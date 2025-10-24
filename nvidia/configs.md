@@ -20,5 +20,62 @@ reg add "HKCU\SOFTWARE\NVIDIA Corporation\Global\RunOpenGLOn" /v ShowContextMenu
 reg add "HKCU\SOFTWARE\NVIDIA Corporation\Global\CoProcManager" /v ShowContextMenu /t REG_DWORD /d 0 /f
 ```
 ```json
-{"HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray":{"StartOnLogin":{"Type":"REG_DWORD","Data":0}},"HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak":{"HideXGpuTrayIcon":{"Type":"REG_DWORD","Data":1}},"HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\CoProcManager":{"ShowTrayIcon":{"Type":"REG_DWORD","Data":0}}}
+{
+  "HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray": {
+    "StartOnLogin": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  },
+  "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+    "HideXGpuTrayIcon": {
+      "Type": "REG_DWORD",
+      "Data": 1
+    }
+  },
+  "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\CoProcManager": {
+    "ShowTrayIcon": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
+```
+
+# Disable DLSS Indicator
+
+Disable:
+```bat
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore" /v ShowDlssIndicator /t REG_DWORD /d 0 /f
+```
+Enable:
+```bat
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore" /v ShowDlssIndicator /t REG_DWORD /d 1024 /f
+```
+
+From NVIDIA documentations:
+`turn-dlss-indicator-off`
+```ps
+[HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore]
+"ShowDlssIndicator"=dword:00000000
+```
+`turn-dlss-indicator-on-center`
+```ps
+[HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore]
+"ShowDlssIndicator"=dword:00000001
+```
+`turn-dlss-indicator-on-top-left`
+```ps
+[HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore]
+"ShowDlssIndicator"=dword:00000002
+```
+```json
+{
+  "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NGXCore": {
+    "ShowDlssIndicator": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
 ```

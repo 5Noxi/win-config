@@ -1,4 +1,4 @@
-# Disable Hibernation / Hiberboot, Remove Power Options
+# Disable Hibernation / Hiberboot
 
 ```c
 dq offset aPower_2      ; "Power" // HKLM\SYSTEM\CurrentControlSet\Control\Power
@@ -22,12 +22,44 @@ Disable fast startup:
 ```bat
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 0 /f
 ```
-Remove `Hibernate`, `Lock`, `Sleep` power options:
-```bat
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" /v ShowHibernateOption /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" /v ShowLockOption /t REG_DWORD /d 0 /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings" /v ShowSleepOption /t REG_DWORD /d 0 /f
-```
 ```json
-{"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power":{"HibernateEnabled":{"Type":"REG_DWORD","Data":0},"HibernateEnabledDefault":{"Type":"REG_DWORD","Data":0},"AllowHibernate":{"Type":"REG_DWORD","Data":0}}}
+{
+  "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+    "HibernateEnabled": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "HibernateEnabledDefault": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "AllowHibernate": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
+```
+
+# Remove Power Options
+
+Removes the `Hibernate`, `Lock`, `Sleep` power options.
+
+```json
+{
+  "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+    "ShowHibernateOption": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "ShowLockOption": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "ShowSleepOption": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
 ```

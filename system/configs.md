@@ -38,5 +38,56 @@ ConsentPromptBehaviorAdmin - Data: 0
 PromptOnSecureDesktop - Data: 0
 ```
 ```json
-{"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System":{"ValidateAdminCodeSignatures":{"Type":"REG_DWORD","Data":0},"ConsentPromptBehaviorAdmin":{"Type":"REG_DWORD","Data":0},"ConsentPromptBehaviorUser":{"Type":"REG_DWORD","Data":0},"PromptOnSecureDesktop":{"Type":"REG_DWORD","Data":0},"EnableLUA":{"Type":"REG_DWORD","Data":0}}}
+{
+  "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+    "ValidateAdminCodeSignatures": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "ConsentPromptBehaviorAdmin": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "ConsentPromptBehaviorUser": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "PromptOnSecureDesktop": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableLUA": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
+```
+
+# Lock Screen
+
+Disables the lock screen (skips the lock screen and go directly to the login screen). Revert it by removing the value (2nd command).
+
+__Miscellaneous (`ControlPanelDisplay.admx`):__
+Prevent lock screen background motion:
+```bat
+reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v AnimateLockScreenBackground /t REG_DWORD /d 1 /f
+```
+Prevent enabling lock screen slide show:
+```bat
+reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v NoLockScreenSlideshow /t REG_DWORD /d 1 /f
+```
+Show clear logon background:
+```bat
+reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackgroundOnLogon /t REG_DWORD /d 1 /f
+```
+```json
+{
+  "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+    "NoLockScreen": {
+      "Type": "REG_DWORD",
+      "Data": 1
+    }
+  }
+}
 ```
