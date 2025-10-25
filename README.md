@@ -26,11 +26,3 @@ Report any kind of issues either in the repository or on the Discord server:
 ```ps
 pip install PySide6 mistune requests
 ```
-
-```mermaid
-architecture-beta
-    service user(mdi:account)
-    service lambda(logos:aws-lambda)
-
-    user:R --> L:lambda
-```
