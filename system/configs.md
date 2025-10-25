@@ -34,7 +34,7 @@ for ($i=0; $i -le 271; $i++) {
 
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/w32ps.png?raw=true)
 
-> [network/assets | Win32PrioritySeparation.pdf](https://github.com/5Noxi/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
+> [system/assets | Win32PrioritySeparation.pdf](https://github.com/5Noxi/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
 
 ```json
 {
@@ -232,10 +232,205 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackg
 ```
 ```json
 {
-  "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-    "NoLockScreen": {
-      "Type": "REG_DWORD",
-      "Data": 1
+  "apply": {
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+      "NoLockScreen": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    }
+  },
+  "revert": {
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+      "NoLockScreen": {
+        "Action": "DeleteValue"
+      }
+    }
+  }
+}
+```
+
+# Enable/Disable Game Mode
+
+Game Mode should: "Prevents Windows Update from performing driver installations and sending restart notifications" Does it work? Not really, in my experience it tends to lower the priority and prevent driver updates (correct me if you've experienced otherwise) - It may also mess with process/thread priorities. Not all games support it, generally leave it enabled or benchmark the differences in equal scenarios.
+
+It might set CPU affinites (`AffinitizeToExclusiveCpus`, `CpuExclusivityMaskHig`, `CpuExclusivityMaskLow`) for the game process and the maximum amount of cores the game uses (`MaxCpuCount`). The percentage of GPU memory (`PercentGpuMemoryAllocatedToGame`), GPU time (`PercentGpuTimeAllocatedToGame`) & system compositor (`PercentGpuMemoryAllocatedToSystemCompositor`) that will be dedicated to the game. It may also create a list of processes (`RelatedProcessNames`) that are gaming related, which means that they won't be affected from the game mode. These are just assumptions, I haven't looked into it in detail yet (`GamingHandlers.c`).
+
+Disable game mode:
+```bat
+reg add "HKCU\Software\Microsoft\GameBar" /v AllowAutoGameMode /t REG_DWORD /d 0 /f
+reg add "HKCU\Software\Microsoft\GameBar" /v AutoGameModeEnabled /t REG_DWORD /d 0 /f
+```
+Enable game mode (switch on/off):
+```bat
+reg add "HKCU\Software\Microsoft\GameBar" /v AllowAutoGameMode /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Microsoft\GameBar" /v AutoGameModeEnabled /t REG_DWORD /d 1 /f
+```
+Enabling/disabling it via the system settings only switches `AutoGameModeEnabled`:
+```ps
+SystemSettings.exe  HKCU\Software\Microsoft\GameBar\AutoGameModeEnabled	Type: REG_DWORD, Length: 4, Data: 1
+```
+The value doesn't exist by default (not existing = `1`). Ignore `GameBar.txt`, it shows read values.
+
+> [system/assets | gamemode-GamingHandlers.c](https://github.com/5Noxi/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)
+> https://support.xbox.com/en-US/help/games-apps/game-setup-and-play/use-game-mode-gaming-on-pc  
+> https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-26100
+
+---
+
+Miscellaneous notes:
+```ps
+\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadDoublePressIntervalMs
+\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadShortPressIntervalMs
+```
+```json
+{
+  "apply": {
+    "HKCU\\Software\\Microsoft\\GameBar": {
+      "AllowAutoGameMode": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      },
+      "AutoGameModeEnabled": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    }
+  },
+  "revert": {
+    "HKCU\\Software\\Microsoft\\GameBar": {
+      "AllowAutoGameMode": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      },
+      "AutoGameModeEnabled": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    }
+  }
+}
+```
+
+# Disable Search Indexing
+
+It builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
+
+> https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/searchindex.png?raw=true)
+
+Instead of using the explorer to search for a file or folder, use everything. It's a lot faster:
+> https://www.voidtools.com/downloads/
+
+The command below includes some of my personal settings. They're saved in:
+```
+%appdata%\Everything\Everything.ini
+```
+If you want to revert the changes, either remove the `Everything.ini` file or restore the settings via the options (`STRG + P`).
+```ps
+$nvp = "$env:appdata\Everything\Everything.ini";(gc $nvp) -replace '^normal_background_color=.*', 'normal_background_color=#353535' -replace '^normal_foreground_color=.*', 'normal_foreground_color=#ffffff' -replace '^single_click_open=.*', 'single_click_open=2' -replace '^hide_empty_search_results=.*', 'hide_empty_search_results=1' -replace '^double_click_path=.*', 'double_click_path=1' -replace '^show_mouseover=.*', 'show_mouseover=1' -replace '^show_number_of_results_with_selection=.*', 'show_number_of_results_with_selection=1' -replace '^tooltips=.*', 'tooltips=0' -replace '^search_history_enabled=.*', 'search_history_enabled=0' -replace '^run_history_enabled=.*', 'run_history_enabled=0' -replace '^index_date_modified=.*', 'index_date_modified=0' -replace '^exclude_list_enabled=.*', 'exclude_list_enabled=0' -replace '^language=.*', 'language=1033' | sc $nvp
+```
+```json
+{
+  "apply": {
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+      "PreventIndexOnBattery": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    },
+    "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
+      "RespectPowerModes": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+      "WholeFileSystem": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      },
+      "SystemFolders": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "AutoWildCard": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      },
+      "EnableNaturalQuerySyntax": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "ArchivedFiles": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
+      "SearchOnly": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
+      "Start": {
+        "Type": "REG_DWORD",
+        "Data": 4
+      }
+    },
+    "COMMANDS": {
+      "DisableSearchFeature": {
+        "Action": "run_powershell",
+        "Command": "dism /Online /Disable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart"
+      }
+    }
+  },
+  "revert": {
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+      "PreventIndexOnBattery": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
+      "RespectPowerModes": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+      "WholeFileSystem": {
+        "Action": "DeleteValue"
+      },
+      "SystemFolders": {
+        "Action": "DeleteValue"
+      },
+      "AutoWildCard": {
+        "Action": "DeleteValue"
+      },
+      "EnableNaturalQuerySyntax": {
+        "Action": "DeleteValue"
+      },
+      "ArchivedFiles": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
+      "SearchOnly": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
+      "Start": {
+        "Type": "REG_DWORD",
+        "Data": 2
+      }
+    },
+    "COMMANDS": {
+      "EnableSearchFeature": {
+        "Action": "run_powershell",
+        "Command": "dism /Online /Enable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart"
+      }
     }
   }
 }
