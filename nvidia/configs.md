@@ -3,7 +3,7 @@
 Complete NVIDIA driver preparation tool.
 > https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvidia-tool.ps1
 
-**Main menu:**  
+Main menu:**  
 `1` - Debloat driver (includes optional DDU clean uninstall)  
 `2` - Install driver directly  
 
@@ -28,7 +28,7 @@ Complete NVIDIA driver preparation tool.
   "COMMANDS": {
     "OpenNvCpl": {
       "Action": "run_powershell",
-      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvidia-tool.ps1' | iex"
+      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/NVIDIA-Tool.ps1' | iex"
     }
   }
 }
@@ -263,7 +263,7 @@ $home\Desktop\Nvcpl.lnk
     "COMMANDS": {
       "OpenNvCpl": {
         "Action": "run_powershell",
-        "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1' | iex"
+        "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/nvcpl.ps1' | iex"
       }
     }
   },
