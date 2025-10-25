@@ -1,6 +1,38 @@
 # Debloated Driver
 
+Complete NVIDIA driver preparation tool.
+> https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvidia-tool.ps1
 
+**Main menu:**  
+`1` - Debloat driver (includes optional DDU clean uninstall)  
+`2` - Install driver directly  
+
+**Driver debloat option:**  
+- Opens [www.techpowerup.com | nvidia-drivers](https://www.techpowerup.com/download/nvidia-geforce-graphics-drivers/)
+- Removes all non-essential folders except `Display.Driver`, `NVI2`, `setup.cfg`, and `setup.exe`
+- Cleans up `.xml` and `.cfg` files by removing telemetry, EULA, and web-link entries
+- Miscellaenous theme configurations
+
+**Optional DDU cleanup:**  
+- Downloads [`NV-DDU.zip`](https://github.com/5Noxi/files/releases/download/driver/NV-DDU.zip) and [`NV-DDU.ps1`](https://github.com/5Noxi/files/releases/download/driver/NV-DDU.ps1), enables Safe Boot, and reboots
+
+**Driver installation:**  
+- Runs `setup.exe`
+
+```json
+{
+  "__control": {
+    "type": "button",
+    "label": "Open"
+  },
+  "COMMANDS": {
+    "OpenNvCpl": {
+      "Action": "run_powershell",
+      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvidia-tool.ps1' | iex"
+    }
+  }
+}
+```
 
 # NVCPL Settings
 
@@ -214,18 +246,45 @@ A system restart is required to see the changes in nvcpl.
 
 # Temporary NVCPL
 
-`NVDisplay.Container.exe` is required for nvcpl to start. [`nvcpl.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvcpl.ps1) (included in [`NVIDIA-Tool.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/NVIDIA-Tool.ps1)) starts them, waits till you close the program, and then terminates them.
+`NVDisplay.Container.exe` is required for nvcpl to start. [`nvcpl.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvcpl.ps1) starts them, waits till you close the program, and then terminates them.
+
+Download location:
+```ps
+$env:appdata\Noverse
+```
+Shortcut location:
+```ps
+$home\Desktop\Nvcpl.lnk
+```
 
 ```json
 {
-  "__control": {
-    "type": "button",
-    "label": "Open"
+  "apply": {
+    "COMMANDS": {
+      "OpenNvCpl": {
+        "Action": "run_powershell",
+        "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1' | iex"
+      }
+    }
   },
-  "COMMANDS": {
-    "OpenNvCpl": {
-      "Action": "run_powershell",
-      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1' | iex"
+  "revert": {
+    "COMMANDS": {
+      "RemoveNvCplExe": {
+        "Action": "delete_path",
+        "Path": "$env:appdata\\Noverse\\nvcplui.exe"
+      },
+      "RemoveNvCplIcon": {
+        "Action": "delete_path",
+        "Path": "$env:appdata\\Noverse\\Nvcpl.ico"
+      },
+      "RemoveNvCplScript": {
+        "Action": "delete_path",
+        "Path": "$env:appdata\\Noverse\\NV-nvcpl.ps1"
+      },
+      "RemoveNvCplShortcut": {
+        "Action": "delete_path",
+        "Path": "$home\\Desktop\\Nvcpl.lnk"
+      }
     }
   }
 }
@@ -580,6 +639,36 @@ Disables the notification (GeForce), whenever a new driver is available.
 ```
 
 # Disable Telemetry
+
+---
+
+Block NVIDIA telemetry domains (`C:\Windows\System32\drivers\etc\hosts`):
+```
+0.0.0.0 accounts.nvgs.nvidia.cn
+0.0.0.0 accounts.nvgs.nvidia.com
+0.0.0.0 api.commune.ly
+0.0.0.0 assets.nvidiagrid.net
+0.0.0.0 events.gfe.nvidia.com
+0.0.0.0 gfe.geforce.com
+0.0.0.0 gfe.nvidia.com
+0.0.0.0 gfwsl.geforce.com
+0.0.0.0 images.nvidia.com
+0.0.0.0 images.nvidiagrid.net
+0.0.0.0 img.nvidiagrid.net
+0.0.0.0 login.nvgs.nvidia.cn
+0.0.0.0 login.nvgs.nvidia.com
+0.0.0.0 ls.dtrace.nvidia.com
+0.0.0.0 nvidia.com.edgesuite.net
+0.0.0.0 nvidia.telemetry.internet.microsoft.com
+0.0.0.0 nvidia.tt.omtrdc.net
+0.0.0.0 ota-downloads.nvidia.com
+0.0.0.0 ota.nvidia.com
+0.0.0.0 rds-assets.nvidia.com
+0.0.0.0 services.gfe.nvidia.com
+0.0.0.0 telemetry.gfe.nvidia.com
+0.0.0.0 telemetry.nvidia.com
+```
+> https://github.com/ravetank/nvidia-telemetry-blocklist
 
 ```json
 {
