@@ -91,15 +91,25 @@ does the same as the batch:
 
 ```json
 {
-  "HKCU\\Control Panel\\International\\User Profile": {
-    "HttpAcceptLanguageOptOut": {
-      "Type": "REG_DWORD",
-      "Data": 1
+  "apply": {
+    "HKCU\\Control Panel\\International\\User Profile": {
+      "HttpAcceptLanguageOptOut": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
+    },
+    "HKCU\\Software\\Microsoft\\Internet Explorer\\International": {
+      "AcceptLanguage": {
+        "Action": "DeleteValue"
+      }
     }
   },
-  "HKCU\\Software\\Microsoft\\Internet Explorer\\International": {
-    "AcceptLanguage": {
-      "Action": "DeleteValue"
+  "revert": {
+    "HKCU\\Control Panel\\International\\User Profile": {
+      "HttpAcceptLanguageOptOut": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
     }
   }
 }
