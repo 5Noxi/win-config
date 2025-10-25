@@ -226,7 +226,7 @@ From NVIDIA documentations:
 "ShowDlssIndicator"=dword:00000002
 ```
 
-> [nvidia/assets | dlss.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/dlss.c)
+> [nvidia/assets | dlss.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/dlss.c)  
 > [nvidia/assets | dlss-NGXCubinGeneric.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/dlss-NGXCubinGeneric.cpp)
 
 ```json
@@ -249,7 +249,7 @@ From NVIDIA documentations:
 
 You can find it in `nvsvc64.dll`.
 
-> [nvidia/assets | disppower-nvsvc64.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64.c)
+> [nvidia/assets | disppower-nvsvc64.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64.c)  
 > [nvidia/assets | disppower-nvsvc64gv.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64gv.c)
 
 ```json
@@ -541,8 +541,8 @@ sin(0) = 0  = 0x00000000 hex
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITORXXXXX_XX_XXXX_XX : ScalingConfig
 ```
 
-![nvidia/assets | color-DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)
-![nvidia/assets | color-displayDB.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-displayDB.cpp)
+> [nvidia/assets | color-DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)  
+> [nvidia/assets | color-displayDB.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-displayDB.cpp)
 
 # Noise Reduction
 
