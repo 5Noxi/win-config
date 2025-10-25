@@ -78,6 +78,7 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 
 # Temporary NVCPL
 
+```json
 {
   "COMMANDS": {
     "Install Nvcpl Shortcut": {
@@ -106,6 +107,7 @@ $shortcut.Save()"
     }
   }
 }
+```
 
 
 # Disable HDCP
