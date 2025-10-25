@@ -80,7 +80,7 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 
 HDCP protects digital content from being copied while it's transmitted between devices like a computer and a TV - would leave it enabled.
 
-```json
+```c
 {
 "Name":  "RMHdcpKeyglobZero",
 "Comment":  [
