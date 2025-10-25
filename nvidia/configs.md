@@ -81,29 +81,9 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 ```json
 {
   "COMMANDS": {
-    "Install Nvcpl Shortcut": {
+    "Install NVCPL Shortcut": {
       "Action": "run_powershell",
-      "Command": " \
-$nvroam = \"$env:LOCALAPPDATA\\Noverse\"; \
-if (-not (Test-Path $nvroam)) {New-Item -ItemType Directory -Path $nvroam | Out-Null}; \
-Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/driver/nvcplui.exe' -OutFile \"$nvroam\\nvcplui.exe\"; \
-Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/driver/Nvcpl.ico' -OutFile \"$nvroam\\Nvcpl.ico\"; \
-$nvpsnvcpl = \"$nvroam\\NV-nvcpl.ps1\"; \
-$nvcplcon = @\" \
-`$ErrorActionPreference = 'SilentlyContinue'; \
-`$nvsrv='NVDisplay.ContainerLocalSystem','NvContainerLocalSystem'; \
-foreach (`$s in `$nvsrv){if(Get-Service `$s){Set-Service `$s -StartupType Manual; if ((Get-Service `$s).Status -ne 'Running'){Start-Service `$s}}}; \
-Start-Process -FilePath \"$nvroam\\nvcplui.exe\" -Wait; \
-foreach (`$s in `$nvsrv){if(Get-Service `$s){if((Get-Service `$s).Status -eq 'Running'){Stop-Service `$s -Force}; Set-Service `$s -StartupType Disabled}}; \
-\"@; \
-$nvcplcon | Set-Content -Encoding ASCII -Path $nvpsnvcpl; \
-$nvsh = New-Object -ComObject WScript.Shell; \
-$shortcut = $nvsh.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Nvcpl.lnk\"); \
-$shortcut.TargetPath = 'powershell.exe'; \
-$shortcut.Arguments = \"-WindowStyle Hidden -File `\"$nvpsnvcpl`\"\"; \
-$shortcut.WorkingDirectory = $nvroam; \
-$shortcut.IconLocation = \"$nvroam\\Nvcpl.ico\"; \
-$shortcut.Save()"
+      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1' | iex"
     }
   }
 }
