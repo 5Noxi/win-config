@@ -107,7 +107,7 @@ HDCP protects digital content from being copied while it's transmitted between d
 }
 ```
 
-# Disable Error Correcting Code
+# Disable ECC
 
 Some GPUs don't support it, disabling is also not really needed. You can test it by disabling it via the control panel.
 
@@ -123,12 +123,16 @@ Reset the ECC error counters for the target GPUs. See the (GPU ATTRIBUTES) secti
 > https://docs.nvidia.com/deploy/nvidia-smi/index.html
 
 from `nvidia-smi.exe -h`:
-```
-C:\Windows\System32\nvidia-smi.exe -e 0
+```c
+nvidia-smi.exe -e 0
+
+// Query current state
+nvidia-smi -q -d ecc
 ```
 
 More about `nvidia-smi`:
 > https://discord.com/channels/836870260715028511/1375059420970487838/1375935298093191189
+> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/3D%20Settings/Change_ECC_State.htm
 
 Other ECC related features can be found using <#1371478333585363034> (<#1349023856001548338>) - e.g. `RMNoECCFuseCheck`.
 
@@ -360,7 +364,7 @@ Disables `Add Dekstop Context Menu` in the NVIDIA control panel.
 
 # GPU Performance Counters
 "GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs."
-```json
+```c
 {
 "Name":  "RmProfilingAdminOnly",
 "Comment":  [
@@ -395,6 +399,13 @@ Change `XXXX` to the correct key and `X` to `1`/`0`.
 {
   "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
     "RmProfilingAdminOnly": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  },
+  "NVIDIA": {
+    "RmProfilingAdminOnly": {
+      "Action": "nvidia key",
       "Type": "REG_DWORD",
       "Data": 0
     }
