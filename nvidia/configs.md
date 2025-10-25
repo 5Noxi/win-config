@@ -76,6 +76,38 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 }
 ```
 
+# Temporary NVCPL
+
+{
+  "COMMANDS": {
+    "Install Nvcpl Shortcut": {
+      "Action": "run_powershell",
+      "Command": " \
+$nvroam = \"$env:LOCALAPPDATA\\Noverse\"; \
+if (-not (Test-Path $nvroam)) {New-Item -ItemType Directory -Path $nvroam | Out-Null}; \
+Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/driver/nvcplui.exe' -OutFile \"$nvroam\\nvcplui.exe\"; \
+Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/driver/Nvcpl.ico' -OutFile \"$nvroam\\Nvcpl.ico\"; \
+$nvpsnvcpl = \"$nvroam\\NV-nvcpl.ps1\"; \
+$nvcplcon = @\" \
+`$ErrorActionPreference = 'SilentlyContinue'; \
+`$nvsrv='NVDisplay.ContainerLocalSystem','NvContainerLocalSystem'; \
+foreach (`$s in `$nvsrv){if(Get-Service `$s){Set-Service `$s -StartupType Manual; if ((Get-Service `$s).Status -ne 'Running'){Start-Service `$s}}}; \
+Start-Process -FilePath \"$nvroam\\nvcplui.exe\" -Wait; \
+foreach (`$s in `$nvsrv){if(Get-Service `$s){if((Get-Service `$s).Status -eq 'Running'){Stop-Service `$s -Force}; Set-Service `$s -StartupType Disabled}}; \
+\"@; \
+$nvcplcon | Set-Content -Encoding ASCII -Path $nvpsnvcpl; \
+$nvsh = New-Object -ComObject WScript.Shell; \
+$shortcut = $nvsh.CreateShortcut(\"$env:APPDATA\\Microsoft\\Windows\\Start Menu\\Programs\\Nvcpl.lnk\"); \
+$shortcut.TargetPath = 'powershell.exe'; \
+$shortcut.Arguments = \"-WindowStyle Hidden -File `\"$nvpsnvcpl`\"\"; \
+$shortcut.WorkingDirectory = $nvroam; \
+$shortcut.IconLocation = \"$nvroam\\Nvcpl.ico\"; \
+$shortcut.Save()"
+    }
+  }
+}
+
+
 # Disable HDCP
 
 HDCP protects digital content from being copied while it's transmitted between devices like a computer and a TV - would leave it enabled.
@@ -315,6 +347,141 @@ Disables the notification (GeForce), whenever a new driver is available.
       "Data": 0
     },
     "LogErrorEntries": {
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
+```
+
+# Disable Scheduled Tasks
+
+```json
+{
+  "COMMANDS": {
+    "Disable NvTmRep_*": {
+      "Action": "scheduled_task",
+      "TaskName": "NvTmRep_*",
+      "Operation": "disable"
+    },
+    "Disable NvTmRepOnLogon*": {
+      "Action": "scheduled_task",
+      "TaskName": "NvTmRepOnLogon*",
+      "Operation": "disable"
+    },
+    "Disable NvTmMon_*": {
+      "Action": "scheduled_task",
+      "TaskName": "NvTmMon_*",
+      "Operation": "disable"
+    }
+  }
+}
+```
+
+# Disable Telemetry
+
+```json
+{
+  "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
+    "OptInOrOutPreference": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  },
+  "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
+    "SendTelemetryData": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  },
+  "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
+    "EnableRID44231": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableRID64640": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableRID66610": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  },
+  "HKLM\\System\\CurrentControlSet\\Services\\nvlddmkm\\NvCamera": {
+    "(default)": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  }
+}
+```
+
+# Disable Preemption
+
+```json
+{
+  "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
+    "DisablePreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 1
+    },
+    "DisableCudaContextPreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 1
+    },
+    "EnableCEPreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "DisablePreemptionOnS3S4": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 1
+    },
+    "ComputePreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableMidGfxPreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableMidGfxPreemptionVGPU": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableMidBufferPreemptionForHighTdrTimeout": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableMidBufferPreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    },
+    "EnableAsyncMidBufferPreemption": {
+      "Action": "",
+      "Type": "REG_DWORD",
+      "Data": 0
+    }
+  },
+  "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
+    "EnablePreemption": {
+      "Action": "",
       "Type": "REG_DWORD",
       "Data": 0
     }
