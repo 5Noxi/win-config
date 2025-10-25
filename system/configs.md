@@ -250,7 +250,7 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackg
 }
 ```
 
-# Enable/Disable Game Mode
+# Enable Game Mode
 
 Game Mode should: "Prevents Windows Update from performing driver installations and sending restart notifications" Does it work? Not really, in my experience it tends to lower the priority and prevent driver updates (correct me if you've experienced otherwise) - It may also mess with process/thread priorities. Not all games support it, generally leave it enabled or benchmark the differences in equal scenarios.
 
@@ -272,7 +272,7 @@ SystemSettings.exe  HKCU\Software\Microsoft\GameBar\AutoGameModeEnabled	Type: RE
 ```
 The value doesn't exist by default (not existing = `1`). Ignore `GameBar.txt`, it shows read values.
 
-> [system/assets | gamemode-GamingHandlers.c](https://github.com/5Noxi/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)
+> [system/assets | gamemode-GamingHandlers.c](https://github.com/5Noxi/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)  
 > https://support.xbox.com/en-US/help/games-apps/game-setup-and-play/use-game-mode-gaming-on-pc  
 > https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-26100
 
@@ -331,6 +331,9 @@ If you want to revert the changes, either remove the `Everything.ini` file or re
 ```ps
 $nvp = "$env:appdata\Everything\Everything.ini";(gc $nvp) -replace '^normal_background_color=.*', 'normal_background_color=#353535' -replace '^normal_foreground_color=.*', 'normal_foreground_color=#ffffff' -replace '^single_click_open=.*', 'single_click_open=2' -replace '^hide_empty_search_results=.*', 'hide_empty_search_results=1' -replace '^double_click_path=.*', 'double_click_path=1' -replace '^show_mouseover=.*', 'show_mouseover=1' -replace '^show_number_of_results_with_selection=.*', 'show_number_of_results_with_selection=1' -replace '^tooltips=.*', 'tooltips=0' -replace '^search_history_enabled=.*', 'search_history_enabled=0' -replace '^run_history_enabled=.*', 'run_history_enabled=0' -replace '^index_date_modified=.*', 'index_date_modified=0' -replace '^exclude_list_enabled=.*', 'exclude_list_enabled=0' -replace '^language=.*', 'language=1033' | sc $nvp
 ```
+
+The `WSearch` service is needed for CmdPals `File Search` extension to work.
+
 ```json
 {
   "apply": {

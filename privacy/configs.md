@@ -35,7 +35,7 @@ return v5;
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-maps
 
 `AutoDownloadAndUpdateMapData` & `AllowUntriggeredNetworkTrafficOnSettingsPage`:
-> https://gpsearch.azurewebsites.net/#13439
+> https://gpsearch.azurewebsites.net/#13439  
 > https://gpsearch.azurewebsites.net/#13350
 
 ```json

@@ -136,9 +136,9 @@ sin(0) = 0  = 0x00000000 hex
 = last 2 bytes
 ```
 - [nvDisplay.cpp#L293](https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293)  
-- [displayDB.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/displayDB.cpp)  
-- [DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/DesktopColors.cpp)  
-- [DisplayDatabase Trace](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/display.txt) (snipped of [nvlddmkm](https://github.com/5Noxi/wpr-reg-records/blob/main/records/nvlddmkm.txt))  
+- [displayDB.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-displayDB.cpp)  
+- [DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)  
+- [nvlddmkm Trace](https://github.com/5Noxi/wpr-reg-records/blob/main/records/nvlddmkm.txt)
 
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)  
 
@@ -423,7 +423,7 @@ nvidia-smi -q -d ecc
 ```
 
 More about `nvidia-smi`:
-> https://discord.com/channels/836870260715028511/1375059420970487838/1375935298093191189
+> https://discord.com/channels/836870260715028511/1375059420970487838/1375935298093191189  
 > https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/3D%20Settings/Change_ECC_State.htm
 
 Other ECC related features can be found using <#1371478333585363034> (<#1349023856001548338>) - e.g. `RMNoECCFuseCheck`.

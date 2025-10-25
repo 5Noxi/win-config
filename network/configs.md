@@ -35,6 +35,21 @@ Capturing the network activity after adding the policy:
 ![](https://github.com/5Noxi/win-config/blob/main/network/images/qosvalues.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/network/images/qosexplanation.png?raw=true)
 
+```json
+{
+  "__control": {
+    "type": "button",
+    "label": "Open"
+  },
+  "COMMANDS": {
+    "OpenNvCpl": {
+      "Action": "run_powershell",
+      "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/network/assets/QoS-Policy.ps1 | iex\"'"
+    }
+  }
+}
+```
+
 # Congestion Provider
 
 BBRv2 only works on W11 - can cause issues with applications (e.g. steelseries), can work fine. Fix:
@@ -50,12 +65,12 @@ netsh int ipv4 set gl loopbacklargemtu=enable
 > https://dev.moe/en/3021
 
 Info, which was used:
-> https://www3.cs.stonybrook.edu/~anshul/comsnets24_bbrbbrv2.pdf
-> https://github.com/google/bbr
-> https://www.rfc-editor.org/rfc/rfc6582
-> https://internet2.edu/wp-content/uploads/2022/12/techex22-AdvancedNetworking-ExploringtheBBRv2CongestionControlAlgorithm-Tierney.pdf
-> https://datatracker.ietf.org/meeting/104/materials/slides-104-iccrg-an-update-on-bbr-00
-> https://www.speedguide.net/articles/tcp-congestion-control-algorithms-comparison-7423
+> https://www3.cs.stonybrook.edu/~anshul/comsnets24_bbrbbrv2.pdf  
+> https://github.com/google/bbr  
+> https://www.rfc-editor.org/rfc/rfc6582  
+> https://internet2.edu/wp-content/uploads/2022/12/techex22-AdvancedNetworking-ExploringtheBBRv2CongestionControlAlgorithm-Tierney.pdf  
+> https://datatracker.ietf.org/meeting/104/materials/slides-104-iccrg-an-update-on-bbr-00  
+> https://www.speedguide.net/articles/tcp-congestion-control-algorithms-comparison-7423  
 > https://datatracker.ietf.org/meeting/105/materials/slides-105-iccrg-bbr-v2-a-model-based-congestion-control-00
 
 Get your current congestion provider, by pasting the following into powershell:
@@ -99,4 +114,72 @@ netsh int tcp set supplemental Template=Datacenter CongestionProvider=NewReno
 netsh int tcp set supplemental Template=Compat CongestionProvider=NewReno
 netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=NewReno
 netsh int tcp set supplemental Template=InternetCustom CongestionProvider=NewReno
+```
+```json
+{
+  "apply": {
+    "COMMANDS": {
+      "DisableLoopbackLargeMTU_IPv6": {
+        "Action": "run_powershell",
+        "Command": "netsh int ipv6 set global loopbacklargemtu=disable"
+      },
+      "DisableLoopbackLargeMTU_IPv4": {
+        "Action": "run_powershell",
+        "Command": "netsh int ipv4 set global loopbacklargemtu=disable"
+      },
+      "SetTCP_BBR2_Internet": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=Internet CongestionProvider=bbr2"
+      },
+      "SetTCP_BBR2_Datacenter": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=Datacenter CongestionProvider=bbr2"
+      },
+      "SetTCP_BBR2_Compat": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=Compat CongestionProvider=bbr2"
+      },
+      "SetTCP_BBR2_DatacenterCustom": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=bbr2"
+      },
+      "SetTCP_BBR2_InternetCustom": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=InternetCustom CongestionProvider=bbr2"
+      }
+    }
+  },
+  "revert": {
+    "COMMANDS": {
+      "EnableLoopbackLargeMTU_IPv6": {
+        "Action": "run_powershell",
+        "Command": "netsh int ipv6 set global loopbacklargemtu=enable"
+      },
+      "EnableLoopbackLargeMTU_IPv4": {
+        "Action": "run_powershell",
+        "Command": "netsh int ipv4 set global loopbacklargemtu=enable"
+      },
+      "RevertTCP_CUBIC_Internet": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=Internet CongestionProvider=CUBIC"
+      },
+      "RevertTCP_CUBIC_InternetCustom": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=InternetCustom CongestionProvider=CUBIC"
+      },
+      "RevertTCP_CUBIC_Compat": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=Compat CongestionProvider=CUBIC"
+      },
+      "RevertTCP_CUBIC_Datacenter": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=Datacenter CongestionProvider=CUBIC"
+      },
+      "RevertTCP_CUBIC_DatacenterCustom": {
+        "Action": "run_powershell",
+        "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=CUBIC"
+      }
+    }
+  }
+}
 ```
