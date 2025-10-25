@@ -80,7 +80,7 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 
 The following includes details of how the panel sets the changes and more, a lot of it is for informational purposes only.
 
-- [Desktop Options](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#desktop-settings)
+- [Desktop Options](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#desktop-options)
 - [Temporary NVCPL](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#temporary-nvcpl)
 - 3D Settings
   - [Adjust image settings with preview](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#3d-settings--adjust-image-settings-with-preview)
@@ -108,7 +108,7 @@ reg add "HKCU\Software\NVIDIA Corporation\Global\NvCplApi\Policies" /v ContextUI
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v NvDevToolsVisible /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvTray" /v StartOnLogin /t REG_DWORD /d 0 /f
 ```
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl0.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl0.png?raw=true)  
 ```h
 //Profile info related
 #define NV_REG_CPL_PERFCOUNT_RESTRICTION  "RmProfilingAdminOnly"
@@ -121,7 +121,7 @@ reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvTray" /v StartOnLogin /t REG_DWORD /
 
 ## 3D Settings > Adjust image settings with preview
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl1.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)  
 
 ## 3D Settings > Manage 3D settings
 
@@ -155,7 +155,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 ```
 - [nvapi.h](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/nvapi.h)  
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl2.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)  
 
 ## Display > Adjust desktop color settings 
 
@@ -183,12 +183,12 @@ Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends o
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : HueRegistryKey
 ```
 `HueRegistryKey` controls the `Hue` options, it is a `REG_BINARY` type ([`displayDB.cpp`](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/displayDB.cpp)):
-```ps
-# 0°
+```c
+// 0°
 HKLM\System\CurrentControlSet\Services\nvlddmkm\State\DisplayDatabase\MSI3CB01222_2E_07E4_FF\HueRegistryKey    Type: REG_BINARY, Length: 20, Data: DB 01 00 00 14 00 00 00 10 27 00 00 00 00 00 00
 ```
-```ps
-# 359°
+```c
+// 359°
 HKLM\System\CurrentControlSet\Services\nvlddmkm\State\DisplayDatabase\MSI3CB01222_2E_07E4_FF\HueRegistryKey    Type: REG_BINARY, Length: 20, Data: DB 01 00 00 14 00 00 00 0E 27 00 00 52 FF FF FF
 ```
 The calculation works via `cosHue_x10K` (cosinus), `sinHue_x10K` (sinus) and a checksum. `0°`:
@@ -203,7 +203,7 @@ sin(0) = 0  = 0x00000000 hex
 - [DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/DesktopColors.cpp)  
 - [DisplayDatabase Trace](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/files/display.txt) (snipped of [nvlddmkm](https://github.com/5Noxi/wpr-reg-records/blob/main/records/nvlddmkm.txt))  
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl3.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)  
 
 ## Display > Rotate display
 
@@ -238,7 +238,7 @@ reg add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers\Configuration\MSI
 ```
 `ScalingConfig` = `Scaling Mode`, `Perform Scaling on`, `Override the scaling mode...` (includes all settings?)
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl4.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true)  
 
 ## Developer > Manage GPU Performance Counters
 
@@ -274,7 +274,7 @@ Change `XXXX` to the correct key and `X` to `1`/`0`.
 - [Control-Panel-Help](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)  
 - [Bitmask Calculator](https://github.com/5Noxi/bitmask-calc)  
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl5.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)  
 
 ## Video > Adjust video color settings
 
@@ -283,7 +283,7 @@ Personal preference.
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl6.png)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)  
 
 ## Video > Adjust video image settings
 ```ps
@@ -305,7 +305,7 @@ Quality:
 `4` = `_User_Global_VAL_SuperResolution` - `4`  
 A system restart is required to see the changes in nvcpl.
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl7.png)
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true)
 
 # Temporary NVCPL
 
