@@ -1,4 +1,4 @@
-# Noverse Windows Configurtion
+# Noverse Windows Configuration
 
 Text block
 
@@ -7,7 +7,7 @@ The tool is based on the GitHub repository and parses its information out of it.
 ## My Projects
 
 You can find all of my other projects here:
-> https://5noxi.github.io/projects.html
+> https://5noxi.github.io/projects.html  
 > https://github.com/5Noxi
 
 More miscellaneous uploads:
