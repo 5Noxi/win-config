@@ -1,87 +1,11 @@
-# Performance State (P0)
+# Debloated Driver
 
-```c
-{
-"Name":  "DisableDynamicPstate",
-"Comment":  [
-         "Type Dword",
-         "1 = Disable dynamic P-State/adaptive clocking",
-         "0 = Do not disable dynamic P-State/adaptive clocking (default)"
-     ],
-"Configured":  "1",
-"Elements":  [
-          {"Name":  "DISABLE","Value":  "0"},
-          {"Name":  "ENABLE","Value":  "1"}
-      ]
-},
-```
-Other value:
-```c
-{
-"Name":  "DisableAsyncPstates",
-"Comment":  [
-         "Type Dword",
-         "Encoding Numeric Value",
-         "Determines whether or not asynchronous p-states should be disabled",
-         "1 - Disables asynchronous p-state changes",
-         "0 - (default) Leaves asynchronous p-state changes enabled"
-     ],
-"Configured":  "1",
-"Elements":  [
-          {"Name":  "DISABLE","Value":  "1"},
-          {"Name":  "ENABLE","Value":  "0"},
-          {"Name":  "DEFAULT","Value":  "0"}
-      ]
-},
-```
-See your current performance state with (`nvidia-smi.exe` has to be in `Windows\System32`):
-```ps
-nvidia-smi --query-gpu=name,pstate --format=noheader
-```
-It shows the current performance state. States range from P0 (maximum performance) to P12 (minimum performance).
-> https://docs.nvidia.com/deploy/nvidia-smi/index.html
 
-Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/1375059420970487838/1420721787678752818) and look at the `NvAPI_GPU_GetCurrentPstate` function.
-```h
-{
-    NVAPI_GPU_PERF_PSTATE_P0 = 0,
-    NVAPI_GPU_PERF_PSTATE_P1,
-    NVAPI_GPU_PERF_PSTATE_P2,
-    NVAPI_GPU_PERF_PSTATE_P3,
-    NVAPI_GPU_PERF_PSTATE_P4,
-    NVAPI_GPU_PERF_PSTATE_P5,
-    NVAPI_GPU_PERF_PSTATE_P6,
-    NVAPI_GPU_PERF_PSTATE_P7,
-    NVAPI_GPU_PERF_PSTATE_P8,
-    NVAPI_GPU_PERF_PSTATE_P9,
-    NVAPI_GPU_PERF_PSTATE_P10,
-    NVAPI_GPU_PERF_PSTATE_P11,
-    NVAPI_GPU_PERF_PSTATE_P12,
-    NVAPI_GPU_PERF_PSTATE_P13,
-    NVAPI_GPU_PERF_PSTATE_P14,
-    NVAPI_GPU_PERF_PSTATE_P15,
-    NVAPI_GPU_PERF_PSTATE_UNDEFINED = NVAPI_MAX_GPU_PERF_PSTATES,
-
-}
-```
-```json
-{
-  "NVIDIA": {
-    "DisableDynamicPstate": {
-      "Action": "nvidia key",
-      "Type": "REG_DWORD",
-      "Data": 1
-    }
-  }
-}
-```
 
 # NVCPL Settings
 
 The following includes details of how the panel sets the changes and more, a lot of it is for informational purposes only.
 
-- [Desktop Options](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#desktop-options)
-- [Temporary NVCPL](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#temporary-nvcpl)
 - 3D Settings
   - [Adjust image settings with preview](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#3d-settings--adjust-image-settings-with-preview)
   - [Manage 3D settings](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#3d-settings--manage-3D-settings)
@@ -99,25 +23,6 @@ The following includes details of how the panel sets the changes and more, a lot
 - Video
   - [Adjust video color settings](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#video--adjust-video-color-settings)
   - [Adjust video image settings](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md#video--adjust-video-image-settings)
-
-## Desktop Options
-
-Enables `Enable Developer Settings`, disables `Add Dekstop Context Menu` and `Show Notification Tray Icon`:
-```ps
-reg add "HKCU\Software\NVIDIA Corporation\Global\NvCplApi\Policies" /v ContextUIPolicy /t REG_DWORD /d 0 /f
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v NvDevToolsVisible /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvTray" /v StartOnLogin /t REG_DWORD /d 0 /f
-```
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl0.png?raw=true)  
-```h
-//Profile info related
-#define NV_REG_CPL_PERFCOUNT_RESTRICTION  "RmProfilingAdminOnly"
-#define NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
-```
-
-## Temporary NVCPL
-
-`NVDisplay.Container.exe` is required for nvcpl to start. [`NV-nvcpl.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/NV-nvcpl.ps1) (included in [`NVIDIA-Tool.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/NVIDIA-Tool.ps1)) starts them, waits till you close the program, and then terminates them.
 
 ## 3D Settings > Adjust image settings with preview
 
@@ -309,17 +214,96 @@ A system restart is required to see the changes in nvcpl.
 
 # Temporary NVCPL
 
+`NVDisplay.Container.exe` is required for nvcpl to start. [`nvcpl.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvcpl.ps1) (included in [`NVIDIA-Tool.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/NVIDIA-Tool.ps1)) starts them, waits till you close the program, and then terminates them.
+
 ```json
 {
   "COMMANDS": {
-    "Install NVCPL Shortcut": {
+    "OpenNvCpl": {
       "Action": "run_powershell",
-      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1' | iex"
+      "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"irm https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1 | iex\"' -Verb RunAs"
     }
   }
 }
 ```
 
+# Performance State (P0)
+
+```c
+{
+"Name":  "DisableDynamicPstate",
+"Comment":  [
+         "Type Dword",
+         "1 = Disable dynamic P-State/adaptive clocking",
+         "0 = Do not disable dynamic P-State/adaptive clocking (default)"
+     ],
+"Configured":  "1",
+"Elements":  [
+          {"Name":  "DISABLE","Value":  "0"},
+          {"Name":  "ENABLE","Value":  "1"}
+      ]
+},
+```
+Other value:
+```c
+{
+"Name":  "DisableAsyncPstates",
+"Comment":  [
+         "Type Dword",
+         "Encoding Numeric Value",
+         "Determines whether or not asynchronous p-states should be disabled",
+         "1 - Disables asynchronous p-state changes",
+         "0 - (default) Leaves asynchronous p-state changes enabled"
+     ],
+"Configured":  "1",
+"Elements":  [
+          {"Name":  "DISABLE","Value":  "1"},
+          {"Name":  "ENABLE","Value":  "0"},
+          {"Name":  "DEFAULT","Value":  "0"}
+      ]
+},
+```
+See your current performance state with (`nvidia-smi.exe` has to be in `Windows\System32`):
+```ps
+nvidia-smi --query-gpu=name,pstate --format=noheader
+```
+It shows the current performance state. States range from P0 (maximum performance) to P12 (minimum performance).
+> https://docs.nvidia.com/deploy/nvidia-smi/index.html
+
+Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/1375059420970487838/1420721787678752818) and look at the `NvAPI_GPU_GetCurrentPstate` function.
+```h
+{
+    NVAPI_GPU_PERF_PSTATE_P0 = 0,
+    NVAPI_GPU_PERF_PSTATE_P1,
+    NVAPI_GPU_PERF_PSTATE_P2,
+    NVAPI_GPU_PERF_PSTATE_P3,
+    NVAPI_GPU_PERF_PSTATE_P4,
+    NVAPI_GPU_PERF_PSTATE_P5,
+    NVAPI_GPU_PERF_PSTATE_P6,
+    NVAPI_GPU_PERF_PSTATE_P7,
+    NVAPI_GPU_PERF_PSTATE_P8,
+    NVAPI_GPU_PERF_PSTATE_P9,
+    NVAPI_GPU_PERF_PSTATE_P10,
+    NVAPI_GPU_PERF_PSTATE_P11,
+    NVAPI_GPU_PERF_PSTATE_P12,
+    NVAPI_GPU_PERF_PSTATE_P13,
+    NVAPI_GPU_PERF_PSTATE_P14,
+    NVAPI_GPU_PERF_PSTATE_P15,
+    NVAPI_GPU_PERF_PSTATE_UNDEFINED = NVAPI_MAX_GPU_PERF_PSTATES,
+
+}
+```
+```json
+{
+  "NVIDIA": {
+    "DisableDynamicPstate": {
+      "Action": "nvidia key",
+      "Type": "REG_DWORD",
+      "Data": 1
+    }
+  }
+}
+```
 
 # Disable HDCP
 
