@@ -271,19 +271,19 @@ $home\Desktop\Nvcpl.lnk
     "COMMANDS": {
       "RemoveNvCplExe": {
         "Action": "delete_path",
-        "Path": "$env:appdata\\Noverse\\nvcplui.exe"
+        "Path": "%APPDATA%\\Noverse\\nvcplui.exe"
       },
       "RemoveNvCplIcon": {
         "Action": "delete_path",
-        "Path": "$env:appdata\\Noverse\\Nvcpl.ico"
+        "Path": "%APPDATA%\\Noverse\\Nvcpl.ico"
       },
       "RemoveNvCplScript": {
         "Action": "delete_path",
-        "Path": "$env:appdata\\Noverse\\NV-nvcpl.ps1"
+        "Path": "%APPDATA%\\Noverse\\NV-nvcpl.ps1"
       },
       "RemoveNvCplShortcut": {
         "Action": "delete_path",
-        "Path": "$home\\Desktop\\Nvcpl.lnk"
+        "Path": "%USERPROFILE%\\Desktop\\Nvcpl.lnk"
       }
     }
   }
