@@ -78,11 +78,11 @@ Using `Set-WinAcceptLanguageFromLanguageListOptOut`
 Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 ```
 does the same as the batch:
-```ps
-# $True
+```c
+// $True
 "powershell.exe","RegSetValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut","Type: REG_DWORD, Length: 4, Data: 1"
 "powershell.exe","RegDeleteValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage",""
-# $False
+// $False
 "powershell.exe","RegDeleteValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut",""
 "powershell.exe","RegSetValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage","Type: REG_SZ, Length: 54, Data: en-US;q=0.7,en;q=0.3"
 ```
