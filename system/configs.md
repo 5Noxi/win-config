@@ -5,7 +5,7 @@
 - The middle two bits (AABBCC) determine whether the length of the interval varies or is fixed.
 - The lowest two bits (AABBCC) determine whether the threads of foreground processes get more processor time than the threads of background processes each time they run."
 
-Read trough the `.pdf` file, if you want to get more information about the bitmask. Calculate it yourself with <#1371478333585363034>.
+Read trough the `.pdf` file, if you want to get more information about the bitmask. Calculate it yourself with [`bitmask-calc`](https://github.com/5Noxi/bitmask-calc).
 
 ```bat
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v Win32PrioritySeparation /t REG_DWORD /d 24 /f
@@ -32,9 +32,30 @@ for ($i=0; $i -le 271; $i++) {
 }
 ```
 
-![](https://github.com/5Noxi/win-config/blob/main/network/images/w32ps.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/w32ps.png?raw=true)
 
-> [network/assets | Win32PrioritySeparation.pdf](https://github.com/5Noxi/win-config/blob/main/network/assets/Win32PrioritySeparation.pdf)
+> [network/assets | Win32PrioritySeparation.pdf](https://github.com/5Noxi/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
+
+```json
+{
+  "apply": {
+    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
+      "Win32PrioritySeparation": {
+        "Type": "REG_DWORD",
+        "Data": 24
+      }
+    }
+  },
+  "revert": {
+    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
+      "Win32PrioritySeparation": {
+        "Type": "REG_DWORD",
+        "Data": 2
+      }
+    }
+  }
+}
+```
 
 # Disable UAC
 
@@ -75,28 +96,118 @@ EnableLUA - Data: 1
 ConsentPromptBehaviorAdmin - Data: 0
 PromptOnSecureDesktop - Data: 0
 ```
+
+Value: `FilterAdministratorToken`
+
+| Value        | Meaning                                                                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `0x00000000` | Only the built-in administrator account (RID 500) should be placed into Full Token mode.                                                         |
+| `0x00000001` | Only the built-in administrator account (RID 500) is placed into Admin Approval Mode. Approval is required when performing administrative tasks. |
+
+Value: `ConsentPromptBehaviorAdmin`
+
+| Value        | Meaning                                                                                                              |
+| ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `0x00000000` | Allows the admin to perform operations that require elevation without consent or credentials.                        |
+| `0x00000001` | Prompts for username and password on the secure desktop when elevation is required.                                  |
+| `0x00000002` | Prompts the admin to Permit or Deny an elevation request (secure desktop). Removes the need to re-enter credentials. |
+| `0x00000003` | Prompts for credentials (admin username/password) when elevation is required.                                        |
+| `0x00000004` | Prompts the admin to Permit or Deny elevation (non-secure desktop).                                                  |
+| `0x00000005` | Default: Prompts admin to Permit or Deny elevation for non-Windows binaries on the secure desktop.                   |
+
+Value: `ConsentPromptBehaviorUser`
+
+| Value        | Meaning                                                                       |
+| ------------ | ----------------------------------------------------------------------------- |
+| `0x00000000` | Any operation requiring elevation fails for standard users.                   |
+| `0x00000001` | Standard users are prompted for an admin’s credentials to elevate privileges. |
+
+Value: `EnableInstallerDetection`
+
+| Value        | Meaning                                                            |
+| ------------ | ------------------------------------------------------------------ |
+| `0x00000000` | Disables automatic detection of installers that require elevation. |
+| `0x00000001` | Enables heuristic detection of installers needing elevation.       |
+
+Value: `ValidateAdminCodeSignatures`
+
+| Value        | Meaning                                                                        |
+| ------------ | ------------------------------------------------------------------------------ |
+| `0x00000000` | Does not enforce cryptographic signatures on elevated apps.                    |
+| `0x00000001` | Enforces cryptographic signatures on any interactive app requesting elevation. |
+
+Value: `EnableLUA`
+
+| Value        | Meaning                                                                             |
+| ------------ | ----------------------------------------------------------------------------------- |
+| `0x00000000` | Disables the “Administrator in Admin Approval Mode” user type and all UAC policies. |
+| `0x00000001` | Enables the “Administrator in Admin Approval Mode” and activates all UAC policies.  |
+
+Value: `PromptOnSecureDesktop`
+
+| Value        | Meaning                                                                        |
+| ------------ | ------------------------------------------------------------------------------ |
+| `0x00000000` | Disables secure desktop prompting — prompts appear on the interactive desktop. |
+| `0x00000001` | Forces all UAC prompts to occur on the secure desktop.                         |
+
+Value: `EnableVirtualization`
+
+| Value        | Meaning                                                                                       |
+| ------------ | --------------------------------------------------------------------------------------------- |
+| `0x00000000` | Disables data redirection for interactive processes.                                          |
+| `0x00000001` | Enables file and registry redirection for legacy apps to allow writes in user-writable paths. |
+
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
+> https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
+
 ```json
 {
-  "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-    "ValidateAdminCodeSignatures": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "ConsentPromptBehaviorAdmin": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "ConsentPromptBehaviorUser": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "PromptOnSecureDesktop": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "EnableLUA": {
-      "Type": "REG_DWORD",
-      "Data": 0
+  "apply": {
+    "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+      "ValidateAdminCodeSignatures": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "ConsentPromptBehaviorAdmin": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "ConsentPromptBehaviorUser": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "PromptOnSecureDesktop": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "EnableLUA": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
+    }
+  },
+  "revert": {
+    "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+      "ValidateAdminCodeSignatures": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "EnableLUA": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      },
+      "ConsentPromptBehaviorAdmin": {
+        "Type": "REG_DWORD",
+        "Data": 5
+      },
+      "ConsentPromptBehaviorUser": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "PromptOnSecureDesktop": {
+        "Type": "REG_DWORD",
+        "Data": 1
+      }
     }
   }
 }
