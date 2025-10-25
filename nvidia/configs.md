@@ -213,14 +213,17 @@ A system restart is required to see the changes in nvcpl.
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true)
 
 # Temporary NVCPL
-Button: Open
 
 `NVDisplay.Container.exe` is required for nvcpl to start. [`nvcpl.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvcpl.ps1) (included in [`NVIDIA-Tool.ps1`](https://github.com/5Noxi/win-config/blob/main/nvidia/configs.md/blob/main/NVIDIA-Tool.ps1)) starts them, waits till you close the program, and then terminates them.
 
 ```json
 {
+  "__control": {
+    "type": "button",
+    "label": "Open"
+  },
   "COMMANDS": {
-    "Install NVCPL Shortcut": {
+    "OpenNvCpl": {
       "Action": "run_powershell",
       "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/nvidia/assets/nvcpl.ps1' | iex"
     }
