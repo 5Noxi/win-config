@@ -76,6 +76,37 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 }
 ```
 
+# High-bandwidth Digital Content Protection (HDCP)
+
+HDCP protects digital content from being copied while it's transmitted between devices like a computer and a TV - would leave it enabled.
+
+```json
+{
+"Name":  "RMHdcpKeyglobZero",
+"Comment":  [
+         "Type DWORD",
+         "Encoding: 1 means Keyglob will be forced to zero"
+     ],
+"Elements":  [
+          {"Name":  "TRUE","Value":  "1"},
+          {"Name":  "FALSE", "Value":  "0"}
+         ]
+},
+```
+> https://en.wikipedia.org/wiki/High-bandwidth_Digital_Content_Protection
+
+```json
+{
+  "NVIDIA": {
+    "RMHdcpKeyglobZero": {
+      "Action": "nvidia key",
+      "Type": "REG_DWORD",
+      "Data": 1
+    }
+  }
+}
+```
+
 # Hide NVIDIA Tray Icon
 
 ```
@@ -247,7 +278,6 @@ Enables `Enable Developer Settings`, disables `Add Dekstop Context Menu` and `Sh
 #define NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
 ```
 
-``` ```
 # GPU Performance Counters
 "GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs."
 ```json
@@ -289,4 +319,54 @@ Change `XXXX` to the correct key and `X` to `1`/`0`.
     }
   }
 }
+```
+
+# Noise Reduction
+
+Path (Change `XXXX` to the correct key name):
+```ps
+HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\XXXX
+```
+`Use the video player setting`:
+```ps
+_User_SUB0_DFP1_XALG_Noise_Reduce    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
+_User_SUB0_DFP1_XEN_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 0
+_User_SUB0_DFP1_VAL_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 0
+_User_SUB0_DFP1_XALG_Cadence    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
+_User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
+```
+`Use NVIDIA setting`:
+```ps
+_User_SUB0_DFP1_XALG_Noise_Reduce    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
+_User_SUB0_DFP1_VAL_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 5
+_User_SUB0_DFP1_XEN_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 2147483649
+_User_SUB0_DFP1_XALG_Cadence    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
+_User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
+```
+`_User_SUB0_DFP1_VAL_Noise_Reduce` controls the percentage, e.g. `5%` = `5 Dec` until `49%`. Nvcpl skips `50%`, which means that everything above `50` is `X - 1`, range `0-99`.
+
+# Rotate Display - Orientation
+
+You've to edit the `Rotation` value to change the orientation, `DefaultSettings.Orientation` gets reset to the `Rotation` state if changing it. The IDs will obviously not be the same for you.
+
+```ps
+"dwm.exe","RegSetValue","HKLM\System\CurrentControlSet\Control\UnitedVideo\CONTROL\VIDEO\{0096AEE5-861E-11F0-896E-806E6F6E6963}\0000\DefaultSettings.Orientation","Type: REG_DWORD, Length: 4, Data: 0"
+```
+`0` = Landscape
+`1` = Portrait
+`2` = Landscape (flipped)
+`3` = Portrait (flipped)
+
+```ps
+"svchost.exe","RegSetValue","HKLM\System\CurrentControlSet\Control\GraphicsDrivers\Configuration\MSI3CB01222_2E_07E4_FF^28BF11A4ED9F56277B96046CA0884335\00\00\Rotation","Type: REG_DWORD, Length: 4, Data: 1"
+```
+`1` = Landscape
+`2` = Portrait
+`3` = Landscape (flipped)
+`4` = Portrait (flipped)
+
+`Landscape`:
+```bat
+reg add "HKLM\System\CurrentControlSet\Control\UnitedVideo\CONTROL\VIDEO\{0096AEE5-861E-11F0-896E-806E6F6E6963}\0000" /v DefaultSettings.Orientation /t REG_DWORD /d 0 /f
+reg add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers\Configuration\MSI3CB01222_2E_07E4_FF^28BF11A4ED9F56277B96046CA0884335\00\00" /v Rotation /t REG_DWORD /d 1 /f
 ```
