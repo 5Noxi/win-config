@@ -136,7 +136,7 @@ More about `nvidia-smi`:
 
 Other ECC related features can be found using <#1371478333585363034> (<#1349023856001548338>) - e.g. `RMNoECCFuseCheck`.
 
-![](placeholder)
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/ecc.png?raw=true)
 
 ```json
 {
@@ -171,9 +171,9 @@ reg add "HKCU\SOFTWARE\NVIDIA Corporation\Global\RunOpenGLOn" /v ShowContextMenu
 reg add "HKCU\SOFTWARE\NVIDIA Corporation\Global\CoProcManager" /v ShowContextMenu /t REG_DWORD /d 0 /f
 ```
 
-![](placeholder)
-![](placeholder)
-![](placeholder)
+> [nvidia/assets | HideManufacturer.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/trayicon-HideManufacturer.c)  
+> [nvidia/assets | notes.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/trayicon-notes.cpp)  
+> [nvidia/assets | nvcpl.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/trayicon-nvcpl.c)
 
 ```json
 {
@@ -226,8 +226,8 @@ From NVIDIA documentations:
 "ShowDlssIndicator"=dword:00000002
 ```
 
-![](placeholder)
-![](placeholder)
+> [nvidia/assets | dlss.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/dlss.c)
+> [nvidia/assets | dlss-NGXCubinGeneric.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/dlss-NGXCubinGeneric.cpp)
 
 ```json
 {
@@ -249,8 +249,8 @@ From NVIDIA documentations:
 
 You can find it in `nvsvc64.dll`.
 
-![](placeholder)
-![](placeholder)
+> [nvidia/assets | disppower-nvsvc64.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64.c)
+> [nvidia/assets | disppower-nvsvc64gv.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64gv.c)
 
 ```json
 {
@@ -332,7 +332,7 @@ Enables `Enable Developer Settings` in the NVIDIA control panel.
 #define NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
 ```
 
-![](placeholder)
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true)
 
 ```json
 {
@@ -349,7 +349,7 @@ Enables `Enable Developer Settings` in the NVIDIA control panel.
 
 Disables `Add Dekstop Context Menu` in the NVIDIA control panel.
 
-![](placeholder)
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true)
 
 ```json
 {
@@ -451,7 +451,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 00 00 00
 ```
 
-![](placeholder)
+> [nvidia/assets | physx-nvapi.h](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/physx-nvapi.h)
 
 # Color Settings
 
@@ -541,8 +541,8 @@ sin(0) = 0  = 0x00000000 hex
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITORXXXXX_XX_XXXX_XX : ScalingConfig
 ```
 
-![](placeholder)
-![](placeholder)
+![nvidia/assets | color-DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)
+![nvidia/assets | color-displayDB.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-displayDB.cpp)
 
 # Noise Reduction
 
