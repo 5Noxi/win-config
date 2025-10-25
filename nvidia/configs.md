@@ -28,7 +28,7 @@ Main menu:**
   "COMMANDS": {
     "OpenNvCpl": {
       "Action": "run_powershell",
-      "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/NVIDIA-Tool.ps1' | iex"
+      "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/NVIDIA-Tool.ps1 | iex\"'"
     }
   }
 }
@@ -263,7 +263,7 @@ $home\Desktop\Nvcpl.lnk
     "COMMANDS": {
       "OpenNvCpl": {
         "Action": "run_powershell",
-        "Command": "iwr -UseBasicParsing -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/nvcpl.ps1' | iex"
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/nvcpl.ps1 | iex\"'"
       }
     }
   },
