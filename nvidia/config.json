@@ -60,89 +60,177 @@
     }
   },
   "Disable HDCP": {
-    "NVIDIA": {
-      "RMHdcpKeyglobZero": {
-        "Action": "nvidia key",
-        "Type": "REG_DWORD",
-        "Data": 1
+    "apply": {
+      "NVIDIA": {
+        "RMHdcpKeyglobZero": {
+          "Action": "nvidia key",
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    },
+    "revert": {
+      "NVIDIA": {
+        "RMHdcpKeyglobZero": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "Disable ECC": {
-    "COMMANDS": {
-      "DisableECC": {
-        "Action": "run_powershell",
-        "Command": "C:\\Windows\\System32\\nvidia-smi.exe -e 0"
+    "apply": {
+      "COMMANDS": {
+        "DisableECC": {
+          "Action": "run_powershell",
+          "Command": "C:\\Windows\\System32\\nvidia-smi.exe -e 0"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EnableECC": {
+          "Action": "run_powershell",
+          "Command": "C:\\Windows\\System32\\nvidia-smi.exe -e 1"
+        }
       }
     }
   },
   "Hide NVIDIA Tray Icon": {
-    "HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray": {
-      "StartOnLogin": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "apply": {
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray": {
+        "StartOnLogin": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "HideXGpuTrayIcon": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\CoProcManager": {
+        "ShowTrayIcon": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
       }
     },
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-      "HideXGpuTrayIcon": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    },
-    "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\CoProcManager": {
-      "ShowTrayIcon": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "revert": {
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray": {
+        "StartOnLogin": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "HideXGpuTrayIcon": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\CoProcManager": {
+        "ShowTrayIcon": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "Disable DLSS Indicator": {
-    "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NGXCore": {
-      "ShowDlssIndicator": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "apply": {
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NGXCore": {
+        "ShowDlssIndicator": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NGXCore": {
+        "ShowDlssIndicator": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "Disable Display Power Savings": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-      "DisplayPowerSaving": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "DisplayPowerSaving": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\Software\\NVIDIA Corporation\\Global\\NVTweak": {
+        "DisplayPowerSaving": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
       }
     },
-    "HKLM\\Software\\NVIDIA Corporation\\Global\\NVTweak": {
-      "DisplayPowerSaving": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "DisplayPowerSaving": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKLM\\Software\\NVIDIA Corporation\\Global\\NVTweak": {
+        "DisplayPowerSaving": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "Disable NVIDIA Driver Notification": {
-    "HKCU\\SOFTWARE\\NVIDIA Corporation\\Global\\GFExperience": {
-      "NotifyNewDisplayUpdates": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "apply": {
+      "HKCU\\SOFTWARE\\NVIDIA Corporation\\Global\\GFExperience": {
+        "NotifyNewDisplayUpdates": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\NVIDIA Corporation\\Global\\GFExperience": {
+        "NotifyNewDisplayUpdates": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "Disable Logging": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-      "LogWarningEntries": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "LogPagingEntries": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "LogEventEntries": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "LogErrorEntries": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
+        "LogWarningEntries": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "LogPagingEntries": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "LogEventEntries": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "LogErrorEntries": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
+        "LogWarningEntries": {
+          "Action": "DeleteValue"
+        },
+        "LogPagingEntries": {
+          "Action": "DeleteValue"
+        },
+        "LogEventEntries": {
+          "Action": "DeleteValue"
+        },
+        "LogErrorEntries": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
@@ -229,113 +317,196 @@
     }
   },
   "Disable Scheduled Tasks": {
-    "COMMANDS": {
-      "Disable NvTmRep_*": {
-        "Action": "scheduled_task",
-        "TaskName": "NvTmRep_*",
-        "Operation": "disable"
-      },
-      "Disable NvTmRepOnLogon*": {
-        "Action": "scheduled_task",
-        "TaskName": "NvTmRepOnLogon*",
-        "Operation": "disable"
-      },
-      "Disable NvTmMon_*": {
-        "Action": "scheduled_task",
-        "TaskName": "NvTmMon_*",
-        "Operation": "disable"
+    "apply": {
+      "COMMANDS": {
+        "Disable NvTmRep_*": {
+          "Action": "scheduled_task",
+          "TaskName": "NvTmRep_*",
+          "Operation": "disable"
+        },
+        "Disable NvTmRepOnLogon*": {
+          "Action": "scheduled_task",
+          "TaskName": "NvTmRepOnLogon*",
+          "Operation": "disable"
+        },
+        "Disable NvTmMon_*": {
+          "Action": "scheduled_task",
+          "TaskName": "NvTmMon_*",
+          "Operation": "disable"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "Enable NvTmRep_*": {
+          "Action": "scheduled_task",
+          "TaskName": "NvTmRep_*",
+          "Operation": "enable"
+        },
+        "Enable NvTmRepOnLogon*": {
+          "Action": "scheduled_task",
+          "TaskName": "NvTmRepOnLogon*",
+          "Operation": "enable"
+        },
+        "Enable NvTmMon_*": {
+          "Action": "scheduled_task",
+          "TaskName": "NvTmMon_*",
+          "Operation": "enable"
+        }
       }
     }
   },
   "Disable Preemption": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-      "DisablePreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 1
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
+        "DisablePreemption": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "DisableCudaContextPreemption": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "EnableCEPreemption": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "DisablePreemptionOnS3S4": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "ComputePreemption": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableMidGfxPreemption": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableMidGfxPreemptionVGPU": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableMidBufferPreemptionForHighTdrTimeout": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableMidBufferPreemption": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableAsyncMidBufferPreemption": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
       },
-      "DisableCudaContextPreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "EnableCEPreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "DisablePreemptionOnS3S4": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "ComputePreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableMidGfxPreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableMidGfxPreemptionVGPU": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableMidBufferPreemptionForHighTdrTimeout": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableMidBufferPreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableAsyncMidBufferPreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
+        "EnablePreemption": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
       }
     },
-    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
-      "EnablePreemption": {
-        "Action": "",
-        "Type": "REG_DWORD",
-        "Data": 0
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
+        "DisablePreemption": {
+          "Action": "DeleteValue"
+        },
+        "DisableCudaContextPreemption": {
+          "Action": "DeleteValue"
+        },
+        "EnableCEPreemption": {
+          "Action": "DeleteValue"
+        },
+        "DisablePreemptionOnS3S4": {
+          "Action": "DeleteValue"
+        },
+        "ComputePreemption": {
+          "Action": "DeleteValue"
+        },
+        "EnableMidGfxPreemption": {
+          "Action": "DeleteValue"
+        },
+        "EnableMidGfxPreemptionVGPU": {
+          "Action": "DeleteValue"
+        },
+        "EnableMidBufferPreemptionForHighTdrTimeout": {
+          "Action": "DeleteValue"
+        },
+        "EnableMidBufferPreemption": {
+          "Action": "DeleteValue"
+        },
+        "EnableAsyncMidBufferPreemption": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
+        "EnablePreemption": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "Enable Developer Settings": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-      "NvDevToolsVisible": {
-        "Type": "REG_DWORD",
-        "Data": 1
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "NvDevToolsVisible": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "NvDevToolsVisible": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
-  "Disable Add Dekstop Context Menu": {
-    "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
-      "ContextUIPolicy": {
-        "Type": "REG_DWORD",
-        "Data": 0
+  "Disable Add Desktop Context Menu": {
+    "apply": {
+      "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
+        "ContextUIPolicy": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
+        "ContextUIPolicy": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
   "GPU Performance Counters": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-      "RmProfilingAdminOnly": {
-        "Type": "REG_DWORD",
-        "Data": 0
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "RmProfilingAdminOnly": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "NVIDIA": {
+        "RmProfilingAdminOnly": {
+          "Action": "nvidia key",
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
       }
     },
-    "NVIDIA": {
-      "RmProfilingAdminOnly": {
-        "Action": "nvidia key",
-        "Type": "REG_DWORD",
-        "Data": 0
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
+        "RmProfilingAdminOnly": {
+          "Action": "DeleteValue"
+        }
+      },
+      "NVIDIA": {
+        "RmProfilingAdminOnly": {
+          "Action": "DeleteValue"
+        }
       }
     }
   },
