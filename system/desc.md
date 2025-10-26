@@ -240,3 +240,32 @@ Storage Sense deletes temporary files automatically - revert it by changing it b
 
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/storagesen1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/storagesen2.png?raw=true)
+
+# Reduce Shutdown Time
+
+Forces hung apps and services to terminate faster.
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control : WaitToKillServiceTimeout
+\Registry\User\S-ID\Control Panel\Desktop : WaitToKillTimeout
+\Registry\User\S-ID\Control Panel\Desktop : HungAppTimeout
+\Registry\User\S-ID\Control Panel\Desktop : AutoEndTasks
+```
+`HungAppTimeout`-> `1500` (`1.5` sec; default is `5` sec)
+`WaitToKillTimeout`-> `2500` (`2.5` sec)
+`WaitToKillServiceTimeout`-> `2500` (`2.5` sec; default is `5` sec)
+`WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000` (`20` sec))
+
+More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
+
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/ControlPanel-Desktop.txt
+
+# Disable FTH
+
+Used for preventing legacy or unstable applications from crashing, read through the picture below for more detailed information (`Windows Internals 7th Edition, Part 1, Page 347`).
+
+> https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf  
+> https://learn.microsoft.com/en-us/windows/win32/win7appqual/fault-tolerant-heap  
+> https://www.youtube.com/watch?v=4SvNNXAwoqE
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/fth.png?raw=true)

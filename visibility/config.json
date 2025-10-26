@@ -66,7 +66,7 @@
       }
     }
   },
-  "Remove Home and Gallery from Explorer": {
+  "Remove Home & Gallery": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": {
         "Action": "delete_path"
@@ -123,6 +123,79 @@
       "COMMANDS": {
         "RestartExplorer": {
           "Action": "restart_explorer"
+        }
+      }
+    }
+  },
+  "Disable Animations": {
+    "apply": {
+      "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+        "MinAnimate": {
+          "Type": "REG_SZ",
+          "Data": "0"
+        }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarAnimations": {
+          "Type": "REG_SZ",
+          "Data": "0"
+        }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": {
+        "DisallowAnimations": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "EnableFirstLogonAnimation": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "EnableFirstLogonAnimation": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "TurnOffSPIAnimations": {
+          "Type": "REG_DWORD",
+          "Data": 1,
+          "KeyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+          "KeyName": "TurnOffSPIAnimations"
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+        "MinAnimate": {
+          "Type": "REG_SZ",
+          "Data": "1"
+        }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarAnimations": {
+          "Type": "REG_SZ",
+          "Data": "1"
+        }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "TurnOffSPIAnimations": {
+          "Action": "deletevalue"
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "EnableFirstLogonAnimation": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "EnableFirstLogonAnimation": {
+          "Type": "REG_DWORD",
+          "Data": 1
         }
       }
     }

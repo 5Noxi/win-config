@@ -163,5 +163,75 @@
         }
       }
     }
+  },
+  "Reduce Shutdown Time": {
+    "apply": {
+      "HKCU\\Control Panel\\Desktop": {
+        "AutoEndTasks": {
+          "Type": "REG_SZ",
+          "Data": "1"
+        },
+        "HungAppTimeout": {
+          "Type": "REG_SZ",
+          "Data": "1500"
+        },
+        "WaitToKillTimeout": {
+          "Type": "REG_SZ",
+          "Data": "2500"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
+        "WaitToKillServiceTimeout": {
+          "Type": "REG_SZ",
+          "Data": "2500"
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Control Panel\\Desktop": {
+        "AutoEndTasks": {
+          "Action": "deletevalue"
+        },
+        "HungAppTimeout": {
+          "Action": "deletevalue"
+        },
+        "WaitToKillTimeout": {
+          "Action": "deletevalue"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
+        "WaitToKillServiceTimeout": {
+          "Type": "REG_SZ",
+          "Data": "5000"
+        }
+      }
+    }
+  },
+  "Disable FTH": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\FTH": {
+        "Enabled": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\FTH\\State": {
+        "Action": "delete_path"
+      },
+      "COMMANDS": {
+        "RunFthSpecialize": {
+          "Action": "run_powershell",
+          "Command": "Rundll32.exe fthsvc.dll,FthSysprepSpecialize"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\FTH": {
+        "Enabled": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    }
   }
 }
