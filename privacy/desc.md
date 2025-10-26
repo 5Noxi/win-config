@@ -38,37 +38,6 @@ return v5;
 > https://gpsearch.azurewebsites.net/#13439  
 > https://gpsearch.azurewebsites.net/#13350
 
-```json
-{
-  "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MapsBroker": {
-    "Start": {
-      "Type": "REG_DWORD",
-      "Data": 4
-    }
-  },
-  "HKLM\\SYSTEM\\Maps": {
-    "AutoUpdateEnabled": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "UpdateOnlyOnWifi": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  },
-  "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps": {
-    "AllowUntriggeredNetworkTrafficOnSettingsPage": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "AutoDownloadAndUpdateMapData": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  }
-}
-```
-
 # Disable Website Access to Language List
 
 "Sets the HTTP Accept Language from the Language List opt-out setting." Disables `Let websites provide locally relevant content by accessing my language list`.
@@ -89,28 +58,3 @@ does the same as the batch:
 > https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps
 > https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general
 
-```json
-{
-  "apply": {
-    "HKCU\\Control Panel\\International\\User Profile": {
-      "HttpAcceptLanguageOptOut": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    },
-    "HKCU\\Software\\Microsoft\\Internet Explorer\\International": {
-      "AcceptLanguage": {
-        "Action": "DeleteValue"
-      }
-    }
-  },
-  "revert": {
-    "HKCU\\Control Panel\\International\\User Profile": {
-      "HttpAcceptLanguageOptOut": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
-    }
-  }
-}
-```

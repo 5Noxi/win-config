@@ -1,0 +1,80 @@
+{
+  "QoS Policy": {
+    "__control": {
+      "type": "button",
+      "label": "Open"
+    },
+    "COMMANDS": {
+      "OpenNvCpl": {
+        "Action": "run_powershell",
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/network/assets/QoS-Policy.ps1 | iex\"'"
+      }
+    }
+  },
+  "Congestion Provider": {
+    "apply": {
+      "COMMANDS": {
+        "DisableLoopbackLargeMTU_IPv6": {
+          "Action": "run_powershell",
+          "Command": "netsh int ipv6 set global loopbacklargemtu=disable"
+        },
+        "DisableLoopbackLargeMTU_IPv4": {
+          "Action": "run_powershell",
+          "Command": "netsh int ipv4 set global loopbacklargemtu=disable"
+        },
+        "SetTCP_BBR2_Internet": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=Internet CongestionProvider=bbr2"
+        },
+        "SetTCP_BBR2_Datacenter": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=Datacenter CongestionProvider=bbr2"
+        },
+        "SetTCP_BBR2_Compat": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=Compat CongestionProvider=bbr2"
+        },
+        "SetTCP_BBR2_DatacenterCustom": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=bbr2"
+        },
+        "SetTCP_BBR2_InternetCustom": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=InternetCustom CongestionProvider=bbr2"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EnableLoopbackLargeMTU_IPv6": {
+          "Action": "run_powershell",
+          "Command": "netsh int ipv6 set global loopbacklargemtu=enable"
+        },
+        "EnableLoopbackLargeMTU_IPv4": {
+          "Action": "run_powershell",
+          "Command": "netsh int ipv4 set global loopbacklargemtu=enable"
+        },
+        "RevertTCP_CUBIC_Internet": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=Internet CongestionProvider=CUBIC"
+        },
+        "RevertTCP_CUBIC_InternetCustom": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=InternetCustom CongestionProvider=CUBIC"
+        },
+        "RevertTCP_CUBIC_Compat": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=Compat CongestionProvider=CUBIC"
+        },
+        "RevertTCP_CUBIC_Datacenter": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=Datacenter CongestionProvider=CUBIC"
+        },
+        "RevertTCP_CUBIC_DatacenterCustom": {
+          "Action": "run_powershell",
+          "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=CUBIC"
+        }
+      }
+    }
+  }
+}

@@ -22,44 +22,8 @@ Disable fast startup:
 ```bat
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v HiberbootEnabled /t REG_DWORD /d 0 /f
 ```
-```json
-{
-  "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-    "HibernateEnabled": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "HibernateEnabledDefault": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "AllowHibernate": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  }
-}
-```
 
 # Remove Power Options
 
 Removes the `Hibernate`, `Lock`, `Sleep` power options.
 
-```json
-{
-  "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
-    "ShowHibernateOption": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "ShowLockOption": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "ShowSleepOption": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  }
-}
-```

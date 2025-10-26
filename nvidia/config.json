@@ -42,11 +42,20 @@
     }
   },
   "Performance State (P0)": {
-    "NVIDIA": {
-      "DisableDynamicPstate": {
-        "Action": "nvidia key",
-        "Type": "REG_DWORD",
-        "Data": 1
+    "apply": {
+      "NVIDIA": {
+        "DisableDynamicPstate": {
+          "Action": "nvidia key",
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    },
+    "revert":{
+      "NVIDIA":{
+        "DisableDynamicPstate":{
+          "Action":"DeleteValue"
+        }
       }
     }
   },

@@ -36,27 +36,6 @@ for ($i=0; $i -le 271; $i++) {
 
 > [system/assets | Win32PrioritySeparation.pdf](https://github.com/5Noxi/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
 
-```json
-{
-  "apply": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
-      "Win32PrioritySeparation": {
-        "Type": "REG_DWORD",
-        "Data": 24
-      }
-    }
-  },
-  "revert": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
-      "Win32PrioritySeparation": {
-        "Type": "REG_DWORD",
-        "Data": 2
-      }
-    }
-  }
-}
-```
-
 # Disable UAC
 
 Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation. Save `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System` before running it.
@@ -160,59 +139,6 @@ Value: `EnableVirtualization`
 > https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
 > https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
 
-```json
-{
-  "apply": {
-    "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-      "ValidateAdminCodeSignatures": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ConsentPromptBehaviorAdmin": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ConsentPromptBehaviorUser": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "PromptOnSecureDesktop": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableLUA": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
-    }
-  },
-  "revert": {
-    "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-      "ValidateAdminCodeSignatures": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "EnableLUA": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "ConsentPromptBehaviorAdmin": {
-        "Type": "REG_DWORD",
-        "Data": 5
-      },
-      "ConsentPromptBehaviorUser": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "PromptOnSecureDesktop": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    }
-  }
-}
-```
-
 # Lock Screen
 
 Disables the lock screen (skips the lock screen and go directly to the login screen). Revert it by removing the value (2nd command).
@@ -229,25 +155,6 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v NoLockScre
 Show clear logon background:
 ```bat
 reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackgroundOnLogon /t REG_DWORD /d 1 /f
-```
-```json
-{
-  "apply": {
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-      "NoLockScreen": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    }
-  },
-  "revert": {
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-      "NoLockScreen": {
-        "Action": "DeleteValue"
-      }
-    }
-  }
-}
 ```
 
 # Enable Game Mode
@@ -283,34 +190,6 @@ Miscellaneous notes:
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadDoublePressIntervalMs
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadShortPressIntervalMs
 ```
-```json
-{
-  "apply": {
-    "HKCU\\Software\\Microsoft\\GameBar": {
-      "AllowAutoGameMode": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "AutoGameModeEnabled": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    }
-  },
-  "revert": {
-    "HKCU\\Software\\Microsoft\\GameBar": {
-      "AllowAutoGameMode": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "AutoGameModeEnabled": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    }
-  }
-}
-```
 
 # Disable Search Indexing
 
@@ -334,107 +213,3 @@ $nvp = "$env:appdata\Everything\Everything.ini";(gc $nvp) -replace '^normal_back
 
 The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
-```json
-{
-  "apply": {
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-      "PreventIndexOnBattery": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    },
-    "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
-      "RespectPowerModes": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
-      "WholeFileSystem": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "SystemFolders": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "AutoWildCard": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "EnableNaturalQuerySyntax": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ArchivedFiles": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
-    },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
-      "SearchOnly": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      }
-    },
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
-      "Start": {
-        "Type": "REG_DWORD",
-        "Data": 4
-      }
-    },
-    "COMMANDS": {
-      "DisableSearchFeature": {
-        "Action": "run_powershell",
-        "Command": "dism /Online /Disable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart"
-      }
-    }
-  },
-  "revert": {
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-      "PreventIndexOnBattery": {
-        "Action": "DeleteValue"
-      }
-    },
-    "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
-      "RespectPowerModes": {
-        "Action": "DeleteValue"
-      }
-    },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
-      "WholeFileSystem": {
-        "Action": "DeleteValue"
-      },
-      "SystemFolders": {
-        "Action": "DeleteValue"
-      },
-      "AutoWildCard": {
-        "Action": "DeleteValue"
-      },
-      "EnableNaturalQuerySyntax": {
-        "Action": "DeleteValue"
-      },
-      "ArchivedFiles": {
-        "Action": "DeleteValue"
-      }
-    },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
-      "SearchOnly": {
-        "Action": "DeleteValue"
-      }
-    },
-    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
-      "Start": {
-        "Type": "REG_DWORD",
-        "Data": 2
-      }
-    },
-    "COMMANDS": {
-      "EnableSearchFeature": {
-        "Action": "run_powershell",
-        "Command": "dism /Online /Enable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart"
-      }
-    }
-  }
-}
-```

@@ -31,89 +31,6 @@ Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTes
 > https://blogs.windows.com/windowsdeveloper/2023/05/26/delivering-delightful-performance-for-more-than-one-billion-users-worldwide/  
 > https://github.com/valleyofdoom/PC-Tuning#1150-background-window-message-rate-permalink
 
-```json
-{
-  "HKCU\\Control Panel\\Mouse": {
-    "MouseSensitivity": {
-      "Type": "REG_SZ",
-      "Data": "10"
-    },
-    "MouseSpeed": {
-      "Type": "REG_SZ",
-      "Data": "0"
-    },
-    "MouseThreshold1": {
-      "Type": "REG_SZ",
-      "Data": "0"
-    },
-    "MouseThreshold2": {
-      "Type": "REG_SZ",
-      "Data": "0"
-    },
-    "MouseHoverTime": {
-      "Type": "REG_SZ",
-      "Data": "100"
-    },
-    "MouseTrails": {
-      "Type": "REG_SZ",
-      "Data": "0"
-    },
-    "DoubleClickSpeed": {
-      "Type": "REG_SZ",
-      "Data": "340"
-    },
-    "SwapMouseButtons": {
-      "Type": "REG_SZ",
-      "Data": "0"
-    },
-    "SnapToDefaultButton": {
-      "Type": "REG_SZ",
-      "Data": "0"
-    },
-    "ActiveWindowTracking": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    },
-    "Beep": {
-      "Type": "REG_SZ",
-      "Data": "No"
-    },
-    "ExtendedSounds": {
-      "Type": "REG_SZ",
-      "Data": "No"
-    },
-    "RawMouseThrottleDuration": {
-      "Type": "REG_DWORD",
-      "Data": 20
-    },
-    "RawMouseThrottleEnabled": {
-      "Type": "REG_DWORD",
-      "Data": 1
-    },
-    "RawMouseThrottleForced": {
-      "Type": "REG_DWORD",
-      "Data": 1
-    },
-    "RawMouseThrottleLeeway": {
-      "Type": "REG_DWORD",
-      "Data": 2
-    }
-  },
-  "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
-    "Flags": {
-      "Type": "REG_SZ",
-      "Data": "158"
-    }
-  },
-  "HKCU\\Control Panel\\Cursors": {
-    "ContactVisualization": {
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  }
-}
-```
-
 # Audio Ducking
 
 "*Windows audio ducking is a dynamic audio processing technique that enables the **automatic adjustment of audio levels** between different audio sources on a Windows-based computer or operating system.*"
@@ -139,14 +56,4 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 `Do nothing`:
 ```ps
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 3
-```
-```json
-{
-  "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
-    "UserDuckingPreference": {
-      "Type": "REG_DWORD",
-      "Data": 3
-    }
-  }
-}
 ```

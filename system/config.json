@@ -1,0 +1,215 @@
+{
+  "Win32PrioritySeparation": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
+        "Win32PrioritySeparation": {
+          "Type": "REG_DWORD",
+          "Data": 24
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
+        "Win32PrioritySeparation": {
+          "Type": "REG_DWORD",
+          "Data": 2
+        }
+      }
+    }
+  },
+  "Disable UAC": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "ValidateAdminCodeSignatures": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "ConsentPromptBehaviorAdmin": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "ConsentPromptBehaviorUser": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "PromptOnSecureDesktop": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableLUA": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "ValidateAdminCodeSignatures": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "EnableLUA": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "ConsentPromptBehaviorAdmin": {
+          "Type": "REG_DWORD",
+          "Data": 5
+        },
+        "ConsentPromptBehaviorUser": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "PromptOnSecureDesktop": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    }
+  },
+  "Lock Screen": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+        "NoLockScreen": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+        "NoLockScreen": {
+          "Action": "DeleteValue"
+        }
+      }
+    }
+  },
+  "Enable Game Mode": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\GameBar": {
+        "AllowAutoGameMode": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "AutoGameModeEnabled": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\GameBar": {
+        "AllowAutoGameMode": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "AutoGameModeEnabled": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    }
+  },
+  "Disable Search Indexing": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+        "PreventIndexOnBattery": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
+        "RespectPowerModes": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+        "WholeFileSystem": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "SystemFolders": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "AutoWildCard": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        },
+        "EnableNaturalQuerySyntax": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        },
+        "ArchivedFiles": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
+        "SearchOnly": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
+        "Start": {
+          "Type": "REG_DWORD",
+          "Data": 4
+        }
+      },
+      "COMMANDS": {
+        "DisableSearchFeature": {
+          "Action": "run_powershell",
+          "Command": "dism /Online /Disable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+        "PreventIndexOnBattery": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
+        "RespectPowerModes": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+        "WholeFileSystem": {
+          "Action": "DeleteValue"
+        },
+        "SystemFolders": {
+          "Action": "DeleteValue"
+        },
+        "AutoWildCard": {
+          "Action": "DeleteValue"
+        },
+        "EnableNaturalQuerySyntax": {
+          "Action": "DeleteValue"
+        },
+        "ArchivedFiles": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
+        "SearchOnly": {
+          "Action": "DeleteValue"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
+        "Start": {
+          "Type": "REG_DWORD",
+          "Data": 2
+        }
+      },
+      "COMMANDS": {
+        "EnableSearchFeature": {
+          "Action": "run_powershell",
+          "Command": "dism /Online /Enable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart"
+        }
+      }
+    }
+  }
+}
