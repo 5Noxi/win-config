@@ -1,52 +1,29 @@
 {
   "Disable Automatic Map Downloads": {
     "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MapsBroker": {
-      "Start": {
-        "Type": "REG_DWORD",
-        "Data": 4
-      }
+      "Start": { "Type": "REG_DWORD", "Data": 4 }
     },
     "HKLM\\SYSTEM\\Maps": {
-      "AutoUpdateEnabled": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "UpdateOnlyOnWifi": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
+      "AutoUpdateEnabled": { "Type": "REG_DWORD", "Data": 0 },
+      "UpdateOnlyOnWifi": { "Type": "REG_DWORD", "Data": 0 }
     },
     "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps": {
-      "AllowUntriggeredNetworkTrafficOnSettingsPage": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "AutoDownloadAndUpdateMapData": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
+      "AllowUntriggeredNetworkTrafficOnSettingsPage": { "Type": "REG_DWORD", "Data": 0 },
+      "AutoDownloadAndUpdateMapData": { "Type": "REG_DWORD", "Data": 0 }
     }
   },
   "Disable Website Access to Language List": {
     "apply": {
       "HKCU\\Control Panel\\International\\User Profile": {
-        "HttpAcceptLanguageOptOut": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+        "HttpAcceptLanguageOptOut": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Microsoft\\Internet Explorer\\International": {
-        "AcceptLanguage": {
-          "Action": "DeleteValue"
-        }
+        "AcceptLanguage": { "Action": "DeleteValue" }
       }
     },
     "revert": {
       "HKCU\\Control Panel\\International\\User Profile": {
-        "HttpAcceptLanguageOptOut": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "HttpAcceptLanguageOptOut": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
   }

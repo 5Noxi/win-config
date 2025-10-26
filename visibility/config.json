@@ -1,116 +1,35 @@
 {
   "Explorer Options": {
     "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-      "ShowFrequent": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowRecent": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowCloudFilesInQuickAccess": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowDriveLettersFirst": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
+      "ShowFrequent": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowRecent": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowCloudFilesInQuickAccess": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowDriveLettersFirst": { "Type": "REG_DWORD", "Data": 0 }
     },
     "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-      "IconsOnly": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "UseCompactMode": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "ShowTypeOverlay": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "FolderContentsInfoTip": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "Hidden": {
-        "Type": "REG_DWORD",
-        "Data": 2
-      },
-      "HideDrivesWithNoMedia": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "HideFileExt": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "HideMergeConflicts": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowSuperHidden": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "SeparateProcess": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "PersistBrowsers": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowEncryptCompressedColor": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowInfoTip": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowPreviewHandlers": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowStatusBar": {
-        "Type": "REG_DWORD",
-        "Data": 1
-      },
-      "ShowSyncProviderNotifications": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "AutoCheckSelect": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "SharingWizardOn": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "TypeAhead": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "NavPaneExpandToCurrentFolder": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "NavPaneShowAllCloudStates": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "NavPaneShowAllFolders": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "TaskbarDa": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
+      "IconsOnly": { "Type": "REG_DWORD", "Data": 0 },
+      "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 },
+      "ShowTypeOverlay": { "Type": "REG_DWORD", "Data": 0 },
+      "FolderContentsInfoTip": { "Type": "REG_DWORD", "Data": 0 },
+      "Hidden": { "Type": "REG_DWORD", "Data": 2 },
+      "HideDrivesWithNoMedia": { "Type": "REG_DWORD", "Data": 0 },
+      "HideFileExt": { "Type": "REG_DWORD", "Data": 0 },
+      "HideMergeConflicts": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowSuperHidden": { "Type": "REG_DWORD", "Data": 0 },
+      "SeparateProcess": { "Type": "REG_DWORD", "Data": 0 },
+      "PersistBrowsers": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowEncryptCompressedColor": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowInfoTip": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowPreviewHandlers": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
+      "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 },
+      "AutoCheckSelect": { "Type": "REG_DWORD", "Data": 0 },
+      "SharingWizardOn": { "Type": "REG_DWORD", "Data": 0 },
+      "TypeAhead": { "Type": "REG_DWORD", "Data": 0 },
+      "NavPaneExpandToCurrentFolder": { "Type": "REG_DWORD", "Data": 0 },
+      "NavPaneShowAllCloudStates": { "Type": "REG_DWORD", "Data": 0 },
+      "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 },
+      "TaskbarDa": { "Type": "REG_DWORD", "Data": 0 }
     }
   }
 }

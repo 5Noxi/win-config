@@ -1,34 +1,16 @@
 {
   "Disable Hibernation / Hiberboot": {
     "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-      "HibernateEnabled": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "HibernateEnabledDefault": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "AllowHibernate": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
+      "HibernateEnabled": { "Type": "REG_DWORD", "Data": 0 },
+      "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 0 },
+      "AllowHibernate": { "Type": "REG_DWORD", "Data": 0 }
     }
   },
   "Remove Power Options": {
     "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
-      "ShowHibernateOption": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowLockOption": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      },
-      "ShowSleepOption": {
-        "Type": "REG_DWORD",
-        "Data": 0
-      }
+      "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 },
+      "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
     }
   }
 }
