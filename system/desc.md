@@ -213,3 +213,23 @@ $nvp = "$env:appdata\Everything\Everything.ini";(gc $nvp) -replace '^normal_back
 
 The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
+# Enable HAGS
+
+HAGS feature is introducedspecifically for the WDDM. If disables the CPU manages the GPU scheduling via a high-priority kernel thread, GPU context switches and task scheduling are handled by the CPU (CPU offloads graphics intensive tasks to the GPU for rendering). If enabled the GPU handles its own scheduling using a built in scheduler processor, context switching between GPU tasks is done directly on the GPU. It is especially beneficial, if you've a slow CPU, or if the CPU is heavily loaded with other tasks. 
+"It depends on your hardware, if you want HAGS to be enabled or not. E.g if using a old GPU, it may not fully support the new scheduler."
+
+HAGS should be enabled, there're many reasons like different threads... may add more information here soon.
+
+> https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/
+> https://maxcloudon.com/hardware-accelerated-gpu-scheduling/
+
+# Remove Windows.old
+
+Removes old/previous windows installation files from `Windows.old`.
+
+```
+Ten days after you upgrade to Windows, your previous version of Windows will be automatically deleted from your PC. However, if you need to free up drive space, and you’re confident that your files and settings are where you want them to be in Windows, you can safely delete it yourself.
+
+If it’s been fewer than 10 days since you upgraded to Windows, your previous version of Windows will be listed as a system file you can delete. You can delete it, but keep in mind that you'll be deleting your Windows.old folder, which contains files that give you the option to go back to your previous version of Windows. If you delete your previous version of Windows, this can't be undone (you won't be able to go back to your previous version of Windows).
+```
+> https://support.microsoft.com/en-us/windows/delete-your-previous-version-of-windows-f8b26680-e083-c710-b757-7567d69dbb74

@@ -31,5 +31,74 @@
       "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 },
       "TaskbarDa": { "Type": "REG_DWORD", "Data": 0 }
     }
+  },
+  "Enable Dark Theme": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize": {
+        "AppsUseLightTheme": { "Type": "REG_DWORD", "Data": 0 },
+        "ColorPrevalence": { "Type": "REG_DWORD", "Data": 0 },
+        "SystemUsesLightTheme": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+        "UWPAppsUseLightTheme": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize": {
+        "ColorPrevalence": { "Type": "REG_DWORD", "Data": 0 },
+        "AppsUseLightTheme": { "Type": "REG_DWORD", "Data": 1 },
+        "SystemUsesLightTheme": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+        "UWPAppsUseLightTheme": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Transparency": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize": {
+        "EnableTransparency": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize": {
+        "EnableTransparency": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Remove Home and Gallery from Explorer": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": {
+        "Action": "delete_path"
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": {
+        "Action": "delete_path"
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "LaunchTo": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Classes\\CLSID\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": {
+        "System.IsPinnedToNameSpaceTree": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKCU\\Software\\Classes\\CLSID\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": {
+        "System.IsPinnedToNameSpaceTree": {
+          "Type": "REG_DWORD",
+          "Data": 1
+        }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "LaunchTo": {
+          "Action": "deletevalue"
+        }
+      }
+    }
   }
 }

@@ -106,5 +106,33 @@
         "EnableSearchFeature": { "Action": "run_powershell", "Command": "dism /Online /Enable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart" }
       }
     }
+  },
+  "Enable HAGS": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "HwSchMode": {
+          "Type": "REG_DWORD",
+          "Data": 2
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "HwSchMode": {
+          "Type": "REG_DWORD",
+          "Data": 2
+        }
+      }
+    }
+  },
+  "Remove Windows.old": {
+    "apply": {
+      "COMMANDS": {
+        "RemoveWindowsOld": {
+          "Action": "elevated_priv",
+          "Command": "rd /s /q \"%systemdrive%\\Windows.old\""
+        }
+      }
+    }
   }
 }
