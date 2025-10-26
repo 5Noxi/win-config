@@ -15,6 +15,13 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Sh
 ```
 Set `Hidden` to `2` and `ShowSuperHidden` to `0` to disable it.
 
+---
+
+Miscellaneous notes:
+```ps
+"TaskbarDa": { "Type": "REG_DWORD", "Data": 0 } # Access denied
+```
+
 # Enable Dark Theme
 
 `darktheme-GetThemeFromUnattendSetup.c` for information about the comments, otherwise ignore them.

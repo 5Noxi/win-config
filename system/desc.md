@@ -220,7 +220,7 @@ HAGS feature is introducedspecifically for the WDDM. If disables the CPU manages
 
 HAGS should be enabled, there're many reasons like different threads... may add more information here soon.
 
-> https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/
+> https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/  
 > https://maxcloudon.com/hardware-accelerated-gpu-scheduling/
 
 # Remove Windows.old
@@ -325,7 +325,7 @@ Self explaining.
 
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/CV-Explorer.txt
 
-![](https://github.com/5Noxi/win-config/blob/main/system/images/lowdiskspace.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true)
 
 # Clean WinSxS Folder
 
@@ -354,7 +354,7 @@ Component Store Cleanup Recommended : No
 ```
 `Number of Reclaimable Packages : 0` -> This is the number of superseded packages on the system that component cleanup can remove.
 
--# > https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder?view=windows-11&source=recommendations#analyze-the-component-store
+> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder?view=windows-11&source=recommendations#analyze-the-component-store
 
 Clean your folder with:
 ```cmd

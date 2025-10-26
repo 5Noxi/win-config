@@ -28,7 +28,7 @@
     },
     "revert": {
       "NVIDIA": {
-        "DisableDynamicPstate": { "Action": "DeleteValue" }
+        "DisableDynamicPstate": { "Action": "deletevalue" }
       }
     }
   },
@@ -40,7 +40,7 @@
     },
     "revert": {
       "NVIDIA": {
-        "RMHdcpKeyglobZero": { "Action": "DeleteValue" }
+        "RMHdcpKeyglobZero": { "Action": "deletevalue" }
       }
     }
   },
@@ -70,13 +70,13 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray": {
-        "StartOnLogin": { "Action": "DeleteValue" }
+        "StartOnLogin": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-        "HideXGpuTrayIcon": { "Action": "DeleteValue" }
+        "HideXGpuTrayIcon": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\CoProcManager": {
-        "ShowTrayIcon": { "Action": "DeleteValue" }
+        "ShowTrayIcon": { "Action": "deletevalue" }
       }
     }
   },
@@ -88,7 +88,7 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NGXCore": {
-        "ShowDlssIndicator": { "Action": "DeleteValue" }
+        "ShowDlssIndicator": { "Action": "deletevalue" }
       }
     }
   },
@@ -103,10 +103,10 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-        "DisplayPowerSaving": { "Action": "DeleteValue" }
+        "DisplayPowerSaving": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\NVIDIA Corporation\\Global\\NVTweak": {
-        "DisplayPowerSaving": { "Action": "DeleteValue" }
+        "DisplayPowerSaving": { "Action": "deletevalue" }
       }
     }
   },
@@ -118,7 +118,7 @@
     },
     "revert": {
       "HKCU\\SOFTWARE\\NVIDIA Corporation\\Global\\GFExperience": {
-        "NotifyNewDisplayUpdates": { "Action": "DeleteValue" }
+        "NotifyNewDisplayUpdates": { "Action": "deletevalue" }
       }
     }
   },
@@ -133,10 +133,10 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "LogWarningEntries": { "Action": "DeleteValue" },
-        "LogPagingEntries": { "Action": "DeleteValue" },
-        "LogEventEntries": { "Action": "DeleteValue" },
-        "LogErrorEntries": { "Action": "DeleteValue" }
+        "LogWarningEntries": { "Action": "deletevalue" },
+        "LogPagingEntries": { "Action": "deletevalue" },
+        "LogEventEntries": { "Action": "deletevalue" },
+        "LogErrorEntries": { "Action": "deletevalue" }
       }
     }
   },
@@ -156,15 +156,15 @@
     },
     "revert": {
       "NVIDIA": {
-        "RmDisableACPI": { "Action": "DeleteValue" },
-        "RMDisableGpuASPMFlags": { "Action": "DeleteValue" },
-        "RMFspg": { "Action": "DeleteValue" },
-        "RMBlcg": { "Action": "DeleteValue" },
-        "RMElcg": { "Action": "DeleteValue" },
-        "RmElpg": { "Action": "DeleteValue" },
-        "RMSlcg": { "Action": "DeleteValue" },
-        "RMOPSB": { "Action": "DeleteValue" },
-        "RMLpwrArch": { "Action": "DeleteValue" }
+        "RmDisableACPI": { "Action": "deletevalue" },
+        "RMDisableGpuASPMFlags": { "Action": "deletevalue" },
+        "RMFspg": { "Action": "deletevalue" },
+        "RMBlcg": { "Action": "deletevalue" },
+        "RMElcg": { "Action": "deletevalue" },
+        "RmElpg": { "Action": "deletevalue" },
+        "RMSlcg": { "Action": "deletevalue" },
+        "RMOPSB": { "Action": "deletevalue" },
+        "RMLpwrArch": { "Action": "deletevalue" }
       }
     }
   },
@@ -204,19 +204,19 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "DisablePreemption": { "Action": "DeleteValue" },
-        "DisableCudaContextPreemption": { "Action": "DeleteValue" },
-        "EnableCEPreemption": { "Action": "DeleteValue" },
-        "DisablePreemptionOnS3S4": { "Action": "DeleteValue" },
-        "ComputePreemption": { "Action": "DeleteValue" },
-        "EnableMidGfxPreemption": { "Action": "DeleteValue" },
-        "EnableMidGfxPreemptionVGPU": { "Action": "DeleteValue" },
-        "EnableMidBufferPreemptionForHighTdrTimeout": { "Action": "DeleteValue" },
-        "EnableMidBufferPreemption": { "Action": "DeleteValue" },
-        "EnableAsyncMidBufferPreemption": { "Action": "DeleteValue" }
+        "DisablePreemption": { "Action": "deletevalue" },
+        "DisableCudaContextPreemption": { "Action": "deletevalue" },
+        "EnableCEPreemption": { "Action": "deletevalue" },
+        "DisablePreemptionOnS3S4": { "Action": "deletevalue" },
+        "ComputePreemption": { "Action": "deletevalue" },
+        "EnableMidGfxPreemption": { "Action": "deletevalue" },
+        "EnableMidGfxPreemptionVGPU": { "Action": "deletevalue" },
+        "EnableMidBufferPreemptionForHighTdrTimeout": { "Action": "deletevalue" },
+        "EnableMidBufferPreemption": { "Action": "deletevalue" },
+        "EnableAsyncMidBufferPreemption": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
-        "EnablePreemption": { "Action": "DeleteValue" }
+        "EnablePreemption": { "Action": "deletevalue" }
       }
     }
   },
@@ -228,7 +228,7 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-        "NvDevToolsVisible": { "Action": "DeleteValue" }
+        "NvDevToolsVisible": { "Action": "deletevalue" }
       }
     }
   },
@@ -240,7 +240,7 @@
     },
     "revert": {
       "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
-        "ContextUIPolicy": { "Action": "DeleteValue" }
+        "ContextUIPolicy": { "Action": "deletevalue" }
       }
     }
   },
@@ -255,10 +255,10 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
-        "RmProfilingAdminOnly": { "Action": "DeleteValue" }
+        "RmProfilingAdminOnly": { "Action": "deletevalue" }
       },
       "NVIDIA": {
-        "RmProfilingAdminOnly": { "Action": "DeleteValue" }
+        "RmProfilingAdminOnly": { "Action": "deletevalue" }
       }
     }
   },
@@ -299,18 +299,18 @@
     },
     "revert": {
       "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
-        "OptInOrOutPreference": { "Action": "DeleteValue" }
+        "OptInOrOutPreference": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
-        "SendTelemetryData": { "Action": "DeleteValue" }
+        "SendTelemetryData": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
-        "EnableRID44231": { "Action": "DeleteValue" },
-        "EnableRID64640": { "Action": "DeleteValue" },
-        "EnableRID66610": { "Action": "DeleteValue" }
+        "EnableRID44231": { "Action": "deletevalue" },
+        "EnableRID64640": { "Action": "deletevalue" },
+        "EnableRID66610": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
-        "(default)": { "Action": "DeleteValue" }
+        "(default)": { "Action": "deletevalue" }
       }
     }
   },
@@ -323,8 +323,8 @@
     },
     "revert": {
       "NVIDIA": {
-        "RMPowerFeature": { "Action": "DeleteValue" },
-        "RMPowerFeature2": { "Action": "DeleteValue" }
+        "RMPowerFeature": { "Action": "deletevalue" },
+        "RMPowerFeature2": { "Action": "deletevalue" }
       }
     }
   }

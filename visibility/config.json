@@ -1,35 +1,68 @@
 {
   "Explorer Options": {
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-      "ShowFrequent": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowRecent": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowCloudFilesInQuickAccess": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowDriveLettersFirst": { "Type": "REG_DWORD", "Data": 0 }
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "ShowFrequent": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowRecent": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowCloudFilesInQuickAccess": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowDriveLettersFirst": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "IconsOnly": { "Type": "REG_DWORD", "Data": 0 },
+        "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 },
+        "ShowTypeOverlay": { "Type": "REG_DWORD", "Data": 0 },
+        "FolderContentsInfoTip": { "Type": "REG_DWORD", "Data": 0 },
+        "Hidden": { "Type": "REG_DWORD", "Data": 2 },
+        "HideDrivesWithNoMedia": { "Type": "REG_DWORD", "Data": 0 },
+        "HideFileExt": { "Type": "REG_DWORD", "Data": 0 },
+        "HideMergeConflicts": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowSuperHidden": { "Type": "REG_DWORD", "Data": 0 },
+        "SeparateProcess": { "Type": "REG_DWORD", "Data": 0 },
+        "PersistBrowsers": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowEncryptCompressedColor": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowInfoTip": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowPreviewHandlers": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
+        "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 },
+        "AutoCheckSelect": { "Type": "REG_DWORD", "Data": 0 },
+        "SharingWizardOn": { "Type": "REG_DWORD", "Data": 0 },
+        "TypeAhead": { "Type": "REG_DWORD", "Data": 0 },
+        "NavPaneExpandToCurrentFolder": { "Type": "REG_DWORD", "Data": 0 },
+        "NavPaneShowAllCloudStates": { "Type": "REG_DWORD", "Data": 0 },
+        "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 }
+      }
     },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-      "IconsOnly": { "Type": "REG_DWORD", "Data": 0 },
-      "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 },
-      "ShowTypeOverlay": { "Type": "REG_DWORD", "Data": 0 },
-      "FolderContentsInfoTip": { "Type": "REG_DWORD", "Data": 0 },
-      "Hidden": { "Type": "REG_DWORD", "Data": 2 },
-      "HideDrivesWithNoMedia": { "Type": "REG_DWORD", "Data": 0 },
-      "HideFileExt": { "Type": "REG_DWORD", "Data": 0 },
-      "HideMergeConflicts": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowSuperHidden": { "Type": "REG_DWORD", "Data": 0 },
-      "SeparateProcess": { "Type": "REG_DWORD", "Data": 0 },
-      "PersistBrowsers": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowEncryptCompressedColor": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowInfoTip": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowPreviewHandlers": { "Type": "REG_DWORD", "Data": 0 },
-      "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
-      "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 },
-      "AutoCheckSelect": { "Type": "REG_DWORD", "Data": 0 },
-      "SharingWizardOn": { "Type": "REG_DWORD", "Data": 0 },
-      "TypeAhead": { "Type": "REG_DWORD", "Data": 0 },
-      "NavPaneExpandToCurrentFolder": { "Type": "REG_DWORD", "Data": 0 },
-      "NavPaneShowAllCloudStates": { "Type": "REG_DWORD", "Data": 0 },
-      "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 },
-      "TaskbarDa": { "Type": "REG_DWORD", "Data": 0 }
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "ShowFrequent": { "Action": "deletevalue" },
+        "ShowRecent": { "Action": "deletevalue" },
+        "ShowCloudFilesInQuickAccess": { "Action": "deletevalue" },
+        "ShowDriveLettersFirst": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "IconsOnly": { "Action": "deletevalue" },
+        "UseCompactMode": { "Action": "deletevalue" },
+        "ShowTypeOverlay": { "Action": "deletevalue" },
+        "FolderContentsInfoTip": { "Action": "deletevalue" },
+        "Hidden": { "Action": "deletevalue" },
+        "HideDrivesWithNoMedia": { "Action": "deletevalue" },
+        "HideFileExt": { "Action": "deletevalue" },
+        "HideMergeConflicts": { "Action": "deletevalue" },
+        "ShowSuperHidden": { "Action": "deletevalue" },
+        "SeparateProcess": { "Action": "deletevalue" },
+        "PersistBrowsers": { "Action": "deletevalue" },
+        "ShowEncryptCompressedColor": { "Action": "deletevalue" },
+        "ShowInfoTip": { "Action": "deletevalue" },
+        "ShowPreviewHandlers": { "Action": "deletevalue" },
+        "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
+        "ShowSyncProviderNotifications": { "Action": "deletevalue" },
+        "AutoCheckSelect": { "Action": "deletevalue" },
+        "SharingWizardOn": { "Action": "deletevalue" },
+        "TypeAhead": { "Action": "deletevalue" },
+        "NavPaneExpandToCurrentFolder": { "Action": "deletevalue" },
+        "NavPaneShowAllCloudStates": { "Action": "deletevalue" },
+        "NavPaneShowAllFolders": { "Action": "deletevalue" }
+      }
     }
   },
   "Enable Dark Theme": {
@@ -135,7 +168,7 @@
       }
     }
   },
-    "Taskbar Settings": {
+  "Taskbar Settings": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
         "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 0 }
@@ -145,7 +178,11 @@
         "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarFlashing": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 },
-        "PeopleBand": { "Type": "REG_DWORD", "Data": 0 }
+        "PeopleBand": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "HidePeopleBar": { "Type": "REG_DWORD", "Data": 1 }
@@ -153,16 +190,8 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
         "AllowNewsAndInterests": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -173,10 +202,12 @@
         "ShowTaskViewButton": { "Action": "deletevalue" },
         "TaskbarBadges": { "Action": "deletevalue" },
         "TaskbarFlashing": { "Action": "deletevalue" },
-        "TaskbarAl": { "Action": "deletevalue" }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People": {
-        "Action": "deletevalue"
+        "TaskbarAl": { "Action": "deletevalue" },
+        "PeopleBand": { "Action": "deletevalue" },
+        "TaskbarGlomLevel": { "Action": "deletevalue" },
+        "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSd": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "Action": "deletevalue"
@@ -184,16 +215,8 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Action": "deletevalue" }
       },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarGlomLevel": { "Action": "deletevalue" },
-        "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
         "Action": "deletevalue"
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarSd": { "Action": "deletevalue" }
       }
     }
   },

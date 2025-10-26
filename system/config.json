@@ -39,7 +39,7 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-        "NoLockScreen": { "Action": "DeleteValue" }
+        "NoLockScreen": { "Action": "deletevalue" }
       }
     }
   },
@@ -84,20 +84,20 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-        "PreventIndexOnBattery": { "Action": "DeleteValue" }
+        "PreventIndexOnBattery": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
-        "RespectPowerModes": { "Action": "DeleteValue" }
+        "RespectPowerModes": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
-        "WholeFileSystem": { "Action": "DeleteValue" },
-        "SystemFolders": { "Action": "DeleteValue" },
-        "AutoWildCard": { "Action": "DeleteValue" },
-        "EnableNaturalQuerySyntax": { "Action": "DeleteValue" },
-        "ArchivedFiles": { "Action": "DeleteValue" }
+        "WholeFileSystem": { "Action": "deletevalue" },
+        "SystemFolders": { "Action": "deletevalue" },
+        "AutoWildCard": { "Action": "deletevalue" },
+        "EnableNaturalQuerySyntax": { "Action": "deletevalue" },
+        "ArchivedFiles": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
-        "SearchOnly": { "Action": "DeleteValue" }
+        "SearchOnly": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
         "Start": { "Type": "REG_DWORD", "Data": 2 }
@@ -336,6 +336,18 @@
     "revert": {
       "HKCU\\Control Panel\\Desktop": {
         "JPEGImportQuality": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Clean WinSxS Folder": {
+    "__control": {
+      "type": "button",
+      "label": "Clean"
+    },
+    "COMMANDS": {
+      "RunDISM": {
+        "Action": "run_powershell",
+        "Command": "dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase"
       }
     }
   },
