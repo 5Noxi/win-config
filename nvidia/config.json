@@ -13,7 +13,7 @@
     "COMMANDS": {
       "DownloadFiles": {
         "Action": "run_powershell",
-        "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile \"$env:USERPROFILE\\Downloads\\NV-ROFF.nip\"; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector-2.4.0.29.zip' -OutFile \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\""
+        "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile \"$env:USERPROFILE\\Downloads\\NV-ROFF.nip\"; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector.zip' -OutFile \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\""
       },
       "ExtractFiles": {
         "Action": "run_powershell",
