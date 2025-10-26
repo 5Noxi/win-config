@@ -3,7 +3,7 @@
 Complete NVIDIA driver preparation tool.
 > https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvidia-tool.ps1
 
-Main menu:**  
+**Main menu:**  
 `1` - Debloat driver (includes optional DDU clean uninstall)  
 `2` - Install driver directly  
 
@@ -614,6 +614,205 @@ Disables the notification (GeForce), whenever a new driver is available.
 }
 ```
 
+# RMPowerFeature
+
+`ELPG` – Engine-Level Power Gating  
+`BLCG` - Block Level Clock Gating  
+`FSPG` - Floorsweep Power Gating  
+
+Disabling all of it will increase the wattage usage noticeable.
+
+```json
+{
+  "Name":  "RMPowerFeature",
+  "Comment":  [
+                  "Type DWORD",
+                  "For elpg, blcg, fspg",
+                  "0 : Keep the vbios default for all engines",
+                  "1 : Disable for all engines",
+                  "2 : Per unit/engine settings (Look at engine specific RegKeys below)",
+                  "3 : Enable for all engines",
+                  "For elcg,",
+                  "0 : Keep the vbios default for all engines i.e Feature ON",
+                  "1 : feature off for all engines",
+                  "3 : engine disabled for all engines",
+                  "for the rest of the features, the following convention applies",
+                  "0 : Keep the vbios default",
+                  "1 : Disable feature",
+                  "3 : Enable feature",
+                  "BLCG: this uses 4 bits, where the bottom two bits decide",
+                  "if the feature needs to be on/off/default for all engines or engine specific",
+                  "Top two bits decide the level(STALL, IDLE, QUIESCENT) if on/default for all engines"
+              ],
+}
+
+{
+  "Name":  "RMPowerFeature2",
+  "Comment":  [
+                  "the following convention applies to _FLCG",
+                  "0 : Keep default for all engines",
+                  "1 : Disable FLCG for all engines",
+                  "2 : Per unit/engine settings (Look at engine specific regkey FLCG)",
+                  "3 : Enable  FLCG for all engines",
+                  "If _MSCG_SETTINGS_OWNER is set to _RM, RM will program the MSCG watermarks,",
+                  "and will control the enabling and disabling of MSCG for modeswitches and",
+                  "pstate transitions.  If it is set to _PMU, the PMU will control the enabling",
+                  "and disabling of MSCG for modeswitches and pstate transitions, and the PMU",
+                  "will program the watermarks using values provided by RM.",
+                  "_RM is the initial default; this is expected to change when _PMU support",
+                  "becomes available.",
+                  "the following convention applies to _OPERATION_MODE",
+                  "0 : choose default GPU Operation mode",
+                  "1 : Disable all GPU Operation modes - force power up of all GPU Operation Mode units after boot",
+                  "2 : Enable GPU Operation mode as per mask - keep power gated after boot as per RmGpuOperationMode mask",
+                  "the following convention applies to _SLCG",
+                  "1 : Disable SLCG for all engines",
+                  "2 : Per unit/engine settings (Look at engine specific regkey SLCG)",
+                  "3 : Enable  SLCG for all engines",
+                  "The following convention applies to _CLK_NDIV_SLIDING:",
+                  "0 : Keep the vbios default",
+                  "1 : Disable feature for all clock domains",
+                  "2 : Per clock domain settings (Look at clock domain specific regkey below - NV_REG_STR_RM_CLK_NDIV_SLIDING)",
+                  "3 : Enable for all clock domains",
+                  "The following convention applies to _NVVDD_PSI:",
+                  "1 : Disable feature",
+                  "3 : Enable feature",
+                  "The following convention applies to GC6_ROMLESS:",
+                  "The following convention applies to GC6_ROM:",
+                  "The following convention applies to DIDLE-SSC:",
+                  "This flag overwrites all the other flags  while arming DIDLE-OS",
+                  "if it is disabled here, DI-OS will not be Entered. However if it enabled",
+                  "DI-OS will be only Entered, if all other Preconditions are met.",
+                  "The following convention applies to GC4:",
+                  "This flag overwrites all the other flags  while enabling L1 substates",
+                  "if it is disabled here, L1 Substates will not be Entered. However if it enabled",
+                  "L1 Substates will be only Entered, if root port supports it and enabled in VBIOS",
+                  "The following convention applies to L1 Substates:",
+                  "The following convention applies to LPWR oneshot:",
+                  "The following convention applies to RPPG:",
+                  "The following convention applies to IST clock gating:",
+                  "0 : Keep the IST gating enabled by default"
+              ],
+}
+
+```json
+{
+  "apply": {
+    "NVIDIA": {
+      "RMPowerFeature": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 1412080853
+      },
+      "RMPowerFeature2": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 89478485
+      }
+    }
+  },
+  "revert": {
+    "NVIDIA": {
+      "RMPowerFeature": {
+        "Action": "DeleteValue"
+      },
+      "RMPowerFeature2": {
+        "Action": "DeleteValue"
+      }
+    }
+  }
+}
+```
+
+# Disable Power Savings
+
+Sets `RmDisableACPI`, `RMDisableGpuASPMFlags`, `RMFspg`, `RMBlcg`, `RMElcg`, `RmElpg`, `RMSlcg`, `RMOPSB`, `RMLpwrArch`. See [`bitmask-calc`](https://github.com/5Noxi/bitmask-calc) for more details of what the data does.
+
+```json
+{
+  "apply": {
+    "NVIDIA": {
+      "RmDisableACPI": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 1023
+      },
+      "RMDisableGpuASPMFlags": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 3
+      },
+      "RMFspg": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 15
+      },
+      "RMBlcg": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 286331153
+      },
+      "RMElcg": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 1431655765
+      },
+      "RmElpg": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 4095
+      },
+      "RMSlcg": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 262143
+      },
+      "RMOPSB": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 10914
+      },
+      "RMLpwrArch": {
+        "Action": "nvidia key",
+        "Type": "REG_DWORD",
+        "Data": 349525
+      }
+    }
+  },
+  "revert": {
+    "NVIDIA": {
+      "RmDisableACPI": {
+        "Action": "DeleteValue"
+      },
+      "RMDisableGpuASPMFlags": {
+        "Action": "DeleteValue"
+      },
+      "RMFspg": {
+        "Action": "DeleteValue"
+      },
+      "RMBlcg": {
+        "Action": "DeleteValue"
+      },
+      "RMElcg": {
+        "Action": "DeleteValue"
+      },
+      "RmElpg": {
+        "Action": "DeleteValue"
+      },
+      "RMSlcg": {
+        "Action": "DeleteValue"
+      },
+      "RMOPSB": {
+        "Action": "DeleteValue"
+      },
+      "RMLpwrArch": {
+        "Action": "DeleteValue"
+      }
+    }
+  }
+}
+```
+
 # Disable Scheduled Tasks
 
 ```json
@@ -672,42 +871,84 @@ Block NVIDIA telemetry domains (`C:\Windows\System32\drivers\etc\hosts`):
 
 ```json
 {
-  "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
-    "OptInOrOutPreference": {
-      "Action": "",
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  },
-  "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
-    "SendTelemetryData": {
-      "Action": "",
-      "Type": "REG_DWORD",
-      "Data": 0
-    }
-  },
-  "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
-    "EnableRID44231": {
-      "Action": "",
-      "Type": "REG_DWORD",
-      "Data": 0
+  "apply": {
+    "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
+      "OptInOrOutPreference": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
     },
-    "EnableRID64640": {
-      "Action": "",
-      "Type": "REG_DWORD",
-      "Data": 0
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
+      "SendTelemetryData": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
     },
-    "EnableRID66610": {
-      "Action": "",
-      "Type": "REG_DWORD",
-      "Data": 0
+    "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
+      "EnableRID44231": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "EnableRID64640": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      },
+      "EnableRID66610": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
+      "(default)": {
+        "Type": "REG_DWORD",
+        "Data": 0
+      }
+    },
+    "COMMANDS": {
+      "DeleteNvCameraKey": {
+        "Action": "delete_path",
+        "Path": "HKLM\\System\\CurrentControlSet\\Services\\nvlddmkm\\NvCamera",
+      },
+      "RemoveNvTelemetryDLL": {
+        "Action": "run_powershell",
+        "Command": "Get-ChildItem -Path \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\" -Filter 'NvTelemetry64.dll' -Recurse | Remove-Item -Force"
+      },
+      "UninstallNvTelemetryPackages": {
+        "Action": "run_powershell",
+        "Command": "if (Test-Path \"$env:ProgramFiles\\NVIDIA Corporation\\Installer2\\InstallerCore\\NVI2.DLL\") { Start-Process rundll32.exe -ArgumentList '\"$env:ProgramFiles\\NVIDIA Corporation\\Installer2\\InstallerCore\\NVI2.DLL\",UninstallPackage NvTelemetryContainer' -NoNewWindow -Wait; Start-Process rundll32.exe -ArgumentList '\"$env:ProgramFiles\\NVIDIA Corporation\\Installer2\\InstallerCore\\NVI2.DLL\",UninstallPackage NvTelemetry' -NoNewWindow -Wait }"
+      },
+      "RenameNvTelemetryFiles": {
+        "Action": "run_powershell",
+        "Command": "$file = \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\\NvTelemetry*.dll\"; $enviro = [System.Environment]::ExpandEnvironmentVariables($file); $paths = Get-ChildItem -Path $enviro -Force -Recurse | Select-Object -ExpandProperty FullName | Select-Object -Unique | Sort-Object Length -Descending; foreach ($telpath in $paths) { if (-not (Test-Path -Path $telpath -PathType Container)) { Move-Item -LiteralPath $telpath -Destination (\"$telpath.old\") -Force } }"
+      }
     }
   },
-  "HKLM\\System\\CurrentControlSet\\Services\\nvlddmkm\\NvCamera": {
-    "(default)": {
-      "Action": "",
-      "Type": "REG_DWORD",
-      "Data": 0
+  "revert": {
+    "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
+      "OptInOrOutPreference": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
+      "SendTelemetryData": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
+      "EnableRID44231": {
+        "Action": "DeleteValue"
+      },
+      "EnableRID64640": {
+        "Action": "DeleteValue"
+      },
+      "EnableRID66610": {
+        "Action": "DeleteValue"
+      }
+    },
+    "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
+      "(default)": {
+        "Action": "DeleteValue"
+      }
     }
   }
 }

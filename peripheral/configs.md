@@ -28,7 +28,7 @@ Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTes
 ```
 `GetRawMouseThrottlingThresholds.c` includes more detail and my notes. `RawMouseThrottleDuration` has a minumum of `1` (`1000` Hz).
 
-> https://blogs.windows.com/windowsdeveloper/2023/05/26/delivering-delightful-performance-for-more-than-one-billion-users-worldwide/
+> https://blogs.windows.com/windowsdeveloper/2023/05/26/delivering-delightful-performance-for-more-than-one-billion-users-worldwide/  
 > https://github.com/valleyofdoom/PC-Tuning#1150-background-window-message-rate-permalink
 
 ```json
