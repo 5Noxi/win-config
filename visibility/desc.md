@@ -77,8 +77,7 @@ Before & after:
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/classiconb.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/classicona.png?raw=true)
 
-``` ```
-# Disable Animation
+# Disable Animations
 
 Minimize, Maximize, Taskbar Animations / First Sign-In Animations. These options are also changeable via `SystemPropertiesPerformance` (`WIN + R`) - first three.
 
@@ -183,3 +182,77 @@ CMachine::RegQueryDWORD(
                     ]
 },
 ```
+
+# Hide Language Bar
+
+Topic should speak for itself.
+
+> https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Software/Microsoft/CTF/LangBar/index
+> https://gist.github.com/omar-irizarry/d469e1642e3b27df1eebd1e907ffe61d
+
+# OEM Information
+
+Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
+```
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
+```
+You used to change the logo with:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" /v Logo /t REG_SZ /d "path\OEM.bmp" /f
+```
+But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels, `.bmp` file & `32-bit` color depth.
+
+Edit registered owner/orga (visible in `winver`) with:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d Nohuxi /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d Noverse /f
+```
+Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`):
+> https://www.angusj.com/resourcehacker/
+
+---
+
+Example:
+```ps
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Manufacturer" /t REG_SZ /d "Noverse" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Model" /t REG_SZ /d "Windows 11" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportHours" /t REG_SZ /d "24 Hours" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportPhone" /t REG_SZ /d "noverse@gmail.com" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportURL" /t REG_SZ /d "https://discord.gg/noverse" /f
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/oem.png?raw=true)
+
+
+# System Clock Seconds
+
+"Uses more power" (in relation to laptops).
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/clock.png?raw=true)
+
+# Taskbar Settings
+
+Removes the search box, moves the taskbar to the left, removes badges, disables the orange flashes on the app icons, removes the "Task View" button. (`Personalization > Taskbar`)
+
+Add the `End Task` option to the taskbar right click menu with:
+```bat
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" /v TaskbarEndTask /t REG_DWORD /d 1 /f
+```
+`TaskbarSd` adds/removes the block in the right corner, which shows the desktop (picture).
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/taskbar.png?raw=true)
+
+# Optimize Visual Effects
+
+Open `SystemPropertiesPerformance.exe` & apply the following settings, turning on/off other options is personal preference. A system restart is required to apply the changes:
+```bat
+shutdown -r -t 0
+```
+`Perf-Options.bat` leaves font smoothing on (improves the appearance of text on screens by softening the edges of characters), if you want to disable it (for whatever reason):
+```bat
+reg add "HKCU\Control Panel\Desktop" /v FontSmoothing /t REG_SZ /d 0 /f
+reg add "HKCU\Control Panel\Desktop" /v FontSmoothingType /t REG_DWORD /d 1 /f
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/visual1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/visual2.png?raw=true)

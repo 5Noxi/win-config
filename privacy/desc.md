@@ -58,3 +58,29 @@ does the same as the batch:
 > https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps
 > https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general
 
+# Disable System Restore
+Removes all copies (volume backups), see your current shadows with:
+```cmd
+vssadmin list shadows /for=<ForVolumeSpec> /shadow=<ShadowID>
+```
+`<ForVolumeSpec>` -> Volume
+`<ShadowID>` -> Shadow copy specified by ShadowID
+
+Remove it with:
+```cmd
+vssadmin delete shadows /all
+```
+Random fact: Creating a `.bat` file for it & sending it into a discord channel will detect it as a virus.
+
+```ps
+Disable-ComputerRestore -Drive "C:\"
+```
+Does:
+```ps
+"wmiprvse.exe", "RegSetValue","HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\RPSessionInterval","Type: REG_DWORD, Length: 4, Data: 0"
+```
+
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/disable-computerrestore?view=powershell-5.1  
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-delete-shadows  
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-list-shadows  
+> https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service

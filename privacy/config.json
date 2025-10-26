@@ -26,5 +26,43 @@
         "HttpAcceptLanguageOptOut": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
-  }
+  },
+    "Disable System Restore": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\SystemRestore": {
+        "DisableSR": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableConfig": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore": {
+        "RPSessionInterval": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\VSS": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "COMMANDS": {
+        "RenameRstrui": {
+          "Action": "elevated_priv",
+          "Command": "ren %SystemRoot%\\System32\\rstrui.exe rstrui.bak"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\SystemRestore": {
+        "DisableSR": { "Action": "deletevalue" },
+        "DisableConfig": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore": {
+        "RPSessionInterval": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\VSS": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "COMMANDS": {
+        "RestoreRstrui": {
+          "Action": "elevated_priv",
+          "Command": "ren %SystemRoot%\\System32\\rstrui.bak rstrui.exe"
+        }
+      }
+    }
+  }  
 }

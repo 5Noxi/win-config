@@ -34,48 +34,46 @@
   "Disable Hiberboot": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power": {
-        "HiberbootEnabled": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
-        "HiberbootEnabled": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power": {
-        "HiberbootEnabled": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
-        "HiberbootEnabled": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   },
   "Disable Power Throttling": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling": {
-        "PowerThrottlingOff": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+        "PowerThrottlingOff": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling": {
-        "PowerThrottlingOff": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "PowerThrottlingOff": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    }
+  },
+  "Disable Energy Estimation": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "EnergyEstimationDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "UserBatteryDischargeEstimator": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "EnergyEstimationDisabled": { "Action": "deletevalue" },
+        "UserBatteryDischargeEstimator": { "Action": "deletevalue" }
       }
     }
   }

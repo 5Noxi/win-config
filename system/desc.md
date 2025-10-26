@@ -269,3 +269,176 @@ Used for preventing legacy or unstable applications from crashing, read through 
 > https://www.youtube.com/watch?v=4SvNNXAwoqE
 
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/fth.png?raw=true)
+
+# Disable Accessibility Features
+
+Disables multiple accessibility features such as `Sticky Keys`, `Toggle Keys`, `Mouse Keys`, `Sound Sentry`, `High Contrast` and more (read trough the file for more).
+
+Disable accessibility insights telemetry with:
+```bat
+reg add "HKLM\SOFTWARE\Policies\Accessibility Insights for Windows" /v DisableTelemetry /t REG_DWORD /d 1 /f
+powershell -NoProfile -Command "$f='$env:LOCALAPPDATA\AccessibilityInsights\V1\Configurations\Configuration.json';if(Test-Path $f){$j=if((gc $f -Raw) -eq ''){@{}}else{gc $f -Raw|ConvertFrom-Json};$j.EnableTelemetry=$false;$j|ConvertTo-Json|sc $f -Encoding UTF8;Write-Host 'EnableTelemetry set to false in' $f}else{Write-Host 'JSON file not found.'}"
+```
+> https://github.com/microsoft/accessibility-insights-windows/blob/main/docs/TelemetryOverview.md#control-of-telemery
+
+# Detailed Verbose Messages
+
+Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
+
+"Verbose status messages can be very helpful when debugging or troubleshooting certain Windows problems, including slow startup, shutdown, logon, or logoff behavior. If your Windows is just not shutting down, verbose status messages may tell you where exactly or at which stage it is getting ‘stuck’."
+
+> https://www.thewindowsclub.com/enable-verbose-status-message-windows
+
+# Disable Theme Mouse Changes
+
+Prevent Themes from changing the mouse cursor.
+
+# Disable Aero Shake
+
+![HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+
+# Disable JPEG Reduction
+
+Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%`, by using the following batch.
+
+Pseudocode snippet:
+```c
+if ( JPEGImportQuality not present or error )
+    v54 = 85.0f;
+else
+    v54 = max(JPEGImportQuality, 60.0f);
+    if (v54 > 100.0f)
+        v54 = 100.0f;
+```
+Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
+
+
+Change your wallpaper via cmd:
+```
+reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d ""C:\Path\Picture.png"" /f
+```
+
+> [system/assets | jpeg-TranscodeImage.c](https://github.com/5Noxi/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
+
+# Disable Low Disk Space Checks
+Self explaining.
+
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/CV-Explorer.txt
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/lowdiskspace.png?raw=true)
+
+# Clean WinSxS Folder
+
+Get the current size of the WinSxS folder, by pasting the following command into `cmd`:
+```cmd
+Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
+```
+The output could look like:
+```
+C:\Users\Nohuxi>Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
+
+Component Store (WinSxS) information:
+
+Windows Explorer Reported Size of Component Store : 5.00 GB
+
+Actual Size of Component Store : 4.94 GB
+
+    Shared with Windows : 2.82 GB
+    Backups and Disabled Features : 2.12 GB
+    Cache and Temporary Data :  0 bytes
+
+Date of Last Cleanup : 2025-03-30 11:05:43
+
+Number of Reclaimable Packages : 0
+Component Store Cleanup Recommended : No
+```
+`Number of Reclaimable Packages : 0` -> This is the number of superseded packages on the system that component cleanup can remove.
+
+-# > https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder?view=windows-11&source=recommendations#analyze-the-component-store
+
+Clean your folder with:
+```cmd
+Dism.exe /online /Cleanup-Image /StartComponentCleanup
+```
+or
+```
+Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+```
+, if you want to remove all superseded versions of every component in the component store. (no need, if there aren't any)
+
+> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/manage-the-component-store?view=windows-11
+> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/clean-up-the-winsxs-folder?view=windows-11
+
+Permanently remove outdated update files from `C:\Windows\WinSxS` to free space. Once applied, previous updates cannot be uninstalled:
+```bat
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\SideBySide\Configuration" /v DisableResetbase /t REG_DWORD /d 0 /f
+```
+The value doesn't exist on more recent versions.
+
+# Enable Segment Heap
+
+"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications."
+
+Allows modern apps to use a more efficient memory allocator.
+
+For a specific executeable:
+```
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\
+Image File Execution Options\(executable)
+FrontEndHeapDebugOptions = (DWORD)
+Bit 2 (0x04): Disable Segment Heap
+Bit 3 (0x08): Enable Segment Heap
+```
+Globally:
+```
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Segment Heap
+Enabled = (DWORD)
+0 : Disable Segment Heap
+(Not 0): Enable Segment Heap
+```
+Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors.
+
+`heapmisc.c` includes info for the 4 comments (default values).
+
+> https://blog.s-schoener.com/2024-11-05-segment-heap/  
+> https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf  
+> https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (Page `334`f.)  
+> [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/5Noxi/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
+
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/segment1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/segment2.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/segment3.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/segment4.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/segment5.png?raw=true)
+
+---
+
+Miscellaneous notes:
+```c
+INIT:0000000140C6A660                 dq offset aSessionManager_6 ; "Session Manager"
+INIT:0000000140C6A668                 dq offset aHeapsegmentres ; "HeapSegmentReserve"
+INIT:0000000140C6A670                 dq offset qword_140FC4228
+INIT:0000000140C6A678                 dq 3 dup(0)
+INIT:0000000140C6A690                 dq offset aSessionManager_6 ; "Session Manager"
+INIT:0000000140C6A698                 dq offset aHeapsegmentcom ; "HeapSegmentCommit"
+INIT:0000000140C6A6A0                 dq offset qword_140FC4220
+INIT:0000000140C6A6A8                 align 20h
+INIT:0000000140C6A6C0                 dq offset aSessionManager_6 ; "Session Manager"
+INIT:0000000140C6A6C8                 dq offset aHeapdecommitto ; "HeapDeCommitTotalFreeThreshold"
+INIT:0000000140C6A6D0                 dq offset qword_140FC4218
+INIT:0000000140C6A6D8                 dq 3 dup(0)
+INIT:0000000140C6A6F0                 dq offset aSessionManager_6 ; "Session Manager"
+INIT:0000000140C6A6F8                 dq offset aHeapdecommitfr ; "HeapDeCommitFreeBlockThreshold"
+INIT:0000000140C6A700                 dq offset qword_140FC4210
+INIT:0000000140C6A708                 align 20h
+
+ALMOSTRO:0000000140FC4210 qword_140FC4210 dq 1000h                ; DATA XREF: sub_1404F2FA0+2F9↑r
+ALMOSTRO:0000000140FC4210                                         ; sub_14097DBCC+134↑r ...
+ALMOSTRO:0000000140FC4218 qword_140FC4218 dq 10000h               ; DATA XREF: sub_1404F2FA0+31C↑r
+ALMOSTRO:0000000140FC4218                                         ; sub_14097DBCC+127↑r ...
+ALMOSTRO:0000000140FC4220 qword_140FC4220 dq 2000h                ; DATA XREF: sub_1404F2FA0+2DE↑r
+ALMOSTRO:0000000140FC4220                                         ; sub_14097E0AC+1AD↑r ...
+ALMOSTRO:0000000140FC4228 qword_140FC4228 dq 100000h              ; DATA XREF: sub_1404F2FA0+2C3↑r
+ALMOSTRO:0000000140FC4228                                         ; sub_14097E0AC+19E↑r ...
+```

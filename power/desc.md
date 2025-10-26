@@ -65,3 +65,21 @@ PpmPerfQosGroupPolicyDisable dd 0 // Throttling enabled
 ```
 
 ![](https://github.com/5Noxi/win-config/blob/main/power/images/powerth.png?raw=true)
+
+# Disable Energy Estimation
+
+Not needed, if you disable energy estimation:
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\TaggedEnergy : DisableTaggedEnergyLogging
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\TaggedEnergy : TelemetryMaxApplication
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\TaggedEnergy : TelemetryMaxTagPerApplication
+```
+```bat
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v DisableTaggedEnergyLogging /t REG_DWORD /d 1 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v TelemetryMaxApplication /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v TelemetryMaxTagPerApplication /t REG_DWORD /d 0 /f
+```
+
+> [power/assets | jpeg-TranscodeImage.c](https://github.com/5Noxi/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
+
+![](https://github.com/5Noxi/win-config/blob/main/power/images/energyesti.png?raw=true)

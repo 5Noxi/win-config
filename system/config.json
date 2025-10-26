@@ -110,114 +110,70 @@
   "Enable HAGS": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "HwSchMode": {
-          "Type": "REG_DWORD",
-          "Data": 2
-        }
+        "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "HwSchMode": {
-          "Type": "REG_DWORD",
-          "Data": 2
-        }
+        "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
       }
     }
   },
   "Remove Windows.old": {
-    "apply": {
-      "COMMANDS": {
-        "RemoveWindowsOld": {
-          "Action": "elevated_priv",
-          "Command": "Remove-Item -Path \"$env:SystemDrive\\Windows.old\" -Recurse -Force"
-        }
+    "__control": { "type": "button", "label": "Remove" },
+    "COMMANDS": {
+      "RemoveWindowsOld": {
+        "Action": "elevated_priv",
+        "Command": "Remove-Item -Path \"$env:SystemDrive\\Windows.old\" -Recurse -Force"
       }
     }
   },
   "Disable Storage Sense": {
     "apply": {
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy": {
-        "01": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "01": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
-        "AllowStorageSenseGlobal": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "AllowStorageSenseGlobal": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy": {
-        "01": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "01": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
-        "AllowStorageSenseGlobal": {
-          "Action": "deletevalue"
-        }
+        "AllowStorageSenseGlobal": { "Action": "deletevalue" }
       }
     }
   },
   "Reduce Shutdown Time": {
     "apply": {
       "HKCU\\Control Panel\\Desktop": {
-        "AutoEndTasks": {
-          "Type": "REG_SZ",
-          "Data": "1"
-        },
-        "HungAppTimeout": {
-          "Type": "REG_SZ",
-          "Data": "1500"
-        },
-        "WaitToKillTimeout": {
-          "Type": "REG_SZ",
-          "Data": "2500"
-        }
+        "AutoEndTasks": { "Type": "REG_SZ", "Data": "1" },
+        "HungAppTimeout": { "Type": "REG_SZ", "Data": "1500" },
+        "WaitToKillTimeout": { "Type": "REG_SZ", "Data": "2500" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
-        "WaitToKillServiceTimeout": {
-          "Type": "REG_SZ",
-          "Data": "2500"
-        }
+        "WaitToKillServiceTimeout": { "Type": "REG_SZ", "Data": "2500" }
       }
     },
     "revert": {
       "HKCU\\Control Panel\\Desktop": {
-        "AutoEndTasks": {
-          "Action": "deletevalue"
-        },
-        "HungAppTimeout": {
-          "Action": "deletevalue"
-        },
-        "WaitToKillTimeout": {
-          "Action": "deletevalue"
-        }
+        "AutoEndTasks": { "Action": "deletevalue" },
+        "HungAppTimeout": { "Action": "deletevalue" },
+        "WaitToKillTimeout": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
-        "WaitToKillServiceTimeout": {
-          "Type": "REG_SZ",
-          "Data": "5000"
-        }
+        "WaitToKillServiceTimeout": { "Type": "REG_SZ", "Data": "5000" }
       }
     }
   },
   "Disable FTH": {
     "apply": {
       "HKLM\\Software\\Microsoft\\FTH": {
-        "Enabled": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\SOFTWARE\\Microsoft\\FTH\\State": {
-        "Action": "delete_path"
-      },
+      "HKLM\\SOFTWARE\\Microsoft\\FTH\\State": { "Action": "delete_path" },
       "COMMANDS": {
         "RunFthSpecialize": {
           "Action": "run_powershell",
@@ -227,10 +183,195 @@
     },
     "revert": {
       "HKLM\\Software\\Microsoft\\FTH": {
-        "Enabled": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+        "Enabled": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable Accessibility Features": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\VoiceAccess": {
+        "RunningState": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\LiveCaptions": {
+        "RunningState": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
+        "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+        "DuckAudio": { "Type": "REG_DWORD", "Data": 0 },
+        "WinEnterLaunchEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "ScriptingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "OnlineServicesEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "DetailedFeedback": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
+        "AutoStart": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\ShowSounds": {
+        "On": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
+        "Flags": { "Type": "REG_SZ", "Data": "3" },
+        "FSTextEffect": { "Type": "REG_SZ", "Data": "0" },
+        "WindowsEffect": { "Type": "REG_SZ", "Data": "0" },
+        "TextEffect": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\Blind Access": {
+        "On": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\SlateLaunch": {
+        "LaunchAT": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\Keyboard Preference": {
+        "On": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\On": {
+        "On": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Accessibility": {
+        "Warning Sounds": { "Type": "REG_DWORD", "Data": 0 },
+        "Sound on Activation": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\ColorFiltering": {
+        "Active": { "Type": "REG_DWORD", "Data": 0 },
+        "HotkeyEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+        "AccessibilityMonoMixState": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\VoiceAccess": {
+        "RunningState": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\LiveCaptions": {
+        "RunningState": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
+        "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+        "DuckAudio": { "Action": "deletevalue" },
+        "WinEnterLaunchEnabled": { "Action": "deletevalue" },
+        "ScriptingEnabled": { "Action": "deletevalue" },
+        "OnlineServicesEnabled": { "Action": "deletevalue" },
+        "DetailedFeedback": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
+        "AutoStart": { "Action": "deletevalue" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\ShowSounds": {
+        "On": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
+        "Flags": { "Type": "REG_SZ", "Data": "2" },
+        "FSTextEffect": { "Type": "REG_SZ", "Data": "0" },
+        "TextEffect": { "Type": "REG_SZ", "Data": "0" },
+        "WindowsEffect": { "Type": "REG_SZ", "Data": "1" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\Blind Access": {
+        "On": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\SlateLaunch": {
+        "LaunchAT": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\Keyboard Preference": {
+        "On": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\On": {
+        "On": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Accessibility": {
+        "Warning Sounds": { "Action": "deletevalue" },
+        "Sound on Activation": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\ColorFiltering": {
+        "Active": { "Action": "deletevalue" },
+        "HotkeyEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+        "AccessibilityMonoMixState": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Detailed Verbose Messages": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "VerboseStatus": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "VerboseStatus": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Theme Mouse Changes": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+        "ThemeChangesMousePointers": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+        "ThemeChangesMousePointers": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable Aero Shake": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "DisallowShaking": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "DisallowShaking": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable JPEG Reduction": {
+    "apply": {
+      "HKCU\\Control Panel\\Desktop": {
+        "JPEGImportQuality": { "Type": "REG_DWORD", "Data": 100 }
+      }
+    },
+    "revert": {
+      "HKCU\\Control Panel\\Desktop": {
+        "JPEGImportQuality": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Low Disk Space Checks": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoLowDiskSpaceChecks": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoLowDiskSpaceChecks": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Enable Segment Heap": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+        "HeapSegmentReserve": { "Type": "REG_DWORD", "Data": 1048576 },
+        "HeapSegmentCommit": { "Type": "REG_DWORD", "Data": 8192 },
+        "HeapDeCommitTotalFreeThreshold": { "Type": "REG_DWORD", "Data": 65536 },
+        "HeapDeCommitFreeBlockThreshold": { "Type": "REG_DWORD", "Data": 4096 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+        "HeapSegmentReserve": { "Action": "deletevalue" },
+        "HeapSegmentCommit": { "Action": "deletevalue" },
+        "HeapDeCommitTotalFreeThreshold": { "Action": "deletevalue" },
+        "HeapDeCommitFreeBlockThreshold": { "Action": "deletevalue" }
       }
     }
   }

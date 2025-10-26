@@ -66,137 +66,188 @@
       }
     }
   },
-  "Remove Home & Gallery": {
+    "Remove Home & Gallery": {
     "apply": {
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": {
-        "Action": "delete_path"
-      },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": {
-        "Action": "delete_path"
-      },
-      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "LaunchTo": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
-      }
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": { "Action": "delete_path" },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": { "Action": "delete_path" },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": { "LaunchTo": { "Type": "REG_DWORD", "Data": 1 } }
     },
     "revert": {
-      "HKCU\\Software\\Classes\\CLSID\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": {
-        "System.IsPinnedToNameSpaceTree": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
-      },
-      "HKCU\\Software\\Classes\\CLSID\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": {
-        "System.IsPinnedToNameSpaceTree": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
-      },
-      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "LaunchTo": {
-          "Action": "deletevalue"
-        }
-      }
+      "HKCU\\Software\\Classes\\CLSID\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": { "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 1 } },
+      "HKCU\\Software\\Classes\\CLSID\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": { "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 1 } },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": { "LaunchTo": { "Action": "deletevalue" } }
     }
   },
   "Classic Context Menu": {
     "apply": {
-      "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32": {
-        "(default)": {
-          "Type": "REG_SZ",
-          "Data": ""
-        }
-      },
-      "COMMANDS": {
-        "RestartExplorer": {
-          "Action": "restart_explorer"
-        }
-      }
+      "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32": { "(default)": { "Type": "REG_SZ", "Data": "" } },
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
     },
     "revert": {
-      "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}": {
-        "Action": "delete_path",
-        "Recurse": true
-      },
-      "COMMANDS": {
-        "RestartExplorer": {
-          "Action": "restart_explorer"
-        }
-      }
+      "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}": { "Action": "delete_path", "Recurse": true },
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
     }
   },
   "Disable Animations": {
     "apply": {
-      "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
-        "MinAnimate": {
-          "Type": "REG_SZ",
-          "Data": "0"
-        }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarAnimations": {
-          "Type": "REG_SZ",
-          "Data": "0"
-        }
-      },
-      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": {
-        "DisallowAnimations": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
-      },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "EnableFirstLogonAnimation": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
-      },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
-        "EnableFirstLogonAnimation": {
-          "Type": "REG_DWORD",
-          "Data": 0
-        }
-      },
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
-        "TurnOffSPIAnimations": {
-          "Type": "REG_DWORD",
-          "Data": 1,
-          "KeyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-          "KeyName": "TurnOffSPIAnimations"
-        }
+      "HKCU\\Control Panel\\Desktop\\WindowMetrics": { "MinAnimate": { "Type": "REG_SZ", "Data": "0" } },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": { "TaskbarAnimations": { "Type": "REG_SZ", "Data": "0" } },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": { "DisallowAnimations": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Type": "REG_DWORD", "Data": 1, "KeyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "KeyName": "TurnOffSPIAnimations" } }
+    },
+    "revert": {
+      "HKCU\\Control Panel\\Desktop\\WindowMetrics": { "MinAnimate": { "Type": "REG_SZ", "Data": "1" } },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": { "TaskbarAnimations": { "Type": "REG_SZ", "Data": "1" } },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Action": "deletevalue" } },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } }
+    }
+  },
+  "Hide Language Bar": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+        "ShowStatus": { "Type": "REG_DWORD", "Data": 3 },
+        "ExtraIconsOnMinimized": { "Type": "REG_DWORD", "Data": 0 },
+        "Transparency": { "Type": "REG_DWORD", "Data": 255 },
+        "Label": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
-      "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
-        "MinAnimate": {
-          "Type": "REG_SZ",
-          "Data": "1"
-        }
+      "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+        "ShowStatus": { "Action": "deletevalue" },
+        "ExtraIconsOnMinimized": { "Action": "deletevalue" },
+        "Transparency": { "Action": "deletevalue" },
+        "Label": { "Action": "deletevalue" }
+      }
+    }
+  },
+    "System Clock Seconds": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowSecondsInSystemClock": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowSecondsInSystemClock": { "Action": "deletevalue" }
+      }
+    }
+  },
+    "Taskbar Settings": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarAnimations": {
-          "Type": "REG_SZ",
-          "Data": "1"
-        }
+        "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarFlashing": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 },
+        "PeopleBand": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
-        "TurnOffSPIAnimations": {
-          "Action": "deletevalue"
-        }
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "HidePeopleBar": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "EnableFirstLogonAnimation": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "EnableAutoTray": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
-        "EnableFirstLogonAnimation": {
-          "Type": "REG_DWORD",
-          "Data": 1
-        }
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
+        "AllowNewsAndInterests": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowTaskViewButton": { "Action": "deletevalue" },
+        "TaskbarBadges": { "Action": "deletevalue" },
+        "TaskbarFlashing": { "Action": "deletevalue" },
+        "TaskbarAl": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People": {
+        "Action": "deletevalue"
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "Action": "deletevalue"
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "EnableAutoTray": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarGlomLevel": { "Action": "deletevalue" },
+        "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
+        "Action": "deletevalue"
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarSd": { "Action": "deletevalue" }
+      }
+    }
+  },
+    "Optimize Visual Effects": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects": {
+        "VisualFXSetting": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKCU\\Control Panel\\Desktop": {
+        "UserPreferencesMask": { "Type": "REG_BINARY", "Data": "9012038010000000" }
+      },
+      "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+        "MinAnimate": { "Type": "REG_SZ", "Data": "0" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarAnimations": { "Type": "REG_DWORD", "Data": 0 },
+        "ListviewAlphaSelect": { "Type": "REG_DWORD", "Data": 0 },
+        "ListviewShadow": { "Type": "REG_DWORD", "Data": 0 },
+        "IconsOnly": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\DWM": {
+        "EnableAeroPeek": { "Type": "REG_DWORD", "Data": 0 },
+        "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Desktop": {
+        "DragFullWindows": { "Type": "REG_SZ", "Data": "1" },
+        "FontSmoothing": { "Type": "REG_SZ", "Data": "2" },
+        "FontSmoothingType": { "Type": "REG_DWORD", "Data": 2 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects": {
+        "VisualFXSetting": { "Action": "deletevalue" }
+      },
+      "HKCU\\Control Panel\\Desktop": {
+        "UserPreferencesMask": { "Type": "REG_BINARY", "Data": "9e,1e,07,80,12,00,00,00" }
+      },
+      "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+        "MinAnimate": { "Type": "REG_SZ", "Data": "1" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarAnimations": { "Type": "REG_DWORD", "Data": 1 },
+        "ListviewAlphaSelect": { "Type": "REG_DWORD", "Data": 1 },
+        "ListviewShadow": { "Type": "REG_DWORD", "Data": 1 },
+        "IconsOnly": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\DWM": {
+        "EnableAeroPeek": { "Type": "REG_DWORD", "Data": 1 },
+        "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Desktop": {
+        "DragFullWindows": { "Type": "REG_SZ", "Data": "1" },
+        "FontSmoothing": { "Type": "REG_SZ", "Data": "2" },
+        "FontSmoothingType": { "Type": "REG_DWORD", "Data": 2 }
       }
     }
   }

@@ -449,7 +449,7 @@ Disables the notification (GeForce), whenever a new driver is available.
 
 # RMPowerFeature
 
-`ELPG` – Engine-Level Power Gating  
+`ELPG` - Engine-Level Power Gating  
 `BLCG` - Block Level Clock Gating  
 `FSPG` - Floorsweep Power Gating  
 

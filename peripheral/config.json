@@ -29,5 +29,55 @@
     "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
       "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 3 }
     }
+  },
+  "Disable System Sounds": {
+    "apply": {
+      "HKCU\\AppEvents\\Schemes": {
+        "(default)": { "Type": "REG_SZ", "Data": ".None" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\BootAnimation": {
+        "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\AppEvents\\Schemes": {
+        "(default)": { "Type": "REG_SZ", "Data": ".Default" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\BootAnimation": {
+        "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "DisableStartupSound": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Autoplay/Autorun": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers": {
+        "DisableAutoplay": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoDriveTypeAutoRun": { "Type": "REG_DWORD", "Data": 255 },
+        "NoAutorun": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
+        "NoAutoplayfornonVolume": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers": {
+        "DisableAutoplay": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoDriveTypeAutoRun": { "Action": "deletevalue" },
+        "NoAutorun": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
+        "NoAutoplayfornonVolume": { "Action": "deletevalue" }
+      }
+    }
   }
 }
