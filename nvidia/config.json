@@ -23,10 +23,6 @@
         "RunNVIDIAProfileInspector": {
           "Action": "run_powershell",
           "Command": "Start-Process \"cmd.exe\" -ArgumentList \"/c $env:TEMP\\nvidiaProfileInspector\\nvidiaProfileInspector.exe $env:TEMP\\NV-ROFF.nip\""
-        },
-        "RemoveFiles": {
-          "Action": "run_powershell",
-          "Command": "Remove-Item -Path \"$env:TEMP\\NV-ROFF.nip\" -Force; Remove-Item -Path \"$env:TEMP\\nvidiaProfileInspector.zip\" -Force; Remove-Item -Path \"$env:TEMP\\nvidiaProfileInspector\" -Recurse -Force"
         }
       }
     }
