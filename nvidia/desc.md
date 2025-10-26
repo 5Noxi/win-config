@@ -407,7 +407,7 @@ HDCP protects digital content from being copied while it's transmitted between d
 
 Some GPUs don't support it, disabling is also not really needed. You can test it by disabling it via the control panel.
 
-> https://www.nvidia.com/content/control-panel-help/vlatest/en-us/mergedprojects/nv3d/To_turn_your_GPU_ECC_on_or_off.htm
+> https://www.nvidia.com/content/control-panel-help/vlatest/en-us/mergedprojects/nv3d/To_turn_your_GPU_ECC_on_or_off.htm  
 > https://www.nvidia.com/content/control-panel-help/vlatest/en-us/mergedprojects/nv3d/Change_ECC_State.htm
 
 ```
@@ -430,7 +430,7 @@ More about `nvidia-smi`:
 > https://discord.com/channels/836870260715028511/1375059420970487838/1375935298093191189  
 > https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/3D%20Settings/Change_ECC_State.htm
 
-Other ECC related features can be found using <#1371478333585363034> (<#1349023856001548338>) - e.g. `RMNoECCFuseCheck`.
+Other ECC related features can be found using [`bitmask-calc`](https://github.com/5Noxi/bitmask-calc) - e.g. `RMNoECCFuseCheck`.
 
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/ecc.png?raw=true)
 
@@ -471,7 +471,10 @@ Enable:
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore" /v ShowDlssIndicator /t REG_DWORD /d 1024 /f
 ```
 
-From NVIDIA documentations:
+---
+
+### From NVIDIA documentations:  
+
 `turn-dlss-indicator-off`
 ```ps
 [HKEY_LOCAL_MACHINE\SOFTWARE\NVIDIA Corporation\Global\NGXCore]

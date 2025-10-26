@@ -139,6 +139,8 @@ Value: `EnableVirtualization`
 > https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
 > https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
 
+![](https://github.com/5Noxi/win-config/blob/main/system/images/uac.png?raw=true)
+
 # Lock Screen
 
 Disables the lock screen (skips the lock screen and go directly to the login screen). Revert it by removing the value (2nd command).
@@ -441,4 +443,25 @@ ALMOSTRO:0000000140FC4220 qword_140FC4220 dq 2000h                ; DATA XREF: s
 ALMOSTRO:0000000140FC4220                                         ; sub_14097E0AC+1AD↑r ...
 ALMOSTRO:0000000140FC4228 qword_140FC4228 dq 100000h              ; DATA XREF: sub_1404F2FA0+2C3↑r
 ALMOSTRO:0000000140FC4228                                         ; sub_14097E0AC+19E↑r ...
+```
+
+# Notepad++
+
+You can either change it yourself in:
+```
+HKCR\batfile\shell\edit\command
+```
+or use the following batch, which selects [notepad++](https://notepad-plus-plus.org/downloads/) as default editor.
+
+# System Informer
+
+Since system informer is a lot better than the default task manager, it is recommended to replace it.
+
+> https://systeminformer.io/
+
+Undo it by removing the first line and executing the second command (delete the `::`), or just paste the second one in cmd.
+
+Enable `Theme support` (dark mode) and disable `Check for updates automatically` with:
+```ps
+(gc "$env:appdata\SystemInformer\settings.xml") -replace '(?<=<setting name="ProcessHacker\.UpdateChecker\.PromptStart">)\d(?=</setting>)','0' -replace '(?<=<setting name="EnableThemeSupport">)\d(?=</setting>)','1' | sc "$appdata\SystemInformer\settings.xml"
 ```

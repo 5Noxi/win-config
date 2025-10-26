@@ -386,5 +386,35 @@
         "HeapDeCommitFreeBlockThreshold": { "Action": "deletevalue" }
       }
     }
+  },
+  "Notepad++": {
+    "apply": {
+      "COMMANDS": {
+        "AddRegistryEntry": {
+          "Action": "run_powershell",
+          "Command": "reg add \"HKCR\\batfile\\shell\\edit\\command\" /ve /d \"\\\"C:\\Program Files\\Notepad++\\notepad++.exe\\\" \\\"%1\\\"\" /f"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "RemoveRegistryEntry": {
+          "Action": "run_powershell",
+          "Command": "reg delete \"HKCR\\batfile\\shell\\edit\\command\" /f"
+        }
+      }
+    }
+  },
+  "Task Manager Debugger": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
+        "Debugger": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\SystemInformer\\SystemInformer.exe\"" }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
+        "Debugger": { "Action": "deletevalue" }
+      }
+    }
   }
 }

@@ -269,5 +269,36 @@
         "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
+  },
+  "Hide Shortcut Icon": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "link": { "Type": "REG_BINARY", "Data": "00000000" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons": {
+        "29": { "Type": "REG_SZ", "Data": "C:\\Windows\\System32\\Blank.ico" },
+        "179": { "Type": "REG_SZ", "Data": "C:\\Windows\\System32\\Blank.ico" }
+      },
+      "COMMANDS": {
+        "DownloadIcon": {
+          "Action": "run_powershell",
+          "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/miscellaneous/Blank.ico' -OutFile 'C:\\Windows\\System32\\Blank.ico'"
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "link": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Icons": {
+        "29": { "Action": "deletevalue" },
+        "179": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "RestartExplorer": {
+          "Action": "restart_explorer"
+        }
+      }
+    }
   }
 }

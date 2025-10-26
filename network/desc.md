@@ -24,8 +24,7 @@ Capturing the network activity after adding the policy:
   TotalLength: 132 (0x84)
   Identification: 28587 (0x6FAB)
 ```
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/network-monitor-3
-
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/network-monitor-3  
 > https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus1000/sw/4_0/qos/configuration/guide/nexus1000v_qos/qos_6dscp_val.pdf  
 > https://github.com/valleyofdoom/PC-Tuning/blob/main/docs/research.md#2-how-can-you-verify-whether-a-dscp-qos-policy-is-working-permalink  
 > https://webhostinggeeks.com/blog/what-is-differentiated-services-code-point-dscp/  
@@ -100,3 +99,7 @@ netsh int tcp set supplemental Template=Compat CongestionProvider=NewReno
 netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=NewReno
 netsh int tcp set supplemental Template=InternetCustom CongestionProvider=NewReno
 ```
+
+# Disable WiFi
+
+Self explaining.

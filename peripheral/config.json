@@ -79,5 +79,125 @@
         "NoAutoplayfornonVolume": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disk Write Cache Policy": {
+    "apply": {
+      "COMMANDS": {
+        "SetCachePolicy": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\SCSI' | ForEach-Object { $scsiKey = $_.PSPath; Get-ChildItem -Path $scsiKey | ForEach-Object { $subKey = $_.PSPath; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"CacheIsPowerProtected\" -Value 1 -Type DWord -Force; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"UserWriteCacheSetting\" -Value 1 -Type DWord -Force } }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "RevertCachePolicy": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\SCSI' | ForEach-Object { $scsiKey = $_.PSPath; Get-ChildItem -Path $scsiKey | ForEach-Object { $subKey = $_.PSPath; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"CacheIsPowerProtected\" -Value 0 -Type DWord -Force; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"UserWriteCacheSetting\" -Value 1 -Type DWord -Force } }"
+        }
+      }
+    }
+  },
+  "Disable Bluetooth": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthA2dp": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthEnum": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthHFEnum": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthLEEnum": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHMODEM": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Microsoft_Bluetooth_AvrcpTransport": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthAvctpSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RFCOMM": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bthserv": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTAGService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHUSB": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHPORT": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthMini": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HidBth": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowBluetooth": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthA2dp": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthEnum": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthHFEnum": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthLEEnum": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHMODEM": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Microsoft_Bluetooth_AvrcpTransport": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthAvctpSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RFCOMM": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bthserv": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTAGService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHUSB": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHPORT": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthMini": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HidBth": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowBluetooth": {
+        "value": { "Type": "REG_DWORD", "Data": 2 }
+      }
+    }
   }
 }

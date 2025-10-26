@@ -28,5 +28,93 @@
         "RevertTCP_CUBIC_DatacenterCustom": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=CUBIC" }
       }
     }
+  },
+  "Disable WiFi": {
+    "apply": {
+      "COMMANDS": {
+        "DisableWiFiTask1": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WCM\\WiFiTask",
+          "TaskAction": "disable"
+        },
+        "DisableWiFiTask2": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
+          "TaskAction": "disable"
+        },
+        "DisableWiFiTask3": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
+          "TaskAction": "disable"
+        },
+        "DisableWiFiTask4": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
+          "TaskAction": "disable"
+        },
+        "DisableWiFiTask5": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement",
+          "TaskAction": "disable"
+        },
+        "DisableWlanSvc": {
+          "Action": "reg_add",
+          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc",
+          "ValueName": "Start",
+          "ValueType": "REG_DWORD",
+          "Data": "4"
+        },
+        "DisableVwififlt": {
+          "Action": "reg_add",
+          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt",
+          "ValueName": "Start",
+          "ValueType": "REG_DWORD",
+          "Data": "4"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EnableWiFiTask1": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WCM\\WiFiTask",
+          "TaskAction": "enable"
+        },
+        "EnableWiFiTask2": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
+          "TaskAction": "enable"
+        },
+        "EnableWiFiTask3": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
+          "TaskAction": "enable"
+        },
+        "EnableWiFiTask4": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
+          "TaskAction": "enable"
+        },
+        "EnableWiFiTask5": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement",
+          "TaskAction": "enable"
+        },
+        "EnableWlanSvc": {
+          "Action": "reg_add",
+          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc",
+          "ValueName": "Start",
+          "ValueType": "REG_DWORD",
+          "Data": "2"
+        },
+        "EnableVwififlt": {
+          "Action": "reg_add",
+          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt",
+          "ValueName": "Start",
+          "ValueType": "REG_DWORD",
+          "Data": "2"
+        }
+      }
+    }
   }
 }

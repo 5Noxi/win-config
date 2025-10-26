@@ -64,5 +64,127 @@
         }
       }
     }
-  }  
+  },
+  "Disable Auto Maintenance": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\Maintenance": {
+        "MaintenanceDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "WakeUp": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\Maintenance": {
+        "MaintenanceDisabled": { "Action": "deletevalue" },
+        "WakeUp": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Windows Defender": {
+    "COMMANDS": {
+      "DisableWindowsDefender": {
+        "Action": "elevated_priv",
+        "Command": [
+          "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\" /v DisableAntiSpyware /t REG_DWORD /d 1 /f",
+          "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection\" /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f",
+          "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection\" /v DisableOnAccessProtection /t REG_DWORD /d 1 /f",
+          "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection\" /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f",
+          "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection\" /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense\" /v Start /t REG_DWORD /d 4 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity\" /v Enabled /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet\" /v SpyNetReporting /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet\" /v SubmitSamplesConsent /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\" /v SmartScreenEnabled /t REG_SZ /d Off /f",
+          "reg add \"HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer\" /v SmartScreenEnabled /t REG_SZ /d Off /f",
+          "reg add \"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System\" /v EnableSmartScreen /t REG_DWORD /d 0 /f",
+          "reg add \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost\" /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components\" /v ServiceEnabled /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components\" /v NotifyMalicious /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components\" /v NotifyPasswordReuse /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components\" /v NotifyUnsafeApp /t REG_DWORD /d 0 /f",
+          "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy\" /v VerifiedAndReputablePolicyState /t REG_DWORD /d 0 /f",
+          "reg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /v SecurityHealth /f",
+          "reg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /v WindowsDefender /f"
+        ]
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
+        "DisableAntiSpyware": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection": {
+        "DisableScanOnRealtimeEnable": { "Action": "deletevalue" },
+        "DisableOnAccessProtection": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection": {
+        "DisableScanOnRealtimeEnable": { "Action": "deletevalue" },
+        "DisableBehaviorMonitoring": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet": {
+        "SpyNetReporting": { "Action": "deletevalue" },
+        "SubmitSamplesConsent": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "SmartScreenEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "SmartScreenEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableSmartScreen": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
+        "EnableWebContentEvaluation": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
+        "ServiceEnabled": { "Action": "deletevalue" },
+        "NotifyMalicious": { "Action": "deletevalue" },
+        "NotifyPasswordReuse": { "Action": "deletevalue" },
+        "NotifyUnsafeApp": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy": {
+        "VerifiedAndReputablePolicyState": { "Action": "deletevalue" }
+      },
+      "SecurityHealth": {
+        "Action": "deletevalue"
+      }
+    }
+  }
 }

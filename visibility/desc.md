@@ -263,3 +263,7 @@ reg add "HKCU\Control Panel\Desktop" /v FontSmoothingType /t REG_DWORD /d 1 /f
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/visual1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/visual2.png?raw=true)
+
+# Hide Shortcut Icon
+
+Disables the `- Shortcut` text, hides the shortcut & compression arrows.
