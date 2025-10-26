@@ -54,7 +54,7 @@ Removes the `Hibernate`, `Lock`, `Sleep` power options.
 Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
 ```
 You can see processes, which use power throttling by enabling the column (`Details` > `Select Column`) or add it to the active columns in system informer via the `Choose columns...` window (picture).
-> https://discord.com/channels/836870260715028511/1296968338504945684/1371451927006810223
+> https://systeminformer.io/
 
 ```c
 dq offset aPowerPowerthro ; "Power\\PowerThrottling"

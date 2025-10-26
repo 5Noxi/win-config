@@ -194,7 +194,7 @@ CMachine::RegQueryDWORD(
 
 Topic should speak for itself.
 
-> https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Software/Microsoft/CTF/LangBar/index
+> https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Software/Microsoft/CTF/LangBar/index  
 > https://gist.github.com/omar-irizarry/d469e1642e3b27df1eebd1e907ffe61d
 
 # OEM Information

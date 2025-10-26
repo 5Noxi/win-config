@@ -5,6 +5,30 @@
       "OpenNvCpl": { "Action": "run_powershell", "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/NVIDIA-Tool.ps1 | iex\"'" }
     }
   },
+  "NVCPL Settings": {
+    "__control": {
+      "type": "button",
+      "label": "Import"
+    },
+    "COMMANDS": {
+      "DownloadFiles": {
+        "Action": "run_powershell",
+        "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile '$env:USERPROFILE\\Downloads\\NV-ROFF.nip'; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector-2.4.0.29.zip' -OutFile '$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip'"
+      },
+      "ExtractFiles": {
+        "Action": "run_powershell",
+        "Command": "Expand-Archive -Path '$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip' -DestinationPath 'C:\\nvidiaProfileInspector'"
+      },
+      "RunProfileInspector": {
+        "Action": "run_powershell",
+        "Command": "Start-Process 'cmd.exe' -ArgumentList '/c \"C:\\nvidiaProfileInspector\\nvidiaProfileInspector.exe\" \"C:\\nvidiaProfileInspector\\NV-ROFF.nip\"' -NoNewWindow -Wait"
+      },
+      "RemoveFiles": {
+        "Action": "run_powershell",
+        "Command": "Remove-Item -Path '$env:USERPROFILE\\Downloads\\NV-ROFF.nip' -Force; Remove-Item -Path '$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip' -Force"
+      }
+    }
+  },
   "Temporary NVCPL": {
     "apply": {
       "COMMANDS": {

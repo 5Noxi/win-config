@@ -33,7 +33,7 @@
   "Disable System Sounds": {
     "apply": {
       "HKCU\\AppEvents\\Schemes": {
-        "(default)": { "Type": "REG_SZ", "Data": ".None" }
+        "(Default)": { "Type": "REG_SZ", "Data": ".None" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\BootAnimation": {
         "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }
@@ -44,7 +44,7 @@
     },
     "revert": {
       "HKCU\\AppEvents\\Schemes": {
-        "(default)": { "Type": "REG_SZ", "Data": ".Default" }
+        "(Default)": { "Type": "REG_SZ", "Data": ".Default" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\BootAnimation": {
         "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }

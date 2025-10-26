@@ -156,7 +156,7 @@
       }
     }
   },
-    "System Clock Seconds": {
+  "System Clock Seconds": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "ShowSecondsInSystemClock": { "Type": "REG_DWORD", "Data": 1 }
@@ -164,8 +164,8 @@
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "ShowSecondsInSystemClock": { "Action": "deletevalue" }
-      }
+        "ShowSecondsInSystemClock": { "Action": "deletevalue" } },
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
     }
   },
   "Taskbar Settings": {
@@ -220,13 +220,16 @@
       }
     }
   },
-    "Optimize Visual Effects": {
+  "Optimize Visual Effects": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects": {
         "VisualFXSetting": { "Type": "REG_DWORD", "Data": 3 }
       },
       "HKCU\\Control Panel\\Desktop": {
-        "UserPreferencesMask": { "Type": "REG_BINARY", "Data": "9012038010000000" }
+        "UserPreferencesMask": { "Type": "REG_BINARY", "Data": "9012038010000000" },
+        "DragFullWindows": { "Type": "REG_SZ", "Data": "1" },
+        "FontSmoothing": { "Type": "REG_SZ", "Data": "2" },
+        "FontSmoothingType": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
         "MinAnimate": { "Type": "REG_SZ", "Data": "0" }
@@ -240,11 +243,6 @@
       "HKCU\\Software\\Microsoft\\Windows\\DWM": {
         "EnableAeroPeek": { "Type": "REG_DWORD", "Data": 0 },
         "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKCU\\Control Panel\\Desktop": {
-        "DragFullWindows": { "Type": "REG_SZ", "Data": "1" },
-        "FontSmoothing": { "Type": "REG_SZ", "Data": "2" },
-        "FontSmoothingType": { "Type": "REG_DWORD", "Data": 2 }
       }
     },
     "revert": {
@@ -252,7 +250,10 @@
         "VisualFXSetting": { "Action": "deletevalue" }
       },
       "HKCU\\Control Panel\\Desktop": {
-        "UserPreferencesMask": { "Type": "REG_BINARY", "Data": "9e,1e,07,80,12,00,00,00" }
+        "UserPreferencesMask": { "Type": "REG_BINARY", "Data": "9e,1e,07,80,12,00,00,00" },
+        "DragFullWindows": { "Type": "REG_SZ", "Data": "1" },
+        "FontSmoothing": { "Type": "REG_SZ", "Data": "2" },
+        "FontSmoothingType": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
         "MinAnimate": { "Type": "REG_SZ", "Data": "1" }
@@ -266,11 +267,6 @@
       "HKCU\\Software\\Microsoft\\Windows\\DWM": {
         "EnableAeroPeek": { "Type": "REG_DWORD", "Data": 1 },
         "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKCU\\Control Panel\\Desktop": {
-        "DragFullWindows": { "Type": "REG_SZ", "Data": "1" },
-        "FontSmoothing": { "Type": "REG_SZ", "Data": "2" },
-        "FontSmoothingType": { "Type": "REG_DWORD", "Data": 2 }
       }
     }
   }

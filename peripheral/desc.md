@@ -40,12 +40,12 @@ Go into your sound settings (`mmsys.cpl`), click on the `Communications` tab and
 ```bat
 reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v UserDuckingPreference /t REG_DWORD /d 3 /f
 ```
-__All options:__
+
 `Mute all other sounds`:
 ```ps
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 0
 ```
-`Reduce the volume of other sounds by 80%`:
+`Reduce the volume of other sounds by 80%` (default):
 ```ps
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 1
 ```
@@ -118,5 +118,5 @@ Disables system sounds and removes sound events. I did use the keys, which Windo
 
 "AutoPlay lets you choose an action for different kinds of media when you plug in a device or insert media. You can set AutoPlay to open different kinds of content, such as photos, music, and video on different kinds of media, such as drives, CDs, DVDs, cameras, and phones. For example, you can use AutoPlay to select an app that will automatically open photos on a removable drive when you plug it into your PC. With AutoPlay, you don't have to open the same app or reselect preferences every time you plug in a certain device."
 
-> https://www.tenforums.com/tutorials/101962-enable-disable-autoplay-all-drives-windows.html
+> https://www.tenforums.com/tutorials/101962-enable-disable-autoplay-all-drives-windows.html  
 > https://geekrewind.com/how-to-turn-enable-or-disable-autoplay-in-windows-11/
