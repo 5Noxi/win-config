@@ -22,10 +22,6 @@
       "RunProfileInspector": {
         "Action": "run_powershell",
         "Command": "Start-Process 'cmd.exe' -ArgumentList '/c \"C:\\nvidiaProfileInspector\\nvidiaProfileInspector.exe\" \"C:\\nvidiaProfileInspector\\NV-ROFF.nip\"' -NoNewWindow -Wait"
-      },
-      "RemoveFiles": {
-        "Action": "run_powershell",
-        "Command": "Remove-Item -Path \"$env:USERPROFILE\\Downloads\\NV-ROFF.nip\" -Force; Remove-Item -Path \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\" -Force"
       }
     }
   },
