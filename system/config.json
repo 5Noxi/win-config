@@ -130,7 +130,36 @@
       "COMMANDS": {
         "RemoveWindowsOld": {
           "Action": "elevated_priv",
-          "Command": "rd /s /q \"%systemdrive%\\Windows.old\""
+          "Command": "Remove-Item -Path \"$env:SystemDrive\\Windows.old\" -Recurse -Force"
+        }
+      }
+    }
+  },
+  "Disable Storage Sense": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy": {
+        "01": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
+        "AllowStorageSenseGlobal": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy": {
+        "01": {
+          "Type": "REG_DWORD",
+          "Data": 0
+        }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
+        "AllowStorageSenseGlobal": {
+          "Action": "deletevalue"
         }
       }
     }
