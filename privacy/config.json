@@ -81,241 +81,231 @@
   },
   "Disable Windows Defender": {
     "COMMANDS": {
-      "DisableWindowsDefender": {
-        "COMMANDS": {
-          "DisableAntiSpyware": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender' /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
-          },
-          "DisableScanOnRealtimeEnable": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f"
-          },
-          "DisableOnAccessProtection": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
-          },
-          "DisableScanOnRealtimeEnable2": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f"
-          },
-          "DisableBehaviorMonitoring": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
-          },
-          "WinDefendStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "MsSecCoreStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "wscsvcStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "WdFilterStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "WdBootStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "WdNisSvcStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "WdNisDrvStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "SecurityHealthServiceStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "SenseStart": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense' /v Start /t REG_DWORD /d 4 /f"
-          },
-          "HypervisorEnforcedCodeIntegrity": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity' /v Enabled /t REG_DWORD /d 0 /f"
-          },
-          "SpyNetReporting": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SpyNetReporting /t REG_DWORD /d 0 /f"
-          },
-          "SubmitSamplesConsent": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SubmitSamplesConsent /t REG_DWORD /d 0 /f"
-          },
-          "SmartScreenEnabled": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d Off /f"
-          },
-          "SmartScreenEnabledWOW6432": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d Off /f"
-          },
-          "EnableSmartScreen": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' /v EnableSmartScreen /t REG_DWORD /d 0 /f"
-          },
-          "EnableWebContentEvaluation": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost' /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f"
-          },
-          "ServiceEnabled": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v ServiceEnabled /t REG_DWORD /d 0 /f"
-          },
-          "NotifyMalicious": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyMalicious /t REG_DWORD /d 0 /f"
-          },
-          "NotifyPasswordReuse": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyPasswordReuse /t REG_DWORD /d 0 /f"
-          },
-          "NotifyUnsafeApp": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyUnsafeApp /t REG_DWORD /d 0 /f"
-          },
-          "VerifiedAndReputablePolicyState": {
-            "Action": "elevated_priv",
-            "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy' /v VerifiedAndReputablePolicyState /t REG_DWORD /d 0 /f"
-          },
-          "DeleteSecurityHealth": {
-            "Action": "elevated_priv",
-            "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' /v SecurityHealth /f"
-          },
-          "DeleteWindowsDefender": {
-            "Action": "elevated_priv",
-            "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' /v WindowsDefender /f"
-          },
-          "RenameSmartScreen": {
-            "Action": "elevated_priv",
-            "Command": "ren '%windir%\\System32\\smartscreen.exe' smartscreen.exee"
-          }
-        }
+      "DisableAntiSpyware": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender' /v DisableAntiSpyware /t REG_DWORD /d 1 /f"
+      },
+      "DisableScanOnRealtimeEnable": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f"
+      },
+      "DisableOnAccessProtection": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableOnAccessProtection /t REG_DWORD /d 1 /f"
+      },
+      "DisableScanOnRealtimeEnable2": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 1 /f"
+      },
+      "DisableBehaviorMonitoring": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableBehaviorMonitoring /t REG_DWORD /d 1 /f"
+      },
+      "WinDefendStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "MsSecCoreStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "wscsvcStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "WdFilterStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "WdBootStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "WdNisSvcStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "WdNisDrvStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "SecurityHealthServiceStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "SenseStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense' /v Start /t REG_DWORD /d 4 /f"
+      },
+      "HypervisorEnforcedCodeIntegrity": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity' /v Enabled /t REG_DWORD /d 0 /f"
+      },
+      "SpyNetReporting": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SpyNetReporting /t REG_DWORD /d 0 /f"
+      },
+      "SubmitSamplesConsent": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SubmitSamplesConsent /t REG_DWORD /d 0 /f"
+      },
+      "SmartScreenEnabled": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d Off /f"
+      },
+      "SmartScreenEnabledWOW6432": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d Off /f"
+      },
+      "EnableSmartScreen": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' /v EnableSmartScreen /t REG_DWORD /d 0 /f"
+      },
+      "EnableWebContentEvaluation": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost' /v EnableWebContentEvaluation /t REG_DWORD /d 0 /f"
+      },
+      "ServiceEnabled": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v ServiceEnabled /t REG_DWORD /d 0 /f"
+      },
+      "NotifyMalicious": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyMalicious /t REG_DWORD /d 0 /f"
+      },
+      "NotifyPasswordReuse": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyPasswordReuse /t REG_DWORD /d 0 /f"
+      },
+      "NotifyUnsafeApp": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyUnsafeApp /t REG_DWORD /d 0 /f"
+      },
+      "VerifiedAndReputablePolicyState": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy' /v VerifiedAndReputablePolicyState /t REG_DWORD /d 0 /f"
+      },
+      "DeleteSecurityHealth": {
+        "Action": "elevated_priv",
+        "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' /v SecurityHealth /f"
+      },
+      "DeleteWindowsDefender": {
+        "Action": "elevated_priv",
+        "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' /v WindowsDefender /f"
+      },
+      "RenameSmartScreen": {
+        "Action": "elevated_priv",
+        "Command": "ren '%windir%\\System32\\smartscreen.exe' smartscreen.exee"
       }
     },
     "revert": {
-      "COMMANDS": {
-        "RevertDisableAntiSpyware": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender' /v DisableAntiSpyware /t REG_DWORD /d 0 /f"
-        },
-        "RevertDisableScanOnRealtimeEnable": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 0 /f"
-        },
-        "RevertDisableOnAccessProtection": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableOnAccessProtection /t REG_DWORD /d 0 /f"
-        },
-        "RevertDisableScanOnRealtimeEnable2": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 0 /f"
-        },
-        "RevertDisableBehaviorMonitoring": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableBehaviorMonitoring /t REG_DWORD /d 0 /f"
-        },
-        "RevertWinDefendStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend' /v Start /t REG_DWORD /d 2 /f"
-        },
-        "RevertMsSecCoreStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore' /v Start /t REG_DWORD /d 0 /f"
-        },
-        "RevertwscsvcStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc' /v Start /t REG_DWORD /d 2 /f"
-        },
-        "RevertWdFilterStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter' /v Start /t REG_DWORD /d 0 /f"
-        },
-        "RevertWdBootStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot' /v Start /t REG_DWORD /d 0 /f"
-        },
-        "RevertWdNisSvcStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc' /v Start /t REG_DWORD /d 3 /f"
-        },
-        "RevertWdNisDrvStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv' /v Start /t REG_DWORD /d 3 /f"
-        },
-        "RevertSecurityHealthServiceStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService' /v Start /t REG_DWORD /d 3 /f"
-        },
-        "RevertSenseStart": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense' /v Start /t REG_DWORD /d 3 /f"
-        },
-        "RevertHypervisorEnforcedCodeIntegrity": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity' /v Enabled /t REG_DWORD /d 1 /f"
-        },
-        "RevertSpyNetReporting": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SpyNetReporting /t REG_DWORD /d 2 /f"
-        },
-        "RevertSubmitSamplesConsent": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SubmitSamplesConsent /t REG_DWORD /d 1 /f"
-        },
-        "RevertSmartScreenEnabled": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d On /f"
-        },
-        "RevertSmartScreenEnabledWOW6432": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d On /f"
-        },
-        "RevertEnableSmartScreen": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' /v EnableSmartScreen /t REG_DWORD /d 1 /f"
-        },
-        "RevertEnableWebContentEvaluation": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost' /v EnableWebContentEvaluation /t REG_DWORD /d 1 /f"
-        },
-        "RevertServiceEnabled": {
-          "Action": "elevated_priv",
-          "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v ServiceEnabled /f"
-        },
-        "RevertNotifyMalicious": {
-          "Action": "elevated_priv",
-          "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyMalicious /f"
-        },
-        "RevertNotifyPasswordReuse": {
-          "Action": "elevated_priv",
-          "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyPasswordReuse /f"
-        },
-        "RevertNotifyUnsafeApp": {
-          "Action": "elevated_priv",
-          "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyUnsafeApp /f"
-        },
-        "RevertVerifiedAndReputablePolicyState": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy' /v VerifiedAndReputablePolicyState /t REG_DWORD /d 2 /f"
-        },
-        "RevertSecurityHealth": {
-          "Action": "elevated_priv",
-          "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' /v SecurityHealth /t REG_SZ /d '%SystemRoot%\\system32\\SecurityHealthService.exe' /f"
-        },
-        "RenameSmartScreen": {
-          "Action": "elevated_priv",
-          "Command": "ren '%windir%\\System32\\smartscreen.exee' smartscreen.exe"
-        }
+      "RevertDisableAntiSpyware": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender' /v DisableAntiSpyware /t REG_DWORD /d 0 /f"
+      },
+      "RevertDisableScanOnRealtimeEnable": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 0 /f"
+      },
+      "RevertDisableOnAccessProtection": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection' /v DisableOnAccessProtection /t REG_DWORD /d 0 /f"
+      },
+      "RevertDisableScanOnRealtimeEnable2": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableScanOnRealtimeEnable /t REG_DWORD /d 0 /f"
+      },
+      "RevertDisableBehaviorMonitoring": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection' /v DisableBehaviorMonitoring /t REG_DWORD /d 0 /f"
+      },
+      "RevertWinDefendStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend' /v Start /t REG_DWORD /d 2 /f"
+      },
+      "RevertMsSecCoreStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore' /v Start /t REG_DWORD /d 0 /f"
+      },
+      "RevertwscsvcStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc' /v Start /t REG_DWORD /d 2 /f"
+      },
+      "RevertWdFilterStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter' /v Start /t REG_DWORD /d 0 /f"
+      },
+      "RevertWdBootStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot' /v Start /t REG_DWORD /d 0 /f"
+      },
+      "RevertWdNisSvcStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc' /v Start /t REG_DWORD /d 3 /f"
+      },
+      "RevertWdNisDrvStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv' /v Start /t REG_DWORD /d 3 /f"
+      },
+      "RevertSecurityHealthServiceStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService' /v Start /t REG_DWORD /d 3 /f"
+      },
+      "RevertSenseStart": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense' /v Start /t REG_DWORD /d 3 /f"
+      },
+      "RevertHypervisorEnforcedCodeIntegrity": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity' /v Enabled /t REG_DWORD /d 1 /f"
+      },
+      "RevertSpyNetReporting": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SpyNetReporting /t REG_DWORD /d 2 /f"
+      },
+      "RevertSubmitSamplesConsent": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet' /v SubmitSamplesConsent /t REG_DWORD /d 1 /f"
+      },
+      "RevertSmartScreenEnabled": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d On /f"
+      },
+      "RevertSmartScreenEnabledWOW6432": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer' /v SmartScreenEnabled /t REG_SZ /d On /f"
+      },
+      "RevertEnableSmartScreen": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System' /v EnableSmartScreen /t REG_DWORD /d 1 /f"
+      },
+      "RevertEnableWebContentEvaluation": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost' /v EnableWebContentEvaluation /t REG_DWORD /d 1 /f"
+      },
+      "RevertServiceEnabled": {
+        "Action": "elevated_priv",
+        "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v ServiceEnabled /f"
+      },
+      "RevertNotifyMalicious": {
+        "Action": "elevated_priv",
+        "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyMalicious /f"
+      },
+      "RevertNotifyPasswordReuse": {
+        "Action": "elevated_priv",
+        "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyPasswordReuse /f"
+      },
+      "RevertNotifyUnsafeApp": {
+        "Action": "elevated_priv",
+        "Command": "reg delete 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components' /v NotifyUnsafeApp /f"
+      },
+      "RevertVerifiedAndReputablePolicyState": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy' /v VerifiedAndReputablePolicyState /t REG_DWORD /d 2 /f"
+      },
+      "RevertSecurityHealth": {
+        "Action": "elevated_priv",
+        "Command": "reg add 'HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run' /v SecurityHealth /t REG_SZ /d '%SystemRoot%\\system32\\SecurityHealthService.exe' /f"
       }
     }
   }
