@@ -111,67 +111,68 @@
           "reg add \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components\" /v NotifyUnsafeApp /t REG_DWORD /d 0 /f",
           "reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy\" /v VerifiedAndReputablePolicyState /t REG_DWORD /d 0 /f",
           "reg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /v SecurityHealth /f",
-          "reg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /v WindowsDefender /f"
+          "reg delete \"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\" /v WindowsDefender /f",
+          "ren \"%windir%\\System32\\smartscreen.exe\" smartscreen.exee"
         ]
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
-        "DisableAntiSpyware": { "Action": "deletevalue" }
+        "DisableAntiSpyware": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection": {
-        "DisableScanOnRealtimeEnable": { "Action": "deletevalue" },
-        "DisableOnAccessProtection": { "Action": "deletevalue" }
+        "DisableScanOnRealtimeEnable": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableOnAccessProtection": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection": {
-        "DisableScanOnRealtimeEnable": { "Action": "deletevalue" },
-        "DisableBehaviorMonitoring": { "Action": "deletevalue" }
+        "DisableScanOnRealtimeEnable": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableBehaviorMonitoring": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
-        "Enabled": { "Action": "deletevalue" }
+        "Enabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet": {
-        "SpyNetReporting": { "Action": "deletevalue" },
-        "SubmitSamplesConsent": { "Action": "deletevalue" }
+        "SpyNetReporting": { "Type": "REG_DWORD", "Data": 2 },
+        "SubmitSamplesConsent": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-        "SmartScreenEnabled": { "Action": "deletevalue" }
+        "SmartScreenEnabled": { "Type": "REG_SZ", "Data": "On" }
       },
       "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-        "SmartScreenEnabled": { "Action": "deletevalue" }
+        "SmartScreenEnabled": { "Type": "REG_SZ", "Data": "On" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
-        "EnableSmartScreen": { "Action": "deletevalue" }
+        "EnableSmartScreen": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
-        "EnableWebContentEvaluation": { "Action": "deletevalue" }
+        "EnableWebContentEvaluation": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
         "ServiceEnabled": { "Action": "deletevalue" },
@@ -180,10 +181,18 @@
         "NotifyUnsafeApp": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy": {
-        "VerifiedAndReputablePolicyState": { "Action": "deletevalue" }
+        "VerifiedAndReputablePolicyState": { "Type": "REG_DWORD", "Data": 2 }
       },
-      "SecurityHealth": {
-        "Action": "deletevalue"
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
+        "SecurityHealth": { "Type": "REG_SZ", "Data": "%SystemRoot%\\system32\\SecurityHealthService.exe" }
+      },
+      "smartscreen": {
+        "COMMANDS": {
+          "RenameSmartScreen": {
+            "Action": "run_powershell",
+            "Command": "ren \"%windir%\\System32\\smartscreen.exee\" smartscreen.exe"
+          }
+        }
       }
     }
   }
