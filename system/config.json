@@ -405,7 +405,7 @@
       }
     }
   },
-  "Task Manager Debugger": {
+  "System Informer": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
         "Debugger": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\SystemInformer\\SystemInformer.exe\"" }
