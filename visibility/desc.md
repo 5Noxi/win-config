@@ -67,3 +67,9 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t 
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/homegal.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/homenet.png?raw=true)
+
+# Classic Context Menu
+
+Use it on W11, unless you like the new menu - remove the key, to revert it.
+
+Before & after:
