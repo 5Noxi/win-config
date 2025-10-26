@@ -10,18 +10,20 @@
       "type": "button",
       "label": "Import"
     },
-    "COMMANDS": {
-      "DownloadFiles": {
-        "Action": "run_powershell",
-        "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile \"$env:USERPROFILE\\Downloads\\NV-ROFF.nip\"; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector.zip' -OutFile \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\""
-      },
-      "ExtractFiles": {
-        "Action": "run_powershell",
-        "Command": "Expand-Archive -Path \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\" -DestinationPath \"C:\\nvidiaProfileInspector\""
-      },
-      "RunProfileInspector": {
-        "Action": "run_powershell",
-        "Command": "Start-Process 'cmd.exe' -ArgumentList '/c \"C:\\nvidiaProfileInspector\\nvidiaProfileInspector.exe\" \"C:\\nvidiaProfileInspector\\NV-ROFF.nip\"' -NoNewWindow -Wait"
+    "apply": {
+      "COMMANDS": {
+        "DownloadFiles": {
+          "Action": "run_powershell",
+          "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile \"$env:USERPROFILE\\Downloads\\NV-ROFF.nip\"; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector-2.4.0.29.zip' -OutFile \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\""
+        },
+        "ExtractFiles": {
+          "Action": "run_powershell",
+          "Command": "Expand-Archive -Path \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\" -DestinationPath \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector\""
+        },
+        "RunNVIDIAProfileInspector": {
+          "Action": "run_powershell",
+          "Command": "Start-Process \"cmd.exe\" -ArgumentList \"/c C:\\Users\\$env:USERNAME\\Downloads\\nvidiaProfileInspector\\nvidiaProfileInspector.exe C:\\Users\\$env:USERNAME\\Downloads\\NV-ROFF.nip\" -NoNewWindow -Wait"
+        }
       }
     }
   },
@@ -252,7 +254,7 @@
       }
     }
   },
-  "Disable Add Desktop Context Menu": {
+  "Remove Context Menu Entry": {
     "apply": {
       "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
         "ContextUIPolicy": { "Type": "REG_DWORD", "Data": 0 }
