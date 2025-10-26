@@ -14,15 +14,19 @@
       "COMMANDS": {
         "DownloadFiles": {
           "Action": "run_powershell",
-          "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile \"$env:USERPROFILE\\Downloads\\NV-ROFF.nip\"; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector.zip' -OutFile \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\""
+          "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip' -OutFile \"$env:TEMP\\NV-ROFF.nip\"; Invoke-WebRequest -Uri 'https://github.com/Orbmu2k/nvidiaProfileInspector/releases/download/2.4.0.29/nvidiaProfileInspector.zip' -OutFile \"$env:TEMP\\nvidiaProfileInspector.zip\""
         },
         "ExtractFiles": {
           "Action": "run_powershell",
-          "Command": "Expand-Archive -Path \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector.zip\" -DestinationPath \"$env:USERPROFILE\\Downloads\\nvidiaProfileInspector\""
+          "Command": "Expand-Archive -Path \"$env:TEMP\\nvidiaProfileInspector.zip\" -DestinationPath \"$env:TEMP\\nvidiaProfileInspector\""
         },
         "RunNVIDIAProfileInspector": {
           "Action": "run_powershell",
-          "Command": "Start-Process \"cmd.exe\" -ArgumentList \"/c C:\\Users\\$env:USERNAME\\Downloads\\nvidiaProfileInspector\\nvidiaProfileInspector.exe C:\\Users\\$env:USERNAME\\Downloads\\NV-ROFF.nip\" -NoNewWindow -Wait"
+          "Command": "Start-Process \"cmd.exe\" -ArgumentList \"/c $env:TEMP\\nvidiaProfileInspector\\nvidiaProfileInspector.exe $env:TEMP\\NV-ROFF.nip\""
+        },
+        "RemoveFiles": {
+          "Action": "run_powershell",
+          "Command": "Remove-Item -Path \"$env:TEMP\\NV-ROFF.nip\" -Force; Remove-Item -Path \"$env:TEMP\\nvidiaProfileInspector.zip\" -Force; Remove-Item -Path \"$env:TEMP\\nvidiaProfileInspector\" -Recurse -Force"
         }
       }
     }
