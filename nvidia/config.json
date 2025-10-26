@@ -279,8 +279,10 @@
         "(default)": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
-        "DeleteNvCameraKey": { "Action": "delete_path", "Path": "HKLM\\System\\CurrentControlSet\\Services\\nvlddmkm\\NvCamera" },
-        "RemoveNvTelemetryDLL": { "Action": "run_powershell", "Command": "Get-ChildItem -Path \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\" -Filter 'NvTelemetry64.dll' -Recurse | Remove-Item -Force" },
+        "RemoveNvTelemetryDLL": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem -Path \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\" -Filter 'NvTelemetry64.dll' -Recurse | Remove-Item -Force"
+        },
         "UninstallNvTelemetryPackages": {
           "Action": "run_powershell",
           "Command": "if (Test-Path \"$env:ProgramFiles\\NVIDIA Corporation\\Installer2\\InstallerCore\\NVI2.DLL\") { Start-Process rundll32.exe -ArgumentList '\"$env:ProgramFiles\\NVIDIA Corporation\\Installer2\\InstallerCore\\NVI2.DLL\",UninstallPackage NvTelemetryContainer' -NoNewWindow -Wait; Start-Process rundll32.exe -ArgumentList '\"$env:ProgramFiles\\NVIDIA Corporation\\Installer2\\InstallerCore\\NVI2.DLL\",UninstallPackage NvTelemetry' -NoNewWindow -Wait }"
@@ -288,6 +290,10 @@
         "RenameNvTelemetryFiles": {
           "Action": "run_powershell",
           "Command": "$file = \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\\NvTelemetry*.dll\"; $enviro = [System.Environment]::ExpandEnvironmentVariables($file); $paths = Get-ChildItem -Path $enviro -Force -Recurse | Select-Object -ExpandProperty FullName | Select-Object -Unique | Sort-Object Length -Descending; foreach ($telpath in $paths) { if (-not (Test-Path -Path $telpath -PathType Container)) { Move-Item -LiteralPath $telpath -Destination (\"$telpath.old\") -Force } }"
+        },
+        "RemoveNvProgramFiles": {
+          "Action": "run_powershell",
+          "Command": "Remove-Item -Recurse -Force \"$env:ProgramFiles\\NVIDIA Corporation\""
         }
       }
     },

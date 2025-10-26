@@ -455,7 +455,7 @@ Disables the notification (GeForce), whenever a new driver is available.
 
 Disabling all of it will increase the wattage usage noticeable.
 
-```jsonc
+```json
 {
   "Name":  "RMPowerFeature",
   "Comment":  [
