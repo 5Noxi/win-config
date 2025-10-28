@@ -300,5 +300,104 @@
         }
       }
     }
+  },
+  "'New' Context Menu": {
+    "apply": {
+      "HKCU\\Software\\Classes\\.ps1": {
+        "": { "Type": "REG_SZ", "Data": "ps1legacy" }
+      },
+      "HKCU\\Software\\Classes\\.ps1\\ShellNew": {
+        "NullFile": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\Software\\Classes\\ps1legacy": {
+        "": { "Type": "REG_SZ", "Data": "pwsh" },
+        "FriendlyTypeName": { "Type": "REG_SZ", "Data": "pwsh" }
+      },
+      "HKCU\\Software\\Classes\\.txt": {
+        "": { "Type": "REG_SZ", "Data": "txtlegacy" }
+      },
+      "HKCU\\Software\\Classes\\.txt\\ShellNew": {
+        "NullFile": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\Software\\Classes\\txtlegacy": {
+        "": { "Type": "REG_SZ", "Data": "txt" },
+        "FriendlyTypeName": { "Type": "REG_SZ", "Data": "txt" }
+      },
+      "HKCU\\Software\\Classes\\.bat": {
+        "": { "Type": "REG_SZ", "Data": "batfile" }
+      },
+      "HKCU\\Software\\Classes\\.bat\\ShellNew": {
+        "NullFile": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\Software\\Classes\\batfile": {
+        "": { "Type": "REG_SZ", "Data": "bat" },
+        "FriendlyTypeName": { "Type": "REG_SZ", "Data": "bat" }
+      },
+      "COMMANDS": {
+        "RestartExplorer": { "Action": "restart_explorer" }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Classes\\.ps1": { "Action": "delete_path" },
+      "HKCU\\Software\\Classes\\ps1legacy": { "Action": "delete_path" },
+      "HKCU\\Software\\Classes\\.txt": { "Action": "delete_path" },
+      "HKCU\\Software\\Classes\\txtlegacy": { "Action": "delete_path" },
+      "HKCU\\Software\\Classes\\.bat": { "Action": "delete_path" },
+      "HKCU\\Software\\Classes\\batfile": { "Action": "delete_path" },
+      "COMMANDS": {
+        "RestartExplorer": { "Action": "restart_explorer" }
+      }
+    }
+  },
+  "Desktop Icon Spacing": {
+    "__control": { "type": "button", "label": "Open" },
+    "COMMANDS": {
+      "RemoveWindowsOld": {
+        "Action": "run_powershell",
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Icon-Spacing.ps1 | iex\"'"
+      }
+    }
+  },
+  "Detailed File Transfer": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\OperationStatusManager": {
+        "EnthusiastMode": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\OperationStatusManager": {
+        "EnthusiastMode": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    }
+  },
+  "Classic Task Switcher": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "AltTabSettings": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "AltTabSettings": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Remove Quick Access": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "LaunchTo": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "HubMode": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "LaunchTo": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "HubMode": { "Action": "deletevalue" }
+      }
+    }
   }
 }

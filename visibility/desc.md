@@ -267,3 +267,140 @@ reg add "HKCU\Control Panel\Desktop" /v FontSmoothingType /t REG_DWORD /d 1 /f
 # Hide Shortcut Icon
 
 Disables the `- Shortcut` text, hides the shortcut & compression arrows.
+
+# 'New' Context Menu
+
+Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you can add these options to the 'new' context menu. This may also change the `Type` shown in the explorer (only `.bat` is affected of the three).
+
+Edit the text, by editing `Default` (value empty) and `FriendlyTypeName`:
+```ps
+:: PowerShell
+reg add "HKCR\ps1legacy" /ve /d "pwsh" /f
+reg add "HKCR\ps1legacy" /v FriendlyTypeName /t REG_SZ /d "pwsh" /f
+:: Text
+reg add "HKCR\txtlegacy" /ve /d "txt" /f
+reg add "HKCR\txtlegacy" /v FriendlyTypeName /t REG_SZ /d "txt" /f
+:: Batch
+reg add "HKCR\batfile" /ve /d "bat" /f
+reg add "HKCR\batfile" /v FriendlyTypeName /t REG_SZ /d "bat" /f
+```
+Remove a specific block from `New-Context-Menu.bat`, or add a different one - personal preference.
+
+Additionaly I added `Classic-Context-Menu`, which gets rid of the compact menu (W11). It's personal preference, but it's a "must do" in my opinion.
+
+Enable the classic context menu with:
+```bat
+reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+```
+Remove `Add to Favorites` option with:
+```bat
+reg delete "HKCR\*\shell\pintohomefile" /f
+```
+Remove `Share` option with:
+```bat
+reg delete "HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\ModernSharing" /f
+```
+Remove `Send to` option with:
+```bat
+reg delete "HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo" /f
+```
+Remove miscellaneous stock windows context menu options:
+```bat
+reg delete "HKCR\.bmp\ShellNew" /f
+reg delete "HKCR\.zip\CompressedFolder\ShellNew" /f
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/newcontext1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/newcontext2.png?raw=true)
+
+# Desktop Icon Spacing
+
+Location:
+```
+\Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconSpacing
+\Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconVerticalSpacing
+```
+`IconSpacing` = Horizontal
+`IconVerticalSpacing` = Vertical
+
+Default: `75px` (`-1125`)
+Min: `32px` (`-480`)
+Max: `182px` (`-2730`)
+
+Personal preference: `100px` horizontal, `75px` vertical
+
+Value gets calculated with:
+```c
+-15*px
+
+-15*75 = -1125 // default
+```
+I created a small tool for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly. (the images show vertical `75px` & `100px` difference)
+
+Set the icon view size to `Small` with:
+```bat
+reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v IconSize /t REG_DWORD /d 32 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v Mode /t REG_DWORD /d 1 /f
+reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v LogicalViewMode /t REG_DWORD /d 3 /f
+```
+`75px`:
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/iconspacing75.png?raw=true)
+
+`100px`:
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
+
+# Settings Page Visibility 
+
+It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).
+
+```
+This policy allows an administrator to block a given set of pages from the System Settings app. Blocked pages will not be visible in the app, and if all pages in a category are blocked the category will be hidden as well. Direct navigation to a blocked page via URI, context menu in Explorer or other means will result in the front page of Settings being shown instead.
+```
+Path (`String Value`):
+```
+HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer : SettingsPageVisibility
+```
+`showonly:` followed by a semicolon separated list of page identifiers to allow
+`hide:` followed by a list of pages to block
+
+Page identifiers are the part after `ms-settings:` in a settings URI.
+
+Example:
+`showonly:bluetooth` only shows the `Bluetooth` page
+`hide:bluetooth;windowsdefender` hides the `Bluetooth` & `Windows Security` pages
+
+All categories of `ms-settings` URIs:
+> https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-settings-app#ms-settings-uri-scheme-reference
+
+Example value:
+```bat
+hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
+```
+It depends on the user what he wants to see and what not, so I won't upload a batch for it.
+
+# Detailed File Transfer
+
+When you copy, move, or delete a file or folder, a progress dialog appears. You can switch between `More details` and `Fewer details`. By default, the dialog opens in the same view you last used (if you didn't switch it yet, `0` is used).
+
+`EnthusiastMode` - `0` = fewer detailes, `1` = more details:
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/filetransfer0.png?raw=true)
+
+`EnthusiastMode` - `1` = more details:
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/filetransfer1.png?raw=true)
+
+# Classic Task Switcher
+
+It won't work on 24H2.
+
+New (delete `AltTabSettings`):
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/taskswitchnew.png?raw=true)
+
+Classic (`AltTabSettings` - `1`):
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
+
+
+# Remove Quick Access
+
+Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to `This PC`.
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/quickaccess.png?raw=true)

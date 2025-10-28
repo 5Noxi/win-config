@@ -199,5 +199,35 @@
         "value": { "Type": "REG_DWORD", "Data": 2 }
       }
     }
+  },
+  "M/K DQS": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\services\\kbdclass\\Parameters": {
+        "KeyboardDataQueueSize": { "Type": "REG_DWORD", "Data": 100 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\services\\mouclass\\Parameters": {
+        "MouseDataQueueSize": { "Type": "REG_DWORD", "Data": 100 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\services\\kbdclass\\Parameters": {
+        "KeyboardDataQueueSize": { "Type": "REG_DWORD", "Data": 100 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\services\\mouclass\\Parameters": {
+        "MouseDataQueueSize": { "Type": "REG_DWORD", "Data": 100 }
+      }
+    }
+  },
+  "Mouse Hover Time": {
+    "apply": {
+      "HKCU\\Control Panel\\Mouse": {
+        "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
+      }
+    },
+    "revert": {
+      "HKCU\\Control Panel\\Mouse": {
+        "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+      }
+    }
   }
 }

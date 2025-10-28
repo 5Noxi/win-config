@@ -134,3 +134,76 @@ Enables write cache & turns off write cache buffer flushing on all connected dis
 # Disable Bluetooth
 
 Self explaining.
+
+# M/K DQS
+
+The value exists by default and is set to `100` decimal (`64` hex). Reducing it doesn't reduce your latency, leave it default.
+
+"Specifies the number of mouse events to be buffered internally by the driver, in nonpaged pool. The allocated size, in bytes, of the internal buffer is this value times the size of the MOUSE_INPUT_DATA structure (defined in NTDDMOU.H)."
+
+```c
+v11 = *((_DWORD *)&WPP_MAIN_CB.Reserved + 2); // MouseDataQueueSize value
+if (!v11)
+{
+    // Set default to 100 if value was 0
+    v11 = 100;
+}
+else if (v11 > 0xAAAAAAA) // ≈ 178956970
+{
+    v12 = 2400;
+}
+else
+{
+    v12 = 24 * v11;
+}
+*((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = v12;
+
+```
+__Scenarios:__
+Exists & > 0 -> `v11 = reg value`
+Value == 0 -> `v11 = 100`
+Value not present -> `v11 = 288` ?
+Value > `0xAAAAAAA` ->  Clamped to `2400`
+Otherwise `v11 * 24`
+
+> https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990
+
+> [peripheral/assets | mkdata-MouConfiguration.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)
+> [peripheral/assets | mkdata-KbdConfiguration.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/mkdata-KbdConfiguration.c)
+
+# Mouse Hover Time
+
+Hover time is the time in milliseconds that the mouse pointer has to stay hovered over something before an event happens, personal preference.
+
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 10 /f
+```
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 100 /f
+```
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 200 /f
+```
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 300 /f
+```
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 400 /f
+```
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 500 /f
+```
+```bat
+reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 1000 /f
+```
+
+Default/fallback value:
+```c
+g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // 400
+```
+Type: `String`
+Min: `0`
+Max: `65534`? - It uses `StrToIntW` to read the value
+
+> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw
+> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime

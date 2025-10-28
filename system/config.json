@@ -389,19 +389,13 @@
   },
   "Notepad++": {
     "apply": {
-      "COMMANDS": {
-        "AddRegistryEntry": {
-          "Action": "run_powershell",
-          "Command": "reg add \"HKCR\\batfile\\shell\\edit\\command\" /ve /d \"\\\"C:\\Program Files\\Notepad++\\notepad++.exe\\\" \\\"%1\\\"\" /f"
-        }
+      "HKCR\\batfile\\shell\\edit\\command": {
+        "": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\Notepad++\\notepad++.exe\" \"%1\"" }
       }
     },
     "revert": {
-      "COMMANDS": {
-        "RemoveRegistryEntry": {
-          "Action": "run_powershell",
-          "Command": "reg delete \"HKCR\\batfile\\shell\\edit\\command\" /f"
-        }
+      "HKCR\\batfile\\shell\\edit\\command": { 
+        "": { "Type": "REG_SZ", "Data": "\"%SystemRoot%\\System32\\notepad.exe\" \"%1\"" }
       }
     }
   },

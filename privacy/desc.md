@@ -172,3 +172,5 @@ MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\smartscreenps.dll
 
 endlocal
 ```
+
+> [privacy/assets | Windows-Defender.txt](https://github.com/5Noxi/win-config/blob/main/privacy/assets/Windows-Defender.txt)
