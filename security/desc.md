@@ -322,7 +322,7 @@ Does:
 
 ![](https://github.com/5Noxi/win-config/blob/main/privacy/images/downblocking.png?raw=true)
 
-# ​Disable WPBT
+# Disable WPBT
 
 WPBT allows hardware manufacturers to run programs during Windows startup that may introduce unwanted software.
 ```

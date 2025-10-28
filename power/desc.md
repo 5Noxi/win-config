@@ -1,3 +1,61 @@
+# Disable Device Powersavings
+
+Disables USB selective suspend, idle power management, and related LP features.
+
+`Device-Powersavings.ps1` includes some comments, which can be tested - if not, leave them.
+
+I added some comments to `QueryUsbflagsValuesForDevice.c`, since they renamed the values.
+
+> https://discord.com/channels/836870260715028511/1326527941051678801/1375576361762295809
+> https://discord.com/channels/836870260715028511/1326527941051678801/1375576424668336248
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/pci.txt
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Enum-USB.txt
+
+`pci.inf`:
+```c
+// D3 cold supported.
+[PciD3ColdSupported]
+Needs=PciD3ColdSupported.HW
+
+[PciD3ColdSupported.HW]
+AddReg=PciD3ColdSupported.RegHW
+
+[PciD3ColdSupported.RegHW]
+HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,D3ColdSupported,0x10001,1
+```
+
+> [power/assets | devicepower-HidpFdoConfigureIdleSettings.c](https://github.com/5Noxi/win-config/blob/main/power/assets/devicepower-HidpFdoConfigureIdleSettings.c)  
+> [power/assets | devicepower-UsbhGetD3Policy.c](https://github.com/5Noxi/win-config/blob/main/power/assets/devicepower-UsbhGetD3Policy.c)  
+> [power/assets | devicepower-QueryUsbflagsValuesForDevice.c](https://github.com/5Noxi/win-config/blob/main/power/assets/devicepower-QueryUsbflagsValuesForDevice.c)
+
+---
+
+Miscellaneous comments:
+```ps
+Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\usbhub\hubg' -Name 'DisableSelectiveSuspendUI' -Value 1
+Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\usbhub\hubg' -Name 'DisableUxdSupport' -Value 1
+Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\usbhub\hubg' -Name 'WakeOnConnectUI' -Value 0
+HcDisableAllSelectiveSuspend
+WinUsbPowerPolicyOwnershipDisabled
+
+$dev = @(
+    'DefaultIdleState'
+    'EnableSelectiveSuspend'
+    'FullPowerDownOnTransientDx'
+    'SelSuspCancelBehavior'
+    'SuppressInputInCS'
+    'SystemInputSuppressionEnabled'
+    'SystemWakeEnabled'
+    'WaitWakeEnabled'
+    'WakeScreenOnInputSupport'
+    'WriteReportExSupported'
+)
+$devsub = @(
+    'DeviceD0DelayTime'
+    'DevicePowerResetDelayTime'
+)
+```
+
 # Disable Hibernation
 
 ```c
@@ -80,7 +138,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEner
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v TelemetryMaxTagPerApplication /t REG_DWORD /d 0 /f
 ```
 
-> [power/assets | jpeg-TranscodeImage.c](https://github.com/5Noxi/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
+> [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/5Noxi/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/5Noxi/win-config/blob/main/power/images/energyesti.png?raw=true)
 
@@ -248,3 +306,38 @@ I removed it, since it causes a BSOD on my testing VMs.
 
 ![](https://github.com/5Noxi/win-config/blob/main/power/images/coalesc1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/power/images/coalesc2.png?raw=true)
+
+# Disable USB Battery Saver 
+
+Used to stop USB devices when your screen is off - Obviously only for laptop users.
+
+```
+Stop USB devices when my screen is off to help battery.
+```
+`Bluetooth & devices` > `USB` > `USB battery saver`
+
+> [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue](https://github.com/5Noxi/win-config/blob/main/power/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue)  
+
+---
+
+Miscellaneous notes:
+```ps
+for /f "delims=" %%k in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\USB" /s /f "AttemptRecoveryFromUsbPowerDrain" ^| findstr "HKEY"') do reg add "%%k" /v AttemptRecoveryFromUsbPowerDrain /t REG_DWORD /d 0 /f
+```
+
+# USB Flags
+
+In `USBXHCI.SYS`. Disables S0 idle on the host controller - remains in the working state (S0)?
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags : Allow64KLowOrFullSpeedControlTransfers
+\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags : DisableHCS0Idle
+```
+I didn't do proper research for them, either test them or leave it:
+```ps
+Get-ChildItem 'HKLM:\SYSTEM\CurrentControlSet\Control\usbflags' -ErrorAction SilentlyContinue | ForEach-Object {
+    Set-ItemProperty -Path $_.PSPath -Name 'DisableOnSoftRemove' -Value 1
+    Set-ItemProperty -Path $_.PSPath -Name 'DisableRecoveryFromPowerDrain' -Value 0
+    Set-ItemProperty -Path $_.PSPath -Name 'DisableLPM' -Value 1
+}
+```
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/USB-Flags.txt

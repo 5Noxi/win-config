@@ -80,7 +80,7 @@
       }
     }
   },
-  "Disable UAR": {
+  "Disable PSR": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
         "DisableUAR": { "Type": "REG_DWORD", "Data": 1 }

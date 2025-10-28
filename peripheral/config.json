@@ -1,33 +1,150 @@
 {
   "Mouse Values": {
-    "HKCU\\Control Panel\\Mouse": {
-      "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
-      "MouseSpeed": { "Type": "REG_SZ", "Data": "0" },
-      "MouseThreshold1": { "Type": "REG_SZ", "Data": "0" },
-      "MouseThreshold2": { "Type": "REG_SZ", "Data": "0" },
-      "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" },
-      "MouseTrails": { "Type": "REG_SZ", "Data": "0" },
-      "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
-      "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
-      "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-      "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
-      "Beep": { "Type": "REG_SZ", "Data": "No" },
-      "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
-      "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
-      "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
-      "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
-      "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
+    "apply": {
+      "HKCU\\Control Panel\\Mouse": {
+        "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
+        "MouseSpeed": { "Type": "REG_SZ", "Data": "0" },
+        "MouseThreshold1": { "Type": "REG_SZ", "Data": "0" },
+        "MouseThreshold2": { "Type": "REG_SZ", "Data": "0" },
+        "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" },
+        "MouseTrails": { "Type": "REG_SZ", "Data": "0" },
+        "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
+        "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
+        "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
+        "Beep": { "Type": "REG_SZ", "Data": "No" },
+        "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
+        "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
+        "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
+        "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
+        "Flags": { "Type": "REG_SZ", "Data": "158" }
+      },
+      "HKCU\\Control Panel\\Cursors": {
+        "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 }
+      }
     },
-    "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
-      "Flags": { "Type": "REG_SZ", "Data": "158" }
+    "revert": {
+      "HKCU\\Control Panel\\Mouse": {
+        "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
+        "MouseSpeed": { "Type": "REG_SZ", "Data": "1" },
+        "MouseThreshold1": { "Type": "REG_SZ", "Data": "6" },
+        "MouseThreshold2": { "Type": "REG_SZ", "Data": "10" },
+        "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" },
+        "MouseTrails": { "Type": "REG_SZ", "Data": "0" },
+        "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" },
+        "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
+        "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
+        "Beep": { "Type": "REG_SZ", "Data": "No" },
+        "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
+        "RawMouseThrottleDuration": { "Action": "deletevalue" },
+        "RawMouseThrottleEnabled": { "Action": "deletevalue" },
+        "RawMouseThrottleForced": { "Action": "deletevalue" },
+        "RawMouseThrottleLeeway": { "Action": "deletevalue" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
+        "Flags": { "Type": "REG_SZ", "Data": "62" }
+      },
+      "HKCU\\Control Panel\\Cursors": {
+        "ContactVisualization": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Keyboard & Accessibility": {
+    "apply": {
+      "HKCU\\Control Panel\\Keyboard": {
+        "KeyboardDelay": { "Type": "REG_SZ", "Data": "0" },
+        "KeyboardSpeed": { "Type": "REG_SZ", "Data": "31" },
+        "InitialKeyboardIndicators": { "Type": "REG_SZ", "Data": "0" },
+        "PrintScreenKeyForSnippingEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Desktop": {
+        "CursorBlinkRate": { "Type": "REG_SZ", "Data": "900" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\Keyboard Response": {
+        "BounceTime": { "Type": "REG_SZ", "Data": "0" },
+        "Last BounceKey Setting": { "Type": "REG_DWORD", "Data": 0 },
+        "Last Valid Delay": { "Type": "REG_DWORD", "Data": 0 },
+        "Last Valid Repeat": { "Type": "REG_DWORD", "Data": 0 },
+        "Last Valid Wait": { "Type": "REG_DWORD", "Data": 0 },
+        "Flags": { "Type": "REG_DWORD", "Data": 98 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\StickyKeys": {
+        "Flags": { "Type": "REG_DWORD", "Data": 482 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\ToggleKeys": {
+        "Flags": { "Type": "REG_DWORD", "Data": 38 }
+      }
     },
-    "HKCU\\Control Panel\\Cursors": {
-      "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 }
+    "revert": {
+      "HKCU\\Control Panel\\Keyboard": {
+        "KeyboardDelay": { "Type": "REG_SZ", "Data": "1" },
+        "KeyboardSpeed": { "Type": "REG_SZ", "Data": "31" },
+        "InitialKeyboardIndicators": { "Type": "REG_SZ", "Data": "0" },
+        "PrintScreenKeyForSnippingEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Control Panel\\Desktop": {
+        "CursorBlinkRate": { "Type": "REG_SZ", "Data": "530" }
+      },
+      "HKCU\\Control Panel\\Accessibility\\Keyboard Response": {
+        "BounceTime": { "Type": "REG_SZ", "Data": "0" },
+        "Last BounceKey Setting": { "Type": "REG_DWORD", "Data": 0 },
+        "Last Valid Delay": { "Type": "REG_DWORD", "Data": 0 },
+        "Last Valid Repeat": { "Type": "REG_DWORD", "Data": 0 },
+        "Last Valid Wait": { "Type": "REG_DWORD", "Data": 1000 },
+        "Flags": { "Type": "REG_DWORD", "Data": 126 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\StickyKeys": {
+        "Flags": { "Type": "REG_DWORD", "Data": 510 }
+      },
+      "HKCU\\Control Panel\\Accessibility\\ToggleKeys": {
+        "Flags": { "Type": "REG_DWORD", "Data": 62 }
+      }
     }
   },
   "Audio Ducking": {
-    "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
-      "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 3 }
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+        "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 3 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+        "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable Audio Enhancements": {
+    "apply": {
+      "COMMANDS": {
+        "DisableAudioEnhCapture": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; $fx=Join-Path $_.PSPath 'FxProperties'; New-Item -Path $p,$fx -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -PropertyType DWord -Value 0 -Force | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -PropertyType DWord -Value 0 -Force | Out-Null; New-ItemProperty -Path $fx -Name '{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5' -PropertyType DWord -Value 1 -Force | Out-Null }"
+        },
+        "DisableAudioEnhRender": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; New-Item -Path $p -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -PropertyType DWord -Value 0 -Force | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -PropertyType DWord -Value 0 -Force | Out-Null }"
+        }
+      }
+    }
+  },
+  "revert": {
+    "COMMANDS": {
+      "RevertAudioEnhCapture": {
+        "Action": "run_powershell",
+        "Elevated": true,
+        "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; $fx=Join-Path $_.PSPath 'FxProperties'; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -ea SilentlyContinue; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -ea SilentlyContinue; Remove-ItemProperty -Path $fx -Name '{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5' -ea SilentlyContinue }"
+      },
+      "RevertAudioEnhRender": {
+        "Action": "run_powershell",
+        "Elevated": true,
+        "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -ea SilentlyContinue; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -ea SilentlyContinue }"
+      }
     }
   },
   "Disable System Sounds": {
@@ -215,18 +332,6 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\services\\mouclass\\Parameters": {
         "MouseDataQueueSize": { "Action": "deletevalue" }
-      }
-    }
-  },
-  "Mouse Hover Time": {
-    "apply": {
-      "HKCU\\Control Panel\\Desktop": {
-        "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
-      }
-    },
-    "revert": {
-      "HKCU\\Control Panel\\Desktop": {
-        "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
       }
     }
   }
