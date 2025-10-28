@@ -425,6 +425,85 @@
         "NoLockScreen": { "Action": "deletevalue" }
       }
     }
+  },
+    "Hide Most Used Apps": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
+        "ShowOrHideMostUsedApps": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Start": {
+        "ShowFrequentList": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
+        "ShowOrHideMostUsedApps": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoStartMenuMFUprogramsList": { "Action": "deletevalue" },
+        "NoInstrumentation": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoStartMenuMFUprogramsList": { "Action": "deletevalue" },
+        "NoInstrumentation": { "Action": "deletevalue" }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
+        "ShowOrHideMostUsedApps": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Start": {
+        "ShowFrequentList": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
+        "ShowOrHideMostUsedApps": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoStartMenuMFUprogramsList": { "Action": "deletevalue" },
+        "NoInstrumentation": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoStartMenuMFUprogramsList": { "Action": "deletevalue" },
+        "NoInstrumentation": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Spotlight": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent": {
+        "DisableWindowsSpotlightFeatures": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsSpotlightWindowsWelcomeExperience": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsSpotlightOnActionCenter": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsSpotlightOnSettings": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableSpotlightCollectionOnDesktop": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableThirdPartySuggestions": { "Type": "REG_DWORD", "Data": 1 },
+        "ConfigureWindowsSpotlight": { "Type": "REG_DWORD", "Data": 0 },
+        "IncludeEnterpriseSpotlight": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager": {
+        "RotatingLockScreenOverlayEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "RotatingLockScreenEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel": {
+        "{2cc5ca98-6485-489a-920e-b3e88a6ccce3}": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CloudContent": {
+        "DisableWindowsSpotlightFeatures": { "Action": "deletevalue" },
+        "DisableWindowsSpotlightWindowsWelcomeExperience": { "Action": "deletevalue" },
+        "DisableWindowsSpotlightOnActionCenter": { "Action": "deletevalue" },
+        "DisableWindowsSpotlightOnSettings": { "Action": "deletevalue" },
+        "DisableSpotlightCollectionOnDesktop": { "Action": "deletevalue" },
+        "DisableThirdPartySuggestions": { "Action": "deletevalue" },
+        "ConfigureWindowsSpotlight": { "Action": "deletevalue" },
+        "IncludeEnterpriseSpotlight": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager": {
+        "RotatingLockScreenOverlayEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "RotatingLockScreenEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel": {
+        "{2cc5ca98-6485-489a-920e-b3e88a6ccce3}": { "Action": "deletevalue" }
+      }
+    }
   }
-
 }

@@ -82,7 +82,8 @@
       "COMMANDS": {
         "SetHddParking0": {
           "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 0 -Force | Out-Null }"
+          "Elevated": true,
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse -EA SilentlyContinue | Where-Object { $null -ne (Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -EA SilentlyContinue) } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 0 -Force -EA SilentlyContinue | Out-Null }"
         }
       }
     },
@@ -90,7 +91,8 @@
       "COMMANDS": {
         "SetHddParking1": {
           "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 1 -Force | Out-Null }"
+          "Elevated": true,
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse -EA SilentlyContinue | Where-Object { $null -ne (Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -EA SilentlyContinue) } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 1 -Force -EA SilentlyContinue | Out-Null }"
         }
       }
     }
@@ -100,6 +102,7 @@
       "COMMANDS": {
         "StorportIdleOff": {
           "Action": "run_powershell",
+          "Elevated": true,
           "Command": "$map=@{EnableIdlePowerManagement=0;DisableIdlePowerManagement=1;DisableD3Cold=1}; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum' -Recurse -EA SilentlyContinue | Where-Object { $_.PSChildName -ieq 'StorPort' } | ForEach-Object { foreach($k in $map.Keys){ New-ItemProperty -Path $_.PSPath -Name $k -PropertyType DWord -Value $map[$k] -Force -EA SilentlyContinue | Out-Null } }"
         }
       }
@@ -108,6 +111,7 @@
       "COMMANDS": {
         "StorportIdleOn": {
           "Action": "run_powershell",
+          "Elevated": true,
           "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum' -Recurse -EA SilentlyContinue | Where-Object { $_.PSChildName -ieq 'StorPort' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableIdlePowerManagement' -PropertyType DWord -Value 1 -Force -EA SilentlyContinue | Out-Null; Remove-ItemProperty -Path $_.PSPath -Name 'DisableIdlePowerManagement' -EA SilentlyContinue; Remove-ItemProperty -Path $_.PSPath -Name 'DisableD3Cold' -EA SilentlyContinue }"
         }
       }

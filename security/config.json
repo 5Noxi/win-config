@@ -360,5 +360,133 @@
         "DontOfferThroughWUAU": { "Action": "DeleteValue" }
       }
     }
+  },
+  "Disable Bitlocker & EFS": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\BitLocker": {
+        "PreventDeviceEncryption": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+        "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Policies": {
+        "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\BitLocker": {
+        "PreventDeviceEncryption": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+        "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Policies": {
+        "NtfsDisableEncryption": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable VBS (HVCI) & Hyper-V": {
+    "apply": {
+      "COMMANDS": {
+        "HypervisorOff": {
+          "Action": "run_powershell",
+          "Command": "bcdedit /set hypervisorlaunchtype off"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
+        "EnableVirtualizationBasedSecurity": { "Type": "REG_DWORD", "Data": 0 },
+        "Locked": { "Type": "REG_DWORD", "Data": 0 },
+        "RequirePlatformSecurityFeatures": { "Type": "REG_DWORD", "Data": 0 },
+        "RequireMicrosoftSignedBootChain": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard": {
+        "EnableVirtualizationBasedSecurity": { "Type": "REG_DWORD", "Data": 0 },
+        "HypervisorEnforcedCodeIntegrity": { "Type": "REG_DWORD", "Data": 0 },
+        "RequirePlatformSecurityFeatures": { "Type": "REG_DWORD", "Data": 0 },
+        "HVCIMATRequired": { "Type": "REG_DWORD", "Data": 0 },
+        "LsaCfgFlags": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
+        "HVCIMATRequired": { "Type": "REG_DWORD", "Data": 0 },
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 },
+        "Locked": { "Type": "REG_DWORD", "Data": 0 },
+        "WasEnabledBy": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
+        "LsaCfgFlags": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HvHost": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicguestinterface": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicheartbeat": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmickvpexchange": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicrdv": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicshutdown": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmictimesync": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvmsession": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvss": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\gencounter": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvcrash": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\storflt": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Vid": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmbus": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmgid": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvservice": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": { "Start": { "Type": "REG_DWORD", "Data": 4 } }
+    },
+    "revert": {
+      "COMMANDS": {
+        "HypervisorAuto": {
+          "Action": "run_powershell",
+          "Command": "bcdedit /deletevalue hypervisorlaunchtype"
+        }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
+        "EnableVirtualizationBasedSecurity": { "Action": "deletevalue" },
+        "Locked": { "Action": "deletevalue" },
+        "RequirePlatformSecurityFeatures": { "Action": "deletevalue" },
+        "RequireMicrosoftSignedBootChain": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard": {
+        "EnableVirtualizationBasedSecurity": { "Action": "deletevalue" },
+        "HypervisorEnforcedCodeIntegrity": { "Action": "deletevalue" },
+        "RequirePlatformSecurityFeatures": { "Action": "deletevalue" },
+        "HVCIMATRequired": { "Action": "deletevalue" },
+        "LsaCfgFlags": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
+        "HVCIMATRequired": { "Action": "deletevalue" },
+        "Enabled": { "Action": "deletevalue" },
+        "Locked": { "Action": "deletevalue" },
+        "WasEnabledBy": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
+        "LsaCfgFlags": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HvHost": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicguestinterface": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicheartbeat": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmickvpexchange": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicrdv": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicshutdown": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmictimesync": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvmsession": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvss": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\gencounter": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvcrash": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\storflt": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Vid": { "Start": { "Type": "REG_DWORD", "Data": 1 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmbus": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmgid": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvservice": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": { "Start": { "Type": "REG_DWORD", "Data": 3 } }
+    }
   }
+
+
 }

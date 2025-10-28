@@ -267,6 +267,7 @@ DisableNativeNVMeStack db 0 // default
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/StorPort.txt
 
 # Disable System Restore
+
 Removes all copies (volume backups), see your current shadows with:
 ```cmd
 vssadmin list shadows /for=<ForVolumeSpec> /shadow=<ShadowID>
@@ -322,6 +323,7 @@ Does:
 ![](https://github.com/5Noxi/win-config/blob/main/privacy/images/downblocking.png?raw=true)
 
 # ​Disable WPBT
+
 WPBT allows hardware manufacturers to run programs during Windows startup that may introduce unwanted software.
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager : DisableWpbtExecution
@@ -341,6 +343,7 @@ dism /unmount-image /mountdir:"<tempmountdir>" /commit /checkintegrity
 ```
 
 # Block MRT via WU
+
 MRT takes a lot of time - there are better tools. It blocks 
 ```ps
 reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontReportInfectionInformation /t REG_DWORD /d 1 /f
@@ -348,3 +351,206 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontReportInfectionInformation
 Blocks infection reporting, if using MRT.
 
 ![](https://github.com/5Noxi/win-config/blob/main/privacy/images/mrt.png?raw=true)
+
+# Disable Bitlocker & EFS
+
+Disable bitlocker on all volumes:
+```ps
+$nvbvol = Get-BitLockerVolume
+Disable-BitLocker -MountPoint $nvbvol
+```
+> https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior
+> https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps
+
+`fsutil behavior set disableencryption 1` sets:
+```ps
+fsutil.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\FileSystem\NtfsDisableEncryption	Type: REG_DWORD, Length: 4, Data: 1
+```
+```
+\Registry\Machine\SYSTEM\ControlSet001\Policies : NtfsDisableEncryption
+\Registry\Machine\SYSTEM\ControlSet001\Control\FileSystem : NtfsDisableEncryption
+```
+```json
+{
+	"File":  "FileSys.admx",
+	"NameSpace":  "Microsoft.Policies.FileSys",
+	"Class":  "Machine",
+	"CategoryName":  "NTFS",
+	"DisplayName":  "Do not allow encryption on all NTFS volumes",
+	"ExplainText":  "Encryption can add to the processing overhead of filesystem operations. Enabling this setting will prevent access to and creation of encrypted files.A reboot is required for this setting to take effect",
+	"Supported":  "Windows7",
+	"KeyPath":  "System\\CurrentControlSet\\Policies",
+	"KeyName":  "NtfsDisableEncryption",
+	"Elements":  [
+					 {"Value":  "1","Type":  "EnabledValue"},
+					 {"Value":  "0","Type":  "DisabledValue"}
+				 ]
+},
+```
+Enabling `NtfsDisableEncryption` (`1`) may cause Xbox games to fail to install (error code `0x8007177E` - "Allow encryption on selected disk volume to install this game"):
+```py
+ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
+```
+> [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
+
+# Disable VBS (HVCI) & Hyper-V
+
+VBS won't work if Hyper-V is disabled.
+
+"Memory integrity is a Virtualization-based security (VBS) feature available in Windows. Memory integrity and VBS improve the threat model of Windows and provide stronger protections against malware trying to exploit the Windows kernel. VBS uses the Windows hypervisor to create an isolated virtual environment that becomes the root of trust of the OS that assumes the kernel can be compromised. Memory integrity is a critical component that protects and hardens Windows by running kernel mode code integrity within the isolated virtual environment of VBS. Memory integrity also restricts kernel memory allocations that could be used to compromise the system."
+
+> https://www.nirsoft.net/utils/serviwin.html  
+> https://www.nirsoft.net/utils/device_manager_view.html  
+> https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-deviceguard-unattend  
+> https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/configure?tabs=reg  
+> https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity?tabs=security
+
+```json
+{
+	"File":  "DeviceGuard.admx",
+	"NameSpace":  "Microsoft.Windows.DeviceGuard",
+	"Class":  "Machine",
+	"CategoryName":  "DeviceGuardCategory",
+	"DisplayName":  "Disabled",
+	"ExplainText":  " Specifies whether Virtualization Based Security is enabled. Virtualization Based Security uses the Windows Hypervisor to provide support for security services. Virtualization Based Security requires Secure Boot, and can optionally be enabled with the use of DMA Protections. DMA protections require hardware support and will only be enabled on correctly configured devices. Virtualization Based Protection of Code Integrity This setting enables virtualization based protection of Kernel Mode Code Integrity. When this is enabled, kernel mode memory protections are enforced and the Code Integrity validation path is protected by the Virtualization Based Security feature. The \"Disabled\" option turns off Virtualization Based Protection of Code Integrity remotely if it was previously turned on with the \"Enabled without lock\" option. The \"Enabled with UEFI lock\" option ensures that Virtualization Based Protection of Code Integrity cannot be disabled remotely. In order to disable the feature, you must set the Group Policy to \"Disabled\" as well as remove the security functionality from each computer, with a physically present user, in order to clear configuration persisted in UEFI. The \"Enabled without lock\" option allows Virtualization Based Protection of Code Integrity to be disabled remotely by using Group Policy. The \"Not Configured\" option leaves the policy setting undefined. Group Policy does not write the policy setting to the registry, and so it has no impact on computers or users. If there is a current setting in the registry it will not be modified. The \"Require UEFI Memory Attributes Table\" option will only enable Virtualization Based Protection of Code Integrity on devices with UEFI firmware support for the Memory Attributes Table. Devices without the UEFI Memory Attributes Table may have firmware that is incompatible with Virtualization Based Protection of Code Integrity which in some cases can lead to crashes or data loss or incompatibility with certain plug-in cards. If not setting this option the targeted devices should be tested to ensure compatibility. Warning: All drivers on the system must be compatible with this feature or the system may crash. Ensure that this policy setting is only deployed to computers which are known to be compatible. Credential Guard This setting lets users turn on Credential Guard with virtualization-based security to help protect credentials. For Windows 11 21H2 and earlier, the \"Disabled\" option turns off Credential Guard remotely if it was previously turned on with the \"Enabled without lock\" option. For later versions, the \"Disabled\" option turns off Credential Guard remotely if it was previously turned on with the \"Enabled without lock\" option or was \"Not Configured\". The \"Enabled with UEFI lock\" option ensures that Credential Guard cannot be disabled remotely. In order to disable the feature, you must set the Group Policy to \"Disabled\" as well as remove the security functionality from each computer, with a physically present user, in order to clear configuration persisted in UEFI. The \"Enabled without lock\" option allows Credential Guard to be disabled remotely by using Group Policy. The devices that use this setting must be running at least Windows 10 (Version 1511). For Windows 11 21H2 and earlier, the \"Not Configured\" option leaves the policy setting undefined. Group Policy does not write the policy setting to the registry, and so it has no impact on computers or users. If there is a current setting in the registry it will not be modified. For later versions, if there is no current setting in the registry, the \"Not Configured\" option will enable Credential Guard without UEFI lock. Machine Identity Isolation This setting controls Credential Guard protection of Active Directory machine accounts. Enabling this policy has certain prerequisites. The prerequisites and more information about this policy can be found at https://go.microsoft.com/fwlink/?linkid=2251066. The \"Not Configured\" option leaves the policy setting undefined. Group Policy does not write the policy setting to the registry, and so it has no impact on computers or users. If there is a current setting in the registry it will not be modified. The \"Disabled\" option turns off Machine Identity Isolation. If this policy was previously set to \"Enabled in audit mode\", no further action is needed. If this policy was previously set to â€œEnabled in enforcement modeâ€, the device must be unjoined and rejoined to the domain. More details can be found at the link above. The \"Enabled in audit mode\" option copies the machine identity into Credential Guard. Both LSA and Credential Guard will have access to the machine identity. This allows users to validate that \"Enabled in enforcement mode\" will work in their Active Directory Domain. The \"Enabled in enforcement mode\" option moves the machine identity into Credential Guard. This makes the machine identity only accessible to Credential Guard. Secure Launch This setting sets the configuration of Secure Launch to secure the boot chain. The \"Not Configured\" setting is the default, and allows configuration of the feature by Administrative users. The \"Enabled\" option turns on Secure Launch on supported hardware. The \"Disabled\" option turns off Secure Launch, regardless of hardware support. Kernel-mode Hardware-enforced Stack Protection This setting enables Hardware-enforced Stack Protection for kernel-mode code. When this security feature is enabled, kernel-mode data stacks are hardened with hardware-based shadow stacks, which store intended return address targets to ensure that program control flow is not tampered. This security feature has the following prerequisites: 1) The CPU hardware supports hardware-based shadow stacks. 2) Virtualization Based Protection of Code Integrity is enabled. If either prerequisite is not met, this feature will not be enabled, even if an \"Enabled\" option is selected for this feature. Note that selecting an \"Enabled\" option for this feature will not automatically enable Virtualization Based Protection of Code Integrity, that needs to be done separately. Devices that enable this security feature must be running at least Windows 11 (Version 22H2). The \"Disabled\" option turns off kernel-mode Hardware-enforced Stack Protection. The \"Enabled in audit mode\" option enables kernel-mode Hardware-enforced Stack Protection in audit mode, where shadow stack violations are not fatal and will be logged to the system event log. The \"Enabled in enforcement mode\" option enables kernel-mode Hardware-enforced Stack Protection in enforcement mode, where shadow stack violations are fatal. The \"Not Configured\" option leaves the policy setting undefined. Group Policy does not write the policy setting to the registry, and so it has no impact on computers or users. If there is a current setting in the registry it will not be modified. Warning: All drivers on the system must be compatible with this security feature or the system may crash in enforcement mode. Audit mode can be used to discover incompatible drivers. For more information, refer to https://go.microsoft.com/fwlink/?LinkId=2162953.",
+	"Supported":  "Windows_10_0",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard",
+	"KeyName":  "EnableVirtualizationBasedSecurity",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "RequirePlatformSecurityFeatures",
+							"Items":  [
+										{
+											"DisplayName":  "Secure Boot",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Secure Boot and DMA Protection",
+											"Value":  "3"
+										}
+									]
+						},
+						{
+							"Type":  "Enum",
+							"ValueName":  "HypervisorEnforcedCodeIntegrity",
+							"Items":  [
+										{
+											"DisplayName":  "Disabled",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Enabled with UEFI lock",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Enabled without lock",
+											"Value":  "2"
+										},
+										{
+											"DisplayName":  "Not Configured",
+											"Value":  "3"
+										}
+									]
+						},
+						{
+							"ValueName":  "HVCIMATRequired",
+							"FalseValue":  "0",
+							"TrueValue":  "1",
+							"Type":  "Boolean"
+						},
+						{
+							"Type":  "Enum",
+							"ValueName":  "LsaCfgFlags",
+							"Items":  [
+										{
+											"DisplayName":  "Disabled",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Enabled with UEFI lock",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Enabled without lock",
+											"Value":  "2"
+										},
+										{
+											"DisplayName":  "Not Configured",
+											"Value":  "3"
+										}
+									]
+						},
+						{
+							"Type":  "Enum",
+							"ValueName":  "MachineIdentityIsolation",
+							"Items":  [
+										{
+											"DisplayName":  "Disabled",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Enabled in audit mode",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Enabled in enforcement mode",
+											"Value":  "2"
+										},
+										{
+											"DisplayName":  "Not Configured",
+											"Value":  "3"
+										}
+									]
+						},
+						{
+							"Type":  "Enum",
+							"ValueName":  "ConfigureSystemGuardLaunch",
+							"Items":  [
+										{
+											"DisplayName":  "Not Configured",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Enabled",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Disabled",
+											"Value":  "2"
+										}
+									]
+						},
+						{
+							"Type":  "Enum",
+							"ValueName":  "ConfigureKernelShadowStacksLaunch",
+							"Items":  [
+										{
+											"DisplayName":  "Not Configured",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Enabled in enforcement mode",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Enabled in audit mode",
+											"Value":  "2"
+										},
+										{
+											"DisplayName":  "Disabled",
+											"Value":  "3"
+										}
+									]
+						},
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},

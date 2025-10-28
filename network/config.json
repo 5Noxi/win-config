@@ -134,6 +134,23 @@
         "NoActiveProbe": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable VPNs": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RasMan": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SstpSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RasMan": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SstpSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      }
+    }
   }
-
 }

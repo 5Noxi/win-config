@@ -79,5 +79,17 @@
         "AppCaptureEnabled": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable UAR": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
+        "DisableUAR": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
+        "DisableUAR": { "Action": "deletevalue" }
+      }
+    }
   }
 }

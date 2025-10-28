@@ -526,3 +526,251 @@ Show clear logon background:
 ```bat
 reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackgroundOnLogon /t REG_DWORD /d 1 /f
 ```
+
+# Hide Most Used Apps
+
+Hide recently added apps with:
+```bat
+reg add "HKLM\Software\Policies\Microsoft\Windows\Explorer" /v HideRecentlyAddedApps /t REG_DWORD /d 1 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Start" /v ShowRecentList /t REG_DWORD /d 0 /f
+```
+Remove frequently used programs list from the start menu with:
+```bat
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoStartMenuMFUprogramsList /t REG_DWORD /d 1 /f
+```
+Hide new apps notification with ("`You have new apps that can open this type of file`"):
+```bat
+reg add "HKLM\Software\Policies\Microsoft\Windows\Explorer" /v NoNewAppAlert /t REG_DWORD /d 1 /f
+```
+```c
+dq offset POLID_NoNewAppAlert
+dq offset aExplorer     ; "Explorer"
+dq offset aNonewappalert ; "NoNewAppAlert"
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/mostused.jpg?raw=true)
+
+```json
+{
+    "File":  "StartMenu.admx",
+    "NameSpace":  "Microsoft.Policies.StartMenu",
+    "Class":  "Both",
+    "CategoryName":  "StartMenu",
+    "DisplayName":  "Hide",
+    "ExplainText":  "If you enable this policy setting, you can configure Start menu to show or hide the list of user\u0027s most used apps, regardless of user settings.Selecting \"Show\" will force the \"Most used\" list to be shown, and user cannot change to hide it using the Settings app.Selecting \"Hide\" will force the \"Most used\" list to be hidden, and user cannot change to show it using the Settings app.Selecting \"Not Configured\", or if you disable or do not configure this policy setting, all will allow users to turn on or off the display of \"Most used\" list using the Settings app. This is default behavior.Note: configuring this policy to \"Show\" or \"Hide\" on supported versions of Windows 10 will supercede any policy setting of \"Remove frequent programs list from the Start Menu\" (which manages same part of Start menu but with fewer options).",
+    "Supported":  "Windows_10_0_21H2",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows",
+    "KeyName":  "Explorer",
+    "Elements":  [
+                      {
+                          "Type":  "Enum",
+                          "ValueName":  "ShowOrHideMostUsedApps",
+                          "Items":  [
+                                        {
+                                            "DisplayName":  "Not Configured",
+                                            "Value":  "0"
+                                        },
+                                        {
+                                            "DisplayName":  "Show",
+                                            "Value":  "1"
+                                        },
+                                        {
+                                            "DisplayName":  "Hide",
+                                            "Value":  "2"
+                                        }
+                                    ]
+                      }
+                  ]
+},
+{
+    "File":  "StartMenu.admx",
+    "NameSpace":  "Microsoft.Policies.StartMenu",
+    "Class":  "Both",
+    "CategoryName":  "StartMenu",
+    "DisplayName":  "Remove frequent programs list from the Start Menu",
+    "ExplainText":  "If you enable this setting, the frequently used programs list is removed from the Start menu.If you disable this setting or do not configure it, the frequently used programs list remains on the simple Start menu.",
+    "Supported":  "Windows7ToXPAndWindows10",
+    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "KeyName":  "NoStartMenuMFUprogramsList",
+    "Elements":  [
+
+                  ]
+},
+{
+    "File":  "StartMenu.admx",
+    "NameSpace":  "Microsoft.Policies.StartMenu",
+    "Class":  "User",
+    "CategoryName":  "StartMenu",
+    "DisplayName":  "Turn off user tracking",
+    "ExplainText":  "This policy setting allows you to turn off user tracking.If you enable this policy setting, the system does not track the programs that the user runs, and does not display frequently used programs in the Start Menu.If you disable or do not configure this policy setting, the system tracks the programs that the user runs. The system uses this information to customize Windows features, such as showing frequently used programs in the Start Menu.Also, see these related policy settings: \"Remove frequent programs liist from the Start Menu\" and \"Turn off personalized menus\".This policy setting does not prevent users from pinning programs to the Start Menu or Taskbar. See the \"Remove pinned programs list from the Start Menu\" and \"Do not allow pinning programs to the Taskbar\" policy settings.",
+    "Supported":  "WindowsVistaTo2k",
+    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "KeyName":  "NoInstrumentation",
+    "Elements":  [
+
+                  ]
+},
+```
+
+# Disable Spotlight
+
+Spotlight is used to provide new pictures on your lock screen.
+
+> https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11#policy-settings
+> https://www.dev2qa.com/how-to-show-or-hide-the-windows-spotlight-learn-about-this-picture-icon-on-windows-11-desktop/
+
+```json
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Turn off all Windows spotlight features",
+    "ExplainText":  "This policy setting lets you turn off all Windows Spotlight features at once.If you enable this policy setting, Windows spotlight on lock screen, Windows tips, Microsoft consumer features and other related features will be turned off. You should enable this policy setting if your goal is to minimize network traffic from target devices.If you disable or do not configure this policy setting, Windows spotlight features are allowed and may be controlled individually using their corresponding policy settings.",
+    "Supported":  "Windows_10_0_NOSERVER",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "DisableWindowsSpotlightFeatures",
+    "Elements":  [
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "0",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Turn off the Windows Welcome Experience",
+    "ExplainText":  "This policy setting lets you turn off the Windows Spotlight Windows Welcome experience. This feature helps onboard users to Windows, for instance launching Microsoft Edge with a web page highlighting new features.If you enable this policy, the Windows Welcome Experience will no longer display when there are updates and changes to Windows and its apps.If you disable or do not configure this policy, the Windows Welcome Experience will be launched to help onboard users to Windows telling them about what\u0027s new, changed, and suggested.",
+    "Supported":  "Windows_10_0_RS2",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "DisableWindowsSpotlightWindowsWelcomeExperience",
+    "Elements":  [
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "0",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Turn off Windows Spotlight on Action Center",
+    "ExplainText":  "If you enable this policy, Windows Spotlight notifications will no longer be shown on Action Center.If you disable or do not configure this policy, Microsoft may display notifications in Action Center that will suggest apps or features to help users be more productive on Windows.",
+    "Supported":  "Windows_10_0_RS2",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "DisableWindowsSpotlightOnActionCenter",
+    "Elements":  [
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "0",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Turn off Windows Spotlight on Settings",
+    "ExplainText":  "If you enable this policy, Windows Spotlight suggestions will no longer be shown in Settings app.If you disable or do not configure this policy, Microsoft may suggest apps or features in Settings app to help users be productive on Windows or their linked phone.",
+    "Supported":  "Windows_10_0_RS4",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "DisableWindowsSpotlightOnSettings",
+    "Elements":  [
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "0",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Turn off Spotlight collection on Desktop",
+    "ExplainText":  "This policy setting removes the Spotlight collection setting in Personalization, rendering the user unable to select and subsequentyly download daily images from Microsoft to desktop.If you enable this policy, \"Spotlight collection\" will not be available as an option in Personalization settings.If you disable or do not configure this policy, \"Spotlight collection\" will appear as an option in Personalization settings, allowing the user to select \"Spotlight collection\" as the Desktop provider and display daily images from Microsoft on the desktop.",
+    "Supported":  "Windows_10_0_NOSERVER",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "DisableSpotlightCollectionOnDesktop",
+    "Elements":  [
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "0",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Do not suggest third-party content in Windows spotlight",
+    "ExplainText":  "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps.If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
+    "Supported":  "Windows_10_0_NOSERVER",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "DisableThirdPartySuggestions",
+    "Elements":  [
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "0",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+{
+    "File":  "CloudContent.admx",
+    "NameSpace":  "Microsoft.Policies.CloudContent",
+    "Class":  "User",
+    "CategoryName":  "CloudContent",
+    "DisplayName":  "Configure Windows spotlight on lock screen",
+    "ExplainText":  "This policy setting lets you configure Windows spotlight on the lock screen.If you enable this policy setting, \"Windows spotlight\" will be set as the lock screen provider and users will not be able to modify their lock screen. \"Windows spotlight\" will display daily images from Microsoft on the lock screen.Additionally, if you check the \"Include content from Enterprise spotlight\" checkbox and your organization has setup an Enterprise spotlight content service in Azure, the lock screen will display internal messages and communications configured in that service, when available. If your organization does not have an Enterprise spotlight content service, the checkbox will have no effect.If you disable this policy setting, Windows spotlight will be turned off and users will no longer be able to select it as their lock screen. Users will see the default lock screen image and will be able to select another image, unless you have enabled the \"Prevent changing lock screen image\" policy.If you do not configure this policy, Windows spotlight will be available on the lock screen and will be selected by default, unless you have configured another default lock screen image using the \"Force a specific default lock screen and logon image\" policy.Note: This policy is only available for Enterprise SKUs",
+    "Supported":  "Windows_10_0_NOSERVER",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
+    "KeyName":  "ConfigureWindowsSpotlight",
+    "Elements":  [
+                      {
+                          "ValueName":  "IncludeEnterpriseSpotlight",
+                          "FalseValue":  "0",
+                          "TrueValue":  "1",
+                          "Type":  "Boolean"
+                      },
+                      {
+                          "Value":  "1",
+                          "Type":  "EnabledValue"
+                      },
+                      {
+                          "Value":  "2",
+                          "Type":  "DisabledValue"
+                      }
+                  ]
+},
+```

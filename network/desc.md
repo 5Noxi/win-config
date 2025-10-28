@@ -146,3 +146,59 @@ reg add "HKLM\System\CurrentControlSet\services\NlaSvc\Parameters\Internet" /v M
 \Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbePathV6
 \Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ReprobeThreshold
 ```
+
+# Disable VPNs
+
+SSTP VPN & other VPNs - enable the services, to revert it.
+
+Get current VPN connections:
+```ps
+Get-VpnConnection
+```
+Remove a VPN connection with (or `Remove-VpnConnection`):
+```bat
+rasphone -r "Name"
+```
+or `WIN + I` > Network & Internet > VPN > Remove
+
+> https://learn.microsoft.com/en-us/powershell/module/vpnclient/remove-vpnconnection?view=windowsserver2025-ps
+> https://learn.microsoft.com/en-us/powershell/module/vpnclient/?view=windowsserver2025-ps
+
+Disable `Allow VPN over metered networks` (`0` = On, `1` = Off):
+```ps
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\RasMan\Parameters\Config\VpnCostedNetworkSettings" /v NoCostedNetwork /d 1 /f
+```
+```c
+OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters_1 = 
+    L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings";
+
+VpnRegQueryDWord(
+    v13,
+    OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters_1,
+    L"NoCostedNetwork",
+    &g_donotUseCosted,
+    v17);
+
+if ( !v17[0] )
+    g_donotUseCosted = 0; // default
+```
+Disable `Allow VPN while Roaming` (`0` = On, `1` = Off):
+```ps
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\RasMan\Parameters\Config\VpnCostedNetworkSettings" /v NoRoamingNetwork /d 1 /f
+```
+```c
+OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters = 
+    L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings";
+
+VpnRegQueryDWord(
+    v15,
+    OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters,
+    L"NoRoamingNetwork",
+    &g_donotUseRoaming,
+    v17);
+
+if ( !v17[0] )
+    g_donotUseRoaming = 0; // default
+```
+
+> [network/assets | vpn-NlmGetCostedNetworkSettings.c](https://github.com/5Noxi/win-config/blob/main/network/assets/vpn-NlmGetCostedNetworkSettings.c)
