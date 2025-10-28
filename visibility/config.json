@@ -243,7 +243,8 @@
       "HKCU\\Software\\Microsoft\\Windows\\DWM": {
         "EnableAeroPeek": { "Type": "REG_DWORD", "Data": 0 },
         "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
-      }
+      },
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VisualEffects": {
@@ -267,7 +268,8 @@
       "HKCU\\Software\\Microsoft\\Windows\\DWM": {
         "EnableAeroPeek": { "Type": "REG_DWORD", "Data": 1 },
         "AlwaysHibernateThumbnails": { "Type": "REG_DWORD", "Data": 0 }
-      }
+      },
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
     }
   },
   "Hide Shortcut Icon": {

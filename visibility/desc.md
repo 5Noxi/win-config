@@ -251,7 +251,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Taskba
 
 # Optimize Visual Effects
 
-Open `SystemPropertiesPerformance.exe` & apply the following settings, turning on/off other options is personal preference. A system restart is required to apply the changes:
+Open `SystemPropertiesPerformance.exe` & apply the following settings, turning on/off other options is personal preference. A system restart may be required to apply the changes:
 ```bat
 shutdown -r -t 0
 ```
@@ -344,9 +344,11 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v Mode /t REG_DW
 reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v LogicalViewMode /t REG_DWORD /d 3 /f
 ```
 `75px`:
+
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/iconspacing75.png?raw=true)
 
 `100px`:
+
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
 
 # Settings Page Visibility 
@@ -382,10 +384,12 @@ It depends on the user what he wants to see and what not, so I won't upload a ba
 
 When you copy, move, or delete a file or folder, a progress dialog appears. You can switch between `More details` and `Fewer details`. By default, the dialog opens in the same view you last used (if you didn't switch it yet, `0` is used).
 
-`EnthusiastMode` - `0` = fewer detailes, `1` = more details:
+`EnthusiastMode` - `0` = fewer detailes:
+
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/filetransfer0.png?raw=true)
 
 `EnthusiastMode` - `1` = more details:
+
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/filetransfer1.png?raw=true)
 
 # Classic Task Switcher
@@ -393,9 +397,11 @@ When you copy, move, or delete a file or folder, a progress dialog appears. You 
 It won't work on 24H2.
 
 New (delete `AltTabSettings`):
+
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/taskswitchnew.png?raw=true)
 
 Classic (`AltTabSettings` - `1`):
+
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
 
 

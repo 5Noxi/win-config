@@ -15,8 +15,8 @@ fffff806`c53c30f4  ffffffff`ffffffff
 `powercfg.exe /hibernate off`
 
 `HibernateEnabledDefault`, `AllowHibernate` take a default value of `4294967295` dec. `hiber.c` includes some snippets (notes).
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation
-> https://discord.com/channels/836870260715028511/1371224441568231516/1372986527411470377
+> https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Power.txt
 
 # Remove Power Options
 

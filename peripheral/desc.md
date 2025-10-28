@@ -205,5 +205,5 @@ Type: `String`
 Min: `0`
 Max: `65534`? - It uses `StrToIntW` to read the value
 
-> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw
+> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw  
 > https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime

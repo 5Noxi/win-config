@@ -211,10 +211,10 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\services\\kbdclass\\Parameters": {
-        "KeyboardDataQueueSize": { "Type": "REG_DWORD", "Data": 100 }
+        "KeyboardDataQueueSize": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\services\\mouclass\\Parameters": {
-        "MouseDataQueueSize": { "Type": "REG_DWORD", "Data": 100 }
+        "MouseDataQueueSize": { "Action": "deletevalue" }
       }
     }
   },

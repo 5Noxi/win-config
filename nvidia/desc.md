@@ -660,7 +660,7 @@ Enables `Enable Developer Settings` in the NVIDIA control panel.
 
 # Remove Context Menu Entry
 
-Disables `Add Dekstop Context Menu` in the NVIDIA control panel.
+Disables `Add Desktop Context Menu` in the NVIDIA control panel.
 
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true)
 
