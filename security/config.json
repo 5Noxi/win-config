@@ -1,0 +1,364 @@
+{
+  "Disable Windows Update": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
+        "PauseFeatureUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
+        "PauseQualityUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
+        "PauseUpdatesExpiryTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
+        "PauseFeatureUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
+        "PauseQualityUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
+        "PauseUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState": {
+        "PauseFeatureUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
+        "PauseQualityUpdatesEndTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
+        "PauseFeatureUpdatesStartTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
+        "PauseQualityUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuauserv": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WaaSMedicSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UsoSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": { "Action": "delete_path" },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState": { "Action": "delete_path" },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuauserv": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WaaSMedicSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UsoSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
+      }
+    }
+  },
+  "Disable WU Driver Updates": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Update": {
+        "ExcludeWUDriversInQualityUpdate": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Update": {
+        "ExcludeWUDriversInQualityUpdate": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
+        "ExcludeWUDriversInQualityUpdate": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate": {
+        "ExcludeWUDriversInQualityUpdate": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Update\\ExcludeWUDriversInQualityUpdate": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState": {
+        "ExcludeWUDrivers": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching": {
+        "SearchOrderConfig": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DriverSearching": {
+        "SearchOrderConfig": { "Type": "REG_DWORD", "Data": 0 },
+        "DontSearchWindowsUpdate": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Metadata": {
+        "PreventDeviceMetadataFromNetwork": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Update": {
+        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Update": {
+        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
+        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate": {
+        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Update\\ExcludeWUDriversInQualityUpdate": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState": {
+        "ExcludeWUDrivers": { "Action": "DeleteValue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching": {
+        "SearchOrderConfig": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DriverSearching": {
+        "SearchOrderConfig": { "Action": "DeleteValue" },
+        "DontSearchWindowsUpdate": { "Action": "DeleteValue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Metadata": {
+        "PreventDeviceMetadataFromNetwork": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    }
+  },
+  "Disable Windows Defender": {
+      "apply":{
+
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
+        "DisableAntiSpyware": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection": {
+        "DisableScanOnRealtimeEnable": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableOnAccessProtection": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection": {
+        "DisableScanOnRealtimeEnable": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableBehaviorMonitoring": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet": {
+        "SpyNetReporting": { "Type": "REG_DWORD", "Data": 0 },
+        "SubmitSamplesConsent": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "SmartScreenEnabled": { "Type": "REG_SZ", "Data": "Off" }
+      },
+      "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "SmartScreenEnabled": { "Type": "REG_SZ", "Data": "Off" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableSmartScreen": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
+        "EnableWebContentEvaluation": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
+        "ServiceEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "NotifyMalicious": { "Type": "REG_DWORD", "Data": 0 },
+        "NotifyPasswordReuse": { "Type": "REG_DWORD", "Data": 0 },
+        "NotifyUnsafeApp": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy": {
+        "VerifiedAndReputablePolicyState": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
+        "SecurityHealth": { "Action": "deletevalue" },
+        "WindowsDefender": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "RenameSmartScreen": {
+          "Action": "run_powershell",
+          "Command": "ren \"$env:SystemRoot\\System32\\smartscreen.exe\" smartscreen.exee",
+          "Elevated": true
+        }
+      }
+    },
+    "revert":{
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
+        "DisableAntiSpyware": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Microsoft Antimalware\\Real-Time Protection": {
+        "DisableScanOnRealtimeEnable": { "Action": "deletevalue" },
+        "DisableOnAccessProtection": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Real-Time Protection": {
+        "DisableScanOnRealtimeEnable": { "Action": "deletevalue" },
+        "DisableBehaviorMonitoring": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WinDefend": {
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MsSecCore": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wscsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdFilter": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdBoot": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WdNisDrv": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SecurityHealthService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Sense": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Spynet": {
+        "SpyNetReporting": { "Type": "REG_DWORD", "Data": 2 },
+        "SubmitSamplesConsent": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "SmartScreenEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "SmartScreenEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableSmartScreen": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
+        "EnableWebContentEvaluation": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
+        "ServiceEnabled": { "Action": "deletevalue" },
+        "NotifyMalicious": { "Action": "deletevalue" },
+        "NotifyPasswordReuse": { "Action": "deletevalue" },
+        "NotifyUnsafeApp": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy": {
+        "VerifiedAndReputablePolicyState": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run": {
+        "SecurityHealth": { "Type": "REG_EXPAND_SZ", "Data": "%windir%\\system32\\SecurityHealthSystray.exe" }
+      },
+      "COMMANDS": {
+        "RenameSmartScreen": {
+          "Action": "run_powershell",
+          "Command": "ren \"$env:SystemRoot\\System32\\smartscreen.exee\" smartscreen.exe",
+          "Elevated": true
+        }
+      }
+    }
+  },
+  "Opt-out DMA Remapping": {
+    "apply": {
+      "COMMANDS": {
+        "Optoutdev": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\PCI' -Recurse | Where-Object { $_.PSChildName -eq 'DMA Management' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'RemappingSupported' -PropertyType DWord -Value 0 -Force | Out-Null }"
+        },
+        "Optoutdrv": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' -PropertyType DWord -Value 0 -Force }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "Optindev": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\PCI' -Recurse | Where-Object { $_.PSChildName -eq 'DMA Management' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'RemappingSupported' -PropertyType DWord -Value 1 -Force | Out-Null }"
+        },
+        "Optindrv": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' -PropertyType DWord -Value 1 -Force }"
+        }
+      }
+    }
+  },
+  "Disable System Restore": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\SystemRestore": {
+        "DisableSR": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableConfig": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore": {
+        "RPSessionInterval": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\VSS": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "COMMANDS": {
+        "RenameRstrui": {
+          "Action": "elevated_priv",
+          "Command": "ren %SystemRoot%\\System32\\rstrui.exe rstrui.bak"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\SystemRestore": {
+        "DisableSR": { "Action": "deletevalue" },
+        "DisableConfig": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\SystemRestore": {
+        "RPSessionInterval": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\VSS": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "COMMANDS": {
+        "RestoreRstrui": {
+          "Action": "elevated_priv",
+          "Command": "ren %SystemRoot%\\System32\\rstrui.bak rstrui.exe"
+        }
+      }
+    }
+  },
+  "Disable Downloads Blocking": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments": {
+        "SaveZoneInformation": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments": {
+        "SaveZoneInformation": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable WPBT": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+        "DisableWpbtExecution": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
+        "DisableWpbtExecution": { "Action": "DeleteValue" }
+      }
+    }
+  },
+  "Block MRT via WU": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\MRT": {
+        "DontOfferThroughWUAU": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\MRT": {
+        "DontOfferThroughWUAU": { "Action": "DeleteValue" }
+      }
+    }
+  }
+}

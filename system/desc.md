@@ -601,3 +601,24 @@ More detailed information about prefetch and superfetch on page `413`f & `472`f.
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch2.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch3.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch4.png?raw=true)
+
+# Optimize File System
+
+If you're confused about `NTFSDisableLastAccessUpdate /t REG_DWORD /d 2147483649`:
+> https://www.tenforums.com/tutorials/139015-enable-disable-ntfs-last-access-time-stamp-updates-windows-10-a.html
+
+`NtfsMftZoneReservation` is currently set to `2` (valid range is 1-4 -> 4 MFT zone size to the maximum)
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/backup-and-storage/ntfs-reserves-space-for-mft
+
+Scan current 8dot3 files names: `fsutil 8dot3name scan C:\`
+
+Symlinksare shortcuts or references that point to a file or folder in another location, like a portal. They're not duplicates, just pointers.
+File at: `C:\Projects\Game\assets\logo.png`
+Symlink: `C:\Users\YourName\Desktop\logo.png`
+
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior
+> https://github.com/MicrosoftDocs/windows-driver-docs/blob/5e03e46194f2a977da34fdf453f2703262370a23/windows-driver-docs-pr/ifs/offloaded-data-transfers.md?plain=1#L104
+> https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry
+> https://discord.com/channels/836870260715028511/1371224441568231516/1372986651436912772
+
+> [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)

@@ -517,5 +517,61 @@
         "SfTracingState": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
+  },
+  "Optimize File System": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+        "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsAllowExtendedCharacter8dot3Rename": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDefaultTier": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 1 },
+        "NtfsDisableCompressionLimit": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 1 },
+        "NtfsEncryptPagingFile": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsMftZoneReservation": { "Type": "REG_DWORD", "Data": 2 },
+        "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 },
+        "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
+        "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 1 },
+        "DontVerifyRandomDrivers": { "Type": "REG_DWORD", "Data": 1 },
+        "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
+        "NtfsParallelFlushThreshold": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsParallelFlushWorkers": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsMemoryUsage": { "Type": "REG_DWORD", "Data": 2 },
+        "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+        "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+        "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsAllowExtendedCharacter8dot3Rename": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDefaultTier": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisableCompressionLimit": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsEncryptPagingFile": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsMftZoneReservation": { "Type": "REG_DWORD", "Data": 0 },
+        "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 },
+        "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
+        "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 2 },
+        "DontVerifyRandomDrivers": { "Action": "deletevalue" },
+        "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
+        "NtfsParallelFlushThreshold": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsMemoryUsage": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+        "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+        "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
   }
+
 }

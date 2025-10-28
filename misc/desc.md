@@ -159,3 +159,16 @@ Revert it by deleting the value or via `RegistryFinder --regedit`:
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v Debugger /f
 ```
 > https://registry-finder.com
+
+# 7-Zip Settings
+
+7-Zip minimal context menu settings:
+
+![](https://github.com/5Noxi/win-config/blob/main/misc/images/7zip.png?raw=true)
+
+A good replacement would be NanaZip:
+```ps
+winget install M2Team.NanaZip
+```
+New features etc. can be found here:
+> https://github.com/M2Team/NanaZip

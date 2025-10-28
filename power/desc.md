@@ -104,3 +104,147 @@ powercfg -delete a1841308-3541-4fab-bc81-f71556f20b4a
 powercfg -delete e9a42b02-d5df-448d-aa00-03f14749eb61
 ```
 > https://bitsum.com/known-windows-power-guids/
+
+# Disable HDD Parking
+
+Disables HIPM, DIPM, and HDD Parking, preventing storage devices from entering low-power states.
+
+---
+
+Miscellaneous information:
+```
+HIPM = Host Initiated Link Power Management
+DIPM = Device Initiated Link Power Management
+```
+`EnableDIPM` is set to `0` by default.
+```c
+Dst[37] = L"EnableHIPM";
+LODWORD(Dst[11]) = 4;
+Dst[38] = &dword_4C134;
+Dst[40] = &dword_4C134;
+Dst[44] = L"EnableDIPM";
+LODWORD(Dst[13]) = 4;
+Dst[45] = &dword_5D0C8;
+Dst[47] = &dword_5D0C8;
+Dst[58] = L"EnableHDDParking";
+LODWORD(Dst[18]) = 4;
+Dst[59] = &dword_4C13C;
+Dst[61] = &dword_4C13C;
+
+dword_5D0CC = 0;
+dword_5D0C8 = 0;
+dword_4C434 = 0;
+dword_4C12C = -1;
+dword_4C138 = -1;
+dword_4C134 = -1;
+dword_4C424 = 16;
+dword_4C420 = 3000;
+dword_5D510 = 1;
+dword_4C13C = 1;
+dword_4C130 = 1;
+dword_4C140 = -1;
+```
+
+> [power/assets | hddpark-amdsbs.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-amdsbs.c)
+
+More values, which may work:
+```
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Storage" /v StorageD3InModernStandby /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device" /v IdlePowerMode /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\iaStorv" /v EnableAPM /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\iaStorv\Parameters" /v EnableAPM /t REG_DWORD /d 0 /f
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\storahci\Parameters" /v EnableAPM /t REG_DWORD /d 0 /f
+```
+> https://github.com/5Noxi/wpr-reg-records#wpr--procmon-registry-activity-records
+
+Needs more research (`ClassGetServiceParameter.c` - default `0`?):
+```
+\Registry\Machine\SYSTEM\ControlSet001\Services\disk : IdleClassSupported
+```
+Additional notes: `EnableALPEDisableHotplug` (`0`), `AhciDisablePxHotplug` - `amdsbs.c`
+
+> https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm
+
+> [power/assets | hddpark-ClassGetServiceParameter.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-ClassGetServiceParameter.c)
+> [power/assets | hddpark-DllInitialize.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-DllInitialize.c)
+
+# Disable Storport Idle
+
+"Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.
+
+Storport IPM allows the classpnp and disk class drivers to send the SCSI Stop Unit command to the storage device when it's idle for some period of time. The idle period is configurable by the system administrator. The Storport miniport driver is responsible for how the command is used by the Storport miniport driver to conserve power.
+
+Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled in the registry by setting the "EnableIdlePowerManagement" value in the "StorPort" subkey of the device's hardware key to any nonzero value. To do so, use the device INF file or manually edit the registry using the registry editor."
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
+> https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/storage/storport-idle-power-management.md  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/pci.txt
+> [power/assets | storport.c](https://github.com/5Noxi/win-config/blob/main/power/assets/storport.c)
+
+# NoLazyMode
+
+`NoLazyMode` = `0` (default)
+`LazyModeTimeout` = `1000000` (default)
+
+
+It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely a placeholder for future documentation. Instead of using `NoLazyMode`, change `LazyModeTimeout`.
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MultiMedia\systemprofile : NoLazyMode
+```
+`AlwaysOn` value exists in W7 and W8, but doesn't exist in W10 and W11 anymore.
+
+"The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results."
+
+> https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do
+> https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-does-the-mmcss-alwayson-registry-setting-exist
+
+![](https://github.com/5Noxi/win-config/blob/main/power/images/nolazymode.png?raw=true)
+
+# Disable Timer Coalescing
+
+"CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
+
+```c
+PopCoalescingTimerInterval dd 5DCh // 1500
+PopDeepIoCoalescingEnabled dd 0
+```
+```c
+void InitTimerPowerSaving(void)
+{
+  UserSessionState = W32GetUserSessionState();
+  FastGetProfileDword(0LL, 2LL, L"RITdemonTimerPowerSaveElapse", 43200000LL, UserSessionState + 62692); // 12H?
+  v1 = W32GetUserSessionState();
+  FastGetProfileDword(0LL, 2LL, L"RITdemonTimerPowerSaveCoalescing", 43200000LL, v1 + 62696); // 12H?
+}
+```
+```c
+lkd> dd PopCoalescingTimerInterval l1
+fffff806`d300b1b8  000005dc
+
+lkd> dd PopDeepIoCoalescingEnabled l1
+fffff806`d31c3278  00000000
+```
+
+The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIo...` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RIT...` & `TimerCoalescing` ones get read.
+
+`TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`). `InitTimerCoalescing.c` shows all info about it, the batch should add it correctly, still needs some further reading. `InitTimerCoalescing.c` includes detail about it and some comments I added.
+> https://discord.com/channels/836870260715028511/1371224441568231516/1372988981817380935
+```c
+v20[0..3] = 0
+v20[4..7] ≤ 0x7FFFFFF5 // 0 = default timer coalescing?
+v20[8..11] = 0
+v20[12..15] ≤ 0x7FFFFFF5 // ^
+v20[16..19] = 0
+```
+`Coalescing-Timer-Interval.bat` would currently use the upper bound (`ToleranceDelay`?)
+```ps
+reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows" /v TimerCoalescing /t REG_BINARY /d 00000000000000000000000000000000F5FFFF7FF5FFFF7FF5FFFF7FF5FFFF7F00000000000000000000000000000000F5FFFF7FF5FFFF7FF5FFFF7FF5FFFF7F00000000000000000000000000000000 /f
+```
+I removed it, since it causes a BSOD on my testing VMs.
+
+> [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/5Noxi/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)  
+> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setcoalescabletimer ?
+
+![](https://github.com/5Noxi/win-config/blob/main/power/images/coalesc1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/power/images/coalesc2.png?raw=true)

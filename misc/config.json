@@ -111,79 +111,79 @@
     },
     "revert": {
       "HKCU\\Software\\StartIsBack": {
-        "AlterStyle": { "Action": "DeleteValue" },
-        "Start_LargeMFUIcons": { "Action": "DeleteValue" },
-        "Start_MinMFU": { "Action": "DeleteValue" },
-        "Start_LargeAllAppsIcons": { "Action": "DeleteValue" },
-        "AllProgramsFlyout": { "Action": "DeleteValue" },
-        "StartMetroAppsFolder": { "Action": "DeleteValue" },
-        "Start_SortOverride": { "Action": "DeleteValue" },
-        "Start_NotifyNewApps": { "Action": "DeleteValue" },
-        "Start_AutoCascade": { "Action": "DeleteValue" },
-        "Start_LargeSearchIcons": { "Action": "DeleteValue" },
-        "Start_AskCortana": { "Action": "DeleteValue" },
-        "HideUserFrame": { "Action": "DeleteValue" },
-        "Start_RightPaneIcons": { "Action": "DeleteValue" },
-        "Start_ShowCommandPrompt": { "Action": "DeleteValue" },
-        "Start_ShowControlPanel": { "Action": "DeleteValue" },
-        "Start_ShowDownloads": { "Action": "DeleteValue" },
-        "Start_ShowMyComputer": { "Action": "DeleteValue" },
-        "Start_ShowMyDocs": { "Action": "DeleteValue" },
-        "Start_ShowMyMusic": { "Action": "DeleteValue" },
-        "Start_ShowMyPics": { "Action": "DeleteValue" },
-        "Start_ShowNetConn": { "Action": "DeleteValue" },
-        "Start_ShowNetPlaces": { "Action": "DeleteValue" },
-        "Start_ShowPCSettings": { "Action": "DeleteValue" },
-        "Start_ShowPrinters": { "Action": "DeleteValue" },
-        "Start_ShowRecentDocs": { "Action": "DeleteValue" },
-        "Start_ShowRun": { "Action": "DeleteValue" },
-        "Start_ShowSetProgramAccessAndDefaults": { "Action": "DeleteValue" },
+        "AlterStyle": { "Action": "deletevalue" },
+        "Start_LargeMFUIcons": { "Action": "deletevalue" },
+        "Start_MinMFU": { "Action": "deletevalue" },
+        "Start_LargeAllAppsIcons": { "Action": "deletevalue" },
+        "AllProgramsFlyout": { "Action": "deletevalue" },
+        "StartMetroAppsFolder": { "Action": "deletevalue" },
+        "Start_SortOverride": { "Action": "deletevalue" },
+        "Start_NotifyNewApps": { "Action": "deletevalue" },
+        "Start_AutoCascade": { "Action": "deletevalue" },
+        "Start_LargeSearchIcons": { "Action": "deletevalue" },
+        "Start_AskCortana": { "Action": "deletevalue" },
+        "HideUserFrame": { "Action": "deletevalue" },
+        "Start_RightPaneIcons": { "Action": "deletevalue" },
+        "Start_ShowCommandPrompt": { "Action": "deletevalue" },
+        "Start_ShowControlPanel": { "Action": "deletevalue" },
+        "Start_ShowDownloads": { "Action": "deletevalue" },
+        "Start_ShowMyComputer": { "Action": "deletevalue" },
+        "Start_ShowMyDocs": { "Action": "deletevalue" },
+        "Start_ShowMyMusic": { "Action": "deletevalue" },
+        "Start_ShowMyPics": { "Action": "deletevalue" },
+        "Start_ShowNetConn": { "Action": "deletevalue" },
+        "Start_ShowNetPlaces": { "Action": "deletevalue" },
+        "Start_ShowPCSettings": { "Action": "deletevalue" },
+        "Start_ShowPrinters": { "Action": "deletevalue" },
+        "Start_ShowRecentDocs": { "Action": "deletevalue" },
+        "Start_ShowRun": { "Action": "deletevalue" },
+        "Start_ShowSetProgramAccessAndDefaults": { "Action": "deletevalue" },
 
-        "TaskbarStyle": { "Action": "DeleteValue" },
-        "TaskbarLargerIcons": { "Action": "DeleteValue" },
-        "TaskbarSpacierIcons": { "Action": "DeleteValue" },
-        "TaskbarGrouping": { "Action": "DeleteValue" },
-        "TaskbarCenterIcons": { "Action": "DeleteValue" },
-        "FatTaskbar": { "Action": "DeleteValue" },
-        "TaskbarOneSegment": { "Action": "DeleteValue" },
-        "TaskbarTranslucentEffect": { "Action": "DeleteValue" },
+        "TaskbarStyle": { "Action": "deletevalue" },
+        "TaskbarLargerIcons": { "Action": "deletevalue" },
+        "TaskbarSpacierIcons": { "Action": "deletevalue" },
+        "TaskbarGrouping": { "Action": "deletevalue" },
+        "TaskbarCenterIcons": { "Action": "deletevalue" },
+        "FatTaskbar": { "Action": "deletevalue" },
+        "TaskbarOneSegment": { "Action": "deletevalue" },
+        "TaskbarTranslucentEffect": { "Action": "deletevalue" },
 
-        "SysTrayStyle": { "Action": "DeleteValue" },
-        "SysTrayLocation": { "Action": "DeleteValue" },
-        "SysTrayMicrophone": { "Action": "DeleteValue" },
-        "SysTrayVolume": { "Action": "DeleteValue" },
-        "SysTrayNetwork": { "Action": "DeleteValue" },
-        "SysTrayPower": { "Action": "DeleteValue" },
-        "SysTrayInputSwitch": { "Action": "DeleteValue" },
-        "TaskbarControlCenter": { "Action": "DeleteValue" },
-        "SysTraySpacierIcons": { "Action": "DeleteValue" },
+        "SysTrayStyle": { "Action": "deletevalue" },
+        "SysTrayLocation": { "Action": "deletevalue" },
+        "SysTrayMicrophone": { "Action": "deletevalue" },
+        "SysTrayVolume": { "Action": "deletevalue" },
+        "SysTrayNetwork": { "Action": "deletevalue" },
+        "SysTrayPower": { "Action": "deletevalue" },
+        "SysTrayInputSwitch": { "Action": "deletevalue" },
+        "TaskbarControlCenter": { "Action": "deletevalue" },
+        "SysTraySpacierIcons": { "Action": "deletevalue" },
 
-        "FrameStyle": { "Action": "DeleteValue" },
-        "NavBarGlass": { "Action": "DeleteValue" },
-        "RestyleIcons": { "Action": "DeleteValue" },
-        "DriveGrouping": { "Action": "DeleteValue" },
-        "BottomDetails": { "Action": "DeleteValue" },
-        "NoXAMLMenus": { "Action": "DeleteValue" },
-        "UndeadControlPanel": { "Action": "DeleteValue" },
-        "RestyleControls": { "Action": "DeleteValue" }
+        "FrameStyle": { "Action": "deletevalue" },
+        "NavBarGlass": { "Action": "deletevalue" },
+        "RestyleIcons": { "Action": "deletevalue" },
+        "DriveGrouping": { "Action": "deletevalue" },
+        "BottomDetails": { "Action": "deletevalue" },
+        "NoXAMLMenus": { "Action": "deletevalue" },
+        "UndeadControlPanel": { "Action": "deletevalue" },
+        "RestyleControls": { "Action": "deletevalue" }
       },
 
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "Start_PowerButtonAction": { "Action": "DeleteValue" },
+        "Start_PowerButtonAction": { "Action": "deletevalue" },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarGlomLevel": { "Action": "DeleteValue" },
-        "MMTaskbarGlomLevel": { "Action": "DeleteValue" },
-        "ShowTaskViewButton": { "Action": "DeleteValue" },
+        "TaskbarGlomLevel": { "Action": "deletevalue" },
+        "MMTaskbarGlomLevel": { "Action": "deletevalue" },
+        "ShowTaskViewButton": { "Action": "deletevalue" },
         "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
-        "Start_TrackProgs": { "Action": "DeleteValue" },
+        "Start_TrackProgs": { "Action": "deletevalue" },
         "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 1 },
-        "Start_JumpListItems": { "Action": "DeleteValue" },
-        "JumpListItems_Maximum": { "Action": "DeleteValue" },
-        "ShowSystrayDateTimeValueName": { "Action": "DeleteValue" }
+        "Start_JumpListItems": { "Action": "deletevalue" },
+        "JumpListItems_Maximum": { "Action": "deletevalue" },
+        "ShowSystrayDateTimeValueName": { "Action": "deletevalue" }
       },
 
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-        "EnableAutoTray": { "Action": "DeleteValue" }
+        "EnableAutoTray": { "Action": "deletevalue" }
       },
 
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
@@ -191,19 +191,19 @@
       },
 
       "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
-        "SystemTrayChevronVisibility": { "Action": "DeleteValue" }
+        "SystemTrayChevronVisibility": { "Action": "deletevalue" }
       },
 
       "HKCU\\Control Panel\\Bluetooth": {
-        "Notification Area Icon": { "Action": "DeleteValue" }
+        "Notification Area Icon": { "Action": "deletevalue" }
       },
 
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
-        "PenWorkspaceButtonDesiredVisibility": { "Action": "DeleteValue" }
+        "PenWorkspaceButtonDesiredVisibility": { "Action": "deletevalue" }
       },
 
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
-        "TipbandDesiredVisibility": { "Action": "DeleteValue" }
+        "TipbandDesiredVisibility": { "Action": "deletevalue" }
       }
     }
   },
@@ -228,6 +228,18 @@
     "revert": {
       "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\regedit.exe": {
         "Debugger": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "7-Zip Settings": {
+    "apply": {
+      "HKCU\\Software\\7-Zip\\Options": {
+        "ContextMenu": { "Type": "REG_DWORD", "Data": 548 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\7-Zip\\Options": {
+        "ContextMenu": { "Action": "deletevalue" }
       }
     }
   }

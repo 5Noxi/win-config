@@ -76,5 +76,76 @@
         "UserBatteryDischargeEstimator": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable HDD Parking": {
+    "apply": {
+      "COMMANDS": {
+        "SetHddParking0": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 0 -Force | Out-Null }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "SetHddParking1": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 1 -Force | Out-Null }"
+        }
+      }
+    }
+  },
+  "Disable Storport Idle": {
+    "apply": {
+      "COMMANDS": {
+        "StorportIdleOff": {
+          "Action": "run_powershell",
+          "Command": "$map=@{EnableIdlePowerManagement=0;DisableIdlePowerManagement=1;DisableD3Cold=1}; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum' -Recurse -EA SilentlyContinue | Where-Object { $_.PSChildName -ieq 'StorPort' } | ForEach-Object { foreach($k in $map.Keys){ New-ItemProperty -Path $_.PSPath -Name $k -PropertyType DWord -Value $map[$k] -Force -EA SilentlyContinue | Out-Null } }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "StorportIdleOn": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum' -Recurse -EA SilentlyContinue | Where-Object { $_.PSChildName -ieq 'StorPort' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableIdlePowerManagement' -PropertyType DWord -Value 1 -Force -EA SilentlyContinue | Out-Null; Remove-ItemProperty -Path $_.PSPath -Name 'DisableIdlePowerManagement' -EA SilentlyContinue; Remove-ItemProperty -Path $_.PSPath -Name 'DisableD3Cold' -EA SilentlyContinue }"
+        }
+      }
+    }
+  },
+  "NoLazyMode": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile": {
+        "NoLazyMode": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile": {
+        "NoLazyMode": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Timer Coalescing": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "CoalescingTimerInterval": { "Type": "REG_DWORD", "Data": 0 },
+        "DeepIoCoalescingEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows": {
+        "RITdemonTimerPowerSaveCoalescing": { "Type": "REG_DWORD", "Data": 0 },
+        "RITdemonTimerPowerSaveElapse": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "CoalescingTimerInterval": { "Action": "deletevalue" },
+        "DeepIoCoalescingEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows": {
+        "RITdemonTimerPowerSaveCoalescing": { "Action": "deletevalue" },
+        "RITdemonTimerPowerSaveElapse": { "Action": "deletevalue" }
+      }
+    }
   }
+
 }
