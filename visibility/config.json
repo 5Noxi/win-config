@@ -401,5 +401,30 @@
         "HubMode": { "Action": "deletevalue" }
       }
     }
+  },
+  "System Fonts / Text Size": {
+    "__control": {
+      "type": "button",
+      "label": "Open"
+    },
+    "COMMANDS": {
+      "DownloadFiles": {
+        "Action": "run_powershell",
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Drawing-Font.ps1 | iex\"'"
+      }
+    }
+  },
+  "Disable Lock Screen": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+        "NoLockScreen": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+        "NoLockScreen": { "Action": "deletevalue" }
+      }
+    }
   }
+
 }

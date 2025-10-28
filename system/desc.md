@@ -36,6 +36,59 @@ for ($i=0; $i -le 271; $i++) {
 
 > [system/assets | Win32PrioritySeparation.pdf](https://github.com/5Noxi/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
 
+# System Responsiveness
+
+*"Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*" (`mmcss.sys`)
+> https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings
+
+```c
+DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL);
+
+if ( DWORD - 10 > 0x5A )          // if DWORD < 10 or DWORD > 100
+    v2 = 20LL;                    // fallback
+else
+    v2 = 10 * (DWORD / 0xA);      // round down to nearest multiple of 10
+
+CiSystemResponsiveness = v2;
+
+if ( CiSystemResponsiveness == 100 ) {
+    WPP_SF_(WPP_GLOBAL_Control->AttachedDevice, 19LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids);
+    v0 = -1073741696;             // STATUS_SERVER_DISABLED
+}
+```
+```c
+// -1073741696 = 0xC0000080
+0xC0000080 // STATUS_SERVER_DISABLED
+
+The GUID allocation server is disabled at the moment.
+```
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55
+
+Calculation:
+```c
+CiSystemResponsiveness = 10 * (value / 10);
+
+// Examples
+< 10   -> 20   (fallback)
+10-19  -> 10
+20-29  -> 20
+30-39  -> 30
+40-49  -> 40
+50-59  -> 50
+60-69  -> 60
+70-79  -> 70
+80-89  -> 80
+90-99  -> 90
+== 100 -> 100  (STATUS_SERVER_DISABLED)
+> 100  -> 20   (fallback)
+```
+Lowest effective value:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v SystemResponsiveness /t REG_DWORD /d 10 /f
+```
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/MultiMedia.txt  
+> [system/assets | sysresp-CiConfigInitialize.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sysresp-CiConfigInitialize.c)  
+
 # Disable UAC
 
 Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation. Save `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System` before running it.
@@ -445,23 +498,106 @@ ALMOSTRO:0000000140FC4228 qword_140FC4228 dq 100000h              ; DATA XREF: s
 ALMOSTRO:0000000140FC4228                                         ; sub_14097E0AC+19E↑r ...
 ```
 
-# Notepad++
+# Disable Notifications
 
-You can either change it yourself in:
+Disables lock screen, desktop, feature advertisement balloon notifications, notification area, notifications network usage and more.
+
+"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
+
+Disable security center notifications with (`WindowsDefenderSecurityCenter.admx`):
+```bat
+reg add "HKLM\SOFTWARE\Microsoft\Security Center" /v AntiVirusDisableNotify /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Microsoft\Security Center" /v FirewallDisableNotify /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Microsoft\Security Center" /v UpdatesDisableNotify /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" /v DisableEnhancedNotifications /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" /v DisableNotifications /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Enterprise Customization" /v EnableForToasts /t REG_DWORD /d 0 /f
 ```
-HKCR\batfile\shell\edit\command
-```
-or use the following batch, which selects [notepad++](https://notepad-plus-plus.org/downloads/) as default editor.
 
-# System Informer
+---
 
-Since system informer is a lot better than the default task manager, it is recommended to replace it.
-
-> https://systeminformer.io/
-
-Undo it by removing the first line and executing the second command (delete the `::`), or just paste the second one in cmd.
-
-Enable `Theme support` (dark mode) and disable `Check for updates automatically` with:
+Miscellaneous notes:
 ```ps
-(gc "$env:appdata\SystemInformer\settings.xml") -replace '(?<=<setting name="ProcessHacker\.UpdateChecker\.PromptStart">)\d(?=</setting>)','0' -replace '(?<=<setting name="EnableThemeSupport">)\d(?=</setting>)','1' | sc "$appdata\SystemInformer\settings.xml"
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND /t REG_DWORD /d 0 /f
+reg add "HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v WnsEndpoint /t REG_SZ /d client.wns.windows.com /f
 ```
+
+# Export Explorer/Taskbar Pins
+
+Can be useful when creating your own image and trying to automate the installation and configuration part.
+
+Quick access pins are saved in a file named `f01b4d95cf55d32a.automaticDestinations-ms`, located at:
+```bat
+%appdata%\Microsoft\Windows\Recent\AutomaticDestinations
+```
+You can either terminate `explorer` while copying it to the path, or just restart it afterwards.
+```bat
+copy /y ".\f01b4d95cf55d32a.automaticDestinations-ms" "%appdata%\Microsoft\Windows\Recent\AutomaticDestinations"
+```
+Taskbar pins are saved in a folder and a key, the folder includes the shortcuts:
+```bat
+%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
+```
+```ps
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband # Only "Favorites" is needed
+```
+You can convert the exported `.reg` to `.ps1` with:
+> https://reg2ps.azurewebsites.net/
+
+Post install example (copy the `TaskBar` folder to any folder):
+```ps
+del "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" -Recurse -Force
+xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" /e /i /y
+```
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy
+
+__Automate the process:__
+Gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
+
+# Disable Timestamp Interval
+
+Disables the interval at which reliability events are timestamped (will not log regular timestamped reliability events).
+
+```c
+if ( !RegQueryValueExW(hKey[0], L"TimeStampEnabled", 0LL, 0LL, (LPBYTE)&Data, &cbData) )
+if ( !RegQueryValueExW(hKey[0], L"TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbData) && v4 <= 0x15180 ) // 86400 seconds = 24h?
+```
+`TimeStampInterval` has a max value of `86400` dec = 24h, `TimeStampEnabled` can probably be set to `0`/`1`.
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability : TimeStampInterval
+```
+Only this path gets read, `TimeStampEnabled` doesn't get read?
+
+> [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/5Noxi/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
+
+# Disable Prefetch & Superfetch
+
+Disables prefetcher features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
+
+"`EnablePrefetcher` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded."
+
+"`EnableSuperfetch` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory."
+
+"`SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search."
+
+`EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
+
+```
+0 - Disables Prefetch
+1 - Enables Prefetch when the application starts
+2 - Enables Prefetch when the device starts up
+3 - Enables Prefetch when the application or device starts up
+```
+The same applies to superfetch.
+
+> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN
+> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN
+
+More detailed information about prefetch and superfetch on page `413`f & `472`f.
+> https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch2.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch3.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/prefetch4.png?raw=true)

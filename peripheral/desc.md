@@ -176,25 +176,25 @@ Otherwise `v11 * 24`
 Hover time is the time in milliseconds that the mouse pointer has to stay hovered over something before an event happens, personal preference.
 
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 10 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 10 /f
 ```
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 100 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 100 /f
 ```
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 200 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 200 /f
 ```
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 300 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 300 /f
 ```
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 400 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 400 /f
 ```
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 500 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 500 /f
 ```
 ```bat
-reg add "HKEY_CURRENT_USER\Control Panel\Mouse" /v MenuShowDelay /t REG_SZ /d 1000 /f
+reg add "HKEY_CURRENT_USER\Control Panel\Desktop" /v MenuShowDelay /t REG_SZ /d 1000 /f
 ```
 
 Default/fallback value:

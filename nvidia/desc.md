@@ -1,7 +1,7 @@
 # Debloated Driver
 
 Complete NVIDIA driver preparation tool.
-> https://github.com/5Noxi/win-config/blob/main/nvidia/assets/nvidia-tool.ps1
+> https://github.com/5Noxi/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1
 
 **Main menu:**  
 `1` - Debloat driver (includes optional DDU clean uninstall)  

@@ -220,12 +220,12 @@
   },
   "Mouse Hover Time": {
     "apply": {
-      "HKCU\\Control Panel\\Mouse": {
+      "HKCU\\Control Panel\\Desktop": {
         "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
       }
     },
     "revert": {
-      "HKCU\\Control Panel\\Mouse": {
+      "HKCU\\Control Panel\\Desktop": {
         "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
       }
     }

@@ -11,6 +11,18 @@
       }
     }
   },
+  "System Responsiveness": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile": {
+        "SystemResponsiveness": { "Type": "REG_DWORD", "Data": 10 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile": {
+        "SystemResponsiveness": { "Type": "REG_DWORD", "Data": 20 }
+      }
+    }
+  },
   "Disable UAC": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
@@ -387,27 +399,122 @@
       }
     }
   },
-  "Notepad++": {
+    "Disable Notifications": {
     "apply": {
-      "HKCR\\batfile\\shell\\edit\\command": {
-        "": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\Notepad++\\notepad++.exe\" \"%1\"" }
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+        "DisableLockScreenAppNotifications": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
+        "ToastEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "LockScreenToastEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
+        "NoCloudApplicationNotification": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
+        "DisallowNotificationMirroring": { "Type": "REG_DWORD", "Data": 1 },
+        "NoToastApplicationNotification": { "Type": "REG_DWORD", "Data": 1 },
+        "NoToastApplicationNotificationOnLockScreen": { "Type": "REG_DWORD", "Data": 1 },
+        "NoTileApplicationNotification": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "DisableNotificationCenter": { "Type": "REG_DWORD", "Data": 1 },
+        "NoAutoTrayNotify": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
+        "NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK": { "Type": "REG_DWORD", "Data": 0 },
+        "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "SetEnabled": {
+          "Action": "run_powershell",
+          "Command": "$b='HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings'; Set-ItemProperty -Path $b -Name Enabled -Type DWord -Value 0 -Force; Get-ChildItem -Path $b | ForEach-Object { Set-ItemProperty -Path $_.PSPath -Name Enabled -Type DWord -Value 0 -Force }"
+        }
       }
     },
     "revert": {
-      "HKCR\\batfile\\shell\\edit\\command": { 
-        "": { "Type": "REG_SZ", "Data": "\"%SystemRoot%\\System32\\notepad.exe\" \"%1\"" }
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+        "DisableLockScreenAppNotifications": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
+        "ToastEnabled": { "Action": "deletevalue" },
+        "LockScreenToastEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowSyncProviderNotifications": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
+        "NoCloudApplicationNotification": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
+        "DisallowNotificationMirroring": { "Action": "deletevalue" },
+        "NoToastApplicationNotification": { "Action": "deletevalue" },
+        "NoToastApplicationNotificationOnLockScreen": { "Action": "deletevalue" },
+        "NoTileApplicationNotification": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "DisableNotificationCenter": { "Action": "deletevalue" },
+        "NoAutoTrayNotify": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
+        "NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK": { "Action": "deletevalue" },
+        "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "DelEnabled": {
+          "Action": "run_powershell",
+          "Command": "$b='HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings'; Remove-ItemProperty -Path $b -Name Enabled; Get-ChildItem -Path $b | ForEach-Object { Remove-ItemProperty -Path $_.PSPath -Name Enabled }"
+        }
       }
     }
   },
-  "System Informer": {
+  "Export Explorer/Taskbar Pins": {
+    "__control": { "type": "button", "label": "Export" },
+    "COMMANDS": {
+      "RemoveWindowsOld": {
+        "Action": "run_powershell",
+        "Command": "$dest=\"$home\\Desktop\";$bat=\"$home\\Desktop\\Taskband.bat\";$ms=\"$env:APPDATA\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\f01b4d95cf55d32a.automaticDestinations-ms\";if(Test-Path $ms){Copy-Item $ms -Destination $dest -Force};$tb=\"$env:APPDATA\\Microsoft\\Internet Explorer\\Quick Launch\\User Pinned\\TaskBar\";$tbdes=Join-Path $dest \"TaskBar\";Remove-Item $tbdes -Force -Recurse -ErrorAction SilentlyContinue;if(Test-Path $tb){Copy-Item $tb -Destination $tbdes -Recurse -Force};$hex=((Get-ItemProperty \"HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband\" -Name \"Favorites\").Favorites|ForEach-Object {'{0:X2}' -f $_}) -join '';$hexnis=((Get-ItemProperty \"HKCU:\\Control Panel\\NotifyIconSettings\" -Name \"UIOrderList\").UIOrderList|ForEach-Object {'{0:X2}' -f $_}) -join '';$q=[char]34;$lines=@(\"@echo off\",\"\",(\"reg add \"+$q+\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Taskband\"+$q+\" /v Favorites /t REG_BINARY /d \"+$hex+\" /f\"),(\"reg add \"+$q+\"HKCU\\Control Panel\\NotifyIconSettings\"+$q+\" /v UIOrderList /t REG_BINARY /d \"+$hexnis+\" /f\"));Set-Content -Path $bat -Value $lines"
+      }
+    }
+  },
+  "Disable Timestamp Interval": {
     "apply": {
-      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
-        "Debugger": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\SystemInformer\\SystemInformer.exe\"" }
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Reliability": {
+        "TimeStampInterval": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability": {
+        "TimeStampInterval": { "Type": "REG_DWORD", "Data": 0 },
+        "TimeStampEnabled": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
-      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
-        "Debugger": { "Action": "deletevalue" }
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Reliability": {
+        "TimeStampInterval": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability": {
+        "TimeStampInterval": { "Action": "deletevalue" },
+        "TimeStampEnabled": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Prefetch & Superfetch": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters": {
+        "EnableSuperfetch": { "Type": "REG_DWORD", "Data": 0 },
+        "EnablePrefetcher": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableBoottrace": { "Type": "REG_DWORD", "Data": 0 },
+        "SfTracingState": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters": {
+        "EnableSuperfetch": { "Type": "REG_DWORD", "Data": 3 },
+        "EnablePrefetcher": { "Type": "REG_DWORD", "Data": 3 },
+        "EnableBoottrace": { "Action": "deletevalue" },
+        "SfTracingState": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   }

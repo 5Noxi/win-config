@@ -1,0 +1,234 @@
+{
+  "Notepad++": {
+    "apply": {
+      "HKCR\\batfile\\shell\\edit\\command": {
+        "": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\Notepad++\\notepad++.exe\" \"%1\"" }
+      }
+    },
+    "revert": {
+      "HKCR\\batfile\\shell\\edit\\command": { 
+        "": { "Type": "REG_SZ", "Data": "\"%SystemRoot%\\System32\\notepad.exe\" \"%1\"" }
+      }
+    }
+  },
+    "StartAllBack Settings": {
+    "apply": {
+      "HKCU\\Software\\StartIsBack": {
+        "AlterStyle": { "Type": "REG_SZ", "Data": "" },
+        "Start_LargeMFUIcons": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_MinMFU": { "Type": "REG_DWORD", "Data": 13 },
+        "Start_LargeAllAppsIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "AllProgramsFlyout": { "Type": "REG_DWORD", "Data": 0 },
+        "StartMetroAppsFolder": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_SortOverride": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_NotifyNewApps": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_AutoCascade": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_LargeSearchIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_AskCortana": { "Type": "REG_DWORD", "Data": 0 },
+        "HideUserFrame": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_RightPaneIcons": { "Type": "REG_DWORD", "Data": 2 },
+        "Start_ShowCommandPrompt": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowControlPanel": { "Type": "REG_DWORD", "Data": 2 },
+        "Start_ShowDownloads": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowMyComputer": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowMyDocs": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_ShowMyMusic": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowMyPics": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowNetConn": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowNetPlaces": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowPCSettings": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_ShowPrinters": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowRecentDocs": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowRun": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_ShowSetProgramAccessAndDefaults": { "Type": "REG_DWORD", "Data": 0 },
+
+        "TaskbarStyle": { "Type": "REG_SZ", "Data": "Plain8.msstyles" },
+        "TaskbarLargerIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarSpacierIcons": { "Type": "REG_DWORD", "Data": "4294967295" },
+        "TaskbarGrouping": { "Type": "REG_DWORD", "Data": 1 },
+        "TaskbarCenterIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "FatTaskbar": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarOneSegment": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarTranslucentEffect": { "Type": "REG_DWORD", "Data": 0 },
+
+        "SysTrayStyle": { "Type": "REG_DWORD", "Data": 0 },
+        "SysTrayLocation": { "Type": "REG_DWORD", "Data": 0 },
+        "SysTrayMicrophone": { "Type": "REG_DWORD", "Data": 1 },
+        "SysTrayVolume": { "Type": "REG_DWORD", "Data": 1 },
+        "SysTrayNetwork": { "Type": "REG_DWORD", "Data": 1 },
+        "SysTrayPower": { "Type": "REG_DWORD", "Data": 0 },
+        "SysTrayInputSwitch": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarControlCenter": { "Type": "REG_DWORD", "Data": 0 },
+        "SysTraySpacierIcons": { "Type": "REG_DWORD", "Data": 1 },
+
+        "FrameStyle": { "Type": "REG_DWORD", "Data": 1 },
+        "NavBarGlass": { "Type": "REG_DWORD", "Data": 1 },
+        "RestyleIcons": { "Type": "REG_DWORD", "Data": 1 },
+        "DriveGrouping": { "Type": "REG_DWORD", "Data": 0 },
+        "BottomDetails": { "Type": "REG_DWORD", "Data": 0 },
+        "NoXAMLMenus": { "Type": "REG_DWORD", "Data": 1 },
+        "UndeadControlPanel": { "Type": "REG_DWORD", "Data": 1 },
+        "RestyleControls": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "Start_PowerButtonAction": { "Type": "REG_DWORD", "Data": 2 },
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "MMTaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_TrackProgs": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_JumpListItems": { "Type": "REG_DWORD", "Data": 15 },
+        "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 15 },
+        "ShowSystrayDateTimeValueName": { "Type": "REG_DWORD", "Data": 1 }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "EnableAutoTray": { "Type": "REG_DWORD", "Data": 1 }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
+        "SystemTrayChevronVisibility": { "Type": "REG_DWORD", "Data": 1 }
+      },
+
+      "HKCU\\Control Panel\\Bluetooth": {
+        "Notification Area Icon": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+        "PenWorkspaceButtonDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "TipbandDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\StartIsBack": {
+        "AlterStyle": { "Action": "DeleteValue" },
+        "Start_LargeMFUIcons": { "Action": "DeleteValue" },
+        "Start_MinMFU": { "Action": "DeleteValue" },
+        "Start_LargeAllAppsIcons": { "Action": "DeleteValue" },
+        "AllProgramsFlyout": { "Action": "DeleteValue" },
+        "StartMetroAppsFolder": { "Action": "DeleteValue" },
+        "Start_SortOverride": { "Action": "DeleteValue" },
+        "Start_NotifyNewApps": { "Action": "DeleteValue" },
+        "Start_AutoCascade": { "Action": "DeleteValue" },
+        "Start_LargeSearchIcons": { "Action": "DeleteValue" },
+        "Start_AskCortana": { "Action": "DeleteValue" },
+        "HideUserFrame": { "Action": "DeleteValue" },
+        "Start_RightPaneIcons": { "Action": "DeleteValue" },
+        "Start_ShowCommandPrompt": { "Action": "DeleteValue" },
+        "Start_ShowControlPanel": { "Action": "DeleteValue" },
+        "Start_ShowDownloads": { "Action": "DeleteValue" },
+        "Start_ShowMyComputer": { "Action": "DeleteValue" },
+        "Start_ShowMyDocs": { "Action": "DeleteValue" },
+        "Start_ShowMyMusic": { "Action": "DeleteValue" },
+        "Start_ShowMyPics": { "Action": "DeleteValue" },
+        "Start_ShowNetConn": { "Action": "DeleteValue" },
+        "Start_ShowNetPlaces": { "Action": "DeleteValue" },
+        "Start_ShowPCSettings": { "Action": "DeleteValue" },
+        "Start_ShowPrinters": { "Action": "DeleteValue" },
+        "Start_ShowRecentDocs": { "Action": "DeleteValue" },
+        "Start_ShowRun": { "Action": "DeleteValue" },
+        "Start_ShowSetProgramAccessAndDefaults": { "Action": "DeleteValue" },
+
+        "TaskbarStyle": { "Action": "DeleteValue" },
+        "TaskbarLargerIcons": { "Action": "DeleteValue" },
+        "TaskbarSpacierIcons": { "Action": "DeleteValue" },
+        "TaskbarGrouping": { "Action": "DeleteValue" },
+        "TaskbarCenterIcons": { "Action": "DeleteValue" },
+        "FatTaskbar": { "Action": "DeleteValue" },
+        "TaskbarOneSegment": { "Action": "DeleteValue" },
+        "TaskbarTranslucentEffect": { "Action": "DeleteValue" },
+
+        "SysTrayStyle": { "Action": "DeleteValue" },
+        "SysTrayLocation": { "Action": "DeleteValue" },
+        "SysTrayMicrophone": { "Action": "DeleteValue" },
+        "SysTrayVolume": { "Action": "DeleteValue" },
+        "SysTrayNetwork": { "Action": "DeleteValue" },
+        "SysTrayPower": { "Action": "DeleteValue" },
+        "SysTrayInputSwitch": { "Action": "DeleteValue" },
+        "TaskbarControlCenter": { "Action": "DeleteValue" },
+        "SysTraySpacierIcons": { "Action": "DeleteValue" },
+
+        "FrameStyle": { "Action": "DeleteValue" },
+        "NavBarGlass": { "Action": "DeleteValue" },
+        "RestyleIcons": { "Action": "DeleteValue" },
+        "DriveGrouping": { "Action": "DeleteValue" },
+        "BottomDetails": { "Action": "DeleteValue" },
+        "NoXAMLMenus": { "Action": "DeleteValue" },
+        "UndeadControlPanel": { "Action": "DeleteValue" },
+        "RestyleControls": { "Action": "DeleteValue" }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "Start_PowerButtonAction": { "Action": "DeleteValue" },
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarGlomLevel": { "Action": "DeleteValue" },
+        "MMTaskbarGlomLevel": { "Action": "DeleteValue" },
+        "ShowTaskViewButton": { "Action": "DeleteValue" },
+        "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_TrackProgs": { "Action": "DeleteValue" },
+        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_JumpListItems": { "Action": "DeleteValue" },
+        "JumpListItems_Maximum": { "Action": "DeleteValue" },
+        "ShowSystrayDateTimeValueName": { "Action": "DeleteValue" }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+        "EnableAutoTray": { "Action": "DeleteValue" }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 2 }
+      },
+
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
+        "SystemTrayChevronVisibility": { "Action": "DeleteValue" }
+      },
+
+      "HKCU\\Control Panel\\Bluetooth": {
+        "Notification Area Icon": { "Action": "DeleteValue" }
+      },
+
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+        "PenWorkspaceButtonDesiredVisibility": { "Action": "DeleteValue" }
+      },
+
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "TipbandDesiredVisibility": { "Action": "DeleteValue" }
+      }
+    }
+  },
+  "System Informer": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
+        "Debugger": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\SystemInformer\\SystemInformer.exe\"" }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\taskmgr.exe": {
+        "Debugger": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Registry Finder": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\regedit.exe": {
+        "Debugger": { "Type": "REG_SZ", "Data": "\"C:\\Program Files\\Registry Finder\\RegistryFinder.exe\" -z" }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\regedit.exe": {
+        "Debugger": { "Action": "deletevalue" }
+      }
+    }
+  }
+}

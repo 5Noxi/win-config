@@ -116,5 +116,24 @@
         }
       }
     }
+  },
+  "Disable Active Probing": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet": {
+        "EnableActiveProbing": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
+        "NoActiveProbe": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet": {
+        "EnableActiveProbing": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
+        "NoActiveProbe": { "Action": "deletevalue" }
+      }
+    }
   }
+
 }

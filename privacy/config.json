@@ -253,5 +253,41 @@
         }
       }
     }
+  },
+  "Disable Downloads Blocking": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments": {
+        "SaveZoneInformation": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments": {
+        "SaveZoneInformation": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Game DVR": {
+    "apply": {
+      "HKCU\\System\\GameConfigStore": {
+        "GameDVR_Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR": {
+        "AllowGameDVR": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR": {
+        "AppCaptureEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\System\\GameConfigStore": {
+        "GameDVR_Enabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\GameDVR": {
+        "AllowGameDVR": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR": {
+        "AppCaptureEnabled": { "Action": "deletevalue" }
+      }
+    }
   }
 }
