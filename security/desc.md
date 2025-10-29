@@ -208,7 +208,7 @@ endlocal
 
 > [privacy/assets | Windows-Defender.txt](https://github.com/5Noxi/win-config/blob/main/privacy/assets/Windows-Defender.txt)
 
-# Opt-out DMA Remapping
+# Opt-Out DMA Remapping
 
 "To ensure compatibility with Kernel DMA Protection and DMAGuard Policy, PCIe device drivers can opt into Direct Memory Access (DMA) remapping. DMA remapping for device drivers protects against memory corruption and malicious DMA attacks, and provides a higher level of compatibility for devices. Also, devices with DMA remapping-compatible drivers can start and perform DMA regardless of lock screen status. On Kernel DMA Protection enabled systems, DMAGuard Policy might block devices, with DMA remapping-incompatible drivers, connected to external/exposed PCIe ports (for example, M.2, Thunderbolt), depending on the policy value set by the system administrator. DMA remapping isn't supported for graphics device drivers. `DmaRemappingCompatible` key is ignored if `RemappingSupported` is set."
 
@@ -554,3 +554,21 @@ VBS won't work if Hyper-V is disabled.
 						}
 					]
 },
+```
+
+# Disable Password Reveal
+
+"This policy setting allows you to configure the display of the password reveal button in password entry user experiences. If you enable this policy setting, the password reveal button won't be displayed after a user types a password in the password entry text box. If you disable or don't configure this policy setting, the password reveal button will be displayed after a user types a password in the password entry text box. By default, the password reveal button is displayed after a user types a password in the password entry text box."
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-credentialsui
+
+Turn off picture password sign-in with (`CredentialProviders.admx`):
+```bat
+reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v BlockDomainPicturePassword /t REG_DWORD /d 1 /f
+```
+"This policy setting allows you to control whether a domain user can sign in using a picture password. If you enable this policy setting, a domain user can't set up or sign in with a picture password. If you disable or don't configure this policy setting, a domain user can set up and use a picture password. Note that the user's domain password will be cached in the system vault when using this feature."
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Policies-System.txt
+
+# Disable P2P Updates
+
+Prevents updates that would be downloaded from PCs in your network (only downloads updates from micorosoft servers).

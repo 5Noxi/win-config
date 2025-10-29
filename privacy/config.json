@@ -91,5 +91,1054 @@
         "DisableUAR": { "Action": "deletevalue" }
       }
     }
+  },
+  "Remove Product Key": {
+    "control": { "type": "button", "label": "Remove" },
+    "apply": {
+      "COMMANDS": {
+        "RemoveKey": {
+          "Action": "run_powershell",
+          "Command": "slmgr /cpky"
+        }
+      }
+    }
+  },
+  "Clear SRUM Data": {
+    "control": { "type": "button", "label": "Clear" },
+    "apply": {
+      "COMMANDS": {
+        "StopDPS": {
+          "Action": "run_powershell",
+          "Command": "Stop-Service -Name 'DPS' -Force"
+        },
+        "DeleteSRUDB": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "Remove-Item -Path \"$env:windir\\System32\\sru\\SRUDB.dat\" -Force"
+        }
+      }
+    }
+  },
+  "Disable App Launch Tracking": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "Start_TrackProgs": { "Type": "REG_SZ", "Data": "0" }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "Start_TrackProgs": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Location Access": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors": {
+        "DisableLocation": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableLocationScripting": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsLocationProvider": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration": {
+        "Status": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}": {
+        "SensorPermissionState": { "Type": "REG_DWORD", "Data": 0 },
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\\NonPackaged": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" },
+        "ShowGlobalPrompts": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors": {
+        "DisableLocation": { "Action": "deletevalue" },
+        "DisableLocationScripting": { "Action": "deletevalue" },
+        "DisableWindowsLocationProvider": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration": {
+        "Status": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Sensor\\Overrides\\{BFA794E4-F964-4FDB-90F6-51056BFE4B44}": {
+        "SensorPermissionState": { "Type": "REG_DWORD", "Data": 0 },
+        "Value": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location\\NonPackaged": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" },
+        "ShowGlobalPrompts": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      }
+    }
+  },
+  "Disable Windows Insider": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PreviewBuilds": {
+        "EnableExperimentation": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableConfigFlighting": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowBuildPreview": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\System\\AllowExperimentation": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsSelfHost\\UI\\Visibility": {
+        "HideInsiderPage": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wisvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PreviewBuilds": {
+        "EnableExperimentation": { "Action": "deletevalue" },
+        "EnableConfigFlighting": { "Action": "deletevalue" },
+        "AllowBuildPreview": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\System\\AllowExperimentation": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WindowsSelfHost\\UI\\Visibility": {
+        "HideInsiderPage": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Device Definition\\Wpd": {
+        "SwipeToNavigate": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wisvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      }
+    }
+  },
+  "Disable PowerShell & .NET Telemetry": {
+    "apply": {
+      "HKCU\\Environment": {
+        "POWERSHELL_TELEMETRY_OPTOUT": { "Type": "REG_SZ", "Data": "1" },
+        "DOTNET_CLI_TELEMETRY_OPTOUT": { "Type": "REG_SZ", "Data": "1" }
+      }
+    },
+    "revert": {
+      "HKCU\\Environment": {
+        "POWERSHELL_TELEMETRY_OPTOUT": { "Action": "deletevalue" },
+        "DOTNET_CLI_TELEMETRY_OPTOUT": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Reserved Storage": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ReserveManager": {
+        "ShippedWithReserves": { "Type": "REG_DWORD", "Data": 0 },
+        "PassedPolicy": { "Type": "REG_DWORD", "Data": 0 },
+        "MiscPolicyInfo": { "Type": "REG_DWORD", "Data": 2 },
+        "ActiveScenario": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableDeletes": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ReserveManager": {
+        "ShippedWithReserves": { "Type": "REG_DWORD", "Data": 1 },
+        "PassedPolicy": { "Type": "REG_DWORD", "Data": 0 },
+        "MiscPolicyInfo": { "Action": "deletevalue" },
+        "ActiveScenario": { "Action": "deletevalue" },
+        "DisableDeletes": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    }
+  },
+  "Disable Biometrics": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Biometrics": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Biometrics\\Credential Provider": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 },
+        "Domain Accounts": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WbioSrvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Biometrics": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Biometrics\\Credential Provider": {
+        "Enabled": { "Action": "deletevalue" },
+        "Domain Accounts": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WbioSrvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      }
+    }
+  },
+  "Disable Remote Desktop": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server": {
+        "fDenyTSConnections": { "Type": "REG_DWORD", "Data": 1 },
+        "fDisableCdm": { "Type": "REG_DWORD", "Data": 1 },
+        "updateRDStatus": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Remote Assistance": {
+        "fAllowFullControl": { "Type": "REG_DWORD", "Data": 0 },
+        "fAllowToGetHelp": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services": {
+        "CreateEncryptedOnlyTickets": { "Type": "REG_DWORD", "Data": 1 },
+        "LoggingEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Rpc": {
+        "RestrictRemoteClients": { "Type": "REG_DWORD", "Data": 2 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server": {
+        "fDenyTSConnections": { "Type": "REG_DWORD", "Data": 1 },
+        "fDisableCdm": { "Action": "deletevalue" },
+        "updateRDStatus": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Remote Assistance": {
+        "fAllowFullControl": { "Type": "REG_DWORD", "Data": 1 },
+        "fAllowToGetHelp": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Terminal Services": {
+        "CreateEncryptedOnlyTickets": { "Action": "deletevalue" },
+        "LoggingEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Rpc": {
+        "RestrictRemoteClients": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Deny App Access": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\activity": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\picturesLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\videosLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\broadFileSystemAccess": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\cellularData": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\musicLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\picturesLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\videosLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\broadFileSystemAccess": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\cellularData": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\exploitProtection": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic\\NonPackaged": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder\\NonPackaged": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\musicLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder": {
+        "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps": {
+        "AgentActivationOnLockScreenEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "AgentActivationEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\activity": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\picturesLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\videosLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\broadFileSystemAccess": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\cellularData": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\musicLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\documentsLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\picturesLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\videosLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\broadFileSystemAccess": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\cellularData": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\exploitProtection": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic\\NonPackaged": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder\\NonPackaged": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\musicLibrary": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\downloadsFolder": {
+        "Value": { "Type": "REG_SZ", "Data": "Allow" }
+      },
+      "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps": {
+        "AgentActivationOnLockScreenEnabled": { "Action": "deletevalue" },
+        "AgentActivationEnabled": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Inking & Typing Personalization": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Personalization\\Settings": {
+        "AcceptedPrivacyPolicy": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\InputPersonalization": {
+        "RestrictImplicitTextCollection": { "Type": "REG_DWORD", "Data": 1 },
+        "RestrictImplicitInkCollection": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\InputPersonalization\\TrainedDataStore": {
+        "HarvestContacts": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization": {
+        "Value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\InputPersonalization": {
+        "AllowInputPersonalization": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
+        "PreventHandwritingDataSharing": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\HandwritingErrorReports": {
+        "PreventHandwritingErrorReports": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Input\\Settings": {
+        "InsightsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableHwkbAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableHwkbTextPrediction": { "Type": "REG_DWORD", "Data": 0 },
+        "MultilingualEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "EnableAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableSpellchecking": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableTextPrediction": { "Type": "REG_DWORD", "Data": 0 },
+        "EnablePredictionSpaceInsertion": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\TextInput": {
+        "AllowLinguisticDataCollection": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Input\\TIPC": {
+      "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKU\\.DEFAULT\\SOFTWARE\\Microsoft\\Input\\TIPC": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Personalization\\Settings": {
+        "AcceptedPrivacyPolicy": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\InputPersonalization": {
+        "RestrictImplicitTextCollection": { "Type": "REG_DWORD", "Data": 0 },
+        "RestrictImplicitInkCollection": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\InputPersonalization\\TrainedDataStore": {
+        "HarvestContacts": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\InkingAndTypingPersonalization": {
+        "Value": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\InputPersonalization": {
+        "AllowInputPersonalization": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
+        "PreventHandwritingDataSharing": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\HandwritingErrorReports": {
+        "PreventHandwritingErrorReports": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Input\\Settings": {
+        "InsightsEnabled": { "Action": "deletevalue" },
+        "EnableHwkbAutocorrection": { "Action": "deletevalue" },
+        "EnableHwkbTextPrediction": { "Action": "deletevalue" },
+        "MultilingualEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "EnableAutocorrection": { "Action": "deletevalue" },
+        "EnableSpellchecking": { "Action": "deletevalue" },
+        "EnableTextPrediction": { "Action": "deletevalue" },
+        "EnablePredictionSpaceInsertion": { "Action": "deletevalue" },
+        "EnableDoubleTapSpace": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\TextInput": {
+        "AllowLinguisticDataCollection": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Input\\TIPC": {
+      "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKU\\.DEFAULT\\SOFTWARE\\Microsoft\\Input\\TIPC": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    }
+  },
+  "Disable Online Speech Recognition": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy": {
+        "HasAccepted": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Speech_OneCore\\Settings\\Holographic": {
+        "DisableSpeechInput": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Speech": {
+        "AllowSpeechModelUpdate": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\OnlineSpeechPrivacy": {
+        "HasAccepted": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Speech_OneCore\\Settings\\Holographic": {
+        "DisableSpeechInput": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Speech": {
+        "AllowSpeechModelUpdate": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Microsoft Copilot": {
+    "apply": {
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot": {
+        "TurnOffWindowsCopilot": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot": {
+        "TurnOffWindowsCopilot": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowCopilotButton": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot": {
+        "IsCopilotAvailable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsCopilot": {
+        "AllowCopilotRuntime": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\Shell\\Copilot\\BingChat": {
+        "IsUserEligible": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
+        "AutoOpenCopilotLargeScreens": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot": {
+        "TurnOffWindowsCopilot": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot": {
+        "TurnOffWindowsCopilot": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "ShowCopilotButton": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot": {
+        "IsCopilotAvailable": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsCopilot": {
+        "AllowCopilotRuntime": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\Shell\\Copilot\\BingChat": {
+        "IsUserEligible": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
+        "AutoOpenCopilotLargeScreens": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Recall": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
+        "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 },
+        "AllowRecallEnablement": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
+        "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "COMMANDS": {
+        "DisableRecallFeature": {
+          "Action": "run_powershell",
+          "Command": "dism /Online /Disable-Feature /FeatureName:Recall /Quiet /NoRestart"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
+        "DisableAIDataAnalysis": { "Action": "deletevalue" },
+        "AllowRecallEnablement": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
+        "DisableAIDataAnalysis": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableRecallFeature": {
+          "Action": "run_powershell",
+          "Command": "dism /Online /Enable-Feature /FeatureName:Recall /Quiet /NoRestart"
+        }
+      }
+    }
+  },
+  "Disable Lock Screen Camera": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+        "NoLockScreenCamera": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
+        "NoLockScreenCamera": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Suggestions/Tips/Tricks": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement": {
+        "ScoobeSystemSettingEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "Start_IrisRecommendations": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
+        "DisableThirdPartySuggestions": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "AllowOnlineTips": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "HideRecommendedPersonalizedSites": { "Type": "REG_DWORD", "Data": 1 },
+        "HideRecommendedSection": { "Type": "REG_DWORD", "Data": 1 }
+      },
+
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "EnableAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
+        "TipbandDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableSpellchecking": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableAutoShiftEngage": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableKeyAudioFeedback": { "Type": "REG_DWORD", "Data": 0 },
+        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 },
+        "EnablePredictionSpaceInsertion": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableTextPrediction": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\input\\Settings": {
+        "IsVoiceTypingKeyEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "InsightsEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Input\\Settings": {
+        "EnableHwkbAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableHwkbTextPrediction": { "Type": "REG_DWORD", "Data": 0 },
+        "MultilingualEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager": {
+        "ContentDeliveryAllowed": { "Type": "REG_DWORD", "Data": 0 },
+        "FeatureManagementEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "OemPreInstalledAppsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "PreInstalledAppsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "PreInstalledAppsEverEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "RotatingLockScreenEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "RotatingLockScreenOverlayEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "SilentInstalledAppsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "SoftLandingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "SystemPaneSuggestionsEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "DisableSearchBoxSuggestions": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\UserProfileEngagement": {
+        "ScoobeSystemSettingEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "Start_IrisRecommendations": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
+        "DisableThirdPartySuggestions": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "AllowOnlineTips": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "HideRecommendedPersonalizedSites": { "Action": "deletevalue" },
+        "HideRecommendedSection": { "Action": "deletevalue" }
+      },
+
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "EnableAutocorrection": { "Action": "deletevalue" },
+        "TipbandDesiredVisibility": { "Action": "deletevalue" },
+        "EnableSpellchecking": { "Action": "deletevalue" },
+        "EnableAutoShiftEngage": { "Action": "deletevalue" },
+        "EnableDoubleTapSpace": { "Action": "deletevalue" },
+        "EnableKeyAudioFeedback": { "Action": "deletevalue" },
+        "TouchKeyboardTapInvoke": { "Action": "deletevalue" },
+        "EnablePredictionSpaceInsertion": { "Action": "deletevalue" },
+        "EnableTextPrediction": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\input\\Settings": {
+        "IsVoiceTypingKeyEnabled": { "Action": "deletevalue" },
+        "InsightsEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager": {
+        "ContentDeliveryAllowed": { "Type": "REG_DWORD", "Data": 0 },
+        "FeatureManagementEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "OemPreInstalledAppsEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "PreInstalledAppsEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "PreInstalledAppsEverEnabled": { "Action": "deletevalue" },
+        "RotatingLockScreenEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "RotatingLockScreenOverlayEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "SilentInstalledAppsEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "SoftLandingEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "SystemPaneSuggestionsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "DisableSearchBoxSuggestions": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Synchronization": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync": {
+        "DisableSyncOnPaidNetwork": { "Type": "REG_DWORD", "Data": 1 },
+        "SyncPolicy": { "Type": "REG_DWORD", "Data": 5 },
+        "DisableAppSyncSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableAppSyncSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableApplicationSettingSync": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableApplicationSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableCredentialsSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableDesktopThemeSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableDesktopThemeSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisablePersonalizationSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisablePersonalizationSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableStartLayoutSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableStartLayoutSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWebBrowserSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableWebBrowserSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableWindowsSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Accessibility": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\AppSync": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\BrowserSettings": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Credentials": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\DesktopTheme": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Language": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\PackageState": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Personalization": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Windows": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync": {
+        "DisableSyncOnPaidNetwork": { "Action": "deletevalue" },
+        "SyncPolicy": { "Action": "deletevalue" },
+        "DisableAppSyncSettingSync": { "Action": "deletevalue" },
+        "DisableAppSyncSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableApplicationSettingSync": { "Action": "deletevalue" },
+        "DisableApplicationSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableCredentialsSettingSync": { "Action": "deletevalue" },
+        "DisableDesktopThemeSettingSync": { "Action": "deletevalue" },
+        "DisableDesktopThemeSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisablePersonalizationSettingSync": { "Action": "deletevalue" },
+        "DisablePersonalizationSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableSettingSync": { "Action": "deletevalue" },
+        "DisableSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableStartLayoutSettingSync": { "Action": "deletevalue" },
+        "DisableStartLayoutSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableWebBrowserSettingSync": { "Action": "deletevalue" },
+        "DisableWebBrowserSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableWindowsSettingSync": { "Action": "deletevalue" },
+        "DisableWindowsSettingSyncUserOverride": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Accessibility": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\AppSync": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\BrowserSettings": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Credentials": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\DesktopTheme": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Language": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\PackageState": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Personalization": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Windows": {
+        "Enabled": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Activity History": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableActivityFeed": { "Type": "REG_DWORD", "Data": 0 },
+        "PublishUserActivities": { "Type": "REG_DWORD", "Data": 0 },
+        "UploadUserActivities": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableActivityFeed": { "Action": "deletevalue" },
+        "PublishUserActivities": { "Action": "deletevalue" },
+        "UploadUserActivities": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Cross-Device Experiences": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableCdp": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDP": {
+        "RomeSdkChannelUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 0 },
+        "CdpSessionUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 0 },
+        "NearShareChannelUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage": {
+        "BluetoothLastDisabledNearShare": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableCdp": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDP": {
+        "RomeSdkChannelUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 1 },
+        "CdpSessionUserAuthzPolicy": { "Action": "deletevalue" },
+        "NearShareChannelUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage": {
+        "BluetoothLastDisabledNearShare": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Phone Linking": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableMmx": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "EnableMmx": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable File History": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\FileHistory": {
+        "Disabled": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\FileHistory": {
+        "Disabled": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable MDM Enrollment": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM": {
+        "DisableRegistration": { "Type": "REG_DWORD", "Data": 1 },
+        "AutoEnrollMDM": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM": {
+        "DisableRegistration": { "Action": "deletevalue" },
+        "AutoEnrollMDM": { "Action": "deletevalue" }
+      }
+    }
   }
 }

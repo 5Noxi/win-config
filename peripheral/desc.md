@@ -110,6 +110,13 @@ Spatial audio positions sounds in 3D space around you, surround sound mainly anc
 
 ![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/spatial.jpeg?raw=true)
 
+---
+
+Miscellaneous notes:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio" /v DisableSpatialOnLowLatency /t REG_DWORD /d 1 /f
+```
+
 # Disable System Sounds
 
 Disables system sounds and removes sound events. I did use the keys, which Windows would disable:
@@ -255,3 +262,167 @@ Higher sampling rates reduce jitter and latency and ensure more accurate cursor 
 
 ![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/polling1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/polling2.png?raw=true)
+
+# Device Manager
+
+`Microphone`, `Speakers`  - Disable unused ones
+`Generic Monitor`  - You can try disabling it, but this may restrict functionality (resolution, brightness on laptop?)
+`WAN Miniports` - Virtual network adapters, used for VPN protocols, remote access etc.
+`Microsoft ISATAP Adapter` - Disabled, enables transport IPv6 traffic over an IPv4 infrastructure
+`SM Bus Controller` - Used for communication with onboard sensors and devices for system monitoring...
+`Microsoft iSCSI Initiator` - Disabled, connect to storage devices over a network
+`Microsoft Virtual Drive Enumerator` - Disabled, breaks `diskmgmt.msc`
+`Microsoft RRAS Root Enumerator` - Disabled, driver that helps initialize older or virtual devices during system boot
+`Microsoft System Management BIOS Driver` - Disabling it breaks GTA5 and maybe other system info fetching
+`System Speaker` - Disabling breaks monitor audio
+`AMD/Intel PSP (ME)` - Platform Security Processor
+
+---
+
+Click on '**View**', then on '**Devices by connection'**.
+
+Disabling unused '**PCI-to-PCI Bridge**' devices (picture):
+- Go into `PCI Bus` / `PCI Express Root Complex`
+    - Disable all `PCI-to-PCI Bridge` devices, which are unused (`PCI Express Downstream Switch Port`)
+
+![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/devman.png?raw=true)
+
+Removing Non-Present Devices:
+- Download [DeviceCleanup](https://www.uwe-sieber.de/files/DeviceCleanup_x64.zip)
+- Run it, click on '**Devices**'
+- Click on '**Select all**', then on '**Remove selected**'
+
+You can also remove unknown devices with:
+```ps
+Get-PnpDevice | Where Status -eq Unknown | ForEach { &pnputil /remove-device $_.InstanceId }
+```
+But be cautioned, it also removes devices which are connected, but registred as unkown.
+
+# Disable Touch & Tablet
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : TouchKeyboardTapInvoke
+\Registry\User\S-ID\SOFTWARE\Microsoft\TabletTip\1.7 : TouchKeyboardTapInvoke
+\Registry\User\S-ID\SOFTWARE\Microsoft\TabletTip\1.7 : EnableAutoShiftEngage
+\Registry\User\S-ID\SOFTWARE\Microsoft\TabletTip\1.7 : EnableDoubleTapSpace
+```
+Disable the touch screen feature of your device with:
+```bat
+devmanview /disable "HID-compliant touch screen"
+```
+> https://www.nirsoft.net/utils/device_manager_view.html
+
+"Tablet mode makes Windows more touch friendly and is helpful on touch capable devices."
+
+> https://support.microsoft.com/en-us/windows/turn-tablet-mode-on-or-off-in-windows-add3fbce-5cb5-bf76-0f9c-8d7b30041f30
+> https://superuser.com/questions/1194038/windows-10-command-line-to-enable-disable-tablet-mode  
+> [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
+
+---
+
+Miscellaneous notes:
+```
+TabletModeActivated
+TabletModeCoverWindow
+TabletModeInputHandler
+```
+
+# Disable Wake on Input
+
+```bat
+powercfg /devicequery wake_programmable
+powercfg /devicequery wake_armed
+```
+`powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state
+`powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
+
+```bat
+powercfg /devicedisablewake device
+```
+Disables the device (replace '*Device*' with the device name) from waking the system from any sleep state. 
+
+> https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a
+
+`WakeOnInputDeviceTypes.bat` probably disables wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
+```
+\Registry\Machine\SYSTEM\INPUT : UnDimOnInputDeviceTypes
+\Registry\Machine\SYSTEM\INPUT : WakeOnInputDeviceTypes
+```
+`UnDimOnInputDeviceTypes` probably refers to any dimmed elemets (pure speculation)? Disabling it wouldn't make sense.
+
+Default values:
+```c
+WakeOnInputDeviceTypes = 6
+UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
+```
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Input.txt  
+> [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
+
+--- 
+
+All available flags (`powercfg /devicequery query_flag`):
+
+| `query_flag`             | Description                                                                      |
+| ------------------------ | -------------------------------------------------------------------------------- |
+| `wake_from_S1_supported` | Returns all devices that support waking the system from a light sleep state.     |
+| `wake_from_S2_supported` | Returns all devices that support waking the system from a deeper sleep state.    |
+| `wake_from_S3_supported` | Returns all devices that support waking the system from the deepest sleep state. |
+| `wake_from_any`          | Returns all devices that support waking the system from any sleep state.         |
+| `S1_supported`           | Lists devices supporting light sleep.                                            |
+| `S2_supported`           | Lists devices supporting deeper sleep.                                           |
+| `S3_supported`           | Lists devices supporting deepest sleep.                                          |
+| `S4_supported`           | Lists devices supporting hibernation.                                            |
+| `wake_programmable`      | Lists devices that are user-configurable to wake the system from a sleep state.  |
+| `wake_armed`             | Lists devices currently configured to wake the system from any sleep state.      |
+| `all_devices`            | Returns all devices present in the system.                                       |
+
+# Enable MSI Mode
+
+Enables MSI for USB, video, network, and IDE PCI devices & sets them to undefined. Setting the priority to high can be beneficial, but needs benchmarking. Removes `MessageNumberLimit`, so device uses the maximum MN itself.
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/enabling-message-signaled-interrupts-in-the-registry
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-message-signaled-interrupts
+> https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf
+
+"Interrupt affinity defines which logical processors handle a device's interrupts, using the `KAFFINITY` bitmask in the `AssignmentSetOverride` registry value (bit 0 = CPU 0, bit 1 = CPU 1, etc.). To apply it, `DevicePolicy` must be set to `4` (`IrqPolicySpecifiedProcessors`). Interrupt priority controls the urgency of handling and is set in KMDF drivers via `WdfInterruptSetPolicy`, using values like `WdfIrqPriorityHigh`. Both affinity and priority are stored in the `u.Interrupt` resource descriptor and apply to line-based and MSI/MSI-X interrupts. These settings optimize performance by balancing load and improving locality on multi-core systems."
+> https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/kernel/interrupt-affinity-and-priority.md
+
+Example:
+```bat
+delete "\Affinity Policy" /v DevicePriority /f
+:: IrqPolicySpecifiedProcessors
+add "\Affinity Policy" /v DevicePolicy /t REG_DWORD /d 4 /f
+:: CPU 5
+add "\Affinity Policy" /v AssignmentSetOverride /t REG_BINARY /d 2000000000000000 /f
+add "\MessageSignaledInterruptProperties" /v MSISupported /t REG_DWORD /d 1 /f
+delete "\MessageSignaledInterruptProperties" /v MessageNumberLimit /f
+```
+`AssignmentSetOverride` calculation:
+```ps
+$cpus = @(5)
+$mask = 0
+$cpus | % { $mask = $mask -bor (1 -shl $_) }
+'{0:X16}' -f $mask
+```
+> https://github.com/BoringBoredom/Windows-MultiTool  
+> [peripheral/assets | MSI-Paper.pdf](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/MSI-Paper.pdf)
+
+# Disable Dynamic Lighting
+
+"Dynamic Lighting is a feature that allows you to control LED-powered devices such as keyboards, mice, and other illuminated accessories. This feature enables you to coordinate the colors of LEDs, creating a unified lighting experience both within Windows and across all your devices."
+
+| Value  | Type      | Values                                                                                                                                                                                                   | Ranges                     | Notes                                                                 |
+| ---------------------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- | --------------------------------------------------------------------- |
+| `AmbientLightingEnabled`                   | REG_DWORD | `0 = off`, `1 = on`                                                                                                                                                                                      | `0–1`                      | Master toggle for Dynamic Lighting.                                   |
+| `UseSystemAccentColor`                     | REG_DWORD | `0 = use custom Color/Color2`, `1 = match Windows accent`                                                                                                                                                | `0–1`                      | When `1`, `Color` is ignored.                                         |
+| `Color`                                    | REG_DWORD | `COLORREF (RGB)`                                                                                                                                                                                         | `0x00000000–0x00FFFFFF`    | Format `0x00BBGGRR`. Used when `UseSystemAccentColor = 0`.            |
+| `Color2`                                   | REG_DWORD | `COLORREF (RGB)`                                                                                                                                                                                         | `0x00000000–0x00FFFFFF`    | Secondary color for some effects.                                     |
+| `EffectType`                               | REG_DWORD | `0 = Solid`, `1 = Breathing`, `2 = Rainbow`, `4 = Wave`, `5 = Wheel`, `6 = Gradient`                                                                                                                     | `discrete enum`            | Defines animation.                                                    |
+| `Speed`                                    | REG_DWORD | `integer`                                                                                                                                                                                                | `1–10`                     | Higher = faster.                                                      |
+| `EffectMode`                               | REG_DWORD | Rainbow: `0 = Forward`, `1 = Reverse` · Wave: `0 = Right`, `1 = Left`, `2 = Down`, `3 = Up` · Wheel: `0 = Clockwise`, `1 = Counterclockwise` · Gradient: `0 = Horizontal`, `1 = Vertical`, `2 = Outward` | `discrete enum per effect` | Depends on `EffectType`.                                              |
+| `Brightness`                              | REG_DWORD | `integer (%)`                                                                                                                                                                                            | `0–100`                    | - |
+| `ControlledByForegroundApp`               | REG_DWORD | `0 = ignore apps`, `1 = apps can take control`                                                                                                                                                           | `0–1`                      | -     |
+
+
+> https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices
+> https://support.microsoft.com/en-us/windows/control-dynamic-lighting-devices-in-windows-8e8f22e3-e820-476c-8f9d-9ffc7b6ffcd2

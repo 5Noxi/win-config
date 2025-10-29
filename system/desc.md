@@ -622,3 +622,102 @@ Symlink: `C:\Users\YourName\Desktop\logo.png`
 > https://discord.com/channels/836870260715028511/1371224441568231516/1372986651436912772
 
 > [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
+
+# Disable Clipboard
+
+If you copy or cut something it gets stored to your clipboard.
+
+Additional value, which get's read:
+```
+\Registry\Machine\SOFTWARE\Microsoft\Clipboard : IsCloudAndHistoryFeatureAvailable
+```
+To only disable the history, use:
+```bat
+reg add "HKCU\Software\Microsoft\Clipboard" /v EnableClipboardHistory /t REG_DWORD /d 0 /f
+```
+```json
+{
+    "File":  "TerminalServer.admx",
+    "NameSpace":  "Microsoft.Policies.TerminalServer",
+    "Class":  "Machine",
+    "CategoryName":  "TS_REDIRECTION",
+    "DisplayName":  "Do not allow Clipboard redirection",
+    "ExplainText":  "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session.You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection.If you enable this policy setting, users cannot redirect Clipboard data.If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection.If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
+    "Supported":  "WindowsXP",
+    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services",
+    "KeyName":  "fDisableClip",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "WindowsSandbox.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsSandbox",
+    "Class":  "Machine",
+    "CategoryName":  "WindowsSandbox",
+    "DisplayName":  "Allow clipboard sharing with Windows Sandbox",
+    "ExplainText":  "This policy setting enables or disables clipboard sharing with the sandbox.If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted.If you do not configure this policy setting, clipboard sharing will be enabled.",
+    "Supported":  "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
+    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox",
+    "KeyName":  "AllowClipboardRedirection",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "OSPolicy.admx",
+    "NameSpace":  "Microsoft.Policies.OSPolicy",
+    "Class":  "Machine",
+    "CategoryName":  "PolicyPolicies",
+    "DisplayName":  "Allow Clipboard synchronization across devices",
+    "ExplainText":  " This policy setting determines whether Clipboard contents can be synchronized across devices. If you enable this policy setting, Clipboard contents are allowed to be synchronized across devices logged in under the same Microsoft account or Azure AD account. If you disable this policy setting, Clipboard contents cannot be shared to other devices. Policy change takes effect immediately.",
+    "Supported":  "Windows_10_0",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
+    "KeyName":  "AllowCrossDeviceClipboard",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "OSPolicy.admx",
+    "NameSpace":  "Microsoft.Policies.OSPolicy",
+    "Class":  "Machine",
+    "CategoryName":  "PolicyPolicies",
+    "DisplayName":  "Allow Clipboard History",
+    "ExplainText":  " This policy setting determines whether history of Clipboard contents can be stored in memory. If you enable this policy setting, history of Clipboard contents are allowed to be stored. If you disable this policy setting, history of Clipboard contents are not allowed to be stored. Policy change takes effect immediately.",
+    "Supported":  "Windows_10_0",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
+    "KeyName":  "AllowClipboardHistory",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```

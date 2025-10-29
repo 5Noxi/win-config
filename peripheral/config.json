@@ -53,7 +53,7 @@
       }
     }
   },
-  "Keyboard & Accessibility": {
+  "Keyboard Values": {
     "apply": {
       "HKCU\\Control Panel\\Keyboard": {
         "KeyboardDelay": { "Type": "REG_SZ", "Data": "0" },
@@ -144,6 +144,24 @@
         "Action": "run_powershell",
         "Elevated": true,
         "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -ea SilentlyContinue; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -ea SilentlyContinue }"
+      }
+    }
+  },
+  "Disable Spatial Audio": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio": {
+        "DisableSpatialAudioGlobal": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableSpatialAudioVssFeature": { "Type": "REG_DWORD", "Data": 1 },
+        "SpatialAudioHrtfOnByDefault": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableSpatialOnComboEndpoints": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio": {
+        "DisableSpatialAudioGlobal": { "Action": "deletevalue" },
+        "DisableSpatialAudioVssFeature": { "Action": "deletevalue" },
+        "SpatialAudioHrtfOnByDefault": { "Action": "deletevalue" },
+        "DisableSpatialOnComboEndpoints": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
   },
@@ -334,5 +352,106 @@
         "MouseDataQueueSize": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable Touch & Tablet": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
+        "TouchGate": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
+        "TurnOffTouchInput": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableAutoShiftEngage": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableKeyAudioFeedback": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\TabletTip\\1.7": {
+        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
+        "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "SignInMode": { "Type": "REG_DWORD", "Data": 1 },
+        "ConvertibleSlateModePromptPreference": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarAppsVisibleInTabletMode": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
+        "TouchGate": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
+        "TurnOffTouchInput": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": { "Action": "delete_path" },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
+        "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "SignInMode": { "Action": "deletevalue" },
+        "ConvertibleSlateModePromptPreference": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarAppsVisibleInTabletMode": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Wake on Input": {
+    "apply": {
+      "HKLM\\SYSTEM\\INPUT": {
+        "WakeOnInputDeviceTypes": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\INPUT": {
+        "WakeOnInputDeviceTypes": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Enable MSI Mode": {
+    "apply": {
+      "COMMANDS": {
+        "EnableMSI": {
+          "Action": "run_powershell",
+          "Command": "$classes='Win32_USBController','Win32_VideoController','Win32_NetworkAdapter','Win32_IDEController'; $classes | ForEach-Object { Get-CimInstance -ClassName $_ -EA SilentlyContinue } | Where-Object { $_.PNPDeviceID -and ($_.PNPDeviceID -like 'PCI\\VEN_*') } | ForEach-Object { $base=('HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\{0}\\Device Parameters\\Interrupt Management' -f $_.PNPDeviceID); $msi=Join-Path $base 'MessageSignaledInterruptProperties'; New-Item -Path $msi -Force -EA SilentlyContinue | Out-Null; New-ItemProperty -Path $msi -Name 'MSISupported' -PropertyType DWord -Value 1 -Force -EA SilentlyContinue | Out-Null; $aff=Join-Path $base 'Affinity Policy'; if(Test-Path $aff){ Remove-ItemProperty -Path $aff -Name 'DevicePriority' -EA SilentlyContinue }; Remove-ItemProperty -Path $msi -Name 'MessageNumberLimit' -EA SilentlyContinue }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "RemoveMSI": {
+          "Action": "run_powershell",
+          "Command": "$classes='Win32_USBController','Win32_VideoController','Win32_NetworkAdapter','Win32_IDEController'; $classes | ForEach-Object { Get-CimInstance -ClassName $_ -EA SilentlyContinue } | Where-Object { $_.PNPDeviceID -and ($_.PNPDeviceID -like 'PCI\\VEN_*') } | ForEach-Object { $base=('HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\{0}\\Device Parameters\\Interrupt Management' -f $_.PNPDeviceID); $msi=Join-Path $base 'MessageSignaledInterruptProperties'; if(Test-Path $msi){ Remove-ItemProperty -Path $msi -Name 'MSISupported' -EA SilentlyContinue; Remove-ItemProperty -Path $msi -Name 'MessageNumberLimit' -EA SilentlyContinue }; $aff=Join-Path $base 'Affinity Policy'; if(Test-Path $aff){ Remove-ItemProperty -Path $aff -Name 'DevicePriority' -EA SilentlyContinue } }"
+        }
+      }
+    }
+  },
+  "Disable Dynamic Lighting": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Lighting": {
+        "AmbientLightingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "ControlledByForegroundApp": { "Type": "REG_DWORD", "Data": 0 },
+        "Brightness": { "Type": "REG_DWORD", "Data": 0 },
+        "EffectMode": { "Type": "REG_DWORD", "Data": 0 },
+        "EffectType": { "Type": "REG_DWORD", "Data": 0 },
+        "Speed": { "Type": "REG_DWORD", "Data": 1 },
+        "UseSystemAccentColor": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Lighting": {
+        "AmbientLightingEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "ControlledByForegroundApp": { "Action": "deletevalue" },
+        "Brightness": { "Type": "REG_DWORD", "Data": 100 },
+        "EffectMode": { "Type": "REG_DWORD", "Data": 0 },
+        "EffectType": { "Type": "REG_DWORD", "Data": 0 },
+        "Speed": { "Type": "REG_DWORD", "Data": 7 },
+        "UseSystemAccentColor": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
   }
+
 }

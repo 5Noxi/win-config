@@ -163,6 +163,13 @@ powercfg -delete e9a42b02-d5df-448d-aa00-03f14749eb61
 ```
 > https://bitsum.com/known-windows-power-guids/
 
+```bat
+powercfg /availablesleepstates (or /a)
+```
+Shows the current available sleep states on your system.
+
+> https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#option_availablesleepstates
+
 # Disable HDD Parking
 
 Disables HIPM, DIPM, and HDD Parking, preventing storage devices from entering low-power states.
@@ -341,3 +348,27 @@ Get-ChildItem 'HKLM:\SYSTEM\CurrentControlSet\Control\usbflags' -ErrorAction Sil
 }
 ```
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/USB-Flags.txt
+
+# Disable Audio Idle
+
+| Parameter              | Desc                                                                          | Default  | notes                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
+| `ConservationIdleTime` | Idle timeout (in seconds) used when the system is in power-conservation mode. | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
+| `PerformanceIdleTime`  | Idle timeout (in seconds) used when the system is in performance mode.        | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
+| `IdlePowerState`       | Device power state to enter when the inactivity timeout expires (D0–D3).      | `3` (D3) | Valid values `0–3` map to `D0–D3`.                                    |
+
+I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈ 136 years`) & `IdlePowerState` to `0` (`D0`).
+
+| Parameter              | Type           | Revert Hex data     | Parsed value                      | Meaning                       |
+| ---------------------- | -------------- | ------------------- | --------------------------------- | ----------------------------- |
+| `ConservationIdleTime` | REG_BINARY (3) | `1e,00,00,0`        | malformed; if `1e,00,00,00` → 30s | `10s` on battery              |
+| `PerformanceIdleTime`  | REG_BINARY (3) | `00,00,00,00`       | 0 seconds                         | No idle mgmt on AC            |
+| `IdlePowerState`       | REG_BINARY (3) | `03,00,00,00`       | 3                                 | Go to `D3` when idle          |
+
+| Category   | Class | Class GUID                           | Description                                                                                       |
+| ---------- | ----- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Multimedia | Media | 4d36e96c-e325-11ce-bfc1-08002be10318 | Includes Audio and DVD multimedia devices, joystick ports, and full-motion video capture devices. |
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation  
+> https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors

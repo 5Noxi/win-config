@@ -572,6 +572,55 @@
         "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
+  },
+  "Disable Clipboard": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Clipboard": {
+        "EnableClipboardHistory": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "AllowClipboardHistory": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowCrossDeviceClipboard": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services": {
+        "fDisableClip": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox": {
+        "AllowClipboardRedirection": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "DisableCbdhsvcServices": {
+          "Action": "run_powershell",
+          "Command": "$base='HKLM:\\SYSTEM\\CurrentControlSet\\Services'; Get-ChildItem $base | Where-Object { $_.PSChildName -like 'cbdhsvc*' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name Start -PropertyType DWord -Value 4 -Force -ErrorAction SilentlyContinue }"
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Clipboard": {
+        "EnableClipboardHistory": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
+        "AllowClipboardHistory": { "Action": "deletevalue" },
+        "AllowCrossDeviceClipboard": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services": {
+        "fDisableClip": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox": {
+        "AllowClipboardRedirection": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableCbdhsvcServices": {
+          "Action": "run_powershell",
+          "Command": "$base='HKLM:\\SYSTEM\\CurrentControlSet\\Services'; Get-ChildItem $base | Where-Object { $_.PSChildName -like 'cbdhsvc*' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name Start -PropertyType DWord -Value 2 -Force -ErrorAction SilentlyContinue }"
+        }
+      }
+    }
   }
-
 }

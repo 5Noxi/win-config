@@ -224,5 +224,23 @@
         "DisableHCS0Idle": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable Audio Idle": {
+    "apply": {
+      "COMMANDS": {
+        "AudioIdleDisable": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}' -ea SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.PSChildName -match '^\\d{4}$' } | ForEach-Object { $p=Join-Path $_.PSPath 'PowerSettings'; New-Item -Path $p -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'IdlePowerState' -PropertyType Binary -Value ([byte[]](0,0,0,0)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'ConservationIdleTime' -PropertyType Binary -Value ([byte[]](0xff,0xff,0xff,0xff)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'PerformanceIdleTime' -PropertyType Binary -Value ([byte[]](0xff,0xff,0xff,0xff)) -Force -ea SilentlyContinue | Out-Null }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "AudioIdleDefaults": {
+          "Action": "run_powershell",
+          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}' -ea SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.PSChildName -match '^\\d{4}$' } | ForEach-Object { $p=Join-Path $_.PSPath 'PowerSettings'; if(Test-Path $p){ New-ItemProperty -Path $p -Name 'ConservationIdleTime' -PropertyType Binary -Value ([byte[]](0x1e,0x00,0x00,0x00)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'PerformanceIdleTime' -PropertyType Binary -Value ([byte[]](0x00,0x00,0x00,0x00)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'IdlePowerState' -PropertyType Binary -Value ([byte[]](0x03,0x00,0x00,0x00)) -Force -ea SilentlyContinue | Out-Null } }"
+        }
+      }
+    }
   }
 }

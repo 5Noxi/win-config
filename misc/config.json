@@ -242,5 +242,100 @@
         "ContextMenu": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable VSC Telemetry": {
+    "apply": {
+      "COMMANDS": {
+        "SetVSCodeSettings": {
+          "Action": "run_powershell",
+          "Command": "\"$json=gc \"$env:APPDATA\\Code\\User\\settings.json\"|ConvertFrom-Json;$nvsettings=@{\"extensions.autoCheckUpdates\"=$false;\"extensions.showRecommendationsOnlyOnDemand\"=$true;\"git.autofetch\"=$false;\"npm.fetchOnlinePackageInfo\"=$false;\"telemetry.telemetryLevel\"=0;\"telemetry.enableCrashReporter\"=$false;\"telemetry.enableTelemetry\"=$false;\"update.mode\"=\"manual\";\"update.showReleaseNotes\"=$false;\"workbench.enableExperiments\"=$false};foreach($nkey in($nvsettings.Keys|sort)){if($json.$nkey -ne$nvsettings[$nkey]){$json|Add-Member -Type NoteProperty -Name $nkey -Value $nvsettings[$nkey] -Force}};$json|ConvertTo-Json -Depth 10|sc \"$env:APPDATA\\Code\\User\\settings.json\"\""
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "DeleteVSCodeSettings": {
+          "Action": "run_powershell",
+          "Command": "Remove-Item -Path \"$env:APPDATA\\Code\\User\\settings.json\" -Force -EA SilentlyContinue"
+        }
+      }
+    }
+  },
+  "Disable VS Telemetry": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\VisualStudio\\SQM": {
+        "OptIn": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\14.0\\SQM": {
+        "OptIn": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\15.0\\SQM": {
+        "OptIn": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\16.0\\SQM": {
+        "OptIn": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\17.0\\SQM": {
+        "OptIn": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\VisualStudio\\Telemetry": {
+        "TurnOffSwitch": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\VSCommon\\16.0\\IntelliCode": {
+        "DisableRemoteAnalysis": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\VSCommon\\17.0\\IntelliCode": {
+        "DisableRemoteAnalysis": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\VisualStudio\\Feedback": {
+        "DisableEmailInput": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableFeedbackDialog": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableScreenshotCapture": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\VisualStudio\\IntelliCode": {
+        "DisableRemoteAnalysis": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Microsoft\\VisualStudio\\DiagnosticsHub": {
+        "LogLevel": { "Action": "deletevalue" }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\VisualStudio\\SQM": {
+        "OptIn": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\14.0\\SQM": {
+        "OptIn": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\15.0\\SQM": {
+        "OptIn": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\16.0\\SQM": {
+        "OptIn": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Wow6432Node\\Microsoft\\VSCommon\\17.0\\SQM": {
+        "OptIn": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\VisualStudio\\Telemetry": {
+        "TurnOffSwitch": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\VSCommon\\16.0\\IntelliCode": {
+        "DisableRemoteAnalysis": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\VSCommon\\17.0\\IntelliCode": {
+        "DisableRemoteAnalysis": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\VisualStudio\\Feedback": {
+        "DisableEmailInput": { "Action": "deletevalue" },
+        "DisableFeedbackDialog": { "Action": "deletevalue" },
+        "DisableScreenshotCapture": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\VisualStudio\\IntelliCode": {
+        "DisableRemoteAnalysis": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\VisualStudio\\DiagnosticsHub": {
+        "LogLevel": { "Action": "deletevalue" }
+      }
+    }
   }
+
 }

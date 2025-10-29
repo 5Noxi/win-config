@@ -486,7 +486,47 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": { "Start": { "Type": "REG_DWORD", "Data": 3 } }
     }
+  },
+  "Disable Password Reveal": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CredUI": {
+        "DisablePasswordReveal": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CredUI": {
+        "DisablePasswordReveal": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable P2P Updates": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization": {
+        "SystemSettingsDownloadMode": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization\\Settings": {
+        "DownloadMode": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization\\Config": {
+        "DODownloadMode": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization": {
+        "DODownloadMode": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization": {
+        "SystemSettingsDownloadMode": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization\\Settings": {
+        "DownloadMode": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DeliveryOptimization\\Config": {
+        "DODownloadMode": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeliveryOptimization": {
+        "DODownloadMode": { "Action": "deletevalue" }
+      }
+    }
   }
-
-
 }

@@ -172,3 +172,91 @@ winget install M2Team.NanaZip
 ```
 New features etc. can be found here:
 > https://github.com/M2Team/NanaZip
+
+# Disable VSC Telemetry
+
+**Caution:** The revert currently deletes `settings.json`. Means any settings you used beside the ones which get applied using this option will get removed.
+
+Stops VSC to send telemetry, crash reports, disable online experiments, turn off automatic updates (manual updates), prevent fetching release notes, stop automatic extension and git repository updates, limit extension recommendations to on demand requests, and block fetching package information from online sources like NPM or Bower.
+```ts
+export const enum TelemetryLevel {
+	NONE = 0,
+	CRASH = 1,
+	ERROR = 2,
+	USAGE = 3
+}
+```
+```json
+"config.autofetch": "When set to true, commits will automatically be fetched from the default remote of the current Git repository. Setting to `all` will fetch from all remotes.",
+```
+```json
+"config.npm.fetchOnlinePackageInfo": "Fetch data from https://registry.npmjs.org and https://registry.bower.io to provide auto-completion and information on hover features on npm dependencies.",
+```
+```ts
+'update.mode': {
+	enum: ['none', 'manual', 'start', 'default'],
+	description: localize('updateMode', "Configure whether you receive automatic updates. Requires a restart after change. The updates are fetched from a Microsoft online service."),
+	enumDescriptions: [
+		localize('manual', "Disable automatic background update checks. Updates will be available if you manually check for updates."),
+```
+> https://github.com/microsoft/vscode/blob/274d71002ec805c8b4f61ade3f058dd3cac1aceb/src/vs/workbench/contrib/extensions/common/extensions.ts#L185  
+> https://github.com/microsoft/vscode/blob/274d71002ec805c8b4f61ade3f058dd3cac1aceb/extensions/git/package.nls.json#L155  
+> https://github.com/microsoft/vscode/blob/274d71002ec805c8b4f61ade3f058dd3cac1aceb/extensions/npm/package.nls.json#L26  
+> https://github.com/microsoft/vscode/blob/274d71002ec805c8b4f61ade3f058dd3cac1aceb/src/vs/platform/telemetry/common/telemetry.ts#L83  
+> https://github.com/microsoft/vscode/blob/274d71002ec805c8b4f61ade3f058dd3cac1aceb/src/vs/workbench/services/assignment/common/assignmentService.ts#L110
+
+# Disable VS Telemetry
+
+Disables VS telemetry, SQM data collection, IntelliCode remote analysis, feedback features, and the `DiagnosticsHub` logger. Disabling `VSStandardCollectorService150` could cause issues, I added it as a comment.
+
+```ps
+"14.0" = "VS 2015"
+"15.0" = "VS 2017" 
+"16.0" = "VS 2019"
+"17.0" = "VS 2022"
+```
+Remove VS logs, telemetry & feedback data:
+```bat
+for %%p in (
+ "%APPDATA%\vstelemetry"
+ "%LOCALAPPDATA%\Microsoft\VSApplicationInsights"
+ "%LOCALAPPDATA%\Microsoft\VSCommon\14.0\SQM"
+ "%LOCALAPPDATA%\Microsoft\VSCommon\15.0\SQM"
+ "%LOCALAPPDATA%\Microsoft\VSCommon\16.0\SQM"
+ "%LOCALAPPDATA%\Microsoft\VSCommon\17.0\SQM"
+ "%PROGRAMDATA%\Microsoft\VSApplicationInsights"
+ "%PROGRAMDATA%\vstelemetry"
+ "%TEMP%\Microsoft\VSApplicationInsights"
+ "%TEMP%\Microsoft\VSFeedbackCollector"
+ "%TEMP%\VSFaultInfo"
+ "%TEMP%\VSFeedbackIntelliCodeLogs"
+ "%TEMP%\VSFeedbackPerfWatsonData"
+ "%TEMP%\VSFeedbackVSRTCLogs"
+ "%TEMP%\VSRemoteControl"
+ "%TEMP%\VSTelem"
+ "%TEMP%\VSTelem.Out"
+) do rd /s /q "%%~p"
+```
+Remove VS licenses (could cause the need of a reactivation):
+```bat
+for %%g in (
+ "77550D6B-6352-4E77-9DA3-537419DF564B"
+ "E79B3F9C-6543-4897-BBA5-5BFB0A02BB5C"
+ "4D8CFBCB-2F6A-4AD2-BABF-10E28F6F2C8F"
+ "5C505A59-E312-4B89-9508-E162F8150517"
+ "41717607-F34E-432C-A138-A3CFD7E25CDA"
+ "1299B4B9-DFCC-476D-98F0-F65A2B46C96D"
+) do reg delete "HKLM\SOFTWARE\Classes\Licenses\%%~g" /f
+```
+> https://github.com/jedipi/Visual-Studio-Key-Finder/blob/main/src/VsKeyFinder/Data/ProductData.cs
+
+---
+
+Miscellaneous notes:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\VSCommon\14.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\VSCommon\15.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\VSCommon\16.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
+reg add "HKLM\SOFTWARE\Microsoft\VSCommon\17.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\VSStandardCollectorService150" /v Start /t REG_DWORD /d 4 /f
+```
