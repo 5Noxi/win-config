@@ -1,4 +1,104 @@
 {
+    "Disable General Telemetry": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+        "UsageTracking": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Bluetooth": {
+        "AllowAdvertising": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+        "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
+        "AITEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+        "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableOneSettingsDownloads": { "Type": "REG_DWORD", "Data": 1 },
+        "LimitDiagnosticLogCollection": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableDiagnosticDataViewer": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableTelemetryOptInSettingsUx": { "Type": "REG_DWORD", "Data": 1 },
+        "LimitDumpCollection": { "Type": "REG_DWORD", "Data": 1 },
+        "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowDeviceNameInTelemetry": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableTelemetryOptInChangeNotification": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\AutoLogger-Diagtrack-Listener": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\System\\CurrentControlSet\\Services\\DiagTrack": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\System\\CurrentControlSet\\Services\\dmwappushservice": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy": {
+        "TailoredExperiencesWithDiagnosticDataEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo": {
+        "Value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AdvertisingInfo": {
+        "DisabledByGroupPolicy": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+        "UsageTracking": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Bluetooth": {
+        "AllowAdvertising": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+        "AllowTelemetry": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
+        "AITEnable": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+        "AllowTelemetry": { "Action": "deletevalue" },
+        "DisableOneSettingsDownloads": { "Action": "deletevalue" },
+        "LimitDiagnosticLogCollection": { "Action": "deletevalue" },
+        "DisableDiagnosticDataViewer": { "Action": "deletevalue" },
+        "DisableTelemetryOptInSettingsUx": { "Action": "deletevalue" },
+        "LimitDumpCollection": { "Action": "deletevalue" },
+        "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Action": "deletevalue" },
+        "AllowDeviceNameInTelemetry": { "Action": "deletevalue" },
+        "DisableTelemetryOptInChangeNotification": { "Action": "deletevalue" }
+      },
+      "HKLM\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\AutoLogger-Diagtrack-Listener": {
+        "Start": { "Action": "deletevalue" }
+      },
+      "HKLM\\System\\CurrentControlSet\\Services\\DiagTrack": {
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\System\\CurrentControlSet\\Services\\dmwappushservice": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Privacy": {
+        "TailoredExperiencesWithDiagnosticDataEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CPSS\\Store\\AdvertisingInfo": {
+        "Value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AdvertisingInfo": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AdvertisingInfo": {
+        "DisabledByGroupPolicy": { "Action": "deletevalue" }
+      }
+    }
+  },
   "Disable Automatic Map Downloads": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MapsBroker": {
@@ -1138,6 +1238,297 @@
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM": {
         "DisableRegistration": { "Action": "deletevalue" },
         "AutoEnrollMDM": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Feedback Prompts": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Siuf\\Rules": {
+        "NumberOfSIUFInPeriod": { "Type": "REG_DWORD", "Data": 0 },
+        "PeriodInNanoSeconds": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+        "DoNotShowFeedbackNotifications": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+        "DoNotShowFeedbackNotifications": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Siuf\\Rules": {
+        "NumberOfSIUFInPeriod": { "Action": "deletevalue" },
+        "PeriodInNanoSeconds": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+        "DoNotShowFeedbackNotifications": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
+        "DoNotShowFeedbackNotifications": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable CEIP": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppV\\CEIP": {
+        "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\SQMClient": {
+        "UploadDisableFlag": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\SQMClient\\Windows": {
+        "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\SQMClient\\Windows": {
+        "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "DisableUsbCeip": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+          "Operation": "disable"
+        },
+        "DisableConsolidator": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+          "Operation": "disable"
+        },
+        "DisableUploader": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+          "Operation": "disable"
+        },
+        "DisableServerCeipAssistant": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+          "Operation": "disable"
+        },
+        "DisableServerRoleUsageCollector": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector",
+          "Operation": "disable"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppV\\CEIP": {
+        "CEIPEnable": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\SQMClient": {
+        "UploadDisableFlag": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\SQMClient\\Windows": {
+        "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\SQMClient\\Windows": {
+        "CEIPEnable": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableUsbCeip": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+          "Operation": "enable"
+        },
+        "EnableConsolidator": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+          "Operation": "enable"
+        },
+        "EnableUploader": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+          "Operation": "enable"
+        },
+        "EnableServerCeipAssistant": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+          "Operation": "enable"
+        },
+        "EnableServerRoleUsageCollector": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector",
+          "Operation": "enable"
+        }
+      }
+    }
+  },
+  "Disable Cortana": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "CanCortanaBeEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Windows Search": {
+        "CortanaConsent": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Experience\\AllowCortana": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "CortanaEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+        "AllowCortana": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowCortanaAboveLock": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowSearchToUseLocation": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "CanCortanaBeEnabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Windows Search": {
+        "CortanaConsent": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Experience\\AllowCortana": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "CortanaEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+        "AllowCortana": { "Action": "deletevalue" },
+        "AllowCortanaAboveLock": { "Action": "deletevalue" },
+        "AllowSearchToUseLocation": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Hide Last Logged-In User": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "DontDisplayLastUserName": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Background Apps": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications": {
+        "GlobalUserDisabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "BackgroundAppGlobalToggle": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+        "LetAppsRunInBackground": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsRunInBackground_UserInControlOfTheseApps": { "Action": "deletevalue" },
+        "LetAppsRunInBackground_ForceAllowTheseApps": { "Action": "deletevalue" },
+        "LetAppsRunInBackground_ForceDenyTheseApps": { "Action": "deletevalue" }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\BackgroundAccessApplications": {
+        "GlobalUserDisabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "BackgroundAppGlobalToggle": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+        "LetAppsRunInBackground": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable WER": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\PCHealth\\ErrorReporting": {
+        "DoReport": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowUI": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Windows Error Reporting": {
+        "Disabled": { "Type": "REG_DWORD", "Data": 1 },
+        "AutoApproveOSDumps": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting": {
+        "Disabled": { "Type": "REG_DWORD", "Data": 1 },
+        "DontShowUI": { "Type": "REG_DWORD", "Data": 1 },
+        "LoggingDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "DontSendAdditionalData": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWerUpload": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting\\Consent": {
+        "DefaultConsent": { "Type": "REG_DWORD", "Data": 1 },
+        "DefaultOverrideBehavior": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Windows Error Reporting": {
+        "LoggingDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "AutoApproveOSDumps": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WerSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wercplsupport": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings": {
+        "DisableSendRequestAdditionalSoftwareToWER": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableSendGenericDriverNotFoundToWER": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "COMMANDS": {
+        "DisableWER_Tasks": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
+          "Operation": "disable"
+        },
+        "DisableWER_QueueReporting": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
+          "Operation": "disable"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\PCHealth\\ErrorReporting": {
+        "DoReport": { "Action": "deletevalue" },
+        "ShowUI": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Windows Error Reporting": {
+        "Disabled": { "Action": "deletevalue" },
+        "AutoApproveOSDumps": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting": {
+        "Disabled": { "Action": "deletevalue" },
+        "DontShowUI": { "Action": "deletevalue" },
+        "LoggingDisabled": { "Action": "deletevalue" },
+        "DontSendAdditionalData": { "Action": "deletevalue" },
+        "DisableWerUpload": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting\\Consent": {
+        "DefaultConsent": { "Type": "REG_DWORD", "Data": 4 },
+        "DefaultOverrideBehavior": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Windows Error Reporting": {
+        "LoggingDisabled": { "Action": "deletevalue" },
+        "AutoApproveOSDumps": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WerSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wercplsupport": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings": {
+        "DisableSendRequestAdditionalSoftwareToWER": { "Action": "deletevalue" },
+        "DisableSendGenericDriverNotFoundToWER": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableWER_Tasks": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
+          "Operation": "enable"
+        },
+        "EnableWER_QueueReporting": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
+          "Operation": "enable"
+        }
       }
     }
   }

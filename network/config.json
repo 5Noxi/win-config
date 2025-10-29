@@ -29,6 +29,44 @@
       }
     }
   },
+  "Disable Network Discovery": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD": {
+        "AllowLLTDIOOnDomain": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowLLTDIOOnPublicNet": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableLLTDIO": { "Type": "REG_DWORD", "Data": 0 },
+        "ProhibitLLTDIOOnPrivateNet": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowRspndrOnDomain": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowRspndrOnPublicNet": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableRspndr": { "Type": "REG_DWORD", "Data": 0 },
+        "ProhibitRspndrOnPrivateNet": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "DisableNetworkDiscoveryGroup": {
+          "Action": "run_powershell",
+          "Command": "Set-NetFirewallRule -DisplayGroup 'Network Discovery' -Enabled False -Profile Any"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD": {
+        "AllowLLTDIOOnDomain": { "Action": "deletevalue" },
+        "AllowLLTDIOOnPublicNet": { "Action": "deletevalue" },
+        "EnableLLTDIO": { "Action": "deletevalue" },
+        "ProhibitLLTDIOOnPrivateNet": { "Action": "deletevalue" },
+        "AllowRspndrOnDomain": { "Action": "deletevalue" },
+        "AllowRspndrOnPublicNet": { "Action": "deletevalue" },
+        "EnableRspndr": { "Action": "deletevalue" },
+        "ProhibitRspndrOnPrivateNet": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "RestoreNetworkDiscoveryRules": {
+          "Action": "run_powershell",
+          "Command": "$rules=@(@{Name='NETDIS-UPnPHost-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-SSDPSrv-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-LLMNR-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-In-UDP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-UPnP-Out-TCP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNTS-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-SSDPSrv-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Name-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Name-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-LLMNR-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-SSDPSrv-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-WSDEVNTS-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Datagram-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDPHOST-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNT-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDPHOST-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-UPnP-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')}); foreach($r in $rules){ $enabledEnum=[Enum]::Parse([Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetSecurity.Enabled], $r.Enabled); try { Set-NetFirewallRule -Name $r.Name -Enabled $enabledEnum -Profile $r.Profile -ea SilentlyContinue } catch {} }"
+        }
+      }
+    }
+  },
   "Disable WiFi": {
     "apply": {
       "COMMANDS": {

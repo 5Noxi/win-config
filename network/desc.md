@@ -34,6 +34,91 @@ Capturing the network activity after adding the policy:
 ![](https://github.com/5Noxi/win-config/blob/main/network/images/qosvalues.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/network/images/qosexplanation.png?raw=true)
 
+# Disable Network Discovery
+
+"LLTDIO and Responder are network protocol drivers used for Link Layer Topology Discovery and network diagnostics. LLTDIO discovers network topology and supports QoS functions, while Responder allows the device to be identified and take part in network health assessments."
+> https://gpsearch.azurewebsites.net/#1829
+> https://gpsearch.azurewebsites.net/#1830
+
+Disable network discovery (includes LLTDIO & Rspndr), by pasting the desired command into `powershell`:
+```ps
+Set-NetFirewallRule -DisplayGroup "Network Discovery" -Enabled False -Profile Any​ # Domain​, Private, Public​
+```
+Get the current states with:
+```ps
+Get-NetFirewallRule -DisplayGroup "Network Discovery" | Select-Object Name, Enabled, Profile
+```
+> https://learn.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallrule?view=windowsserver2025-ps
+
+```ps
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\EnableLLTDIO	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowLLTDIOOnDomain	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowLLTDIOOnPublicNet	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\ProhibitLLTDIOOnPrivateNet	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\EnableRspndr	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowRspndrOnDomain	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowRspndrOnPublicNet	Type: REG_DWORD, Length: 4, Data: 0
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\ProhibitRspndrOnPrivateNet	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+Defaults on W11 LTSC IoT Enterprise:
+```
+Name                               Enabled        Profile
+----                               -------        -------
+NETDIS-UPnPHost-Out-TCP              False         Public
+NETDIS-SSDPSrv-Out-UDP-Active         True        Private
+NETDIS-WSDEVNT-Out-TCP-Active         True        Private
+NETDIS-NB_Name-Out-UDP               False         Public
+NETDIS-NB_Datagram-Out-UDP           False         Public
+NETDIS-LLMNR-In-UDP                  False Domain, Public
+NETDIS-DAS-In-UDP-Active              True        Private
+NETDIS-SSDPSrv-In-UDP-Teredo          True         Public
+NETDIS-UPnP-Out-TCP                  False Domain, Public
+NETDIS-FDPHOST-In-UDP-Active          True        Private
+NETDIS-WSDEVNT-In-TCP-Active          True        Private
+NETDIS-UPnPHost-Out-TCP-Active        True        Private
+NETDIS-WSDEVNTS-In-TCP-Active         True        Private
+NETDIS-UPnPHost-In-TCP-Active         True        Private
+NETDIS-NB_Name-In-UDP                False         Public
+NETDIS-NB_Datagram-In-UDP-NoScope    False         Domain
+NETDIS-FDRESPUB-WSD-In-UDP-Active     True        Private
+NETDIS-WSDEVNTS-Out-TCP              False         Public
+NETDIS-UPnPHost-Out-TCP-NoScope      False         Domain
+NETDIS-WSDEVNT-In-TCP-NoScope        False         Domain
+NETDIS-WSDEVNT-Out-TCP-NoScope       False         Domain
+NETDIS-FDRESPUB-WSD-Out-UDP-Active    True        Private
+NETDIS-LLMNR-Out-UDP                 False Domain, Public
+NETDIS-WSDEVNTS-In-TCP-NoScope       False         Domain
+NETDIS-SSDPSrv-In-UDP                False Domain, Public
+NETDIS-DAS-In-UDP                    False Domain, Public
+NETDIS-NB_Name-In-UDP-Active          True        Private
+NETDIS-NB_Datagram-Out-UDP-Active     True        Private
+NETDIS-NB_Datagram-In-UDP            False         Public
+NETDIS-UPnPHost-In-TCP               False         Public
+NETDIS-NB_Name-In-UDP-NoScope        False         Domain
+NETDIS-WSDEVNTS-Out-TCP-NoScope      False         Domain
+NETDIS-LLMNR-Out-UDP-Active           True        Private
+NETDIS-UPnPHost-In-TCP-Teredo         True         Public
+NETDIS-FDRESPUB-WSD-Out-UDP          False Domain, Public
+NETDIS-SSDPSrv-In-UDP-Active          True        Private
+NETDIS-LLMNR-In-UDP-Active            True        Private
+NETDIS-WSDEVNT-Out-TCP               False         Public
+NETDIS-WSDEVNTS-In-TCP               False         Public
+NETDIS-NB_Datagram-In-UDP-Active      True        Private
+NETDIS-SSDPSrv-Out-UDP               False Domain, Public
+NETDIS-NB_Datagram-Out-UDP-NoScope   False         Domain
+NETDIS-FDPHOST-Out-UDP               False Domain, Public
+NETDIS-WSDEVNT-In-TCP                False         Public
+NETDIS-UPnPHost-In-TCP-NoScope       False         Domain
+NETDIS-WSDEVNTS-Out-TCP-Active        True        Private
+NETDIS-FDRESPUB-WSD-In-UDP           False Domain, Public
+NETDIS-FDPHOST-Out-UDP-Active         True        Private
+NETDIS-FDPHOST-In-UDP                False Domain, Public
+NETDIS-UPnP-Out-TCP-Active            True        Private
+NETDIS-NB_Name-Out-UDP-Active         True        Private
+NETDIS-NB_Name-Out-UDP-NoScope       False         Domain
+```
+
 # Congestion Provider
 
 BBRv2 only works on W11 - can cause issues with applications (e.g. steelseries), can work fine. Fix:

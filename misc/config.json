@@ -336,6 +336,163 @@
         "LogLevel": { "Action": "deletevalue" }
       }
     }
-  }
+  },
+  "Disable MS Office Telemetry": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Common": {
+        "QMEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Common\\ClientTelemetry": {
+        "DisableTelemetry": { "Type": "REG_DWORD", "Data": 1 },
+        "VerboseLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Common\\Feedback": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Outlook\\Options\\Calendar": {
+        "EnableCalendarLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Outlook\\Options\\Mail": {
+        "EnableLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Word\\Options": {
+        "EnableLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
 
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common": {
+        "QMEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common\\ClientTelemetry": {
+        "DisableTelemetry": { "Type": "REG_DWORD", "Data": 1 },
+        "VerboseLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common\\Feedback": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Outlook\\Options\\Calendar": {
+        "EnableCalendarLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Outlook\\Options\\Mail": {
+        "EnableLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Word\\Options": {
+        "EnableLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\Common\\ClientTelemetry": {
+        "DisableTelemetry": { "Type": "REG_DWORD", "Data": 1 },
+        "VerboseLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Office\\15.0\\OSM": {
+        "EnableLogging": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableUpload": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Office\\16.0\\OSM": {
+        "EnableLogging": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableUpload": { "Type": "REG_DWORD", "Data": 0 }
+      },
+
+      "COMMANDS": {
+        "DisableOfficeTelemetryAgentFallBack": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
+          "Operation": "disable"
+        },
+        "DisableOfficeTelemetryAgentFallBack2016": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
+          "Operation": "disable"
+        },
+        "DisableOfficeTelemetryAgentLogOn": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
+          "Operation": "disable"
+        },
+        "DisableOfficeTelemetryAgentLogOn2016": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016",
+          "Operation": "disable"
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Common": {
+        "QMEnable": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Common\\ClientTelemetry": {
+        "DisableTelemetry": { "Action": "deletevalue" },
+        "VerboseLogging": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Common\\Feedback": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Outlook\\Options\\Calendar": {
+        "EnableCalendarLogging": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Outlook\\Options\\Mail": {
+        "EnableLogging": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Word\\Options": {
+        "EnableLogging": { "Action": "deletevalue" }
+      },
+
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common": {
+        "QMEnable": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common\\ClientTelemetry": {
+        "DisableTelemetry": { "Action": "deletevalue" },
+        "VerboseLogging": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common\\Feedback": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Outlook\\Options\\Calendar": {
+        "EnableCalendarLogging": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Outlook\\Options\\Mail": {
+        "EnableLogging": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Word\\Options": {
+        "EnableLogging": { "Action": "deletevalue" }
+      },
+
+      "HKCU\\SOFTWARE\\Microsoft\\Office\\Common\\ClientTelemetry": {
+        "DisableTelemetry": { "Action": "deletevalue" },
+        "VerboseLogging": { "Action": "deletevalue" }
+      },
+
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Office\\15.0\\OSM": {
+        "EnableLogging": { "Action": "deletevalue" },
+        "EnableUpload": { "Action": "deletevalue" }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Office\\16.0\\OSM": {
+        "EnableLogging": { "Action": "deletevalue" },
+        "EnableUpload": { "Action": "deletevalue" }
+      },
+
+      "COMMANDS": {
+        "EnableOfficeTelemetryAgentFallBack": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
+          "Operation": "enable"
+        },
+        "EnableOfficeTelemetryAgentFallBack2016": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
+          "Operation": "enable"
+        },
+        "EnableOfficeTelemetryAgentLogOn": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
+          "Operation": "enable"
+        },
+        "EnableOfficeTelemetryAgentLogOn2016": {
+          "Action": "scheduled_task",
+          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016",
+          "Operation": "enable"
+        }
+      }
+    }
+  }
 }

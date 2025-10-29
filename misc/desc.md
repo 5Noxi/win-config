@@ -260,3 +260,9 @@ reg add "HKLM\SOFTWARE\Microsoft\VSCommon\16.0\SQM" /v OptIn /t REG_DWORD /d 0 /
 reg add "HKLM\SOFTWARE\Microsoft\VSCommon\17.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\VSStandardCollectorService150" /v Start /t REG_DWORD /d 4 /f
 ```
+
+# Disable MS Office Telemetry
+
+Disables logging, data collection, opts out from CEIP, disables feedback collection and telemetry agent tasks.
+
+> https://learn.microsoft.com/en-us/office/compatibility/data-that-the-telemetry-agent-collects-in-office

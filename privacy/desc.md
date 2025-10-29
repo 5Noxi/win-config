@@ -1,3 +1,299 @@
+# Disable General Telemetry
+Prevents sending info about your computer to microsoft, also disables the diagnostic log collection, media player diagnostics & bluetooth ads (`DataCollection.admx`). It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase.
+
+```ps
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
+---
+Seems to be a fallback if `AllowTelemetry` isn't set.
+> https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106
+
+
+Miscellaneous notes:  
+
+Telemetry for DCE usage?
+```bat
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" /v DCEInUseTelemetryDisabled /t REG_DWORD /d 1 /f
+```
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Winows-NT.txt
+
+"This setting controls the Inventory Collector, which sends app, file, device, and driver data to Microsoft. Enabled = Collector off. Disabled/not configured = Collector on. Has no effect if CEIP is off." (`AppCompat.admx`):
+```bat
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v DisableInventory /t REG_DWORD /d 1 /f
+```
+Kills the device and configuration data collection tool and telemetry collector and sender tasks.
+```bat
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\CompatTelRunner.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
+reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\DeviceCensus.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
+```
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\wbem\Tracing" /v enableWinmgmtTelemetry /t REG_DWORD /d 0 /f
+```
+
+```json
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Both",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Send optional diagnostic data",
+	"ExplainText":  "By configuring this policy setting you can adjust what diagnostic data is collected from Windows. This policy setting also restricts the user from increasing the amount of diagnostic data collection via the Settings app. The diagnostic data collected under this policy impacts the operating system and apps that are considered part of Windows and does not apply to any additional apps installed by your organization. - Diagnostic data off (not recommended). Using this value, no diagnostic data is sent from the device. This value is only supported on Enterprise, Education, and Server editions. - Send required diagnostic data. This is the minimum diagnostic data necessary to keep Windows secure, up to date, and performing as expected. Using this value disables the \"Optional diagnostic data\" control in the Settings app. - Send optional diagnostic data. Additional diagnostic data is collected that helps us to detect, diagnose and fix issues, as well as make product improvements. Required diagnostic data will always be included when you choose to send optional diagnostic data. Optional diagnostic data can also include diagnostic log files and crash dumps. Use the \"Limit Dump Collection\" and the \"Limit Diagnostic Log Collection\" policies for more granular control of what optional diagnostic data is sent.If you disable or do not configure this policy setting, the device will send required diagnostic data and the end user can choose whether to send optional diagnostic data from the Settings app.Note:The \"Configure diagnostic data opt-in settings user interface\" group policy can be used to prevent end users from changing their data collection settings.",
+	"Supported":  "Windows_10_0",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows",
+	"KeyName":  "DataCollection",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "AllowTelemetry",
+							"Items":  [
+										{
+											"DisplayName":  "Diagnostic data off (not recommended)",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Send required diagnostic data",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Send optional diagnostic data",
+											"Value":  "3"
+										}
+									]
+						}
+					]
+},
+{
+	"File":  "AppCompat.admx",
+	"NameSpace":  "Microsoft.Policies.ApplicationCompatibility",
+	"Class":  "Machine",
+	"CategoryName":  "AppCompat",
+	"DisplayName":  "Turn off Application Telemetry",
+	"ExplainText":  "The policy controls the state of the Application Telemetry engine in the system.Application Telemetry is a mechanism that tracks anonymous usage of specific Windows system components by applications.Turning Application Telemetry off by selecting \"enable\" will stop the collection of usage data.If the customer Experience Improvement program is turned off, Application Telemetry will be turned off regardless of how this policy is set.Disabling telemetry will take effect on any newly launched applications. To ensure that telemetry collection has stopped for all applications, please reboot your machine.",
+	"Supported":  "Windows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\AppCompat",
+	"KeyName":  "AITEnable",
+	"Elements":  [
+						{
+							"Value":  "0",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "1",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Disable OneSettings Downloads",
+	"ExplainText":  "This policy setting controls whether Windows attempts to connect with the OneSettings service.If you enable this policy, Windows will not attempt to connect with the OneSettings Service.If you disable or don\u0027t configure this policy setting, Windows will periodically attempt to connect with the OneSettings service to download configuration settings.",
+	"Supported":  "Windows_10_0_RS7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "DisableOneSettingsDownloads",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Limit Diagnostic Log Collection",
+	"ExplainText":  "This policy setting controls whether additional diagnostic logs are collected when more information is needed to troubleshoot a problem on the device. Diagnostic logs are only sent when the device has been configured to send optional diagnostic data.By enabling this policy setting, diagnostic logs will not be collected.If you disable or do not configure this policy setting, we may occasionally collect diagnostic logs if the device has been configured to send optional diagnostic data.",
+	"Supported":  "Windows_10_0_RS7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "LimitDiagnosticLogCollection",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Disable diagnostic data viewer",
+	"ExplainText":  "This policy setting controls whether users can enable and launch the Diagnostic Data Viewer from the Diagnostic \u0026 feedback Settings page.If you enable this policy setting, the Diagnostic Data Viewer will not be enabled in Settings page, and it will prevent the viewer from showing diagnostic data collected by Microsoft from the device.If you disable or don\u0027t configure this policy setting, the Diagnostic Data Viewer will be enabled in Settings page.",
+	"Supported":  "Windows_10_0_RS5",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "DisableDiagnosticDataViewer",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Enable diagnostic data opt-in setings",
+	"ExplainText":  "This policy setting determines whether an end user can change diagnostic data settings in the Settings app.If you set this policy setting to \"Disable diagnostic data opt-in settings\", diagnostic data settings are disabled in the Settings app.If you don\u0027t configure this policy setting, or you set it to \"Enable diagnostic data opt-in settings\", end users can change the device diagnostic settings in the Settings app.Note:To set a limit on the amount of diagnostic data that is sent to Microsoft by your organization, use the \"Allow Diagnostic Data\" policy setting.",
+	"Supported":  "Windows_10_0_RS4",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "DisableTelemetryOptInSettingsUx",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "DisableTelemetryOptInSettingsUx",
+							"Items":  [
+										{
+											"DisplayName":  "Disable diagnostic data opt-in settings",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Enable diagnostic data opt-in setings",
+											"Value":  "0"
+										}
+									]
+						},
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Limit Dump Collection",
+	"ExplainText":  "This policy setting limits the type of dumps that can be collected when more information is needed to troubleshoot a problem. Dumps are only sent when the device has been configured to send optional diagnostic data.By enabling this setting, Windows Error Reporting is limited to sending kernel mini dumps and user mode triage dumps.If you disable or do not configure this policy setting, we may occasionally collect full or heap dumps if the user has opted to send optional diagnostic data.",
+	"Supported":  "Windows_10_0_RS7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "LimitDumpCollection",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Disable Desktop Analytics collection",
+	"ExplainText":  "This policy setting, in combination with the \"Allow Diagnostic Data\" policy setting, enables organizations to send the minimum data required by Desktop Analytics.To enable the behavior described above, complete the following steps: 1. Enable this policy setting 2. Set the \"Allow Diagnostic Data\" policy to \"Send optional diagnostic data\" 3. Enable the \"Limit Dump Collection\" policy 4. Enable the \"Limit Diagnostic Log Collection\" policyWhen these policies are configured, Microsoft will collect only required diagnostic data and the events required by Desktop Analytics, which can be viewed at https://go.microsoft.com/fwlink/?linkid=2116020.If you disable or do not configure this policy setting, diagnostic data collection is determined by the \"Allow Diagnostic Data\" policy setting or by the end user from the Settings app.",
+	"Supported":  "Windows_10_0_RS3",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "LimitEnhancedDiagnosticDataWindowsAnalytics",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "LimitEnhancedDiagnosticDataWindowsAnalytics",
+							"Items":  [
+										{
+											"DisplayName":  "Enable Desktop Analytics collection",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Disable Desktop Analytics collection",
+											"Value":  "0"
+										}
+									]
+						},
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Allow device name to be sent in Windows diagnostic data",
+	"ExplainText":  "This policy allows the device name to be sent to Microsoft as part of Windows diagnostic data.If you disable or do not configure this policy setting, then device name will not be sent to Microsoft as part of Windows diagnostic data.",
+	"Supported":  "Windows_10_0_RS4",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "AllowDeviceNameInTelemetry",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DataCollection.admx",
+	"NameSpace":  "Microsoft.Policies.DataCollection",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Enable diagnostic data change notifications",
+	"ExplainText":  "This policy setting controls whether notifications are shown, following a change to diagnostic data opt-in settings, on first logon and when the changes occur in settings.If you set this policy setting to \"Disable diagnostic data change notifications\", diagnostic data opt-in change notifications will not appear.If you set this policy setting to \"Enable diagnostic data change notifications\" or don\u0027t configure this policy setting, diagnostic data opt-in change notifications appear at first logon and when the changes occur in Settings.",
+	"Supported":  "Windows_10_0_RS4",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "DisableTelemetryOptInChangeNotification",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "DisableTelemetryOptInChangeNotification",
+							"Items":  [
+										{
+											"DisplayName":  "Disable diagnostic data change notifications",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Enable diagnostic data change notifications",
+											"Value":  "0"
+										}
+									]
+						},
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
 # Disable Automatic Map Downloads
 
 Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location-related data updates.
@@ -587,7 +883,6 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 > https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech  
 > [privacy/assets | locationaccess-LocationApi.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
 
-``` ```
 # Disable Microsoft Copilot
 
 "Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they’re available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced."
@@ -1266,6 +1561,492 @@ Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nea
 							"ValueName":  "MDMApplicationId",
 							"Type":  "Text"
 						},
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable Feedback Prompts
+
+"This policy setting allows an organization to prevent its devices from showing feedback questions from Microsoft.If you enable this policy setting, users will no longer see feedback notifications through the Windows Feedback app.If you disable or do not configure this policy setting, users may see notifications through the Windows Feedback app asking users for feedback.Note: If you disable or do not configure this policy setting, users can control how often they receive feedback questions."
+
+Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
+
+```json
+{
+	"File":  "FeedbackNotifications.admx",
+	"NameSpace":  "Microsoft.Policies.FeedbackNotifications",
+	"Class":  "Machine",
+	"CategoryName":  "DataCollectionAndPreviewBuilds",
+	"DisplayName":  "Do not show feedback notifications",
+	"ExplainText":  "This policy setting allows an organization to prevent its devices from showing feedback questions from Microsoft.If you enable this policy setting, users will no longer see feedback notifications through the Windows Feedback app.If you disable or do not configure this policy setting, users may see notifications through the Windows Feedback app asking users for feedback.Note: If you disable or do not configure this policy setting, users can control how often they receive feedback questions.",
+	"Supported":  "Windows_10_0",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DataCollection",
+	"KeyName":  "DoNotShowFeedbackNotifications",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable CEIP
+
+Voluntary program that collects usage data to help improve the quality and performance of its products.
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-icm
+
+Opt out from windows SDK CEIP:
+```
+\Registry\Machine\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Ceip : OptIn
+```
+```bat
+reg add "HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows Kits\Ceip" /v OptIn /t REG_DWORD /d 0 /f
+```
+Opt out from the internet explorer CEIP with:
+```bat
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\SQM" /v DisableCustomerImprovementProgram /t REG_DWORD /d 0 /f
+```
+Turn off Windows Messenger CEIP:
+```bat
+reg add "HKCU\Software\Policies\Microsoft\Messenger\Client" /v CEIP /t REG_DWORD /d 2 /f
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-internetexplorer#disablecustomerexperienceimprovementprogramparticipation
+
+```json
+{
+	"File":  "appv.admx",
+	"NameSpace":  "Microsoft.Policies.AppV",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_CEIP",
+	"DisplayName":  "Microsoft Customer Experience Improvement Program (CEIP)",
+	"ExplainText":  "The program collects information about computer hardware and how you use Microsoft Application Virtualization without interrupting you. This helps Microsoft identify which Microsoft Application Virtualization features to improve. No information collected is used to identify or contact you. For more details, read about the program online at http://go.microsoft.com/fwlink/?LinkID=184686.",
+	"Supported":  "Windows7",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\AppV\\CEIP",
+	"KeyName":  "CEIPEnable",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ICM.admx",
+	"NameSpace":  "Microsoft.Policies.InternetCommunicationManagement",
+	"Class":  "Machine",
+	"CategoryName":  "InternetManagement_Settings",
+	"DisplayName":  "Turn off Windows Customer Experience Improvement Program",
+	"ExplainText":  "This policy setting turns off the Windows Customer Experience Improvement Program. The Windows Customer Experience Improvement Program collects information about your hardware configuration and how you use our software and services to identify trends and usage patterns. Microsoft will not collect your name, address, or any other personally identifiable information. There are no surveys to complete, no salesperson will call, and you can continue working without interruption. It is simple and user-friendly.If you enable this policy setting, all users are opted out of the Windows Customer Experience Improvement Program.If you disable this policy setting, all users are opted into the Windows Customer Experience Improvement Program.If you do not configure this policy setting, the administrator can use the Problem Reports and Solutions component in Control Panel to enable Windows Customer Experience Improvement Program for all users.",
+	"Supported":  "WindowsVista",
+	"KeyPath":  "Software\\Policies\\Microsoft\\SQMClient\\Windows",
+	"KeyName":  "CEIPEnable",
+	"Elements":  [
+						{
+							"Value":  "0",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "1",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ICM.admx",
+	"NameSpace":  "Microsoft.Policies.InternetCommunicationManagement",
+	"Class":  "User",
+	"CategoryName":  "InternetManagement_Settings",
+	"DisplayName":  "Turn off the Windows Messenger Customer Experience Improvement Program",
+	"ExplainText":  "This policy setting specifies whether Windows Messenger collects anonymous information about how Windows Messenger software and service is used.With the Customer Experience Improvement program, users can allow Microsoft to collect anonymous information about how the product is used. This information is used to improve the product in future releases.If you enable this policy setting, Windows Messenger does not collect usage information, and the user settings to enable the collection of usage information are not shown.If you disable this policy setting, Windows Messenger collects anonymous usage information, and the setting is not shown.If you do not configure this policy setting, users have the choice to opt in and allow information to be collected.",
+	"Supported":  "WindowsXPSP2_Or_WindowsNET",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Messenger\\Client",
+	"KeyName":  "CEIP",
+	"Elements":  [
+						{
+							"Value":  "2",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "1",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable Cortana
+
+"Cortana was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
+
+> https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)
+
+# Hide Last Logged-In User
+
+Disables 'Other User' or the username of the last signed-in user on the sign-in screen.
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\Policies\SYSTEM : DontDisplayLastUserName
+\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon : DontDisplayLastUserName
+```
+
+> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name
+
+# Disable Background Apps
+
+"This policy setting specifies whether Windows apps can run in the background.You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device.If you choose the "Force Allow" option, Windows apps are allowed to run in the background and employees in your organization cannot change it.If you choose the "Force Deny" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it.If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app."
+
+```
+Computer Configuration\Administrative Templates\Windows Components\App Privacy
+```
+`Enabled` -> `Deny All changes`:
+```ps
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground	Type: REG_DWORD, Length: 4, Data: 2
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_UserInControlOfTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceAllowTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceDenyTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
+```
+
+```json
+{
+	"File":  "AppPrivacy.admx",
+	"NameSpace":  "Microsoft.Policies.AppPrivacy",
+	"Class":  "Machine",
+	"CategoryName":  "AppPrivacy",
+	"DisplayName":  "Force Deny",
+	"ExplainText":  "This policy setting specifies whether Windows apps can run in the background.You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings \u003e Privacy on the device.If you choose the \"Force Allow\" option, Windows apps are allowed to run in the background and employees in your organization cannot change it.If you choose the \"Force Deny\" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it.If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings \u003e Privacy on the device.If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
+	"Supported":  "Windows_10_0",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows",
+	"KeyName":  "AppPrivacy",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "LetAppsRunInBackground",
+							"Items":  [
+										{
+											"DisplayName":  "User is in control",
+											"Value":  "0"
+										},
+										{
+											"DisplayName":  "Force Allow",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Force Deny",
+											"Value":  "2"
+										}
+									]
+						}
+					]
+},
+```
+
+# Disable WER
+
+WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
+
+`\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
+
+```
+0.0.0.0 watson.microsoft.com
+0.0.0.0 watson.telemetry.microsoft.com
+0.0.0.0 umwatsonc.events.data.microsoft.com
+0.0.0.0 ceuswatcab01.blob.core.windows.net
+0.0.0.0 ceuswatcab02.blob.core.windows.net
+0.0.0.0 eaus2watcab01.blob.core.windows.net
+0.0.0.0 eaus2watcab02.blob.core.windows.net
+0.0.0.0 weus2watcab01.blob.core.windows.net
+0.0.0.0 weus2watcab02.blob.core.windows.net
+```
+`DisableSendRequestAdditionalSoftwareToWER`: "Prevent Windows from sending an error report when a device driver requests additional software during installation"
+`DisableSendGenericDriverNotFoundToWER`: "Do not send a Windows error report when a generic driver is installed on a device"
+
+> https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-errorreporting
+> https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings  
+> [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
+
+```ps
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ArchiveFolderCountLimit
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : AutoApproveOSDumps
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassDataThrottling
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassNetworkCostThrottling
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassPowerThrottling
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CabArchiveCreate
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CabArchiveFolder
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CabArchiveSeparate
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ChangeDumpTypeByTelemetryLevel
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ConfigureArchive
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerPortNumber
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerServer
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerUploadOnFreeNetworksOnly
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerUseAuthentication
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerUseSSL
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DeferCabUpload
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DisableArchive
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : Disabled
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DisableEnterpriseAuthProxy
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DisableWerUpload
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DontSendAdditionalData
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DontShowUI
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceEtw
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceHeapDump
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceMetadata
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceQueue
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceUserModeCabCollection
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : LiveReportFlushInterval
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : LocalCompression
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : LoggingDisabled
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MaxArchiveCount
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MaxQueueCount
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MaxRetriesForSasRenewal
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MinFreeDiskSpace
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MinQueueSize
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : NoHeapDumpOnQueue
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : OobeCompleted
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : QueueNoPesterInterval
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : QueuePesterInterval
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : QueueSizeMaxPercentFreeDisk
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : source
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : StorePath
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : UploadOnFreeNetworksOnly
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : User
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting\Consent : DefaultConsent
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting\Consent : DefaultOverrideBehavior
+\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting\Consent : NewUserDefaultConsent
+```
+
+---
+
+Miscellaneous notes:  
+
+Disable DHA Report:
+```bat
+reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v EnableDeviceHealthAttestationService /t REG_DWORD /d 0 /f
+```
+Related to PCIe advanced error reporting? Haven't found anything on this and haven't done much research myself:
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
+```
+Default is `0`, non zero would enable the behaviour? The value doesn't exist by default.
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability ?
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled
+\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
+```
+
+```json
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_WindowsErrorReporting",
+	"DisplayName":  "Display Error Notification",
+	"ExplainText":  "This policy setting controls whether users are shown an error dialog box that lets them report an error.If you enable this policy setting, users are notified in a dialog box that an error has occurred, and can display more details about the error. If the Configure Error Reporting policy setting is also enabled, the user can also report the error.If you disable this policy setting, users are not notified that errors have occurred. If the Configure Error Reporting policy setting is also enabled, errors are reported, but users receive no notification. Disabling this policy setting is useful for servers that do not have interactive users.If you do not configure this policy setting, users can change this setting in Control Panel, which is set to enable notification by default on computers that are running Windows XP Personal Edition and Windows XP Professional Edition, and disable notification by default on computers that are running Windows Server.See also the Configure Error Reporting policy setting.",
+	"Supported":  "WindowsNET_XP",
+	"KeyPath":  "Software\\Policies\\Microsoft\\PCHealth\\ErrorReporting",
+	"KeyName":  "ShowUI",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "User",
+	"CategoryName":  "CAT_WindowsErrorReporting",
+	"DisplayName":  "Disable Windows Error Reporting",
+	"ExplainText":  "This policy setting turns off Windows Error Reporting, so that reports are not collected or sent to either Microsoft or internal servers within your organization when software unexpectedly stops working or fails.If you enable this policy setting, Windows Error Reporting does not send any problem information to Microsoft. Additionally, solution information is not available in Security and Maintenance in Control Panel.If you disable or do not configure this policy setting, the Turn off Windows Error Reporting policy setting in Computer Configuration/Administrative Templates/System/Internet Communication Management/Internet Communication settings takes precedence. If Turn off Windows Error Reporting is also either disabled or not configured, user settings in Control Panel for Windows Error Reporting are applied.",
+	"Supported":  "WindowsVista",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+	"KeyName":  "Disabled",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_WindowsErrorReporting",
+	"DisplayName":  "Automatically send memory dumps for OS-generated error reports",
+	"ExplainText":  "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps.If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user.If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
+	"Supported":  "Windows_6_3only",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+	"KeyName":  "AutoApproveOSDumps",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_WindowsErrorReporting",
+	"DisplayName":  "Disable logging",
+	"ExplainText":  "This policy setting controls whether Windows Error Reporting saves its own events and error messages to the system event log.If you enable this policy setting, Windows Error Reporting events are not recorded in the system event log.If you disable or do not configure this policy setting, Windows Error Reporting events and errors are logged to the system event log, as with other Windows-based programs.",
+	"Supported":  "WindowsVista",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+	"KeyName":  "LoggingDisabled",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_WindowsErrorReporting",
+	"DisplayName":  "Do not send additional data",
+	"ExplainText":  "This policy setting controls whether additional data in support of error reports can be sent to Microsoft automatically.If you enable this policy setting, any additional data requests from Microsoft in response to a Windows Error Reporting report are automatically declined, without notification to the user.If you disable or do not configure this policy setting, then consent policy settings in Computer Configuration/Administrative Templates/Windows Components/Windows Error Reporting/Consent take precedence.",
+	"Supported":  "WindowsVista",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+	"KeyName":  "DontSendAdditionalData",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_WindowsErrorReportingConsent",
+	"DisplayName":  "Send all data",
+	"ExplainText":  "This policy setting determines the default consent behavior of Windows Error Reporting.If you enable this policy setting, you can set the default consent handling for error reports. The following list describes the Consent level settings that are available in the pull-down menu in this policy setting:- Always ask before sending data: Windows prompts users for consent to send reports.- Send parameters: Only the minimum data that is required to check for an existing solution is sent automatically, and Windows prompts users for consent to send any additional data that is requested by Microsoft.- Send parameters and safe additional data: the minimum data that is required to check for an existing solution, along with data which Windows has determined (within a high probability) does not contain personally-identifiable information is sent automatically, and Windows prompts the user for consent to send any additional data that is requested by Microsoft.- Send all data: any error reporting data requested by Microsoft is sent automatically.If this policy setting is disabled or not configured, then the consent level defaults to the highest-privacy setting: Always ask before sending data.",
+	"Supported":  "Windows_6_3ToVista",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting",
+	"KeyName":  "Consent",
+	"Elements":  [
+						{
+							"Type":  "Enum",
+							"ValueName":  "DefaultConsent",
+							"Items":  [
+										{
+											"DisplayName":  "Always ask before sending data",
+											"Value":  "1"
+										},
+										{
+											"DisplayName":  "Send parameters",
+											"Value":  "2"
+										},
+										{
+											"DisplayName":  "Send parameters and safe additional data",
+											"Value":  "3"
+										},
+										{
+											"DisplayName":  "Send all data",
+											"Value":  "4"
+										}
+									]
+						}
+					]
+},
+{
+	"File":  "ErrorReporting.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsErrorReporting",
+	"Class":  "Machine",
+	"CategoryName":  "CAT_WindowsErrorReportingConsent",
+	"DisplayName":  "Ignore custom consent settings",
+	"ExplainText":  "This policy setting determines the behavior of the Configure Default Consent setting in relation to custom consent settings.If you enable this policy setting, the default consent levels of Windows Error Reporting always override any other consent policy setting.If you disable or do not configure this policy setting, custom consent policy settings for error reporting determine the consent level for specified event types, and the default consent setting determines only the consent level of any other error reports.",
+	"Supported":  "WindowsVista",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting\\Consent",
+	"KeyName":  "DefaultOverrideBehavior",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DeviceSetup.admx",
+	"NameSpace":  "Microsoft.Policies.DeviceSoftwareSetup",
+	"Class":  "Machine",
+	"CategoryName":  "DeviceInstall_Category",
+	"DisplayName":  "Prevent Windows from sending an error report when a device driver requests additional software during installation",
+	"ExplainText":  "Windows has a feature that allows a device driver to request additional software through the Windows Error Reporting infrastructure. This policy allows you to disable the feature.If you enable this policy setting, Windows will not send an error report to request additional software even if this is specified by the device driver.If you disable or do not configure this policy setting, Windows sends an error report when a device driver that requests additional software is installed.",
+	"Supported":  "Windows_10_0_RS3ToWindows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings",
+	"KeyName":  "DisableSendRequestAdditionalSoftwareToWER",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "DeviceSetup.admx",
+	"NameSpace":  "Microsoft.Policies.DeviceSoftwareSetup",
+	"Class":  "Machine",
+	"CategoryName":  "DeviceInstall_Category",
+	"DisplayName":  "Do not send a Windows error report when a generic driver is installed on a device",
+	"ExplainText":  "Windows has a feature that sends \"generic-driver-installed\" reports through the Windows Error Reporting infrastructure. This policy allows you to disable the feature.If you enable this policy setting, an error report is not sent when a generic driver is installed.If you disable or do not configure this policy setting, an error report is sent when a generic driver is installed.",
+	"Supported":  "Windows_10_0_RS3ToVista",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings",
+	"KeyName":  "DisableSendGenericDriverNotFoundToWER",
+	"Elements":  [
 						{
 							"Value":  "1",
 							"Type":  "EnabledValue"
