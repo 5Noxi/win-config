@@ -18,11 +18,3 @@ More miscellaneous uploads:
 Report any kind of issues either in the repository or on the Discord server:
 > https://github.com/5Noxi/win-config/issues  
 > https://discord.com/channels/836870260715028511/1372991172015820900
-
-## Requirements
-
-> https://www.python.org/downloads/windows
-
-```ps
-pip install PySide6 mistune requests
-```
