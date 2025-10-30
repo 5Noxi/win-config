@@ -817,9 +817,6 @@
       "HKLM\\SOFTWARE\\Microsoft\\Input\\TIPC": {
       "Enabled": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKU\\.DEFAULT\\SOFTWARE\\Microsoft\\Input\\TIPC": {
-        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
       }
@@ -865,9 +862,6 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\Input\\TIPC": {
       "Enabled": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKU\\.DEFAULT\\SOFTWARE\\Microsoft\\Input\\TIPC": {
-        "Enabled": { "Action": "deletevalue" }
       },
       "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -1567,6 +1561,108 @@
           "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
           "Operation": "enable"
         }
+      }
+    }
+  },
+  "Disable Crash Dumps": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+        "CrashDumpEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowCrashDump": { "Type": "REG_DWORD", "Data": 0 },
+        "LogEvent": { "Type": "REG_DWORD", "Data": 0 },
+        "DumpLogLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableLogFile": { "Type": "REG_DWORD", "Data": 0 },
+        "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "FilterPages": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl\\StorageTelemetry": {
+        "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+        "CrashDumpEnabled": { "Type": "REG_DWORD", "Data": 7 },
+        "AllowCrashDump": { "Action": "deletevalue" },
+        "LogEvent": { "Type": "REG_DWORD", "Data": 1 },
+        "DumpLogLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableLogFile": { "Type": "REG_DWORD", "Data": 1 },
+        "DeviceDumpEnabled": { "Action": "deletevalue" },
+        "FilterPages": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl\\StorageTelemetry": {
+        "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable Sleep Study": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-SleepStudy/Diagnostic": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-Kernel-Processor-Power/Diagnostic": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-UserModePowerService/Diagnostic": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power": {
+        "SleepStudyDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "SleepStudyDeviceAccountingLevel": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Wdf": {
+        "WdfGlobalSleepStudyDisabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "SleepstudyAccountingEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "EnablePowerEfficiencyDiagnosticsTaskDisable": {
+        "Action": "scheduled_task",
+        "TaskName": "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
+        "Operation": "disable"
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-SleepStudy/Diagnostic": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-Kernel-Processor-Power/Diagnostic": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-UserModePowerService/Diagnostic": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power": {
+        "SleepStudyDisabled": { "Action": "deletevalue" },
+        "SleepStudyDeviceAccountingLevel": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Wdf": {
+        "WdfGlobalSleepStudyDisabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "SleepstudyAccountingEnabled": { "Action": "deletevalue" }
+      },
+      "EnablePowerEfficiencyDiagnosticsTaskEnable": {
+        "Action": "scheduled_task",
+        "TaskName": "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
+        "Operation": "enable"
+      }
+    }
+  },
+  "Disable RSoP Logging": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "RsopLogging": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SYSTEM": {
+        "RsopLogging": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "RsopLogging": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SYSTEM": {
+        "RsopLogging": { "Action": "deletevalue" }
       }
     }
   }

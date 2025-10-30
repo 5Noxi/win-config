@@ -1,4 +1,58 @@
 {
+  "SMB Configuration": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+        "DisableBandwidthThrottling": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableLargeMtu": { "Type": "REG_DWORD", "Data": 0 },
+        "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
+        "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" },
+        "DisableMultiChannel": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 },
+        "MaxSmb2Dialect": { "Type": "REG_DWORD", "Data": 65536 },
+        "MinSmb2Dialect": { "Type": "REG_DWORD", "Data": 785 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+        "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
+        "enablesecuritysignature": { "Type": "REG_DWORD", "Data": 1 },
+        "EncryptData": { "Type": "REG_DWORD", "Data": 1 },
+        "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" },
+        "RejectUnencryptedAccess": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableLeasing": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 },
+        "MaxSmb2Dialect": { "Type": "REG_DWORD", "Data": 65536 },
+        "MinSmb2Dialect": { "Type": "REG_DWORD", "Data": 785 },
+        "AutoShareServer": { "Type": "REG_DWORD", "Data": 0 },
+        "AutoShareWks": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+        "DisableBandwidthThrottling": { "Action": "deletevalue" },
+        "DisableLargeMtu": { "Action": "deletevalue" },
+        "RequireSecuritySignature": { "Action": "deletevalue" },
+        "EnableSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
+        "CipherSuiteOrder": { "Action": "deletevalue" },
+        "DisableMultiChannel": { "Action": "deletevalue" },
+        "EnableSMBQUIC": { "Action": "deletevalue" },
+        "MaxSmb2Dialect": { "Action": "deletevalue" },
+        "MinSmb2Dialect": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+        "RequireSecuritySignature": { "Action": "deletevalue" },
+        "enablesecuritysignature": { "Type": "REG_DWORD", "Data": 0 },
+        "EncryptData": { "Action": "deletevalue" },
+        "CipherSuiteOrder": { "Action": "deletevalue" },
+        "RejectUnencryptedAccess": { "Action": "deletevalue" },
+        "DisableLeasing": { "Action": "deletevalue" },
+        "EnableSMBQUIC": { "Action": "deletevalue" },
+        "MaxSmb2Dialect": { "Action": "deletevalue" },
+        "MinSmb2Dialect": { "Action": "deletevalue" },
+        "AutoShareServer": { "Action": "deletevalue" },
+        "AutoShareWks": { "Action": "deletevalue" }
+      }
+    }
+  },
   "QoS Policy": {
     "__control": { "type": "button", "label": "Open" },
     "COMMANDS": {

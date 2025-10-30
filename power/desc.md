@@ -361,7 +361,7 @@ I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈
 
 | Parameter              | Type           | Revert Hex data     | Parsed value                      | Meaning                       |
 | ---------------------- | -------------- | ------------------- | --------------------------------- | ----------------------------- |
-| `ConservationIdleTime` | REG_BINARY (3) | `1e,00,00,0`        | malformed; if `1e,00,00,00` → 30s | `10s` on battery              |
+| `ConservationIdleTime` | REG_BINARY (3) | `1e,00,00,0`        | malformed; if `1e,00,00,00` -> 30s | `10s` on battery              |
 | `PerformanceIdleTime`  | REG_BINARY (3) | `00,00,00,00`       | 0 seconds                         | No idle mgmt on AC            |
 | `IdlePowerState`       | REG_BINARY (3) | `03,00,00,00`       | 3                                 | Go to `D3` when idle          |
 

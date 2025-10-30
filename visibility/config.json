@@ -99,7 +99,305 @@
       }
     }
   },
-    "Remove Home & Gallery": {
+  "Disable Audio / Video Preview": {
+    "apply": {
+      "HKCR\\.3gp\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.3gp\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.3gp\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.aac\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.aac\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.aac\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.avi\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.avi\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.avi\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.flac\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.flac\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.flac\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4a\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.m4a\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4a\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4v\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.m4v\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4v\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mkv\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mkv\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mkv\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mod\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mod\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mod\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mov\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mov\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mov\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp3\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mp3\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp3\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp4\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mp4\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp4\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpeg\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mpeg\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpeg\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpg\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mpg\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpg\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ogg\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.ogg\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ogg\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ts\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.ts\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ts\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.vob\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.vob\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.vob\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wav\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.wav\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wav\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.webm\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.webm\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.webm\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wma\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.wma\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wma\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wmv\\ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.wmv\\-ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wmv\\-ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Modules\\GlobalSettings\\DetailsContainer": {
+        "DetailsContainer": { "Type": "REG_BINARY", "Data": "02,00,00,00,02,00,00,00" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Modules\\GlobalSettings\\Sizer": {
+        "DetailsContainerSizer": { "Type": "REG_BINARY", "Data": "15,01,00,00,00,00,00,00,00,00,00,00,C0,03,00,00" }
+      }
+    },
+    "revert": {
+      "HKCR\\.3gp\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.3gp\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.3gp\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.aac\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.aac\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.aac\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.avi\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.avi\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.avi\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.flac\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.flac\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.flac\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4a\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.m4a\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4a\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4v\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.m4v\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.m4v\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mkv\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mkv\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mkv\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mod\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mod\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mod\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mov\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mov\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mov\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp3\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mp3\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp3\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp4\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mp4\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mp4\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpeg\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mpeg\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpeg\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpg\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.mpg\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.mpg\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ogg\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.ogg\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ogg\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ts\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.ts\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.ts\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.vob\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.vob\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.vob\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wav\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.wav\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wav\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.webm\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.webm\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.webm\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wma\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.wma\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wma\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wmv\\-ShellEx": { "Action": "delete_path", "Recurse": true },
+      "HKCR\\.wmv\\ShellEx\\{E357FCCD-A995-4576-B01F-234630154E96}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCR\\.wmv\\ShellEx\\{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}": {
+        "": { "Type": "REG_SZ", "Data": "{9DBD2C50-62AD-11D0-B806-00C04FD706EC}" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Modules\\GlobalSettings\\DetailsContainer": {
+        "DetailsContainer": { "Type": "REG_BINARY", "Data": "02,00,00,00,01,00,00,00" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Modules\\GlobalSettings\\Sizer": {
+        "DetailsContainerSizer": { "Type": "REG_BINARY", "Data": "15,01,00,00,01,00,00,00,00,00,00,00,C0,03,00,00" }
+      }
+    }
+  },
+  "Remove Home & Gallery": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}": { "Action": "delete_path" },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}": { "Action": "delete_path" },
@@ -136,6 +434,35 @@
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Action": "deletevalue" } },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } },
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } }
+    }
+  },
+    "Disable Automatic Folder Type Discovery": {
+    "apply": {
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags": {
+        "": { "Action": "deletekey" }
+      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU": {
+        "": { "Action": "deletekey" }
+      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags\\AllFolders\\Shell": {
+        "FolderType": { "Type": "REG_SZ", "Data": "NotSpecified" }
+      },
+      "COMMANDS": {
+        "RestartExplorer": {
+          "Action": "restart_explorer"
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags": {
+        "": {}
+      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU": {
+        "": {}
+      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags\\AllFolders\\Shell": {
+        "FolderType": { "Action": "deletevalue" }
+      }
     }
   },
   "Hide Language Bar": {

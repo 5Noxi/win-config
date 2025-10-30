@@ -2096,3 +2096,75 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 					]
 },
 ```
+
+# Disable Crash Dumps
+
+Disables the crash dump, logging. Not all values may be read on your system.
+
+```c
+CrashDumpEnabled REG_DWORD 0x0 = None
+CrashDumpEnabled REG_DWORD 0x1 = Complete memory dump
+CrashDumpEnabled REG_DWORD 0x2 = Kernel memory dump
+CrashDumpEnabled REG_DWORD 0x3 = Small memory dump (64 KB)
+CrashDumpEnabled REG_DWORD 0x7 = Automatic memory dump
+CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dump
+```
+
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/automatic-memory-dump  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/CrashControl.txt  
+> [system/assets | crashdmp.c](https://github.com/5Noxi/win-config/blob/main/system/assets/crashdmp.c)
+
+# Disable Sleep Study
+
+Sleep Study tracks modern sleep states to analyze energy usage and pinpoint battery drain. It disables Sleep Study by making ETL logs read-only, disabling related diagnostics, and turning off the scheduled task.
+
+```ps
+wevtutil sl Microsoft-Windows-SleepStudy/Diagnostic /e:false
+svchost.exe	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-SleepStudy/Diagnostic\Enabled	Type: REG_DWORD, Length: 4, Data: 0
+
+wevtutil sl Microsoft-Windows-Kernel-Processor-Power/Diagnostic /e:false
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-Kernel-Processor-Power/Diagnostic\Enabled	Type: REG_DWORD, Length: 4, Data: 0
+
+wevtutil sl Microsoft-Windows-UserModePowerService/Diagnostic /e:false
+svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-UserModePowerService/Diagnostic\Enabled	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+> [system/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)  
+> [system/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-PoFxInitPowerManagement.c)
+
+---
+
+Other:
+```
+\Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : EnableNicAutoPowerSaverInSleepStudy
+\Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : EnableNicAutoPowerSaverInSleepStudy
+\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Power : SleepStudyBufferSizeInMB
+\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Power : SleepStudyTraceDirectory
+```
+
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil
+
+# Disable RSoP Logging
+
+"This setting allows you to enable or disable Resultant Set of Policy (RSoP) logging on a client computer.RSoP logs information on Group Policy settings that have been applied to the client. This information includes details such as which Group Policy Objects (GPO) were applied where they came from and the client-side extension settings that were included.If you enable this setting RSoP logging is turned off.If you disable or do not configure this setting RSoP logging is turned on. By default RSoP logging is always on.Note: To view the RSoP information logged on a client computer you can use the RSoP snap-in in the Microsoft Management Console (MMC)."
+
+> https://www.windows-security.org/370c915e44b6a75efac0d24669aa9434/turn-off-resultant-set-of-policy-logging
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon : RsopLogging
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
+```
+
+> https://learn.microsoft.com/en-us/previous-versions/windows/desktop/Policy/developing-an-rsop-management-tool  
+> [privacy/assets | rsop-IsDesktopHeapLoggingOn.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/rsop-IsDesktopHeapLoggingOn.c)
+
+---
+
+Another logging feature - `DesktopHeapLogging`. "It is meant to log information about desktop heap usage. This can be helpful when diagnosing issues where system resources for desktop objects might be strained." ([*](https://answers.microsoft.com/en-us/windows/forum/all/question-about-some-dwm-registry-settings/341cac5c-d85a-43e5-89d3-d9734f84da4e))
+
+```bat
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" /v DesktopHeapLogging /t REG_DWORD /d 0 /f
+```
+
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Winows-NT.txt

@@ -354,5 +354,17 @@
         "RMPowerFeature2": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable MPO": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm": {
+        "OverlayTestMode": { "Type": "REG_DWORD", "Data": 5 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm": {
+        "OverlayTestMode": { "Action": "deletevalue" }
+      }
+    }
   }
 }

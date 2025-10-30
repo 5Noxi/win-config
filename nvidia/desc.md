@@ -720,3 +720,66 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v RmPr
 Change `XXXX` to the correct key and `X` to `1`/`0`.
 > https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters
 > https://github.com/5Noxi/bitmask-calc
+
+# Disable MPO
+
+"MPO lets the GPU present frames directly to the display using hardware scanout planes, reducing latency by bypassing the DWMs software composition. A display needs at least two planes for MPO to be active. As of April 2023, SKIF shows MPO assignments in its settings tab. NVIDIA typically assigns all available planes (usually 4 or more) to one display, leaving others without."
+
+Shouldn't be disabled, same goes for FSO. Leave it enabled or you may end up using composition atlas. I decided to add it since MPO can cause issues like screen flickering.
+
+Use [PresentMon](https://github.com/GameTechDev/PresentMon/releases) and record your game to see which presentation mode you currently use.
+
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/swapchain.png?raw=true)  
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows\Dwm : OverlayTestMode
+```
+Takes a default value of `0`, which shouldn't get changed (removing the value = using `0`):
+```c
+v5 = 0;
+if (!(unsigned int)GetPersistedRegistryValueW(
+      L"DWMSwitches",
+      L"Software\\Microsoft\\Windows\\Dwm",
+      L"OverlayTestMode",
+      16,
+      0,
+      &v5,
+      4,
+      0))
+{
+    dword_18041A46C = v5;
+}
+```
+
+> [nvidia/assets | mpo-bDwmOverlayTestMode.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/mpo-bDwmOverlayTestMode.c)  
+> https://wiki.special-k.info/en/SwapChain  
+> https://wiki.special-k.info/Presentation_Model  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Windows-Dwm.txt
+
+---
+
+Other value, which I found while looking through `dwmcore.dll`:
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows\Dwm : OverlayMinFPS
+```
+Takes a default value of `15`:
+```c
+  v2 = 0;
+  result = GetPersistedRegistryValueW(
+             L"DWMSwitches",
+             L"Software\\Microsoft\\Windows\\Dwm",
+             L"OverlayMinFPS",
+             16,
+             0,
+             &v2,
+             4,
+             0);
+  v1 = 15; // will be used if not overrided via registry
+  if ( !(_DWORD)result )
+    v1 = v2;
+  dword_180419950 = v1;
+  return result;
+}
+```
+
+> [nvidia/assets | mpo-minfps.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/mpo-minfps.c)

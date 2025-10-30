@@ -15,11 +15,16 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v Sh
 ```
 Set `Hidden` to `2` and `ShowSuperHidden` to `0` to disable it.
 
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/explorer.png?raw=true)
+
 ---
 
 Miscellaneous notes:
 ```ps
 "TaskbarDa": { "Type": "REG_DWORD", "Data": 0 } # Access denied
+
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v ShellState /t REG_BINARY /d 24,00,00,00,3e,20,00,00,00,00,00,00,00,00,00,00,00,00,00,00,01,00,00,00,13,00,00,00,00,00,00,00,42,00,00,00 /f
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState" /v Settings /t REG_BINARY /d 0c,00,02,00,0a,01,00,00,60,00,00,00 /f
 ```
 
 # Enable Dark Theme
@@ -51,6 +56,35 @@ The pictures below show: `Transparency On`, `Transparency Off`.
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/transpa1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/transpa2.png?raw=true)
+
+# Disable Audio / Video Preview
+
+Disables the preview function for (extensions):
+```
+3gp aac avi flac m4a m4v mkv mod mov mp3 mp4 mpeg mpg ogg ts vob wav webm wma wmv
+```
+`{E357FCCD-A995-4576-B01F-234630154E96}` - Thumbnail Provider (Thumbnail image handler)
+`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}` - Extract Image (Image handler)
+`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}` - Default shell extension handler for thumbnails
+> https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names
+> https://learn.microsoft.com/en-us/windows/win32/api/thumbcache/nn-thumbcache-ithumbnailprovider
+> https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/nn-shobjidl_core-iextractimage
+
+Enabled:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true)
+
+Disabled:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/audiovidpreoff.png?raw=true)
+
+---
+
+Hide preview pane:
+```ps
+"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\Sizer\DetailsContainerSizer","Type: REG_BINARY, Length: 16, Data: 15 01 00 00 00 00 00 00 00 00 00 00 6B 03 00 00"
+"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\DetailsContainer\DetailsContainer","Type: REG_BINARY, Length: 8, Data: 02 00 00 00 02 00 00 00"
+```
 
 # Remove Home & Gallery
 
@@ -189,6 +223,17 @@ CMachine::RegQueryDWORD(
                     ]
 },
 ```
+
+# Disable Automatic Folder Type Discovery
+
+"Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders."
+
+Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`)
+
+The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
+
+> https://www.insomniacgeek.com/posts/how-to-disable-windows-folder-discovery/  
+> https://github.com/LesFerch/WinSetView
 
 # Hide Language Bar
 

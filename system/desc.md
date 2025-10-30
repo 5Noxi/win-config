@@ -965,3 +965,26 @@ PSComputerName               :
 
 > https://github.com/5Noxi/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (P. 459)  
 > https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
+
+# Enable Detailed BSoD
+
+| Aspect                    | New BSoD (Windows 8/10/11)                      | Old BSoD (Windows 7/classic)                                                      |
+| ------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------- |
+| Main look                 | Big blue screen, sad face, simple text, QR code | Plain blue text screen, no icons                                                  |
+| Stop code shown           | e.g. CRITICAL_PROCESS_DIED                      | e.g. STOP 0x0000007E                                                              |
+| Hex parameters            | Hidden                                          | Shown: (0x00000000, 0x00000000...)                                                |
+| Faulty driver/module name | Hidden                                          | Often shown (e.g. nvlddmkm.sys)                                                   |
+| Extra help                | QR code + link                                  | Text-only advice                                                                  |
+| Purpose                   | Less scary, easier to tell support the code     | See the actual debug information                                                  |
+
+Enabling the options includes setting `AutoReboot` to `0` ("The option specifies that Windows automatically restarts your computer").
+
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
+> https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options
+
+---
+
+Disable BSoD smiley:
+```bat
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v DisableEmoticon /t REG_DWORD /d 1 /f
+```

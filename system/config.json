@@ -1116,5 +1116,19 @@
         }
       }
     }
+  },
+  "Enable Detailed BSoD": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+        "DisplayParameters": { "Type": "REG_DWORD", "Data": 1 },
+        "AutoReboot": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+        "DisplayParameters": { "Action": "deletevalue" },
+        "AutoReboot": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
   }
 }
