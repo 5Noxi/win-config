@@ -372,3 +372,32 @@ I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation  
 > https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors
+
+# Disable NVMe Perf Throttling
+
+It get intialized, unsure what exactly it does. Might be related to thermal throttling (controller cuts IOPS and bandwidth to lower heat and protect the drive)?
+
+The default data is `0` if the value is missing, but for new installations it's present with the value `1`. Il'll still leave it in here for documentation reasons.
+
+```c
+ResultLength = 0;
+DestinationString = 0LL;
+RtlInitUnicodeString(&DestinationString, L"NVMeDisablePerfThrottling");
+if (ZwQueryValueKey(
+        KeyHandle,
+        &DestinationString,
+        KeyValuePartialInformation,
+        KeyValueInformation,
+        0x110u,
+        &ResultLength) < 0)           // query failed
+{
+    ClassNVMeDisablePerfThrottling = 0; // default if missing
+}
+else if (v6 == 4 && ResultLength >= 4)  // REG_DWORD
+{
+    ClassNVMeDisablePerfThrottling = (v7 != 0); // non zero = disable throttling
+}
+```
+
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Classpnp.txt  
+> [power/assets | nvmeperf-ClassUpdateDynamicRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)

@@ -156,7 +156,7 @@
       }
     }
   },
-  "Disable Game DVR": {
+  "Disable Xbox Game Bar": {
     "apply": {
       "HKCU\\System\\GameConfigStore": {
         "GameDVR_Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -165,7 +165,26 @@
         "AllowGameDVR": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR": {
-        "AppCaptureEnabled": { "Type": "REG_DWORD", "Data": 0 }
+        "AppCaptureEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "CameraCaptureEnabledByDefault": { "Type": "REG_DWORD", "Data": 0 },
+        "HistoricalCaptureEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "HistoricalCaptureOnBatteryAllowed": { "Type": "REG_DWORD", "Data": 0 },
+        "HistoricalCaptureOnWirelessDisplayAllowed": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "SetPresenceWriter": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\WindowsRuntime\\ActivatableClassId\\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter' -Name 'ActivationType' -Value 0 -Type DWord -Force"
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\ApplicationManagement\\AllowGameDVR": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\GameBar": {
+        "GamePanelStartupTipIndex": { "Type": "REG_DWORD", "Data": 3 },
+        "ShowStartupPanel": { "Type": "REG_DWORD", "Data": 0 },
+        "UseNexusForGameBarEnabled": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -176,7 +195,26 @@
         "AllowGameDVR": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR": {
-        "AppCaptureEnabled": { "Action": "deletevalue" }
+        "AppCaptureEnabled": { "Action": "deletevalue" },
+        "CameraCaptureEnabledByDefault": { "Action": "deletevalue" },
+        "HistoricalCaptureEnabled": { "Action": "deletevalue" },
+        "HistoricalCaptureOnBatteryAllowed": { "Action": "deletevalue" },
+        "HistoricalCaptureOnWirelessDisplayAllowed": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "ResetPresenceWriter": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\WindowsRuntime\\ActivatableClassId\\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter' -Name 'ActivationType' -Value 1 -Type DWord -Force"
+        }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\ApplicationManagement\\AllowGameDVR": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\GameBar": {
+        "GamePanelStartupTipIndex": { "Action": "deletevalue" },
+        "ShowStartupPanel": { "Action": "deletevalue" },
+        "UseNexusForGameBarEnabled": { "Action": "deletevalue" }
       }
     }
   },

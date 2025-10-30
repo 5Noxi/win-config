@@ -242,5 +242,17 @@
         }
       }
     }
+  },
+  "Disable NVMe Perf Throttling": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Classpnp": {
+        "NVMeDisablePerfThrottling": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Classpnp": {
+        "NVMeDisablePerfThrottling": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
   }
 }

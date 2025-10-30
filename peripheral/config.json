@@ -168,7 +168,151 @@
   "Disable System Sounds": {
     "apply": {
       "HKCU\\AppEvents\\Schemes": {
-        "(Default)": { "Type": "REG_SZ", "Data": ".None" }
+        "": { "Type": "REG_SZ", "Data": ".None" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemAsterisk\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Reminder\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Close\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\CriticalBatteryAlarm\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemHand\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\.Default\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MailBeep\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\DeviceConnect\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\DeviceDisconnect\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\DeviceFail\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemExclamation\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.IM\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\LowBatteryAlarm\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Maximize\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MenuCommand\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MenuPopup\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MessageNudge\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Minimize\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\FaxBeep\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Mail\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.SMS\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Proximity\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\ProximityConnection\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Default\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Open\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\PrintComplete\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\AppGPFault\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemQuestion\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\RestoreDown\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\RestoreUp\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\CCSelect\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\ShowBand\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemNotification\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\ChangeTheme\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\WindowsUAC\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\BlockedPopup\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\ActivatingDocument\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\EmptyRecycleBin\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\FeedDiscovered\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\MoveMenuItem\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\SecurityBand\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\Navigating\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\DisNumbersSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\PanelSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\MisrecoSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\HubOffSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\HubOnSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\HubSleepSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\BootAnimation": {
         "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }
@@ -179,7 +323,151 @@
     },
     "revert": {
       "HKCU\\AppEvents\\Schemes": {
-        "(Default)": { "Type": "REG_SZ", "Data": ".Default" }
+        "": { "Type": "REG_SZ", "Data": ".Default" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemAsterisk\\.Current": {
+        "": { "Type": "REG_EXPAND_SZ", "Data": "C:\\WINDOWS\\media\\Windows Background.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Reminder\\.Current": {
+        "": { "Type": "REG_EXPAND_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify Calendar.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Close\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\CriticalBatteryAlarm\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Foreground.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemHand\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Foreground.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\.Default\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Background.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MailBeep\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify Email.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\DeviceConnect\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Hardware Insert.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\DeviceDisconnect\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Hardware Remove.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\DeviceFail\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Hardware Fail.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemExclamation\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Background.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.IM\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify Messaging.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\LowBatteryAlarm\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Foreground.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Maximize\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MenuCommand\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MenuPopup\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\MessageNudge\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Message Nudge.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Minimize\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\FaxBeep\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify Email.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Mail\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify Email.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.SMS\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify Messaging.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Proximity\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Proximity Notification.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\ProximityConnection\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Proximity Connection.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Notification.Default\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Notify System Generic.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\Open\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\PrintComplete\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\AppGPFault\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemQuestion\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\RestoreDown\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\RestoreUp\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\CCSelect\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\ShowBand\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\SystemNotification\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows Background.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\ChangeTheme\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\.Default\\WindowsUAC\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Windows User Account Control.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\BlockedPopup\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\ActivatingDocument\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\EmptyRecycleBin\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\FeedDiscovered\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\MoveMenuItem\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\SecurityBand\\.current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\Explorer\\Navigating\\.Current": {
+        "": { "Type": "REG_SZ", "Data": "" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\DisNumbersSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Speech Disambiguation.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\PanelSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Speech Disambiguation.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\MisrecoSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Speech Misrecognition.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\HubOffSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Speech Off.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\HubOnSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Speech On.wav" }
+      },
+      "HKCU\\AppEvents\\Schemes\\Apps\\sapisvr\\HubSleepSound\\.current": {
+        "": { "Type": "REG_SZ", "Data": "C:\\WINDOWS\\media\\Speech Sleep.wav" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\BootAnimation": {
         "DisableStartupSound": { "Type": "REG_DWORD", "Data": 1 }

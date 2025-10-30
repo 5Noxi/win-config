@@ -39,6 +39,23 @@
       }
     }
   },
+  "Disable System Mitigations": {
+    "apply": {
+      "COMMANDS": {
+        "DisableAllMitigations": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "$exclude=@('EnableExportAddressFilter','AuditEnableExportAddressFilter','EnableExportAddressFilterPlus','AuditEnableExportAddressFilterPlus','EnableImportAddressFilter','AuditEnableImportAddressFilter','EnableRopStackPivot','AuditEnableRopStackPivot','EnableRopCallerCheck','AuditEnableRopCallerCheck','EnableRopSimExec','AuditEnableRopSimExec','DisallowChildProcessCreation','AuditChildProcess'); (Get-Command Set-ProcessMitigation).Parameters['Disable'].Attributes.ValidValues | Where-Object { $exclude -notcontains $_ } | ForEach-Object { Set-ProcessMitigation -System -Disable $_ -ea SilentlyContinue }"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+        "MitigationAuditOptions": { "Action": "deletevalue" },
+        "MitigationOptions": { "Action": "deletevalue" }
+      }
+    }
+  },
   "Disable WU Driver Updates": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Update": {
@@ -694,6 +711,26 @@
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\StorageDevicePolicies": {
         "WriteProtect": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Increase TDR": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "TdrLimitTime": { "Type": "REG_DWORD", "Data": 60 },
+        "TdrLimitCount": { "Type": "REG_DWORD", "Data": 5 },
+        "TdrLevel": { "Type": "REG_DWORD", "Data": 3 },
+        "TdrDelay": { "Type": "REG_DWORD", "Data": 8 },
+        "TdrDdiDelay": { "Type": "REG_DWORD", "Data": 10 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "TdrLimitTime": { "Action": "deletevalue" },
+        "TdrLimitCount": { "Action": "deletevalue" },
+        "TdrLevel": { "Action": "deletevalue" },
+        "TdrDelay": { "Action": "deletevalue" },
+        "TdrDdiDelay": { "Action": "deletevalue" }
       }
     }
   }

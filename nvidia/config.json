@@ -206,22 +206,23 @@
       }
     }
   },
-  "Disable Preemption": {
+  "Enable Preemption": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "DisablePreemption": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableCudaContextPreemption": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableCEPreemption": { "Type": "REG_DWORD", "Data": 0 },
-        "DisablePreemptionOnS3S4": { "Type": "REG_DWORD", "Data": 1 },
-        "ComputePreemption": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableMidGfxPreemption": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableMidGfxPreemptionVGPU": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableMidBufferPreemptionForHighTdrTimeout": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableMidBufferPreemption": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableAsyncMidBufferPreemption": { "Type": "REG_DWORD", "Data": 0 }
+        "DisablePreemption": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableCudaContextPreemption": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableCEPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "DisablePreemptionOnS3S4": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableSCGMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMidGfxPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMidGfxPreemptionVGPU": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMidBufferPreemptionForHighTdrTimeout": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableAsyncMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "PerfAnalyzeMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
-        "EnablePreemption": { "Type": "REG_DWORD", "Data": 0 }
+        "EnablePreemption": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
@@ -230,12 +231,13 @@
         "DisableCudaContextPreemption": { "Action": "deletevalue" },
         "EnableCEPreemption": { "Action": "deletevalue" },
         "DisablePreemptionOnS3S4": { "Action": "deletevalue" },
-        "ComputePreemption": { "Action": "deletevalue" },
+        "EnableSCGMidBufferPreemption": { "Action": "deletevalue" },
         "EnableMidGfxPreemption": { "Action": "deletevalue" },
         "EnableMidGfxPreemptionVGPU": { "Action": "deletevalue" },
         "EnableMidBufferPreemptionForHighTdrTimeout": { "Action": "deletevalue" },
         "EnableMidBufferPreemption": { "Action": "deletevalue" },
-        "EnableAsyncMidBufferPreemption": { "Action": "deletevalue" }
+        "EnableAsyncMidBufferPreemption": { "Action": "deletevalue" },
+        "PerfAnalyzeMidBufferPreemption": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
         "EnablePreemption": { "Action": "deletevalue" }

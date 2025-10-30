@@ -171,6 +171,8 @@ Disables system sounds and removes sound events. I did use the keys, which Windo
 "HKCU\AppEvents\Schemes\Apps\sapisvr\HubSleepSound\.current\(Default)","Type: REG_SZ, Length: 0"
 ```
 
+The revert data is based on `W11 LTSC IoT Enterprise 2024` defaults.
+
 `DisableStartupSound` is set to `1` by default (`LogonUI\BootAnimation`).
 
 # Disable Autoplay/Autorun

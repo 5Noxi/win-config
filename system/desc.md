@@ -152,7 +152,7 @@ Value: `ConsentPromptBehaviorUser`
 | Value        | Meaning                                                                       |
 | ------------ | ----------------------------------------------------------------------------- |
 | `0x00000000` | Any operation requiring elevation fails for standard users.                   |
-| `0x00000001` | Standard users are prompted for an admin’s credentials to elevate privileges. |
+| `0x00000001` | Standard users are prompted for an admin's credentials to elevate privileges. |
 
 Value: `EnableInstallerDetection`
 
@@ -193,6 +193,159 @@ Value: `EnableVirtualization`
 > https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
 
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/uac.png?raw=true)
+
+# Disable Service Splitting
+
+Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
+
+`Windows Internals 7th Edition, Part 2` handpicked snippets (shortened):
+If system physical memory, obtained via `GlobalMemoryStatusEx`, exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
+
+Service splitting is allowed only if:  
+- Splitting is globally enabled
+- The service is not marked as critical (i.e., it doesn't reboot the machine on failure)
+- The service is hosted in `svchost.exe`
+- `SvcHostSplitDisable` is not set to `1` in the service registry key
+
+Setting `SvcHostSplitDisable` to `0` for a critical service forces it to be split, but this can lead to issues.
+
+Get the current amount of `svchost` process instances with:
+```cmd
+(get-process -Name "svchost" | measure).Count
+```
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostDebug
+\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostSplitThresholdInKB
+```
+`SvcHostDebug` is set to `0` by default:
+```c
+v1 = 0;
+if ( !RegistryValueWithFallbackW && Type == 4 )
+    LOBYTE(v1) = Data != 0;
+return v1;
+```
+
+> [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/5Noxi/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)  
+> https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf (page `467`f)  
+> https://learn.microsoft.com/en-us/windows/application-management/svchost-service-refactoring  
+> https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
+
+---
+
+Miscellaneous notes:
+```bat
+:: "If the total physical memory is above the threshold, it enables Svchost service splitting"
+reg add HKLM\SYSTEM\CurrentControlSet\Control /t REG_DWORD /v SvcHostSplitThresholdInKB /d 4294967295 /f
+```
+
+# Disable Scheduled Tasks
+
+Disables all kind of scheduled tasks most users don't need. Read through the list before switching the option.
+
+Currently disables:
+```ps
+"\Microsoft\Windows\Application Experience\MareBackup",
+"\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser",
+"\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser Exp",
+"\Microsoft\Windows\Application Experience\StartupAppTask",
+"\Microsoft\Windows\ApplicationData\DsSvcCleanup",
+"\Microsoft\Windows\Autochk\Proxy",
+"\Microsoft\Windows\CloudExperienceHost\CreateObjectTask",
+"\Microsoft\Windows\Customer Experience Improvement Program\Consolidator",
+"\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip",
+"\Microsoft\Windows\Defrag\ScheduledDefrag",
+"\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner",
+"\Microsoft\Windows\Diagnosis\Scheduled",
+"\Microsoft\Windows\Diagnosis\UnexpectedCodePath",
+"\Microsoft\Windows\DiskCleanup\SilentCleanup",
+"\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector",
+"\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver",
+"\Microsoft\Windows\DiskFootprint\Diagnostics",
+"\Microsoft\Windows\DiskFootprint\StorageSense",
+"\Microsoft\Windows\Feedback\Siuf\DmClient",
+"\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload",
+"\Microsoft\Windows\InstallService\ScanForUpdates",
+"\Microsoft\Windows\InstallService\ScanForUpdatesAsUser",
+"\Microsoft\Windows\InstallService\SmartRetry",
+"\Microsoft\Windows\InstallService\WakeUpAndContinueUpdates",
+"\Microsoft\Windows\InstallService\WakeUpAndScanForUpdates",
+"\Microsoft\Windows\International\Synchronize Language Settings",
+"\Microsoft\Windows\LanguageComponentsInstaller\Installation",
+"\Microsoft\Windows\LanguageComponentsInstaller\ReconcileLanguageResources",
+"\Microsoft\Windows\LanguageComponentsInstaller\Uninstallation",
+"\Microsoft\Windows\Maps\MapsUpdateTask",
+"\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem",
+"\Microsoft\Windows\Registry\RegIdleBackup",
+"\Microsoft\Windows\RetailDemo\CleanupOfflineContent",
+"\Microsoft\Windows\Speech\SpeechModelDownloadTask",
+"\Microsoft\Windows\Sysmain\ResPriStaticDbSync",
+"\Microsoft\Windows\Sysmain\WsSwapAssessmentTask",
+"\Microsoft\Windows\Time Synchronization\ForceSynchronizeTime",
+"\Microsoft\Windows\Time Synchronization\SynchronizeTime",
+"\Microsoft\Windows\UNP\RunUpdateNotificationMgr",
+"\Microsoft\Windows\Windows Error Reporting\QueueReporting",
+```
+
+---
+
+Miscellaneous notes:
+```ps
+for %%a in (
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64 Critical",
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64",
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 Critical",
+    "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319",
+    "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataReceiver",
+    "\Microsoft\Windows\Active Directory Rights Management Services Client\AD RMS Rights Policy Template Management (Manual)",
+    "\Microsoft\Windows\AppID\EDP Policy Manager",
+    "\Microsoft\Windows\BitLocker\BitLocker Encrypt All Drives",
+    "\Microsoft\Windows\BitLocker\BitLocker MDM Policy Refresh",
+    "\Microsoft\Windows\BrokerInfrastructure\BgTaskRegistrationMaintenanceTask",
+    "\Microsoft\Windows\CloudRestore\Backup",
+    "\Microsoft\Windows\CloudRestore\Restore",
+    "\Microsoft\Windows\Data Integrity Scan\Data Integrity Check And Scan",
+    "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan",
+    "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan For Crash Recovery",
+    "\Microsoft\Windows\Device Information\Device",
+    "\Microsoft\Windows\Device Information\Device User",
+    "\Microsoft\Windows\Device Setup\Metadata Refresh",
+    "\Microsoft\Windows\FileHistory\File History (maintenance mode)",
+    "\Microsoft\Windows\Flighting\FeatureConfig\BootstrapUsageDataReporting",
+    "\Microsoft\Windows\Flighting\FeatureConfig\ReconcileFeatures",
+    "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataFlushing",
+    "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataReceiver",
+    "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataReporting",
+    "\Microsoft\Windows\Flighting\OneSettings\RefreshCache",
+    "\Microsoft\Windows\Printing\EduPrintProv",
+    "\Microsoft\Windows\Printing\PrinterCleanupTask",
+    "\Microsoft\Windows\Printing\PrintJobCleanupTask",
+    "\Microsoft\Windows\Security\Pwdless\IntelligentPwdlessTask",
+    # WU
+    "\Microsoft\Windows\UpdateOrchestrator\Report policies",
+    "\Microsoft\Windows\UpdateOrchestrator\Schedule Maintenance Work",
+    "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan",
+    "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan Static Task",
+    "\Microsoft\Windows\UpdateOrchestrator\Schedule Wake To Work",
+    "\Microsoft\Windows\UpdateOrchestrator\Schedule Work",
+    "\Microsoft\Windows\UpdateOrchestrator\Start Oobe Expedite Work",
+    "\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScan_LicenseAccepted",
+    "\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScanAfterUpdate",
+    "\Microsoft\Windows\UpdateOrchestrator\USO_UxBroker",
+    "\Microsoft\Windows\UpdateOrchestrator\UUS Failover Task",
+    "\Microsoft\Windows\WindowsUpdate\Scheduled Start",
+    "\Microsoft\Windows\WindowsUpdate\Refresh Group Policy Cache",
+    # WiFi
+    "\Microsoft\Windows\WlanSvc\CDSSync",
+    "\Microsoft\Windows\WlanSvc\MoProfileManagement"
+) do (
+    schtasks.exe /change /disable /TN %%a
+)
+
+powershell -Command "Get-ScheduledTask -TaskPath '\' | Where-Object { $_.TaskName -like 'MicrosoftEdgeUpdateTaskMachine*' } | ForEach-Object { Disable-ScheduledTask -TaskName $_.TaskName -TaskPath '\' }"
+```
 
 # Lock Screen
 
@@ -283,9 +436,9 @@ HAGS should be enabled, there're many reasons like different threads... may add 
 Removes old/previous windows installation files from `Windows.old`.
 
 ```
-Ten days after you upgrade to Windows, your previous version of Windows will be automatically deleted from your PC. However, if you need to free up drive space, and you’re confident that your files and settings are where you want them to be in Windows, you can safely delete it yourself.
+Ten days after you upgrade to Windows, your previous version of Windows will be automatically deleted from your PC. However, if you need to free up drive space, and you're confident that your files and settings are where you want them to be in Windows, you can safely delete it yourself.
 
-If it’s been fewer than 10 days since you upgraded to Windows, your previous version of Windows will be listed as a system file you can delete. You can delete it, but keep in mind that you'll be deleting your Windows.old folder, which contains files that give you the option to go back to your previous version of Windows. If you delete your previous version of Windows, this can't be undone (you won't be able to go back to your previous version of Windows).
+If it's been fewer than 10 days since you upgraded to Windows, your previous version of Windows will be listed as a system file you can delete. You can delete it, but keep in mind that you'll be deleting your Windows.old folder, which contains files that give you the option to go back to your previous version of Windows. If you delete your previous version of Windows, this can't be undone (you won't be able to go back to your previous version of Windows).
 ```
 > https://support.microsoft.com/en-us/windows/delete-your-previous-version-of-windows-f8b26680-e083-c710-b757-7567d69dbb74
 
@@ -340,7 +493,7 @@ powershell -NoProfile -Command "$f='$env:LOCALAPPDATA\AccessibilityInsights\V1\C
 
 Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
 
-"Verbose status messages can be very helpful when debugging or troubleshooting certain Windows problems, including slow startup, shutdown, logon, or logoff behavior. If your Windows is just not shutting down, verbose status messages may tell you where exactly or at which stage it is getting ‘stuck’."
+"Verbose status messages can be very helpful when debugging or troubleshooting certain Windows problems, including slow startup, shutdown, logon, or logoff behavior. If your Windows is just not shutting down, verbose status messages may tell you where exactly or at which stage it is getting ‘stuck'."
 
 > https://www.thewindowsclub.com/enable-verbose-status-message-windows
 
@@ -573,7 +726,7 @@ Only this path gets read, `TimeStampEnabled` doesn't get read?
 
 # Disable Prefetch & Superfetch
 
-Disables prefetcher features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
+Disables prefetcher (includes disabling `ApplicationLaunchPrefetching` & `ApplicationPreLaunch`) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
 
 "`EnablePrefetcher` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded."
 
@@ -591,8 +744,9 @@ Disables prefetcher features, used to speed up the boot process and application 
 ```
 The same applies to superfetch.
 
-> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN
-> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN
+> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN  
+> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN  
+> https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
 
 More detailed information about prefetch and superfetch on page `413`f & `472`f.
 > https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf
@@ -721,3 +875,93 @@ reg add "HKCU\Software\Microsoft\Clipboard" /v EnableClipboardHistory /t REG_DWO
                     ]
 },
 ```
+
+# Disable Background GP Updates
+
+"This policy setting prevents Group Policy from being updated while the computer is in use. This policy setting applies to Group Policy for computers, users, and domain controllers.If you enable this policy setting, the system waits until the current user logs off the system before updating the computer and user settings.If you disable or do not configure this policy setting, updates can be applied while users are working."
+
+```json
+{
+    "File":  "GroupPolicy.admx",
+    "NameSpace":  "Microsoft.Policies.GroupPolicy",
+    "Class":  "Machine",
+    "CategoryName":  "PolicyPolicies",
+    "DisplayName":  "Turn off background refresh of Group Policy",
+    "ExplainText":  "This policy setting prevents Group Policy from being updated while the computer is in use. This policy setting applies to Group Policy for computers, users, and domain controllers.If you enable this policy setting, the system waits until the current user logs off the system before updating the computer and user settings.If you disable or do not configure this policy setting, updates can be applied while users are working. The frequency of updates is determined by the \"Set Group Policy refresh interval for computers\" and \"Set Group Policy refresh interval for users\" policy settings.Note: If you make changes to this policy setting, you must restart your computer for it to take effect.",
+    "Supported":  "Win2k",
+    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+    "KeyName":  "DisableBkGndGroupPolicy",
+    "Elements":  [
+
+                    ]
+},
+```
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-grouppolicy#disablebackgroundpolicy
+
+---
+
+Miscellaneous notes:
+```bat
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v DenyUsersFromMachGP /t REG_DWORD /d 1 /f
+```
+Users aren't able to invoke a refresh of computer policy. Computer policy will still be applied at startup or when an official policy refresh occurs.
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-grouppolicy#disableusersfrommachgp
+
+# Disable Memory Compression
+
+Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
+
+Example:  
+1. System looks for cold/rarely used data in RAM
+2. It compresses that data, e.g. 24 MB -> 7 MB
+3. The 17 MB saved is used for active apps
+4. When the data is needed again, it's decompressed back to 24 MB
+
+See the current memory compresstion state on your system via:
+```ps
+Get-MMAgent
+```
+```ps
+ApplicationLaunchPrefetching : True
+ApplicationPreLaunch         : True
+MaxOperationAPIFiles         : 512
+MemoryCompression            : True # Enabled
+OperationAPI                 : True
+PageCombining                : True
+PSComputerName               :
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/memcompress1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/memcompress2.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/memcompress3.png?raw=true)
+
+> https://github.com/5Noxi/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (P. 449)  
+> https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
+
+# Disable Page Combining
+
+Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
+
+See the current page combining state on your system via:
+```ps
+Get-MMAgent
+```
+```ps
+ApplicationLaunchPrefetching : True
+ApplicationPreLaunch         : True
+MaxOperationAPIFiles         : 512
+MemoryCompression            : True
+OperationAPI                 : True
+PageCombining                : True # Enabled
+PSComputerName               :
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/pagecomb1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/pagecomb2.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/pagecomb3.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/system/images/pagecomb4.png?raw=true)
+
+> https://github.com/5Noxi/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (P. 459)  
+> https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps

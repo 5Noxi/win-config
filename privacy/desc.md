@@ -3,7 +3,7 @@ Prevents sending info about your computer to microsoft, also disables the diagno
 
 ```ps
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
----
+```
 Seems to be a fallback if `AllowTelemetry` isn't set.
 > https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106
 
@@ -383,9 +383,47 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance" /v Randomized /t REG_DWORD /d 0 /f
 ```
 
-# Disable Game DVR
+# Disable Xbox Game Bar
 
 GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, with optional background recording.
+
+---
+
+"Game Bar Presence Writer is a component that is notified when a game's "presence" state (i.e. is a game running in the foreground) changes. This functionality is available in Windows 10 and later operating systems. By default, the existing Game Bar Presence Writer will set a user's Xbox Live presence state for a running game if the Xbox App is installed, the user is signed into their Xbox account, and the user has enabled Xbox Live presence to be set when they run a game on their PC. It is possible for Windows Application developers to override this default behavior with their own implementation."
+
+> https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter
+
+---
+
+Miscellaneous notes:
+```ps
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : AppCaptureEnabled
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : CameraCaptureEnabledByDefault
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : HistoricalCaptureEnabled
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : HistoricalCaptureOnBatteryAllowed
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : HistoricalCaptureOnWirelessDisplayAllowed
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : KGLRevision
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : KGLToGCSUpdatedRevision
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : MicrophoneCaptureEnabled
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKSaveHistoricalVideo
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKTakeScreenshot
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleBroadcast
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCameraCapture
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom1
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom10
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom2
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom3
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom4
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom5
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom6
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom7
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom8
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleCustom9
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleGameBar
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleMicrophoneCapture
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleRecording
+\Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : VKToggleRecordingIndicator
+```
 
 # Disable PSR
 

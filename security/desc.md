@@ -44,6 +44,127 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Up
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update" /v AcceleratedInstallRequired /f
 ```
 
+# Disable System Mitigations
+
+Security features that protect against memory based attacks like buffer overflows and code injection. Enabling this option will reduce system security.
+
+It currently applies all valid values **system wide** using `Set-ProcessMitigation -System`:
+```ps
+powershell.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationOptions	Type: REG_BINARY, Length: 24, Data: 00 22 22 20 22 20 22 22 22 20 22 22 22 22 22 22
+powershell.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationAuditOptions	Type: REG_BINARY, Length: 24, Data: 02 22 22 02 02 02 20 22 22 22 22 22 22 22 22 22
+```
+
+Disable specific mitigation:
+```ps
+Set-ProcessMitigation -Name process.exe -Disable Value
+```
+
+Editing process mitigations via LGPE (`Administrative Templates\System\Mitigation Options\Process Mitigation Options`):
+
+![](https://github.com/5Noxi/win-config/blob/main/security/images/processmiti.png?raw=true)
+
+| Flag | Bit | Setting                                                                         | Details                                                                                                                                                                                                                                                                               |
+| ---- | ------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A    | 0            | PROCESS_CREATION_MITIGATION_POLICY_DEP_ENABLE (0x00000001)                      | Turns on Data Execution Prevention (DEP) for child processes.                                                                                                                                                                                                                         |
+| B    | 1            | PROCESS_CREATION_MITIGATION_POLICY_DEP_ATL_THUNK_ENABLE (0x00000002)            | Turns on DEP-ATL thunk emulation for child processes. DEP-ATL thunk emulation lets the system intercept nonexecutable (NX) faults that originate from the Active Template Library (ATL) thunk layer, and then emulate and handle the instructions so the process can continue to run. |
+| C    | 2            | PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE (0x00000004)                    | Turns on Structured Exception Handler Overwrite Protection (SEHOP) for child processes. SEHOP helps to block exploits that use the Structured Exception Handler (SEH) overwrite technique.                                                                                            |
+| D    | 8            | PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON (0x00000100) | Uses the force ASLR setting to act as though an image base collision happened at load time, forcibly rebasing images that aren't dynamic base compatible. Images without the base relocation section aren't loaded if relocations are required.                                       |
+| E    | 15           | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON (0x00010000)        | Turns on the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address.                                                                                                                           |
+| F    | 16           | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_OFF (0x00020000)       | Turns off the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address.                                                                                                                          |
+
+> https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies
+
+`(gcm set-processmitigation).Parameters.Disable.Attributes.ValidValues`:
+```ps
+DEP
+EmulateAtlThunks
+ForceRelocateImages
+RequireInfo
+BottomUp
+HighEntropy
+StrictHandle
+DisableWin32kSystemCalls
+AuditSystemCall
+DisableExtensionPoints
+DisableFsctlSystemCalls
+AuditFsctlSystemCall
+BlockDynamicCode
+AllowThreadsToOptOut
+AuditDynamicCode
+CFG
+SuppressExports
+StrictCFG
+MicrosoftSignedOnly
+AllowStoreSignedBinaries
+AuditMicrosoftSigned
+AuditStoreSigned
+EnforceModuleDependencySigning
+DisableNonSystemFonts
+AuditFont
+BlockRemoteImageLoads
+BlockLowLabelImageLoads
+PreferSystem32
+AuditRemoteImageLoads
+AuditLowLabelImageLoads
+AuditPreferSystem32
+EnableExportAddressFilter
+AuditEnableExportAddressFilter
+EnableExportAddressFilterPlus
+AuditEnableExportAddressFilterPlus
+EnableImportAddressFilter
+AuditEnableImportAddressFilter
+EnableRopStackPivot
+AuditEnableRopStackPivot
+EnableRopCallerCheck
+AuditEnableRopCallerCheck
+EnableRopSimExec
+AuditEnableRopSimExec
+SEHOP
+AuditSEHOP
+SEHOPTelemetry
+TerminateOnError
+DisallowChildProcessCreation
+AuditChildProcess
+UserShadowStack
+UserShadowStackStrictMode
+AuditUserShadowStack
+```
+
+> https://learn.microsoft.com/en-us/powershell/module/processmitigations/set-processmitigation?view=windowsserver2025-ps
+
+---
+
+Miscellaneous notes:
+
+Editing DEP via bcdedit:
+```
+bcdedit /set nx OptIn
+```
+`OptIn` is preferred.
+
+|DEP Option | Description |
+|-----------|-------------|
+|**Optin**| Enables DEP only for operating system components, including the Windows kernel and drivers. Administrators can enable DEP on selected executable files by using the Application Compatibility Toolkit (ACT). |
+|**Optout** | Enables DEP for the operating system and all processes, including the Windows kernel and drivers. However, administrators can disable DEP on selected executable files by using **System** in **Control Panel**. |
+|**AlwaysOn** | Enables DEP for the operating system and all processes, including the Windows kernel and drivers. All attempts to disable DEP are ignored. |
+|**AlwaysOff** | Disables DEP. Attempts to enable DEP selectively are ignored. On Windows Vista, this parameter also disables Physical Address Extension (PAE). This parameter does not disable PAE on Windows Server 2008. |
+
+> https://learn.microsoft.com/en-us/windows/win32/memory/data-execution-prevention  
+> https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/devtest/bcdedit--set.md#verification-settings
+
+`MoveImages` value (`ASLR`) - it's recommended, to disable ASLR for a specific process instead:
+```c
+dq offset aSessionManager_10 ; "Session Manager\\Memory Management"
+dq offset aMoveimages   ; "MoveImages"
+dq offset dword_140FC41E0
+
+dword_140FC41E0 dd 1 // default - 0 = disabled
+```
+```bat
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v MoveImages /t REG_DWORD /d 0 /f 
+```
+> https://en.wikipedia.org/wiki/Address_space_layout_randomization
+
 # Disable WU Driver Updates
 
 "Do not include drivers with Windows Updates", "Prevent device metadata retrieval from the Internet":
@@ -206,7 +327,7 @@ MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\smartscreenps.dll
 endlocal
 ```
 
-> [privacy/assets | Windows-Defender.txt](https://github.com/5Noxi/win-config/blob/main/privacy/assets/Windows-Defender.txt)
+> [security/assets | Windows-Defender.txt](https://github.com/5Noxi/win-config/blob/main/security/assets/Windows-Defender.txt)
 
 # Opt-Out DMA Remapping
 
@@ -320,7 +441,7 @@ Does:
 },
 ```
 
-![](https://github.com/5Noxi/win-config/blob/main/privacy/images/downblocking.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/security/images/downblocking.png?raw=true)
 
 # Disable WPBT
 
@@ -350,7 +471,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontReportInfectionInformation
 ```
 Blocks infection reporting, if using MRT.
 
-![](https://github.com/5Noxi/win-config/blob/main/privacy/images/mrt.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/security/images/mrt.png?raw=true)
 
 # Disable Bitlocker & EFS
 
@@ -601,7 +722,7 @@ Level `5` gets applied.
 > https://dirteam.com/sander/2019/07/30/howto-disable-weak-protocols-cipher-suites-and-hashing-algorithms-on-web-application-proxies-ad-fs-servers-and-windows-servers-running-azure-ad-connect/  
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-security-lan-manager-authentication-level
 
-![](https://github.com/5Noxi/win-config/blob/main/privacy/images/insecureconn.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/security/images/insecureconn.png?raw=true)
 
 Enable DTLS 1.2 & TLS 1.3 with:
 ```ps
@@ -643,3 +764,69 @@ Disable USB connection errors (for whatever reason):
 ```bat
 reg add "HKCU\Software\Microsoft\Shell\USB" /v NotifyOnUsbErrors /t REG_DWORD /d 0 /f
 ```
+
+# Increase TDR
+
+"TDR stands for Timeout Detection and Recovery. This is a feature of the Windows operating system which detects response problems from a graphics card, and recovers to a functional desktop by resetting the card. If the operating system does not receive a response from a graphics card within a certain amount of time (default is 2 seconds), the operating system resets the graphics card."
+
+> Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.
+
+| Registry key       | Value name           | Default value                | Description                                                                                               |
+| ------------------ | -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
+| TdrLevel           | `TdrLevel`           | `3` (TdrLevelRecover)        | Controls the GPU timeout behavior. `0` = disabled, `1` = bugcheck, `3` = reset/recover (Windows default). |
+| TdrDelay           | `TdrDelay`           | `2` seconds                  | Timeout threshold before Windows starts TDR handling. Longer value = GPU gets more time.                  |
+| TdrDdiDelay        | `TdrDdiDelay`        | `5` seconds                  | Extra time for driver/user-mode threads to exit after a timeout before VIDEO_TDR_FAILURE (0x116).         |
+| TdrDebugMode       | `TdrDebugMode`       | `2`                          | TDR debug control: `0` break, `1` ignore, `2` recover (default), `3` always recover.                      |
+| TdrLimitTime       | `TdrLimitTime`       | `60` seconds                 | Time window to count repeated TDRs before forcing a crash. Works with `TdrLimitCount`.                    |
+| TdrLimitCount      | `TdrLimitCount`      | `5`                          | Max number of TDRs allowed within `TdrLimitTime` before Windows stops recovering and bugchecks.           |
+| TdrTestMode        | `TdrTestMode`        | -                            | Reserved/test entry, not for normal use.                                                                  |
+| TdrDodPresentDelay | `TdrDodPresentDelay` | `2` seconds (min 1, max 900) | Extra time for display-only drivers to report an async present before a TDR is triggered.                 |
+| TdrDodVSyncDelay   | `TdrDodVSyncDelay`   | `2` seconds (min 1, max 900) | Time the VSync watchdog waits for VSync from a display-only driver before triggering TDR.                 |
+
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md  
+> https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm
+
+Default values:  
+`TdrLimitTime` - `60` (doc) / `5` driver?  
+`TdrLimitCount` - `5`  
+`TdrLevel` - `3` (`TdrLevelRecover`)  
+`TdrDelay` - `2`  
+`TdrDdiDelay` - `5`  
+`TdrDebugMode` `2` (`TDR_DEBUG_MODE_RECOVER_NO_PROMPT`)
+
+Driver code snippets:
+```c
+if ( v0 < 0 )
+{
+  v13 = 3; // TdrLevel
+  v8 = 2; // TdrDelay
+  v9 = 2; // TdrDodPresentDelay
+  v10 = 2; // TdrDodVSyncDelay
+  v11 = 5; // TdrDdiDelay
+  v12 = 2; // TdrDebugMode
+  WdLogSingleEntry1(3LL, v0);
+  WdLogGlobalForLineNumber = 2211;
+}
+
+v67 = L"TdrLimitTime";
+v66 = 288;
+v68 = &v15;
+v6 = v15;
+v7 = 3600LL;
+if (v15 <= 0xE10) { // 3600
+  if (v15 < 5)
+    v6 = 5; // set to 5 minimum
+  else
+    v6 = v15;
+  dword_1C015B874 = v6;
+} else {
+  dword_1C015B874 = 3600; // clamp max
+}
+
+if (dword_1C015B874 != v15) {
+    WdLogSingleEntry2(3LL, v15, (unsigned int)dword_1C015B874);
+    WdLogGlobalForLineNumber = 2387;
+}
+```
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Graphics-Drivers.txt  
+> [security/assets | TdrInit.c](https://github.com/5Noxi/win-config/blob/main/security/assets/TdrInit.c)
