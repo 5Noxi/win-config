@@ -58,409 +58,101 @@
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
-        "Disable_AppExperience_MareBackup": {
+        "DisableScheduledTasksBatch": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-          "Operation": "disable"
-        },
-        "Disable_AppExperience_Compat": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
-          "Operation": "disable"
-        },
-        "Disable_AppExperience_CompatExp": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
-          "Operation": "disable"
-        },
-        "Disable_AppExperience_StartupAppTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
-          "Operation": "disable"
-        },
-        "Disable_AppData_DsSvcCleanup": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
-          "Operation": "disable"
-        },
-        "Disable_Autochk_Proxy": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Autochk\\Proxy",
-          "Operation": "disable"
-        },
-        "Disable_CEH_CreateObjectTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\CloudExperienceHost\\CreateObjectTask",
-          "Operation": "disable"
-        },
-        "Disable_CEIP_Consolidator": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
-          "Operation": "disable"
-        },
-        "Disable_CEIP_UsbCeip": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
-          "Operation": "disable"
-        },
-        "Disable_Defrag_ScheduledDefrag": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
-          "Operation": "disable"
-        },
-        "Disable_Diagnosis_RecommendedTroubleshootingScanner": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
-          "Operation": "disable"
-        },
-        "Disable_Diagnosis_Scheduled": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
-          "Operation": "disable"
-        },
-        "Disable_Diagnosis_UnexpectedCodePath": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
-          "Operation": "disable"
-        },
-        "Disable_DiskCleanup_SilentCleanup": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup",
-          "Operation": "disable"
-        },
-        "Disable_DiskDiagnostic_DataCollector": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
-          "Operation": "disable"
-        },
-        "Disable_DiskDiagnostic_Resolver": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticResolver",
-          "Operation": "disable"
-        },
-        "Disable_DiskFootprint_Diagnostics": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
-          "Operation": "disable"
-        },
-        "Disable_DiskFootprint_StorageSense": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskFootprint\\StorageSense",
-          "Operation": "disable"
-        },
-        "Disable_Feedback_DmClient": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
-          "Operation": "disable"
-        },
-        "Disable_Feedback_DmClientOnScenarioDownload": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload",
-          "Operation": "disable"
-        },
-        "Disable_InstallService_ScanForUpdates": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\ScanForUpdates",
-          "Operation": "disable"
-        },
-        "Disable_InstallService_ScanForUpdatesAsUser": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\ScanForUpdatesAsUser",
-          "Operation": "disable"
-        },
-        "Disable_InstallService_SmartRetry": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\SmartRetry",
-          "Operation": "disable"
-        },
-        "Disable_InstallService_WakeUpAndContinueUpdates": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\WakeUpAndContinueUpdates",
-          "Operation": "disable"
-        },
-        "Disable_InstallService_WakeUpAndScanForUpdates": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\WakeUpAndScanForUpdates",
-          "Operation": "disable"
-        },
-        "Disable_International_SyncLangSettings": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\International\\Synchronize Language Settings",
-          "Operation": "disable"
-        },
-        "Disable_LCI_Installation": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Installation",
-          "Operation": "disable"
-        },
-        "Disable_LCI_ReconcileLanguageResources": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\LanguageComponentsInstaller\\ReconcileLanguageResources",
-          "Operation": "disable"
-        },
-        "Disable_LCI_Uninstallation": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Uninstallation",
-          "Operation": "disable"
-        },
-        "Disable_Maps_MapsUpdateTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Maps\\MapsUpdateTask",
-          "Operation": "disable"
-        },
-        "Disable_PowerEfficiency_AnalyzeSystem": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
-          "Operation": "disable"
-        },
-        "Disable_Registry_RegIdleBackup": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Registry\\RegIdleBackup",
-          "Operation": "disable"
-        },
-        "Disable_RetailDemo_CleanupOfflineContent": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\RetailDemo\\CleanupOfflineContent",
-          "Operation": "disable"
-        },
-        "Disable_Speech_SpeechModelDownloadTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask",
-          "Operation": "disable"
-        },
-        "Disable_Sysmain_ResPriStaticDbSync": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
-          "Operation": "disable"
-        },
-        "Disable_Sysmain_WsSwapAssessmentTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
-          "Operation": "disable"
-        },
-        "Disable_TimeSync_ForceSynchronizeTime": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
-          "Operation": "disable"
-        },
-        "Disable_TimeSync_SynchronizeTime": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime",
-          "Operation": "disable"
-        },
-        "Disable_UNP_RunUpdateNotificationMgr": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr",
-          "Operation": "disable"
-        },
-        "Disable_WER_QueueReporting": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
-          "Operation": "disable"
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Application Experience\\MareBackup",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
+            "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
+            "\\Microsoft\\Windows\\Autochk\\Proxy",
+            "\\Microsoft\\Windows\\CloudExperienceHost\\CreateObjectTask",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+            "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+            "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
+            "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
+            "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
+            "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup",
+            "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
+            "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticResolver",
+            "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
+            "\\Microsoft\\Windows\\DiskFootprint\\StorageSense",
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload",
+            "\\Microsoft\\Windows\\InstallService\\ScanForUpdates",
+            "\\Microsoft\\Windows\\InstallService\\ScanForUpdatesAsUser",
+            "\\Microsoft\\Windows\\InstallService\\SmartRetry",
+            "\\Microsoft\\Windows\\InstallService\\WakeUpAndContinueUpdates",
+            "\\Microsoft\\Windows\\InstallService\\WakeUpAndScanForUpdates",
+            "\\Microsoft\\Windows\\International\\Synchronize Language Settings",
+            "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Installation",
+            "\\Microsoft\\Windows\\LanguageComponentsInstaller\\ReconcileLanguageResources",
+            "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Uninstallation",
+            "\\Microsoft\\Windows\\Maps\\MapsUpdateTask",
+            "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
+            "\\Microsoft\\Windows\\Registry\\RegIdleBackup",
+            "\\Microsoft\\Windows\\RetailDemo\\CleanupOfflineContent",
+            "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask",
+            "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
+            "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
+            "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
+            "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime",
+            "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr",
+            "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+          ],
+          "TaskAction": "disable"
         }
       }
     },
     "revert": {
       "COMMANDS": {
-        "Enable_AppExperience_MareBackup": {
+        "EnableScheduledTasksBatch": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-          "Operation": "enable"
-        },
-        "Enable_AppExperience_Compat": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
-          "Operation": "enable"
-        },
-        "Enable_AppExperience_CompatExp": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
-          "Operation": "enable"
-        },
-        "Enable_AppExperience_StartupAppTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
-          "Operation": "enable"
-        },
-        "Enable_AppData_DsSvcCleanup": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
-          "Operation": "enable"
-        },
-        "Enable_Autochk_Proxy": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Autochk\\Proxy",
-          "Operation": "enable"
-        },
-        "Enable_CEH_CreateObjectTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\CloudExperienceHost\\CreateObjectTask",
-          "Operation": "enable"
-        },
-        "Enable_CEIP_Consolidator": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
-          "Operation": "enable"
-        },
-        "Enable_CEIP_UsbCeip": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
-          "Operation": "enable"
-        },
-        "Enable_Defrag_ScheduledDefrag": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
-          "Operation": "enable"
-        },
-        "Enable_Diagnosis_RecommendedTroubleshootingScanner": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
-          "Operation": "enable"
-        },
-        "Enable_Diagnosis_Scheduled": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
-          "Operation": "enable"
-        },
-        "Enable_Diagnosis_UnexpectedCodePath": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
-          "Operation": "enable"
-        },
-        "Enable_DiskCleanup_SilentCleanup": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup",
-          "Operation": "enable"
-        },
-        "Enable_DiskDiagnostic_DataCollector": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
-          "Operation": "enable"
-        },
-        "Enable_DiskDiagnostic_Resolver": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticResolver",
-          "Operation": "enable"
-        },
-        "Enable_DiskFootprint_Diagnostics": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
-          "Operation": "enable"
-        },
-        "Enable_DiskFootprint_StorageSense": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\DiskFootprint\\StorageSense",
-          "Operation": "enable"
-        },
-        "Enable_Feedback_DmClient": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
-          "Operation": "enable"
-        },
-        "Enable_Feedback_DmClientOnScenarioDownload": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload",
-          "Operation": "enable"
-        },
-        "Enable_InstallService_ScanForUpdates": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\ScanForUpdates",
-          "Operation": "enable"
-        },
-        "Enable_InstallService_ScanForUpdatesAsUser": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\ScanForUpdatesAsUser",
-          "Operation": "enable"
-        },
-        "Enable_InstallService_SmartRetry": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\SmartRetry",
-          "Operation": "enable"
-        },
-        "Enable_InstallService_WakeUpAndContinueUpdates": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\WakeUpAndContinueUpdates",
-          "Operation": "enable"
-        },
-        "Enable_InstallService_WakeUpAndScanForUpdates": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\InstallService\\WakeUpAndScanForUpdates",
-          "Operation": "enable"
-        },
-        "Enable_International_SyncLangSettings": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\International\\Synchronize Language Settings",
-          "Operation": "enable"
-        },
-        "Enable_LCI_Installation": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Installation",
-          "Operation": "enable"
-        },
-        "Enable_LCI_ReconcileLanguageResources": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\LanguageComponentsInstaller\\ReconcileLanguageResources",
-          "Operation": "enable"
-        },
-        "Enable_LCI_Uninstallation": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Uninstallation",
-          "Operation": "enable"
-        },
-        "Enable_Maps_MapsUpdateTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Maps\\MapsUpdateTask",
-          "Operation": "enable"
-        },
-        "Enable_PowerEfficiency_AnalyzeSystem": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
-          "Operation": "enable"
-        },
-        "Enable_Registry_RegIdleBackup": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Registry\\RegIdleBackup",
-          "Operation": "enable"
-        },
-        "Enable_RetailDemo_CleanupOfflineContent": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\RetailDemo\\CleanupOfflineContent",
-          "Operation": "enable"
-        },
-        "Enable_Speech_SpeechModelDownloadTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask",
-          "Operation": "enable"
-        },
-        "Enable_Sysmain_ResPriStaticDbSync": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
-          "Operation": "enable"
-        },
-        "Enable_Sysmain_WsSwapAssessmentTask": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
-          "Operation": "enable"
-        },
-        "Enable_TimeSync_ForceSynchronizeTime": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
-          "Operation": "enable"
-        },
-        "Enable_TimeSync_SynchronizeTime": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime",
-          "Operation": "enable"
-        },
-        "Enable_UNP_RunUpdateNotificationMgr": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr",
-          "Operation": "enable"
-        },
-        "Enable_WER_QueueReporting": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
-          "Operation": "enable"
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Application Experience\\MareBackup",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
+            "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
+            "\\Microsoft\\Windows\\Autochk\\Proxy",
+            "\\Microsoft\\Windows\\CloudExperienceHost\\CreateObjectTask",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+            "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+            "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
+            "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
+            "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
+            "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup",
+            "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
+            "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticResolver",
+            "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
+            "\\Microsoft\\Windows\\DiskFootprint\\StorageSense",
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload",
+            "\\Microsoft\\Windows\\InstallService\\ScanForUpdates",
+            "\\Microsoft\\Windows\\InstallService\\ScanForUpdatesAsUser",
+            "\\Microsoft\\Windows\\InstallService\\SmartRetry",
+            "\\Microsoft\\Windows\\InstallService\\WakeUpAndContinueUpdates",
+            "\\Microsoft\\Windows\\InstallService\\WakeUpAndScanForUpdates",
+            "\\Microsoft\\Windows\\International\\Synchronize Language Settings",
+            "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Installation",
+            "\\Microsoft\\Windows\\LanguageComponentsInstaller\\ReconcileLanguageResources",
+            "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Uninstallation",
+            "\\Microsoft\\Windows\\Maps\\MapsUpdateTask",
+            "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem",
+            "\\Microsoft\\Windows\\Registry\\RegIdleBackup",
+            "\\Microsoft\\Windows\\RetailDemo\\CleanupOfflineContent",
+            "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask",
+            "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
+            "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
+            "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
+            "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime",
+            "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr",
+            "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+          ],
+          "TaskAction": "enable"
         }
       }
     }
@@ -468,12 +160,14 @@
   "Lock Screen": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-        "NoLockScreen": { "Type": "REG_DWORD", "Data": 1 }
+        "NoLockScreen": { "Type": "REG_DWORD", "Data": 1 },
+        "LockScreenOverlaysDisabled": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-        "NoLockScreen": { "Action": "deletevalue" }
+        "NoLockScreen": { "Action": "deletevalue" },
+        "LockScreenOverlaysDisabled": { "Action": "deletevalue" }
       }
     }
   },
@@ -513,7 +207,12 @@
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
       "COMMANDS": {
-        "DisableSearchFeature": { "Action": "run_powershell", "Command": "dism /Online /Disable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart" }
+        "DisableSearchFeature": {
+          "Action": "optional_feature",
+          "Name": "SearchEngine-Client-Package",
+          "Enabled": false,
+          "Arguments": ["/NoRestart"]
+        }
       }
     },
     "revert": {
@@ -537,7 +236,12 @@
         "Start": { "Type": "REG_DWORD", "Data": 2 }
       },
       "COMMANDS": {
-        "EnableSearchFeature": { "Action": "run_powershell", "Command": "dism /Online /Enable-Feature /FeatureName:\"SearchEngine-Client-Package\" /NoRestart" }
+        "EnableSearchFeature": {
+          "Action": "optional_feature",
+          "Name": "SearchEngine-Client-Package",
+          "Enabled": true,
+          "Arguments": ["/NoRestart"]
+        }
       }
     }
   },
@@ -932,12 +636,14 @@
       },
       "COMMANDS": {
         "DisableMMAgentAppLaunch": {
-          "Action": "run_powershell",
-          "Command": "Disable-MMAgent -ApplicationLaunchPrefetching"
+          "Action": "mmagent",
+          "Setting": "ApplicationLaunchPrefetching",
+          "Enabled": false
         },
         "DisableMMAgentPrelaunch": {
-          "Action": "run_powershell",
-          "Command": "Disable-MMAgent -ApplicationPreLaunch"
+          "Action": "mmagent",
+          "Setting": "ApplicationPreLaunch",
+          "Enabled": false
         }
       }
     },
@@ -950,12 +656,14 @@
       },
       "COMMANDS": {
         "EnableMMAgentAppLaunch": {
-          "Action": "run_powershell",
-          "Command": "Enable-MMAgent -ApplicationLaunchPrefetching"
+          "Action": "mmagent",
+          "Setting": "ApplicationLaunchPrefetching",
+          "Enabled": true
         },
         "EnableMMAgentPrelaunch": {
-          "Action": "run_powershell",
-          "Command": "Enable-MMAgent -ApplicationPreLaunch"
+          "Action": "mmagent",
+          "Setting": "ApplicationPreLaunch",
+          "Enabled": true
         }
       }
     }
@@ -1081,18 +789,20 @@
     "apply": {
       "COMMANDS": {
         "DisableMMAgentMemoryCompression": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Disable-MMAgent -MemoryCompression"
+          "Action": "mmagent",
+          "Setting": "MemoryCompression",
+          "Enabled": false,
+          "Elevated": true
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "EnableMMAgentMemoryCompression": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Enable-MMAgent -MemoryCompression"
+          "Action": "mmagent",
+          "Setting": "MemoryCompression",
+          "Enabled": true,
+          "Elevated": true
         }
       }
     }
@@ -1101,18 +811,20 @@
     "apply": {
       "COMMANDS": {
         "DisableMMAgentPageCombining": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Disable-MMAgent -PageCombining"
+          "Action": "mmagent",
+          "Setting": "PageCombining",
+          "Enabled": false,
+          "Elevated": true
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "EnableMMAgentPageCombining": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Enable-MMAgent -PageCombining"
+          "Action": "mmagent",
+          "Setting": "PageCombining",
+          "Enabled": true,
+          "Elevated": true
         }
       }
     }

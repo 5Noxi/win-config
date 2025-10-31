@@ -1875,6 +1875,13 @@ WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps 
 
 Miscellaneous notes:  
 
+```c
+`EnableWerUserReporting`  
+Default: `1` (`DbgkEnableWerUserReporting dd 1`)
+
+"Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
+```
+
 Disable DHA Report:
 ```bat
 reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v EnableDeviceHealthAttestationService /t REG_DWORD /d 0 /f

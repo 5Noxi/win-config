@@ -392,27 +392,34 @@
         "EnableLogging": { "Type": "REG_DWORD", "Data": 0 },
         "EnableUpload": { "Type": "REG_DWORD", "Data": 0 }
       },
-
+      "HKCU\\Software\\Policies\\Microsoft\\Office\\16.0\\OSM\\preventedsolutiontypes": {
+        "agave": { "Type": "REG_DWORD", "Data": 1 },
+        "appaddins": { "Type": "REG_DWORD", "Data": 1 },
+        "comaddins": { "Type": "REG_DWORD", "Data": 1 },
+        "documentfiles": { "Type": "REG_DWORD", "Data": 1 },
+        "templatefiles": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Office\\16.0\\OSM\\preventedapplications": {
+        "accesssolution": { "Type": "REG_DWORD", "Data": 1 },
+        "olksolution": { "Type": "REG_DWORD", "Data": 1 },
+        "onenotesolution": { "Type": "REG_DWORD", "Data": 1 },
+        "pptsolution": { "Type": "REG_DWORD", "Data": 1 },
+        "projectsolution": { "Type": "REG_DWORD", "Data": 1 },
+        "publishersolution": { "Type": "REG_DWORD", "Data": 1 },
+        "visiosolution": { "Type": "REG_DWORD", "Data": 1 },
+        "wdsolution": { "Type": "REG_DWORD", "Data": 1 },
+        "xlsolution": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
-        "DisableOfficeTelemetryAgentFallBack": {
+        "DisableOfficeTelemetryTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
-          "Operation": "disable"
-        },
-        "DisableOfficeTelemetryAgentFallBack2016": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
-          "Operation": "disable"
-        },
-        "DisableOfficeTelemetryAgentLogOn": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
-          "Operation": "disable"
-        },
-        "DisableOfficeTelemetryAgentLogOn2016": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016",
-          "Operation": "disable"
+          "TaskNames": [
+            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
+            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
+            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
+            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016"
+          ],
+          "TaskAction": "disable"
         }
       }
     },
@@ -470,27 +477,34 @@
         "EnableLogging": { "Action": "deletevalue" },
         "EnableUpload": { "Action": "deletevalue" }
       },
-
+      "HKCU\\Software\\Policies\\Microsoft\\Office\\16.0\\OSM\\preventedsolutiontypes": {
+        "agave": { "Action": "deletevalue" },
+        "appaddins": { "Action": "deletevalue" },
+        "comaddins": { "Action": "deletevalue" },
+        "documentfiles": { "Action": "deletevalue" },
+        "templatefiles": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Office\\16.0\\OSM\\preventedapplications": {
+        "accesssolution": { "Action": "deletevalue" },
+        "olksolution": { "Action": "deletevalue" },
+        "onenotesolution": { "Action": "deletevalue" },
+        "pptsolution": { "Action": "deletevalue" },
+        "projectsolution": { "Action": "deletevalue" },
+        "publishersolution": { "Action": "deletevalue" },
+        "visiosolution": { "Action": "deletevalue" },
+        "wdsolution": { "Action": "deletevalue" },
+        "xlsolution": { "Action": "deletevalue" }
+      },
       "COMMANDS": {
-        "EnableOfficeTelemetryAgentFallBack": {
+        "EnableOfficeTelemetryTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
-          "Operation": "enable"
-        },
-        "EnableOfficeTelemetryAgentFallBack2016": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
-          "Operation": "enable"
-        },
-        "EnableOfficeTelemetryAgentLogOn": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
-          "Operation": "enable"
-        },
-        "EnableOfficeTelemetryAgentLogOn2016": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016",
-          "Operation": "enable"
+          "TaskNames": [
+            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
+            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
+            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
+            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016"
+          ],
+          "TaskAction": "enable"
         }
       }
     }

@@ -1,50 +1,100 @@
 {
   "Disable Device Powersavings": {
     "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
+          "DisableSelectiveSuspend": { "Type": "REG_DWORD", "Data": 1 },
+          "EnableDiagnosticMode": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "COMMANDS": {
         "UsbWmiDisablePower": {
           "Action": "run_powershell",
           "Command": "$mgmt=Get-WmiObject -Namespace 'root\\wmi' -Class MSPower_DeviceEnable; 'Win32_USBController','Win32_USBControllerDevice','Win32_USBHub' | % { Get-WmiObject -Class $_ -ea SilentlyContinue } | % { $pnp=$_.PNPDeviceID; if($pnp){ foreach($p in $mgmt){ if($p.InstanceName.ToUpper() -like ('*'+$pnp+'*')){ $p.Enable=$false; $p.PSBase.Put() | Out-Null } } } }"
         },
-        "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
-          "DisableSelectiveSuspend": { "Type": "REG_DWORD", "Data": 1 },
-          "EnableDiagnosticMode": { "Type": "REG_DWORD", "Data": 0 }
-        },
         "UsbDeviceParametersZero": {
-          "Action": "run_powershell",
-          "Command": "$dev='AllowIdleIrpInD3','DeviceIdleEnabled','DeviceSelectiveSuspended','EnhancedPowerManagementEnabled','EnhancedPowerManagementUseMonitor','IdleSupported','IdleTimeoutPeriodInMilliSec','SelectiveSuspendEnabled','SelectiveSuspendTimeout','UserSetDeviceIdleEnabled'; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\USB' -Recurse -ea SilentlyContinue | % { $dp=Join-Path $_.PSPath 'Device Parameters'; if(Test-Path $dp){ foreach($n in $dev){ New-ItemProperty -Path $dp -Name $n -PropertyType DWord -Value 0 -Force -ea SilentlyContinue | Out-Null } } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "AllowIdleIrpInD3", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "DeviceIdleEnabled", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "DeviceSelectiveSuspended", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "EnhancedPowerManagementEnabled", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "EnhancedPowerManagementUseMonitor", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "IdleSupported", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "IdleTimeoutPeriodInMilliSec", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "SelectiveSuspendEnabled", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "SelectiveSuspendTimeout", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "UserSetDeviceIdleEnabled", "Type": "REG_DWORD", "Value": 0 }
+          ]
         },
         "UsbWdfParamsZero": {
-          "Action": "run_powershell",
-          "Command": "$wdf='IdleInWorkingState','SleepstudyState','WdfDefaultIdleInWorkingState','WdfDirectedPowerTransitionEnable'; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\USB' -Recurse -ea SilentlyContinue | % { $dp=Join-Path $_.PSPath 'Device Parameters'; if(Test-Path $dp){ $wdfp=Join-Path $dp 'Wdf'; New-Item -Path $wdfp -Force -ea SilentlyContinue | Out-Null; foreach($n in $wdf){ New-ItemProperty -Path $wdfp -Name $n -PropertyType DWord -Value 0 -Force -ea SilentlyContinue | Out-Null } } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
+            { "SubPath": "Wdf", "Name": "SleepstudyState", "Type": "REG_DWORD", "Value": 0 },
+            { "SubPath": "Wdf", "Name": "WdfDefaultIdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
+            { "SubPath": "Wdf", "Name": "WdfDirectedPowerTransitionEnable", "Type": "REG_DWORD", "Value": 0 }
+          ]
         },
         "UsbDevSubD3ColdZero": {
-          "Action": "run_powershell",
-          "Command": "$id='^[0-9A-Fa-f-]{8,}$'; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\USB' -Recurse -ea SilentlyContinue | % { $dp=Join-Path $_.PSPath 'Device Parameters'; if(Test-Path $dp){ Get-ChildItem -Path $dp -ea SilentlyContinue | ? { $_.PSChildName -match $id } | % { New-ItemProperty -Path $_.PSPath -Name 'D3ColdSupported' -PropertyType DWord -Value 0 -Force -ea SilentlyContinue | Out-Null } } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
+          "Root": "HKLM",
+          "ExcludeSubPaths": ["wdf"],
+          "Operations": [
+            { "Name": "D3ColdSupported", "Type": "REG_DWORD", "Value": 0 }
+          ]
         }
       }
     },
     "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
+        "DisableSelectiveSuspend": { "Action": "deletevalue" },
+        "EnableDiagnosticMode": { "Action": "deletevalue" }
+      },
       "COMMANDS": {
         "UsbWmiEnablePower": {
           "Action": "run_powershell",
           "Command": "$mgmt=Get-WmiObject -Namespace 'root\\wmi' -Class MSPower_DeviceEnable; 'Win32_USBController','Win32_USBControllerDevice','Win32_USBHub' | % { Get-WmiObject -Class $_ -ea SilentlyContinue } | % { $pnp=$_.PNPDeviceID; if($pnp){ foreach($p in $mgmt){ if($p.InstanceName.ToUpper() -like ('*'+$pnp+'*')){ $p.Enable=$true; $p.PSBase.Put() | Out-Null } } } }"
         },
-        "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
-          "DisableSelectiveSuspend": { "Action": "deletevalue" },
-          "EnableDiagnosticMode": { "Action": "deletevalue" }
-        },
         "UsbDeviceParametersRevert": {
-          "Action": "run_powershell",
-          "Command": "$set=@{AllowIdleIrpInD3=1;DeviceIdleEnabled=1;EnhancedPowerManagementEnabled=1}; $del='DeviceSelectiveSuspended','EnhancedPowerManagementUseMonitor','IdleSupported','IdleTimeoutPeriodInMilliSec','SelectiveSuspendEnabled','SelectiveSuspendTimeout','UserSetDeviceIdleEnabled'; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\USB' -Recurse -ea SilentlyContinue | % { $dp=Join-Path $_.PSPath 'Device Parameters'; if(Test-Path $dp){ foreach($k in $set.Keys){ New-ItemProperty -Path $dp -Name $k -PropertyType DWord -Value $set[$k] -Force -ea SilentlyContinue | Out-Null }; foreach($n in $del){ Remove-ItemProperty -Path $dp -Name $n -ea SilentlyContinue } } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "AllowIdleIrpInD3", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "DeviceIdleEnabled", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "EnhancedPowerManagementEnabled", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "DeviceSelectiveSuspended", "Op": "delete" },
+            { "Name": "EnhancedPowerManagementUseMonitor", "Op": "delete" },
+            { "Name": "IdleSupported", "Op": "delete" },
+            { "Name": "IdleTimeoutPeriodInMilliSec", "Op": "delete" },
+            { "Name": "SelectiveSuspendEnabled", "Op": "delete" },
+            { "Name": "SelectiveSuspendTimeout", "Op": "delete" },
+            { "Name": "UserSetDeviceIdleEnabled", "Op": "delete" }
+          ]
         },
         "UsbWdfParamsRevert": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\USB' -Recurse -ea SilentlyContinue | % { $dp=Join-Path $_.PSPath 'Device Parameters'; $wdfp=Join-Path $dp 'Wdf'; if(Test-Path $wdfp){ New-Item -Path $wdfp -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $wdfp -Name 'IdleInWorkingState' -PropertyType DWord -Value 1 -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $wdfp -Name 'WdfDirectedPowerTransitionEnable' -PropertyType DWord -Value 1 -Force -ea SilentlyContinue | Out-Null; Remove-ItemProperty -Path $wdfp -Name 'SleepstudyState' -ea SilentlyContinue; Remove-ItemProperty -Path $wdfp -Name 'WdfDefaultIdleInWorkingState' -ea SilentlyContinue } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Op": "delete" },
+            { "SubPath": "Wdf", "Name": "WdfDirectedPowerTransitionEnable", "Op": "delete" },
+            { "SubPath": "Wdf", "Name": "SleepstudyState", "Op": "delete" },
+            { "SubPath": "Wdf", "Name": "WdfDefaultIdleInWorkingState", "Op": "delete" }
+          ]
         },
         "UsbDevSubD3ColdClear": {
-          "Action": "run_powershell",
-          "Command": "$id='^[0-9A-Fa-f-]{8,}$'; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\USB' -Recurse -ea SilentlyContinue | % { $dp=Join-Path $_.PSPath 'Device Parameters'; if(Test-Path $dp){ Get-ChildItem -Path $dp -ea SilentlyContinue | ? { $_.PSChildName -match $id } | % { Remove-ItemProperty -Path $_.PSPath -Name 'D3ColdSupported' -ea SilentlyContinue } } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
+          "Root": "HKLM",
+          "ExcludeSubPaths": ["wdf"],
+          "Operations": [
+            { "Name": "D3ColdSupported", "Op": "delete" }
+          ]
         }
       }
     }
@@ -131,18 +181,24 @@
     "apply": {
       "COMMANDS": {
         "SetHddParking0": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse -ea SilentlyContinue | Where-Object { $null -ne (Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -ea SilentlyContinue) } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 0 -Force -ea SilentlyContinue | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\**",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "EnableHDDParking", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
+          ]
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "SetHddParking1": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse -ea SilentlyContinue | Where-Object { $null -ne (Get-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -ea SilentlyContinue) } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableHDDParking' -PropertyType DWord -Value 1 -Force -ea SilentlyContinue | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\**",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "EnableHDDParking", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
+          ]
         }
       }
     }
@@ -151,18 +207,28 @@
     "apply": {
       "COMMANDS": {
         "StorportIdleOff": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "$map=@{EnableIdlePowerManagement=0;DisableIdlePowerManagement=1;DisableD3Cold=1}; Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum' -Recurse -ea SilentlyContinue | Where-Object { $_.PSChildName -ieq 'StorPort' } | ForEach-Object { foreach($k in $map.Keys){ New-ItemProperty -Path $_.PSPath -Name $k -PropertyType DWord -Value $map[$k] -Force -ea SilentlyContinue | Out-Null } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "DisableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "DisableD3Cold", "Type": "REG_DWORD", "Value": 1 }
+          ]
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "StorportIdleOn": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum' -Recurse -ea SilentlyContinue | Where-Object { $_.PSChildName -ieq 'StorPort' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'EnableIdlePowerManagement' -PropertyType DWord -Value 1 -Force -ea SilentlyContinue | Out-Null; Remove-ItemProperty -Path $_.PSPath -Name 'DisableIdlePowerManagement' -ea SilentlyContinue; Remove-ItemProperty -Path $_.PSPath -Name 'DisableD3Cold' -ea SilentlyContinue }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "DisableIdlePowerManagement", "Op": "delete" },
+            { "Name": "DisableD3Cold", "Op": "delete" }
+          ]
         }
       }
     }
@@ -229,16 +295,28 @@
     "apply": {
       "COMMANDS": {
         "AudioIdleDisable": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}' -ea SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.PSChildName -match '^\\d{4}$' } | ForEach-Object { $p=Join-Path $_.PSPath 'PowerSettings'; New-Item -Path $p -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'IdlePowerState' -PropertyType Binary -Value ([byte[]](0,0,0,0)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'ConservationIdleTime' -PropertyType Binary -Value ([byte[]](0xff,0xff,0xff,0xff)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'PerformanceIdleTime' -PropertyType Binary -Value ([byte[]](0xff,0xff,0xff,0xff)) -Force -ea SilentlyContinue | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "PowerSettings", "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [0,0,0,0] },
+            { "SubPath": "PowerSettings", "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] },
+            { "SubPath": "PowerSettings", "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] }
+          ]
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "AudioIdleDefaults": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}' -ea SilentlyContinue | Where-Object { $_.PSIsContainer -and $_.PSChildName -match '^\\d{4}$' } | ForEach-Object { $p=Join-Path $_.PSPath 'PowerSettings'; if(Test-Path $p){ New-ItemProperty -Path $p -Name 'ConservationIdleTime' -PropertyType Binary -Value ([byte[]](0x1e,0x00,0x00,0x00)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'PerformanceIdleTime' -PropertyType Binary -Value ([byte[]](0x00,0x00,0x00,0x00)) -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name 'IdlePowerState' -PropertyType Binary -Value ([byte[]](0x03,0x00,0x00,0x00)) -Force -ea SilentlyContinue | Out-Null } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "PowerSettings", "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30,0,0,0] },
+            { "SubPath": "PowerSettings", "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] },
+            { "SubPath": "PowerSettings", "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3,0,0,0] }
+          ]
         }
       }
     }
@@ -252,6 +330,34 @@
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Classpnp": {
         "NVMeDisablePerfThrottling": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable PM in Standby Mode": {
+    "apply": {
+      "COMMANDS": {
+        "StorageIdle": {
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\*",
+          "Root": "HKLM",
+          "Operations": [
+            {"Name": "IdleStatesNumber", "Type": "REG_DWORD", "Value": 0 }
+          ]
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\HDD": {
+        "IdleStatesNumber": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\NVME": {
+        "IdleStatesNumber": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\SD": {
+        "IdleStatesNumber": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\SSD": {
+        "IdleStatesNumber": { "Type": "REG_DWORD", "Data": 3 }
       }
     }
   }

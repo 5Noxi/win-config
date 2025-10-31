@@ -121,29 +121,47 @@
     "apply": {
       "COMMANDS": {
         "DisableAudioEnhCapture": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; $fx=Join-Path $_.PSPath 'FxProperties'; New-Item -Path $p,$fx -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -PropertyType DWord -Value 0 -Force | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -PropertyType DWord -Value 0 -Force | Out-Null; New-ItemProperty -Path $fx -Name '{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5' -PropertyType DWord -Value 1 -Force | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture\\*",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Type": "REG_DWORD", "Value": 0 },
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Type": "REG_DWORD", "Value": 0 },
+            { "SubPath": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Type": "REG_DWORD", "Value": 1 }
+          ]
         },
         "DisableAudioEnhRender": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; New-Item -Path $p -Force -ea SilentlyContinue | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -PropertyType DWord -Value 0 -Force | Out-Null; New-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -PropertyType DWord -Value 0 -Force | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\*",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Type": "REG_DWORD", "Value": 0 },
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Type": "REG_DWORD", "Value": 0 }
+          ]
         }
       }
-    }
-  },
-  "revert": {
-    "COMMANDS": {
-      "RevertAudioEnhCapture": {
-        "Action": "run_powershell",
-        "Elevated": true,
-        "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; $fx=Join-Path $_.PSPath 'FxProperties'; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -ea SilentlyContinue; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -ea SilentlyContinue; Remove-ItemProperty -Path $fx -Name '{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5' -ea SilentlyContinue }"
-      },
-      "RevertAudioEnhRender": {
-        "Action": "run_powershell",
-        "Elevated": true,
-        "Command": "Get-ChildItem 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render' -ea SilentlyContinue | ForEach-Object { $p=Join-Path $_.PSPath 'Properties'; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},3' -ea SilentlyContinue; Remove-ItemProperty -Path $p -Name '{b3f8fa53-0004-438e-9003-51a46e139bfc},4' -ea SilentlyContinue }"
+    },
+    "revert": {
+      "COMMANDS": {
+        "RevertAudioEnhCapture": {
+          "Action": "registry_pattern",
+          "Pattern": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture\\*",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Op": "delete" },
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Op": "delete" },
+            { "SubPath": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Op": "delete" }
+          ]
+        },
+        "RevertAudioEnhRender": {
+          "Action": "registry_pattern",
+          "Pattern": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\*",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Op": "delete" },
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Op": "delete" }
+          ]
+        }
       }
     }
   },
@@ -507,16 +525,26 @@
     "apply": {
       "COMMANDS": {
         "SetCachePolicy": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\SCSI' | ForEach-Object { $scsiKey = $_.PSPath; Get-ChildItem -Path $scsiKey | ForEach-Object { $subKey = $_.PSPath; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"CacheIsPowerProtected\" -Value 1 -Type DWord -Force; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"UserWriteCacheSetting\" -Value 1 -Type DWord -Force } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\SCSI\\**\\Device Parameters\\Disk",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "CacheIsPowerProtected", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "UserWriteCacheSetting", "Type": "REG_DWORD", "Value": 1 }
+          ]
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "RevertCachePolicy": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem -Path 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\SCSI' | ForEach-Object { $scsiKey = $_.PSPath; Get-ChildItem -Path $scsiKey | ForEach-Object { $subKey = $_.PSPath; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"CacheIsPowerProtected\" -Value 0 -Type DWord -Force; Set-ItemProperty -Path \"$subKey\\Device Parameters\\Disk\" -Name \"UserWriteCacheSetting\" -Value 1 -Type DWord -Force } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\SCSI\\**\\Device Parameters\\Disk",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "CacheIsPowerProtected", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "UserWriteCacheSetting", "Type": "REG_DWORD", "Value": 1 }
+          ]
         }
       }
     }
@@ -669,7 +697,7 @@
       }
     },
     "revert": {
-      "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
+      "HKCU\\Software\\Microsoft\\Wisp\\Touch": { 
         "TouchGate": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
@@ -703,16 +731,28 @@
     "apply": {
       "COMMANDS": {
         "EnableMSI": {
-          "Action": "run_powershell",
-          "Command": "$classes='Win32_USBController','Win32_VideoController','Win32_NetworkAdapter','Win32_IDEController'; $classes | ForEach-Object { Get-CimInstance -ClassName $_ -EA SilentlyContinue } | Where-Object { $_.PNPDeviceID -and ($_.PNPDeviceID -like 'PCI\\VEN_*') } | ForEach-Object { $base=('HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\{0}\\Device Parameters\\Interrupt Management' -f $_.PNPDeviceID); $msi=Join-Path $base 'MessageSignaledInterruptProperties'; New-Item -Path $msi -Force -EA SilentlyContinue | Out-Null; New-ItemProperty -Path $msi -Name 'MSISupported' -PropertyType DWord -Value 1 -Force -EA SilentlyContinue | Out-Null; $aff=Join-Path $base 'Affinity Policy'; if(Test-Path $aff){ Remove-ItemProperty -Path $aff -Name 'DevicePriority' -EA SilentlyContinue }; Remove-ItemProperty -Path $msi -Name 'MessageNumberLimit' -EA SilentlyContinue }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\PCI\\**\\Device Parameters\\Interrupt Management",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Type": "REG_DWORD", "Value": 1 },
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Op": "delete" },
+            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Op": "delete" }
+          ]
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "RemoveMSI": {
-          "Action": "run_powershell",
-          "Command": "$classes='Win32_USBController','Win32_VideoController','Win32_NetworkAdapter','Win32_IDEController'; $classes | ForEach-Object { Get-CimInstance -ClassName $_ -EA SilentlyContinue } | Where-Object { $_.PNPDeviceID -and ($_.PNPDeviceID -like 'PCI\\VEN_*') } | ForEach-Object { $base=('HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\{0}\\Device Parameters\\Interrupt Management' -f $_.PNPDeviceID); $msi=Join-Path $base 'MessageSignaledInterruptProperties'; if(Test-Path $msi){ Remove-ItemProperty -Path $msi -Name 'MSISupported' -EA SilentlyContinue; Remove-ItemProperty -Path $msi -Name 'MessageNumberLimit' -EA SilentlyContinue }; $aff=Join-Path $base 'Affinity Policy'; if(Test-Path $aff){ Remove-ItemProperty -Path $aff -Name 'DevicePriority' -EA SilentlyContinue } }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\PCI\\**\\Device Parameters\\Interrupt Management",
+          "Root": "HKLM",
+          "Operations": [
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Op": "delete" },
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Op": "delete" },
+            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Op": "delete" }
+          ]
         }
       }
     }
@@ -738,6 +778,152 @@
         "EffectType": { "Type": "REG_DWORD", "Data": 0 },
         "Speed": { "Type": "REG_DWORD", "Data": 7 },
         "UseSystemAccentColor": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable Printing": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Spooler": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintWorkFlowUserSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\StiSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintNotify": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbprint": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\McpManagementService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintScanBrokerService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintDeviceConfigurationService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "COMMANDS": {
+        "DisablePrintingTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask",
+            "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask",
+            "\\Microsoft\\Windows\\Printing\\EduPrintProv"
+          ],
+          "TaskAction": "disable"
+        },
+        "DisablePrintingFoundationInternetClient": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-InternetPrinting-Client",
+          "State": "Disabled"
+        },
+        "DisablePrintingFoundationLPR": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-LPRPortMonitor",
+          "State": "Disabled"
+        },
+        "DisablePrintToPDF": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-PrintToPDFServices-Features",
+          "State": "Disabled"
+        },
+        "DisableXPSServices": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-XPSServices-Features",
+          "State": "Disabled"
+        },
+        "DisablePrintingFoundationFeatures": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-Features",
+          "State": "Disabled"
+        },
+        "DisableWorkFoldersClient": {
+          "Action": "optional_feature",
+          "FeatureName": "WorkFolders-Client",
+          "State": "Disabled"
+        },
+        "DisableLPDPrintService": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-LPDPrintService",
+          "State": "Disabled"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Spooler": {
+        "Start": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintWorkFlowUserSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\StiSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintNotify": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbprint": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\McpManagementService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintScanBrokerService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintDeviceConfigurationService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "COMMANDS": {
+        "EnablePrintingTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask",
+            "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask",
+            "\\Microsoft\\Windows\\Printing\\EduPrintProv"
+          ],
+          "TaskAction": "enable"
+        },
+        "KeepPrintingFoundationLPRDisabled": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-LPRPortMonitor",
+          "State": "Disabled"
+        },
+        "EnablePrintToPDF": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-PrintToPDFServices-Features",
+          "State": "Enabled"
+        },
+        "KeepXPSServicesDisabled": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-XPSServices-Features",
+          "State": "Disabled"
+        },
+        "EnablePrintingFoundationFeatures": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-Features",
+          "State": "Enabled"
+        },
+        "EnableWorkFoldersClient": {
+          "Action": "optional_feature",
+          "FeatureName": "WorkFolders-Client",
+          "State": "Enabled"
+        },
+        "EnablePrintingFoundationInternetClient": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-InternetPrinting-Client",
+          "State": "Enabled"
+        },
+        "DisableLPDPrintService": {
+          "Action": "optional_feature",
+          "FeatureName": "Printing-Foundation-LPDPrintService",
+          "State": "Disabled"
+        }
       }
     }
   }

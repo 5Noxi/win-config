@@ -505,11 +505,13 @@
         "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarFlashing": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 },
-        "PeopleBand": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People": {
+        "PeopleBand": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "HidePeopleBar": { "Type": "REG_DWORD", "Data": 1 }
@@ -535,6 +537,9 @@
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSd": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People": {
+        "PeopleBand": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "Action": "deletevalue"
@@ -830,6 +835,32 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\HideDesktopIcons\\NewStartPanel": {
         "{2cc5ca98-6485-489a-920e-b3e88a6ccce3}": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Black PS Background": {
+    "apply": {
+      "COMMANDS": {
+        "SetPSConsoleColor": {
+          "Action": "registry_pattern",
+          "Root": "HKCU",
+          "Pattern": "Console\\*powershell*",
+          "Operations": [
+            { "Name": "ScreenColors", "Type": "REG_DWORD", "Value": 7 }
+          ]
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "ResetPSConsoleColor": {
+          "Action": "registry_pattern",
+          "Root": "HKCU",
+          "Pattern": "Console\\*powershell*",
+          "Operations": [
+            { "Name": "ScreenColors", "Type": "REG_DWORD", "Value": 86 }
+          ]
+        }
       }
     }
   }

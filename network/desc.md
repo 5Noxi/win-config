@@ -92,8 +92,6 @@ Disable default sharing:
 Set-SmbServerConfiguration -AutoShareServer $false -AutoShareWorkstation $false -Force
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareServer	Type: REG_DWORD, Length: 4, Data: 0
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareWks	Type: REG_DWORD, Length: 4, Data: 0
-
-# Get-SmbServerConfiguration | Select AutoShareServer, AutoShareWorkstation
 ```
 > https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbserverconfiguration?view=windowsserver2025-ps  
 > https://woshub.com/enable-remote-access-to-admin-shares-in-workgroup/
@@ -330,6 +328,8 @@ reg add "HKLM\System\CurrentControlSet\services\NlaSvc\Parameters\Internet" /v M
 \Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbePath
 \Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbePathV6
 \Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ReprobeThreshold
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisallowNetworkConnectivityActiveTests: value (DWord 1)
 ```
 
 # Disable VPNs
@@ -387,3 +387,182 @@ if ( !v17[0] )
 ```
 
 > [network/assets | vpn-NlmGetCostedNetworkSettings.c](https://github.com/5Noxi/win-config/blob/main/network/assets/vpn-NlmGetCostedNetworkSettings.c)
+
+# Disable SMBv1/SMBv2
+
+SMBv1 is only needed for old computers or software (that you usually don't have) and should be disabled, as it's unsafe & not efficient.
+
+Detect current states with:
+```ps
+Get-SmbServerConfiguration | Select EnableSMB1Protocol, EnableSMB2Protocol
+```
+Disable it with (`$true` to enable it):
+```ps
+Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
+Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
+```
+, use the batch or turn off the feature off in `optionalfeatures` -> '**SMB 1.0/CIFS File Sharing Support**'
+
+If you want to disable SMB2 & SMB3:
+```ps
+Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
+```
+`Set-SmbServerConfiguration $false`:
+```ps
+"Process Name","Operation","Path","Detail"
+"wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2","Type: REG_DWORD, Length: 4, Data: 0"
+"wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB1","Type: REG_DWORD, Length: 4, Data: 0"
+```
+
+| Functionality                                      | Disabled when SMBv3 is off       | Disabled when SMBv2 is off       |
+|----------------------------------------------------|----------------------------------|----------------------------------|
+| Transparent failover                               | Yes                              | No                               |
+| Scale-out file server access                       | Yes                              | No                               |
+| SMB Multichannel                                   | Yes                              | No                               |
+| SMB Direct (RDMA)                                  | Yes                              | No                               |
+| Encryption (end-to-end)                            | Yes                              | No                               |
+| Directory leasing                                  | Yes                              | No                               |
+| Performance optimization (small random I/O)        | Yes                              | No                               |
+| Request compounding                                | No                               | Yes                              |
+| Larger reads and writes                            | No                               | Yes                              |
+| Caching of folder and file properties              | No                               | Yes                              |
+| Durable handles                                    | No                               | Yes                              |
+| Improved message signing (HMAC SHA-256)            | No                               | Yes                              |
+| Improved scalability for file sharing              | No                               | Yes                              |
+| Support for symbolic links                         | No                               | Yes                              |
+| Client oplock leasing model                        | No                               | Yes                              |
+| Large MTU / 10 GbE support                         | No                               | Yes                              |
+| Improved energy efficiency (clients can sleep)     | No                               | Yes                              |
+
+> https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3?tabs=client#disable-smbv2-or-smbv3-for-troubleshooting  
+> https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3?tabs=server  
+> https://techcommunity.microsoft.com/blog/filecab/stop-using-smb1/425858  
+> https://thelinuxcode.com/how-to-detect-and-turn-on-off-smbv1-smbv2-and-smbv3-in-windows/
+
+# Disable NetBIOS/mDNS/LLMNR
+
+"`NetbiosOptions` specifies the configurable security settings for the NetBIOS service and determines the mode of operation for NetBIOS over TCP/IP on the parent interface."
+
+`NetbiosOptions`:
+
+| Value | Description                                                                                 |
+| ----- | ------------------------------------------------------------------------------------------- |
+| 0     | Specifies that the Dynamic Host Configuration Protocol (DHCP) setting is used if available. |
+| 1     | Specifies that NetBIOS is enabled. This is the default value if DHCP is not available.      |
+| 2     | Specifies that NetBIOS is disabled.                                                         |
+
+Disabling `NetbiosOptions` via network center:
+```ps
+RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
+```
+
+| Protocol                                     | Purpose                                                                   | How it works                                                                                                                      | Notes                                                                                   |
+| -------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| LLMNR (Link-Local Multicast Name Resolution) | Local name resolution when DNS isn't available                            | Sends multicast queries on the local link (IPv4 224.0.0.252, UDP 5355) asking "who has this name?", hosts that own the name reply | Windows-specific legacy fallback, vulnerable to spoofing/poisoning                      |
+| mDNS (Multicast DNS)                         | Zero-config service/host discovery on local networks (e.g. printer.local) | Uses multicast to 224.0.0.251 (IPv6 ff02::fb) on UDP 5353, devices answer for their own .local names                              | Cross-platform (Apple Bonjour, now Windows), modern replacement for LLMNR in many cases |
+| NetBIOS over TCP/IP                          | Legacy Windows naming, service announcement and sessions                  | Uses broadcasts or WINS to resolve NetBIOS names, historically used by SMB/Windows networking                                     | Very old, chatty, bigger attack surface, kept for backward compatibility                |
+
+> https://en.wikipedia.org/wiki/Link-Local_Multicast_Name_Resolution  
+> https://en.wikipedia.org/wiki/Multicast_DNS  
+> https://en.wikipedia.org/wiki/NetBIOS  
+
+```json
+{
+    "File":  "DnsClient.admx",
+    "NameSpace":  "Microsoft.Policies.DNSClient",
+    "Class":  "Machine",
+    "CategoryName":  "DNS_Client",
+    "DisplayName":  "Configure multicast DNS (mDNS) protocol",
+    "ExplainText":  "Specifies if the DNS client will perform name resolution over mDNS.If you enable this policy, the DNS client will use mDNS protocol.If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
+    "Supported":  "Windows_10_0_RS2",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\DNSClient",
+    "KeyName":  "EnableMDNS",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "DnsClient.admx",
+    "NameSpace":  "Microsoft.Policies.DNSClient",
+    "Class":  "Machine",
+    "CategoryName":  "DNS_Client",
+    "DisplayName":  "Turn off smart multi-homed name resolution",
+    "ExplainText":  "Specifies that a multi-homed DNS client should optimize name resolution across networks. The setting improves performance by issuing parallel DNS, link local multicast name resolution (LLMNR) and NetBIOS over TCP/IP (NetBT) queries across all networks. In the event that multiple positive responses are received, the network binding order is used to determine which response to accept.If you enable this policy setting, the DNS client will not perform any optimizations. DNS queries will be issued across all networks first. LLMNR queries will be issued if the DNS queries fail, followed by NetBT queries if LLMNR queries fail.If you disable this policy setting, or if you do not configure this policy setting, name resolution will be optimized when issuing DNS, LLMNR and NetBT queries.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\DNSClient",
+    "KeyName":  "DisableSmartNameResolution",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "DnsClient.admx",
+    "NameSpace":  "Microsoft.Policies.DNSClient",
+    "Class":  "Machine",
+    "CategoryName":  "DNS_Client",
+    "DisplayName":  "NetBIOS learning mode",
+    "ExplainText":  "Specifies if the DNS client will perform name resolution over NetBIOS.By default, the DNS client will disable NetBIOS name resolution on public networks for security reasons.To use this policy setting, click Enabled, and then select one of the following options from the drop-down list:Disable NetBIOS name resolution: Never allow NetBIOS name resolution.Allow NetBIOS name resolution: Always allow NetBIOS name resolution.Disable NetBIOS name resolution on public networks: Only allow NetBIOS name resolution on network adapters which are not connected to public networks.NetBIOS learning mode: Always allow NetBIOS name resolution and use it as a fallback after mDNS/LLMNR queries fail.If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
+    "Supported":  "WindowsVista",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT",
+    "KeyName":  "DNSClient",
+    "Elements":  [
+                        {
+                            "Type":  "Enum",
+                            "ValueName":  "EnableNetbios",
+                            "Items":  [
+                                        {
+                                            "DisplayName":  "Disable NetBIOS name resolution",
+                                            "Value":  "0"
+                                        },
+                                        {
+                                            "DisplayName":  "Allow NetBIOS name resolution",
+                                            "Value":  "1"
+                                        },
+                                        {
+                                            "DisplayName":  "Disable NetBIOS name resolution on public networks",
+                                            "Value":  "2"
+                                        },
+                                        {
+                                            "DisplayName":  "NetBIOS learning mode",
+                                            "Value":  "3"
+                                        }
+                                    ]
+                        }
+                    ]
+},
+{
+    "File":  "DnsClient.admx",
+    "NameSpace":  "Microsoft.Policies.DNSClient",
+    "Class":  "Machine",
+    "CategoryName":  "DNS_Client",
+    "DisplayName":  "Turn off multicast name resolution",
+    "ExplainText":  "Specifies that link local multicast name resolution (LLMNR) is disabled on the DNS client.LLMNR is a secondary name resolution protocol. With LLMNR, queries are sent using multicast over a local network link on a single subnet from a DNS client to another DNS client on the same subnet that also has LLMNR enabled. LLMNR does not require a DNS server or DNS client configuration, and provides name resolution in scenarios in which conventional DNS name resolution is not possible.If you enable this policy setting, LLMNR will be disabled on all available network adapters on the DNS client.If you disable this policy setting, or you do not configure this policy setting, LLMNR will be enabled on all available network adapters.",
+    "Supported":  "WindowsVista",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\DNSClient",
+    "KeyName":  "EnableMulticast",
+    "Elements":  [
+                        {
+                            "Value":  "0",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "1",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```

@@ -193,16 +193,28 @@
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
-        "Disable NvTmRep_*": { "Action": "scheduled_task", "TaskName": "NvTmRep_*", "Operation": "disable" },
-        "Disable NvTmRepOnLogon*": { "Action": "scheduled_task", "TaskName": "NvTmRepOnLogon*", "Operation": "disable" },
-        "Disable NvTmMon_*": { "Action": "scheduled_task", "TaskName": "NvTmMon_*", "Operation": "disable" }
+        "DisableNvTelemetryTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "NvTmRep_*",
+            "NvTmRepOnLogon*",
+            "NvTmMon_*"
+          ],
+          "TaskAction": "disable"
+        }
       }
     },
     "revert": {
       "COMMANDS": {
-        "Enable NvTmRep_*": { "Action": "scheduled_task", "TaskName": "NvTmRep_*", "Operation": "enable" },
-        "Enable NvTmRepOnLogon*": { "Action": "scheduled_task", "TaskName": "NvTmRepOnLogon*", "Operation": "enable" },
-        "Enable NvTmMon_*": { "Action": "scheduled_task", "TaskName": "NvTmMon_*", "Operation": "enable" }
+        "EnableNvTelemetryTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "NvTmRep_*",
+            "NvTmRepOnLogon*",
+            "NvTmMon_*"
+          ],
+          "TaskAction": "enable"
+        }
       }
     }
   },
@@ -365,6 +377,15 @@
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm": {
         "OverlayTestMode": { "Action": "deletevalue" }
       }
+    }
+  },
+  "Clear Shader Cache": {
+    "__control": { "type": "button", "label": "Clear" },
+    "COMMANDS": {
+      "DelNvCache": { "Action": "delete_path", "Path": "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache" },
+      "DelDxCacheLow": { "Action": "delete_path", "Path": "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache" },
+      "DelDxCache": { "Action": "delete_path", "Path": "%LOCALAPPDATA%\\NVIDIA\\DXCache" },
+      "DelGlCache": { "Action": "delete_path", "Path": "%LOCALAPPDATA%\\NVIDIA\\GLCache" }
     }
   }
 }

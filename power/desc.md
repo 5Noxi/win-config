@@ -55,6 +55,29 @@ $devsub = @(
     'DevicePowerResetDelayTime'
 )
 ```
+```c
+// Opt-out of ASPM.
+[PciASPMOptOut]
+Needs=PciASPMOptOut.HW
+
+[PciASPMOptOut.HW]
+AddReg=PciASPMOptOut.RegHW
+
+[PciASPMOptOut.RegHW]
+HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,ASPMOptOut,0x10001,1
+
+// Opt-in to ASPM.
+[PciASPMOptIn]
+Needs=PciASPMOptIn.HW
+
+[PciASPMOptIn.HW]
+AddReg=PciASPMOptIn.RegHW
+
+[PciASPMOptIn.RegHW]
+HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,ASPMOptIn,0x10001,1
+```
+
+> [power/assets | devicepower-OptInOptOutPolicy.c](https://github.com/5Noxi/win-config/blob/main/power/assets/devicepower-OptInOptOutPolicy.c)
 
 # Disable Hibernation
 
@@ -401,3 +424,58 @@ else if (v6 == 4 && ResultLength >= 4)  // REG_DWORD
 
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Classpnp.txt  
 > [power/assets | nvmeperf-ClassUpdateDynamicRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
+
+# Disable Storage Idle States
+
+Disables idle states for NVMe, SSD, SD, HDD. This is currently more of a possible idea. 
+
+If `IdleStatesNumber` is set, the other values are ignored? Let me know if you have a better interpretation.
+
+> The values are located in the `EnergyEstimation` (guesses how much power is used over time), so it's probably related to something else. I'll leave it for documentation reasons (and future extended declaration).
+
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Power.txt  
+> [power/assets | storageidle-PmPowerContextInitialization.c](https://github.com/5Noxi/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
+
+# Disable PM in Standby Mode
+
+This policy setting specifies that power management is disabled when the machine enters connected standby mode.
+- If this policy setting is enabled, Windows Connection Manager doesn't manage adapter radios to reduce power consumption when the machine enters connected standby mode.
+- If this policy setting isn't configured or is disabled, power management is enabled when the machine enters connected standby mode.
+
+```json
+{
+    "File":  "WCM.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsConnectionManager",
+    "Class":  "Machine",
+    "CategoryName":  "WCM_Category",
+    "DisplayName":  "Disable power management in connected standby mode",
+    "ExplainText":  "This policy setting specifies that power management is disabled when the machine enters connected standby mode.If this policy setting is enabled, Windows Connection Manager does not manage adapter radios to reduce power consumption when the machine enters connected standby mode.If this policy setting is not configured or is disabled, power management is enabled when the machine enters connected standby mode.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy",
+    "KeyName":  "fDisablePowerManagement",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
+```ps
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fAllowFailoverToCellular
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fBlockNonDomain
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fBlockRoaming
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fDisablePowerManagement
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fMinimizeConnections
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fSoftDisconnectConnections
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fAllowFailoverToCellular
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fBlockNonDomain
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fBlockRoaming
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fDisablePowerManagement
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fMinimizeConnections
+\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fSoftDisconnectConnections
+```

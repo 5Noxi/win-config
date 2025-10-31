@@ -243,24 +243,22 @@
   },
   "Clear SRUM Data": {
     "control": { "type": "button", "label": "Clear" },
-    "apply": {
-      "COMMANDS": {
-        "StopDPS": {
-          "Action": "run_powershell",
-          "Command": "Stop-Service -Name 'DPS' -Force"
-        },
-        "DeleteSRUDB": {
-          "Action": "run_powershell",
-          "Elevated": true,
-          "Command": "Remove-Item -Path \"$env:windir\\System32\\sru\\SRUDB.dat\" -Force"
-        }
+    "COMMANDS": {
+      "StopDPS": {
+        "Action": "run_powershell",
+        "Command": "Stop-Service -Name 'DPS' -Force"
+      },
+      "DeleteSRUDB": {
+        "Action": "run_powershell",
+        "Elevated": true,
+        "Command": "Remove-Item -Path \"$env:windir\\System32\\sru\\SRUDB.dat\" -Force"
       }
     }
   },
   "Disable App Launch Tracking": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "Start_TrackProgs": { "Type": "REG_SZ", "Data": "0" }
+        "Start_TrackProgs": { "Type": "REG_DWORD", "Data": "0" }
       }
     },
     "revert": {
@@ -948,14 +946,16 @@
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 }
-      },
-      "COMMANDS": {
-        "DisableRecallFeature": {
-          "Action": "run_powershell",
-          "Command": "dism /Online /Disable-Feature /FeatureName:Recall /Quiet /NoRestart"
-        }
-      }
     },
+    "COMMANDS": {
+      "DisableRecallFeature": {
+        "Action": "optional_feature",
+        "Name": "Recall",
+        "Enabled": false,
+        "Arguments": ["/Quiet", "/NoRestart"]
+      }
+    }
+  },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Action": "deletevalue" },
@@ -963,14 +963,16 @@
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Action": "deletevalue" }
-      },
-      "COMMANDS": {
-        "EnableRecallFeature": {
-          "Action": "run_powershell",
-          "Command": "dism /Online /Enable-Feature /FeatureName:Recall /Quiet /NoRestart"
-        }
+    },
+    "COMMANDS": {
+      "EnableRecallFeature": {
+        "Action": "optional_feature",
+        "Name": "Recall",
+        "Enabled": true,
+        "Arguments": ["/Quiet", "/NoRestart"]
       }
     }
+  }
   },
   "Disable Lock Screen Camera": {
     "apply": {
@@ -1239,11 +1241,17 @@
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "EnableMmx": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowPhonePCLinking": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "EnableMmx": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowPhonePCLinking": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   },
@@ -1314,30 +1322,16 @@
         "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
-        "DisableUsbCeip": {
+        "DisableCeipTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
-          "Operation": "disable"
-        },
-        "DisableConsolidator": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
-          "Operation": "disable"
-        },
-        "DisableUploader": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
-          "Operation": "disable"
-        },
-        "DisableServerCeipAssistant": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
-          "Operation": "disable"
-        },
-        "DisableServerRoleUsageCollector": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector",
-          "Operation": "disable"
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector"
+          ],
+          "TaskAction": "disable"
         }
       }
     },
@@ -1355,30 +1349,16 @@
         "CEIPEnable": { "Action": "deletevalue" }
       },
       "COMMANDS": {
-        "EnableUsbCeip": {
+        "EnableCeipTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
-          "Operation": "enable"
-        },
-        "EnableConsolidator": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
-          "Operation": "enable"
-        },
-        "EnableUploader": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
-          "Operation": "enable"
-        },
-        "EnableServerCeipAssistant": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
-          "Operation": "enable"
-        },
-        "EnableServerRoleUsageCollector": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector",
-          "Operation": "enable"
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector"
+          ],
+          "TaskAction": "enable"
         }
       }
     }
@@ -1504,15 +1484,13 @@
         "DisableSendGenericDriverNotFoundToWER": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
-        "DisableWER_Tasks": {
+        "DisableWerTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
-          "Operation": "disable"
-        },
-        "DisableWER_QueueReporting": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
-          "Operation": "disable"
+          "TaskNames": [
+            "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
+            "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+          ],
+          "TaskAction": "disable"
         }
       }
     },
@@ -1551,15 +1529,13 @@
         "DisableSendGenericDriverNotFoundToWER": { "Action": "deletevalue" }
       },
       "COMMANDS": {
-        "EnableWER_Tasks": {
+        "EnableWerTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
-          "Operation": "enable"
-        },
-        "EnableWER_QueueReporting": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting",
-          "Operation": "enable"
+          "TaskNames": [
+            "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
+            "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+          ],
+          "TaskAction": "enable"
         }
       }
     }

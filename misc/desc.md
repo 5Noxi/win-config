@@ -253,6 +253,11 @@ for %%g in (
 ---
 
 Miscellaneous notes:
+```
+reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v DisableEmailInput /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v DisableFeedbackDialog /t REG_DWORD /d 1 /f
+reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v DisableScreenshotCapture /t REG_DWORD /d 1 /f
+```
 ```ps
 reg add "HKLM\SOFTWARE\Microsoft\VSCommon\14.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\VSCommon\15.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
@@ -281,5 +286,41 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 | Runtime solution issues                      | Solution issues                        | Event ID; title; explanation; more info; users; sessions                                                                                | Office 2013/2016/2019 (Excel/Outlook/PowerPoint/Word)           | -                                                                                                                                                                                        |
 | Not collected (by design)                    | -                                      | File contents; info about files not in MRU                                                                                              | All                                                             | Data for Office Telemetry Dashboard stays in your org’s SQL Server; it is not sent to Microsoft. Office diagnostic data is separate and managed by different settings.                   |
 
+---
 
-> https://learn.microsoft.com/en-us/office/compatibility/data-that-the-telemetry-agent-collects-in-office
+`HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\OSM\preventedapplications`
+
+| Value Name        | Value Type | Value Description and Data                                                            |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------- |
+| accesssolution    | REG_DWORD  | Prevents data for Access solutions from being reported to Office Telemetry Dashboard. |
+| olksolution       | REG_DWORD  | Prevents data for Microsoft Outlook solutions.                                        |
+| onenotesolution   | REG_DWORD  | Prevents data for OneNote solutions.                                                  |
+| pptsolution       | REG_DWORD  | Prevents data for PowerPoint solutions.                                               |
+| projectsolution   | REG_DWORD  | Prevents data for Project solutions.                                                  |
+| publishersolution | REG_DWORD  | Prevents data for Publisher solutions.                                                |
+| visiosolution     | REG_DWORD  | Prevents data for Visio solutions.                                                    |
+| wdsolution        | REG_DWORD  | Prevents data for Word solutions.                                                     |
+| xlsolution        | REG_DWORD  | Prevents data for Excel solutions.                                                    |
+
+- `1` = Prevent reporting
+- `0` = Allow reporting
+- Default = `0` (Allow reporting)
+
+---
+
+`HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\OSM\preventedsolutiontypes`
+
+| Value Name    | Value Type | Value Description and Data                                                  |
+| ------------- | ---------- | --------------------------------------------------------------------------- |
+| agave         | REG_DWORD  | Prevents data for apps for Office.                                          |
+| appaddins     | REG_DWORD  | Prevents data for application-specific add-ins like Excel, PowerPoint, etc. |
+| comaddins     | REG_DWORD  | Prevents data for COM add-ins.                                              |
+| documentfiles | REG_DWORD  | Prevents data for Office document files.                                    |
+| templatefiles | REG_DWORD  | Prevents data for Office template files.                                    |
+
+- `1` = Prevent reporting
+- `0` = Allow reporting
+- Default = `0` (Allow reporting)
+
+> https://learn.microsoft.com/en-us/office/compatibility/data-that-the-telemetry-agent-collects-in-office  
+> https://learn.microsoft.com/en-us/office/compatibility/manage-the-privacy-of-data-monitored-by-telemetry-in-office

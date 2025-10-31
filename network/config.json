@@ -62,24 +62,52 @@
   "Congestion Provider": {
     "apply": {
       "COMMANDS": {
-        "DisableLoopbackLargeMTU_IPv6": { "Action": "run_powershell", "Command": "netsh int ipv6 set global loopbacklargemtu=disable" },
-        "DisableLoopbackLargeMTU_IPv4": { "Action": "run_powershell", "Command": "netsh int ipv4 set global loopbacklargemtu=disable" },
-        "SetTCP_BBR2_Internet": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=Internet CongestionProvider=bbr2" },
-        "SetTCP_BBR2_Datacenter": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=Datacenter CongestionProvider=bbr2" },
-        "SetTCP_BBR2_Compat": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=Compat CongestionProvider=bbr2" },
-        "SetTCP_BBR2_DatacenterCustom": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=bbr2" },
-        "SetTCP_BBR2_InternetCustom": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=InternetCustom CongestionProvider=bbr2" }
+        "DisableLoopbackLargeMTU_IPv6": {
+          "Action": "loopback_mtu",
+          "Protocol": "ipv6",
+          "Enable": false
+        },
+        "DisableLoopbackLargeMTU_IPv4": {
+          "Action": "loopback_mtu",
+          "Protocol": "ipv4",
+          "Enable": false
+        },
+        "SetTCP_BBR2": {
+          "Action": "tcp_congestion",
+          "Templates": [
+            "Internet",
+            "Datacenter",
+            "Compat",
+            "DatacenterCustom",
+            "InternetCustom"
+          ],
+          "Provider": "bbr2"
+        }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EnableLoopbackLargeMTU_IPv6": { "Action": "run_powershell", "Command": "netsh int ipv6 set global loopbacklargemtu=enable" },
-        "EnableLoopbackLargeMTU_IPv4": { "Action": "run_powershell", "Command": "netsh int ipv4 set global loopbacklargemtu=enable" },
-        "RevertTCP_CUBIC_Internet": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=Internet CongestionProvider=CUBIC" },
-        "RevertTCP_CUBIC_InternetCustom": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=InternetCustom CongestionProvider=CUBIC" },
-        "RevertTCP_CUBIC_Compat": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=Compat CongestionProvider=CUBIC" },
-        "RevertTCP_CUBIC_Datacenter": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=Datacenter CongestionProvider=CUBIC" },
-        "RevertTCP_CUBIC_DatacenterCustom": { "Action": "run_powershell", "Command": "netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=CUBIC" }
+        "EnableLoopbackLargeMTU_IPv6": {
+          "Action": "loopback_mtu",
+          "Protocol": "ipv6",
+          "Enable": true
+        },
+        "EnableLoopbackLargeMTU_IPv4": {
+          "Action": "loopback_mtu",
+          "Protocol": "ipv4",
+          "Enable": true
+        },
+        "RevertTCP_CUBIC": {
+          "Action": "tcp_congestion",
+          "Templates": [
+            "Internet",
+            "InternetCustom",
+            "Compat",
+            "Datacenter",
+            "DatacenterCustom"
+          ],
+          "Provider": "CUBIC"
+        }
       }
     }
   },
@@ -99,6 +127,14 @@
         "DisableNetworkDiscoveryGroup": {
           "Action": "run_powershell",
           "Command": "Set-NetFirewallRule -DisplayGroup 'Network Discovery' -Enabled False -Profile Any"
+        },
+        "DisableLLTDIORspndr": {
+          "Action": "netbind",
+          "ComponentID": [
+            "ms_lltdio",
+            "ms_rspndr"
+          ],
+          "State": "disable"
         }
       }
     },
@@ -117,6 +153,14 @@
         "RestoreNetworkDiscoveryRules": {
           "Action": "run_powershell",
           "Command": "$rules=@(@{Name='NETDIS-UPnPHost-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-SSDPSrv-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-LLMNR-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-In-UDP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-UPnP-Out-TCP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNTS-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-SSDPSrv-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Name-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Name-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-LLMNR-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-SSDPSrv-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-WSDEVNTS-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Datagram-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDPHOST-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNT-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDPHOST-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-UPnP-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')}); foreach($r in $rules){ $enabledEnum=[Enum]::Parse([Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetSecurity.Enabled], $r.Enabled); try { Set-NetFirewallRule -Name $r.Name -Enabled $enabledEnum -Profile $r.Profile -ea SilentlyContinue } catch {} }"
+        },
+        "EnableLLTDIORspndr": {
+          "Action": "netbind",
+          "ComponentID": [
+            "ms_lltdio",
+            "ms_rspndr"
+          ],
+          "State": "enable"
         }
       }
     }
@@ -124,29 +168,15 @@
   "Disable WiFi": {
     "apply": {
       "COMMANDS": {
-        "DisableWiFiTask1": {
+        "DisableWiFiTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WCM\\WiFiTask",
-          "TaskAction": "disable"
-        },
-        "DisableWiFiTask2": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
-          "TaskAction": "disable"
-        },
-        "DisableWiFiTask3": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
-          "TaskAction": "disable"
-        },
-        "DisableWiFiTask4": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
-          "TaskAction": "disable"
-        },
-        "DisableWiFiTask5": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\WCM\\WiFiTask",
+            "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
+            "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
+            "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
+            "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
+          ],
           "TaskAction": "disable"
         },
         "DisableWlanSvc": {
@@ -167,29 +197,15 @@
     },
     "revert": {
       "COMMANDS": {
-        "EnableWiFiTask1": {
+        "EnableWiFiTasks": {
           "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WCM\\WiFiTask",
-          "TaskAction": "enable"
-        },
-        "EnableWiFiTask2": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
-          "TaskAction": "enable"
-        },
-        "EnableWiFiTask3": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
-          "TaskAction": "enable"
-        },
-        "EnableWiFiTask4": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
-          "TaskAction": "enable"
-        },
-        "EnableWiFiTask5": {
-          "Action": "scheduled_task",
-          "TaskName": "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\WCM\\WiFiTask",
+            "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
+            "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
+            "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
+            "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
+          ],
           "TaskAction": "enable"
         },
         "EnableWlanSvc": {
@@ -234,6 +250,12 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SstpSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowVPNOverCellular": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowVPNRoamingOverCellular": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -242,6 +264,106 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SstpSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowVPNOverCellular": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowVPNRoamingOverCellular": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable SMBv1/SMBv2": {
+    "apply": {
+      "COMMANDS": {
+        "DisableSMBRegistry": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
+          "Operations": [
+            { "Name": "SMB1", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "SMB2", "Type": "REG_DWORD", "Value": 0 }
+          ]
+        },
+        "DisableSMB1Feature": {
+          "Action": "optional_feature",
+          "FeatureName": "SMB1Protocol",
+          "State": "Disabled"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "DeleteSMBRegistry": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
+          "Operations": [
+            { "Name": "SMB1", "Operation": "Delete" },
+            { "Name": "SMB2", "Operation": "Delete" }
+          ]
+        },
+        "DisableSMB1FeatureAgain": {
+          "Action": "optional_feature",
+          "FeatureName": "SMB1Protocol",
+          "State": "Disabled"
+        }
+      }
+    }
+  },
+  "Disable NetBIOS/mDNS/LLMNR": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+        "EnableMDNS": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableNetbios": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableMulticast": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableSmartNameResolution": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "COMMANDS": {
+        "DisableNetBIOSOptions": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces",
+          "Operations": [
+            { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 2 }
+          ]
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+        "EnableMDNS": { "Action": "deletevalue" },
+        "EnableNetbios": { "Action": "deletevalue" },
+        "EnableMulticast": { "Action": "deletevalue" },
+        "DisableSmartNameResolution": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableNetBIOSOptions": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces",
+          "Operations": [
+            { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 0 }
+          ]
+        }
+      }
+    }
+  },
+  "Disable Power Management": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
+        "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
+        "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
+        "fDisablePowerManagement": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
+        "fDisablePowerManagement": { "Action": "deletevalue" }
       }
     }
   }

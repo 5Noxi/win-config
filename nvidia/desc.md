@@ -605,6 +605,7 @@ Disabling all of it will increase the wattage usage noticeable.
                   "0 : Keep the IST gating enabled by default"
               ],
 }
+```
 
 # Disable Power Savings
 
@@ -783,3 +784,11 @@ Takes a default value of `15`:
 ```
 
 > [nvidia/assets | mpo-minfps.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/mpo-minfps.c)
+
+# Clear Shader Cache
+
+Set the `Shader Cache Size` to `Disabled` or you'll get the "The action can't be completet [...] - Folder In Use" window (restart your PC). Use the option (`Clear`), then set the `Shader Cache Size` back to `Unlimited`.
+
+> There should be a reason for clearing the shader cache. If not, you should't clear it. After clearing, the cache must be rebuilt, which means that the game will stutter until then.
+
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/shadercache.png?raw=true)

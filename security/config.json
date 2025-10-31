@@ -282,24 +282,40 @@
     "apply": {
       "COMMANDS": {
         "Optoutdev": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\PCI' -Recurse | Where-Object { $_.PSChildName -eq 'DMA Management' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'RemappingSupported' -PropertyType DWord -Value 0 -Force | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\*ControlSet*\\Enum\\PCI\\**\\Device Parameters\\DMA Management",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "RemappingSupported", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
+          ]
         },
         "Optoutdrv": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' -PropertyType DWord -Value 0 -Force }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\*ControlSet*\\Services\\**",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
+          ]
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "Optindev": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Enum\\PCI' -Recurse | Where-Object { $_.PSChildName -eq 'DMA Management' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'RemappingSupported' -PropertyType DWord -Value 1 -Force | Out-Null }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\*ControlSet*\\Enum\\PCI\\**\\Device Parameters\\DMA Management",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "RemappingSupported", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
+          ]
         },
         "Optindrv": {
-          "Action": "run_powershell",
-          "Command": "Get-ChildItem 'HKLM:\\SYSTEM\\CurrentControlSet\\Services' -Recurse | Where-Object { Get-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name 'DmaRemappingCompatible' -PropertyType DWord -Value 1 -Force }"
+          "Action": "registry_pattern",
+          "Pattern": "SYSTEM\\*ControlSet*\\Services\\**",
+          "Root": "HKLM",
+          "Operations": [
+            { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
+          ]
         }
       }
     }
@@ -406,8 +422,9 @@
     "apply": {
       "COMMANDS": {
         "HypervisorOff": {
-          "Action": "run_powershell",
-          "Command": "bcdedit /set hypervisorlaunchtype off"
+          "Action": "bcdedit",
+          "Name": "hypervisorlaunchtype",
+          "Value": "off"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
@@ -456,8 +473,9 @@
     "revert": {
       "COMMANDS": {
         "HypervisorAuto": {
-          "Action": "run_powershell",
-          "Command": "bcdedit /deletevalue hypervisorlaunchtype"
+          "Action": "bcdedit",
+          "Name": "hypervisorlaunchtype",
+          "Delete": true
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
@@ -633,6 +651,26 @@
         "DisableRenegoOnServer": { "Type": "REG_DWORD", "Data": 1 },
         "DisableRenegoOnClient": { "Type": "REG_DWORD", "Data": 1 },
         "UseScsvForTls": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "COMMANDS": {
+        "SetNetFrameworkTLS": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SOFTWARE\\Microsoft\\.NETFramework\\v*",
+          "Operations": [
+            { "Name": "SchUseStrongCrypto", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "SystemDefaultTlsVersions", "Type": "REG_DWORD", "Value": 1 }
+          ]
+        },
+        "SetNetFrameworkTLSWow": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
+          "Operations": [
+            { "Name": "SchUseStrongCrypto", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "SystemDefaultTlsVersions", "Type": "REG_DWORD", "Value": 1 }
+          ]
+        }
       }
     },
     "revert": {
@@ -699,6 +737,26 @@
         "DisableRenegoOnServer": { "Action": "deletevalue" },
         "DisableRenegoOnClient": { "Action": "deletevalue" },
         "UseScsvForTls": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "DelNetFrameworkTLS": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SOFTWARE\\Microsoft\\.NETFramework\\v*",
+          "Operations": [
+            { "Name": "SchUseStrongCrypto", "Operation": "delete" },
+            { "Name": "SystemDefaultTlsVersions", "Operation": "delete" }
+          ]
+        },
+        "DelNetFrameworkTLSWow": {
+          "Action": "registry_pattern",
+          "Root": "HKLM",
+          "Pattern": "SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
+          "Operations": [
+            { "Name": "SchUseStrongCrypto", "Operation": "delete" },
+            { "Name": "SystemDefaultTlsVersions", "Operation": "delete" }
+          ]
+        }
       }
     }
   },
@@ -735,3 +793,5 @@
     }
   }
 }
+
+
