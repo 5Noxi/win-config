@@ -209,9 +209,10 @@
       "COMMANDS": {
         "DisableSearchFeature": {
           "Action": "optional_feature",
-          "Name": "SearchEngine-Client-Package",
-          "Enabled": false,
-          "Arguments": ["/NoRestart"]
+          "Arguments": ["/NoRestart"],
+          "Features": [
+            { "Name": "SearchEngine-Client-Package", "State": "Disabled" }
+          ]
         }
       }
     },
@@ -238,9 +239,10 @@
       "COMMANDS": {
         "EnableSearchFeature": {
           "Action": "optional_feature",
-          "Name": "SearchEngine-Client-Package",
-          "Enabled": true,
-          "Arguments": ["/NoRestart"]
+          "Arguments": ["/NoRestart"],
+          "Features": [
+            { "Name": "SearchEngine-Client-Package", "State": "Enabled" }
+          ]
         }
       }
     }
@@ -315,7 +317,7 @@
       "COMMANDS": {
         "RunFthSpecialize": {
           "Action": "run_powershell",
-          "Command": "Rundll32.exe fthsvc.dll,FthSysprepSpecialize"
+          "Command": "rundll32.exe fthsvc.dll,FthSysprepSpecialize"
         }
       }
     },
@@ -485,7 +487,7 @@
     "COMMANDS": {
       "RunDISM": {
         "Action": "run_powershell",
-        "Command": "dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase"
+        "Command": "dism.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase"
       }
     }
   },

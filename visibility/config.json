@@ -423,30 +423,25 @@
     "apply": {
       "HKCU\\Control Panel\\Desktop\\WindowMetrics": { "MinAnimate": { "Type": "REG_SZ", "Data": "0" } },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": { "TaskbarAnimations": { "Type": "REG_SZ", "Data": "0" } },
-      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": { "DisallowAnimations": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": { "DisallowAnimations": { "Type": "REG_DWORD", "Data": 1 } },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 0 } },
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Type": "REG_DWORD", "Data": 1, "KeyPath": "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer", "KeyName": "TurnOffSPIAnimations" } }
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Type": "REG_DWORD", "Data": 1 } }
     },
     "revert": {
       "HKCU\\Control Panel\\Desktop\\WindowMetrics": { "MinAnimate": { "Type": "REG_SZ", "Data": "1" } },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": { "TaskbarAnimations": { "Type": "REG_SZ", "Data": "1" } },
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Action": "deletevalue" } },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": { "DisallowAnimations": { "Action": "deletevalue" } },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } }
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": { "EnableFirstLogonAnimation": { "Type": "REG_DWORD", "Data": 1 } },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": { "TurnOffSPIAnimations": { "Action": "deletevalue" } }
     }
   },
-    "Disable Automatic Folder Type Discovery": {
+  "Disable Automatic Folder Type Discovery": {
     "apply": {
-      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags": {
-        "": { "Action": "deletekey" }
-      },
-      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU": {
-        "": { "Action": "deletekey" }
-      },
-      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags\\AllFolders\\Shell": {
-        "FolderType": { "Type": "REG_SZ", "Data": "NotSpecified" }
-      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags": { "": { "Action": "deletekey" } },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU": { "": { "Action": "deletekey" } },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags\\AllFolders\\Shell": { "FolderType": { "Type": "REG_SZ", "Data": "NotSpecified" } },
       "COMMANDS": {
         "RestartExplorer": {
           "Action": "restart_explorer"
@@ -454,15 +449,9 @@
       }
     },
     "revert": {
-      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags": {
-        "": {}
-      },
-      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU": {
-        "": {}
-      },
-      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags\\AllFolders\\Shell": {
-        "FolderType": { "Action": "deletevalue" }
-      }
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags": { "": {} },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\BagMRU": { "": {} },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\Shell\\Bags\\AllFolders\\Shell": { "FolderType": { "Action": "deletevalue" } }
     }
   },
   "Hide Language Bar": {
@@ -503,6 +492,7 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 },
+        "TaskbarEndTasks": { "Type": "REG_DWORD", "Data": 1 },
         "TaskbarFlashing": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
@@ -530,6 +520,7 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "ShowTaskViewButton": { "Action": "deletevalue" },
         "TaskbarBadges": { "Action": "deletevalue" },
+        "TaskbarEndTasks": { "Action": "deletevalue" },
         "TaskbarFlashing": { "Action": "deletevalue" },
         "TaskbarAl": { "Action": "deletevalue" },
         "PeopleBand": { "Action": "deletevalue" },
@@ -843,8 +834,7 @@
       "COMMANDS": {
         "SetPSConsoleColor": {
           "Action": "registry_pattern",
-          "Root": "HKCU",
-          "Pattern": "Console\\*powershell*",
+          "Pattern": "HKCU\\Console\\*powershell*",
           "Operations": [
             { "Name": "ScreenColors", "Type": "REG_DWORD", "Value": 7 }
           ]
@@ -855,8 +845,7 @@
       "COMMANDS": {
         "ResetPSConsoleColor": {
           "Action": "registry_pattern",
-          "Root": "HKCU",
-          "Pattern": "Console\\*powershell*",
+          "Pattern": "HKCU\\Console\\*powershell*",
           "Operations": [
             { "Name": "ScreenColors", "Type": "REG_DWORD", "Value": 86 }
           ]

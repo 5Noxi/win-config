@@ -62,14 +62,12 @@
   "Congestion Provider": {
     "apply": {
       "COMMANDS": {
-        "DisableLoopbackLargeMTU_IPv6": {
+        "DisableLoopbackLargeMTU": {
           "Action": "loopback_mtu",
-          "Protocol": "ipv6",
-          "Enable": false
-        },
-        "DisableLoopbackLargeMTU_IPv4": {
-          "Action": "loopback_mtu",
-          "Protocol": "ipv4",
+          "Protocols": [
+            "ipv6",
+            "ipv4"
+          ],
           "Enable": false
         },
         "SetTCP_BBR2": {
@@ -87,14 +85,12 @@
     },
     "revert": {
       "COMMANDS": {
-        "EnableLoopbackLargeMTU_IPv6": {
+        "EnableLoopbackLargeMTU": {
           "Action": "loopback_mtu",
-          "Protocol": "ipv6",
-          "Enable": true
-        },
-        "EnableLoopbackLargeMTU_IPv4": {
-          "Action": "loopback_mtu",
-          "Protocol": "ipv4",
+          "Protocols": [
+            "ipv6",
+            "ipv4"
+          ],
           "Enable": true
         },
         "RevertTCP_CUBIC": {
@@ -165,7 +161,7 @@
       }
     }
   },
-  "Disable WiFi": {
+  "Disable Wi-Fi": {
     "apply": {
       "COMMANDS": {
         "DisableWiFiTasks": {
@@ -178,21 +174,19 @@
             "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
           ],
           "TaskAction": "disable"
-        },
-        "DisableWlanSvc": {
-          "Action": "reg_add",
-          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc",
-          "ValueName": "Start",
-          "ValueType": "REG_DWORD",
-          "Data": "4"
-        },
-        "DisableVwififlt": {
-          "Action": "reg_add",
-          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt",
-          "ValueName": "Start",
-          "ValueType": "REG_DWORD",
-          "Data": "4"
         }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFi": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowManualWiFiConfiguration": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -207,21 +201,19 @@
             "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
           ],
           "TaskAction": "enable"
-        },
-        "EnableWlanSvc": {
-          "Action": "reg_add",
-          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc",
-          "ValueName": "Start",
-          "ValueType": "REG_DWORD",
-          "Data": "2"
-        },
-        "EnableVwififlt": {
-          "Action": "reg_add",
-          "RegistryPath": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt",
-          "ValueName": "Start",
-          "ValueType": "REG_DWORD",
-          "Data": "2"
         }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFi": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowManualWiFiConfiguration": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   },
@@ -275,37 +267,31 @@
   },
   "Disable SMBv1/SMBv2": {
     "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+        "SMB1": { "Type": "REG_DWORD", "Data": 0 },
+        "SMB2": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "COMMANDS": {
-        "DisableSMBRegistry": {
-          "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
-          "Operations": [
-            { "Name": "SMB1", "Type": "REG_DWORD", "Value": 0 },
-            { "Name": "SMB2", "Type": "REG_DWORD", "Value": 0 }
-          ]
-        },
         "DisableSMB1Feature": {
           "Action": "optional_feature",
-          "FeatureName": "SMB1Protocol",
+          "Features": [
+            "SMB1Protocol"
+          ],
           "State": "Disabled"
         }
       }
     },
     "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+        "SMB1": { "Action": "deletevalue" },
+        "SMB2": { "Action": "deletevalue" }
+      },
       "COMMANDS": {
-        "DeleteSMBRegistry": {
-          "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters",
-          "Operations": [
-            { "Name": "SMB1", "Operation": "Delete" },
-            { "Name": "SMB2", "Operation": "Delete" }
-          ]
-        },
         "DisableSMB1FeatureAgain": {
           "Action": "optional_feature",
-          "FeatureName": "SMB1Protocol",
+          "Features": [
+            "SMB1Protocol"
+          ],
           "State": "Disabled"
         }
       }
@@ -319,11 +305,13 @@
         "EnableMulticast": { "Type": "REG_DWORD", "Data": 0 },
         "DisableSmartNameResolution": { "Type": "REG_DWORD", "Data": 1 }
       },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters": {
+        "EnableLMHOSTS": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "COMMANDS": {
         "DisableNetBIOSOptions": {
           "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces\\Tcpip_*",
           "Operations": [
             { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 2 }
           ]
@@ -337,11 +325,13 @@
         "EnableMulticast": { "Action": "deletevalue" },
         "DisableSmartNameResolution": { "Action": "deletevalue" }
       },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters": {
+        "EnableLMHOSTS": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
         "EnableNetBIOSOptions": {
           "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces\\Tcpip_*",
           "Operations": [
             { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 0 }
           ]
@@ -349,21 +339,53 @@
       }
     }
   },
-  "Disable Power Management": {
+  "Disable IPv6": {
     "apply": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
-        "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters": {
+        "DisabledComponents": { "Type": "REG_DWORD", "Data": 255 }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
-        "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      "COMMANDS": {
+        "DisableIPv6Bindings": {
+          "Action": "netbind",
+          "ComponentID": ["ms_tcpip6"],
+          "State": "disable"
+        }
       }
     },
     "revert": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
-        "fDisablePowerManagement": { "Action": "deletevalue" }
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters": {
+        "DisabledComponents": { "Action": "deletevalue" }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
-        "fDisablePowerManagement": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "EnableIPv6Bindings": {
+          "Action": "netbind",
+          "ComponentID": ["ms_tcpip6"],
+          "State": "enable"
+        }
+      }
+    }
+  },
+  "Disable Wi-Fi Sense": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFiHotSpotReporting": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowAutoConnectToWiFiSenseHotspots": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WcmSvc\\wifinetworkmanager\\config": {
+        "AutoConnectAllowedOEM": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFiHotSpotReporting": {
+        "value": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowAutoConnectToWiFiSenseHotspots": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\WcmSvc\\wifinetworkmanager\\config": {
+        "AutoConnectAllowedOEM": { "Action": "deletevalue" }
       }
     }
   }

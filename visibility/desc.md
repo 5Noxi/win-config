@@ -286,9 +286,9 @@ reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Supp
 
 Removes the search box, moves the taskbar to the left, removes badges, disables the orange flashes on the app icons, removes the "Task View" button. (`Personalization > Taskbar`)
 
-Add the `End Task` option to the taskbar right click menu with:
+Remove the `End Task` option to the taskbar right click menu with:
 ```bat
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" /v TaskbarEndTask /t REG_DWORD /d 1 /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" /v TaskbarEndTask /f
 ```
 `TaskbarSd` adds/removes the block in the right corner, which shows the desktop (picture).
 

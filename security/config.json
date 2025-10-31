@@ -89,29 +89,29 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Update": {
-        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+        "ExcludeWUDriversInQualityUpdate": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Update": {
-        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+        "ExcludeWUDriversInQualityUpdate": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
-        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+        "ExcludeWUDriversInQualityUpdate": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate": {
-        "ExcludeWUDriversInQualityUpdate": { "Action": "DeleteValue" }
+        "ExcludeWUDriversInQualityUpdate": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Update\\ExcludeWUDriversInQualityUpdate": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState": {
-        "ExcludeWUDrivers": { "Action": "DeleteValue" }
+        "ExcludeWUDrivers": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\DriverSearching": {
         "SearchOrderConfig": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DriverSearching": {
-        "SearchOrderConfig": { "Action": "DeleteValue" },
-        "DontSearchWindowsUpdate": { "Action": "DeleteValue" }
+        "SearchOrderConfig": { "Action": "deletevalue" },
+        "DontSearchWindowsUpdate": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Device Metadata": {
         "PreventDeviceMetadataFromNetwork": { "Type": "REG_DWORD", "Data": 0 }
@@ -119,8 +119,7 @@
     }
   },
   "Disable Windows Defender": {
-      "apply":{
-
+    "apply":{
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
         "DisableAntiSpyware": { "Type": "REG_DWORD", "Data": 1 }
       },
@@ -283,16 +282,14 @@
       "COMMANDS": {
         "Optoutdev": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\*ControlSet*\\Enum\\PCI\\**\\Device Parameters\\DMA Management",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Enum\\PCI\\**\\Device Parameters\\DMA Management",
           "Operations": [
             { "Name": "RemappingSupported", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
           ]
         },
         "Optoutdrv": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\*ControlSet*\\Services\\**",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Services\\**",
           "Operations": [
             { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
           ]
@@ -303,16 +300,14 @@
       "COMMANDS": {
         "Optindev": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\*ControlSet*\\Enum\\PCI\\**\\Device Parameters\\DMA Management",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Enum\\PCI\\**\\Device Parameters\\DMA Management",
           "Operations": [
             { "Name": "RemappingSupported", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
           ]
         },
         "Optindrv": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\*ControlSet*\\Services\\**",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Services\\**",
           "Operations": [
             { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
           ]
@@ -378,7 +373,7 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
-        "DisableWpbtExecution": { "Action": "DeleteValue" }
+        "DisableWpbtExecution": { "Action": "deletevalue" }
       }
     }
   },
@@ -390,7 +385,7 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\MRT": {
-        "DontOfferThroughWUAU": { "Action": "DeleteValue" }
+        "DontOfferThroughWUAU": { "Action": "deletevalue" }
       }
     }
   },
@@ -655,8 +650,7 @@
       "COMMANDS": {
         "SetNetFrameworkTLS": {
           "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SOFTWARE\\Microsoft\\.NETFramework\\v*",
+          "Pattern": "HKLM\\SOFTWARE\\Microsoft\\.NETFramework\\v*",
           "Operations": [
             { "Name": "SchUseStrongCrypto", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "SystemDefaultTlsVersions", "Type": "REG_DWORD", "Value": 1 }
@@ -664,8 +658,7 @@
         },
         "SetNetFrameworkTLSWow": {
           "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
+          "Pattern": "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
           "Operations": [
             { "Name": "SchUseStrongCrypto", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "SystemDefaultTlsVersions", "Type": "REG_DWORD", "Value": 1 }
@@ -741,8 +734,7 @@
       "COMMANDS": {
         "DelNetFrameworkTLS": {
           "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SOFTWARE\\Microsoft\\.NETFramework\\v*",
+          "Pattern": "HKLM\\SOFTWARE\\Microsoft\\.NETFramework\\v*",
           "Operations": [
             { "Name": "SchUseStrongCrypto", "Operation": "delete" },
             { "Name": "SystemDefaultTlsVersions", "Operation": "delete" }
@@ -750,8 +742,7 @@
         },
         "DelNetFrameworkTLSWow": {
           "Action": "registry_pattern",
-          "Root": "HKLM",
-          "Pattern": "SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
+          "Pattern": "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
           "Operations": [
             { "Name": "SchUseStrongCrypto", "Operation": "delete" },
             { "Name": "SystemDefaultTlsVersions", "Operation": "delete" }

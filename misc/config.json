@@ -11,7 +11,7 @@
       }
     }
   },
-    "StartAllBack Settings": {
+  "StartAllBack Settings": {
     "apply": {
       "HKCU\\Software\\StartIsBack": {
         "AlterStyle": { "Type": "REG_SZ", "Data": "" },
@@ -41,7 +41,6 @@
         "Start_ShowRecentDocs": { "Type": "REG_DWORD", "Data": 0 },
         "Start_ShowRun": { "Type": "REG_DWORD", "Data": 0 },
         "Start_ShowSetProgramAccessAndDefaults": { "Type": "REG_DWORD", "Data": 0 },
-
         "TaskbarStyle": { "Type": "REG_SZ", "Data": "Plain8.msstyles" },
         "TaskbarLargerIcons": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSpacierIcons": { "Type": "REG_DWORD", "Data": "4294967295" },
@@ -50,7 +49,6 @@
         "FatTaskbar": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarOneSegment": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarTranslucentEffect": { "Type": "REG_DWORD", "Data": 0 },
-
         "SysTrayStyle": { "Type": "REG_DWORD", "Data": 0 },
         "SysTrayLocation": { "Type": "REG_DWORD", "Data": 0 },
         "SysTrayMicrophone": { "Type": "REG_DWORD", "Data": 1 },
@@ -60,7 +58,6 @@
         "SysTrayInputSwitch": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarControlCenter": { "Type": "REG_DWORD", "Data": 0 },
         "SysTraySpacierIcons": { "Type": "REG_DWORD", "Data": 1 },
-
         "FrameStyle": { "Type": "REG_DWORD", "Data": 1 },
         "NavBarGlass": { "Type": "REG_DWORD", "Data": 1 },
         "RestyleIcons": { "Type": "REG_DWORD", "Data": 1 },
@@ -70,7 +67,6 @@
         "UndeadControlPanel": { "Type": "REG_DWORD", "Data": 1 },
         "RestyleControls": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "Start_PowerButtonAction": { "Type": "REG_DWORD", "Data": 2 },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
@@ -84,27 +80,21 @@
         "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 15 },
         "ShowSystrayDateTimeValueName": { "Type": "REG_DWORD", "Data": 1 }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Type": "REG_DWORD", "Data": 1 }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
         "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
         "SystemTrayChevronVisibility": { "Type": "REG_DWORD", "Data": 1 }
       },
-
       "HKCU\\Control Panel\\Bluetooth": {
         "Notification Area Icon": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
         "PenWorkspaceButtonDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "TipbandDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 }
       }
@@ -138,7 +128,6 @@
         "Start_ShowRecentDocs": { "Action": "deletevalue" },
         "Start_ShowRun": { "Action": "deletevalue" },
         "Start_ShowSetProgramAccessAndDefaults": { "Action": "deletevalue" },
-
         "TaskbarStyle": { "Action": "deletevalue" },
         "TaskbarLargerIcons": { "Action": "deletevalue" },
         "TaskbarSpacierIcons": { "Action": "deletevalue" },
@@ -147,7 +136,6 @@
         "FatTaskbar": { "Action": "deletevalue" },
         "TaskbarOneSegment": { "Action": "deletevalue" },
         "TaskbarTranslucentEffect": { "Action": "deletevalue" },
-
         "SysTrayStyle": { "Action": "deletevalue" },
         "SysTrayLocation": { "Action": "deletevalue" },
         "SysTrayMicrophone": { "Action": "deletevalue" },
@@ -157,7 +145,6 @@
         "SysTrayInputSwitch": { "Action": "deletevalue" },
         "TaskbarControlCenter": { "Action": "deletevalue" },
         "SysTraySpacierIcons": { "Action": "deletevalue" },
-
         "FrameStyle": { "Action": "deletevalue" },
         "NavBarGlass": { "Action": "deletevalue" },
         "RestyleIcons": { "Action": "deletevalue" },
@@ -167,7 +154,6 @@
         "UndeadControlPanel": { "Action": "deletevalue" },
         "RestyleControls": { "Action": "deletevalue" }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "Start_PowerButtonAction": { "Action": "deletevalue" },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
@@ -181,27 +167,21 @@
         "JumpListItems_Maximum": { "Action": "deletevalue" },
         "ShowSystrayDateTimeValueName": { "Action": "deletevalue" }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Action": "deletevalue" }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
         "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 2 }
       },
-
       "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
         "SystemTrayChevronVisibility": { "Action": "deletevalue" }
       },
-
       "HKCU\\Control Panel\\Bluetooth": {
         "Notification Area Icon": { "Action": "deletevalue" }
       },
-
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
         "PenWorkspaceButtonDesiredVisibility": { "Action": "deletevalue" }
       },
-
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "TipbandDesiredVisibility": { "Action": "deletevalue" }
       }
@@ -256,7 +236,7 @@
       "COMMANDS": {
         "DeleteVSCodeSettings": {
           "Action": "run_powershell",
-          "Command": "Remove-Item -Path \"$env:APPDATA\\Code\\User\\settings.json\" -Force -EA SilentlyContinue"
+          "Command": "Remove-Item -Path \"$env:APPDATA\\Code\\User\\settings.json\" -Force -ea SilentlyContinue"
         }
       }
     }

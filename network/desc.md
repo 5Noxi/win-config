@@ -217,6 +217,89 @@ NETDIS-NB_Name-Out-UDP-Active         True        Private
 NETDIS-NB_Name-Out-UDP-NoScope       False         Domain
 ```
 
+---
+
+```json
+{
+    "File":  "LinkLayerTopologyDiscovery.admx",
+    "NameSpace":  "Microsoft.Policies.LinkLayerTopology",
+    "Class":  "Machine",
+    "CategoryName":  "LLTD_Category",
+    "DisplayName":  "Turn on Mapper I/O (LLTDIO) driver",
+    "ExplainText":  "This policy setting changes the operational behavior of the Mapper I/O network protocol driver.LLTDIO allows a computer to discover the topology of a network it\u0027s connected to. It also allows a computer to initiate Quality-of-Service requests such as bandwidth estimation and network health analysis.If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow LLTDIO to operate on a network interface that\u0027s connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead.If you disable or do not configure this policy setting, the default behavior of LLTDIO will apply.",
+    "Supported":  "WindowsVista",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LLTD",
+    "KeyName":  "EnableLLTDIO",
+    "Elements":  [
+                        {
+                            "ValueName":  "AllowLLTDIOOnDomain",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        },
+                        {
+                            "ValueName":  "AllowLLTDIOOnPublicNet",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        },
+                        {
+                            "ValueName":  "ProhibitLLTDIOOnPrivateNet",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        },
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "LinkLayerTopologyDiscovery.admx",
+    "NameSpace":  "Microsoft.Policies.LinkLayerTopology",
+    "Class":  "Machine",
+    "CategoryName":  "LLTD_Category",
+    "DisplayName":  "Turn on Responder (RSPNDR) driver",
+    "ExplainText":  "This policy setting changes the operational behavior of the Responder network protocol driver.The Responder allows a computer to participate in Link Layer Topology Discovery requests so that it can be discovered and located on the network. It also allows a computer to participate in Quality-of-Service activities such as bandwidth estimation and network health analysis.If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow the Responder to operate on a network interface that\u0027s connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead.If you disable or do not configure this policy setting, the default behavior for the Responder will apply.",
+    "Supported":  "WindowsVista",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LLTD",
+    "KeyName":  "EnableRspndr",
+    "Elements":  [
+                        {
+                            "ValueName":  "AllowRspndrOnDomain",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        },
+                        {
+                            "ValueName":  "AllowRspndrOnPublicNet",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        },
+                        {
+                            "ValueName":  "ProhibitRspndrOnPrivateNet",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        },
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
+
 # Congestion Provider
 
 BBRv2 only works on W11 - can cause issues with applications (e.g. steelseries), can work fine. Fix:
@@ -283,7 +366,7 @@ netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=NewR
 netsh int tcp set supplemental Template=InternetCustom CongestionProvider=NewReno
 ```
 
-# Disable WiFi
+# Disable Wi-Fi
 
 Self explaining.
 
@@ -443,6 +526,11 @@ Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
 
 "`NetbiosOptions` specifies the configurable security settings for the NetBIOS service and determines the mode of operation for NetBIOS over TCP/IP on the parent interface."
 
+Enabling the option includes disabling `LMHOSTS Lookups` - "LMHOSTS is a local text file Windows uses to map NetBIOS names to IPs when other NetBIOS methods (WINS, broadcast) don't give an answer. It lives in C:\Windows\System32\drivers\etc, there's an `lmhosts.sam` example, and it's checked only if `Enable LMHOSTS lookup` is on."
+
+> https://en.wikipedia.org/wiki/LMHOSTS  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/NetBT.txt
+
 `NetbiosOptions`:
 
 | Value | Description                                                                                 |
@@ -566,3 +654,88 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
                     ]
 },
 ```
+
+# Disable IPv6
+
+`0xFFFFFFFF` disables all IPv6 interfaces, even ones Windows needs. The TCP/IP stack then waits for them to initialize and times out, which adds the `~5s` boot delay. The documentation below was taken from the official support articles.
+
+Min Value: `0x00` (default value)  
+Max Value: `0xFF` (IPv6 disabled)
+Recommended by Microsoft: `0x20` (Prefer IPv4 over IPv6)
+
+|IPv6 Functionality|Registry value and comments|
+|---|---|
+|Prefer IPv4 over IPv6|Decimal 32<br/>Hexadecimal 0x20<br/>Binary xx1x xxxx<br/><br/>Recommended instead of disabling IPv6.<br/><br/>To confirm preference of IPv4 over IPv6, perform the following commands:<br/><br/>- Open the command prompt or PowerShell.<br/>- Use the 'ping' command to check the preferred IP version. For example, "ping bing.com". <br/>- If IPv4 is preferred, you should see an IPv4 address being returned in the response.<br/><br/>Network Connections:<br/><br/>- Open the command prompt or PowerShell.<br/>- Use 'netsh interface ipv6 show prefixpolicies<br/>- Check if the 'Prefix' policies have been modified to prioritize IPv4.<br/>- The '::ffff:0:0/96' prefix should have a higher precedence than the '::/0' prefix.<br/><br/>For Example, if you have two entries, one with precedence 35 and another with precedence 40, the one with precedence 40 will be preferred.|
+|Disable IPv6|Decimal 255<br/>Hexadecimal 0xFF<br/>Binary 1111 1111<br/><br/>See [startup delay occurs after you disable IPv6 in Windows](https://support.microsoft.com/help/3014406) if you encounter startup delay after disabling IPv6 in Windows 7 SP1 or Windows Server 2008 R2 SP1. <br/><br/> Additionally, system startup will be delayed for five seconds if IPv6 is disabled by incorrectly, setting the **DisabledComponents** registry setting to a value of 0xffffffff. The correct value should be 0xff. For more information, see [Internet Protocol Version 6 (IPv6) Overview](/previous-versions/windows/it-pro/windows-8.1-and-8/hh831730(v=ws.11)). <br/><br/>  The **DisabledComponents** registry value doesn't affect the state of the check box. Even if the **DisabledComponents** registry key is set to disable IPv6, the check box in the Networking tab for each interface can be checked. This is an expected behavior.<br/><br/> You cannot completely disable IPv6 as IPv6 is used internally on the system for many TCPIP tasks. For example, you will still be able to run ping `::1` after configuring this setting.|
+|Disable IPv6 on all nontunnel interfaces|Decimal 16<br/>Hexadecimal 0x10<br/>Binary xxx1 xxxx|
+|Disable IPv6 on all tunnel interfaces|Decimal 1<br/>Hexadecimal 0x01<br/>Binary xxxx xxx1|
+|Disable IPv6 on all nontunnel interfaces (except the loopback) and on IPv6 tunnel interface|Decimal 17<br/>Hexadecimal 0x11<br/>Binary xxx1 xxx1|
+|Prefer IPv6 over IPv4|Binary xx0x xxxx|
+|Re-enable IPv6 on all nontunnel interfaces|Binary xxx0 xxxx|
+|Re-enable IPv6 on all tunnel interfaces|Binary xxx xxx0|
+|Re-enable IPv6 on nontunnel interfaces and on IPv6 tunnel interfaces|Binary xxx0 xxx0|
+
+## How to calculate the registry value
+
+Windows use bitmasks to check the `DisabledComponents` values and determine whether a component should be disabled.
+
+|Name|Setting|
+|---|---|
+|Tunnel|Disable tunnel interfaces|
+|Tunnel6to4|Disable 6to4 interfaces|
+|TunnelIsatap|Disable Isatap interfaces|
+|Tunnel Teredo|Disable Teredo interfaces|
+|Native|Disable native interfaces (also PPP)|
+|PreferIpv4|Prefer IPv4 in default prefix policy|
+|TunnelCp|Disable CP interfaces|
+|TunnelIpTls|Disable IP-TLS interfaces|
+  
+For each bit, **0** means false and **1** means true. Refer to the following table for an example.
+
+|Setting|Prefer IPv4 over IPv6 in prefix policies|Disable IPv6 on all nontunnel interfaces|Disable IPv6 on all tunnel interfaces|Disable IPv6 on nontunnel interfaces (except the loopback) and on IPv6 tunnel interface|
+|---|---|---|---|---|
+|Disable tunnel interfaces|0|0|1|1|
+|Disable 6to4 interfaces|0|0|0|0|
+|Disable Isatap interfaces|0|0|0|0|
+|Disable Teredo interfaces|0|0|0|0|
+|Disable native interfaces (also PPP)|0|1|0|1|
+|Prefer IPv4 in default prefix policy.|1|0|0|0|
+|Disable CP interfaces|0|0|0|0|
+|Disable IP-TLS interfaces|0|0|0|0|
+|Binary|0010 0000|0001 0000|0000 0001|0001 0001|
+|Hexadecimal|0x20|0x10|0x01|0x11|
+
+> https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md  
+> https://support.microsoft.com/en-us/topic/startup-delay-occurs-after-you-disable-ipv6-in-windows-da7e0f60-27b0-c27e-7709-7ee9abfc6ef1
+
+# Disable Wi-Fi Sense
+
+Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft account, can share Wi-Fi access (password stays encrypted in MS servers) with your Outlook and Skype contacts, Facebook contacts can be added. When you join a new network, it asks whether to share it. Networks you used before the upgrade won't trigger the prompt.
+
+> https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/configure-wifi-sense-and-paid-wifi-service
+
+```json
+{
+    "File":  "wlansvc.admx",
+    "NameSpace":  "Microsoft.Policies.WlanSvc",
+    "Class":  "Machine",
+    "CategoryName":  "WlanSettings_Category",
+    "DisplayName":  "Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services",
+    "ExplainText":  "This policy setting determines whether users can enable the following WLAN settings: \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\".\"Connect to suggested open hotspots\" enables Windows to automatically connect users to open hotspots it knows about by crowdsourcing networks that other people using Windows have connected to.\"Connect to networks shared by my contacts\" enables Windows to automatically connect to networks that the user\u0027s contacts have shared with them, and enables users on this device to share networks with their contacts.\"Enable paid services\" enables Windows to temporarily connect to open hotspots to determine if paid services are available.If this policy setting is disabled, both \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\" will be turned off and users on this device will be prevented from enabling them.If this policy setting is not configured or is enabled, users can choose to enable or disable either \"Connect to suggested open hotspots\" or \"Connect to networks shared by my contacts\".",
+    "Supported":  "Windows_10_0_NOSERVER",
+    "KeyPath":  "Software\\Microsoft\\wcmsvc\\wifinetworkmanager\\config",
+    "KeyName":  "AutoConnectAllowedOEM",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
+
+# Disable Teredo

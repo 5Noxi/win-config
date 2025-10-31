@@ -12,8 +12,7 @@
         },
         "UsbDeviceParametersZero": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
           "Operations": [
             { "Name": "AllowIdleIrpInD3", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "DeviceIdleEnabled", "Type": "REG_DWORD", "Value": 0 },
@@ -29,8 +28,7 @@
         },
         "UsbWdfParamsZero": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
           "Operations": [
             { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
             { "SubPath": "Wdf", "Name": "SleepstudyState", "Type": "REG_DWORD", "Value": 0 },
@@ -40,8 +38,7 @@
         },
         "UsbDevSubD3ColdZero": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
           "ExcludeSubPaths": ["wdf"],
           "Operations": [
             { "Name": "D3ColdSupported", "Type": "REG_DWORD", "Value": 0 }
@@ -61,39 +58,36 @@
         },
         "UsbDeviceParametersRevert": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
           "Operations": [
             { "Name": "AllowIdleIrpInD3", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "DeviceIdleEnabled", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "EnhancedPowerManagementEnabled", "Type": "REG_DWORD", "Value": 1 },
-            { "Name": "DeviceSelectiveSuspended", "Op": "delete" },
-            { "Name": "EnhancedPowerManagementUseMonitor", "Op": "delete" },
-            { "Name": "IdleSupported", "Op": "delete" },
-            { "Name": "IdleTimeoutPeriodInMilliSec", "Op": "delete" },
-            { "Name": "SelectiveSuspendEnabled", "Op": "delete" },
-            { "Name": "SelectiveSuspendTimeout", "Op": "delete" },
-            { "Name": "UserSetDeviceIdleEnabled", "Op": "delete" }
+            { "Name": "DeviceSelectiveSuspended", "Operation": "delete" },
+            { "Name": "EnhancedPowerManagementUseMonitor", "Operation": "delete" },
+            { "Name": "IdleSupported", "Operation": "delete" },
+            { "Name": "IdleTimeoutPeriodInMilliSec", "Operation": "delete" },
+            { "Name": "SelectiveSuspendEnabled", "Operation": "delete" },
+            { "Name": "SelectiveSuspendTimeout", "Operation": "delete" },
+            { "Name": "UserSetDeviceIdleEnabled", "Operation": "delete" }
           ]
         },
         "UsbWdfParamsRevert": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
           "Operations": [
-            { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Op": "delete" },
-            { "SubPath": "Wdf", "Name": "WdfDirectedPowerTransitionEnable", "Op": "delete" },
-            { "SubPath": "Wdf", "Name": "SleepstudyState", "Op": "delete" },
-            { "SubPath": "Wdf", "Name": "WdfDefaultIdleInWorkingState", "Op": "delete" }
+            { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Operation": "delete" },
+            { "SubPath": "Wdf", "Name": "WdfDirectedPowerTransitionEnable", "Operation": "delete" },
+            { "SubPath": "Wdf", "Name": "SleepstudyState", "Operation": "delete" },
+            { "SubPath": "Wdf", "Name": "WdfDefaultIdleInWorkingState", "Operation": "delete" }
           ]
         },
         "UsbDevSubD3ColdClear": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
           "ExcludeSubPaths": ["wdf"],
           "Operations": [
-            { "Name": "D3ColdSupported", "Op": "delete" }
+            { "Name": "D3ColdSupported", "Operation": "delete" }
           ]
         }
       }
@@ -182,8 +176,7 @@
       "COMMANDS": {
         "SetHddParking0": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\**",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\**",
           "Operations": [
             { "Name": "EnableHDDParking", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
           ]
@@ -194,8 +187,7 @@
       "COMMANDS": {
         "SetHddParking1": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Services\\**",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\**",
           "Operations": [
             { "Name": "EnableHDDParking", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
           ]
@@ -208,8 +200,7 @@
       "COMMANDS": {
         "StorportIdleOff": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
           "Operations": [
             { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "DisableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
@@ -222,12 +213,11 @@
       "COMMANDS": {
         "StorportIdleOn": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
           "Operations": [
             { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
-            { "Name": "DisableIdlePowerManagement", "Op": "delete" },
-            { "Name": "DisableD3Cold", "Op": "delete" }
+            { "Name": "DisableIdlePowerManagement", "Operation": "delete" },
+            { "Name": "DisableD3Cold", "Operation": "delete" }
           ]
         }
       }
@@ -296,8 +286,7 @@
       "COMMANDS": {
         "AudioIdleDisable": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
           "Operations": [
             { "SubPath": "PowerSettings", "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [0,0,0,0] },
             { "SubPath": "PowerSettings", "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] },
@@ -310,8 +299,7 @@
       "COMMANDS": {
         "AudioIdleDefaults": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
           "Operations": [
             { "SubPath": "PowerSettings", "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30,0,0,0] },
             { "SubPath": "PowerSettings", "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] },
@@ -333,13 +321,12 @@
       }
     }
   },
-  "Disable PM in Standby Mode": {
+  "Disable Storage Idle States": {
     "apply": {
       "COMMANDS": {
         "StorageIdle": {
           "Action": "registry_pattern",
-          "Pattern": "SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\*",
-          "Root": "HKLM",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\*",
           "Operations": [
             {"Name": "IdleStatesNumber", "Type": "REG_DWORD", "Value": 0 }
           ]
@@ -358,6 +345,24 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\SSD": {
         "IdleStatesNumber": { "Type": "REG_DWORD", "Data": 3 }
+      }
+    }
+  },
+  "Disable PM in Standby Mode": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
+        "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
+        "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
+        "fDisablePowerManagement": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
+        "fDisablePowerManagement": { "Action": "deletevalue" }
       }
     }
   }

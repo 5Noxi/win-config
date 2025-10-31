@@ -1,5 +1,5 @@
 {
-    "Disable General Telemetry": {
+  "Disable General Telemetry": {
     "apply": {
       "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
         "UsageTracking": { "Type": "REG_DWORD", "Data": 0 }
@@ -946,16 +946,17 @@
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 }
-    },
-    "COMMANDS": {
-      "DisableRecallFeature": {
-        "Action": "optional_feature",
-        "Name": "Recall",
-        "Enabled": false,
-        "Arguments": ["/Quiet", "/NoRestart"]
+      },
+      "COMMANDS": {
+        "DisableRecallFeature": {
+          "Action": "optional_feature",
+          "Arguments": ["/Quiet", "/NoRestart"],
+          "Features": [
+            { "Name": "Recall", "State": "Disabled" }
+          ]
+        }
       }
-    }
-  },
+    },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Action": "deletevalue" },
@@ -963,16 +964,17 @@
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Action": "deletevalue" }
-    },
-    "COMMANDS": {
-      "EnableRecallFeature": {
-        "Action": "optional_feature",
-        "Name": "Recall",
-        "Enabled": true,
-        "Arguments": ["/Quiet", "/NoRestart"]
+      },
+      "COMMANDS": {
+        "EnableRecallFeature": {
+          "Action": "optional_feature",
+          "Arguments": ["/Quiet", "/NoRestart"],
+          "Features": [
+            { "Name": "Recall", "State": "Enabled" }
+          ]
+        }
       }
     }
-  }
   },
   "Disable Lock Screen Camera": {
     "apply": {

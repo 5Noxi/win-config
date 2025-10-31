@@ -35,17 +35,25 @@
     },
     "revert": {
       "COMMANDS": {
-        "RemoveNvCplExe": { "Action": "delete_path", "Path": "%APPDATA%\\Noverse\\nvcplui.exe" },
-        "RemoveNvCplIcon": { "Action": "delete_path", "Path": "%APPDATA%\\Noverse\\Nvcpl.ico" },
-        "RemoveNvCplScript": { "Action": "delete_path", "Path": "%APPDATA%\\Noverse\\NV-nvcpl.ps1" },
-        "RemoveNvCplShortcut": { "Action": "delete_path", "Path": "%USERPROFILE%\\Desktop\\Nvcpl.lnk" }
+        "RemoveNvCplArtifacts": {
+          "Action": "delete_path",
+          "Paths": [
+            "%APPDATA%\\Noverse\\nvcplui.exe",
+            "%APPDATA%\\Noverse\\Nvcpl.ico",
+            "%APPDATA%\\Noverse\\NV-nvcpl.ps1",
+            "%USERPROFILE%\\Desktop\\Nvcpl.lnk"
+          ]
+        }
       }
     }
   },
   "Performance State (P0)": {
     "apply": {
       "NVIDIA": {
-        "DisableDynamicPstate": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 1 }
+        "Action": "nvidia_key",
+        "Values": {
+          "DisableDynamicPstate": { "Type": "REG_DWORD", "Data": 1 }
+        }
       }
     },
     "revert": {
@@ -57,7 +65,10 @@
   "Disable HDCP": {
     "apply": {
       "NVIDIA": {
-        "RMHdcpKeyglobZero": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 1 }
+        "Action": "nvidia_key",
+        "Values": {
+          "RMHdcpKeyglobZero": { "Type": "REG_DWORD", "Data": 1 }
+        }
       }
     },
     "revert": {
@@ -165,15 +176,18 @@
   "Disable Power Savings": {
     "apply": {
       "NVIDIA": {
-        "RmDisableACPI": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 1023 },
-        "RMDisableGpuASPMFlags": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 3 },
-        "RMFspg": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 15 },
-        "RMBlcg": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 286331153 },
-        "RMElcg": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 1431655765 },
-        "RmElpg": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 4095 },
-        "RMSlcg": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 262143 },
-        "RMOPSB": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 10914 },
-        "RMLpwrArch": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 349525 }
+        "Action": "nvidia_key",
+        "Values": {
+          "RmDisableACPI": { "Type": "REG_DWORD", "Data": 1023 },
+          "RMDisableGpuASPMFlags": { "Type": "REG_DWORD", "Data": 3 },
+          "RMFspg": { "Type": "REG_DWORD", "Data": 15 },
+          "RMBlcg": { "Type": "REG_DWORD", "Data": 286331153 },
+          "RMElcg": { "Type": "REG_DWORD", "Data": 1431655765 },
+          "RmElpg": { "Type": "REG_DWORD", "Data": 4095 },
+          "RMSlcg": { "Type": "REG_DWORD", "Data": 262143 },
+          "RMOPSB": { "Type": "REG_DWORD", "Data": 10914 },
+          "RMLpwrArch": { "Type": "REG_DWORD", "Data": 349525 }
+        }
       }
     },
     "revert": {
@@ -286,7 +300,10 @@
         "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
       },
       "NVIDIA": {
-        "RmProfilingAdminOnly": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 0 }
+        "Action": "nvidia_key",
+        "Values": {
+          "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
+        }
       }
     },
     "revert": {
@@ -327,12 +344,14 @@
           "Action": "run_powershell",
           "Command": "$file = \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\\NvTelemetry*.dll\"; $enviro = [System.Environment]::ExpandEnvironmentVariables($file); $paths = Get-ChildItem -Path $enviro -Force -Recurse | Select-Object -ExpandProperty FullName | Select-Object -Unique | Sort-Object Length -Descending; foreach ($telpath in $paths) { if (-not (Test-Path -Path $telpath -PathType Container)) { Move-Item -LiteralPath $telpath -Destination (\"$telpath.old\") -Force } }"
         },
-        "COMMANDS": {
-          "RemoveNvProgramFiles": {
-            "Action": "delete_path",
-            "Path": "C:\\Program Files\\NVIDIA Corporation",
-            "Recurse": true
-          }
+        "RemoveNvProgramFiles": {
+          "Action": "delete_path",
+          "Paths": [
+            {
+              "Path": "C:\\Program Files\\NVIDIA Corporation",
+              "Recurse": true
+            }
+          ]
         }
       }
     },
@@ -356,8 +375,11 @@
   "RMPowerFeature": {
     "apply": {
       "NVIDIA": {
-        "RMPowerFeature": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 1412080853 },
-        "RMPowerFeature2": { "Action": "nvidia key", "Type": "REG_DWORD", "Data": 89478485 }
+        "Action": "nvidia_key",
+        "Values": {
+          "RMPowerFeature": { "Type": "REG_DWORD", "Data": 1412080853 },
+          "RMPowerFeature2": { "Type": "REG_DWORD", "Data": 89478485 }
+        }
       }
     },
     "revert": {
@@ -382,10 +404,15 @@
   "Clear Shader Cache": {
     "__control": { "type": "button", "label": "Clear" },
     "COMMANDS": {
-      "DelNvCache": { "Action": "delete_path", "Path": "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache" },
-      "DelDxCacheLow": { "Action": "delete_path", "Path": "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache" },
-      "DelDxCache": { "Action": "delete_path", "Path": "%LOCALAPPDATA%\\NVIDIA\\DXCache" },
-      "DelGlCache": { "Action": "delete_path", "Path": "%LOCALAPPDATA%\\NVIDIA\\GLCache" }
+      "ClearCaches": {
+        "Action": "delete_path",
+        "Paths": [
+          "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache",
+          "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache",
+          "%LOCALAPPDATA%\\NVIDIA\\DXCache",
+          "%LOCALAPPDATA%\\NVIDIA\\GLCache"
+        ]
+      }
     }
   }
 }
