@@ -28,12 +28,12 @@
         },
         "UsbWdfParamsZero": {
           "Action": "registry_pattern",
-          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\Wdf",
           "Operations": [
-            { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Wdf", "Name": "SleepstudyState", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Wdf", "Name": "WdfDefaultIdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Wdf", "Name": "WdfDirectedPowerTransitionEnable", "Type": "REG_DWORD", "Value": 0 }
+            { "Name": "IdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "SleepstudyState", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "WdfDefaultIdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "WdfDirectedPowerTransitionEnable", "Type": "REG_DWORD", "Value": 0 }
           ]
         },
         "UsbDevSubD3ColdZero": {
@@ -74,12 +74,12 @@
         },
         "UsbWdfParamsRevert": {
           "Action": "registry_pattern",
-          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\Wdf",
           "Operations": [
-            { "SubPath": "Wdf", "Name": "IdleInWorkingState", "Operation": "delete" },
-            { "SubPath": "Wdf", "Name": "WdfDirectedPowerTransitionEnable", "Operation": "delete" },
-            { "SubPath": "Wdf", "Name": "SleepstudyState", "Operation": "delete" },
-            { "SubPath": "Wdf", "Name": "WdfDefaultIdleInWorkingState", "Operation": "delete" }
+            { "Name": "IdleInWorkingState", "Operation": "delete" },
+            { "Name": "WdfDirectedPowerTransitionEnable", "Operation": "delete" },
+            { "Name": "SleepstudyState", "Operation": "delete" },
+            { "Name": "WdfDefaultIdleInWorkingState", "Operation": "delete" }
           ]
         },
         "UsbDevSubD3ColdClear": {
@@ -286,11 +286,11 @@
       "COMMANDS": {
         "AudioIdleDisable": {
           "Action": "registry_pattern",
-          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\**\\PowerSettings",
           "Operations": [
-            { "SubPath": "PowerSettings", "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [0,0,0,0] },
-            { "SubPath": "PowerSettings", "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] },
-            { "SubPath": "PowerSettings", "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] }
+            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [0,0,0,0] },
+            { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] },
+            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] }
           ]
         }
       }
@@ -299,11 +299,11 @@
       "COMMANDS": {
         "AudioIdleDefaults": {
           "Action": "registry_pattern",
-          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318\\}\\**",
+          "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\**\\PowerSettings",
           "Operations": [
-            { "SubPath": "PowerSettings", "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30,0,0,0] },
-            { "SubPath": "PowerSettings", "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] },
-            { "SubPath": "PowerSettings", "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3,0,0,0] }
+            { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30,0,0,0] },
+            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] },
+            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3,0,0,0] }
           ]
         }
       }

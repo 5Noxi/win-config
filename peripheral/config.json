@@ -131,10 +131,10 @@
         },
         "DisableAudioEnhRender": {
           "Action": "registry_pattern",
-          "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\*",
+          "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\**\\Properties",
           "Operations": [
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Type": "REG_DWORD", "Value": 0 }
+            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Type": "REG_DWORD", "Value": 0 }
           ]
         }
       }
@@ -152,10 +152,10 @@
         },
         "RevertAudioEnhRender": {
           "Action": "registry_pattern",
-          "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\*",
+          "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\**\\Properties",
           "Operations": [
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "delete" },
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "delete" }
+            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "delete" },
+            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "delete" }
           ]
         }
       }
