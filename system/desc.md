@@ -617,7 +617,7 @@ Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
 ```
 , if you want to remove all superseded versions of every component in the component store. (no need, if there aren't any)
 
-> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/manage-the-component-store?view=windows-11
+> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/manage-the-component-store?view=windows-11  
 > https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/clean-up-the-winsxs-folder?view=windows-11
 
 Permanently remove outdated update files from `C:\Windows\WinSxS` to free space. Once applied, previous updates cannot be uninstalled:
@@ -813,10 +813,10 @@ Symlinksare shortcuts or references that point to a file or folder in another lo
 File at: `C:\Projects\Game\assets\logo.png`
 Symlink: `C:\Users\YourName\Desktop\logo.png`
 
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior
-> https://github.com/MicrosoftDocs/windows-driver-docs/blob/5e03e46194f2a977da34fdf453f2703262370a23/windows-driver-docs-pr/ifs/offloaded-data-transfers.md?plain=1#L104
-> https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry
-> https://discord.com/channels/836870260715028511/1371224441568231516/1372986651436912772
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior  
+> https://github.com/MicrosoftDocs/windows-driver-docs/blob/5e03e46194f2a977da34fdf453f2703262370a23/windows-driver-docs-pr/ifs/offloaded-data-transfers.md?plain=1#L104  
+> https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/FileSystem.txt
 
 > [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 

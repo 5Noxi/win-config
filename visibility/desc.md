@@ -66,8 +66,8 @@ Disables the preview function for (extensions):
 `{E357FCCD-A995-4576-B01F-234630154E96}` - Thumbnail Provider (Thumbnail image handler)
 `{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}` - Extract Image (Image handler)
 `{9DBD2C50-62AD-11D0-B806-00C04FD706EC}` - Default shell extension handler for thumbnails
-> https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names
-> https://learn.microsoft.com/en-us/windows/win32/api/thumbcache/nn-thumbcache-ithumbnailprovider
+> https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names  
+> https://learn.microsoft.com/en-us/windows/win32/api/thumbcache/nn-thumbcache-ithumbnailprovider  
 > https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/nn-shobjidl_core-iextractimage
 
 Enabled:
@@ -76,7 +76,7 @@ Enabled:
 
 Disabled:
 
-![](https://github.com/5Noxi/win-config/blob/main/visibility/images/audiovidpreoff.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true)
 
 ---
 
@@ -489,7 +489,7 @@ Applying a new font needs a restart or logout, reverting doesn't.
 ```ps
 shutdown -l # logout
 ```
-List all available font families on your system (https://discord.com/channels/836870260715028511/1355572214489153756/1392193389537005700), or via `Personalization > Fonts`:
+List all available font families on your system with the `Open` option, or via `Personalization > Fonts`:
 ```ps
 Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % {$_.Name}
 ```
@@ -661,7 +661,7 @@ dq offset aNonewappalert ; "NoNewAppAlert"
 
 Spotlight is used to provide new pictures on your lock screen.
 
-> https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11#policy-settings
+> https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11#policy-settings  
 > https://www.dev2qa.com/how-to-show-or-hide-the-windows-spotlight-learn-about-this-picture-icon-on-windows-11-desktop/
 
 ```json

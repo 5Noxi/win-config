@@ -6,8 +6,8 @@ Disables USB selective suspend, idle power management, and related LP features.
 
 I added some comments to `QueryUsbflagsValuesForDevice.c`, since they renamed the values.
 
-> https://discord.com/channels/836870260715028511/1326527941051678801/1375576361762295809
-> https://discord.com/channels/836870260715028511/1326527941051678801/1375576424668336248
+> https://github.com/5Noxi/win-config/blob/main/power/desc.md#disable-usb-battery-saver
+> https://github.com/5Noxi/win-config/blob/main/power/desc.md#usb-flags
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/pci.txt
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Enum-USB.txt
 
@@ -251,8 +251,7 @@ Needs more research (`ClassGetServiceParameter.c` - default `0`?):
 ```
 Additional notes: `EnableALPEDisableHotplug` (`0`), `AhciDisablePxHotplug` - `amdsbs.c`
 
-> https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm
-
+> https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm  
 > [power/assets | hddpark-ClassGetServiceParameter.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-ClassGetServiceParameter.c)
 > [power/assets | hddpark-DllInitialize.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-DllInitialize.c)
 
@@ -267,7 +266,7 @@ Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
 > https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/storage/storport-idle-power-management.md  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
-> https://github.com/5Noxi/wpr-reg-records/blob/main/records/pci.txt
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/pci.txt  
 > [power/assets | storport.c](https://github.com/5Noxi/win-config/blob/main/power/assets/storport.c)
 
 # NoLazyMode
@@ -317,7 +316,7 @@ fffff806`d31c3278  00000000
 The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIo...` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RIT...` & `TimerCoalescing` ones get read.
 
 `TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`). `InitTimerCoalescing.c` shows all info about it, the batch should add it correctly, still needs some further reading. `InitTimerCoalescing.c` includes detail about it and some comments I added.
-> https://discord.com/channels/836870260715028511/1371224441568231516/1372988981817380935
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Winows-NT.txt
 ```c
 v20[0..3] = 0
 v20[4..7] ≤ 0x7FFFFFF5 // 0 = default timer coalescing?

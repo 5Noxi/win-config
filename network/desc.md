@@ -1,8 +1,9 @@
 # SMB Configuration
 
-SMB Client -> Outbound connections
+SMB Client -> Outbound connections:  
 > https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbclientconfiguration?view=windowsserver2025-ps
-SMB Server -> Inbound connections
+
+SMB Server -> Inbound connections:  
 > https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbserverconfiguration?view=windowsserver2025-ps
 
 ```ps
@@ -39,7 +40,7 @@ Set-SmbServerConfiguration -RejectUnencryptedAccess $true
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\RejectUnencryptedAccess	Type: REG_DWORD, Length: 4, Data: 1
 ```
 Encryption is enabled by default, some users reported slow read and write speeds. Disabling the encryption  (`$false`) may improve it, otherwise leave it enabled for your own security. Windows automatically uses the most advanced cipher, still 3.1.1 uses `128-GCM` by default. The last command prevent clients that do not support SMB encryption from connecting to encrypted shares.
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/overview-server-message-block-signing
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/overview-server-message-block-signing  
 > https://techcommunity.microsoft.com/blog/filecab/configure-smb-signing-with-confidence/2418102
 
 ```ps
@@ -84,7 +85,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\MinSmb2Dialect	Type: REG_DWORD, Length: 4, Data: 785
 ```
 By default is it set to `None`, which means that the client can use any supported version. SMB 3.1.1, the most secure dialect of the protocol.
-> https://learn.microsoft.com/en-us/windows-server/storage/file-server/manage-smb-dialects?tabs=powershell
+> https://learn.microsoft.com/en-us/windows-server/storage/file-server/manage-smb-dialects?tabs=powershell  
 > https://techcommunity.microsoft.com/blog/filecab/controlling-smb-dialects/860024
 
 Disable default sharing:
@@ -374,8 +375,8 @@ Self explaining.
 
 Disables active internet probing (prevents windows from automatically checking if an internet connection is available). `MaxActiveProbes` (comment) is set to `1`, as `0` = unlimited (breaks connection status).
 
-> https://github.com/5Noxi/wpr-reg-records/blob/main/records/NlaSvc.txt
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-ncsi-guidance
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/NlaSvc.txt  
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-ncsi-guidance  
 > https://privacylearn.com/windows/disable-os-data-collection/disable-connectivity-checks/disable-active-connectivity-tests-breaks-internet-connection-status-captive-portals
 
 Disable passive connectivity (NCSI) tests with:
@@ -389,8 +390,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityStatusIndic
 Passive connectivity tests (NCSI) check internet status every 15 seconds by sending requests to Microsoft servers, which can expose network details, create privacy risks, and trigger unwanted connections. Disabling them stops this monitoring, reducing background network activity and potential VPN/firewall conflicts. However, it can cause Windows to falsely report no internet and break features that rely on NCSI for connectivity detection.
 ```
 NCSI package name: `NcsiUwpApp` (breaks connection status icon)
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/internet-explorer-edge-open-connect-corporate-public-network
-
+> https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/internet-explorer-edge-open-connect-corporate-public-network  
 > [network/assets | probing-NcsiConfigData.c](https://github.com/5Noxi/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
 ---
@@ -429,7 +429,7 @@ rasphone -r "Name"
 ```
 or `WIN + I` > Network & Internet > VPN > Remove
 
-> https://learn.microsoft.com/en-us/powershell/module/vpnclient/remove-vpnconnection?view=windowsserver2025-ps
+> https://learn.microsoft.com/en-us/powershell/module/vpnclient/remove-vpnconnection?view=windowsserver2025-ps  
 > https://learn.microsoft.com/en-us/powershell/module/vpnclient/?view=windowsserver2025-ps
 
 Disable `Allow VPN over metered networks` (`0` = On, `1` = Off):
@@ -809,11 +809,9 @@ Teredo_State = Disabled
 #"*RssMaxProcNumber" = 2
 #"RssV2" = 1
 
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/non-rss-receive-processing
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/non-rss-receive-processing  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/rss-with-message-signaled-interrupts
-
-NetBinds!
 
 # Disable Power Savings
 
@@ -865,3 +863,49 @@ NetBinds!
 "EEEPlus" = 0
 "EnableAspm" = 0
 #"DynamicLTR" = 0
+
+# Disable File/Printer Sharing
+
+Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_msclient`.
+
+```ps
+PS C:\Users\Nohuxi> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
+
+DisplayGroup                                                                      Group
+------------                                                                      -----
+File and Printer Sharing                                                          @FirewallAPI.dll,-28502
+File and Printer Sharing (Restrictive)                                            @FirewallAPI.dll,-28672
+
+PS C:\Users\Nohuxi> Get-NetAdapterBinding -Name *
+
+Name                           DisplayName                                        ComponentID          Enabled
+----                           -----------                                        -----------          -------
+Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
+```
+
+> https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/networking-mpssvc-svc-firewallgroups-firewallgroup-group  
+> https://learn.microsoft.com/en-us/powershell/module/netadapter/get-netadapterbinding?view=windowsserver2025-ps
+
+```json
+{
+	"File":  "WindowsSandbox.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsSandbox",
+	"Class":  "Machine",
+	"CategoryName":  "WindowsSandbox",
+	"DisplayName":  "Allow printer sharing with Windows Sandbox",
+	"ExplainText":  "This policy setting enables or disables printer sharing from the host into the Sandbox.If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host.If you do not configure this policy setting, printer redirection will be disabled.",
+	"Supported":  "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox",
+	"KeyName":  "AllowPrinterRedirection",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```

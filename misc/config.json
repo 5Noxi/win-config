@@ -488,5 +488,123 @@
         }
       }
     }
+  },
+  "Disable OneDrive": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\OneDrive": {
+        "DisableLibrariesDefaultSaveToOneDrive": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableFileSync": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableFileSyncNGSC": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\OneDrive": {
+        "DisableMeteredNetworkFileSync": { "Type": "REG_DWORD", "Data": 0 },
+        "PreventNetworkTrafficPreUserSignIn": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Classes\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}": {
+        "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Classes\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}": {
+        "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\OneDrive": {
+        "DisableLibrariesDefaultSaveToOneDrive": { "Action": "deletevalue" },
+        "DisableFileSync": { "Action": "deletevalue" },
+        "DisableFileSyncNGSC": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\OneDrive": {
+        "DisableMeteredNetworkFileSync": { "Action": "deletevalue" },
+        "PreventNetworkTrafficPreUserSignIn": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Classes\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}": {
+        "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Classes\\Wow6432Node\\CLSID\\{018D5C66-4533-4307-9B53-224DE2ED1FE6}": {
+        "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Disable Edge Features": {
+    "apply": {
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI": {
+        "AllowEdgeSwipe": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableCharms": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableHelpSticker": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableMFUTracking": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableRecentApps": { "Type": "REG_DWORD", "Data": 1 },
+        "TurnOffBackstack": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge": {
+        "AutoImportAtFirstRun": { "Type": "REG_DWORD", "Data": 4 },
+        "DefaultBrowserSettingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "EdgeCollectionsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "EdgeFollowEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "EdgeShoppingAssistantEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "HideFirstRunExperience": { "Type": "REG_DWORD", "Data": 1 },
+        "HideRestoreDialogEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "HubsSidebarEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "ImplicitSignInEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "NewTabPageAllowedBackgroundTypes": { "Type": "REG_DWORD", "Data": 3 },
+        "NewTabPageContentEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "NewTabPageHideDefaultTopSites": { "Type": "REG_DWORD", "Data": 1 },
+        "NewTabPageQuickLinksEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "PersonalizationReportingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "PinBrowserEssentialsToolbarButton": { "Type": "REG_DWORD", "Data": 0 },
+        "QuickSearchShowMiniMenu": { "Type": "REG_DWORD", "Data": 0 },
+        "SearchbarAllowed": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowMicrosoftRewards": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowRecommendationsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "SplitScreenEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "StandaloneHubsSidebarEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "StartupBoostEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "SyncDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "UserFeedbackAllowed": { "Type": "REG_DWORD", "Data": 0 },
+        "TabServicesEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "TextPredictionEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "TrackingPrevention": { "Type": "REG_DWORD", "Data": 3 },
+        "DefaultSensorsSetting": { "Type": "REG_DWORD", "Data": 2 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI": {
+        "AllowEdgeSwipe": { "Action": "deletevalue" },
+        "DisableCharms": { "Action": "deletevalue" },
+        "DisableHelpSticker": { "Action": "deletevalue" },
+        "DisableMFUTracking": { "Action": "deletevalue" },
+        "DisableRecentApps": { "Action": "deletevalue" },
+        "TurnOffBackstack": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge": {
+        "AutoImportAtFirstRun": { "Action": "deletevalue" },
+        "DefaultBrowserSettingEnabled": { "Action": "deletevalue" },
+        "EdgeCollectionsEnabled": { "Action": "deletevalue" },
+        "EdgeFollowEnabled": { "Action": "deletevalue" },
+        "EdgeShoppingAssistantEnabled": { "Action": "deletevalue" },
+        "HideFirstRunExperience": { "Action": "deletevalue" },
+        "HideRestoreDialogEnabled": { "Action": "deletevalue" },
+        "HubsSidebarEnabled": { "Action": "deletevalue" },
+        "ImplicitSignInEnabled": { "Action": "deletevalue" },
+        "NewTabPageAllowedBackgroundTypes": { "Action": "deletevalue" },
+        "NewTabPageContentEnabled": { "Action": "deletevalue" },
+        "NewTabPageHideDefaultTopSites": { "Action": "deletevalue" },
+        "NewTabPageQuickLinksEnabled": { "Action": "deletevalue" },
+        "PersonalizationReportingEnabled": { "Action": "deletevalue" },
+        "PinBrowserEssentialsToolbarButton": { "Action": "deletevalue" },
+        "QuickSearchShowMiniMenu": { "Action": "deletevalue" },
+        "SearchbarAllowed": { "Action": "deletevalue" },
+        "ShowMicrosoftRewards": { "Action": "deletevalue" },
+        "ShowRecommendationsEnabled": { "Action": "deletevalue" },
+        "SplitScreenEnabled": { "Action": "deletevalue" },
+        "StandaloneHubsSidebarEnabled": { "Action": "deletevalue" },
+        "StartupBoostEnabled": { "Action": "deletevalue" },
+        "SyncDisabled": { "Action": "deletevalue" },
+        "UserFeedbackAllowed": { "Action": "deletevalue" },
+        "TabServicesEnabled": { "Action": "deletevalue" },
+        "TextPredictionEnabled": { "Action": "deletevalue" },
+        "TrackingPrevention": { "Action": "deletevalue" },
+        "DefaultSensorsSetting": { "Action": "deletevalue" }
+      }
+    }
   }
 }

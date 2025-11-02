@@ -1324,7 +1324,7 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppV\\CEIP": {
         "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Microsoft\\SQMClient": {
+      "HKLM\\Software\\Microsoft\\SQMClient": { 
         "UploadDisableFlag": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Microsoft\\SQMClient\\Windows": {
@@ -1337,6 +1337,7 @@
         "DisableCeipTasks": {
           "Action": "scheduled_task",
           "TaskNames": [
+            "\\Microsoft\\Windows\\Autochk\\Proxy",
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",

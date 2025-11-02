@@ -490,5 +490,39 @@
         "*UsoIPv6": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable File/Printer Sharing": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox": {
+        "AllowPrinterRedirection": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "DisableFpsFirewall": {
+          "Action": "run_powershell",
+          "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Disable-NetFirewallRule"
+        },
+        "DisableMsServerBinding": {
+          "Action": "netbind",
+          "ComponentIDs": ["ms_server"],
+          "State": "disable"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox": {
+        "AllowPrinterRedirection": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableFpsFirewall": {
+          "Action": "run_powershell",
+          "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Enable-NetFirewallRule"
+        },
+        "EnableMsServerBinding": {
+          "Action": "netbind",
+          "ComponentIDs": ["ms_server"],
+          "State": "enable"
+        }
+      }
+    }
   }
 }

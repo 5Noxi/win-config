@@ -291,7 +291,7 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Services\\**",
           "Operations": [
-            { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 0 }
+            { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 0, "OnlyExisting": true }
           ]
         }
       }
@@ -309,7 +309,7 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Services\\**",
           "Operations": [
-            { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 1 }
+            { "Name": "DmaRemappingCompatible", "Type": "REG_DWORD", "Value": 1, "OnlyExisting": true }
           ]
         }
       }
@@ -382,12 +382,14 @@
   "Block MRT via WU": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\MRT": {
-        "DontOfferThroughWUAU": { "Type": "REG_DWORD", "Data": 1 }
+        "DontOfferThroughWUAU": { "Type": "REG_DWORD", "Data": 1 },
+        "DontReportInfectionInformation": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\MRT": {
-        "DontOfferThroughWUAU": { "Action": "deletevalue" }
+        "DontOfferThroughWUAU": { "Action": "deletevalue" },
+        "DontReportInfectionInformation": { "Action": "deletevalue" }
       }
     }
   },

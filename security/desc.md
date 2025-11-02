@@ -450,7 +450,7 @@ WPBT allows hardware manufacturers to run programs during Windows startup that m
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager : DisableWpbtExecution
 ```
 
-> https://persistence-info.github.io/Data/wpbbin.html
+> https://persistence-info.github.io/Data/wpbbin.html  
 > https://github.com/Jamesits/dropWPBT
 
 Disable WPBT within a image (`sources\install.wim`):
@@ -480,8 +480,8 @@ Disable bitlocker on all volumes:
 $nvbvol = Get-BitLockerVolume
 Disable-BitLocker -MountPoint $nvbvol
 ```
-> https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior
+> https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/  
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior  
 > https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps
 
 `fsutil behavior set disableencryption 1` sets:
@@ -700,7 +700,7 @@ By default it uses a minimum size of `1024` bits (both) - hardens Windows TLS en
 
 "NSA recommends RSA key transport and ephemeral DH (DHE) or ECDH (ECDHE) mechanisms, with RSA or DHE key exchange using at least 3072-bit keys and ECDHE key exchanges using the secp384r1 elliptic curve. For RSA keytransport and DH/DHE key exchange, keys less than 2048 bits should not be used, and ECDH/ECDHE using custom curves should not be used."
 
-> https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF
+> https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF  
 > https://learn.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings?tabs=diffie-hellman
 
 # Disable Insecure Connections

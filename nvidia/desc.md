@@ -405,8 +405,6 @@ nvidia-smi.exe -e 0
 nvidia-smi -q -d ecc
 ```
 
-More about `nvidia-smi`:
-> https://discord.com/channels/836870260715028511/1375059420970487838/1375935298093191189  
 > https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/3D%20Settings/Change_ECC_State.htm
 
 Other ECC related features can be found using [`bitmask-calc`](https://github.com/5Noxi/bitmask-calc) - e.g. `RMNoECCFuseCheck`.
@@ -1373,7 +1371,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v RmProfilingAdminOnly /t REG_DWORD /d X /f
 ```
 Change `XXXX` to the correct key and `X` to `1`/`0`.
-> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters
+> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters  
 > https://github.com/5Noxi/bitmask-calc
 
 # Disable MPO

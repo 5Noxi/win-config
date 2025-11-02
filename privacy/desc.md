@@ -1917,8 +1917,8 @@ WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps 
 `DisableSendRequestAdditionalSoftwareToWER`: "Prevent Windows from sending an error report when a device driver requests additional software during installation"
 `DisableSendGenericDriverNotFoundToWER`: "Do not send a Windows error report when a generic driver is installed on a device"
 
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-errorreporting
+> https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed  
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-errorreporting  
 > https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings  
 > [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
 
@@ -2338,32 +2338,3 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" /v DesktopHe
 					]
 },
 ```
-
-# Disable File/Printer Sharing
-
-Get-NetFirewallRule -Group '*-28502*' | Where-Object 'Profile' -Match 'Any' | Set-NetFirewallRule -Enabled 'True'
-
-Ethernet                       Client for Microsoft Networks                      ms_msclient          False
-Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
-
-{
-	"File":  "WindowsSandbox.admx",
-	"NameSpace":  "Microsoft.Policies.WindowsSandbox",
-	"Class":  "Machine",
-	"CategoryName":  "WindowsSandbox",
-	"DisplayName":  "Allow printer sharing with Windows Sandbox",
-	"ExplainText":  "This policy setting enables or disables printer sharing from the host into the Sandbox.If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host.If you do not configure this policy setting, printer redirection will be disabled.",
-	"Supported":  "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
-	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox",
-	"KeyName":  "AllowPrinterRedirection",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
-},

@@ -41,7 +41,7 @@ Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTes
 > https://github.com/valleyofdoom/PC-Tuning#1150-background-window-message-rate-permalink  
 > [peripheral/assets | mouse-GetRawMouseThrottlingThresholds.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/mouse-GetRawMouseThrottlingThresholds.c)
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/mousevalues.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/mousevalues.png?raw=true)
 
 # Keyboard Values
 
@@ -85,7 +85,7 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 3
 ```
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/audioducking.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/audioducking.png?raw=true)
 
 # Disable Audio Enhancements
 
@@ -99,7 +99,7 @@ The difference is minor (picture), preferable just disable them. Open `mmsys.cpl
 "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Capture\{6119fee4-d49c-474d-978c-0e5f9a67acb3}\FxProperties\{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/audioenhance.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/audioenhance.png?raw=true)
 
 # Disable Spatial Audio
 
@@ -108,7 +108,7 @@ Spatial audio positions sounds in 3D space around you, surround sound mainly anc
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Audio.txt  
 > https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/spatial.jpeg?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
 
 ---
 
@@ -227,9 +227,8 @@ Value not present -> `v11 = 288` ?
 Value > `0xAAAAAAA` ->  Clamped to `2400`
 Otherwise `v11 * 24`
 
-> https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990
-
-> [peripheral/assets | mkdata-MouConfiguration.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)
+> https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990  
+> [peripheral/assets | mkdata-MouConfiguration.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)  
 > [peripheral/assets | mkdata-KbdConfiguration.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/mkdata-KbdConfiguration.c)
 
 # Sample Rate
@@ -245,25 +244,25 @@ As you may know a bit can be `0` or `1`, means (bit depth * `6` = dB):
 
 `44.1` kHz with a bit depth of `16` is more than enough for general usage.
 
-> https://noirsonance.com/bit-depth-calculator-visualizer/
+> https://noirsonance.com/bit-depth-calculator-visualizer/  
 > https://de.wikipedia.org/wiki/Nyquist-Shannon-Abtasttheorem
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/samplerate.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/samplerate.png?raw=true)
 
 # Mouse DPI
 
 Use `800` or `1600`. Going too low will have worse results, as shown in the pictures ([source 1](https://www.youtube.com/watch?v=mwf_F2VboFQ&t=458s), [source 2](https://www.youtube.com/watch?v=imYBTj2RXFs&t=274s))
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/dpi1.png?raw=true)
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/dpi2.png?raw=true)
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/dpi3.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/dpi1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/dpi2.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/dpi3.png?raw=true)
 
 # Polling Rate
 
 Higher sampling rates reduce jitter and latency and ensure more accurate cursor positioning (first image), but may affect performance depending on the hardware (CPU cycles) - [source](https://www.youtube.com/watch?v=jtATbpMqbL4). Using `4 kHz` on a mid-tier PC should not be a problem. Run benchmarks on your system to check whether your PC can handle this rate. It should always be `1 kHz+`. You can use [MouseTester](https://github.com/valleyofdoom/MouseTester/releases) to check if your current polling rate is stable.
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/polling1.png?raw=true)
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/polling2.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/polling1.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/polling2.png?raw=true)
 
 # Device Manager
 
@@ -287,7 +286,7 @@ Disabling unused '**PCI-to-PCI Bridge**' devices (picture):
 - Go into `PCI Bus` / `PCI Express Root Complex`
     - Disable all `PCI-to-PCI Bridge` devices, which are unused (`PCI Express Downstream Switch Port`)
 
-![](https://github.com/5Noxi/win-config/blob/main/peipheral/images/devman.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/devman.png?raw=true)
 
 Removing Non-Present Devices:
 - Download [DeviceCleanup](https://www.uwe-sieber.de/files/DeviceCleanup_x64.zip)
@@ -316,7 +315,7 @@ devmanview /disable "HID-compliant touch screen"
 
 "Tablet mode makes Windows more touch friendly and is helpful on touch capable devices."
 
-> https://support.microsoft.com/en-us/windows/turn-tablet-mode-on-or-off-in-windows-add3fbce-5cb5-bf76-0f9c-8d7b30041f30
+> https://support.microsoft.com/en-us/windows/turn-tablet-mode-on-or-off-in-windows-add3fbce-5cb5-bf76-0f9c-8d7b30041f30  
 > https://superuser.com/questions/1194038/windows-10-command-line-to-enable-disable-tablet-mode  
 > [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
 
@@ -382,8 +381,8 @@ All available flags (`powercfg /devicequery query_flag`):
 
 Enables MSI for USB, video, network, and IDE PCI devices & sets them to undefined. Setting the priority to high can be beneficial, but needs benchmarking. Removes `MessageNumberLimit`, so device uses the maximum MN itself.
 
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/enabling-message-signaled-interrupts-in-the-registry
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-message-signaled-interrupts
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/enabling-message-signaled-interrupts-in-the-registry  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-message-signaled-interrupts  
 > https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf
 
 "Interrupt affinity defines which logical processors handle a device's interrupts, using the `KAFFINITY` bitmask in the `AssignmentSetOverride` registry value (bit 0 = CPU 0, bit 1 = CPU 1, etc.). To apply it, `DevicePolicy` must be set to `4` (`IrqPolicySpecifiedProcessors`). Interrupt priority controls the urgency of handling and is set in KMDF drivers via `WdfInterruptSetPolicy`, using values like `WdfIrqPriorityHigh`. Both affinity and priority are stored in the `u.Interrupt` resource descriptor and apply to line-based and MSI/MSI-X interrupts. These settings optimize performance by balancing load and improving locality on multi-core systems."
@@ -426,7 +425,7 @@ $cpus | % { $mask = $mask -bor (1 -shl $_) }
 | `ControlledByForegroundApp`               | REG_DWORD | `0 = ignore apps`, `1 = apps can take control`                                                                                                                                                           | `0–1`                      | -     |
 
 
-> https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices
+> https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices  
 > https://support.microsoft.com/en-us/windows/control-dynamic-lighting-devices-in-windows-8e8f22e3-e820-476c-8f9d-9ffc7b6ffcd2
 
 # Disable Printing
