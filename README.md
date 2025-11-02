@@ -27,10 +27,11 @@ Report any kind of issues either in the repository or on the Discord server:
 pip install PySide6 mistune requests
 ```
 
-## Contribution
+# Contribution
 
 `Option Name` (`json` examples) must be the same as the `.md` title.
 
+### Overview
 | Context | Allowed actions |
 | ------ | ------ |
 | `COMMANDS` | `run_powershell`, `delete_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent` |
@@ -38,11 +39,12 @@ pip install PySide6 mistune requests
 | `NVIDIA` | `nvidia_key` (with `Values` map) |
 | `ETHERNET` | `ethernet_key` (with `Values` map) |
 
+### Actions & Requirements
 | Action | Required / optional arguments |
 | ------ | ------ |
 | `run_powershell` | Required: `Command` - Optional: `Elevated` |
-| `delete_path` | Use one: `Path` or `Paths` (array) - Optional: `Recurse` |
-| `scheduled_task` | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run` | `stop` | `enable` | `disable` | `delete`) |
+| `delete_path` | Use one: `Path` or `Paths` (array) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
+| `scheduled_task` | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) |
 | `tcp_congestion` | Required: `Templates` (string or array), `Provider` (or `Value`) |
 | `netbind` | Required: component identifiers via one of `ComponentIDs` (array) / `Components` (array) / `ComponentID` / `Component` - Required state: `State` (`enable` | `disable`) (or boolean via `Enabled`/`Enable`) |
 | `optional_feature` | Feature names: via one of `Features` (array) / `Name` / `Feature` / `FeatureName` - Required state: `State` (`Enabled` | `Disabled`) (or boolean via `Enabled`/`Enable`) - Optional: `Arguments` (array or string), `Elevated` |
@@ -50,17 +52,16 @@ pip install PySide6 mistune requests
 | `bcdedit` | Required: `Name` (or `Option`) - One of: `Value` or `Delete`/`Remove` (bool) |
 | `registry_pattern` | Required: `Pattern`, `Operations` (array) - Optional: `ExcludeSubPaths`, `ExcludePatterns`, `ExcludeSegments`, `Exclude`, `Root`, `Message` |
 | `mmagent` | Required: `Setting` (or `Option`/`Name`), desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
-| `nvidia_key` (under `NVIDIA`) | Required: `Values` -> map of valueName -> `{ Type, Data }` |
-| `ethernet_key` (under `ETHERNET`) | Required: `Values` -> map of valueName -> `{ Type, Data }` |
+| `nvidia_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` |
+| `ethernet_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` |
 
-Button instead of switch:
-
+### Buttons
 | Key | Purpose |
 | ------ | ------ |
 | `__control` | `{ "type": "button", "label": "name }` |
 
 
-Examples for all templates:
+### Examples
 ```json
 {
   "Option Name - Direct Writes (single key/values)": {
@@ -187,7 +188,7 @@ Examples for all templates:
         "Recurse": true,
         "Paths": [
           "HKCU\\Software\\Noverse\\Nohuxi",
-          "%ProgramData%\\Noverse\\Cache",
+          "%PROGRAMDATA%\\Noverse\\Cache", // don't use $env:
           "%LOCALAPPDATA%\\Noverse\\Temp"
         ]
       }

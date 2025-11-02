@@ -738,4 +738,130 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 },
 ```
 
+# Enable Offloads
+
+"*IPChecksumOffloadIPv4" = 3
+"*LsoV1IPv4" = 1
+"*LsoV2IPv4" = 1
+"*LsoV2IPv6" = 1
+"*TCPChecksumOffloadIPv4" = 3
+"*TCPChecksumOffloadIPv6" = 3
+"*UDPChecksumOffloadIPv4" = 3
+"*UDPChecksumOffloadIPv6" = 3
+"*TCPConnectionOffloadIPv4" = 1
+"*TCPConnectionOffloadIPv6" = 1
+"*TCPUDPChecksumOffloadIPv4" = 3
+"*TCPUDPChecksumOffloadIPv6" = 3
+"*PMARPOffload" = 1
+"*PMNSOffload" = 0
+"*IPsecOffloadV1IPv4" = 3
+"*IPsecOffloadV2" = 3
+"*IPsecOffloadV2IPv4" = 3
+"*QoSOffload" = 1
+#"*PMWiFiRekeyOffload" = 1
+
+# Disable Wake On
+
+"*WakeOnMagicPacket" = 0
+"*WakeOnPattern" = 0
+"S5WakeOnLan" = 0
+"WakeOnLink" = 0
+"WakeOnMagicPacketFromS5" = 0
+"ForceWakeFromMagicPacketOnModernStandby" = 0
+"EnableWakeOnManagmentOnTCO" = 0
+"WakeFromS5" = 0
+"WakeOn" = 0
+"WakeOnFastStartup" = 0
+
+# Increase Buffers
+
+"*TransmitBuffers" = 4096
+"*ReceiveBuffers" = 4096
+
+# Enable USO
+
+"*UsoIPv4" = 1
+"*UsoIPv6" = 1
+
 # Disable Teredo
+
+HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition
+Teredo_State = Disabled
+
+# Disable Chimney
+
+> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/information-about-tcp-chimney-offload-rss-netdma-feature
+
+
+> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top
+> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
+
+
+# Enable RSS
+
+"*NumRssQueues" = 2
+"*NumaNodeId"= 0
+"*RSS"= 1
+"*RSSProfile"= 4
+"*RssBaseProcGroup"= 0
+#"*RssBaseProcNumber"= 2
+"*RssMaxProcGroup"= 0
+#"*RssMaxProcNumber" = 2
+#"RssV2" = 1
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/non-rss-receive-processing
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/rss-with-message-signaled-interrupts
+
+NetBinds!
+
+# Disable Power Savings
+
+"*EEE" = 0
+"AdvancedEEE" = 0
+
+"GigaLite" = 0
+"AutoPowerSaveModeEnabled" = 0
+"EnablePME" = 0
+"EEELinkAdvertisement" = 0
+#"EnableConnectedPowerGating" = 0
+"EnablePowerManagement" = 0
+"EnableGreenEthernet" = 0
+"PowerSavingMode" = 0
+"ReduceSpeedOnPowerDown" = 0
+
+"*ModernStandbyWoLMagicPacket" = 0
+"EnableModernStandby" = 0
+"ASPM" = 0
+"SipsEnabled" = 0
+
+"EnableSavePowerNow" = 0
+
+"*NicAutoPowerSaver" = 0
+"*DeviceSleepOnDisconnect" = 0
+"*EnableDynamicPowerGating" = 0
+"EnableAdvancedDynamicITR" = 0
+"PnPCapabilities" = 24
+"Selective Suspend Idle Timeout" = 60
+
+"*SSIdleTimeout" = 60
+"*SSIdleTimeoutScreenOff" = 5
+"*SelectiveSuspend" = 0
+"ULPMode" = 0
+
+"PowerDownPll" = 0
+
+"OBFFEnabled" = 0
+"EnableD0PHYFlexibleSpeed" = 0
+"EnablePHYWakeUp" = 0
+"EnablePHYFlexibleSpeed" = 0
+
+"SleepWhileWaiting" = 0
+"EnableD3ColdInS0" = 0
+"IdleRestriction" = 1
+"EnableDisconnectedStandby" = 0
+
+#"CLKREQ" = 0
+"EEEPlus" = 0
+"EnableAspm" = 0
+#"DynamicLTR" = 0

@@ -1,5 +1,6 @@
 # Disable General Telemetry
-Prevents sending info about your computer to microsoft, also disables the diagnostic log collection, media player diagnostics & bluetooth ads (`DataCollection.admx`). It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase.
+
+Prevents sending info about your computer to microsoft, disables the diagnostic log collection, media player diagnostics, bluetooth ads (`DataCollection.admx`), the inventory collector. It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase. See policy explanations below for more details.
 
 ```ps
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
@@ -292,6 +293,20 @@ reg add "HKLM\SOFTWARE\Microsoft\wbem\Tracing" /v enableWinmgmtTelemetry /t REG_
 						}
 					]
 },
+{
+	"File":  "AppCompat.admx",
+	"NameSpace":  "Microsoft.Policies.ApplicationCompatibility",
+	"Class":  "Machine",
+	"CategoryName":  "AppCompat",
+	"DisplayName":  "Turn off Inventory Collector",
+	"ExplainText":  "This policy setting controls the state of the Inventory Collector. The Inventory Collector inventories applications, files, devices, and drivers on the system and sends the information to Microsoft. This information is used to help diagnose compatibility problems.If you enable this policy setting, the Inventory Collector will be turned off and data will not be sent to Microsoft. Collection of installation data through the Program Compatibility Assistant is also disabled.If you disable or do not configure this policy setting, the Inventory Collector will be turned on.Note: This policy setting has no effect if the Customer Experience Improvement Program is turned off. The Inventory Collector will be off.",
+	"Supported":  "Windows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\AppCompat",
+	"KeyName":  "DisableInventory",
+	"Elements":  [
+
+					]
+},
 ```
 
 # Disable Automatic Map Downloads
@@ -531,8 +546,94 @@ Miscellaneous (ignore):
 \Registry\Machine\SOFTWARE\Microsoft\Windows Defender\NIS\Consumers\IPS : DisableBmNetworkSensor
 \Registry\Machine\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\AutoRotation : SensorPresent
 ```
-```bat
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v DisableSensors /t REG_DWORD /d 1 /f
+
+---
+
+```json
+{
+	"File":  "Sensors.admx",
+	"NameSpace":  "Microsoft.Policies.Sensors",
+	"Class":  "Machine",
+	"CategoryName":  "LocationAndSensors",
+	"DisplayName":  "Turn off sensors",
+	"ExplainText":  " This policy setting turns off the sensor feature for this computer. If you enable this policy setting, the sensor feature is turned off, and all programs on this computer cannot use the sensor feature. If you disable or do not configure this policy setting, all programs on this computer can use the sensor feature.",
+	"Supported":  "Windows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LocationAndSensors",
+	"KeyName":  "DisableSensors",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "Sensors.admx",
+	"NameSpace":  "Microsoft.Policies.Sensors",
+	"Class":  "Machine",
+	"CategoryName":  "LocationAndSensors",
+	"DisplayName":  "Turn off location",
+	"ExplainText":  " This policy setting turns off the location feature for this computer. If you enable this policy setting, the location feature is turned off, and all programs on this computer are prevented from using location information from the location feature. If you disable or do not configure this policy setting, all programs on this computer will not be prevented from using location information from the location feature.",
+	"Supported":  "Windows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LocationAndSensors",
+	"KeyName":  "DisableLocation",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "Sensors.admx",
+	"NameSpace":  "Microsoft.Policies.Sensors",
+	"Class":  "Machine",
+	"CategoryName":  "LocationAndSensors",
+	"DisplayName":  "Turn off location scripting",
+	"ExplainText":  " This policy setting turns off scripting for the location feature. If you enable this policy setting, scripts for the location feature will not run. If you disable or do not configure this policy setting, all location scripts will run.",
+	"Supported":  "Windows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LocationAndSensors",
+	"KeyName":  "DisableLocationScripting",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "LocationProviderAdm.admx",
+	"NameSpace":  "Microsoft.Policies.Sensors.WindowsLocationProvider",
+	"Class":  "Machine",
+	"CategoryName":  "WindowsLocationProvider",
+	"DisplayName":  "Turn off Windows Location Provider",
+	"ExplainText":  " This policy setting turns off the Windows Location Provider feature for this computer. If you enable this policy setting, the Windows Location Provider feature will be turned off, and all programs on this computer will not be able to use the Windows Location Provider feature. If you disable or do not configure this policy setting, all programs on this computer can use the Windows Location Provider feature.",
+	"Supported":  "Windows8_Or_Windows_6_3_Only",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LocationAndSensors",
+	"KeyName":  "DisableWindowsLocationProvider",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
 ```
 
 > [privacy/assets | locationaccess-LocationApi.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
@@ -2175,3 +2276,94 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" /v DesktopHe
 ```
 
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Winows-NT.txt
+
+# Disable Message Sync
+
+"This policy setting allows backup and restore of cellular text messages to Microsoft's cloud services. Disable this feature to avoid information being stored on servers outside of your organization's control."
+
+| Policy | Description | Values |
+| ------ | ------ | ------ |
+| AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft’s cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-messaging
+
+```json
+{
+	"File":  "messaging.admx",
+	"NameSpace":  "Microsoft.Policies.Messaging",
+	"Class":  "Machine",
+	"CategoryName":  "Messaging_Category",
+	"DisplayName":  "Allow Message Service Cloud Sync",
+	"ExplainText":  "This policy setting allows backup and restore of cellular text messages to Microsoft\u0027s cloud services.",
+	"Supported":  "Windows_10_0_RS3",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Messaging",
+	"KeyName":  "AllowMessageSync",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable Password Reveal
+
+"This policy setting allows you to configure the display of the password reveal button in password entry user experiences.If you enable this policy setting, the password reveal button will not be displayed after a user types a password in the password entry text box.If you disable or do not configure this policy setting, the password reveal button will be displayed after a user types a password in the password entry text box.By default, the password reveal button is displayed after a user types a password in the password entry text box."
+
+```json
+{
+	"File":  "CredUI.admx",
+	"NameSpace":  "Microsoft.Policies.CredentialsUI",
+	"Class":  "Both",
+	"CategoryName":  "CredUI",
+	"DisplayName":  "Do not display the password reveal button",
+	"ExplainText":  "This policy setting allows you to configure the display of the password reveal button in password entry user experiences.If you enable this policy setting, the password reveal button will not be displayed after a user types a password in the password entry text box.If you disable or do not configure this policy setting, the password reveal button will be displayed after a user types a password in the password entry text box.By default, the password reveal button is displayed after a user types a password in the password entry text box. To display the password, click the password reveal button.The policy applies to all Windows components and applications that use the Windows system controls, including Internet Explorer.",
+	"Supported":  "Windows8_Or_IE10",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CredUI",
+	"KeyName":  "DisablePasswordReveal",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable File/Printer Sharing
+
+Get-NetFirewallRule -Group '*-28502*' | Where-Object 'Profile' -Match 'Any' | Set-NetFirewallRule -Enabled 'True'
+
+Ethernet                       Client for Microsoft Networks                      ms_msclient          False
+Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
+
+{
+	"File":  "WindowsSandbox.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsSandbox",
+	"Class":  "Machine",
+	"CategoryName":  "WindowsSandbox",
+	"DisplayName":  "Allow printer sharing with Windows Sandbox",
+	"ExplainText":  "This policy setting enables or disables printer sharing from the host into the Sandbox.If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host.If you do not configure this policy setting, printer redirection will be disabled.",
+	"Supported":  "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
+	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox",
+	"KeyName":  "AllowPrinterRedirection",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},

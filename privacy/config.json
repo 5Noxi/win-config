@@ -11,7 +11,8 @@
         "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
-        "AITEnable": { "Type": "REG_DWORD", "Data": 0 }
+        "AITEnable": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableInventory": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 },
@@ -60,7 +61,8 @@
         "AllowTelemetry": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
-        "AITEnable": { "Action": "deletevalue" }
+        "AITEnable": { "Action": "deletevalue" },
+        "DisableInventory": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "AllowTelemetry": { "Action": "deletevalue" },
@@ -272,7 +274,8 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors": {
         "DisableLocation": { "Type": "REG_DWORD", "Data": 1 },
         "DisableLocationScripting": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableWindowsLocationProvider": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableWindowsLocationProvider": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableSensors": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration": {
         "Status": { "Type": "REG_DWORD", "Data": 0 }
@@ -299,7 +302,8 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors": {
         "DisableLocation": { "Action": "deletevalue" },
         "DisableLocationScripting": { "Action": "deletevalue" },
-        "DisableWindowsLocationProvider": { "Action": "deletevalue" }
+        "DisableWindowsLocationProvider": { "Action": "deletevalue" },
+        "DisableSensors": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration": {
         "Status": { "Type": "REG_DWORD", "Data": 0 }
@@ -1244,6 +1248,9 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "EnableMmx": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Mobility": {
+        "PhoneLinkEnabled ": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowPhonePCLinking": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
       }
@@ -1251,6 +1258,9 @@
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "EnableMmx": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Mobility": {
+        "PhoneLinkEnabled ": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Connectivity\\AllowPhonePCLinking": {
         "value": { "Type": "REG_DWORD", "Data": 1 }
@@ -1641,6 +1651,30 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SYSTEM": {
         "RsopLogging": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Message Sync": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Messaging": {
+        "AllowMessageSync": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Messaging": {
+        "AllowMessageSync": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Password Reveal": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CredUI": {
+        "DisablePasswordReveal": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CredUI": {
+        "DisablePasswordReveal": { "Action": "deletevalue" }
       }
     }
   }

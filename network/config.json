@@ -6,7 +6,10 @@
         "DisableLargeMtu": { "Type": "REG_DWORD", "Data": 0 },
         "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
         "EnableSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
-        "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" },
+        "CipherSuiteOrder": {
+          "Type": "REG_MULTI_SZ",
+          "Data": "AES_256_GCM,AES_256_CCM"
+        },
         "DisableMultiChannel": { "Type": "REG_DWORD", "Data": 0 },
         "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 },
         "MaxSmb2Dialect": { "Type": "REG_DWORD", "Data": 65536 },
@@ -16,7 +19,10 @@
         "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
         "enablesecuritysignature": { "Type": "REG_DWORD", "Data": 1 },
         "EncryptData": { "Type": "REG_DWORD", "Data": 1 },
-        "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" },
+        "CipherSuiteOrder": {
+          "Type": "REG_MULTI_SZ",
+          "Data": "AES_256_GCM,AES_256_CCM"
+        },
         "RejectUnencryptedAccess": { "Type": "REG_DWORD", "Data": 1 },
         "DisableLeasing": { "Type": "REG_DWORD", "Data": 1 },
         "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 },
@@ -56,20 +62,15 @@
   "QoS Policy": {
     "__control": { "type": "button", "label": "Open" },
     "COMMANDS": {
-      "OpenNvCpl": { "Action": "run_powershell", "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/network/assets/QoS-Policy.ps1 | iex\"'" }
+      "OpenQoSPS": {
+        "Action": "run_powershell",
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/network/assets/QoS-Policy.ps1 | iex\"'"
+      }
     }
   },
   "Congestion Provider": {
     "apply": {
       "COMMANDS": {
-        "DisableLoopbackLargeMTU": {
-          "Action": "loopback_mtu",
-          "Protocols": [
-            "ipv6",
-            "ipv4"
-          ],
-          "Enable": false
-        },
         "SetTCP_BBR2": {
           "Action": "tcp_congestion",
           "Templates": [
@@ -85,14 +86,6 @@
     },
     "revert": {
       "COMMANDS": {
-        "EnableLoopbackLargeMTU": {
-          "Action": "loopback_mtu",
-          "Protocols": [
-            "ipv6",
-            "ipv4"
-          ],
-          "Enable": true
-        },
         "RevertTCP_CUBIC": {
           "Action": "tcp_congestion",
           "Templates": [
@@ -102,7 +95,7 @@
             "Datacenter",
             "DatacenterCustom"
           ],
-          "Provider": "CUBIC"
+          "Provider": "cubic"
         }
       }
     }
@@ -126,10 +119,7 @@
         },
         "DisableLLTDIORspndr": {
           "Action": "netbind",
-          "ComponentID": [
-            "ms_lltdio",
-            "ms_rspndr"
-          ],
+          "ComponentID": ["ms_lltdio", "ms_rspndr"],
           "State": "disable"
         }
       }
@@ -152,10 +142,7 @@
         },
         "EnableLLTDIORspndr": {
           "Action": "netbind",
-          "ComponentID": [
-            "ms_lltdio",
-            "ms_rspndr"
-          ],
+          "ComponentID": ["ms_lltdio", "ms_rspndr"],
           "State": "enable"
         }
       }
@@ -274,9 +261,7 @@
       "COMMANDS": {
         "DisableSMB1Feature": {
           "Action": "optional_feature",
-          "Features": [
-            "SMB1Protocol"
-          ],
+          "Features": ["SMB1Protocol"],
           "State": "Disabled"
         }
       }
@@ -289,9 +274,7 @@
       "COMMANDS": {
         "DisableSMB1FeatureAgain": {
           "Action": "optional_feature",
-          "Features": [
-            "SMB1Protocol"
-          ],
+          "Features": ["SMB1Protocol"],
           "State": "Disabled"
         }
       }
@@ -386,6 +369,125 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\WcmSvc\\wifinetworkmanager\\config": {
         "AutoConnectAllowedOEM": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Enable Offloads": {
+    "apply": {
+      "ETHERNET": {
+        "Action": "ethernet_key",
+        "Values": {
+          "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+          "*LsoV1IPv4": { "Type": "REG_SZ", "Data": 1 },
+          "*LsoV2IPv4": { "Type": "REG_SZ", "Data": 1 },
+          "*LsoV2IPv6": { "Type": "REG_SZ", "Data": 1 },
+          "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+          "*TCPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+          "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+          "*UDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+          "*TCPConnectionOffloadIPv4": { "Type": "REG_SZ", "Data": 1 },
+          "*TCPConnectionOffloadIPv6": { "Type": "REG_SZ", "Data": 1 },
+          "*TCPUDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+          "*TCPUDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+          "*PMARPOffload": { "Type": "REG_SZ", "Data": 1 },
+          "*PMNSOffload": { "Type": "REG_SZ", "Data": 0 },
+          "*IPsecOffloadV1IPv4": { "Type": "REG_SZ", "Data": 3 },
+          "*IPsecOffloadV2": { "Type": "REG_SZ", "Data": 3 },
+          "*IPsecOffloadV2IPv4": { "Type": "REG_SZ", "Data": 3 },
+          "*QoSOffload": { "Type": "REG_SZ", "Data": 1 }
+        }
+      }
+    },
+    "revert": {
+      "ETHERNET": {
+        "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+        "*LsoV1IPv4": { "Action": "deletevalue" },
+        "*LsoV2IPv4": { "Action": "deletevalue" },
+        "*LsoV2IPv6": { "Action": "deletevalue" },
+        "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+        "*TCPChecksumOffloadIPv6": { "Action": "deletevalue" },
+        "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+        "*UDPChecksumOffloadIPv6": { "Action": "deletevalue" },
+        "*TCPConnectionOffloadIPv4": { "Action": "deletevalue" },
+        "*TCPConnectionOffloadIPv6": { "Action": "deletevalue" },
+        "*TCPUDPChecksumOffloadIPv4": { "Action": "deletevalue" },
+        "*TCPUDPChecksumOffloadIPv6": { "Action": "deletevalue" },
+        "*PMARPOffload": { "Action": "deletevalue" },
+        "*PMNSOffload": { "Action": "deletevalue" },
+        "*IPsecOffloadV1IPv4": { "Action": "deletevalue" },
+        "*IPsecOffloadV2": { "Action": "deletevalue" },
+        "*IPsecOffloadV2IPv4": { "Action": "deletevalue" },
+        "*QoSOffload": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Wake On": {
+    "apply": {
+      "ETHERNET": {
+        "Action": "ethernet_key",
+        "Values": {
+          "*WakeOnMagicPacket": { "Type": "REG_SZ", "Data": 0 },
+          "*WakeOnPattern": { "Type": "REG_SZ", "Data": 0 },
+          "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
+          "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
+          "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 },
+          "ForceWakeFromMagicPacketOnModernStandby": {
+            "Type": "REG_SZ",
+            "Data": 0
+          },
+          "EnableWakeOnManagmentOnTCO": { "Type": "REG_SZ", "Data": 0 },
+          "WakeFromS5": { "Type": "REG_SZ", "Data": 0 },
+          "WakeOn": { "Type": "REG_SZ", "Data": 0 },
+          "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 }
+        }
+      }
+    },
+    "revert": {
+      "ETHERNET": {
+        "*WakeOnMagicPacket": { "Action": "deletevalue" },
+        "*WakeOnPattern": { "Action": "deletevalue" },
+        "S5WakeOnLan": { "Action": "deletevalue" },
+        "WakeOnLink": { "Action": "deletevalue" },
+        "WakeOnMagicPacketFromS5": { "Action": "deletevalue" },
+        "ForceWakeFromMagicPacketOnModernStandby": { "Action": "deletevalue" },
+        "EnableWakeOnManagmentOnTCO": { "Action": "deletevalue" },
+        "WakeFromS5": { "Action": "deletevalue" },
+        "WakeOn": { "Action": "deletevalue" },
+        "WakeOnFastStartup": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Increase Buffers": {
+    "apply": {
+      "ETHERNET": {
+        "Action": "ethernet_key",
+        "Values": {
+          "*TransmitBuffers": { "Type": "REG_SZ", "Data": "4096" },
+          "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "4096" }
+        }
+      }
+    },
+    "revert": {
+      "ETHERNET": {
+        "*TransmitBuffers": { "Type": "REG_SZ", "Data": "512" },
+        "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "256" }
+      }
+    }
+  },
+  "Enable USO": {
+    "apply": {
+      "ETHERNET": {
+        "Action": "ethernet_key",
+        "Values": {
+          "*UsoIPv4": { "Type": "REG_DWORD", "Data": 1 },
+          "*UsoIPv6": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      }
+    },
+    "revert": {
+      "ETHERNET": {
+        "*UsoIPv4": { "Action": "deletevalue" },
+        "*UsoIPv6": { "Action": "deletevalue" }
       }
     }
   }

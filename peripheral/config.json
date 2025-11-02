@@ -536,8 +536,8 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\SCSI\\**\\Device Parameters\\Disk",
           "Operations": [
-            { "Name": "CacheIsPowerProtected", "Type": "REG_DWORD", "Value": 0 },
-            { "Name": "UserWriteCacheSetting", "Type": "REG_DWORD", "Value": 1 }
+            { "Name": "CacheIsPowerProtected", "Action": "delete" },
+            { "Name": "UserWriteCacheSetting", "Action": "delete" }
           ]
         }
       }
@@ -697,7 +697,12 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
         "TurnOffTouchInput": { "Action": "deletevalue" }
       },
-      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": { "Action": "delete_path" },
+      "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
+        "TouchKeyboardTapInvoke": { "Action": "deletevalue" },
+        "EnableAutoShiftEngage": { "Action": "deletevalue" },
+        "EnableDoubleTapSpace": { "Action": "deletevalue" },
+        "EnableKeyAudioFeedback": { "Action": "deletevalue" }
+      },
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
         "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
         "SignInMode": { "Action": "deletevalue" },

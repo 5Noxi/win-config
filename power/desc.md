@@ -374,13 +374,13 @@ Get-ChildItem 'HKLM:\SYSTEM\CurrentControlSet\Control\usbflags' -ErrorAction Sil
 
 # Disable Audio Idle
 
-| Parameter              | Desc                                                                          | Default  | notes                                                                 |
-| ---------------------- | ----------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
-| `ConservationIdleTime` | Idle timeout (in seconds) used when the system is in power-conservation mode. | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `PerformanceIdleTime`  | Idle timeout (in seconds) used when the system is in performance mode.        | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `IdlePowerState`       | Device power state to enter when the inactivity timeout expires (D0–D3).      | `3` (D3) | Valid values `0–3` map to `D0–D3`.                                    |
+| Parameter              | Desc                                                                                    | Default  | Notes                                                                 |
+| ---------------------- | --------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
+| `ConservationIdleTime` | Idle timeout for the device, when the system is on battery power.                       | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
+| `PerformanceIdleTime`  | Idle timeout for the device, when the system is on AC power.                            | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
+| `IdlePowerState`       | Specifies the power state that the device will enter, when power is no longer needed.   | `3` (D3) | Valid values `1 - D1`, `2 - D2`, `3 - D3`.                            |
 
-I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈ 136 years`) & `IdlePowerState` to `0` (`D0`).
+I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈ 136 years`) & `IdlePowerState` to `1` (`D1`).
 
 | Parameter              | Type           | Revert Hex data     | Parsed value                      | Meaning                       |
 | ---------------------- | -------------- | ------------------- | --------------------------------- | ----------------------------- |
@@ -394,7 +394,8 @@ I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈
 
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation  
 > https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings  
 
 # Disable NVMe Perf Throttling
 

@@ -214,7 +214,7 @@ reg add "HKLM\System\CurrentControlSet\Control\GraphicsDrivers\Configuration\MSI
 ## Developer > Manage GPU Performance Counters
 
 "GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs."
-```c
+```json
 {
 "Name":  "RmProfilingAdminOnly",
 "Comment":  [
@@ -319,7 +319,7 @@ $home\Desktop\Nvcpl.lnk
 
 # Performance State (P0)
 
-```c
+```json
 {
 "Name":  "DisableDynamicPstate",
 "Comment":  [
@@ -334,7 +334,7 @@ $home\Desktop\Nvcpl.lnk
 },
 ```
 Other value:
-```c
+```json
 {
 "Name":  "DisableAsyncPstates",
 "Comment":  [
@@ -382,25 +382,6 @@ Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/137505942
 }
 ```
 
-# Disable HDCP
-
-HDCP protects digital content from being copied while it's transmitted between devices like a computer and a TV - would leave it enabled.
-
-```json
-{
-"Name":  "RMHdcpKeyglobZero",
-"Comment":  [
-         "Type DWORD",
-         "Encoding: 1 means Keyglob will be forced to zero"
-     ],
-"Elements":  [
-          {"Name":  "TRUE","Value":  "1"},
-          {"Name":  "FALSE", "Value":  "0"}
-         ]
-},
-```
-> https://en.wikipedia.org/wiki/High-bandwidth_Digital_Content_Protection
-
 # Disable ECC
 
 Some GPUs don't support it, disabling is also not really needed. You can test it by disabling it via the control panel.
@@ -432,7 +413,7 @@ Other ECC related features can be found using [`bitmask-calc`](https://github.co
 
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/ecc.png?raw=true)
 
-# Hide NVIDIA Tray Icon
+# Hide Tray Icon
 
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Global\NVTweak : HideXGpuTrayIcon
@@ -1364,7 +1345,7 @@ Disables `Add Desktop Context Menu` in the NVIDIA control panel.
 
 # GPU Performance Counters
 "GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs."
-```c
+```json
 {
 "Name":  "RmProfilingAdminOnly",
 "Comment":  [

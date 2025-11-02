@@ -411,7 +411,7 @@
   },
   "Classic Context Menu": {
     "apply": {
-      "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32": { "(default)": { "Type": "REG_SZ", "Data": "" } },
+      "HKCU\\Software\\Classes\\CLSID\\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\\InprocServer32": { "": { "Type": "REG_SZ", "Data": "" } },
       "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
     },
     "revert": {
@@ -607,7 +607,7 @@
       "COMMANDS": {
         "DownloadIcon": {
           "Action": "run_powershell",
-          "Command": "Invoke-WebRequest -Uri 'https://github.com/5Noxi/Files/releases/download/miscellaneous/Blank.ico' -OutFile 'C:\\Windows\\System32\\Blank.ico'"
+          "Command": "Invoke-WebRequest -Uri https://github.com/5Noxi/Files/releases/download/miscellaneous/Blank.ico -OutFile $env:SYSTEMROOT\\System32\\Blank.ico"
         }
       }
     },
@@ -679,7 +679,7 @@
     "COMMANDS": {
       "RemoveWindowsOld": {
         "Action": "run_powershell",
-        "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Icon-Spacing.ps1 | iex\"'"
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Icon-Spacing.ps1 | iex\"'"
       }
     }
   },
@@ -733,7 +733,7 @@
     "COMMANDS": {
       "DownloadFiles": {
         "Action": "run_powershell",
-        "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Drawing-Font.ps1 | iex\"'"
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Drawing-Font.ps1 | iex\"'"
       }
     }
   },

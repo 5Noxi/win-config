@@ -2,7 +2,10 @@
   "Debloated Driver": {
     "__control": { "type": "button", "label": "Open" },
     "COMMANDS": {
-      "OpenNvCpl": { "Action": "run_powershell", "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/NVIDIA-Tool.ps1 | iex\"'" }
+      "OpenNvCpl": {
+        "Action": "run_powershell",
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/NVIDIA-Tool.ps1 | iex\"'"
+      }
     }
   },
   "NVCPL Settings": {
@@ -30,7 +33,10 @@
   "Temporary NVCPL": {
     "apply": {
       "COMMANDS": {
-        "OpenNvCpl": { "Action": "run_powershell", "Command": "Start-Process powershell -ArgumentList '-NoProfile -WindowStyle Normal -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/nvcpl.ps1 | iex\"'" }
+        "OpenNvCpl": {
+          "Action": "run_powershell",
+          "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/nvidia/assets/nvcpl.ps1 | iex\"'"
+        }
       }
     },
     "revert": {
@@ -62,34 +68,25 @@
       }
     }
   },
-  "Disable HDCP": {
+  "Disable ECC": {
     "apply": {
-      "NVIDIA": {
-        "Action": "nvidia_key",
-        "Values": {
-          "RMHdcpKeyglobZero": { "Type": "REG_DWORD", "Data": 1 }
+      "COMMANDS": {
+        "DisableECC": {
+          "Action": "run_powershell",
+          "Command": "$env:SYSTEMROOT\\System32\\nvidia-smi.exe -e 0"
         }
       }
     },
     "revert": {
-      "NVIDIA": {
-        "RMHdcpKeyglobZero": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "EnableECC": {
+          "Action": "run_powershell",
+          "Command": "$env:SYSTEMROOT\\System32\\nvidia-smi.exe -e 1"
+        }
       }
     }
   },
-  "Disable ECC": {
-    "apply": {
-      "COMMANDS": {
-        "DisableECC": { "Action": "run_powershell", "Command": "C:\\Windows\\System32\\nvidia-smi.exe -e 0" }
-      }
-    },
-    "revert": {
-      "COMMANDS": {
-        "EnableECC": { "Action": "run_powershell", "Command": "C:\\Windows\\System32\\nvidia-smi.exe -e 1" }
-      }
-    }
-  },
-  "Hide NVIDIA Tray Icon": {
+  "Hide Tray Icon": {
     "apply": {
       "HKLM\\SOFTWARE\\NVIDIA Corporation\\NvTray": {
         "StartOnLogin": { "Type": "REG_DWORD", "Data": 0 }
@@ -209,11 +206,7 @@
       "COMMANDS": {
         "DisableNvTelemetryTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "NvTmRep_*",
-            "NvTmRepOnLogon*",
-            "NvTmMon_*"
-          ],
+          "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"],
           "TaskAction": "disable"
         }
       }
@@ -222,11 +215,7 @@
       "COMMANDS": {
         "EnableNvTelemetryTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "NvTmRep_*",
-            "NvTmRepOnLogon*",
-            "NvTmMon_*"
-          ],
+          "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"],
           "TaskAction": "enable"
         }
       }
@@ -329,7 +318,7 @@
         "EnableRID66610": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
-        "(default)": { "Type": "REG_DWORD", "Data": 0 }
+        "": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
         "RemoveNvTelemetryDLL": {
@@ -348,7 +337,7 @@
           "Action": "delete_path",
           "Paths": [
             {
-              "Path": "C:\\Program Files\\NVIDIA Corporation",
+              "Path": "%PROGRAMFILES%\\NVIDIA Corporation",
               "Recurse": true
             }
           ]
@@ -368,7 +357,7 @@
         "EnableRID66610": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
-        "(default)": { "Action": "deletevalue" }
+        "": { "Action": "deletevalue" }
       }
     }
   },

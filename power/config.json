@@ -288,7 +288,7 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\**\\PowerSettings",
           "Operations": [
-            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [0,0,0,0] },
+            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [1,0,0,0] },
             { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] },
             { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] }
           ]
@@ -301,9 +301,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\**\\PowerSettings",
           "Operations": [
+            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3,0,0,0] },
             { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30,0,0,0] },
-            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] },
-            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3,0,0,0] }
+            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] }
           ]
         }
       }
@@ -328,7 +328,7 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\*",
           "Operations": [
-            {"Name": "IdleStatesNumber", "Type": "REG_DWORD", "Value": 0 }
+            { "Name": "IdleStatesNumber", "Type": "REG_DWORD", "Value": 0 }
           ]
         }
       }
