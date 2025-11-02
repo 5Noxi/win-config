@@ -58,7 +58,7 @@ rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Hotkey	Type: REG_SZ, Length
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Layout Hotkey	Type: REG_SZ, Length: 4, Data: 3
 ```
 
-# Audio Ducking
+# Disable Audio Ducking
 
 "*Windows audio ducking is a dynamic audio processing technique that enables the **automatic adjustment of audio levels** between different audio sources on a Windows-based computer or operating system.*"
 > https://multimedia.easeus.com/ai-article/windows-audio-ducking.html

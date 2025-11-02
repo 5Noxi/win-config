@@ -11,19 +11,46 @@
         "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
         "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
         "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": "0" },
         "Beep": { "Type": "REG_SZ", "Data": "No" },
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
-        "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
-        "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
-        "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
+        "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": "20" },
+        "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": "1" },
+        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": "1" },
+        "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": "2" }
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "158" }
       },
       "HKCU\\Control Panel\\Cursors": {
         "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Mouse Acceleration": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MouseSpeed": { "Type": "REG_SZ", "Data": "0" },
+            "MouseThreshold1": { "Type": "REG_SZ", "Data": "0" },
+            "MouseThreshold2": { "Type": "REG_SZ", "Data": "0" }
+          }
+        },
+        "Decrease Hover Time": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" }
+          }
+        },
+        "Faster Double-Click Speed": {
+          "HKCU\\Control Panel\\Mouse": {
+            "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" }
+          }
+        },
+        "Minimum Background Message Rate": {
+          "HKCU\\Control Panel\\Mouse": {
+            "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": "20" },
+            "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": "1" },
+            "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": "1" },
+            "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": "2" }
+          }
+        }
       }
     },
     "revert": {
@@ -37,7 +64,7 @@
         "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" },
         "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
         "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": "0" },
         "Beep": { "Type": "REG_SZ", "Data": "No" },
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
         "RawMouseThrottleDuration": { "Action": "deletevalue" },
@@ -50,6 +77,33 @@
       },
       "HKCU\\Control Panel\\Cursors": {
         "ContactVisualization": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disable Mouse Acceleration": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MouseSpeed": { "Type": "REG_SZ", "Data": "1" },
+            "MouseThreshold1": { "Type": "REG_SZ", "Data": "6" },
+            "MouseThreshold2": { "Type": "REG_SZ", "Data": "10" }
+          }
+        },
+        "Decrease Hover Time": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "Faster Double-Click Speed": {
+          "HKCU\\Control Panel\\Mouse": {
+            "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" }
+          }
+        },
+        "Minimum Background Message Rate": {
+          "HKCU\\Control Panel\\Mouse": {
+            "RawMouseThrottleDuration": { "Action": "deletevalue" },
+            "RawMouseThrottleEnabled": { "Action": "deletevalue" },
+            "RawMouseThrottleForced": { "Action": "deletevalue" },
+            "RawMouseThrottleLeeway": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -77,6 +131,23 @@
       },
       "HKCU\\Control Panel\\Accessibility\\ToggleKeys": {
         "Flags": { "Type": "REG_DWORD", "Data": 38 }
+      },
+      "SUBOPTION": {
+        "Shortest Repeat Delay": {
+          "HKCU\\Control Panel\\Keyboard": {
+            "KeyboardDelay": { "Type": "REG_SZ", "Data": "0" }
+          }
+        },
+        "Fastest Repeat Rate": {
+          "HKCU\\Control Panel\\Keyboard": {
+            "KeyboardSpeed": { "Type": "REG_SZ", "Data": "31" }
+          }
+        },
+        "Decrease Cursor Blink Rate": {
+          "HKCU\\Control Panel\\Desktop": {
+            "CursorBlinkRate": { "Type": "REG_SZ", "Data": "900" }
+          }
+        }
       }
     },
     "revert": {
@@ -102,18 +173,79 @@
       },
       "HKCU\\Control Panel\\Accessibility\\ToggleKeys": {
         "Flags": { "Type": "REG_DWORD", "Data": 62 }
+      },
+      "SUBOPTION": {
+        "Shortest Repeat Delay": {
+          "HKCU\\Control Panel\\Keyboard": {
+            "KeyboardDelay": { "Type": "REG_SZ", "Data": "1" }
+          }
+        },
+        "Fastest Repeat Rate": {
+          "HKCU\\Control Panel\\Keyboard": {
+            "KeyboardSpeed": { "Type": "REG_SZ", "Data": "31" }
+          }
+        },
+        "Decrease Cursor Blink Rate": {
+          "HKCU\\Control Panel\\Desktop": {
+            "CursorBlinkRate": { "Type": "REG_SZ", "Data": "530" }
+          }
+        }
       }
     }
   },
-  "Audio Ducking": {
+  "Disable Audio Ducking": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
         "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "SUBOPTION": {
+        "Mute all other sounds": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Reduce other sounds by 80% (default)": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Reduce other sounds by 50%": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Do nothing": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        }
       }
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
         "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Mute all other sounds": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Reduce other sounds by 80% (default)": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Reduce other sounds by 50%": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Do nothing": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "UserDuckingPreference": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     }
   },
@@ -145,17 +277,17 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture\\*",
           "Operations": [
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "delete" },
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "delete" },
-            { "SubPath": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Operation": "delete" }
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "deletevalue" },
+            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "deletevalue" },
+            { "SubPath": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Operation": "deletevalue" }
           ]
         },
         "RevertAudioEnhRender": {
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Render\\**\\Properties",
           "Operations": [
-            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "delete" },
-            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "delete" }
+            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "deletevalue" },
+            { "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "deletevalue" }
           ]
         }
       }
@@ -734,8 +866,8 @@
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\**\\Device Parameters\\Interrupt Management",
           "Operations": [
             { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Type": "REG_DWORD", "Value": 1 },
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "delete" },
-            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Operation": "delete" }
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "deletevalue" },
+            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Operation": "deletevalue" }
           ]
         }
       }
@@ -746,9 +878,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\**\\Device Parameters\\Interrupt Management",
           "Operations": [
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Operation": "delete" },
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "delete" },
-            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Operation": "delete" }
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Operation": "deletevalue" },
+            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "deletevalue" },
+            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Operation": "deletevalue" }
           ]
         }
       }

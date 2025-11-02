@@ -319,6 +319,8 @@ $home\Desktop\Nvcpl.lnk
 
 # Performance State (P0)
 
+Disable dynamic P-State/adaptive clocking and locks it at `P0`.
+
 ```json
 {
 "Name":  "DisableDynamicPstate",

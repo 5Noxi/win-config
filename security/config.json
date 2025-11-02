@@ -740,16 +740,16 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\Microsoft\\.NETFramework\\v*",
           "Operations": [
-            { "Name": "SchUseStrongCrypto", "Operation": "delete" },
-            { "Name": "SystemDefaultTlsVersions", "Operation": "delete" }
+            { "Name": "SchUseStrongCrypto", "Operation": "deletevalue" },
+            { "Name": "SystemDefaultTlsVersions", "Operation": "deletevalue" }
           ]
         },
         "DelNetFrameworkTLSWow": {
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\.NETFramework\\v*",
           "Operations": [
-            { "Name": "SchUseStrongCrypto", "Operation": "delete" },
-            { "Name": "SystemDefaultTlsVersions", "Operation": "delete" }
+            { "Name": "SchUseStrongCrypto", "Operation": "deletevalue" },
+            { "Name": "SystemDefaultTlsVersions", "Operation": "deletevalue" }
           ]
         }
       }

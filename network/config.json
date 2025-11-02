@@ -30,6 +30,62 @@
         "MinSmb2Dialect": { "Type": "REG_DWORD", "Data": 785 },
         "AutoShareServer": { "Type": "REG_DWORD", "Data": 0 },
         "AutoShareWks": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Enforce SMB Signing": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
+            "EnableSecuritySignature": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
+            "enablesecuritysignature": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Admin Shares": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "AutoShareServer": { "Type": "REG_DWORD", "Data": 0 },
+            "AutoShareWks": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Force Encryption": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "EncryptData": { "Type": "REG_DWORD", "Data": 1 },
+            "RejectUnencryptedAccess": { "Type": "REG_DWORD", "Data": 1 },
+            "CipherSuiteOrder": {
+              "Type": "REG_MULTI_SZ",
+              "Data": "AES_256_GCM,AES_256_CCM"
+            }
+          }
+        },
+        "Enable SMB Over QUIC": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "SMB3 Only": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "MaxSmb2Dialect": { "Type": "REG_DWORD", "Data": 65536 },
+            "MinSmb2Dialect": { "Type": "REG_DWORD", "Data": 785 }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "MaxSmb2Dialect": { "Type": "REG_DWORD", "Data": 65536 },
+            "MinSmb2Dialect": { "Type": "REG_DWORD", "Data": 785 }
+          }
+        },
+        "Disable Bandwidth Throttling": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "DisableBandwidthThrottling": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Large MTU": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "DisableLargeMtu": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -56,6 +112,59 @@
         "MinSmb2Dialect": { "Action": "deletevalue" },
         "AutoShareServer": { "Action": "deletevalue" },
         "AutoShareWks": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Enforce SMB Signing": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "RequireSecuritySignature": { "Action": "deletevalue" },
+            "EnableSecuritySignature": { "Action": "deletevalue" }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "RequireSecuritySignature": { "Action": "deletevalue" },
+            "enablesecuritysignature": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Admin Shares": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "AutoShareServer": { "Action": "deletevalue" },
+            "AutoShareWks": { "Action": "deletevalue" }
+          }
+        },
+        "Force Encryption": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "EncryptData": { "Action": "deletevalue" },
+            "RejectUnencryptedAccess": { "Action": "deletevalue" },
+            "CipherSuiteOrder": { "Action": "deletevalue" }
+          }
+        },
+        "Enable SMB Over QUIC": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "EnableSMBQUIC": { "Action": "deletevalue" }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "EnableSMBQUIC": { "Action": "deletevalue" }
+          }
+        },
+        "SMB3 Only": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "MaxSmb2Dialect": { "Action": "deletevalue" },
+            "MinSmb2Dialect": { "Action": "deletevalue" }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "MaxSmb2Dialect": { "Action": "deletevalue" },
+            "MinSmb2Dialect": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Bandwidth Throttling": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "DisableBandwidthThrottling": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Large MTU": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
+            "DisableLargeMtu": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -82,6 +191,83 @@
           ],
           "Provider": "bbr2"
         }
+      },
+      "SUBOPTION": {
+        "BBR2": {
+          "COMMANDS": {
+            "SetTCP_BBR2": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "bbr2"
+            }
+          }
+        },
+        "CUBIC": {
+          "COMMANDS": {
+            "SetTCP_CUBIC": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "cubic"
+            }
+          }
+        },
+        "DCTCP": {
+          "COMMANDS": {
+            "SetTCP_DCTCP": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "dctcp"
+            }
+          }
+        },
+        "CTCP": {
+          "COMMANDS": {
+            "SetTCP_CTCP": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "ctcp"
+            }
+          }
+        },
+        "NewReno": {
+          "COMMANDS": {
+            "SetTCP_NewReno": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "newreno"
+            }
+          }
+        }
       }
     },
     "revert": {
@@ -96,6 +282,83 @@
             "DatacenterCustom"
           ],
           "Provider": "cubic"
+        }
+      },
+      "SUBOPTION": {
+        "BBR2": {
+          "COMMANDS": {
+            "RevertTCP_BBR2": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "cubic"
+            }
+          }
+        },
+        "CUBIC": {
+          "COMMANDS": {
+            "RevertTCP_CUBIC": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "cubic"
+            }
+          }
+        },
+        "DCTCP": {
+          "COMMANDS": {
+            "RevertTCP_DCTCP": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "cubic"
+            }
+          }
+        },
+        "CTCP": {
+          "COMMANDS": {
+            "RevertTCP_CTCP": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "cubic"
+            }
+          }
+        },
+        "NewReno": {
+          "COMMANDS": {
+            "RevertTCP_NewReno": {
+              "Action": "tcp_congestion",
+              "Templates": [
+                "Internet",
+                "Datacenter",
+                "Compat",
+                "DatacenterCustom",
+                "InternetCustom"
+              ],
+              "Provider": "cubic"
+            }
+          }
         }
       }
     }
@@ -264,6 +527,25 @@
           "Features": ["SMB1Protocol"],
           "State": "Disabled"
         }
+      },
+      "SUBOPTION": {
+        "Disable SMBv1": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "SMB1": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "COMMANDS": {
+            "DisableSMB1Feature": {
+              "Action": "optional_feature",
+              "Features": ["SMB1Protocol"],
+              "State": "Disabled"
+            }
+          }
+        },
+        "Disable SMBv2": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "SMB2": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -276,6 +558,25 @@
           "Action": "optional_feature",
           "Features": ["SMB1Protocol"],
           "State": "Disabled"
+        }
+      },
+      "SUBOPTION": {
+        "Disable SMBv1": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "SMB1": { "Action": "deletevalue" }
+          },
+          "COMMANDS": {
+            "DisableSMB1FeatureAgain": {
+              "Action": "optional_feature",
+              "Features": ["SMB1Protocol"],
+              "State": "Enabled"
+            }
+          }
+        },
+        "Disable SMBv2": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+            "SMB2": { "Action": "deletevalue" }
+          }
         }
       }
     }
@@ -299,6 +600,36 @@
             { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 2 }
           ]
         }
+      },
+      "SUBOPTION": {
+        "Disable mDNS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+            "EnableMDNS": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable LLMNR": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+            "EnableMulticast": { "Type": "REG_DWORD", "Data": 0 },
+            "DisableSmartNameResolution": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable NetBIOS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+            "EnableNetbios": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters": {
+            "EnableLMHOSTS": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "COMMANDS": {
+            "DisableNetBIOSOptions": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces\\Tcpip_*",
+              "Operations": [
+                { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 2 }
+              ]
+            }
+          }
+        }
       }
     },
     "revert": {
@@ -318,6 +649,36 @@
           "Operations": [
             { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 0 }
           ]
+        }
+      },
+      "SUBOPTION": {
+        "Disable mDNS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+            "EnableMDNS": { "Action": "deletevalue" }
+          }
+        },
+        "Disable LLMNR": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+            "EnableMulticast": { "Action": "deletevalue" },
+            "DisableSmartNameResolution": { "Action": "deletevalue" }
+          }
+        },
+        "Disable NetBIOS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dnscache\\Parameters": {
+            "EnableNetbios": { "Action": "deletevalue" }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters": {
+            "EnableLMHOSTS": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "COMMANDS": {
+            "EnableNetBIOSOptions": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NetBT\\Parameters\\Interfaces\\Tcpip_*",
+              "Operations": [
+                { "Name": "NetbiosOptions", "Type": "REG_DWORD", "Value": 0 }
+              ]
+            }
+          }
         }
       }
     }
@@ -374,120 +735,148 @@
   },
   "Enable Offloads": {
     "apply": {
-      "ETHERNET": {
-        "Action": "ethernet_key",
-        "Values": {
-          "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-          "*LsoV1IPv4": { "Type": "REG_SZ", "Data": 1 },
-          "*LsoV2IPv4": { "Type": "REG_SZ", "Data": 1 },
-          "*LsoV2IPv6": { "Type": "REG_SZ", "Data": 1 },
-          "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-          "*TCPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
-          "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-          "*UDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
-          "*TCPConnectionOffloadIPv4": { "Type": "REG_SZ", "Data": 1 },
-          "*TCPConnectionOffloadIPv6": { "Type": "REG_SZ", "Data": 1 },
-          "*TCPUDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-          "*TCPUDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
-          "*PMARPOffload": { "Type": "REG_SZ", "Data": 1 },
-          "*PMNSOffload": { "Type": "REG_SZ", "Data": 0 },
-          "*IPsecOffloadV1IPv4": { "Type": "REG_SZ", "Data": 3 },
-          "*IPsecOffloadV2": { "Type": "REG_SZ", "Data": 3 },
-          "*IPsecOffloadV2IPv4": { "Type": "REG_SZ", "Data": 3 },
-          "*QoSOffload": { "Type": "REG_SZ", "Data": 1 }
+      "COMMANDS": {
+        "EnableAdapterOffloads": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*LsoV1IPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*LsoV2IPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*LsoV2IPv6": { "Type": "REG_SZ", "Data": 1 },
+            "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*TCPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+            "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*UDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+            "*TCPConnectionOffloadIPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*TCPConnectionOffloadIPv6": { "Type": "REG_SZ", "Data": 1 },
+            "*TCPUDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*TCPUDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+            "*PMARPOffload": { "Type": "REG_SZ", "Data": 1 },
+            "*PMNSOffload": { "Type": "REG_SZ", "Data": 0 },
+            "*IPsecOffloadV1IPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*IPsecOffloadV2": { "Type": "REG_SZ", "Data": 3 },
+            "*IPsecOffloadV2IPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*QoSOffload": { "Type": "REG_SZ", "Data": 1 }
+          }
         }
       }
     },
     "revert": {
-      "ETHERNET": {
-        "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-        "*LsoV1IPv4": { "Action": "deletevalue" },
-        "*LsoV2IPv4": { "Action": "deletevalue" },
-        "*LsoV2IPv6": { "Action": "deletevalue" },
-        "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-        "*TCPChecksumOffloadIPv6": { "Action": "deletevalue" },
-        "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-        "*UDPChecksumOffloadIPv6": { "Action": "deletevalue" },
-        "*TCPConnectionOffloadIPv4": { "Action": "deletevalue" },
-        "*TCPConnectionOffloadIPv6": { "Action": "deletevalue" },
-        "*TCPUDPChecksumOffloadIPv4": { "Action": "deletevalue" },
-        "*TCPUDPChecksumOffloadIPv6": { "Action": "deletevalue" },
-        "*PMARPOffload": { "Action": "deletevalue" },
-        "*PMNSOffload": { "Action": "deletevalue" },
-        "*IPsecOffloadV1IPv4": { "Action": "deletevalue" },
-        "*IPsecOffloadV2": { "Action": "deletevalue" },
-        "*IPsecOffloadV2IPv4": { "Action": "deletevalue" },
-        "*QoSOffload": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ResetAdapterOffloads": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*LsoV1IPv4": { "Action": "deletevalue" },
+            "*LsoV2IPv4": { "Action": "deletevalue" },
+            "*LsoV2IPv6": { "Action": "deletevalue" },
+            "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*TCPChecksumOffloadIPv6": { "Action": "deletevalue" },
+            "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*UDPChecksumOffloadIPv6": { "Action": "deletevalue" },
+            "*TCPConnectionOffloadIPv4": { "Action": "deletevalue" },
+            "*TCPConnectionOffloadIPv6": { "Action": "deletevalue" },
+            "*TCPUDPChecksumOffloadIPv4": { "Action": "deletevalue" },
+            "*TCPUDPChecksumOffloadIPv6": { "Action": "deletevalue" },
+            "*PMARPOffload": { "Action": "deletevalue" },
+            "*PMNSOffload": { "Action": "deletevalue" },
+            "*IPsecOffloadV1IPv4": { "Action": "deletevalue" },
+            "*IPsecOffloadV2": { "Action": "deletevalue" },
+            "*IPsecOffloadV2IPv4": { "Action": "deletevalue" },
+            "*QoSOffload": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
   "Disable Wake On": {
     "apply": {
-      "ETHERNET": {
-        "Action": "ethernet_key",
-        "Values": {
-          "*WakeOnMagicPacket": { "Type": "REG_SZ", "Data": 0 },
-          "*WakeOnPattern": { "Type": "REG_SZ", "Data": 0 },
-          "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
-          "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
-          "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 },
-          "ForceWakeFromMagicPacketOnModernStandby": {
-            "Type": "REG_SZ",
-            "Data": 0
-          },
-          "EnableWakeOnManagmentOnTCO": { "Type": "REG_SZ", "Data": 0 },
-          "WakeFromS5": { "Type": "REG_SZ", "Data": 0 },
-          "WakeOn": { "Type": "REG_SZ", "Data": 0 },
-          "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 }
+      "COMMANDS": {
+        "DisableAdapterWake": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*WakeOnMagicPacket": { "Type": "REG_SZ", "Data": 0 },
+            "*WakeOnPattern": { "Type": "REG_SZ", "Data": 0 },
+            "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 },
+            "ForceWakeFromMagicPacketOnModernStandby": {
+              "Type": "REG_SZ",
+              "Data": 0
+            },
+            "EnableWakeOnManagmentOnTCO": { "Type": "REG_SZ", "Data": 0 },
+            "WakeFromS5": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOn": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 }
+          }
         }
       }
     },
     "revert": {
-      "ETHERNET": {
-        "*WakeOnMagicPacket": { "Action": "deletevalue" },
-        "*WakeOnPattern": { "Action": "deletevalue" },
-        "S5WakeOnLan": { "Action": "deletevalue" },
-        "WakeOnLink": { "Action": "deletevalue" },
-        "WakeOnMagicPacketFromS5": { "Action": "deletevalue" },
-        "ForceWakeFromMagicPacketOnModernStandby": { "Action": "deletevalue" },
-        "EnableWakeOnManagmentOnTCO": { "Action": "deletevalue" },
-        "WakeFromS5": { "Action": "deletevalue" },
-        "WakeOn": { "Action": "deletevalue" },
-        "WakeOnFastStartup": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ResetAdapterWake": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*WakeOnMagicPacket": { "Action": "deletevalue" },
+            "*WakeOnPattern": { "Action": "deletevalue" },
+            "S5WakeOnLan": { "Action": "deletevalue" },
+            "WakeOnLink": { "Action": "deletevalue" },
+            "WakeOnMagicPacketFromS5": { "Action": "deletevalue" },
+            "ForceWakeFromMagicPacketOnModernStandby": { "Action": "deletevalue" },
+            "EnableWakeOnManagmentOnTCO": { "Action": "deletevalue" },
+            "WakeFromS5": { "Action": "deletevalue" },
+            "WakeOn": { "Action": "deletevalue" },
+            "WakeOnFastStartup": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
   "Increase Buffers": {
     "apply": {
-      "ETHERNET": {
-        "Action": "ethernet_key",
-        "Values": {
-          "*TransmitBuffers": { "Type": "REG_SZ", "Data": "4096" },
-          "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "4096" }
+      "COMMANDS": {
+        "IncreaseAdapterBuffers": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*TransmitBuffers": { "Type": "REG_SZ", "Data": "4096" },
+            "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "4096" }
+          }
         }
       }
     },
     "revert": {
-      "ETHERNET": {
-        "*TransmitBuffers": { "Type": "REG_SZ", "Data": "512" },
-        "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "256" }
+      "COMMANDS": {
+        "ResetAdapterBuffers": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*TransmitBuffers": { "Type": "REG_SZ", "Data": "512" },
+            "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "256" }
+          }
+        }
       }
     }
   },
   "Enable USO": {
     "apply": {
-      "ETHERNET": {
-        "Action": "ethernet_key",
-        "Values": {
-          "*UsoIPv4": { "Type": "REG_DWORD", "Data": 1 },
-          "*UsoIPv6": { "Type": "REG_DWORD", "Data": 1 }
+      "COMMANDS": {
+        "EnableAdapterUso": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*UsoIPv4": { "Type": "REG_DWORD", "Data": 1 },
+            "*UsoIPv6": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
     "revert": {
-      "ETHERNET": {
-        "*UsoIPv4": { "Action": "deletevalue" },
-        "*UsoIPv6": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ResetAdapterUso": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*UsoIPv4": { "Action": "deletevalue" },
+            "*UsoIPv6": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },

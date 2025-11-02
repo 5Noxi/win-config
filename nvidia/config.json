@@ -55,16 +55,23 @@
   },
   "Performance State (P0)": {
     "apply": {
-      "NVIDIA": {
-        "Action": "nvidia_key",
-        "Values": {
-          "DisableDynamicPstate": { "Type": "REG_DWORD", "Data": 1 }
+      "COMMANDS": {
+        "SetDisableDynamicPstate": {
+          "Action": "nvidia_key",
+          "Values": {
+            "DisableDynamicPstate": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
     "revert": {
-      "NVIDIA": {
-        "DisableDynamicPstate": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ClearDisableDynamicPstate": {
+          "Action": "nvidia_key",
+          "Values": {
+            "DisableDynamicPstate": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -172,32 +179,39 @@
   },
   "Disable Power Savings": {
     "apply": {
-      "NVIDIA": {
-        "Action": "nvidia_key",
-        "Values": {
-          "RmDisableACPI": { "Type": "REG_DWORD", "Data": 1023 },
-          "RMDisableGpuASPMFlags": { "Type": "REG_DWORD", "Data": 3 },
-          "RMFspg": { "Type": "REG_DWORD", "Data": 15 },
-          "RMBlcg": { "Type": "REG_DWORD", "Data": 286331153 },
-          "RMElcg": { "Type": "REG_DWORD", "Data": 1431655765 },
-          "RmElpg": { "Type": "REG_DWORD", "Data": 4095 },
-          "RMSlcg": { "Type": "REG_DWORD", "Data": 262143 },
-          "RMOPSB": { "Type": "REG_DWORD", "Data": 10914 },
-          "RMLpwrArch": { "Type": "REG_DWORD", "Data": 349525 }
+      "COMMANDS": {
+        "SetNvidiaPowerSavings": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RmDisableACPI": { "Type": "REG_DWORD", "Data": 1023 },
+            "RMDisableGpuASPMFlags": { "Type": "REG_DWORD", "Data": 3 },
+            "RMFspg": { "Type": "REG_DWORD", "Data": 15 },
+            "RMBlcg": { "Type": "REG_DWORD", "Data": 286331153 },
+            "RMElcg": { "Type": "REG_DWORD", "Data": 1431655765 },
+            "RmElpg": { "Type": "REG_DWORD", "Data": 4095 },
+            "RMSlcg": { "Type": "REG_DWORD", "Data": 262143 },
+            "RMOPSB": { "Type": "REG_DWORD", "Data": 10914 },
+            "RMLpwrArch": { "Type": "REG_DWORD", "Data": 349525 }
+          }
         }
       }
     },
     "revert": {
-      "NVIDIA": {
-        "RmDisableACPI": { "Action": "deletevalue" },
-        "RMDisableGpuASPMFlags": { "Action": "deletevalue" },
-        "RMFspg": { "Action": "deletevalue" },
-        "RMBlcg": { "Action": "deletevalue" },
-        "RMElcg": { "Action": "deletevalue" },
-        "RmElpg": { "Action": "deletevalue" },
-        "RMSlcg": { "Action": "deletevalue" },
-        "RMOPSB": { "Action": "deletevalue" },
-        "RMLpwrArch": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ClearNvidiaPowerSavings": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RmDisableACPI": { "Action": "deletevalue" },
+            "RMDisableGpuASPMFlags": { "Action": "deletevalue" },
+            "RMFspg": { "Action": "deletevalue" },
+            "RMBlcg": { "Action": "deletevalue" },
+            "RMElcg": { "Action": "deletevalue" },
+            "RmElpg": { "Action": "deletevalue" },
+            "RMSlcg": { "Action": "deletevalue" },
+            "RMOPSB": { "Action": "deletevalue" },
+            "RMLpwrArch": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -288,10 +302,12 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
         "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "NVIDIA": {
-        "Action": "nvidia_key",
-        "Values": {
-          "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
+      "COMMANDS": {
+        "SetNvidiaRmProfiling": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     },
@@ -299,8 +315,13 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
         "RmProfilingAdminOnly": { "Action": "deletevalue" }
       },
-      "NVIDIA": {
-        "RmProfilingAdminOnly": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ClearNvidiaRmProfiling": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RmProfilingAdminOnly": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -363,18 +384,25 @@
   },
   "RMPowerFeature": {
     "apply": {
-      "NVIDIA": {
-        "Action": "nvidia_key",
-        "Values": {
-          "RMPowerFeature": { "Type": "REG_DWORD", "Data": 1412080853 },
-          "RMPowerFeature2": { "Type": "REG_DWORD", "Data": 89478485 }
+      "COMMANDS": {
+        "SetRMPowerFeature": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RMPowerFeature": { "Type": "REG_DWORD", "Data": 1412080853 },
+            "RMPowerFeature2": { "Type": "REG_DWORD", "Data": 89478485 }
+          }
         }
       }
     },
     "revert": {
-      "NVIDIA": {
-        "RMPowerFeature": { "Action": "deletevalue" },
-        "RMPowerFeature2": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ClearRMPowerFeature": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RMPowerFeature": { "Action": "deletevalue" },
+            "RMPowerFeature2": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },

@@ -474,6 +474,17 @@ HAGS should be enabled, there're many reasons like different threads... may add 
 > https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/  
 > https://maxcloudon.com/hardware-accelerated-gpu-scheduling/
 
+---
+
+Enable HAGS:
+```ps
+SystemSettingsAdminFlows.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 2
+```
+Disable HAGS:
+```ps
+SystemSettingsAdminFlows.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 1
+```
+
 # Remove Windows.old
 
 Removes old/previous windows installation files from `Windows.old`.

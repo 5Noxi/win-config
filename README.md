@@ -34,10 +34,8 @@ pip install PySide6 mistune requests
 ### Overview
 | Context | Allowed actions |
 | ------ | ------ |
-| `COMMANDS` | `run_powershell`, `delete_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent` |
+| `COMMANDS` | `run_powershell`, `delete_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent`, `nvidia_key`, `ethernet_key` |
 | Registry hives (`HKCU\`, `HKLM\`...) | Direct value set, `deletevalue` |
-| `NVIDIA` | `nvidia_key` (with `Values` map) |
-| `ETHERNET` | `ethernet_key` (with `Values` map) |
 
 ### Actions & Requirements
 | Action | Required / optional arguments |
@@ -52,8 +50,8 @@ pip install PySide6 mistune requests
 | `bcdedit` | Required: `Name` (or `Option`) - One of: `Value` or `Delete`/`Remove` (bool) |
 | `registry_pattern` | Required: `Pattern`, `Operations` (array) - Optional: `ExcludeSubPaths`, `ExcludePatterns`, `ExcludeSegments`, `Exclude`, `Root`, `Message` |
 | `mmagent` | Required: `Setting` (or `Option`/`Name`), desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
-| `nvidia_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` |
-| `ethernet_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` |
+| `nvidia_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
+| `ethernet_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
 
 ### Buttons
 | Key | Purpose |
@@ -122,8 +120,8 @@ pip install PySide6 mistune requests
           "Action": "registry_pattern",
           "Pattern": "HKCU\\Software\\**Noverse**\\**\\Profiles\\*",
           "Operations": [
-            { "SubPath": "Settings1", "Name": "Enabled", "Operation": "delete" },
-            { "SubPath": "Settings2", "Name": "Channel", "Operation": "delete" }
+            { "SubPath": "Settings1", "Name": "Enabled", "Operation": "deletevalue" },
+            { "SubPath": "Settings2", "Name": "Channel", "Operation": "deletevalue" }
           ]
         }
       }
@@ -138,7 +136,7 @@ pip install PySide6 mistune requests
           "ExcludeSubPaths": ["KeyName"],
           "Operations": [
             { "Name": "Throttle", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Parameters", "Name": "TraceLevel", "Operation": "delete" }
+            { "SubPath": "Parameters", "Name": "TraceLevel", "Operation": "deletevalue" }
           ]
         }
       }
@@ -149,7 +147,7 @@ pip install PySide6 mistune requests
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Services\\**Noverse**\\**",
           "Operations": [
-            { "Name": "Throttle", "Operation": "delete" }
+            { "Name": "Throttle", "Operation": "deletevalue" }
           ]
         }
       }
@@ -360,31 +358,45 @@ pip install PySide6 mistune requests
   },
   "Option Name - NVIDIA Key": {
     "apply": {
-      "NVIDIA": {
-        "Action": "nvidia_key", // searches for the NVIDIA key in the display adapter key (4d36e968-e325-11ce-bfc1-08002be10318)
-        "Values": {
-          "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
+      "COMMANDS": {
+        "SetNvidiaValue": {
+          "Action": "nvidia_key", // searches for the NVIDIA key in the display adapter key (4d36e968-e325-11ce-bfc1-08002be10318)
+          "Values": {
+            "RmProfilingAdminOnly": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     },
     "revert": {
-      "NVIDIA": {
-        "RmProfilingAdminOnly": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ClearNvidiaValue": {
+          "Action": "nvidia_key",
+          "Values": {
+            "RmProfilingAdminOnly": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
   "Option Name - Ethernet Key": {
     "apply": {
-      "ETHERNET": {
-        "Action": "ethernet_key", // searches for a active adapter (exluding VM adapters) then sets the key in the network adapter key (4d36e972-e325-11ce-bfc1-08002be10318)
-        "Values": {
-          "AutoPowerSaveModeEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      "COMMANDS": {
+        "SetAdapterPowerSave": {
+          "Action": "ethernet_key", // searches for an active adapter (excluding VM adapters) then sets the key in the network adapter key (4d36e972-e325-11ce-bfc1-08002be10318)
+          "Values": {
+            "AutoPowerSaveModeEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     },
     "revert": {
-      "ETHERNET": {
-        "AutoPowerSaveModeEnabled": { "Action": "deletevalue" }
+      "COMMANDS": {
+        "ResetAdapterPowerSave": {
+          "Action": "ethernet_key",
+          "Values": {
+            "AutoPowerSaveModeEnabled": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },

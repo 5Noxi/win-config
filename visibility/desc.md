@@ -290,6 +290,11 @@ Remove the `End Task` option to the taskbar right click menu with:
 ```bat
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" /v TaskbarEndTask /f
 ```
+Enabling it via `System > For developers`:
+```ps
+SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings\TaskbarEndTask	Type: REG_DWORD, Length: 4, Data: 1
+```
+
 `TaskbarSd` adds/removes the block in the right corner, which shows the desktop (picture).
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/taskbar.png?raw=true)

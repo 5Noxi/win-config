@@ -30,6 +30,78 @@
         "NavPaneExpandToCurrentFolder": { "Type": "REG_DWORD", "Data": 0 },
         "NavPaneShowAllCloudStates": { "Type": "REG_DWORD", "Data": 0 },
         "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Hide Frequently Used Folders": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowFrequent": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Recently Used Files": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowRecent": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Files From Office.com": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowCloudFilesInQuickAccess": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Drive Letter After Label": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowDriveLettersFirst": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Show Thumbnails Instead of Icons": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "IconsOnly": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Enable Compact Mode": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Show Hidden Files/Folders": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "Hidden": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Show Drives Without Media": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideDrivesWithNoMedia": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Show File Extensions": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideFileExt": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Show Merge Conflicts": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideMergeConflicts": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Pop-Up Info Tips": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowInfoTip": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Preview Handlers": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowPreviewHandlers": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Sync Provider Notifications": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Sharing Wizard": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "SharingWizardOn": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -62,6 +134,78 @@
         "NavPaneExpandToCurrentFolder": { "Action": "deletevalue" },
         "NavPaneShowAllCloudStates": { "Action": "deletevalue" },
         "NavPaneShowAllFolders": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Hide Frequently Used Folders": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowFrequent": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Recently Used Files": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowRecent": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Files From Office.com": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowCloudFilesInQuickAccess": { "Action": "deletevalue" }
+          }
+        },
+        "Drive Letter After Label": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+            "ShowDriveLettersFirst": { "Action": "deletevalue" }
+          }
+        },
+        "Show Thumbnails Instead of Icons": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "IconsOnly": { "Action": "deletevalue" }
+          }
+        },
+        "Enable Compact Mode": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "UseCompactMode": { "Action": "deletevalue" }
+          }
+        },
+        "Show Hidden Files/Folders": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "Hidden": { "Action": "deletevalue" }
+          }
+        },
+        "Show Drives Without Media": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideDrivesWithNoMedia": { "Action": "deletevalue" }
+          }
+        },
+        "Show File Extensions": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideFileExt": { "Action": "deletevalue" }
+          }
+        },
+        "Show Merge Conflicts": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideMergeConflicts": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Pop-Up Info Tips": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowInfoTip": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Preview Handlers": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowPreviewHandlers": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Sync Provider Notifications": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowSyncProviderNotifications": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Sharing Wizard": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "SharingWizardOn": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -492,13 +636,15 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarEndTasks": { "Type": "REG_DWORD", "Data": 1 },
         "TaskbarFlashing": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
+        "TaskbarEndTask": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People": {
         "PeopleBand": { "Type": "REG_DWORD", "Data": 0 }
@@ -511,6 +657,41 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
         "AllowNewsAndInterests": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Hide Task View Button": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Taskbar Badges": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
+            "AllowNewsAndInterests": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Add 'End Task' to Taskbar Context Menu": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
+            "TaskbarEndTask": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Taskbar Flashing": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarFlashing": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Allign Taskbar to Left": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Far Corner Section": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -520,7 +701,7 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "ShowTaskViewButton": { "Action": "deletevalue" },
         "TaskbarBadges": { "Action": "deletevalue" },
-        "TaskbarEndTasks": { "Action": "deletevalue" },
+        "TaskbarEndTask": { "Action": "deletevalue" },
         "TaskbarFlashing": { "Action": "deletevalue" },
         "TaskbarAl": { "Action": "deletevalue" },
         "PeopleBand": { "Action": "deletevalue" },
@@ -528,6 +709,9 @@
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSd": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
+        "TaskbarEndTask": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People": {
         "PeopleBand": { "Action": "deletevalue" }
@@ -540,6 +724,41 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
         "Action": "deletevalue"
+      },
+      "SUBOPTION": {
+        "Hide Task View Button": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowTaskViewButton": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Taskbar Badges": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarBadges": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
+            "AllowNewsAndInterests": { "Action": "deletevalue" }
+          }
+        },
+        "Add 'End Task' to Taskbar Context Menu": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
+            "TaskbarEndTask": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Taskbar Flashing": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarFlashing": { "Action": "deletevalue" }
+          }
+        },
+        "Allign Taskbar to Left": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarAl": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Far Corner Section": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "TaskbarSd": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -658,19 +877,73 @@
         "": { "Type": "REG_SZ", "Data": "bat" },
         "FriendlyTypeName": { "Type": "REG_SZ", "Data": "bat" }
       },
-      "COMMANDS": {
-        "RestartExplorer": { "Action": "restart_explorer" }
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } },
+      "SUBOPTION": {
+        "Add '.ps1'": {
+          "HKCU\\Software\\Classes\\.ps1": {
+            "": { "Type": "REG_SZ", "Data": "ps1legacy" }
+          },
+          "HKCU\\Software\\Classes\\.ps1\\ShellNew": {
+            "NullFile": { "Type": "REG_SZ", "Data": "" }
+          },
+          "HKCU\\Software\\Classes\\ps1legacy": {
+            "": { "Type": "REG_SZ", "Data": "pwsh" },
+            "FriendlyTypeName": { "Type": "REG_SZ", "Data": "pwsh" }
+          },
+          "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
+        },
+        "Add '.txt'": {
+          "HKCU\\Software\\Classes\\.txt": {
+            "": { "Type": "REG_SZ", "Data": "txtlegacy" }
+          },
+          "HKCU\\Software\\Classes\\.txt\\ShellNew": {
+            "NullFile": { "Type": "REG_SZ", "Data": "" }
+          },
+          "HKCU\\Software\\Classes\\txtlegacy": {
+            "": { "Type": "REG_SZ", "Data": "txt" },
+            "FriendlyTypeName": { "Type": "REG_SZ", "Data": "txt" }
+          },
+          "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
+        },
+        "Add '.bat'": {
+          "HKCU\\Software\\Classes\\.bat": {
+            "": { "Type": "REG_SZ", "Data": "batfile" }
+          },
+          "HKCU\\Software\\Classes\\.bat\\ShellNew": {
+            "NullFile": { "Type": "REG_SZ", "Data": "" }
+          },
+          "HKCU\\Software\\Classes\\batfile": {
+            "": { "Type": "REG_SZ", "Data": "bat" },
+            "FriendlyTypeName": { "Type": "REG_SZ", "Data": "bat" }
+          },
+          "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
+        }
       }
     },
     "revert": {
-      "HKCU\\Software\\Classes\\.ps1": { "Action": "delete_path" },
-      "HKCU\\Software\\Classes\\ps1legacy": { "Action": "delete_path" },
-      "HKCU\\Software\\Classes\\.txt": { "Action": "delete_path" },
-      "HKCU\\Software\\Classes\\txtlegacy": { "Action": "delete_path" },
-      "HKCU\\Software\\Classes\\.bat": { "Action": "delete_path" },
-      "HKCU\\Software\\Classes\\batfile": { "Action": "delete_path" },
-      "COMMANDS": {
-        "RestartExplorer": { "Action": "restart_explorer" }
+      "HKCU\\Software\\Classes\\.ps1": { "Action": "delete_path", "Recurse": true },
+      "HKCU\\Software\\Classes\\ps1legacy": { "Action": "delete_path", "Recurse": true },
+      "HKCU\\Software\\Classes\\.txt": { "Action": "delete_path", "Recurse": true },
+      "HKCU\\Software\\Classes\\txtlegacy": { "Action": "delete_path", "Recurse": true },
+      "HKCU\\Software\\Classes\\.bat": { "Action": "delete_path", "Recurse": true },
+      "HKCU\\Software\\Classes\\batfile": { "Action": "delete_path", "Recurse": true },
+      "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } },
+      "SUBOPTION": {
+        "Add '.ps1'": {
+          "HKCU\\Software\\Classes\\.ps1": { "Action": "delete_path", "Recurse": true },
+          "HKCU\\Software\\Classes\\ps1legacy": { "Action": "delete_path", "Recurse": true },
+          "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
+        },
+        "Add '.txt'": {
+          "HKCU\\Software\\Classes\\.txt": { "Action": "delete_path", "Recurse": true },
+          "HKCU\\Software\\Classes\\txtlegacy": { "Action": "delete_path", "Recurse": true },
+          "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
+        },
+        "Add '.bat'": {
+          "HKCU\\Software\\Classes\\.bat": { "Action": "delete_path", "Recurse": true },
+          "HKCU\\Software\\Classes\\batfile": { "Action": "delete_path", "Recurse": true },
+          "COMMANDS": { "RestartExplorer": { "Action": "restart_explorer" } }
+        }
       }
     }
   },

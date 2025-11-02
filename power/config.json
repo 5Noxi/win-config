@@ -31,7 +31,6 @@
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\Wdf",
           "Operations": [
             { "Name": "IdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
-            { "Name": "SleepstudyState", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "WdfDefaultIdleInWorkingState", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "WdfDirectedPowerTransitionEnable", "Type": "REG_DWORD", "Value": 0 }
           ]
@@ -63,23 +62,22 @@
             { "Name": "AllowIdleIrpInD3", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "DeviceIdleEnabled", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "EnhancedPowerManagementEnabled", "Type": "REG_DWORD", "Value": 1 },
-            { "Name": "DeviceSelectiveSuspended", "Operation": "delete" },
-            { "Name": "EnhancedPowerManagementUseMonitor", "Operation": "delete" },
-            { "Name": "IdleSupported", "Operation": "delete" },
-            { "Name": "IdleTimeoutPeriodInMilliSec", "Operation": "delete" },
-            { "Name": "SelectiveSuspendEnabled", "Operation": "delete" },
-            { "Name": "SelectiveSuspendTimeout", "Operation": "delete" },
-            { "Name": "UserSetDeviceIdleEnabled", "Operation": "delete" }
+            { "Name": "DeviceSelectiveSuspended", "Operation": "deletevalue" },
+            { "Name": "EnhancedPowerManagementUseMonitor", "Operation": "deletevalue" },
+            { "Name": "IdleSupported", "Operation": "deletevalue" },
+            { "Name": "IdleTimeoutPeriodInMilliSec", "Operation": "deletevalue" },
+            { "Name": "SelectiveSuspendEnabled", "Operation": "deletevalue" },
+            { "Name": "SelectiveSuspendTimeout", "Operation": "deletevalue" },
+            { "Name": "UserSetDeviceIdleEnabled", "Operation": "deletevalue" }
           ]
         },
         "UsbWdfParamsRevert": {
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\Wdf",
           "Operations": [
-            { "Name": "IdleInWorkingState", "Operation": "delete" },
-            { "Name": "WdfDirectedPowerTransitionEnable", "Operation": "delete" },
-            { "Name": "SleepstudyState", "Operation": "delete" },
-            { "Name": "WdfDefaultIdleInWorkingState", "Operation": "delete" }
+            { "Name": "IdleInWorkingState", "Operation": "deletevalue" },
+            { "Name": "WdfDirectedPowerTransitionEnable", "Operation": "deletevalue" },
+            { "Name": "WdfDefaultIdleInWorkingState", "Operation": "deletevalue" }
           ]
         },
         "UsbDevSubD3ColdClear": {
@@ -87,7 +85,7 @@
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
           "ExcludeSubPaths": ["wdf"],
           "Operations": [
-            { "Name": "D3ColdSupported", "Operation": "delete" }
+            { "Name": "D3ColdSupported", "Operation": "deletevalue" }
           ]
         }
       }
@@ -115,6 +113,23 @@
         "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 },
         "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 },
         "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Hide Hibernate": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+            "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Lock": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+            "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Sleep": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+            "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -122,6 +137,23 @@
         "ShowHibernateOption": { "Action": "deletevalue" },
         "ShowLockOption": { "Action": "deletevalue" },
         "ShowSleepOption": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Hide Hibernate": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+            "ShowHibernateOption": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Lock": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+            "ShowLockOption": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Sleep": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
+            "ShowSleepOption": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -216,8 +248,8 @@
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
           "Operations": [
             { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
-            { "Name": "DisableIdlePowerManagement", "Operation": "delete" },
-            { "Name": "DisableD3Cold", "Operation": "delete" }
+            { "Name": "DisableIdlePowerManagement", "Operation": "deletevalue" },
+            { "Name": "DisableD3Cold", "Operation": "deletevalue" }
           ]
         }
       }

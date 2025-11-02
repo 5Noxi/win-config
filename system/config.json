@@ -31,6 +31,53 @@
         "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
         "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
         "EnableLUA": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "UAC: Disable completely": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 0 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Windows default (prompt, secure desktop)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Always notify": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Notify apps only (no desktop dimming)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Elevate without prompting (admins)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -40,6 +87,53 @@
         "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
         "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
         "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "UAC: Disable completely": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Windows default (prompt, secure desktop)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Always notify": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Notify apps only (no desktop dimming)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Elevate without prompting (admins)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     }
   },
@@ -176,12 +270,40 @@
       "HKCU\\Software\\Microsoft\\GameBar": {
         "AllowAutoGameMode": { "Type": "REG_DWORD", "Data": 1 },
         "AutoGameModeEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION":{
+        "Enable Game Mode": {
+          "HKCU\\Software\\Microsoft\\GameBar": {
+            "AllowAutoGameMode": { "Type": "REG_DWORD", "Data": 1 },
+            "AutoGameModeEnabled": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Game Mode": {
+          "HKCU\\Software\\Microsoft\\GameBar": {
+            "AllowAutoGameMode": { "Type": "REG_DWORD", "Data": 0 },
+            "AutoGameModeEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\GameBar": {
-        "AllowAutoGameMode": { "Type": "REG_DWORD", "Data": 1 },
-        "AutoGameModeEnabled": { "Type": "REG_DWORD", "Data": 1 }
+        "AllowAutoGameMode": { "Action": "deletevalue" },
+        "AutoGameModeEnabled": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Enable Game Mode": {
+          "HKCU\\Software\\Microsoft\\GameBar": {
+            "AllowAutoGameMode": { "Action": "deletevalue" },
+            "AutoGameModeEnabled": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Game Mode": {
+          "HKCU\\Software\\Microsoft\\GameBar": {
+            "AllowAutoGameMode": { "Action": "deletevalue" },
+            "AutoGameModeEnabled": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -251,11 +373,35 @@
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
         "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "SUBOPTION":{
+        "Enable HAGS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+            "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Disable HAGS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+            "HwSchMode": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
+        "HwSchMode": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Enable HAGS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+            "HwSchMode": { "Action": "deletevalue" }
+          }
+        },
+        "Disable HAGS": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+            "HwSchMode": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -561,6 +707,22 @@
           "Action": "run_powershell",
           "Command": "$b='HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings'; Set-ItemProperty -Path $b -Name Enabled -Type DWord -Value 0 -Force; Get-ChildItem -Path $b | ForEach-Object { Set-ItemProperty -Path $_.PSPath -Name Enabled -Type DWord -Value 0 -Force }"
         }
+      },
+      "SUBOPTION": {
+        "Disable Security Center Notifications": {
+          "HKLM\\SOFTWARE\\Microsoft\\Security Center": {
+            "AntiVirusDisableNotify": { "Type": "REG_DWORD", "Data": 1 },
+            "FirewallDisableNotify": { "Type": "REG_DWORD", "Data": 1 },
+            "UpdatesDisableNotify": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications": {
+            "DisableEnhancedNotifications": { "Type": "REG_DWORD", "Data": 1 },
+            "DisableNotifications": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization": {
+            "EnableForToasts": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -595,6 +757,22 @@
         "DelEnabled": {
           "Action": "run_powershell",
           "Command": "$b='HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings'; Remove-ItemProperty -Path $b -Name Enabled; Get-ChildItem -Path $b | ForEach-Object { Remove-ItemProperty -Path $_.PSPath -Name Enabled }"
+        }
+      },
+      "SUBOPTION": {
+        "Disable Security Center Notifications": {
+          "HKLM\\SOFTWARE\\Microsoft\\Security Center": {
+            "AntiVirusDisableNotify": { "Action": "deletevalue" },
+            "FirewallDisableNotify": { "Action": "deletevalue" },
+            "UpdatesDisableNotify": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications": {
+            "DisableEnhancedNotifications": { "Action": "deletevalue" },
+            "DisableNotifications": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization": {
+            "EnableForToasts": { "Action": "deletevalue" }
+          }
         }
       }
     }
