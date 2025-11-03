@@ -686,18 +686,6 @@
       }
     }
   },
-  "Disable Theme Mouse Changes": {
-    "apply": {
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
-        "ThemeChangesMousePointers": { "Type": "REG_DWORD", "Data": 0 }
-      }
-    },
-    "revert": {
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
-        "ThemeChangesMousePointers": { "Type": "REG_DWORD", "Data": 1 }
-      }
-    }
-  },
   "Disable Aero Shake": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {

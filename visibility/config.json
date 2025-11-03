@@ -1482,5 +1482,31 @@
         }
       }
     }
+  },
+  "Disable Theme Mouse Changes": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+        "ThemeChangesMousePointers": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Theme Desktop Icons Changes": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+            "ThemeChangesDesktopIcons": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+        "ThemeChangesMousePointers": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disable Theme Desktop Icons Changes": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes": {
+            "ThemeChangesDesktopIcons": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
+      }
+    }
   }
 }

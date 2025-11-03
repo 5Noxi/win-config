@@ -930,3 +930,11 @@ PS C:\Users\Nohuxi>
 ```ps
 for %%L in ("%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\*.lnk") do powershell -NoLogo -NoProfile -Command "$s=New-Object -ComObject WScript.Shell; $lnk=$s.CreateShortcut('%%~fL'); $lnk.TargetPath='%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe'; $lnk.Arguments='-NoLogo'; $lnk.Save()"
 ```
+
+# Disable Theme Mouse Changes
+
+Prevent Themes from changing the mouse cursor.
+
+`Disable Theme Desktop Icons Changes` prevent themes from changing desktop icons.
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/thememouse.png?raw=true)

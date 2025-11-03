@@ -490,10 +490,6 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
 
 > https://www.thewindowsclub.com/enable-verbose-status-message-windows
 
-# Disable Theme Mouse Changes
-
-Prevent Themes from changing the mouse cursor.
-
 # Disable Aero Shake
 
 ![HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
