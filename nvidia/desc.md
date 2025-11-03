@@ -1384,7 +1384,7 @@ Shouldn't be disabled, same goes for FSO. Leave it enabled or you may end up usi
 
 Use [PresentMon](https://github.com/GameTechDev/PresentMon/releases) and record your game to see which presentation mode you currently use.
 
-![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/swapchain.png?raw=true)  
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/swapchain.jpg?raw=true)  
 
 ```
 \Registry\Machine\SOFTWARE\Microsoft\Windows\Dwm : OverlayTestMode

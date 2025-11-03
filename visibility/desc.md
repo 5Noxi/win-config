@@ -377,7 +377,13 @@ Default: `75px` (`-1125`)
 Min: `32px` (`-480`)
 Max: `182px` (`-2730`)
 
-Personal preference: `100px` horizontal, `75px` vertical
+Personal preference - `100px` horizontal, `75px` vertical:
+
+```bat
+reg add "HKCU\Control Panel\Desktop\WindowMetrics" /v IconSpacing /t REG_SZ /d -1500 /f
+reg add "HKCU\Control Panel\Desktop\WindowMetrics" /v IconVerticalSpacing /t REG_SZ /d -1125 /f
+reg add "HKCU\Control Panel\Desktop\WindowMetrics" /v IconTitleWrap /t REG_SZ /d 0 /f
+```
 
 Value gets calculated with:
 ```c

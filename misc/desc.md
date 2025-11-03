@@ -445,7 +445,7 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 
 # Disable Edge Features
 
-Edge is a whole mess, I wouldn't recommend anyone use it, but here's an option that applies the following values:
+Edge is a whole mess, I wouldn't recommend anyone to use it, but here's an option that applies the following values:
 
 | Value | Disables / Hides |
 | ----- | ----- |

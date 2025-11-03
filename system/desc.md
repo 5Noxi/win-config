@@ -179,7 +179,7 @@ Value: `PromptOnSecureDesktop`
 
 | Value        | Meaning                                                                        |
 | ------------ | ------------------------------------------------------------------------------ |
-| `0x00000000` | Disables secure desktop prompting — prompts appear on the interactive desktop. |
+| `0x00000000` | Disables secure desktop prompting - prompts appear on the interactive desktop. |
 | `0x00000001` | Forces all UAC prompts to occur on the secure desktop.                         |
 
 Value: `EnableVirtualization`

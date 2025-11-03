@@ -1913,6 +1913,9 @@ WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps 
 > https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings  
 > [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
 
+`Disable DHA Report`:  
+"This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows."
+
 ```ps
 \Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ArchiveFolderCountLimit
 \Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : AutoApproveOSDumps
@@ -1974,10 +1977,6 @@ Default: `1` (`DbgkEnableWerUserReporting dd 1`)
 "Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
 ```
 
-Disable DHA Report:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService" /v EnableDeviceHealthAttestationService /t REG_DWORD /d 0 /f
-```
 Related to PCIe advanced error reporting? Haven't found anything on this and haven't done much research myself:
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
@@ -2183,6 +2182,27 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 	"Supported":  "Windows_10_0_RS3ToVista",
 	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings",
 	"KeyName":  "DisableSendGenericDriverNotFoundToWER",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "TPM.admx",
+	"NameSpace":  "Microsoft.Policies.TrustedPlatformModule",
+	"Class":  "Machine",
+	"CategoryName":  "DSHACategory",
+	"DisplayName":  "Enable Device Health Attestation Monitoring and Reporting",
+	"ExplainText":  "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.",
+	"Supported":  "Windows_10_0_RS3",
+	"KeyPath":  "Software\\Policies\\Microsoft\\DeviceHealthAttestationService",
+	"KeyName":  "EnableDeviceHealthAttestationService",
 	"Elements":  [
 						{
 							"Value":  "1",
@@ -2531,3 +2551,9 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 					]
 },
 ```
+
+# Disable Cloud Content Search
+
+"Cloud Content Search lets Windows Search include results from your signed-in cloud accounts personal Microsoft account (OneDrive, Outlook, Bing) and/or work/school (OneDrive for Business, SharePoint, Outlook) alongside local files. Turn it on per account to get those items and Bing-personalized suggestions, turn it off to keep search limited to local content (and non-personalized web)."
+
+![](https://github.com/5Noxi/win-config/blob/main/privacy/images/cloudsearch.png?raw=true)

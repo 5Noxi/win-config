@@ -1623,6 +1623,13 @@
         "EnableActivityFeed": { "Type": "REG_DWORD", "Data": 0 },
         "PublishUserActivities": { "Type": "REG_DWORD", "Data": 0 },
         "UploadUserActivities": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Windows Search History": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
+            "IsDeviceSearchHistoryEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -1630,6 +1637,13 @@
         "EnableActivityFeed": { "Action": "deletevalue" },
         "PublishUserActivities": { "Action": "deletevalue" },
         "UploadUserActivities": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Windows Search History": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
+            "IsDeviceSearchHistoryEnabled": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -1907,6 +1921,13 @@
           "TaskNames": [ "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate", "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting" ],
           "TaskAction": "disable"
         }
+      },
+      "SUBOPTION": {
+        "Disable DHA Report": {
+          "HKLM\\Software\\Policies\\Microsoft\\DeviceHealthAttestationService": {
+            "EnableDeviceHealthAttestationService": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -1948,6 +1969,13 @@
           "Action": "scheduled_task",
           "TaskNames": [ "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate", "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting" ],
           "TaskAction": "enable"
+        }
+      },
+      "SUBOPTION": {
+        "Disable DHA Report": {
+          "HKLM\\Software\\Policies\\Microsoft\\DeviceHealthAttestationService": {
+            "EnableDeviceHealthAttestationService": { "Action": "deletevalue" }
+          }
         }
       }
     }
@@ -2114,11 +2142,9 @@
       },
       "COMMANDS": {
         "DisableOfflineFilesTasks": {
-          "Action": "scheduled_tasks",
-          "Tasks": [
-            { "Path": "\\Microsoft\\Windows\\Offline Files\\Background Synchronization", "State": "Disabled" },
-            { "Path": "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization", "State": "Disabled" }
-          ]
+          "Action": "scheduled_task",
+          "TaskNames": [ "\\Microsoft\\Windows\\Offline Files\\Background Synchronization", "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization" ],
+          "TaskAction": "disable"
         },
         "NeutralizeSyncCenterExe": {
           "Action": "run_powershell",
@@ -2143,18 +2169,30 @@
         "Start": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
-        "EnableOfflineFilesTasks": {
-          "Action": "scheduled_tasks",
-          "Tasks": [
-            { "Path": "\\Microsoft\\Windows\\Offline Files\\Background Synchronization", "State": "Disabled" },
-            { "Path": "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization", "State": "Disabled" }
-          ]
+        "DisableOfflineFilesTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [ "\\Microsoft\\Windows\\Offline Files\\Background Synchronization", "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization" ],
+          "TaskAction": "disable"
         },
         "RestoreSyncCenterExe": {
           "Action": "run_powershell",
           "Elevated": true,
           "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exee mobsync.exe"
         }
+      }
+    }
+  },
+  "Disable Cloud Content Search": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
+        "IsMSACloudSearchEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "IsAADCloudSearchEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
+        "IsMSACloudSearchEnabled": { "Action": "deletevalue" },
+        "IsAADCloudSearchEnabled": { "Action": "deletevalue" }
       }
     }
   }

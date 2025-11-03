@@ -332,6 +332,11 @@
               "Command": "$nvp = \"$env:appdata\\Everything\\Everything.ini\";(gc $nvp) -replace '^normal_background_color=.*', 'normal_background_color=#353535' -replace '^normal_foreground_color=.*', 'normal_foreground_color=#ffffff' -replace '^single_click_open=.*', 'single_click_open=2' -replace '^hide_empty_search_results=.*', 'hide_empty_search_results=1' -replace '^double_click_path=.*', 'double_click_path=1' -replace '^show_mouseover=.*', 'show_mouseover=1' -replace '^show_number_of_results_with_selection=.*', 'show_number_of_results_with_selection=1' -replace '^tooltips=.*', 'tooltips=0' -replace '^search_history_enabled=.*', 'search_history_enabled=0' -replace '^run_history_enabled=.*', 'run_history_enabled=0' -replace '^index_date_modified=.*', 'index_date_modified=0' -replace '^exclude_list_enabled=.*', 'exclude_list_enabled=0' -replace '^language=.*', 'language=1033' | sc $nvp"
             }
           }
+        },
+        "Disable SafeSearch": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
+            "SafeSearchMode": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     },
@@ -362,6 +367,13 @@
           "Features": [
             { "Name": "SearchEngine-Client-Package", "State": "Enabled" }
           ]
+        }
+      },
+      "SUBOPTION": {
+        "Disable SafeSearch": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
+            "SafeSearchMode": { "Action": "deletevalue" }
+          }
         }
       }
     }

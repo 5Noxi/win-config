@@ -924,5 +924,52 @@
         "TdrDdiDelay": { "Action": "deletevalue" }
       }
     }
+  },
+  "Password Age": {
+    "__control": { "type": "button", "label": "Unlimited" },
+    "COMMANDS": {
+      "UnlimitedPWAge": {
+        "Action": "run_powershell",
+        "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"net accounts /maxpwage:UNLIMITED\"'"
+      }
+    },
+    "SUBOPTION": {
+      "45 Days": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "UnlimitedPWAge": {
+            "Action": "run_powershell",
+            "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"net accounts /maxpwage:45\"'"
+          }
+        }
+      },
+      "90 Days (Default)": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "UnlimitedPWAge": {
+            "Action": "run_powershell",
+            "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"net accounts /maxpwage:90\"'"
+          }
+        }
+      },
+      "180 Days": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "UnlimitedPWAge": {
+            "Action": "run_powershell",
+            "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"net accounts /maxpwage:180\"'"
+          }
+        }
+      },
+      "365 Days": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "UnlimitedPWAge": {
+            "Action": "run_powershell",
+            "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"net accounts /maxpwage:365\"'"
+          }
+        }
+      }
+    }
   }
 }
