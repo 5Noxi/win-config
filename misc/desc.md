@@ -284,7 +284,7 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 | Runtime document events                      | Document sessions                      | Date/time of critical or informative events                                                                                             | Office 2013/2016/2019 (Excel/Outlook/PowerPoint/Word)           | -                                                                                                                                                                                        |
 | Runtime add-in telemetry                     | Solutions (runtime fields)             | Success (%); sessions; critical compatibility issue or crash; informative compatibility issue or load failure; load time                | Office 2013/2016/2019 (Excel/Outlook/PowerPoint/Word)           | Shown only after the add-in/app is loaded during runtime.                                                                                                                                |
 | Runtime solution issues                      | Solution issues                        | Event ID; title; explanation; more info; users; sessions                                                                                | Office 2013/2016/2019 (Excel/Outlook/PowerPoint/Word)           | -                                                                                                                                                                                        |
-| Not collected (by design)                    | -                                      | File contents; info about files not in MRU                                                                                              | All                                                             | Data for Office Telemetry Dashboard stays in your org’s SQL Server; it is not sent to Microsoft. Office diagnostic data is separate and managed by different settings.                   |
+| Not collected (by design)                    | -                                      | File contents; info about files not in MRU                                                                                              | All                                                             | Data for Office Telemetry Dashboard stays in your org's SQL Server; it is not sent to Microsoft. Office diagnostic data is separate and managed by different settings.                   |
 
 ---
 
@@ -327,7 +327,7 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 
 # Disable OneDrive
 
-`DisableLibrariesDefaultSaveToOneDrive` sets local storage as the default save location, `DisableFileSync` disables OneDrive on Windows 8.1 including app and picker access removal and stops sync and hides the Explorer entry, `DisableFileSyncNGSC` disables OneDrive via the Next-Gen Sync Client with the same effect, `DisableMeteredNetworkFileSync` set to `0` blocks syncing on all metered connections, `PreventNetworkTrafficPreUserSignIn` stops the OneDrive client from generating network traffic until the user signs in, `System.IsPinnedToNameSpaceTree` set to `0` hides OneDrive from File Explorer’s navigation pane in both CLSID locations.
+`DisableLibrariesDefaultSaveToOneDrive` sets local storage as the default save location, `DisableFileSync` disables OneDrive on Windows 8.1 including app and picker access removal and stops sync and hides the Explorer entry, `DisableFileSyncNGSC` disables OneDrive via the Next-Gen Sync Client with the same effect, `DisableMeteredNetworkFileSync` set to `0` blocks syncing on all metered connections, `PreventNetworkTrafficPreUserSignIn` stops the OneDrive client from generating network traffic until the user signs in, `System.IsPinnedToNameSpaceTree` set to `0` hides OneDrive from File Explorer's navigation pane in both CLSID locations.
 
 ```json
 {
@@ -469,7 +469,7 @@ Edge is a whole mess, I wouldn't recommend anyone use it, but here's an option t
 | `UserFeedbackAllowed` | User feedback prompts |
 | `SearchbarAllowed` | Floating Bing search bar |
 | `StartupBoostEnabled` | Startup Boost |
-| `NewTabPageHideDefaultTopSites` | Microsoft’s default pinned sites on New Tab |
+| `NewTabPageHideDefaultTopSites` | Microsoft's default pinned sites on New Tab |
 | `NewTabPageQuickLinksEnabled` | Quick links on New Tab |
 | `NewTabPageAllowedBackgroundTypes` | New Tab background image (restricts types) |
 | `NewTabPageContentEnabled` | Microsoft content on New Tab (news, highlights, etc.) |

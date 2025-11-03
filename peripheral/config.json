@@ -11,13 +11,13 @@
         "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
         "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
         "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": "0" },
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
         "Beep": { "Type": "REG_SZ", "Data": "No" },
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
-        "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": "20" },
-        "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": "1" },
-        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": "1" },
-        "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": "2" }
+        "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
+        "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
+        "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "158" }
@@ -45,10 +45,10 @@
         },
         "Minimum Background Message Rate": {
           "HKCU\\Control Panel\\Mouse": {
-            "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": "20" },
-            "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": "1" },
-            "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": "1" },
-            "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": "2" }
+            "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
+            "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
+            "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
+            "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
           }
         }
       }
@@ -64,7 +64,7 @@
         "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" },
         "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
         "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": "0" },
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
         "Beep": { "Type": "REG_SZ", "Data": "No" },
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
         "RawMouseThrottleDuration": { "Action": "deletevalue" },
@@ -623,7 +623,7 @@
       }
     }
   },
-  "Disable Autoplay/Autorun": {
+  "Disable AutoPlay/Autorun": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers": {
         "DisableAutoplay": { "Type": "REG_DWORD", "Data": 1 }
@@ -795,6 +795,35 @@
       }
     }
   },
+  "Device Manager": {
+    "__control": { "type": "button", "label": "Clean Up" },
+    "COMMANDS": {
+      "CleanupUnknownPnPDevices": {
+        "Action": "run_powershell",
+        "Command": "Get-PnpDevice -PresentOnly:$false | Where-Object Status -eq 'Unknown' | ForEach-Object { & pnputil /remove-device \"$($_.InstanceId)\" }"
+      }
+    },
+    "SUBOPTION": {
+      "WAN Miniports": {
+        "__control": { "type": "button", "label": "Disable" },
+        "COMMANDS": {
+          "DisableWanMiniports": {
+            "Action": "run_powershell",
+            "Command": "$names=@('WAN Miniport (IKEv2)','WAN Miniport (IP)','WAN Miniport (IPv6)','WAN Miniport (L2TP)','WAN Miniport (Network Monitor)','WAN Miniport (PPPOE)','WAN Miniport (PPTP)','WAN Miniport (SSTP)'); $found=$false; foreach($n in $names){ $devs = Get-PnpDevice -FriendlyName $n -ErrorAction SilentlyContinue; if(-not $devs){ $devs = Get-PnpDevice -FriendlyName ('*{0}*' -f $n) -ErrorAction SilentlyContinue } if($devs){ $found=$true; foreach($d in $devs){ Disable-PnpDevice -InstanceId $d.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } } } if(-not $found){ throw 'No matching WAN Miniport devices found.' }"
+          }
+        }
+      },
+      "High Definition Audio Controller": {
+        "__control": { "type": "button", "label": "Disable" },
+        "COMMANDS": {
+          "DisableHDAController": {
+            "Action": "run_powershell",
+            "Command": "$devs = Get-PnpDevice -FriendlyName '*High Definition Audio Controller*' -ErrorAction SilentlyContinue; if (-not $devs) { throw 'No matching High Definition Audio Controller devices found.' }; foreach ($d in $devs) { Disable-PnpDevice -InstanceId $d.InstanceId -Confirm:$false -ErrorAction SilentlyContinue }"
+          }
+        }
+      }
+    }
+  },
   "Disable Touch & Tablet": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
@@ -823,7 +852,7 @@
       }
     },
     "revert": {
-      "HKCU\\Software\\Microsoft\\Wisp\\Touch": { 
+      "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
         "TouchGate": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
@@ -939,24 +968,12 @@
       "COMMANDS": {
         "DisablePrintingTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask",
-            "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask",
-            "\\Microsoft\\Windows\\Printing\\EduPrintProv"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask", "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask", "\\Microsoft\\Windows\\Printing\\EduPrintProv" ],
           "TaskAction": "disable"
         },
         "DisablePrintingFeatures": {
           "Action": "optional_feature",
-          "Features": [
-            "Printing-Foundation-InternetPrinting-Client",
-            "Printing-Foundation-LPRPortMonitor",
-            "Printing-PrintToPDFServices-Features",
-            "Printing-XPSServices-Features",
-            "Printing-Foundation-Features",
-            "WorkFolders-Client",
-            "Printing-Foundation-LPDPrintService"
-          ],
+          "Features": [ "Printing-Foundation-InternetPrinting-Client", "Printing-Foundation-LPRPortMonitor", "Printing-PrintToPDFServices-Features", "Printing-XPSServices-Features", "Printing-Foundation-Features", "WorkFolders-Client", "Printing-Foundation-LPDPrintService" ],
           "State": "Disabled"
         }
       }
@@ -989,11 +1006,7 @@
       "COMMANDS": {
         "EnablePrintingTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask",
-            "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask",
-            "\\Microsoft\\Windows\\Printing\\EduPrintProv"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask", "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask", "\\Microsoft\\Windows\\Printing\\EduPrintProv" ],
           "TaskAction": "enable"
         },
         "ConfigurePrintingFeatures": {

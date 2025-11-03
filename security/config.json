@@ -119,7 +119,7 @@
     }
   },
   "Disable Windows Defender": {
-    "apply":{
+    "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
         "DisableAntiSpyware": { "Type": "REG_DWORD", "Data": 1 }
       },
@@ -198,7 +198,7 @@
         }
       }
     },
-    "revert":{
+    "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender": {
         "DisableAntiSpyware": { "Action": "deletevalue" }
       },
@@ -328,11 +328,7 @@
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
       "COMMANDS": {
-        "RenameRstrui": {
-          "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.exe rstrui.bak",
-          "Elevated": true
-        }
+        "RenameRstrui": { "Action": "run_powershell", "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.exe rstrui.bak", "Elevated": true }
       }
     },
     "revert": {
@@ -347,11 +343,7 @@
         "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "COMMANDS": {
-        "RestoreRstrui": {
-          "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.bak rstrui.exe",
-          "Elevated": true
-        }
+        "RestoreRstrui": { "Action": "run_powershell", "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.bak rstrui.exe", "Elevated": true }
       }
     }
   },
@@ -420,10 +412,15 @@
   "Disable VBS (HVCI) & Hyper-V": {
     "apply": {
       "COMMANDS": {
-        "HypervisorOff": {
-          "Action": "bcdedit",
-          "Name": "hypervisorlaunchtype",
-          "Value": "off"
+        "HypervisorOff": { "Action": "bcdedit", "Name": "hypervisorlaunchtype", "Value": "off" },
+        "DisableHyperVServices": {
+          "Action": "run_powershell",
+          "Command": "$names=@('Microsoft Hypervisor Service','Microsoft Hyper-V Virtualization Infrastructure Driver'); $found=$false; foreach($n in $names){ $devs=Get-PnpDevice -FriendlyName $n -ErrorAction SilentlyContinue; if(-not $devs){ $devs=Get-PnpDevice -FriendlyName ('*{0}*' -f $n) -ErrorAction SilentlyContinue }; if($devs){ $found=$true; foreach($d in $devs){ Disable-PnpDevice -InstanceId $d.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } } }; if(-not $found){ throw 'No matching Hyper-V related devices found.' }"
+        },
+        "DisableMicrosoftHyperVFeature": {
+          "Action": "optional_feature",
+          "Features": [ "Microsoft-Hyper-V-All", "Microsoft-Hyper-V", "Microsoft-Hyper-V-Tools-All", "HypervisorPlatform", "Microsoft-Hyper-V-Hypervisor", "Microsoft-Hyper-V-Services" ],
+          "State": "Disabled"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
@@ -448,33 +445,78 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
         "LsaCfgFlags": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HvHost": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicguestinterface": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicheartbeat": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmickvpexchange": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicrdv": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicshutdown": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmictimesync": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvmsession": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvss": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\gencounter": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvcrash": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\storflt": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Vid": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmbus": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmgid": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvservice": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": { "Start": { "Type": "REG_DWORD", "Data": 4 } }
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HvHost": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicguestinterface": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicheartbeat": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmickvpexchange": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicrdv": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicshutdown": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmictimesync": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvmsession": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvss": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\gencounter": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvcrash": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\storflt": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Vid": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmbus": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmgid": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvservice": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      }
     },
     "revert": {
       "COMMANDS": {
-        "HypervisorAuto": {
-          "Action": "bcdedit",
-          "Name": "hypervisorlaunchtype",
-          "Delete": true
+        "HypervisorAuto": { "Action": "bcdedit", "Name": "hypervisorlaunchtype", "Delete": true },
+        "EnableHyperVServices": {
+          "Action": "run_powershell",
+          "Command": "$names=@('Microsoft Hypervisor Service','Microsoft Hyper-V Virtualization Infrastructure Driver'); $found=$false; foreach($n in $names){ $devs=Get-PnpDevice -FriendlyName $n -ErrorAction SilentlyContinue; if(-not $devs){ $devs=Get-PnpDevice -FriendlyName ('*{0}*' -f $n) -ErrorAction SilentlyContinue }; if($devs){ $found=$true; foreach($d in $devs){ Enable-PnpDevice -InstanceId $d.InstanceId -Confirm:$false -ErrorAction SilentlyContinue } } }; if(-not $found){ throw 'No matching Hyper-V related devices found.' }"
+        },
+        "EnableMicrosoftHyperVFeature": {
+          "Action": "optional_feature",
+          "Features": [ "Microsoft-Hyper-V-All", "Microsoft-Hyper-V", "Microsoft-Hyper-V-Tools-All", "HypervisorPlatform", "Microsoft-Hyper-V-Hypervisor", "Microsoft-Hyper-V-Services" ],
+          "State": "Disabled"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
@@ -499,26 +541,66 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
         "LsaCfgFlags": { "Action": "deletevalue" }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HvHost": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicguestinterface": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicheartbeat": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmickvpexchange": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicrdv": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicshutdown": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmictimesync": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvmsession": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvss": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\gencounter": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvcrash": { "Start": { "Type": "REG_DWORD", "Data": 4 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\storflt": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Vid": { "Start": { "Type": "REG_DWORD", "Data": 1 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmbus": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmgid": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": { "Start": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvservice": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": { "Start": { "Type": "REG_DWORD", "Data": 3 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": { "Start": { "Type": "REG_DWORD", "Data": 3 } }
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HvHost": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicguestinterface": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicheartbeat": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmickvpexchange": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicrdv": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicshutdown": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmictimesync": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvmsession": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmicvss": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\gencounter": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvcrash": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\storflt": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Vid": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmbus": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vmgid": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hvservice": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\hyperkbd": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      }
     }
   },
   "Disable Password Reveal": {
@@ -587,20 +669,48 @@
   },
   "Disable Insecure Connections": {
     "apply": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 40/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 56/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 128/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 128/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 64/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 56/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 40/128": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\DES 56/56": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168/168": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\NULL": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\MD5": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\SHA": { "Enabled": { "Type": "REG_DWORD", "Data": 0 } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": { "SMB1": { "Type": "REG_DWORD", "Data": 0 } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 40/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 56/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 128/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 128/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 64/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 56/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 40/128": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\DES 56/56": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168/168": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\NULL": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\MD5": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\SHA": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+        "SMB1": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\SSL 2.0\\Server": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 },
         "DisabledByDefault": { "Type": "REG_DWORD", "Data": 1 }
@@ -641,8 +751,8 @@
         "Enabled": { "Type": "REG_DWORD", "Data": 0 },
         "DisabledByDefault": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": { 
-        "LmCompatibilityLevel": { "Type": "REG_DWORD", "Data": 5 } 
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
+        "LmCompatibilityLevel": { "Type": "REG_DWORD", "Data": 5 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL": {
         "AllowInsecureRenegoClients": { "Type": "REG_DWORD", "Data": 0 },
@@ -671,20 +781,48 @@
       }
     },
     "revert": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 40/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 56/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 128/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 128/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 64/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 56/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 40/128": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\DES 56/56": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168/168": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\NULL": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\MD5": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\SHA": { "Enabled": { "Action": "deletevalue" } },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": { "SMB1": { "Action": "deletevalue" } },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 40/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 56/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 128/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 128/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 64/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 56/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC4 40/128": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\DES 56/56": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\Triple DES 168/168": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\NULL": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\MD5": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\SHA": {
+        "Enabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
+        "SMB1": { "Action": "deletevalue" }
+      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\SSL 2.0\\Server": {
         "Enabled": { "Action": "deletevalue" },
         "DisabledByDefault": { "Action": "deletevalue" }
@@ -725,8 +863,8 @@
         "Enabled": { "Action": "deletevalue" },
         "DisabledByDefault": { "Action": "deletevalue" }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": { 
-        "LmCompatibilityLevel": { "Action": "deletevalue" } 
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Lsa": {
+        "LmCompatibilityLevel": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL": {
         "AllowInsecureRenegoClients": { "Action": "deletevalue" },
@@ -788,5 +926,3 @@
     }
   }
 }
-
-

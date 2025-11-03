@@ -172,8 +172,8 @@ Value: `EnableLUA`
 
 | Value        | Meaning                                                                             |
 | ------------ | ----------------------------------------------------------------------------------- |
-| `0x00000000` | Disables the “Administrator in Admin Approval Mode” user type and all UAC policies. |
-| `0x00000001` | Enables the “Administrator in Admin Approval Mode” and activates all UAC policies.  |
+| `0x00000000` | Disables the "Administrator in Admin Approval Mode" user type and all UAC policies. |
+| `0x00000001` | Enables the "Administrator in Admin Approval Mode" and activates all UAC policies.  |
 
 Value: `PromptOnSecureDesktop`
 
@@ -345,67 +345,6 @@ for %%a in (
 )
 
 powershell -Command "Get-ScheduledTask -TaskPath '\' | Where-Object { $_.TaskName -like 'MicrosoftEdgeUpdateTaskMachine*' } | ForEach-Object { Disable-ScheduledTask -TaskName $_.TaskName -TaskPath '\' }"
-```
-
-# Lock Screen
-
-Disables the lock screen (skips the lock screen and go directly to the login screen). Revert it by removing the value (2nd command).
-
-```json
-{
-    "File":  "ControlPanelDisplay.admx",
-    "NameSpace":  "Microsoft.Policies.ControlPanelDisplay",
-    "Class":  "Machine",
-    "CategoryName":  "Personalization",
-    "DisplayName":  "Do not display the lock screen",
-    "ExplainText":  "This policy setting controls whether the lock screen appears for users.If you enable this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see their selected tile after locking their PC.If you disable or do not configure this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see a lock screen after locking their PC. They must dismiss the lock screen using touch, the keyboard, or by dragging it with the mouse.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Personalization",
-    "KeyName":  "NoLockScreen",
-    "Elements":  [
-
-                    ]
-},
-{
-    "File":  "ControlPanelDisplay.admx",
-    "NameSpace":  "Microsoft.Policies.ControlPanelDisplay",
-    "Class":  "Machine",
-    "CategoryName":  "Personalization",
-    "DisplayName":  "Force a specific default lock screen and logon image",
-    "ExplainText":  "This setting allows you to force a specific default lock screen and logon image by entering the path (location) of the image file. The same image will be used for both the lock and logon screens.This setting lets you specify the default lock screen and logon image shown when no user is signed in, and also sets the specified image as the default for all users (it replaces the inbox default image).To use this setting, type the fully qualified path and name of the file that stores the default lock screen and logon image. You can type a local path, such as C:\\Windows\\Web\\Screen\\img104.jpg or a UNC path, such as \\\\Server\\Share\\Corp.jpg.This can be used in conjunction with the \"Prevent changing lock screen and logon image\" setting to always force the specified lock screen and logon image to be shown.Note: This setting only applies to Enterprise, Education, and Server SKUs.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows",
-    "KeyName":  "Personalization",
-    "Elements":  [
-                        {
-                            "ValueName":  "LockScreenImage",
-                            "Type":  "Text"
-                        },
-                        {
-                            "ValueName":  "LockScreenOverlaysDisabled",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        }
-                    ]
-},
-```
-
----
-
-Miscellaneous (`ControlPanelDisplay.admx`):  
-
-Prevent lock screen background motion:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v AnimateLockScreenBackground /t REG_DWORD /d 1 /f
-```
-Prevent enabling lock screen slide show:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v NoLockScreenSlideshow /t REG_DWORD /d 1 /f
-```
-Show clear logon background:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackgroundOnLogon /t REG_DWORD /d 1 /f
 ```
 
 # Enable Game Mode

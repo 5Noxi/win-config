@@ -175,7 +175,7 @@ The revert data is based on `W11 LTSC IoT Enterprise 2024` defaults.
 
 `DisableStartupSound` is set to `1` by default (`LogonUI\BootAnimation`).
 
-# Disable Autoplay/Autorun
+# Disable AutoPlay/Autorun
 
 "AutoPlay lets you choose an action for different kinds of media when you plug in a device or insert media. You can set AutoPlay to open different kinds of content, such as photos, music, and video on different kinds of media, such as drives, CDs, DVDs, cameras, and phones. For example, you can use AutoPlay to select an app that will automatically open photos on a removable drive when you plug it into your PC. With AutoPlay, you don't have to open the same app or reselect preferences every time you plug in a certain device."
 
@@ -266,38 +266,31 @@ Higher sampling rates reduce jitter and latency and ensure more accurate cursor 
 
 # Device Manager
 
-`Microphone`, `Speakers`  - Disable unused ones
-`Generic Monitor`  - You can try disabling it, but this may restrict functionality (resolution, brightness on laptop?)
-`WAN Miniports` - Virtual network adapters, used for VPN protocols, remote access etc.
-`Microsoft ISATAP Adapter` - Disabled, enables transport IPv6 traffic over an IPv4 infrastructure
-`SM Bus Controller` - Used for communication with onboard sensors and devices for system monitoring...
-`Microsoft iSCSI Initiator` - Disabled, connect to storage devices over a network
-`Microsoft Virtual Drive Enumerator` - Disabled, breaks `diskmgmt.msc`
-`Microsoft RRAS Root Enumerator` - Disabled, driver that helps initialize older or virtual devices during system boot
-`Microsoft System Management BIOS Driver` - Disabling it breaks GTA5 and maybe other system info fetching
-`System Speaker` - Disabling breaks monitor audio
-`AMD/Intel PSP (ME)` - Platform Security Processor
+The `Clean` option removes non present devices (`-PresentOnly:$false`/`Status -eq 'Unknown'`) via `/remove-device` ([`pnputil`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax)).
+
+`Microphone`, `Speakers`, `High Definition Audio Controller`  - Disable unused ones  
+`Generic Monitor`  - You can try disabling it, but this may restrict functionality (resolution, brightness on laptop?)  
+`WAN Miniports` - Virtual network adapters, used for VPN protocols, remote access etc.  
+`Microsoft ISATAP Adapter` - Disabled, enables transport IPv6 traffic over an IPv4 infrastructure  
+`SM Bus Controller` - Used for communication with onboard sensors and devices for system monitoring...  
+`Microsoft iSCSI Initiator` - Disabled, connect to storage devices over a network  
+`Microsoft Virtual Drive Enumerator` - Disabled, breaks `diskmgmt.msc`  
+`Microsoft RRAS Root Enumerator` - Disabled, driver that helps initialize older or virtual devices during system boot  
+`Microsoft System Management BIOS Driver` - Disabling it breaks GTA5 and maybe other system info fetching  
+`System Speaker` - Disabling breaks monitor audio  
+`AMD/Intel PSP (ME)` - Platform Security Processor  
 
 ---
 
-Click on '**View**', then on '**Devices by connection'**.
+Click on `View` > `Devices by connection`.
 
-Disabling unused '**PCI-to-PCI Bridge**' devices (picture):
 - Go into `PCI Bus` / `PCI Express Root Complex`
     - Disable all `PCI-to-PCI Bridge` devices, which are unused (`PCI Express Downstream Switch Port`)
 
 ![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/devman.png?raw=true)
 
-Removing Non-Present Devices:
-- Download [DeviceCleanup](https://www.uwe-sieber.de/files/DeviceCleanup_x64.zip)
-- Run it, click on '**Devices**'
-- Click on '**Select all**', then on '**Remove selected**'
-
-You can also remove unknown devices with:
-```ps
-Get-PnpDevice | Where Status -eq Unknown | ForEach { &pnputil /remove-device $_.InstanceId }
-```
-But be cautioned, it also removes devices which are connected, but registred as unkown.
+> https://learn.microsoft.com/en-us/powershell/module/pnpdevice/get-pnpdevice?view=windowsserver2025-ps  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax
 
 # Disable Touch & Tablet
 

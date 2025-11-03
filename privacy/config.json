@@ -236,20 +236,14 @@
     "control": { "type": "button", "label": "Remove" },
     "apply": {
       "COMMANDS": {
-        "RemoveKey": {
-          "Action": "run_powershell",
-          "Command": "slmgr /cpky"
-        }
+        "RemoveKey": { "Action": "run_powershell", "Command": "slmgr /cpky" }
       }
     }
   },
   "Clear SRUM Data": {
     "control": { "type": "button", "label": "Clear" },
     "COMMANDS": {
-      "StopDPS": {
-        "Action": "run_powershell",
-        "Command": "Stop-Service -Name 'DPS' -Force"
-      },
+      "StopDPS": { "Action": "run_powershell", "Command": "Stop-Service -Name 'DPS' -Force" },
       "DeleteSRUDB": {
         "Action": "run_powershell",
         "Elevated": true,
@@ -260,7 +254,7 @@
   "Disable App Launch Tracking": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "Start_TrackProgs": { "Type": "REG_DWORD", "Data": "0" }
+        "Start_TrackProgs": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -369,12 +363,36 @@
       "HKCU\\Environment": {
         "POWERSHELL_TELEMETRY_OPTOUT": { "Type": "REG_SZ", "Data": "1" },
         "DOTNET_CLI_TELEMETRY_OPTOUT": { "Type": "REG_SZ", "Data": "1" }
+      },
+      "SUBOPTION": {
+        "Disable PowerShell Telemetry": {
+          "HKCU\\Environment": {
+            "POWERSHELL_TELEMETRY_OPTOUT": { "Type": "REG_SZ", "Data": "1" }
+          }
+        },
+        "Disable .NET Telemetry": {
+          "HKCU\\Environment": {
+           "DOTNET_CLI_TELEMETRY_OPTOUT": { "Type": "REG_SZ", "Data": "1" }
+          }
+        }
       }
     },
     "revert": {
       "HKCU\\Environment": {
         "POWERSHELL_TELEMETRY_OPTOUT": { "Action": "deletevalue" },
         "DOTNET_CLI_TELEMETRY_OPTOUT": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable PowerShell Telemetry": {
+          "HKCU\\Environment": {
+           "POWERSHELL_TELEMETRY_OPTOUT": { "Action": "deletevalue" }
+          }
+        },
+        "Disable .NET Telemetry": {
+          "HKCU\\Environment": {
+            "DOTNET_CLI_TELEMETRY_OPTOUT": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -1219,7 +1237,7 @@
         "AllowLinguisticDataCollection": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Input\\TIPC": {
-      "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -1265,7 +1283,7 @@
         "AllowLinguisticDataCollection": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Input\\TIPC": {
-      "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -1356,7 +1374,7 @@
       "COMMANDS": {
         "DisableRecallFeature": {
           "Action": "optional_feature",
-          "Arguments": ["/Quiet", "/NoRestart"],
+          "Arguments": [ "/Quiet", "/NoRestart" ],
           "Features": [
             { "Name": "Recall", "State": "Disabled" }
           ]
@@ -1374,7 +1392,7 @@
       "COMMANDS": {
         "EnableRecallFeature": {
           "Action": "optional_feature",
-          "Arguments": ["/Quiet", "/NoRestart"],
+          "Arguments": [ "/Quiet", "/NoRestart" ],
           "Features": [
             { "Name": "Recall", "State": "Enabled" }
           ]
@@ -1412,7 +1430,6 @@
         "HideRecommendedPersonalizedSites": { "Type": "REG_DWORD", "Data": 1 },
         "HideRecommendedSection": { "Type": "REG_DWORD", "Data": 1 }
       },
-
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "EnableAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
         "TipbandDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 },
@@ -1466,7 +1483,6 @@
         "HideRecommendedPersonalizedSites": { "Action": "deletevalue" },
         "HideRecommendedSection": { "Action": "deletevalue" }
       },
-
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "EnableAutocorrection": { "Action": "deletevalue" },
         "TipbandDesiredVisibility": { "Action": "deletevalue" },
@@ -1726,7 +1742,7 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppV\\CEIP": {
         "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Microsoft\\SQMClient": { 
+      "HKLM\\Software\\Microsoft\\SQMClient": {
         "UploadDisableFlag": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Microsoft\\SQMClient\\Windows": {
@@ -1738,14 +1754,7 @@
       "COMMANDS": {
         "DisableCeipTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\Autochk\\Proxy",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\Autochk\\Proxy", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector" ],
           "TaskAction": "disable"
         }
       }
@@ -1766,13 +1775,7 @@
       "COMMANDS": {
         "EnableCeipTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
-            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector" ],
           "TaskAction": "enable"
         }
       }
@@ -1901,10 +1904,7 @@
       "COMMANDS": {
         "DisableWerTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
-            "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate", "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting" ],
           "TaskAction": "disable"
         }
       }
@@ -1946,10 +1946,7 @@
       "COMMANDS": {
         "EnableWerTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
-            "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate", "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting" ],
           "TaskAction": "enable"
         }
       }
@@ -1985,7 +1982,7 @@
       }
     }
   },
-  "Disable Sleep Study": { 
+  "Disable Sleep Study": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WINEVT\\Channels\\Microsoft-Windows-SleepStudy/Diagnostic": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -2051,7 +2048,7 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\Wdf",
           "Operations": [
-            { "Name": "SleepstudyState", "Operation": "deletevalue"  }
+            { "Name": "SleepstudyState", "Operation": "deletevalue" }
           ]
         }
       }
@@ -2096,6 +2093,68 @@
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CredUI": {
         "DisablePasswordReveal": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable CSC": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetCache": {
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 },
+        "BackgroundSyncEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "NoReminders": { "Type": "REG_DWORD", "Data": 1 },
+        "SyncAtLogoff": { "Type": "REG_DWORD", "Data": 0 },
+        "SyncAtLogon": { "Type": "REG_DWORD", "Data": 0 },
+        "WorkOfflineDisabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CscService": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CSC": {
+        "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "COMMANDS": {
+        "DisableOfflineFilesTasks": {
+          "Action": "scheduled_tasks",
+          "Tasks": [
+            { "Path": "\\Microsoft\\Windows\\Offline Files\\Background Synchronization", "State": "Disabled" },
+            { "Path": "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization", "State": "Disabled" }
+          ]
+        },
+        "NeutralizeSyncCenterExe": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exe mobsync.exee"
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetCache": {
+        "Enabled": { "Action": "deletevalue" },
+        "BackgroundSyncEnabled": { "Action": "deletevalue" },
+        "NoReminders": { "Action": "deletevalue" },
+        "SyncAtLogoff": { "Action": "deletevalue" },
+        "SyncAtLogon": { "Action": "deletevalue" },
+        "WorkOfflineDisabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CscService": {
+        "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CSC": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "COMMANDS": {
+        "EnableOfflineFilesTasks": {
+          "Action": "scheduled_tasks",
+          "Tasks": [
+            { "Path": "\\Microsoft\\Windows\\Offline Files\\Background Synchronization", "State": "Disabled" },
+            { "Path": "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization", "State": "Disabled" }
+          ]
+        },
+        "RestoreSyncCenterExe": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exee mobsync.exe"
+        }
       }
     }
   }

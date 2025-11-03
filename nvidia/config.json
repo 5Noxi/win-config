@@ -9,10 +9,7 @@
     }
   },
   "NVCPL Settings": {
-    "__control": {
-      "type": "button",
-      "label": "Import"
-    },
+    "__control": { "type": "button", "label": "Import" },
     "apply": {
       "COMMANDS": {
         "DownloadFiles": {
@@ -43,12 +40,7 @@
       "COMMANDS": {
         "RemoveNvCplArtifacts": {
           "Action": "delete_path",
-          "Paths": [
-            "%APPDATA%\\Noverse\\nvcplui.exe",
-            "%APPDATA%\\Noverse\\Nvcpl.ico",
-            "%APPDATA%\\Noverse\\NV-nvcpl.ps1",
-            "%USERPROFILE%\\Desktop\\Nvcpl.lnk"
-          ]
+          "Paths": [ "%APPDATA%\\Noverse\\nvcplui.exe", "%APPDATA%\\Noverse\\Nvcpl.ico", "%APPDATA%\\Noverse\\NV-nvcpl.ps1", "%USERPROFILE%\\Desktop\\Nvcpl.lnk" ]
         }
       }
     }
@@ -78,18 +70,12 @@
   "Disable ECC": {
     "apply": {
       "COMMANDS": {
-        "DisableECC": {
-          "Action": "run_powershell",
-          "Command": "$env:SYSTEMROOT\\System32\\nvidia-smi.exe -e 0"
-        }
+        "DisableECC": { "Action": "run_powershell", "Command": "$env:SYSTEMROOT\\System32\\nvidia-smi.exe -e 0" }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EnableECC": {
-          "Action": "run_powershell",
-          "Command": "$env:SYSTEMROOT\\System32\\nvidia-smi.exe -e 1"
-        }
+        "EnableECC": { "Action": "run_powershell", "Command": "$env:SYSTEMROOT\\System32\\nvidia-smi.exe -e 1" }
       }
     }
   },
@@ -218,20 +204,12 @@
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
-        "DisableNvTelemetryTasks": {
-          "Action": "scheduled_task",
-          "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"],
-          "TaskAction": "disable"
-        }
+        "DisableNvTelemetryTasks": { "Action": "scheduled_task", "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"], "TaskAction": "disable" }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EnableNvTelemetryTasks": {
-          "Action": "scheduled_task",
-          "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"],
-          "TaskAction": "enable"
-        }
+        "EnableNvTelemetryTasks": { "Action": "scheduled_task", "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"], "TaskAction": "enable" }
       }
     }
   },
@@ -357,10 +335,7 @@
         "RemoveNvProgramFiles": {
           "Action": "delete_path",
           "Paths": [
-            {
-              "Path": "%PROGRAMFILES%\\NVIDIA Corporation",
-              "Recurse": true
-            }
+            { "Path": "%PROGRAMFILES%\\NVIDIA Corporation", "Recurse": true }
           ]
         }
       }
@@ -423,12 +398,7 @@
     "COMMANDS": {
       "ClearCaches": {
         "Action": "delete_path",
-        "Paths": [
-          "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache",
-          "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache",
-          "%LOCALAPPDATA%\\NVIDIA\\DXCache",
-          "%LOCALAPPDATA%\\NVIDIA\\GLCache"
-        ]
+        "Paths": [ "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache", "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\GLCache" ]
       }
     }
   }

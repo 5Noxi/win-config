@@ -6,10 +6,7 @@
         "DisableLargeMtu": { "Type": "REG_DWORD", "Data": 0 },
         "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
         "EnableSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
-        "CipherSuiteOrder": {
-          "Type": "REG_MULTI_SZ",
-          "Data": "AES_256_GCM,AES_256_CCM"
-        },
+        "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" },
         "DisableMultiChannel": { "Type": "REG_DWORD", "Data": 0 },
         "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 },
         "MaxSmb2Dialect": { "Type": "REG_DWORD", "Data": 65536 },
@@ -19,10 +16,7 @@
         "RequireSecuritySignature": { "Type": "REG_DWORD", "Data": 1 },
         "enablesecuritysignature": { "Type": "REG_DWORD", "Data": 1 },
         "EncryptData": { "Type": "REG_DWORD", "Data": 1 },
-        "CipherSuiteOrder": {
-          "Type": "REG_MULTI_SZ",
-          "Data": "AES_256_GCM,AES_256_CCM"
-        },
+        "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" },
         "RejectUnencryptedAccess": { "Type": "REG_DWORD", "Data": 1 },
         "DisableLeasing": { "Type": "REG_DWORD", "Data": 1 },
         "EnableSMBQUIC": { "Type": "REG_DWORD", "Data": 1 },
@@ -52,10 +46,7 @@
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
             "EncryptData": { "Type": "REG_DWORD", "Data": 1 },
             "RejectUnencryptedAccess": { "Type": "REG_DWORD", "Data": 1 },
-            "CipherSuiteOrder": {
-              "Type": "REG_MULTI_SZ",
-              "Data": "AES_256_GCM,AES_256_CCM"
-            }
+            "CipherSuiteOrder": { "Type": "REG_MULTI_SZ", "Data": "AES_256_GCM,AES_256_CCM" }
           }
         },
         "Enable SMB Over QUIC": {
@@ -182,13 +173,7 @@
       "COMMANDS": {
         "SetTCP_BBR2": {
           "Action": "tcp_congestion",
-          "Templates": [
-            "Internet",
-            "Datacenter",
-            "Compat",
-            "DatacenterCustom",
-            "InternetCustom"
-          ],
+          "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
           "Provider": "bbr2"
         }
       },
@@ -197,13 +182,7 @@
           "COMMANDS": {
             "SetTCP_BBR2": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "bbr2"
             }
           }
@@ -212,13 +191,7 @@
           "COMMANDS": {
             "SetTCP_CUBIC": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "cubic"
             }
           }
@@ -227,13 +200,7 @@
           "COMMANDS": {
             "SetTCP_DCTCP": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "dctcp"
             }
           }
@@ -242,13 +209,7 @@
           "COMMANDS": {
             "SetTCP_CTCP": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "ctcp"
             }
           }
@@ -257,13 +218,7 @@
           "COMMANDS": {
             "SetTCP_NewReno": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "newreno"
             }
           }
@@ -274,13 +229,7 @@
       "COMMANDS": {
         "RevertTCP_CUBIC": {
           "Action": "tcp_congestion",
-          "Templates": [
-            "Internet",
-            "InternetCustom",
-            "Compat",
-            "Datacenter",
-            "DatacenterCustom"
-          ],
+          "Templates": [ "Internet", "InternetCustom", "Compat", "Datacenter", "DatacenterCustom" ],
           "Provider": "cubic"
         }
       },
@@ -289,13 +238,7 @@
           "COMMANDS": {
             "RevertTCP_BBR2": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "cubic"
             }
           }
@@ -304,13 +247,7 @@
           "COMMANDS": {
             "RevertTCP_CUBIC": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "cubic"
             }
           }
@@ -319,13 +256,7 @@
           "COMMANDS": {
             "RevertTCP_DCTCP": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "cubic"
             }
           }
@@ -334,13 +265,7 @@
           "COMMANDS": {
             "RevertTCP_CTCP": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "cubic"
             }
           }
@@ -349,13 +274,7 @@
           "COMMANDS": {
             "RevertTCP_NewReno": {
               "Action": "tcp_congestion",
-              "Templates": [
-                "Internet",
-                "Datacenter",
-                "Compat",
-                "DatacenterCustom",
-                "InternetCustom"
-              ],
+              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
               "Provider": "cubic"
             }
           }
@@ -380,11 +299,7 @@
           "Action": "run_powershell",
           "Command": "Set-NetFirewallRule -DisplayGroup 'Network Discovery' -Enabled False -Profile Any"
         },
-        "DisableLLTDIORspndr": {
-          "Action": "netbind",
-          "ComponentID": ["ms_lltdio", "ms_rspndr"],
-          "State": "disable"
-        }
+        "DisableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr"], "State": "disable" }
       }
     },
     "revert": {
@@ -403,11 +318,7 @@
           "Action": "run_powershell",
           "Command": "$rules=@(@{Name='NETDIS-UPnPHost-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-SSDPSrv-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-LLMNR-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-In-UDP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-UPnP-Out-TCP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNTS-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-SSDPSrv-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Name-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Name-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-LLMNR-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-SSDPSrv-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-WSDEVNTS-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Datagram-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDPHOST-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNT-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDPHOST-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-UPnP-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')}); foreach($r in $rules){ $enabledEnum=[Enum]::Parse([Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetSecurity.Enabled], $r.Enabled); try { Set-NetFirewallRule -Name $r.Name -Enabled $enabledEnum -Profile $r.Profile -ea SilentlyContinue } catch {} }"
         },
-        "EnableLLTDIORspndr": {
-          "Action": "netbind",
-          "ComponentID": ["ms_lltdio", "ms_rspndr"],
-          "State": "enable"
-        }
+        "EnableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr"], "State": "enable" }
       }
     }
   },
@@ -416,13 +327,7 @@
       "COMMANDS": {
         "DisableWiFiTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\WCM\\WiFiTask",
-            "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
-            "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
-            "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
-            "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\WCM\\WiFiTask", "\\Microsoft\\Windows\\WlanSvc\\CDSSync", "\\Microsoft\\Windows\\WwanSvc\\NotificationTask", "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery", "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement" ],
           "TaskAction": "disable"
         }
       },
@@ -443,13 +348,7 @@
       "COMMANDS": {
         "EnableWiFiTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Windows\\WCM\\WiFiTask",
-            "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
-            "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
-            "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
-            "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
-          ],
+          "TaskNames": [ "\\Microsoft\\Windows\\WCM\\WiFiTask", "\\Microsoft\\Windows\\WlanSvc\\CDSSync", "\\Microsoft\\Windows\\WwanSvc\\NotificationTask", "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery", "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement" ],
           "TaskAction": "enable"
         }
       },
@@ -522,11 +421,7 @@
         "SMB2": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
-        "DisableSMB1Feature": {
-          "Action": "optional_feature",
-          "Features": ["SMB1Protocol"],
-          "State": "Disabled"
-        }
+        "DisableSMB1Feature": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Disabled" }
       },
       "SUBOPTION": {
         "Disable SMBv1": {
@@ -534,11 +429,7 @@
             "SMB1": { "Type": "REG_DWORD", "Data": 0 }
           },
           "COMMANDS": {
-            "DisableSMB1Feature": {
-              "Action": "optional_feature",
-              "Features": ["SMB1Protocol"],
-              "State": "Disabled"
-            }
+            "DisableSMB1Feature": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Disabled" }
           }
         },
         "Disable SMBv2": {
@@ -554,11 +445,7 @@
         "SMB2": { "Action": "deletevalue" }
       },
       "COMMANDS": {
-        "DisableSMB1FeatureAgain": {
-          "Action": "optional_feature",
-          "Features": ["SMB1Protocol"],
-          "State": "Disabled"
-        }
+        "DisableSMB1FeatureAgain": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Disabled" }
       },
       "SUBOPTION": {
         "Disable SMBv1": {
@@ -566,11 +453,7 @@
             "SMB1": { "Action": "deletevalue" }
           },
           "COMMANDS": {
-            "DisableSMB1FeatureAgain": {
-              "Action": "optional_feature",
-              "Features": ["SMB1Protocol"],
-              "State": "Enabled"
-            }
+            "DisableSMB1FeatureAgain": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Enabled" }
           }
         },
         "Disable SMBv2": {
@@ -689,11 +572,7 @@
         "DisabledComponents": { "Type": "REG_DWORD", "Data": 255 }
       },
       "COMMANDS": {
-        "DisableIPv6Bindings": {
-          "Action": "netbind",
-          "ComponentID": ["ms_tcpip6"],
-          "State": "disable"
-        }
+        "DisableIPv6Bindings": { "Action": "netbind", "ComponentID": ["ms_tcpip6"], "State": "disable" }
       }
     },
     "revert": {
@@ -701,11 +580,7 @@
         "DisabledComponents": { "Action": "deletevalue" }
       },
       "COMMANDS": {
-        "EnableIPv6Bindings": {
-          "Action": "netbind",
-          "ComponentID": ["ms_tcpip6"],
-          "State": "enable"
-        }
+        "EnableIPv6Bindings": { "Action": "netbind", "ComponentID": ["ms_tcpip6"], "State": "enable" }
       }
     }
   },
@@ -800,10 +675,7 @@
             "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 },
-            "ForceWakeFromMagicPacketOnModernStandby": {
-              "Type": "REG_SZ",
-              "Data": 0
-            },
+            "ForceWakeFromMagicPacketOnModernStandby": { "Type": "REG_SZ", "Data": 0 },
             "EnableWakeOnManagmentOnTCO": { "Type": "REG_SZ", "Data": 0 },
             "WakeFromS5": { "Type": "REG_SZ", "Data": 0 },
             "WakeOn": { "Type": "REG_SZ", "Data": 0 },
@@ -890,11 +762,7 @@
           "Action": "run_powershell",
           "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Disable-NetFirewallRule"
         },
-        "DisableMsServerBinding": {
-          "Action": "netbind",
-          "ComponentIDs": ["ms_server"],
-          "State": "disable"
-        }
+        "DisableMsServerBinding": { "Action": "netbind", "ComponentIDs": ["ms_server"], "State": "disable" }
       }
     },
     "revert": {
@@ -906,11 +774,7 @@
           "Action": "run_powershell",
           "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Enable-NetFirewallRule"
         },
-        "EnableMsServerBinding": {
-          "Action": "netbind",
-          "ComponentIDs": ["ms_server"],
-          "State": "enable"
-        }
+        "EnableMsServerBinding": { "Action": "netbind", "ComponentIDs": ["ms_server"], "State": "enable" }
       }
     }
   }

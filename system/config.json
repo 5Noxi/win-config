@@ -251,27 +251,13 @@
       }
     }
   },
-  "Lock Screen": {
-    "apply": {
-      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-        "NoLockScreen": { "Type": "REG_DWORD", "Data": 1 },
-        "LockScreenOverlaysDisabled": { "Type": "REG_DWORD", "Data": 1 }
-      }
-    },
-    "revert": {
-      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
-        "NoLockScreen": { "Action": "deletevalue" },
-        "LockScreenOverlaysDisabled": { "Action": "deletevalue" }
-      }
-    }
-  },
   "Enable Game Mode": {
     "apply": {
       "HKCU\\Software\\Microsoft\\GameBar": {
         "AllowAutoGameMode": { "Type": "REG_DWORD", "Data": 1 },
         "AutoGameModeEnabled": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "SUBOPTION":{
+      "SUBOPTION": {
         "Enable Game Mode": {
           "HKCU\\Software\\Microsoft\\GameBar": {
             "AllowAutoGameMode": { "Type": "REG_DWORD", "Data": 1 },
@@ -331,10 +317,21 @@
       "COMMANDS": {
         "DisableSearchFeature": {
           "Action": "optional_feature",
-          "Arguments": ["/NoRestart"],
+          "Arguments": [ "/NoRestart" ],
           "Features": [
             { "Name": "SearchEngine-Client-Package", "State": "Disabled" }
           ]
+        }
+      },
+      "SUBOPTION": {
+        "Everything Settings": {
+          "__control": { "type": "button", "label": "Apply" },
+          "COMMANDS": {
+            "EverythingIniTweaks": {
+              "Action": "run_powershell",
+              "Command": "$nvp = \"$env:appdata\\Everything\\Everything.ini\";(gc $nvp) -replace '^normal_background_color=.*', 'normal_background_color=#353535' -replace '^normal_foreground_color=.*', 'normal_foreground_color=#ffffff' -replace '^single_click_open=.*', 'single_click_open=2' -replace '^hide_empty_search_results=.*', 'hide_empty_search_results=1' -replace '^double_click_path=.*', 'double_click_path=1' -replace '^show_mouseover=.*', 'show_mouseover=1' -replace '^show_number_of_results_with_selection=.*', 'show_number_of_results_with_selection=1' -replace '^tooltips=.*', 'tooltips=0' -replace '^search_history_enabled=.*', 'search_history_enabled=0' -replace '^run_history_enabled=.*', 'run_history_enabled=0' -replace '^index_date_modified=.*', 'index_date_modified=0' -replace '^exclude_list_enabled=.*', 'exclude_list_enabled=0' -replace '^language=.*', 'language=1033' | sc $nvp"
+            }
+          }
         }
       }
     },
@@ -361,7 +358,7 @@
       "COMMANDS": {
         "EnableSearchFeature": {
           "Action": "optional_feature",
-          "Arguments": ["/NoRestart"],
+          "Arguments": [ "/NoRestart" ],
           "Features": [
             { "Name": "SearchEngine-Client-Package", "State": "Enabled" }
           ]
@@ -374,7 +371,7 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
         "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
       },
-      "SUBOPTION":{
+      "SUBOPTION": {
         "Enable HAGS": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
             "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
@@ -408,10 +405,7 @@
   "Remove Windows.old": {
     "__control": { "type": "button", "label": "Remove" },
     "COMMANDS": {
-      "RemoveWindowsOld": {
-        "Action": "elevated_priv",
-        "Command": "Remove-Item -Path \"$env:SystemDrive\\Windows.old\" -Recurse -Force"
-      }
+      "RemoveWindowsOld": { "Action": "elevated_priv", "Command": "Remove-Item -Path \"$env:SystemDrive\\Windows.old\" -Recurse -Force" }
     }
   },
   "Disable Storage Sense": {
@@ -461,10 +455,7 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\FTH\\State": { "Action": "delete_path" },
       "COMMANDS": {
-        "RunFthSpecialize": {
-          "Action": "run_powershell",
-          "Command": "rundll32.exe fthsvc.dll,FthSysprepSpecialize"
-        }
+        "RunFthSpecialize": { "Action": "run_powershell", "Command": "rundll32.exe fthsvc.dll,FthSysprepSpecialize" }
       }
     },
     "revert": {
@@ -523,6 +514,53 @@
       },
       "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
         "AccessibilityMonoMixState": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Voice Access": {
+          "HKCU\\Software\\Microsoft\\VoiceAccess": {
+            "RunningState": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Live Captions": {
+          "HKCU\\Software\\Microsoft\\LiveCaptions": {
+            "RunningState": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Narrator": {
+          "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
+            "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+            "DuckAudio": { "Type": "REG_DWORD", "Data": 0 },
+            "WinEnterLaunchEnabled": { "Type": "REG_DWORD", "Data": 0 },
+            "ScriptingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+            "OnlineServicesEnabled": { "Type": "REG_DWORD", "Data": 0 },
+            "DetailedFeedback": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
+            "AutoStart": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Screen Flashinh During Audio Alerts": {
+          "HKCU\\Control Panel\\Accessibility\\ShowSounds": {
+            "On": { "Type": "REG_SZ", "Data": "0" }
+          },
+          "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
+            "Flags": { "Type": "REG_SZ", "Data": "3" },
+            "FSTextEffect": { "Type": "REG_SZ", "Data": "0" },
+            "WindowsEffect": { "Type": "REG_SZ", "Data": "0" },
+            "TextEffect": { "Type": "REG_SZ", "Data": "0" }
+          }
+        },
+        "Disable Color Filters": {
+          "HKCU\\Software\\Microsoft\\ColorFiltering": {
+            "Active": { "Type": "REG_DWORD", "Data": 0 },
+            "HotkeyEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Mono Audio": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "AccessibilityMonoMixState": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -574,6 +612,53 @@
       },
       "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
         "AccessibilityMonoMixState": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Voice Access": {
+          "HKCU\\Software\\Microsoft\\VoiceAccess": {
+            "RunningState": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Live Captions": {
+          "HKCU\\Software\\Microsoft\\LiveCaptions": {
+            "RunningState": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Narrator": {
+          "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
+            "RunningState": { "Action": "deletevalue" },
+            "DuckAudio": { "Action": "deletevalue" },
+            "WinEnterLaunchEnabled": { "Action": "deletevalue" },
+            "ScriptingEnabled": { "Action": "deletevalue" },
+            "OnlineServicesEnabled": { "Action": "deletevalue" },
+            "DetailedFeedback": { "Action": "deletevalue" }
+          },
+          "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
+            "AutoStart": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Screen Flashinh During Audio Alerts": {
+          "HKCU\\Control Panel\\Accessibility\\ShowSounds": {
+            "On": { "Action": "deletevalue" }
+          },
+          "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
+            "Flags": { "Action": "deletevalue" },
+            "FSTextEffect": { "Action": "deletevalue" },
+            "WindowsEffect": { "Action": "deletevalue" },
+            "TextEffect": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Color Filters": {
+          "HKCU\\Software\\Microsoft\\ColorFiltering": {
+            "Active": { "Action": "deletevalue" },
+            "HotkeyEnabled": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Mono Audio": {
+          "HKCU\\Software\\Microsoft\\Multimedia\\Audio": {
+            "AccessibilityMonoMixState": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -626,15 +711,9 @@
     }
   },
   "Clean WinSxS Folder": {
-    "__control": {
-      "type": "button",
-      "label": "Clean"
-    },
+    "__control": { "type": "button", "label": "Clean" },
     "COMMANDS": {
-      "RunDISM": {
-        "Action": "run_powershell",
-        "Command": "dism.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase"
-      }
+      "RunDISM": { "Action": "run_powershell", "Command": "dism.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase" }
     }
   },
   "Disable Low Disk Space Checks": {
@@ -673,7 +752,7 @@
       }
     }
   },
-    "Disable Notifications": {
+  "Disable Notifications": {
     "apply": {
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
         "DisableLockScreenAppNotifications": { "Type": "REG_DWORD", "Data": 1 }
@@ -815,16 +894,8 @@
         "SfTracingState": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
-        "DisableMMAgentAppLaunch": {
-          "Action": "mmagent",
-          "Setting": "ApplicationLaunchPrefetching",
-          "Enabled": false
-        },
-        "DisableMMAgentPrelaunch": {
-          "Action": "mmagent",
-          "Setting": "ApplicationPreLaunch",
-          "Enabled": false
-        }
+        "DisableMMAgentAppLaunch": { "Action": "mmagent", "Setting": "ApplicationLaunchPrefetching", "Enabled": false },
+        "DisableMMAgentPrelaunch": { "Action": "mmagent", "Setting": "ApplicationPreLaunch", "Enabled": false }
       }
     },
     "revert": {
@@ -835,16 +906,8 @@
         "SfTracingState": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
-        "EnableMMAgentAppLaunch": {
-          "Action": "mmagent",
-          "Setting": "ApplicationLaunchPrefetching",
-          "Enabled": true
-        },
-        "EnableMMAgentPrelaunch": {
-          "Action": "mmagent",
-          "Setting": "ApplicationPreLaunch",
-          "Enabled": true
-        }
+        "EnableMMAgentAppLaunch": { "Action": "mmagent", "Setting": "ApplicationLaunchPrefetching", "Enabled": true },
+        "EnableMMAgentPrelaunch": { "Action": "mmagent", "Setting": "ApplicationPreLaunch", "Enabled": true }
       }
     }
   },
@@ -926,6 +989,13 @@
           "Action": "run_powershell",
           "Command": "$base='HKLM:\\SYSTEM\\CurrentControlSet\\Services'; Get-ChildItem $base | Where-Object { $_.PSChildName -like 'cbdhsvc*' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name Start -PropertyType DWord -Value 4 -Force -ErrorAction SilentlyContinue }"
         }
+      },
+      "SUBOPTION": {
+        "Disable Clipboard History": {
+          "HKCU\\Software\\Microsoft\\Clipboard": {
+            "EnableClipboardHistory": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -950,6 +1020,13 @@
           "Action": "run_powershell",
           "Command": "$base='HKLM:\\SYSTEM\\CurrentControlSet\\Services'; Get-ChildItem $base | Where-Object { $_.PSChildName -like 'cbdhsvc*' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name Start -PropertyType DWord -Value 2 -Force -ErrorAction SilentlyContinue }"
         }
+      },
+      "SUBOPTION": {
+        "Disable Clipboard History": {
+          "HKCU\\Software\\Microsoft\\Clipboard": {
+            "EnableClipboardHistory": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -968,44 +1045,24 @@
   "Disable Memory Compression": {
     "apply": {
       "COMMANDS": {
-        "DisableMMAgentMemoryCompression": {
-          "Action": "mmagent",
-          "Setting": "MemoryCompression",
-          "Enabled": false,
-          "Elevated": true
-        }
+        "DisableMMAgentMemoryCompression": { "Action": "mmagent", "Setting": "MemoryCompression", "Enabled": false, "Elevated": true }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EnableMMAgentMemoryCompression": {
-          "Action": "mmagent",
-          "Setting": "MemoryCompression",
-          "Enabled": true,
-          "Elevated": true
-        }
+        "EnableMMAgentMemoryCompression": { "Action": "mmagent", "Setting": "MemoryCompression", "Enabled": true, "Elevated": true }
       }
     }
   },
   "Disable Page Combining": {
     "apply": {
       "COMMANDS": {
-        "DisableMMAgentPageCombining": {
-          "Action": "mmagent",
-          "Setting": "PageCombining",
-          "Enabled": false,
-          "Elevated": true
-        }
+        "DisableMMAgentPageCombining": { "Action": "mmagent", "Setting": "PageCombining", "Enabled": false, "Elevated": true }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EnableMMAgentPageCombining": {
-          "Action": "mmagent",
-          "Setting": "PageCombining",
-          "Enabled": true,
-          "Elevated": true
-        }
+        "EnableMMAgentPageCombining": { "Action": "mmagent", "Setting": "PageCombining", "Enabled": true, "Elevated": true }
       }
     }
   },
@@ -1014,12 +1071,26 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
         "DisplayParameters": { "Type": "REG_DWORD", "Data": 1 },
         "AutoReboot": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable BsOD Smiley": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+            "DisableEmoticon": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
         "DisplayParameters": { "Action": "deletevalue" },
         "AutoReboot": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disable BsOD Smiley": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
+            "DisableEmoticon": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   }

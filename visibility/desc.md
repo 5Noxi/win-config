@@ -128,7 +128,7 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKCU\Control Panel\Desktop\WindowMetric
 ```
 Disable logon animations, which would remove the animation (picture), instead shows the windows default background wallpaper: (first sign-in):
 ```
-This policy controls whether users see the first sign-in animation when signing in for the first time, including both the initial setup user and those added later. It also determines if Microsoft account users receive the opt-in prompt for services. If enabled, Microsoft account users see the opt-in prompt and other users see the animation. If disabled, neither the animation nor the opt-in prompt appears. If not configured, the first user sees the animation during setup; later users won’t see it if setup was already completed. This policy has no effect on Server editions.
+This policy controls whether users see the first sign-in animation when signing in for the first time, including both the initial setup user and those added later. It also determines if Microsoft account users receive the opt-in prompt for services. If enabled, Microsoft account users see the opt-in prompt and other users see the animation. If disabled, neither the animation nor the opt-in prompt appears. If not configured, the first user sees the animation during setup; later users won't see it if setup was already completed. This policy has no effect on Server editions.
 ```
 ```bat
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableFirstLogonAnimation /t REG_DWORD /d 0 /f
@@ -559,11 +559,54 @@ IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00
 ```
 > [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/5Noxi/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
 
-# Disable Lock Screen
+# Hide Lock Screen
 
 Disables the lock screen (skips the lock screen and go directly to the login screen). Revert it by removing the value (2nd command).
 
-__Miscellaneous (`ControlPanelDisplay.admx`):__
+```json
+{
+    "File":  "ControlPanelDisplay.admx",
+    "NameSpace":  "Microsoft.Policies.ControlPanelDisplay",
+    "Class":  "Machine",
+    "CategoryName":  "Personalization",
+    "DisplayName":  "Do not display the lock screen",
+    "ExplainText":  "This policy setting controls whether the lock screen appears for users.If you enable this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see their selected tile after locking their PC.If you disable or do not configure this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see a lock screen after locking their PC. They must dismiss the lock screen using touch, the keyboard, or by dragging it with the mouse.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Personalization",
+    "KeyName":  "NoLockScreen",
+    "Elements":  [
+
+                    ]
+}, 
+{
+    "File":  "ControlPanelDisplay.admx",
+    "NameSpace":  "Microsoft.Policies.ControlPanelDisplay",
+    "Class":  "Machine",
+    "CategoryName":  "Personalization",
+    "DisplayName":  "Force a specific default lock screen and logon image",
+    "ExplainText":  "This setting allows you to force a specific default lock screen and logon image by entering the path (location) of the image file. The same image will be used for both the lock and logon screens.This setting lets you specify the default lock screen and logon image shown when no user is signed in, and also sets the specified image as the default for all users (it replaces the inbox default image).To use this setting, type the fully qualified path and name of the file that stores the default lock screen and logon image. You can type a local path, such as C:\\Windows\\Web\\Screen\\img104.jpg or a UNC path, such as \\\\Server\\Share\\Corp.jpg.This can be used in conjunction with the \"Prevent changing lock screen and logon image\" setting to always force the specified lock screen and logon image to be shown.Note: This setting only applies to Enterprise, Education, and Server SKUs.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows",
+    "KeyName":  "Personalization",
+    "Elements":  [
+                        {
+                            "ValueName":  "LockScreenImage",
+                            "Type":  "Text"
+                        },
+                        {
+                            "ValueName":  "LockScreenOverlaysDisabled",
+                            "FalseValue":  "0",
+                            "TrueValue":  "1",
+                            "Type":  "Boolean"
+                        }
+                    ]
+},
+```
+
+---
+
+Miscellaneous (`ControlPanelDisplay.admx`):  
+
 Prevent lock screen background motion:
 ```bat
 reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v AnimateLockScreenBackground /t REG_DWORD /d 1 /f

@@ -521,8 +521,6 @@ VBS won't work if Hyper-V is disabled.
 
 "Memory integrity is a Virtualization-based security (VBS) feature available in Windows. Memory integrity and VBS improve the threat model of Windows and provide stronger protections against malware trying to exploit the Windows kernel. VBS uses the Windows hypervisor to create an isolated virtual environment that becomes the root of trust of the OS that assumes the kernel can be compromised. Memory integrity is a critical component that protects and hardens Windows by running kernel mode code integrity within the isolated virtual environment of VBS. Memory integrity also restricts kernel memory allocations that could be used to compromise the system."
 
-> https://www.nirsoft.net/utils/serviwin.html  
-> https://www.nirsoft.net/utils/device_manager_view.html  
 > https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-deviceguard-unattend  
 > https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/configure?tabs=reg  
 > https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity?tabs=security

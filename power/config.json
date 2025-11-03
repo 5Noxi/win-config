@@ -2,8 +2,8 @@
   "Disable Device Powersavings": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
-          "DisableSelectiveSuspend": { "Type": "REG_DWORD", "Data": 1 },
-          "EnableDiagnosticMode": { "Type": "REG_DWORD", "Data": 0 }
+        "DisableSelectiveSuspend": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableDiagnosticMode": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
         "UsbWmiDisablePower": {
@@ -38,7 +38,7 @@
         "UsbDevSubD3ColdZero": {
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
-          "ExcludeSubPaths": ["wdf"],
+          "ExcludeSubPaths": [ "wdf" ],
           "Operations": [
             { "Name": "D3ColdSupported", "Type": "REG_DWORD", "Value": 0 }
           ]
@@ -83,7 +83,7 @@
         "UsbDevSubD3ColdClear": {
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
-          "ExcludeSubPaths": ["wdf"],
+          "ExcludeSubPaths": [ "wdf" ],
           "Operations": [
             { "Name": "D3ColdSupported", "Operation": "deletevalue" }
           ]
@@ -320,9 +320,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\**\\PowerSettings",
           "Operations": [
-            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [1,0,0,0] },
-            { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] },
-            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [255,255,255,255] }
+            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [1, 0, 0, 0] },
+            { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [255, 255, 255, 255] },
+            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [255, 255, 255, 255] }
           ]
         }
       }
@@ -333,9 +333,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\*ControlSet*\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\**\\PowerSettings",
           "Operations": [
-            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3,0,0,0] },
-            { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30,0,0,0] },
-            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0,0,0,0] }
+            { "Name": "IdlePowerState", "Type": "REG_BINARY", "Value": [3, 0, 0, 0] },
+            { "Name": "ConservationIdleTime", "Type": "REG_BINARY", "Value": [30, 0, 0, 0] },
+            { "Name": "PerformanceIdleTime", "Type": "REG_BINARY", "Value": [0, 0, 0, 0] }
           ]
         }
       }

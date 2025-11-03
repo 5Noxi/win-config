@@ -1015,7 +1015,7 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 # Disable Microsoft Copilot
 
-"Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they’re available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced."
+"Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they're available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced."
 
 `CopilotDisabledReason`:
 ```c
@@ -2232,7 +2232,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 > [system/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)  
 > [system/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-PoFxInitPowerManagement.c)
 
----
+```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0030\0\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDIF030\0\Device Parameters\Wdf : SleepstudyState
@@ -2260,7 +2260,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_05E3&PID_0610\6&3365fbaf&0&11\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_0B05&PID_1939&MI_00\7&40fe908&0&0000\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_0CF2&PID_A102&MI_00\8&7b0cf2a&0&0000\Device Parameters\Wdf : SleepstudyState
----
+```
 
 Other:
 ```
@@ -2302,7 +2302,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" /v DesktopHe
 
 | Policy | Description | Values |
 | ------ | ------ | ------ |
-| AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft’s cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
+| AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft's cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
 
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-messaging
 
@@ -2345,6 +2345,180 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows" /v DesktopHe
 	"Supported":  "Windows8_Or_IE10",
 	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CredUI",
 	"KeyName":  "DisablePasswordReveal",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable CSC
+
+Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, disables `CSC`/`CscService`, disables the two `Offline Files` scheduled tasks (they're disabled by default), and renames `mobsync.exe` to block execution.
+
+"Offline Files (Client-Side Caching, CSC) lets Windows cache files from network shares locally so users can keep working when the network/server is unavailable. Sync Center handles the background sync between the local CSC cache (`%SystemRoot%\CSC`) and the share. It's commonly paired with Folder Redirection so "known folders" (e.g., Documents) live on a server but remain available offline, with options like "Always Offline" for performance on slow links. You enable/disable it via Sync Center (Control Panel) or policy. When disabled, Sync Center has nothing to sync."
+
+> https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/deploy-folder-redirection
+
+
+```json
+{
+	"File":  "OfflineFiles.admx",
+	"NameSpace":  "Microsoft.Policies.OfflineFiles",
+	"Class":  "Machine",
+	"CategoryName":  "Cat_OfflineFiles",
+	"DisplayName":  "Allow or Disallow use of the Offline Files feature",
+	"ExplainText":  "This policy setting determines whether the Offline Files feature is enabled. Offline Files saves a copy of network files on the user\u0027s computer for use when the computer is not connected to the network.If you enable this policy setting, Offline Files is enabled and users cannot disable it.If you disable this policy setting, Offline Files is disabled and users cannot enable it.If you do not configure this policy setting, Offline Files is enabled on Windows client computers, and disabled on computers running Windows Server, unless changed by the user.Note: Changes to this policy setting do not take effect until the affected computer is restarted.",
+	"Supported":  "Win2k",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\NetCache",
+	"KeyName":  "Enabled",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "OfflineFiles.admx",
+	"NameSpace":  "Microsoft.Policies.OfflineFiles",
+	"Class":  "Machine",
+	"CategoryName":  "Cat_OfflineFiles",
+	"DisplayName":  "Configure Background Sync",
+	"ExplainText":  "This policy setting controls when background synchronization occurs while operating in slow-link mode, and applies to any user who logs onto the specified machine while this policy is in effect. To control slow-link mode, use the \"Configure slow-link mode\" policy setting.If you enable this policy setting, you can control when Windows synchronizes in the background while operating in slow-link mode. Use the \u0027Sync Interval\u0027 and \u0027Sync Variance\u0027 values to override the default sync interval and variance settings. Use \u0027Blockout Start Time\u0027 and \u0027Blockout Duration\u0027 to set a period of time where background sync is disabled. Use the \u0027Maximum Allowed Time Without A Sync\u0027 value to ensure that all network folders on the machine are synchronized with the server on a regular basis.You can also configure Background Sync for network shares that are in user selected Work Offline mode. This mode is in effect when a user selects the Work Offline button for a specific share. When selected, all configured settings will apply to shares in user selected Work Offline mode as well.If you disable or do not configure this policy setting, Windows performs a background sync of offline folders in the slow-link mode at a default interval with the start of the sync varying between 0 and 60 additional minutes. In Windows 7 and Windows Server 2008 R2, the default sync interval is 360 minutes. In Windows 8 and Windows Server 2012, the default sync interval is 120 minutes.",
+	"Supported":  "Windows7",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\NetCache",
+	"KeyName":  "BackgroundSyncEnabled",
+	"Elements":  [
+						{
+							"ValueName":  "BackgroundSyncPeriodMin",
+							"MaxValue":  "1440",
+							"MinValue":  "1",
+							"Type":  "Decimal"
+						},
+						{
+							"ValueName":  "BackgroundSyncMaxStartMin",
+							"MaxValue":  "3600",
+							"MinValue":  "0",
+							"Type":  "Decimal"
+						},
+						{
+							"ValueName":  "BackgroundSyncIgnoreBlockOutAfterMin",
+							"MaxValue":  "4294967295",
+							"MinValue":  "0",
+							"Type":  "Decimal"
+						},
+						{
+							"ValueName":  "BackgroundSyncBlockOutStartTime",
+							"MaxValue":  "2400",
+							"MinValue":  "0",
+							"Type":  "Decimal"
+						},
+						{
+							"ValueName":  "BackgroundSyncBlockOutDurationMin",
+							"MaxValue":  "1440",
+							"MinValue":  "0",
+							"Type":  "Decimal"
+						},
+						{
+							"ValueName":  "BackgroundSyncEnabledForForcedOffline",
+							"FalseValue":  "0",
+							"TrueValue":  "1",
+							"Type":  "Boolean"
+						},
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "OfflineFiles.admx",
+	"NameSpace":  "Microsoft.Policies.OfflineFiles",
+	"Class":  "Machine",
+	"CategoryName":  "Cat_OfflineFiles",
+	"DisplayName":  "Turn off reminder balloons",
+	"ExplainText":  "Hides or displays reminder balloons, and prevents users from changing the setting.Reminder balloons appear above the Offline Files icon in the notification area to notify users when they have lost the connection to a networked file and are working on a local copy of the file. Users can then decide how to proceed.If you enable this setting, the system hides the reminder balloons, and prevents users from displaying them.If you disable the setting, the system displays the reminder balloons and prevents users from hiding them.If this setting is not configured, reminder balloons are displayed by default when you enable offline files, but users can change the setting.To prevent users from changing the setting while a setting is in effect, the system disables the \"Enable reminders\" option on the Offline Files tabThis setting appears in the Computer Configuration and User Configuration folders. If both settings are configured, the setting in Computer Configuration takes precedence over the setting in User Configuration.Tip: To display or hide reminder balloons without establishing a setting, in Windows Explorer, on the Tools menu, click Folder Options, and then click the Offline Files tab. This setting corresponds to the \"Enable reminders\" check box.",
+	"Supported":  "WindowsPreVista",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\NetCache",
+	"KeyName":  "NoReminders",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "OfflineFiles.admx",
+	"NameSpace":  "Microsoft.Policies.OfflineFiles",
+	"Class":  "Machine",
+	"CategoryName":  "Cat_OfflineFiles",
+	"DisplayName":  "Synchronize all offline files before logging off",
+	"ExplainText":  "Determines whether offline files are fully synchronized when users log off.This setting also disables the \"Synchronize all offline files before logging off\" option on the Offline Files tab. This prevents users from trying to change the option while a setting controls it.If you enable this setting, offline files are fully synchronized. Full synchronization ensures that offline files are complete and current.If you disable this setting, the system only performs a quick synchronization. Quick synchronization ensures that files are complete, but does not ensure that they are current.If you do not configure this setting, the system performs a quick synchronization by default, but users can change this option.This setting appears in the Computer Configuration and User Configuration folders. If both settings are configured, the setting in Computer Configuration takes precedence over the setting in User Configuration.Tip: To change the synchronization method without changing a setting, in Windows Explorer, on the Tools menu, click Folder Options, click the Offline Files tab, and then select the \"Synchronize all offline files before logging off\" option.",
+	"Supported":  "WindowsPreVista",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\NetCache",
+	"KeyName":  "SyncAtLogoff",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "OfflineFiles.admx",
+	"NameSpace":  "Microsoft.Policies.OfflineFiles",
+	"Class":  "User",
+	"CategoryName":  "Cat_OfflineFiles",
+	"DisplayName":  "Synchronize all offline files when logging on",
+	"ExplainText":  "Determines whether offline files are fully synchronized when users log on.This setting also disables the \"Synchronize all offline files before logging on\" option on the Offline Files tab. This prevents users from trying to change the option while a setting controls it.If you enable this setting, offline files are fully synchronized at logon. Full synchronization ensures that offline files are complete and current. Enabling this setting automatically enables logon synchronization in Synchronization Manager.If this setting is disabled and Synchronization Manager is configured for logon synchronization, the system performs only a quick synchronization. Quick synchronization ensures that files are complete but does not ensure that they are current.If you do not configure this setting and Synchronization Manager is configured for logon synchronization, the system performs a quick synchronization by default, but users can change this option.This setting appears in the Computer Configuration and User Configuration folders. If both settings are configured, the setting in Computer Configuration takes precedence over the setting in User Configuration.Tip: To change the synchronization method without setting a setting, in Windows Explorer, on the Tools menu, click Folder Options, click the Offline Files tab, and then select the \"Synchronize all offline files before logging on\" option.",
+	"Supported":  "WindowsPreVista",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\NetCache",
+	"KeyName":  "SyncAtLogon",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "OfflineFiles.admx",
+	"NameSpace":  "Microsoft.Policies.OfflineFiles",
+	"Class":  "Machine",
+	"CategoryName":  "Cat_OfflineFiles",
+	"DisplayName":  "Remove \"Work offline\" command",
+	"ExplainText":  "This policy setting removes the \"Work offline\" command from Explorer, preventing users from manually changing whether Offline Files is in online mode or offline mode.If you enable this policy setting, the \"Work offline\" command is not displayed in File Explorer.If you disable or do not configure this policy setting, the \"Work offline\" command is displayed in File Explorer.",
+	"Supported":  "Windows8",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\NetCache",
+	"KeyName":  "WorkOfflineDisabled",
 	"Elements":  [
 						{
 							"Value":  "1",

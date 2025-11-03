@@ -6,7 +6,7 @@
       }
     },
     "revert": {
-      "HKCR\\batfile\\shell\\edit\\command": { 
+      "HKCR\\batfile\\shell\\edit\\command": {
         "": { "Type": "REG_SZ", "Data": "\"%SystemRoot%\\System32\\notepad.exe\" \"%1\"" }
       }
     }
@@ -338,7 +338,6 @@
       "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Word\\Options": {
         "EnableLogging": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common": {
         "QMEnable": { "Type": "REG_DWORD", "Data": 0 }
       },
@@ -358,12 +357,10 @@
       "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Word\\Options": {
         "EnableLogging": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\SOFTWARE\\Microsoft\\Office\\Common\\ClientTelemetry": {
         "DisableTelemetry": { "Type": "REG_DWORD", "Data": 1 },
         "VerboseLogging": { "Type": "REG_DWORD", "Data": 0 }
       },
-
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Office\\15.0\\OSM": {
         "EnableLogging": { "Type": "REG_DWORD", "Data": 0 },
         "EnableUpload": { "Type": "REG_DWORD", "Data": 0 }
@@ -393,12 +390,7 @@
       "COMMANDS": {
         "DisableOfficeTelemetryTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
-            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
-            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
-            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016"
-          ],
+          "TaskNames": [ "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack", "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016", "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn", "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016" ],
           "TaskAction": "disable"
         }
       }
@@ -423,7 +415,6 @@
       "HKCU\\SOFTWARE\\Microsoft\\Office\\15.0\\Word\\Options": {
         "EnableLogging": { "Action": "deletevalue" }
       },
-
       "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Common": {
         "QMEnable": { "Action": "deletevalue" }
       },
@@ -443,12 +434,10 @@
       "HKCU\\SOFTWARE\\Microsoft\\Office\\16.0\\Word\\Options": {
         "EnableLogging": { "Action": "deletevalue" }
       },
-
       "HKCU\\SOFTWARE\\Microsoft\\Office\\Common\\ClientTelemetry": {
         "DisableTelemetry": { "Action": "deletevalue" },
         "VerboseLogging": { "Action": "deletevalue" }
       },
-
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Office\\15.0\\OSM": {
         "EnableLogging": { "Action": "deletevalue" },
         "EnableUpload": { "Action": "deletevalue" }
@@ -478,12 +467,7 @@
       "COMMANDS": {
         "EnableOfficeTelemetryTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [
-            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
-            "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
-            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
-            "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016"
-          ],
+          "TaskNames": [ "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack", "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016", "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn", "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016" ],
           "TaskAction": "enable"
         }
       }
