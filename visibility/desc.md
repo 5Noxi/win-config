@@ -407,6 +407,35 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v LogicalViewMod
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
 
+---
+
+Not implemented yet caused by missing parser support:
+
+```json
+"apply": {
+    "SUBOPTION": {
+    "100px Horizonzal - 75px Vertical": {
+        "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+        "IconSpacing": { "Type": "REG_SZ", "Data": "-1500" },
+        "IconVerticalSpacing": { "Type": "REG_SZ", "Data": "-1125" },
+        "IconTitleWrap": { "Type": "REG_SZ", "Data": "0" }
+        }
+    }
+    }
+},
+"revert": {
+    "SUBOPTION": {
+    "100px Horizonzal - 75px Vertical": {
+        "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+        "IconSpacing": { "Action": "deletevalue"},
+        "IconVerticalSpacing": { "Action": "deletevalue" },
+        "IconTitleWrap": { "Action": "deletevalue" }
+        }
+    }
+    }
+}
+```
+
 # Settings Page Visibility 
 
 It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).

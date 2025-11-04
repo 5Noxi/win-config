@@ -2,7 +2,7 @@
 
 Used to be my personal `neofetch`/`fastfetch` replacement with more details. Some arguments will probably also get added like `ids`, so it doesn't display the serial numbers and miscellaneous HWIDs by default.
 
-![](https://github.com/5Noxi/win-config/blob/main/system/images/nvfetch.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/misc/images/nvfetch.png?raw=true)
 
 > https://github.com/5Noxi/nvfetch
 

@@ -819,7 +819,7 @@
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
           }
         },
-        "Disable voice activation": {
+        "Deny 'Voice activation'": {
           "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps": {
             "AgentActivationOnLockScreenEnabled": { "Type": "REG_DWORD", "Data": 0 },
             "AgentActivationEnabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -1176,7 +1176,7 @@
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
           }
         },
-        "Disable voice activation": {
+        "Deny 'Voice activation'": {
           "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps": {
             "AgentActivationOnLockScreenEnabled": { "Action": "deletevalue" },
             "AgentActivationEnabled": { "Action": "deletevalue" }
