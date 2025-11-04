@@ -1,4 +1,180 @@
 {
+  "Disable UAC": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 },
+        "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
+        "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+        "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableLUA": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "UAC: Disable completely": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 0 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Windows default (prompt, secure desktop)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Always notify": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Notify apps only (no desktop dimming)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Elevate without prompting (admins)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+        "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+        "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+        "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "UAC: Disable completely": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Windows default (prompt, secure desktop)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Always notify": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Notify apps only (no desktop dimming)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "UAC: Elevate without prompting (admins)": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
+            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
+      }
+    }
+  },
+  "PS Unrestricted Policy": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3": {
+        "1806": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell": {
+        "ExecutionPolicy": { "Type": "REG_SZ", "Data": "Unrestricted" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\PowerShell": {
+        "EnableScripts": { "Type": "REG_DWORD", "Data": 1 },
+        "ExecutionPolicy": { "Type": "REG_SZ", "Data": "Unrestricted" }
+      },
+      "SUBOPTION": {
+        "Disable Script Block Logging": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging": {
+            "EnableScriptBlockInvocationLogging": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableScriptBlockLogging": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Module Logging": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ModuleLogging": {
+            "EnableModuleLogging": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Transcripting": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\Transcription": {
+            "EnableTranscripting": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\Zones\\3": {
+        "1806": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell": {
+        "ExecutionPolicy": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\PowerShell": {
+        "EnableScripts": { "Action": "deletevalue" },
+        "ExecutionPolicy": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Script Block Logging": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ScriptBlockLogging": {
+            "EnableScriptBlockInvocationLogging": { "Action": "deletevalue" },
+            "EnableScriptBlockLogging": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Module Logging": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\ModuleLogging": {
+            "EnableModuleLogging": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Transcripting": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell\\Transcription": {
+            "EnableTranscripting": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
   "Disable Windows Update": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {

@@ -1,3 +1,157 @@
+# Disable UAC
+
+Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation. Save `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System` before running it.
+
+Remove the `Run as Administrator` context menu option (`.bat`, `.cmd` files) with:
+```bat
+reg delete "HKCR\batfile\shell\runas" /f
+reg delete "HKCR\cmdfile\shell\runas" /f
+```
+Will cause issues like shows in the picture below, the two ones above might cause similar issues (if the app requests elevated permissions?). __Rather leave them alone.__
+```
+reg delete "HKCR\exefile\shell\runas" /f
+```
+
+UAC Values (`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System`) - `UserAccountControlSettings.exe`:
+`Always notify me when: ...`
+```ps
+EnableLUA - Data: 1
+ConsentPromptBehaviorAdmin - Data: 2
+PromptOnSecureDesktop - Data: 1
+```
+`Notify me only when apps try to make changes to my computer (default)`
+```ps
+EnableLUA - Data: 1
+ConsentPromptBehaviorAdmin - Data: 5
+PromptOnSecureDesktop - Data: 1
+```
+`Notify me only when apps try to make changes to my computer (do not dim my desktop)`
+```ps
+EnableLUA - Data: 1
+ConsentPromptBehaviorAdmin - Data: 5
+PromptOnSecureDesktop - Data: 0
+```
+`Never notify me when: ...`
+```ps
+EnableLUA - Data: 1
+ConsentPromptBehaviorAdmin - Data: 0
+PromptOnSecureDesktop - Data: 0
+```
+
+Value: `FilterAdministratorToken`
+
+| Value        | Meaning                                                                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `0x00000000` | Only the built-in administrator account (RID 500) should be placed into Full Token mode.                                                         |
+| `0x00000001` | Only the built-in administrator account (RID 500) is placed into Admin Approval Mode. Approval is required when performing administrative tasks. |
+
+Value: `ConsentPromptBehaviorAdmin`
+
+| Value        | Meaning                                                                                                              |
+| ------------ | -------------------------------------------------------------------------------------------------------------------- |
+| `0x00000000` | Allows the admin to perform operations that require elevation without consent or credentials.                        |
+| `0x00000001` | Prompts for username and password on the secure desktop when elevation is required.                                  |
+| `0x00000002` | Prompts the admin to Permit or Deny an elevation request (secure desktop). Removes the need to re-enter credentials. |
+| `0x00000003` | Prompts for credentials (admin username/password) when elevation is required.                                        |
+| `0x00000004` | Prompts the admin to Permit or Deny elevation (non-secure desktop).                                                  |
+| `0x00000005` | Default: Prompts admin to Permit or Deny elevation for non-Windows binaries on the secure desktop.                   |
+
+Value: `ConsentPromptBehaviorUser`
+
+| Value        | Meaning                                                                       |
+| ------------ | ----------------------------------------------------------------------------- |
+| `0x00000000` | Any operation requiring elevation fails for standard users.                   |
+| `0x00000001` | Standard users are prompted for an admin's credentials to elevate privileges. |
+
+Value: `EnableInstallerDetection`
+
+| Value        | Meaning                                                            |
+| ------------ | ------------------------------------------------------------------ |
+| `0x00000000` | Disables automatic detection of installers that require elevation. |
+| `0x00000001` | Enables heuristic detection of installers needing elevation.       |
+
+Value: `ValidateAdminCodeSignatures`
+
+| Value        | Meaning                                                                        |
+| ------------ | ------------------------------------------------------------------------------ |
+| `0x00000000` | Does not enforce cryptographic signatures on elevated apps.                    |
+| `0x00000001` | Enforces cryptographic signatures on any interactive app requesting elevation. |
+
+Value: `EnableLUA`
+
+| Value        | Meaning                                                                             |
+| ------------ | ----------------------------------------------------------------------------------- |
+| `0x00000000` | Disables the "Administrator in Admin Approval Mode" user type and all UAC policies. |
+| `0x00000001` | Enables the "Administrator in Admin Approval Mode" and activates all UAC policies.  |
+
+Value: `PromptOnSecureDesktop`
+
+| Value        | Meaning                                                                        |
+| ------------ | ------------------------------------------------------------------------------ |
+| `0x00000000` | Disables secure desktop prompting - prompts appear on the interactive desktop. |
+| `0x00000001` | Forces all UAC prompts to occur on the secure desktop.                         |
+
+Value: `EnableVirtualization`
+
+| Value        | Meaning                                                                                       |
+| ------------ | --------------------------------------------------------------------------------------------- |
+| `0x00000000` | Disables data redirection for interactive processes.                                          |
+| `0x00000001` | Enables file and registry redirection for legacy apps to allow writes in user-writable paths. |
+
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
+> https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/uac.png?raw=true)
+
+# PS Unrestricted Policy
+
+Used to make powershell (`.ps1`) scripts work on your PC without showing any warning.
+
+| **Value Name** | **Description** |
+| ---- | ---- |
+| `EnableScriptBlockLogging` | Enables or disables logging of PowerShell script input to the event log. If enabled, it logs the processing of commands, script blocks, functions, and scripts. |
+| `EnableScriptBlockInvocationLogging` | Enables or disables logging of invocation events for commands, script blocks, functions, or scripts. Enabling this generates high volume of event logs for start/stop events. |
+| `EnableModuleLogging` | Enables or disables logging of pipeline execution events for specified PowerShell modules. If enabled, logs events in Event Viewer for the specified modules. |
+| `EnableTranscripting` | Enables or disables transcription of PowerShell commands. If enabled, records the input and output of PowerShell commands into text-based transcripts stored by default in My Documents. |
+| `EnableScripts` | Controls which types of scripts are allowed to run on the system. Options include allowing only signed scripts, allowing local scripts and remote signed scripts, or allowing all scripts to run. |
+
+| **Scope**​ | **Description​** |
+|---- | ---- |
+| `MachinePolicy` | Set by a Group Policy for all users of the computer |
+| `UserPolicy` | Set by a Group Policy for the current user of the computer |
+| `Process` | Sets the execution policy only for the current session - stored in an environment variable & removed when the session ends |
+| `CurrentUser` | The execution policy affects only the current user - stored in the HLCU subkey |
+| `LocalMachine` | The execution policy affects all users on the current computer - stored in the HKLM subkey |
+
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5#execution-policy-scope
+
+| **Execution Policy**  | **Description** |
+| ---- | ---- |
+| `AllSigned` | All scripts must be signed by a trusted publisher. Prompts for untrusted publishers. |
+| `Bypass` | No prompts or restrictions. Used in apps or environments with their own security. |
+| `Default` | Acts like `RemoteSigned` on Windows. |
+| `RemoteSigned` | Scripts run freely unless downloaded from the internet. Internet scripts need a trusted signature or must be unblocked. Local scripts don't require signatures. |
+| `Restricted` | No scripts allowed (only individual commands). Blocks all `.ps1`, `.psm1`, `.ps1xml`, and profile scripts. |
+| `Undefined` | No policy in this scope. If all scopes are undefined, defaults to `Restricted` (clients) or `RemoteSigned` (servers). |
+| `Unrestricted` | Unsigned scripts can run. Prompts for scripts from outside the intranet zone. |
+
+See your current execution policies via:
+```ps
+Get-ExecutionPolicy -l
+```
+`Set-ExecutionPolicy Unrestricted -Force`:
+```
+powershell.exe    HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerShell\ExecutionPolicy    Type: REG_SZ, Length: 26, Data: Unrestricted
+```
+
+> https://powershellisfun.com/2022/07/31/powershell-and-logging/  
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/unblock-file?view=powershell-7.5  
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.5  
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_config?view=powershell-7.5  
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5  
+> https://learn.microsoft.com/en-us/previous-versions/troubleshoot/browsers/security-privacy/ie-security-zones-registry-entries#zones
+> https://gpsearch.azurewebsites.net/#4954
+
 # Disable Windows Update
 
 It works via pausing updates and disabling related services:
@@ -416,6 +570,33 @@ Does:
 > https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service
 
 # Disable Downloads Blocking
+
+Windows adds a hidden tag called `Zone.Identifier` to files downloaded from the internet. This tag (also known as MotW) stores info about the file's origin and helps apply security warnings, see files including the tag with:
+```ps
+gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
+```
+
+> https://www.cyberengage.org/post/unveiling-file-origins-the-role-of-alternate-data-streams-ads-zone-identifier-in-forensic-inve  
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN  
+> https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)?redirectedfrom=MSDN
+
+```ps
+gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
+```
+
+**ZoneID** (`HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones`) - number indicating the security zone the file came from:
+`0` – Local machine
+`1` – Local intranet (internal network)
+`2` – Trusted sites
+`3` – Internet (mostly web downloads)
+`4` – Untrusted / Restricted sites (flagged as dangerous by smartscreen)
+
+Files downloaded from the internet still getting blocked? Unblock it/them with (one of them):
+```ps
+Unblock-File -Path "C:\Path\Script.ps1" -> File
+
+dir C:\Path\*Files* | Unblock-File -> Multiple files 
+```
 
 ```ps
 {

@@ -89,111 +89,6 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProf
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/MultiMedia.txt  
 > [system/assets | sysresp-CiConfigInitialize.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sysresp-CiConfigInitialize.c)  
 
-# Disable UAC
-
-Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation. Save `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System` before running it.
-
-Remove the `Run as Administrator` context menu option (`.bat`, `.cmd` files) with:
-```bat
-reg delete "HKCR\batfile\shell\runas" /f
-reg delete "HKCR\cmdfile\shell\runas" /f
-```
-Will cause issues like shows in the picture below, the two ones above might cause similar issues (if the app requests elevated permissions?). __Rather leave them alone.__
-```
-reg delete "HKCR\exefile\shell\runas" /f
-```
-
-UAC Values (`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System`) - `UserAccountControlSettings.exe`:
-`Always notify me when: ...`
-```ps
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 2
-PromptOnSecureDesktop - Data: 1
-```
-`Notify me only when apps try to make changes to my computer (default)`
-```ps
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 5
-PromptOnSecureDesktop - Data: 1
-```
-`Notify me only when apps try to make changes to my computer (do not dim my desktop)`
-```ps
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 5
-PromptOnSecureDesktop - Data: 0
-```
-`Never notify me when: ...`
-```ps
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 0
-PromptOnSecureDesktop - Data: 0
-```
-
-Value: `FilterAdministratorToken`
-
-| Value        | Meaning                                                                                                                                          |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `0x00000000` | Only the built-in administrator account (RID 500) should be placed into Full Token mode.                                                         |
-| `0x00000001` | Only the built-in administrator account (RID 500) is placed into Admin Approval Mode. Approval is required when performing administrative tasks. |
-
-Value: `ConsentPromptBehaviorAdmin`
-
-| Value        | Meaning                                                                                                              |
-| ------------ | -------------------------------------------------------------------------------------------------------------------- |
-| `0x00000000` | Allows the admin to perform operations that require elevation without consent or credentials.                        |
-| `0x00000001` | Prompts for username and password on the secure desktop when elevation is required.                                  |
-| `0x00000002` | Prompts the admin to Permit or Deny an elevation request (secure desktop). Removes the need to re-enter credentials. |
-| `0x00000003` | Prompts for credentials (admin username/password) when elevation is required.                                        |
-| `0x00000004` | Prompts the admin to Permit or Deny elevation (non-secure desktop).                                                  |
-| `0x00000005` | Default: Prompts admin to Permit or Deny elevation for non-Windows binaries on the secure desktop.                   |
-
-Value: `ConsentPromptBehaviorUser`
-
-| Value        | Meaning                                                                       |
-| ------------ | ----------------------------------------------------------------------------- |
-| `0x00000000` | Any operation requiring elevation fails for standard users.                   |
-| `0x00000001` | Standard users are prompted for an admin's credentials to elevate privileges. |
-
-Value: `EnableInstallerDetection`
-
-| Value        | Meaning                                                            |
-| ------------ | ------------------------------------------------------------------ |
-| `0x00000000` | Disables automatic detection of installers that require elevation. |
-| `0x00000001` | Enables heuristic detection of installers needing elevation.       |
-
-Value: `ValidateAdminCodeSignatures`
-
-| Value        | Meaning                                                                        |
-| ------------ | ------------------------------------------------------------------------------ |
-| `0x00000000` | Does not enforce cryptographic signatures on elevated apps.                    |
-| `0x00000001` | Enforces cryptographic signatures on any interactive app requesting elevation. |
-
-Value: `EnableLUA`
-
-| Value        | Meaning                                                                             |
-| ------------ | ----------------------------------------------------------------------------------- |
-| `0x00000000` | Disables the "Administrator in Admin Approval Mode" user type and all UAC policies. |
-| `0x00000001` | Enables the "Administrator in Admin Approval Mode" and activates all UAC policies.  |
-
-Value: `PromptOnSecureDesktop`
-
-| Value        | Meaning                                                                        |
-| ------------ | ------------------------------------------------------------------------------ |
-| `0x00000000` | Disables secure desktop prompting - prompts appear on the interactive desktop. |
-| `0x00000001` | Forces all UAC prompts to occur on the secure desktop.                         |
-
-Value: `EnableVirtualization`
-
-| Value        | Meaning                                                                                       |
-| ------------ | --------------------------------------------------------------------------------------------- |
-| `0x00000000` | Disables data redirection for interactive processes.                                          |
-| `0x00000001` | Enables file and registry redirection for legacy apps to allow writes in user-writable paths. |
-
-> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
-> https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
-
-![](https://github.com/5Noxi/win-config/blob/main/system/images/uac.png?raw=true)
-
 # Disable Service Splitting
 
 Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
@@ -381,16 +276,29 @@ Miscellaneous notes:
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadShortPressIntervalMs
 ```
 
-# Disable Search Indexing
+# Disable Windows Search
 
-It builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
+| **Suboption** | **Description** |
+| ---- | ---- |
+| **Disable SafeSearch** | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
+| **Prevent Index on Battery** | Prevents Windows from indexing content while running on battery power, saving system resources. |
+| **Disable Index Usage for System File Search** | Disables the use of the index when searching system files, requiring a full scan each time. |
+| **Find Partial Matches** | Allows partial matches to be found when searching for files, enabling more flexible search results. |
+| **Exclude System Directories** | Excludes system directories from search results, narrowing down the search to user files and folders. |
+| **Exclude Archived Files** | Prevents archived files from being included in search results. |
+| **Disable Natural Language Search** | Disables the use of natural language search, which allows more conversational queries for search results. |
+| **Search Only in Indexed Locations** | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
+| **Exclude System Directories** | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
+| **Exclude Compressed Files** | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
+| **Search Only in Indexed Locations** | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
+
+Search indexing builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
 
 > https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview
 
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/searchindex.png?raw=true)
 
-Instead of using the explorer to search for a file or folder, use everything. It's a lot faster:
-> https://www.voidtools.com/downloads/
+Instead of using the explorer to search for a file or folder, use [`Everything`](https://www.voidtools.com/downloads/), it's a lot faster.
 
 The command below includes some of my personal settings. They're saved in:
 ```
@@ -976,4 +884,70 @@ Enabling the options includes setting `AutoReboot` to `0` ("The option specifies
 Disable BSoD smiley:
 ```bat
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashControl" /v DisableEmoticon /t REG_DWORD /d 1 /f
+```
+
+# Display Scaling
+
+Changes the size of text, apps, and other items. You can set a custom scaling size via `System > Display > Custom scaling`:
+
+![](https://github.com/5Noxi/win-config/blob/main/system/images/displayscaling.png?raw=true)
+
+```c
+// 100%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+
+// 125%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+
+// 150%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+
+// 175%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+
+// 200%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+
+// 225%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+```
+
+---
+
+Not implemented yet caused by missing parser support:
+
+`Prevent Window Minimization on Monitor Disconnection` disables `Minimize windows then a monitor is diconnected` (`System > Display`).
+
+```c
+// Enabled
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
+
+// Disabled
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
+```
+```json
+    "apply": {
+      "SUBOPTION": {
+        "Prevent Window Minimization on Monitor Disconnection": {
+          "HKCU\\Control Panel\\Desktop": {
+            "MonitorRemovalRecalcBehavior": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "SUBOPTION": {
+        "Prevent Window Minimization on Monitor Disconnection": {
+          "HKCU\\Control Panel\\Desktop": {
+            "MonitorRemovalRecalcBehavior": { "Action": "deletevalue }
+          }
+        }
+      }
+    }
 ```

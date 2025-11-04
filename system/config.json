@@ -23,120 +23,6 @@
       }
     }
   },
-  "Disable UAC": {
-    "apply": {
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 },
-        "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
-        "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-        "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableLUA": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "SUBOPTION": {
-        "UAC: Disable completely": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 0 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Windows default (prompt, secure desktop)": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Always notify": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Notify apps only (no desktop dimming)": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Elevate without prompting (admins)": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        }
-      }
-    },
-    "revert": {
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-        "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-        "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-        "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 }
-      },
-      "SUBOPTION": {
-        "UAC: Disable completely": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Windows default (prompt, secure desktop)": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Always notify": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Notify apps only (no desktop dimming)": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        },
-        "UAC: Elevate without prompting (admins)": {
-          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
-            "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
-            "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
-            "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
-            "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
-          }
-        }
-      }
-    }
-  },
   "Disable Service Splitting": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
@@ -293,24 +179,8 @@
       }
     }
   },
-  "Disable Search Indexing": {
+  "Disable Windows Search": {
     "apply": {
-      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-        "PreventIndexOnBattery": { "Type": "REG_DWORD", "Data": 1 }
-      },
-      "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
-        "RespectPowerModes": { "Type": "REG_DWORD", "Data": 1 }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
-        "WholeFileSystem": { "Type": "REG_DWORD", "Data": 1 },
-        "SystemFolders": { "Type": "REG_DWORD", "Data": 0 },
-        "AutoWildCard": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableNaturalQuerySyntax": { "Type": "REG_DWORD", "Data": 0 },
-        "ArchivedFiles": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
-        "SearchOnly": { "Type": "REG_DWORD", "Data": 1 }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
@@ -321,6 +191,16 @@
           "Features": [
             { "Name": "SearchEngine-Client-Package", "State": "Disabled" }
           ]
+        },
+        "RenameStartMenuExperienceHost": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe StartMenuExperienceHost.exee"
+        },
+        "RenameSearchHost": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe SearchHost.exee"
         }
       },
       "SUBOPTION": {
@@ -337,26 +217,48 @@
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
             "SafeSearchMode": { "Type": "REG_DWORD", "Data": 0 }
           }
+        },
+        "Prevent Index on Battery": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+            "PreventIndexOnBattery": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
+            "RespectPowerModes": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Index Usage for System File Search": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "WholeFileSystem": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Find Partial Matches": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "AutoWildCard": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Exclude System Directories": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "SystemFolders": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Exclude Compressed Files": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "ArchivedFiles": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Natural Language Search": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "EnableNaturalQuerySyntax": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Search Only in Indexed Locations": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
+            "SearchOnly": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
     "revert": {
-      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-        "PreventIndexOnBattery": { "Action": "deletevalue" }
-      },
-      "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
-        "RespectPowerModes": { "Action": "deletevalue" }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
-        "WholeFileSystem": { "Action": "deletevalue" },
-        "SystemFolders": { "Action": "deletevalue" },
-        "AutoWildCard": { "Action": "deletevalue" },
-        "EnableNaturalQuerySyntax": { "Action": "deletevalue" },
-        "ArchivedFiles": { "Action": "deletevalue" }
-      },
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
-        "SearchOnly": { "Action": "deletevalue" }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
         "Start": { "Type": "REG_DWORD", "Data": 2 }
       },
@@ -367,12 +269,60 @@
           "Features": [
             { "Name": "SearchEngine-Client-Package", "State": "Enabled" }
           ]
+        },
+        "RenameStartMenuExperienceHost": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exee StartMenuExperienceHost.exe"
+        },
+        "RenameSearchHost": {
+          "Action": "run_powershell",
+          "Elevated": true,
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exee SearchHost.exe"
         }
       },
       "SUBOPTION": {
         "Disable SafeSearch": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
             "SafeSearchMode": { "Action": "deletevalue" }
+          }
+        },
+        "Prevent Index on Battery": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+            "PreventIndexOnBattery": { "Action": "deletevalue" }
+          },
+          "HKLM\\Software\\Microsoft\\Windows Search\\Gather\\Windows\\SystemIndex": {
+            "RespectPowerModes": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Index Usage for System File Search": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "WholeFileSystem": { "Action": "deletevalue" }
+          }
+        },
+        "Find Partial Matches": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "AutoWildCard": { "Action": "deletevalue" }
+          }
+        },
+        "Exclude System Directories": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "SystemFolders": { "Action": "deletevalue" }
+          }
+        },
+        "Exclude Compressed Files": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "ArchivedFiles": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Natural Language Search": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\Preferences": {
+            "EnableNaturalQuerySyntax": { "Action": "deletevalue" }
+          }
+        },
+        "Search Only in Indexed Locations": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\PrimaryProperties\\UnindexedLocations": {
+            "SearchOnly": { "Action": "deletevalue" }
           }
         }
       }
@@ -1089,6 +1039,122 @@
         "Disable BsOD Smiley": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
             "DisableEmoticon": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
+  "Display Scaling": {
+    "__control": { "type": "button", "label": "100%" },
+    "COMMANDS": {
+      "SetScalingLocal": {
+        "Action": "registry_pattern",
+        "Pattern": "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\*",
+        "Operations": [
+          { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 0 }
+        ]
+      },
+      "SetScalingUser": {
+        "Action": "registry_pattern",
+        "Pattern": "HKCU\\Control Panel\\Desktop\\PerMonitorSettings\\*",
+        "Operations": [
+          { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 0 }
+        ]
+      }
+    },
+    "SUBOPTION": {
+      "125% Scaling": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "SetScalingLocal": {
+            "Action": "registry_pattern",
+            "Pattern": "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 1 }
+            ]
+          },
+          "SetScalingUser": {
+            "Action": "registry_pattern",
+            "Pattern": "HKCU\\Control Panel\\Desktop\\PerMonitorSettings\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 1 }
+            ]
+          }
+        }
+      },
+      "150% Scaling": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "SetScalingLocal": {
+            "Action": "registry_pattern",
+            "Pattern": "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 2 }
+            ]
+          },
+          "SetScalingUser": {
+            "Action": "registry_pattern",
+            "Pattern": "HKCU\\Control Panel\\Desktop\\PerMonitorSettings\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 2 }
+            ]
+          }
+        }
+      },
+      "175% Scaling": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "SetScalingLocal": {
+            "Action": "registry_pattern",
+            "Pattern": "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 3 }
+            ]
+          },
+          "SetScalingUser": {
+            "Action": "registry_pattern",
+            "Pattern": "HKCU\\Control Panel\\Desktop\\PerMonitorSettings\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 3 }
+            ]
+          }
+        }
+      },
+      "200% Scaling": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "SetScalingLocal": {
+            "Action": "registry_pattern",
+            "Pattern": "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 4 }
+            ]
+          },
+          "SetScalingUser": {
+            "Action": "registry_pattern",
+            "Pattern": "HKCU\\Control Panel\\Desktop\\PerMonitorSettings\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 4 }
+            ]
+          }
+        }
+      },
+      "225% Scaling": {
+        "__control": { "type": "button", "label": "Set" },
+        "COMMANDS": {
+          "SetScalingLocal": {
+            "Action": "registry_pattern",
+            "Pattern": "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 5 }
+            ]
+          },
+          "SetScalingUser": {
+            "Action": "registry_pattern",
+            "Pattern": "HKCU\\Control Panel\\Desktop\\PerMonitorSettings\\*",
+            "Operations": [
+              { "Name": "DpiValue", "Type": "REG_DWORD", "Value": 5 }
+            ]
           }
         }
       }

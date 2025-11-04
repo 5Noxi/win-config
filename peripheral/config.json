@@ -132,6 +132,11 @@
       "HKCU\\Control Panel\\Accessibility\\ToggleKeys": {
         "Flags": { "Type": "REG_DWORD", "Data": 38 }
       },
+      "HKCU\\Keyboard Layout\\Toggle": {
+        "Hotkey": { "Type": "REG_SZ", "Data": "3" },
+        "Language Hotkey": { "Type": "REG_SZ", "Data": "3" },
+        "Layout Hotkey": { "Type": "REG_SZ", "Data": "3" }
+      },
       "SUBOPTION": {
         "Shortest Repeat Delay": {
           "HKCU\\Control Panel\\Keyboard": {
@@ -146,6 +151,13 @@
         "Decrease Cursor Blink Rate": {
           "HKCU\\Control Panel\\Desktop": {
             "CursorBlinkRate": { "Type": "REG_SZ", "Data": "900" }
+          }
+        },
+        "Disable Language Switch Hotkey": {
+          "HKCU\\Keyboard Layout\\Toggle": {
+            "Hotkey": { "Type": "REG_SZ", "Data": "3" },
+            "Language Hotkey": { "Type": "REG_SZ", "Data": "3" },
+            "Layout Hotkey": { "Type": "REG_SZ", "Data": "3" }
           }
         }
       }
@@ -174,6 +186,11 @@
       "HKCU\\Control Panel\\Accessibility\\ToggleKeys": {
         "Flags": { "Type": "REG_DWORD", "Data": 62 }
       },
+      "HKCU\\Keyboard Layout\\Toggle": {
+        "Hotkey": { "Action": "deletevalue" },
+        "Language Hotkey": { "Action": "deletevalue" },
+        "Layout Hotkey": { "Action": "deletevalue" }
+      },
       "SUBOPTION": {
         "Shortest Repeat Delay": {
           "HKCU\\Control Panel\\Keyboard": {
@@ -188,6 +205,13 @@
         "Decrease Cursor Blink Rate": {
           "HKCU\\Control Panel\\Desktop": {
             "CursorBlinkRate": { "Type": "REG_SZ", "Data": "530" }
+          }
+        },
+        "Disable Language Switch Hotkey": {
+          "HKCU\\Keyboard Layout\\Toggle": {
+            "Hotkey": { "Action": "deletevalue" },
+            "Language Hotkey": { "Action": "deletevalue" },
+            "Layout Hotkey": { "Action": "deletevalue" }
           }
         }
       }

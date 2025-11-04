@@ -45,13 +45,13 @@ Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTes
 
 # Keyboard Values
 
-Remove hotkey for input language switching with:
-```bat
-reg add "HKCU\Keyboard Layout\Toggle" /v Hotkey /t REG_SZ /d 3 /f
-reg add "HKCU\Keyboard Layout\Toggle" /v Language Hotkey /t REG_SZ /d 3 /f
-reg add "HKCU\Keyboard Layout\Toggle" /v Layout Hotkey /t REG_SZ /d 3 /f
-```
-`Time & language > Typing > Advanced keyboard settings : Input language hot keys`, `Between input languages` to `Not assigned` (`None`):
+| **Setting**           | **Description**                                                                                          | **Default** | **Changed To** |
+| --------------------- | -------------------------------------------------------------------------------------------------------- | ----------- | -------------- |
+| **Repeat Delay**      | Controls how long you need to hold down a key before it starts repeating when typing.                    | 1           | 0              |
+| **Repeat Rate**       | Adjusts how quickly a key repeats when held down after the repeat delay.                                 | 31          | 31             |
+| **Cursor Blink Rate** | Controls the speed at which the text cursor blinks on the screen. You can set it to be faster or slower. | 530         | 900            |
+
+`Disable Language Switch Hotkey` applies: `Time & language > Typing > Advanced keyboard settings : Input language hot keys`, `Between input languages` to `Not assigned` (`None`):
 ```ps
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Language Hotkey	Type: REG_SZ, Length: 4, Data: 3
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Hotkey	Type: REG_SZ, Length: 4, Data: 3

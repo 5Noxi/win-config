@@ -50,7 +50,6 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\
 Part of SMB3, is enabled by default. "Multichannel enables file servers to use multiple network connections simultaneously"
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn610980(v=ws.11)
 
-⠀
 Disabling leasing may help, but it disables core features like read/write/handle caching that negatively impact many applications, which rely on it.
 ```ps
 Set-SmbServerConfiguration -EnableLeasing $false

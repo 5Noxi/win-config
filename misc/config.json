@@ -1,4 +1,30 @@
 {
+  "NVFetch": {
+    "apply": {
+      "COMMANDS": {
+        "DownloadScripts": {
+          "Action": "run_powershell",
+          "Command": "$nvfetch = 'https://raw.githubusercontent.com/5Noxi/nvfetch/main/NVFetch.ps1'; $cl = 'https://raw.githubusercontent.com/5Noxi/nvfetch/main/CL.ps1'; $downloads = \"$env:USERPROFILE\\Downloads\\NVFetch.ps1\"; $runcl = \"$env:TEMP\\CL.ps1\"; Invoke-WebRequest -Uri $nvfetch -OutFile $downloads; Invoke-WebRequest -Uri $cl -OutFile $runcl;"
+        },
+        "RunCL": {
+          "Action": "run_powershell",
+          "Command": "& \"$env:TEMP\\CL.ps1\""
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "RemoveNoverseFiles": {
+          "Action": "delete_path",
+          "Path": "%APPDATA%\\Noverse\\NVFetch.ps1"
+        },
+        "RemoveNvfetchFunctionFromProfile": {
+          "Action": "run_powershell",
+          "Command": "(Get-Content $profile) | Where-Object { $_ -notmatch 'nvfetch' } | Set-Content $profile"
+        }
+      }
+    }
+  },
   "Notepad++": {
     "apply": {
       "HKCR\\batfile\\shell\\edit\\command": {
