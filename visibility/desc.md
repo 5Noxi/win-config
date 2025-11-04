@@ -967,3 +967,19 @@ Prevent Themes from changing the mouse cursor.
 `Disable Theme Desktop Icons Changes` prevent themes from changing desktop icons.
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/thememouse.png?raw=true)
+
+# Hide Disabled/Disconnected Devices
+
+Hides disabled/disconnected devices in the `mmsys.cpl` window.
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/hidedevices.png?raw=true)
+
+```c
+// Show disabled/disconnected devices
+rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowHiddenDevices	Type: REG_DWORD, Length: 4, Data: 1
+rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowDisconnectedDevices	Type: REG_DWORD, Length: 4, Data: 1
+
+// Hide disabled/diconnected devices
+rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowHiddenDevices	Type: REG_DWORD, Length: 4, Data: 0
+rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowDisconnectedDevices	Type: REG_DWORD, Length: 4, Data: 0
+```

@@ -22,9 +22,6 @@
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "158" }
       },
-      "HKCU\\Control Panel\\Cursors": {
-        "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "SUBOPTION": {
         "Disable Mouse Acceleration": {
           "HKCU\\Control Panel\\Mouse": {
@@ -74,9 +71,6 @@
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "62" }
-      },
-      "HKCU\\Control Panel\\Cursors": {
-        "ContactVisualization": { "Type": "REG_DWORD", "Data": 1 }
       },
       "SUBOPTION": {
         "Disable Mouse Acceleration": {
@@ -873,6 +867,10 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAppsVisibleInTabletMode": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Control Panel\\Cursors": {
+        "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 },
+        "GestureVisualization": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -896,6 +894,10 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAppsVisibleInTabletMode": { "Action": "deletevalue" }
+      },
+      "HKCU\\Control Panel\\Cursors": {
+        "ContactVisualization": { "Type": "REG_DWORD", "Data": 1 },
+        "GestureVisualization": { "Type": "REG_DWORD", "Data": 31 }
       }
     }
   },

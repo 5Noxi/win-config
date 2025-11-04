@@ -12,7 +12,8 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
         "AITEnable": { "Type": "REG_DWORD", "Data": 0 },
-        "DisableInventory": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableInventory": { "Type": "REG_DWORD", "Data": 1 },
+        "DisablePCA": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 },
@@ -62,7 +63,8 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
         "AITEnable": { "Action": "deletevalue" },
-        "DisableInventory": { "Action": "deletevalue" }
+        "DisableInventory": { "Action": "deletevalue" },
+        "DisablePCA": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "AllowTelemetry": { "Action": "deletevalue" },
@@ -1241,6 +1243,9 @@
       },
       "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+        "PenWorkspaceAppSuggestionsEnabled": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -1287,6 +1292,9 @@
       },
       "HKCU\\SOFTWARE\\Microsoft\\Input\\TIPC": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+        "PenWorkspaceAppSuggestionsEnabled": { "Action": "deletevalue" }
       }
     }
   },
@@ -1426,6 +1434,9 @@
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "AllowOnlineTips": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Settings\\AllowOnlineTips": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "HideRecommendedPersonalizedSites": { "Type": "REG_DWORD", "Data": 1 },
         "HideRecommendedSection": { "Type": "REG_DWORD", "Data": 1 }
@@ -1464,6 +1475,9 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "DisableSearchBoxSuggestions": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SystemSettings\\AccountNotifications": {
+        "EnableAccountNotifications": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -1478,6 +1492,9 @@
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "AllowOnlineTips": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Settings\\AllowOnlineTips": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "HideRecommendedPersonalizedSites": { "Action": "deletevalue" },
@@ -1512,6 +1529,9 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "DisableSearchBoxSuggestions": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SystemSettings\\AccountNotifications": {
+        "EnableAccountNotifications": { "Action": "deletevalue" }
       }
     }
   },
@@ -2193,6 +2213,52 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
         "IsMSACloudSearchEnabled": { "Action": "deletevalue" },
         "IsAADCloudSearchEnabled": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Microsoft Accounts": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "NoConnectedUser": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "SUBOPTION": {
+        "Disable Policy": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "NoConnectedUser": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Block Adding Accounts": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "NoConnectedUser": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Block Adding/Using Accounts": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "NoConnectedUser": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "NoConnectedUser": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Policy": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "NoConnectedUser": { "Action": "deletevalue" }
+          }
+        },
+        "Block Adding Accounts": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "NoConnectedUser": { "Action": "deletevalue" }
+          }
+        },
+        "Block Adding/Using Accounts": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "NoConnectedUser": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   }

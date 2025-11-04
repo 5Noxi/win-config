@@ -31,7 +31,15 @@
         "NavPaneShowAllCloudStates": { "Type": "REG_DWORD", "Data": 0 },
         "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
+        "FullPath": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "SUBOPTION": {
+        "Show Full Path in Title": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
+            "FullPath": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
         "Hide Frequently Used Folders": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
             "ShowFrequent": { "Type": "REG_DWORD", "Data": 0 }
@@ -136,6 +144,11 @@
         "NavPaneShowAllFolders": { "Action": "deletevalue" }
       },
       "SUBOPTION": {
+        "Show Full Path in Title": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
+            "FullPath": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
         "Hide Frequently Used Folders": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
             "ShowFrequent": { "Action": "deletevalue" }
@@ -1484,6 +1497,20 @@
             "ThemeChangesDesktopIcons": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
+      }
+    }
+  },
+  "Hide Disabled/Disconnected Devices": {
+    "apply": {
+      "HKCU\\SOFTWARE\\Microsoft\\Multimedia\\Audio\\DeviceCpl": {
+        "ShowDisconnectedDevices": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowHiddenDevices": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\SOFTWARE\\Microsoft\\Multimedia\\Audio\\DeviceCpl": {
+        "ShowDisconnectedDevices": { "Type": "REG_DWORD", "Data": 1 },
+        "ShowHiddenDevices": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   }
