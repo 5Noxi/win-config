@@ -680,6 +680,13 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "SUBOPTION": {
+        "Disable Vulnerable Driver Blocklist": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Config": {
+            "VulnerableDriverBlocklistEnable": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -776,6 +783,13 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\HyperVideo": {
         "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "SUBOPTION": {
+        "Disable Vulnerable Driver Blocklist": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Config": {
+            "VulnerableDriverBlocklistEnable": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     }
   },

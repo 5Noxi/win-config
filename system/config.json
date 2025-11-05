@@ -731,6 +731,9 @@
         "NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK": { "Type": "REG_DWORD", "Data": 0 },
         "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsLogon\\DisableLockScreenAppNotifications": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
         "SetEnabled": {
           "Action": "run_powershell",
@@ -781,6 +784,9 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
         "NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK": { "Action": "deletevalue" },
         "NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsLogon\\DisableLockScreenAppNotifications": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
         "DelEnabled": {
@@ -934,6 +940,9 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox": {
         "AllowClipboardRedirection": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\AllowCrossDeviceClipboard": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
         "DisableCbdhsvcServices": {
           "Action": "run_powershell",
@@ -964,6 +973,9 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox": {
         "AllowClipboardRedirection": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\AllowCrossDeviceClipboard": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
         "EnableCbdhsvcServices": {

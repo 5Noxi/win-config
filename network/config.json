@@ -342,6 +342,9 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowManualWiFiConfiguration": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFiDirect": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -362,6 +365,9 @@
         "value": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowManualWiFiConfiguration": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WiFi\\AllowWiFiDirect": {
         "value": { "Type": "REG_DWORD", "Data": 1 }
       }
     }

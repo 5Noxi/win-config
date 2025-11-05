@@ -1246,6 +1246,15 @@
       },
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
         "PenWorkspaceAppSuggestionsEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace": {
+        "AllowSuggestedAppsInWindowsInkWorkspace": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsInkWorkspace\\AllowSuggestedAppsInWindowsInkWorkspace": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\AllowInputPersonalization": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -1295,6 +1304,15 @@
       },
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
         "PenWorkspaceAppSuggestionsEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsInkWorkspace": {
+        "AllowSuggestedAppsInWindowsInkWorkspace": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsInkWorkspace\\AllowSuggestedAppsInWindowsInkWorkspace": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\AllowInputPersonalization": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   },
@@ -1344,6 +1362,9 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
         "AutoOpenCopilotLargeScreens": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsAI\\TurnOffWindowsCopilot": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
@@ -1367,6 +1388,9 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\Settings": {
         "AutoOpenCopilotLargeScreens": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsAI\\TurnOffWindowsCopilot": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
   },
@@ -1378,6 +1402,9 @@
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsAI\\DisableAIDataAnalysis": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
         "DisableRecallFeature": {
@@ -1396,6 +1423,9 @@
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsAI\\DisableAIDataAnalysis": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
         "EnableRecallFeature": {
@@ -1429,7 +1459,8 @@
         "Start_IrisRecommendations": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
-        "DisableThirdPartySuggestions": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableThirdPartySuggestions": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableCloudOptimizedContent": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "AllowOnlineTips": { "Type": "REG_DWORD", "Data": 0 }
@@ -1488,7 +1519,8 @@
         "Start_IrisRecommendations": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
-        "DisableThirdPartySuggestions": { "Action": "deletevalue" }
+        "DisableThirdPartySuggestions": { "Action": "deletevalue" },
+        "DisableCloudOptimizedContent": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "AllowOnlineTips": { "Action": "deletevalue" }
@@ -1644,6 +1676,15 @@
         "PublishUserActivities": { "Type": "REG_DWORD", "Data": 0 },
         "UploadUserActivities": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\PublishUserActivities": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\UploadUserActivities": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\EnableActivityFeed": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "SUBOPTION": {
         "Disable Windows Search History": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SearchSettings": {
@@ -1657,6 +1698,15 @@
         "EnableActivityFeed": { "Action": "deletevalue" },
         "PublishUserActivities": { "Action": "deletevalue" },
         "UploadUserActivities": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\PublishUserActivities": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\UploadUserActivities": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\EnableActivityFeed": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       },
       "SUBOPTION": {
         "Disable Windows Search History": {
@@ -1785,6 +1835,12 @@
       "HKLM\\Software\\Policies\\Microsoft\\SQMClient\\Windows": {
         "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\CompatTelRunner.exe": {
+        "Debugger": { "Type": "REG_SZ", "Data": "%windir%\\System32\\taskkill.exe" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\AggregatorHost.exe": {
+        "Debugger": { "Type": "REG_SZ", "Data": "%windir%\\System32\\taskkill.exe" }
+      },
       "COMMANDS": {
         "DisableCeipTasks": {
           "Action": "scheduled_task",
@@ -1805,6 +1861,12 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\SQMClient\\Windows": {
         "CEIPEnable": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\CompatTelRunner.exe": {
+        "Debugger": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\AggregatorHost.exe": {
+        "Debugger": { "Action": "deletevalue" }
       },
       "COMMANDS": {
         "EnableCeipTasks": {

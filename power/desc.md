@@ -233,17 +233,16 @@ dword_4C130 = 1;
 dword_4C140 = -1;
 ```
 
-> [power/assets | hddpark-amdsbs.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-amdsbs.c)
+> [power/assets | hddpark-amdsbs.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-amdsbs.c)  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-power-states
 
-More values, which may work:
+---
+
 ```
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Storage" /v StorageD3InModernStandby /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device" /v IdlePowerMode /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\iaStorv" /v EnableAPM /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\iaStorv\Parameters" /v EnableAPM /t REG_DWORD /d 0 /f
-reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\storahci\Parameters" /v EnableAPM /t REG_DWORD /d 0 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\stornvme\Parameters\Device" /v IdlePowerMode /t REG_DWORD /d 0 /f
 ```
-> https://github.com/5Noxi/wpr-reg-records#wpr--procmon-registry-activity-records
+
+> https://github.com/5Noxi/wpr-reg-records#wpr--procmon-registry-activity-records  
 
 Needs more research (`ClassGetServiceParameter.c` - default `0`?):
 ```

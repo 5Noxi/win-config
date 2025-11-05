@@ -105,9 +105,12 @@
             "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
-        "Disable Sharing Wizard": {
+        "Disable WCN": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
             "SharingWizardOn": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI": {
+            "DisableWcnUi": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
       }
@@ -214,9 +217,12 @@
             "ShowSyncProviderNotifications": { "Action": "deletevalue" }
           }
         },
-        "Disable Sharing Wizard": {
+        "Disable WCN": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
             "SharingWizardOn": { "Action": "deletevalue" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI": {
+            "DisableWcnUi": { "Action": "deletevalue" }
           }
         }
       }
@@ -665,6 +671,9 @@
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "TurnOffSPIAnimations": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsLogon\\EnableFirstLogonAnimation": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -685,6 +694,9 @@
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "TurnOffSPIAnimations": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsLogon\\EnableFirstLogonAnimation": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   },
@@ -1511,6 +1523,18 @@
       "HKCU\\SOFTWARE\\Microsoft\\Multimedia\\Audio\\DeviceCpl": {
         "ShowDisconnectedDevices": { "Type": "REG_DWORD", "Data": 1 },
         "ShowHiddenDevices": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
+  "Global Account Picture": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "UseDefaultTile": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "UseDefaultTile": { "Action": "deletevalue" }
       }
     }
   }

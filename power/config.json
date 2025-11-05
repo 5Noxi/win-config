@@ -355,6 +355,9 @@
   },
   "Disable Storage Idle States": {
     "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage": {
+        "StorageD3InModernStandby": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "COMMANDS": {
         "StorageIdle": {
           "Action": "registry_pattern",
@@ -366,6 +369,9 @@
       }
     },
     "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage": {
+        "StorageD3InModernStandby": { "Action": "deletevalue" }
+      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\Storage\\HDD": {
         "IdleStatesNumber": { "Type": "REG_DWORD", "Data": 3 }
       },

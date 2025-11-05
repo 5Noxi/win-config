@@ -1005,6 +1005,27 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 						}
 					]
 },
+{
+	"File":  "WindowsInkWorkspace.admx",
+	"NameSpace":  "Microsoft.Policies.WindowsInkWorkspace",
+	"Class":  "Machine",
+	"CategoryName":  "WindowsInkWorkspace",
+	"DisplayName":  "Allow suggested apps in Windows Ink Workspace",
+	"ExplainText":  "Allow suggested apps in Windows Ink Workspace",
+	"Supported":  "WIN10_RS1",
+	"KeyPath":  "Software\\Policies\\Microsoft\\WindowsInkWorkspace",
+	"KeyName":  "AllowSuggestedAppsInWindowsInkWorkspace",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
 ```
 
 # Disable Online Speech Recognition

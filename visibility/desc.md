@@ -27,6 +27,32 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v ShellState 
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState" /v Settings /t REG_BINARY /d 0c,00,02,00,0a,01,00,00,60,00,00,00 /f
 ```
 
+```json
+{
+    "File":  "WindowsConnectNow.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsConnectNow",
+    "Class":  "Machine",
+    "CategoryName":  "WCN_Category",
+    "DisplayName":  "Prohibit access of the Windows Connect Now wizards",
+    "ExplainText":  "This policy setting prohibits access to Windows Connect Now (WCN) wizards. If you enable this policy setting, the wizards are turned off and users have no access to any of the wizard tasks. All the configuration related tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device\" are disabled. If you disable or do not configure this policy setting, users can access the wizard tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device.\" The default for this policy setting allows users to access all WCN wizards.",
+    "Supported":  "WindowsVista",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\WCN\\UI",
+    "KeyName":  "DisableWcnUi",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-windowsconnectnow
+
 # Enable Dark Theme
 
 `darktheme-GetThemeFromUnattendSetup.c` for information about the comments, otherwise ignore them.
@@ -982,4 +1008,44 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 // Hide disabled/diconnected devices
 rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowHiddenDevices	Type: REG_DWORD, Length: 4, Data: 0
 rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowDisconnectedDevices	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+# Global Account Picture
+
+"This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
+
+Edit account picture/desktop wallpaper via (edit `C:\Path`/`Wallpaper.png`):
+```bat
+:: Account Picture
+del "C:\ProgramData\Microsoft\User Account Pictures\user.png" /f /q
+del "C:\ProgramData\Microsoft\User Account Pictures\user.bmp" /f /q
+copy "C:\Path\user.png" "C:\ProgramData\Microsoft\User Account Pictures\"
+copy "C:\Path\user.bmp" "C:\ProgramData\Microsoft\User Account Pictures\"
+
+:: Desktop Wallpaper
+reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d ""C:\Path\Wallpaper.png"" /f
+```
+
+```json
+{
+    "File":  "Cpls.admx",
+    "NameSpace":  "Microsoft.Policies.ControlPanel2",
+    "Class":  "Machine",
+    "CategoryName":  "Users",
+    "DisplayName":  "Apply the default account picture to all users",
+    "ExplainText":  "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture. One application for this policy setting is to standardize the account pictures to a company logo.Note: The default account picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\user.jpg. The default guest picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\guest.jpg. If the default pictures do not exist, an empty frame is displayed.If you enable this policy setting, the default user account picture will display for all users on the system with no customization allowed.If you disable or do not configure this policy setting, users will be able to customize their account pictures.",
+    "Supported":  "WindowsVista",
+    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "KeyName":  "UseDefaultTile",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
 ```
