@@ -991,6 +991,9 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintDeviceConfigurationService": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoAddPrinter": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
         "DisablePrintingTasks": {
           "Action": "scheduled_task",
@@ -1028,6 +1031,9 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintDeviceConfigurationService": {
         "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoAddPrinter": { "Action": "deletevalue" }
       },
       "COMMANDS": {
         "EnablePrintingTasks": {

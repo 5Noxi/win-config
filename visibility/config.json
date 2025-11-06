@@ -1559,5 +1559,17 @@
         "UseDefaultTile": { "Action": "deletevalue" }
       }
     }
+  },
+  "Force Classic Control Panel": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "ForceClassicControlPanel": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "ForceClassicControlPanel": { "Action": "deletevalue" }
+      }
+    }
   }
 }

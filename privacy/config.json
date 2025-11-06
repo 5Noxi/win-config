@@ -1365,6 +1365,18 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsAI\\TurnOffWindowsCopilot": {
         "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CopilotKey": {
+        "SetCopilotHardwareKey": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Paint AI": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint": {
+            "DisableCocreator": { "Type": "REG_DWORD", "Data": 1 },
+            "DisableGenerativeFill": { "Type": "REG_DWORD", "Data": 1 },
+            "DisableImageCreator": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
@@ -1391,6 +1403,15 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsAI\\TurnOffWindowsCopilot": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Paint AI": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint": {
+            "DisableCocreator": { "Action": "deletevalue" },
+            "DisableGenerativeFill": { "Action": "deletevalue" },
+            "DisableImageCreator": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },

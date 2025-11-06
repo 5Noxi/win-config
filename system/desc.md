@@ -350,6 +350,51 @@ Storage Sense deletes temporary files automatically - revert it by changing it b
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/storagesen1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/storagesen2.png?raw=true)
 
+```json
+{
+    "File":  "StorageSense.admx",
+    "NameSpace":  "Microsoft.Policies.StorageSense",
+    "Class":  "Machine",
+    "CategoryName":  "StorageSense",
+    "DisplayName":  "Allow Storage Sense",
+    "ExplainText":  "Storage Sense can automatically clean some of the userâ€™s files to free up disk space. By default, Storage Sense is automatically turned on when the machine runs into low disk space and is set to run whenever the machine runs into storage pressure. This cadence can be changed in Storage settings or set with the \"Configure Storage Sense cadence\" group policy.Enabled:Storage Sense is turned on for the machine, with the default cadence as â€˜during low free disk spaceâ€™. Users cannot disable Storage Sense, but they can adjust the cadence (unless you also configure the \"Configure Storage Sense cadence\" group policy).Disabled:Storage Sense is turned off the machine. Users cannot enable Storage Sense.Not Configured:By default, Storage Sense is turned off until the user runs into low disk space or the user enables it manually. Users can configure this setting in Storage settings.",
+    "Supported":  "Windows_10_0_RS6",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\StorageSense",
+    "KeyName":  "AllowStorageSenseGlobal",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "StorageSense.admx",
+    "NameSpace":  "Microsoft.Policies.StorageSense",
+    "Class":  "Machine",
+    "CategoryName":  "StorageSense",
+    "DisplayName":  "Allow Storage Sense Temporary Files cleanup",
+    "ExplainText":  "When Storage Sense runs, it can delete the userâ€™s temporary files that are not in use.If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect.Enabled:Storage Sense will delete the userâ€™s temporary files that are not in use. Users cannot disable this setting in Storage settings.Disabled:Storage Sense will not delete the userâ€™s temporary files. Users cannot enable this setting in Storage settings.Not Configured:By default, Storage Sense will delete the userâ€™s temporary files. Users can configure this setting in Storage settings.",
+    "Supported":  "Windows_10_0_RS6",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\StorageSense",
+    "KeyName":  "AllowStorageSenseTemporaryFilesCleanup",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
+
 # Reduce Shutdown Time
 
 Forces hung apps and services to terminate faster.
@@ -400,7 +445,33 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
 
 # Disable Aero Shake
 
-![HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
+
+![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+
+```json
+{
+    "File":  "Desktop.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsDesktop",
+    "Class":  "User",
+    "CategoryName":  "Desktop",
+    "DisplayName":  "Turn off Aero Shake window minimizing mouse gesture",
+    "ExplainText":  "Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse. If you enable this policy, application windows will not be minimized or restored when the active window is shaken back and forth with the mouse.If you disable or do not configure this policy, this window minimizing and restoring gesture will apply.",
+    "Supported":  "Windows7",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "KeyName":  "NoWindowMinimizingShortcuts",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
 
 # Disable JPEG Reduction
 

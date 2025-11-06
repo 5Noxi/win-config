@@ -2652,7 +2652,7 @@ If you disable or don't configure this policy setting, KMS client activation dat
 },
 ```
 
-# Disable Font Provider
+# Disable Font Providers
 
 "This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider.
 

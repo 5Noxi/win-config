@@ -376,7 +376,8 @@
         "01": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
-        "AllowStorageSenseGlobal": { "Type": "REG_DWORD", "Data": 0 }
+        "AllowStorageSenseGlobal": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowStorageSenseTemporaryFilesCleanup": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -384,7 +385,8 @@
         "01": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
-        "AllowStorageSenseGlobal": { "Action": "deletevalue" }
+        "AllowStorageSenseGlobal": { "Action": "deletevalue" },
+        "AllowStorageSenseTemporaryFilesCleanup": { "Action": "deletevalue" }
       }
     }
   },
@@ -640,11 +642,17 @@
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "DisallowShaking": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "NoWindowMinimizingShortcuts": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "DisallowShaking": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "NoWindowMinimizingShortcuts": { "Action": "deletevalue" }
       }
     }
   },

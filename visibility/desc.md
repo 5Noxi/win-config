@@ -1049,3 +1049,39 @@ reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d ""C:\Path\Wallpap
                     ]
 },
 ```
+
+# Force Classic Control Panel
+
+"This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view."
+
+Icon view:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/panel0.png?raw=true)
+
+Category view:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/panel1.png?raw=true)
+
+```json
+{
+    "File":  "ControlPanel.admx",
+    "NameSpace":  "Microsoft.Policies.ControlPanel",
+    "Class":  "User",
+    "CategoryName":  "ControlPanel",
+    "DisplayName":  "Always open All Control Panel Items when opening Control Panel",
+    "ExplainText":  "This policy setting controls the default Control Panel view, whether by category or icons.If this policy setting is enabled, the Control Panel opens to the icon view.If this policy setting is disabled, the Control Panel opens to the category view.If this policy setting is not configured, the Control Panel opens to the view used in the last Control Panel session.Note: Icon size is dependent upon what the user has set it to in the previous session.",
+    "Supported":  "WindowsXP",
+    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "KeyName":  "ForceClassicControlPanel",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
