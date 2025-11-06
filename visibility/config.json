@@ -112,6 +112,17 @@
           "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI": {
             "DisableWcnUi": { "Type": "REG_DWORD", "Data": 1 }
           }
+        },
+        "Hide Desktop Icons": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideIcons": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+            "NoDesktop": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+            "NoDesktop": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
@@ -223,6 +234,17 @@
           },
           "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI": {
             "DisableWcnUi": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Desktop Icons": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "HideIcons": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+            "NoDesktop": { "Action": "deletevalue" }
+          },
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+            "NoDesktop": { "Action": "deletevalue" }
           }
         }
       }

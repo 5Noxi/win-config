@@ -1851,11 +1851,25 @@ reg add "HKCU\Software\Policies\Microsoft\Messenger\Client" /v CEIP /t REG_DWORD
 
 # Hide Last Logged-In User
 
-Disables 'Other User' or the username of the last signed-in user on the sign-in screen.
+"This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC."
 
+```c
+// Enabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName	Type: REG_DWORD, Length: 4, Data: 0
 ```
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\Policies\SYSTEM : DontDisplayLastUserName
-\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon : DontDisplayLastUserName
+
+`Hide Username at Sign-In`:  
+"This security setting determines whether the username of the person signing in to this PC appears at Windows sign-in, after credentials are entered, and before the PC desktop is shown."
+
+```c
+// Enabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name
@@ -2602,4 +2616,70 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 // Users can't add or log on with Microsoft accounts
 services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\NoConnectedUser	Type: REG_DWORD, Length: 4, Data: 3
+```
+
+# Opt-Out KMS Activation Telemetry
+
+Friendly name: `Turn off KMS Client Online AVS Validation`
+
+"This policy setting lets you opt-out of sending KMS client activation data to Microsoft automatically. Enabling this setting prevents this computer from sending data to Microsoft regarding its activation state.
+
+If you disable or don't configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates."
+
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-licensing#disallowkmsclientonlineavsvalidation
+
+```json
+{
+	"File":  "AVSValidationGP.admx",
+	"NameSpace":  "Microsoft.Policies.SoftwareProtectionPlatform",
+	"Class":  "Machine",
+	"CategoryName":  "SoftwareProtectionPlatform",
+	"DisplayName":  "Turn off KMS Client Online AVS Validation",
+	"ExplainText":  " This policy setting lets you opt-out of sending KMS client activation data to Microsoft automatically. Enabling this setting prevents this computer from sending data to Microsoft regarding its activation state. If you disable or do not configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates. Policy Options: - Not Configured (default -- data will be automatically sent to Microsoft) - Disabled (data will be automatically sent to Microsoft) - Enabled (data will not be sent to Microsoft)",
+	"Supported":  "Windows_10_0",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Software Protection Platform",
+	"KeyName":  "NoGenTicket",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+# Disable Font Provider
+
+"This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider.
+
+If you enable this policy setting, Windows periodically queries an online font provider to determine whether a new font catalog is available. Windows may also download font data if needed to format or render text.
+
+If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts."
+
+```json
+{
+	"File":  "GroupPolicy.admx",
+	"NameSpace":  "Microsoft.Policies.GroupPolicy",
+	"Class":  "Machine",
+	"CategoryName":  "NetworkFonts",
+	"DisplayName":  "Enable Font Providers",
+	"ExplainText":  " This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider. If you enable this policy setting, Windows periodically queries an online font provider to determine whether a new font catalog is available. Windows may also download font data if needed to format or render text. If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
+	"Supported":  "Windows_10_0",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
+	"KeyName":  "EnableFontProviders",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
 ```

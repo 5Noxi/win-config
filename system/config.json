@@ -1171,5 +1171,19 @@
         }
       }
     }
+  },
+  "BCD Edits": {
+    "apply": {
+      "COMMANDS": {
+        "SetTimeout": { "Action": "bcdedit", "Name": "timeout", "Value": "3" },
+        "SetBootMenuPolicyLegacy": { "Action": "bcdedit", "Name": "bootmenupolicy", "Value": "Legacy" }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "SetTimeoutDefault": { "Action": "bcdedit", "Name": "timeout", "Value": "30" },
+        "UnsetBootMenuPolicy": { "Action": "bcdedit", "Name": "bootmenupolicy", "Delete": true }
+      }
+    }
   }
 }

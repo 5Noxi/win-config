@@ -1161,5 +1161,17 @@
         }
       }
     }
+  },
+  "Clear Pagefile on Shutdown": {
+    "apply": {
+      "HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Memory Management": {
+        "ClearPageFileAtShutdown": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Memory Management": {
+        "ClearPageFileAtShutdown": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    }
   }
 }

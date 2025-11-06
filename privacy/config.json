@@ -1509,6 +1509,9 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SystemSettings\\AccountNotifications": {
         "EnableAccountNotifications": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "BingSearchEnabled": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -1564,6 +1567,9 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SystemSettings\\AccountNotifications": {
         "EnableAccountNotifications": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
+        "BingSearchEnabled": { "Action": "deletevalue" }
       }
     }
   },
@@ -1919,19 +1925,39 @@
   },
   "Hide Last Logged-In User": {
     "apply": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+        "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
         "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
-        "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
+      "SUBOPTION": {
+        "Hide Username at Sign-In": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+            "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
         "DontDisplayLastUserName": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+        "DontDisplayLastUserName": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Hide Username at Sign-In": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
+            "DontDisplayLastUserName": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -2321,6 +2347,30 @@
             "NoConnectedUser": { "Action": "deletevalue" }
           }
         }
+      }
+    }
+  },
+  "Opt-Out KMS Activation Telemetry": {
+    "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Software Protection Platform": {
+        "NoGenTicket": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Software Protection Platform": {
+        "NoGenTicket": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable Font Providers": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+        "EnableFontProviders": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+        "EnableFontProviders": { "Action": "deletevalue" }
       }
     }
   }

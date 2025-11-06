@@ -106,6 +106,9 @@
         "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 15 },
         "ShowSystrayDateTimeValueName": { "Type": "REG_DWORD", "Data": 1 }
       },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoRecentDocsHistory": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Type": "REG_DWORD", "Data": 1 }
       },
@@ -192,6 +195,9 @@
         "Start_JumpListItems": { "Action": "deletevalue" },
         "JumpListItems_Maximum": { "Action": "deletevalue" },
         "ShowSystrayDateTimeValueName": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoRecentDocsHistory": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Action": "deletevalue" }

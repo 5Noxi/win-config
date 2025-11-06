@@ -1729,3 +1729,47 @@ dq offset aSessionManager_0 ; "Session Manager\\Kernel\\RNG"
 dq offset aRngauxiliaryse ; "RNGAuxiliarySeed"  
 dq offset ExpRNGAuxiliarySeed  
 ```
+
+
+# BCD Edits
+
+`bcdedit /timeout 3`
+Decrease timeout of dual-boot selection window (default of `10`).
+"The boot menu time-out determines how long the boot menu is displayed before the default boot entry is loaded. It is calibrated in seconds. If you want extra time to choose the operating system that loads on your computer, you can extend the time-out value. Or, you can shorten the time-out value so that the default operating system starts faster."
+
+`bcdedit /set bootmenupolicy Legacy`
+"Defines the type of boot menu the system will use. For Windows 10, Windows 8.1, Windows 8 and Windows RT the default is Standard. For Windows Server 2012 R2, Windows Server 2012, the default is Legacy. When Legacy is selected, the Advanced options menu (F8) is available. When Standard is selected, the boot menu appears but only under certain conditions: for example, if there is a startup failure, if you are booting up from a repair disk or installation media, if you have configured multiple boot entries, or if you manually configured the computer to use Advanced startup. When Standard is selected, the F8 key is ignored during boot."
+
+Default entries:
+```ps
+Windows Boot Manager
+--------------------
+identifier              {bootmgr}
+device                  partition=\Device\HarddiskVolume1
+description             Windows Boot Manager
+locale                  en-US
+inherit                 {globalsettings}
+default                 {current}
+resumeobject            {cad1d575-b437-11f0-ab05-d9233ecd39d1}
+displayorder            {current}
+toolsdisplayorder       {memdiag}
+timeout                 30
+
+Windows Boot Loader
+-------------------
+identifier              {current}
+device                  partition=C:
+path                    \WINDOWS\system32\winload.exe
+description             Windows 11
+locale                  en-US
+inherit                 {bootloadersettings}
+recoverysequence        {cad1d577-b437-11f0-ab05-d9233ecd39d1}
+displaymessageoverride  Recovery
+recoveryenabled         Yes
+allowedinmemorysettings 0x15000075
+osdevice                partition=C:
+systemroot              \WINDOWS
+resumeobject            {cad1d575-b437-11f0-ab05-d9233ecd39d1}
+nx                      OptIn
+bootmenupolicy          Standard
+```

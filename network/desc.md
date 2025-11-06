@@ -96,6 +96,38 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoS
 > https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbserverconfiguration?view=windowsserver2025-ps  
 > https://woshub.com/enable-remote-access-to-admin-shares-in-workgroup/
 
+---
+
+`Require NTLMv2 Session Security` (options applied for clients & servers):  
+"This security setting allows a client to require the negotiation of 128-bit encryption and/or NTLMv2 session security. These values are dependent on the LAN Manager Authentication Level security setting value. The options are:
+
+Require NTLMv2 session security: The connection will fail if NTLMv2 protocol is not negotiated.
+Require 128-bit encryption: The connection will fail if strong encryption (128-bit) is not negotiated."
+
+> https://en.wikipedia.org/wiki/NTLM#NTLMv2
+
+```c
+// NTLMv2 Off - 128 Bit Encryption On (default)
+RegSetValue	HKLM\System\CurrentControlSet\Control\Lsa\MSV1_0\NTLMMinClientSec	Type: REG_DWORD, Length: 4, Data: 536870912
+
+// NTLMv2 On - 128 Bit Encryption On
+RegSetValue	HKLM\System\CurrentControlSet\Control\Lsa\MSV1_0\NTLMMinClientSec	Type: REG_DWORD, Length: 4, Data: 537395200
+
+// NTLMv2 Off - 128 Bit Encryption Off
+RegSetValue	HKLM\System\CurrentControlSet\Control\Lsa\MSV1_0\NTLMMinClientSec	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+---
+
+`Send unencrypted password to connect to third-party SMB servers`:  
+```c
+// Enabled (security risk)
+RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainTextPassword	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled (default)
+RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainTextPassword	Type: REG_DWORD, Length: 4, Data: 0
+```
+
 # QoS Policy
 
 Adding the QoS policy via LGPE:

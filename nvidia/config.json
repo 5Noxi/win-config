@@ -133,18 +133,6 @@
       }
     }
   },
-  "Disable NVIDIA Driver Notification": {
-    "apply": {
-      "HKCU\\SOFTWARE\\NVIDIA Corporation\\Global\\GFExperience": {
-        "NotifyNewDisplayUpdates": { "Type": "REG_DWORD", "Data": 0 }
-      }
-    },
-    "revert": {
-      "HKCU\\SOFTWARE\\NVIDIA Corporation\\Global\\GFExperience": {
-        "NotifyNewDisplayUpdates": { "Action": "deletevalue" }
-      }
-    }
-  },
   "Disable Logging": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {

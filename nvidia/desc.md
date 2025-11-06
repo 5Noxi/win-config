@@ -47,11 +47,12 @@ The following includes details of how the panel sets the changes and more, a lot
 
 ## 3D Settings > Manage 3D settings
 
-More information - [discord notes](https://discord.com/channels/836870260715028511/1375059420970487838/1412446705869394071)
-- [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)  
-- [NVIDIA Profile Inspector (all settings)](https://github.com/Ixeoz/nvidiaProfileInspector-UNLOCKED)  
-- [Profile ReBar OFF](https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip)  
-- [Profile ReBar ON](https://github.com/5Noxi/Files/releases/download/Fortnite/NV-RON.nip)  
+More information - [discord notes](https://discord.com/channels/836870260715028511/1375059420970487838/1412446705869394071)  
+> [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)  
+> [NVIDIA Profile Inspector](https://github.com/Ixeoz/nvidiaProfileInspector-UNLOCKED)  
+> [Profile ReBar OFF](https://github.com/5Noxi/Files/releases/download/Fortnite/NV-ROFF.nip)  
+> [Profile ReBar ON](https://github.com/5Noxi/Files/releases/download/Fortnite/NV-RON.nip)  
+> [`d3dreg` Output](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/d3dlist.cpp))
 
 ## 3D Settings > Configure Surround, PhysX
 
@@ -101,6 +102,8 @@ HKCU\Software\NVIDIA Corporation\Global\NVTweak\Devices\1364265386-0\Color
 ```
 Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends on your monitor.
 
+![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/saturation.jpg?raw=true)
+
 ```ps
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : HueRegistryKey
 ```
@@ -120,10 +123,11 @@ cos(0) = 1
 sin(0) = 0  = 0x00000000 hex
 = last 2 bytes
 ```
-- [nvDisplay.cpp#L293](https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293)  
-- [displayDB.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-displayDB.cpp)  
-- [DesktopColors.cpp](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)  
-- [nvlddmkm Trace](https://github.com/5Noxi/wpr-reg-records/blob/main/records/nvlddmkm.txt)
+
+> https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293  
+> https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-displayDB.cpp  
+> https://github.com/5Noxi/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/nvlddmkm.txt
 
 ```ps
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\ADAPTER_10DE_2482_00000007_00000000 : StereoPreferredTargetIdRegistryKey
@@ -242,8 +246,9 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v RmProfilingAdminOnly /t REG_DWORD /d X /f
 ```
 Change `XXXX` to the correct key and `X` to `1`/`0`.
-- [Control-Panel-Help](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)  
-- [Bitmask Calculator](https://github.com/5Noxi/bitmask-calc)  
+
+> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters  
+> https://github.com/5Noxi/bitmask-calc
 
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)  
 
@@ -303,6 +308,30 @@ _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 `_User_SUB0_DFP1_VAL_Noise_Reduce` controls the percentage, e.g. `5%` = `5 Dec` until `49%`. Nvcpl skips `50%`, which means that everything above `50` is `X - 1`, range `0-99`.
 
 ![](https://github.com/5Noxi/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true)
+
+---
+
+Miscellaneous notes:
+
+`_User_SUB0_DFP1_VAL_Edge_Enhance`, `_User_SUB0_DFP1_VAL_Edge_Enhance`, `_User_SUB0_DFP1_XEN_Edge_Enhance`? = `Edge enhancment` (`Adjust video image settings` - `0`):
+```ps
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_VAL_Edge_Enhance    Type: REG_DWORD, Length: 4, Data: 0
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Edge_Enhance    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Edge_Enhance    Type: REG_DWORD, Length: 4, Data: 2147483649
+```
+
+`ScalingConfig` = `Scaling Mode`, `Perform Scaling on`, `Override the scaling mode...` (includes all settings?)
+
+Dynamic range `Full`:
+```ps
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
+```
+Dynamic range `Limited`:
+```ps
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 01 00 00 00 00 00 00 00
+NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
+```
 
 # Temporary NVCPL
 
@@ -485,10 +514,6 @@ You can find it in `nvsvc64.dll`.
 > [nvidia/assets | disppower-nvsvc64.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64.c)  
 > [nvidia/assets | disppower-nvsvc64gv.c](https://github.com/5Noxi/win-config/blob/main/nvidia/assets/disppower-nvsvc64gv.c)
 
-# Disable NVIDIA Driver Notification
-
-Disables the notification (GeForce), whenever a new driver is available.
-
 # Disable Logging
 
 ```cpp
@@ -502,6 +527,24 @@ Disables the notification (GeForce), whenever a new driver is available.
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogEventEntries
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogPagingEntries
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogWarningEntries
+```
+```h
+// Whenever new LOG is Created, add corresponding RegKey from nvdm.cpp in the comment in front of it.
+#if DEBUG
+#define LOG_EVENT_SIZE      0x2000                  // 8192 event entries (debug) L"LogEventEntries" 
+#define LOG_WARNING_SIZE    0x1000                  // 4096 warning entries (debug) L"LogWarningEntries"
+#define LOG_ERROR_SIZE      0x1000                  // 4096 error entries (debug) L"LogErrorEntries"
+#define LOG_PAGING_SIZE     0x0600                  // 1536 paging entries (debug)  L"LogPagingEntries"
+#else
+// Microsoft has complained about the size of the logging data, so whereas
+// we used to have more by default (2048, 1024, 1024, and 1536 for below,
+// respectively) now we go with smaller sizes at the expense of less
+// debuggability.  Upside is we use about 300K less memory than before.
+#define LOG_EVENT_SIZE      0x0200                  // 512 event entries (retail)  L"LogEventEntries" 
+#define LOG_WARNING_SIZE    0x0200                  // 512 warning entries (retail)  L"LogWarningEntries"
+#define LOG_ERROR_SIZE      0x0200                  // 512 error entries (retail)  L"LogErrorEntries"
+#define LOG_PAGING_SIZE     0x0200                  // 512 paging entries (retail) L"LogPagingEntries"
+#endif // DEBUG
 ```
 
 # RMPowerFeature

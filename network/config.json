@@ -76,7 +76,14 @@
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
             "DisableLargeMtu": { "Type": "REG_DWORD", "Data": 0 }
           }
+        },
+        "Require NTLMv2 Session Security": {
+          "HKLM\\System\\CurrentControlSet\\Control\\Lsa\\MSV1_0": {
+            "NTLMMinClientSec": { "Type": "REG_DWORD", "Data": 537395200 },
+            "NTLMMinServerSec": { "Type": "REG_DWORD", "Data": 537395200 }
+          }
         }
+
       }
     },
     "revert": {
@@ -154,6 +161,12 @@
         "Disable Large MTU": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
             "DisableLargeMtu": { "Action": "deletevalue" }
+          }
+        },
+        "Require NTLMv2 Session Security": {
+          "HKLM\\System\\CurrentControlSet\\Control\\Lsa\\MSV1_0": {
+            "NTLMMinClientSec": { "Type": "REG_DWORD", "Data": 536870912 },
+            "NTLMMinServerSec": { "Type": "REG_DWORD", "Data": 536870912 }
           }
         }
       }
