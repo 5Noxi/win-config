@@ -35,6 +35,98 @@
       }
     }
   },
+  "Kernel Values": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+        "EnablePerCpuClockTickScheduling": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableTickAccumulationFromAccountingPeriods": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableWerUserReporting": { "Type": "REG_DWORD", "Data": 0 },
+        "HyperStartDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "ReadyTimeTicks": { "Type": "REG_DWORD", "Data": 6 },
+        "ScanLatencyTicks": { "Type": "REG_DWORD", "Data": 7 },
+        "SerializeTimerExpiration": { "Type": "REG_DWORD", "Data": 0 },
+        "TimerCheckFlags": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Structured Exception Handling Overwrite Protection": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+            "DisableExceptionChainValidation": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+        "EnablePerCpuClockTickScheduling": { "Action": "deletevalue" },
+        "EnableTickAccumulationFromAccountingPeriods": { "Action": "deletevalue" },
+        "EnableWerUserReporting": { "Action": "deletevalue" },
+        "HyperStartDisabled": { "Action": "deletevalue" },
+        "ReadyTimeTicks": { "Action": "deletevalue" },
+        "ScanLatencyTicks": { "Action": "deletevalue" },
+        "SerializeTimerExpiration": { "Action": "deletevalue" },
+        "TimerCheckFlags": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Structured Exception Handling Overwrite Protection": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+            "DisableExceptionChainValidation": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
+  "DXG Kernel Values": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "DisableBadDriverCheckForHwProtection": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableBoostedVSyncVirtualization": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableIndependentVidPnVSync": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableVersionMismatchCheck": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableFuzzing": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableHMDTestMode": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableIgnoreWin32ProcessStatus": { "Type": "REG_DWORD", "Data": 1 },
+        "HwSchMode": { "Type": "REG_DWORD", "Data": 2 },
+        "HwSchOverrideBlockList": { "Type": "REG_DWORD", "Data": 1 },
+        "HwSchTreatExperimentalAsStable": { "Type": "REG_DWORD", "Data": 1 },
+        "InvestigationDebugParameter": { "Type": "REG_DWORD", "Data": 0 },
+        "PlatformSupportMiracast": { "Type": "REG_DWORD", "Data": 0 },
+        "Usb4MonitorPowerOnDelayInSeconds": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay": {
+        "ForcePreserveBootDisplay": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Force DirectFlip": {
+          "DirectFlip": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "DisableBadDriverCheckForHwProtection": { "Action": "deletevalue" },
+        "DisableBoostedVSyncVirtualization": { "Action": "deletevalue" },
+        "DisableIndependentVidPnVSync": { "Action": "deletevalue" },
+        "DisableVersionMismatchCheck": { "Action": "deletevalue" },
+        "EnableFuzzing": { "Action": "deletevalue" },
+        "EnableHMDTestMode": { "Action": "deletevalue" },
+        "EnableIgnoreWin32ProcessStatus": { "Action": "deletevalue" },
+        "HwSchMode": { "Action": "deletevalue" },
+        "HwSchOverrideBlockList": { "Action": "deletevalue" },
+        "HwSchTreatExperimentalAsStable": { "Action": "deletevalue" },
+        "InvestigationDebugParameter": { "Action": "deletevalue" },
+        "PlatformSupportMiracast": { "Type": "REG_DWORD", "Data": 1 },
+        "Usb4MonitorPowerOnDelayInSeconds": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay": {
+        "ForcePreserveBootDisplay": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Force DirectFlip": {
+          "DirectFlip": { "Action": "deletevalue" }
+        }
+      }
+    }
+  },
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
@@ -1184,46 +1276,6 @@
       }
     }
   },
-  "Kernel Values": {
-    "apply": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
-        "EnablePerCpuClockTickScheduling": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableTickAccumulationFromAccountingPeriods": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableWerUserReporting": { "Type": "REG_DWORD", "Data": 0 },
-        "HyperStartDisabled": { "Type": "REG_DWORD", "Data": 1 },
-        "ReadyTimeTicks": { "Type": "REG_DWORD", "Data": 6 },
-        "ScanLatencyTicks": { "Type": "REG_DWORD", "Data": 7 },
-        "SerializeTimerExpiration": { "Type": "REG_DWORD", "Data": 0 },
-        "TimerCheckFlags": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "SUBOPTION": {
-        "Disable Structured Exception Handling Overwrite Protection": {
-          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
-            "DisableExceptionChainValidation": { "Type": "REG_DWORD", "Data": 1 }
-          }
-        }
-      }
-    },
-    "revert": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
-        "EnablePerCpuClockTickScheduling": { "Action": "deletevalue" },
-        "EnableTickAccumulationFromAccountingPeriods": { "Action": "deletevalue" },
-        "EnableWerUserReporting": { "Action": "deletevalue" },
-        "HyperStartDisabled": { "Action": "deletevalue" },
-        "ReadyTimeTicks": { "Action": "deletevalue" },
-        "ScanLatencyTicks": { "Action": "deletevalue" },
-        "SerializeTimerExpiration": { "Action": "deletevalue" },
-        "TimerCheckFlags": { "Action": "deletevalue" }
-      },
-      "SUBOPTION": {
-        "Disable Structured Exception Handling Overwrite Protection": {
-          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
-            "DisableExceptionChainValidation": { "Action": "deletevalue" }
-          }
-        }
-      }
-    }
-  },
   "BCD Edits": {
     "apply": {
       "COMMANDS": {
@@ -1235,58 +1287,6 @@
       "COMMANDS": {
         "SetTimeoutDefault": { "Action": "bcdedit", "Name": "timeout", "Value": "30" },
         "UnsetBootMenuPolicy": { "Action": "bcdedit", "Name": "bootmenupolicy", "Delete": true }
-      }
-    }
-  },
-  "DXG Kernel Values": {
-    "apply": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "DisableBadDriverCheckForHwProtection": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableBoostedVSyncVirtualization": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableIndependentVidPnVSync": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableVersionMismatchCheck": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableFuzzing": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableHMDTestMode": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableIgnoreWin32ProcessStatus": { "Type": "REG_DWORD", "Data": 1 },
-        "HwSchMode": { "Type": "REG_DWORD", "Data": 2 },
-        "HwSchOverrideBlockList": { "Type": "REG_DWORD", "Data": 1 },
-        "HwSchTreatExperimentalAsStable": { "Type": "REG_DWORD", "Data": 1 },
-        "InvestigationDebugParameter": { "Type": "REG_DWORD", "Data": 0 },
-        "PlatformSupportMiracast": { "Type": "REG_DWORD", "Data": 0 },
-        "Usb4MonitorPowerOnDelayInSeconds": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay": {
-        "ForcePreserveBootDisplay": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "SUBOPTION": {
-        "Force DirectFlip": {
-          "DirectFlip": { "Type": "REG_DWORD", "Data": 1 }
-        }
-      }
-    },
-    "revert": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "DisableBadDriverCheckForHwProtection": { "Action": "deletevalue" },
-        "DisableBoostedVSyncVirtualization": { "Action": "deletevalue" },
-        "DisableIndependentVidPnVSync": { "Action": "deletevalue" },
-        "DisableVersionMismatchCheck": { "Action": "deletevalue" },
-        "EnableFuzzing": { "Action": "deletevalue" },
-        "EnableHMDTestMode": { "Action": "deletevalue" },
-        "EnableIgnoreWin32ProcessStatus": { "Action": "deletevalue" },
-        "HwSchMode": { "Action": "deletevalue" },
-        "HwSchOverrideBlockList": { "Action": "deletevalue" },
-        "HwSchTreatExperimentalAsStable": { "Action": "deletevalue" },
-        "InvestigationDebugParameter": { "Action": "deletevalue" },
-        "PlatformSupportMiracast": { "Type": "REG_DWORD", "Data": 1 },
-        "Usb4MonitorPowerOnDelayInSeconds": { "Action": "deletevalue" }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay": {
-        "ForcePreserveBootDisplay": { "Action": "deletevalue" }
-      },
-      "SUBOPTION": {
-        "Force DirectFlip": {
-          "DirectFlip": { "Action": "deletevalue" }
-        }
       }
     }
   }

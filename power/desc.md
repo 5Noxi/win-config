@@ -99,6 +99,17 @@ fffff806`c53c30f4  ffffffff`ffffffff
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation  
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Power.txt
 
+---
+
+Miscellaneous notes:
+```c
+dq offset aPower_2      ; "Power"
+dq offset aHibernatecheck ; "HibernateChecksummingEnabled"
+dq offset PopHiberChecksummingEnabledReg
+
+PopHiberChecksummingEnabledReg   00000001
+```
+
 # Remove Power Options
 
 Removes the `Hibernate`, `Lock`, `Sleep` power options.
@@ -150,15 +161,26 @@ PpmPerfQosGroupPolicyDisable dd 0 // Throttling enabled
 # Disable Energy Estimation
 
 Not needed, if you disable energy estimation:
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\TaggedEnergy : DisableTaggedEnergyLogging
-\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\TaggedEnergy : TelemetryMaxApplication
-\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\TaggedEnergy : TelemetryMaxTagPerApplication
-```
 ```bat
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v DisableTaggedEnergyLogging /t REG_DWORD /d 1 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v TelemetryMaxApplication /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v TelemetryMaxTagPerApplication /t REG_DWORD /d 0 /f
+```
+```c
+dq offset aPower_2      ; "Power"
+dq offset aUserbatterydis ; "UserBatteryDischargeEstimator"
+dq offset PopDisableBatteryDischargeEstimator
+PopDisableBatteryDischargeEstimator   00000000
+
+dq offset aPower_2      ; "Power"
+dq offset aUserbatterycha ; "UserBatteryChargeEstimator"
+dq offset PopUserBatteryChargingEstimator
+PopUserBatteryChargingEstimator   00000000
+
+dq offset aPower_2      ; "Power"
+dq offset aEnergyestimati ; "EnergyEstimationEnabled"
+dq offset PopEnergyEstimationEnabled
+PopEnergyEstimationEnabled   00000001
 ```
 
 > [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/5Noxi/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)

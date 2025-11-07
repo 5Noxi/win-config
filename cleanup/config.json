@@ -32,7 +32,7 @@
     }
   },
   "Clear Recycle Bin": {
-    "__control": { "type": "button", "label": "Clear Recycle Bin" },
+    "__control": { "type": "button", "label": "Clear" },
     "COMMANDS": {
       "ClearRecycleBin": {
          "Action": "run_powershell",
@@ -50,7 +50,7 @@
     }
   },
   "Clear Wallpaper History": {
-    "__control": { "type": "button", "label": "Clear Wallpaper History" },
+    "__control": { "type": "button", "label": "Clear" },
     "COMMANDS": {
       "ClearWallpaperHistory": {
         "Action": "run_powershell",

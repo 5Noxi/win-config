@@ -192,14 +192,16 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
         "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "EnergyEstimationDisabled": { "Type": "REG_DWORD", "Data": 1 },
-        "UserBatteryDischargeEstimator": { "Type": "REG_DWORD", "Data": 0 }
+        "UserBatteryDischargeEstimator": { "Type": "REG_DWORD", "Data": 0 },
+        "UserBatteryChargeEstimator": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
         "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 1 },
         "EnergyEstimationDisabled": { "Action": "deletevalue" },
-        "UserBatteryDischargeEstimator": { "Action": "deletevalue" }
+        "UserBatteryDischargeEstimator": { "Action": "deletevalue" },
+        "UserBatteryChargeEstimator": { "Action": "deletevalue" }
       }
     }
   },

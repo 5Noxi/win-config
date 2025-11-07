@@ -2276,6 +2276,18 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 > [system/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)  
 > [system/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-PoFxInitPowerManagement.c)
 
+---
+
+Miscellaenous notes:
+```c
+dq offset aPower_2      ; "Power"
+dq offset aSleepstudylibr ; "SleepstudyLibraryBlockerLimit"
+dq offset SleepstudyHelperBlockerLibraryLimit
+align 20h
+dq offset aPower_2      ; "Power"
+dq offset aSleepstudyglob ; "SleepstudyGlobalBlockerLimit"
+dq offset SleepstudyHelperBlockerGlobalLimit
+```
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0030\0\Device Parameters\Wdf : SleepstudyState
@@ -2305,8 +2317,6 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_0B05&PID_1939&MI_00\7&40fe908&0&0000\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_0CF2&PID_A102&MI_00\8&7b0cf2a&0&0000\Device Parameters\Wdf : SleepstudyState
 ```
-
-Other:
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : EnableNicAutoPowerSaverInSleepStudy
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : EnableNicAutoPowerSaverInSleepStudy
