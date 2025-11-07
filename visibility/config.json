@@ -1237,14 +1237,36 @@
     }
   },
   "Desktop Icon Spacing": {
-    "__control": { "type": "button", "label": "Open" },
-    "COMMANDS": {
-      "RemoveWindowsOld": {
-        "Action": "run_powershell",
-        "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Icon-Spacing.ps1 | iex\"'"
+    "apply": {
+      "__control": { "type": "button", "label": "Open" },
+      "COMMANDS": {
+        "RemoveWindowsOld": {
+          "Action": "run_powershell",
+          "Command": "Start-Process powershell -ArgumentList '-NoProfile -Command \"iwr -UseBasicParsing -Uri https://raw.githubusercontent.com/5Noxi/win-config/refs/heads/main/visibility/assets/Icon-Spacing.ps1 | iex\"'"
+        }
+      },
+      "SUBOPTION": {
+        "100px Horizonzal - 75px Vertical": {
+          "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+            "IconSpacing": { "Type": "REG_SZ", "Data": "-1500" },
+            "IconVerticalSpacing": { "Type": "REG_SZ", "Data": "-1125" },
+            "IconTitleWrap": { "Type": "REG_SZ", "Data": "0" }
+          }
+        }
+      }
+    },
+    "revert": {
+      "SUBOPTION": {
+        "100px Horizonzal - 75px Vertical": {
+          "HKCU\\Control Panel\\Desktop\\WindowMetrics": {
+            "IconSpacing": { "Action": "deletevalue"},
+            "IconVerticalSpacing": { "Action": "deletevalue" },
+            "IconTitleWrap": { "Action": "deletevalue" }
+          }
+        }
       }
     }
-},
+  },
   "Detailed File Transfer": {
     "apply": {
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\OperationStatusManager": {

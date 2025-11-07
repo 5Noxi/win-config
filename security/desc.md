@@ -543,19 +543,6 @@ DisableNativeNVMeStack db 0 // default
 
 # Disable System Restore
 
-Removes all copies (volume backups), see your current shadows with:
-```cmd
-vssadmin list shadows /for=<ForVolumeSpec> /shadow=<ShadowID>
-```
-`<ForVolumeSpec>` -> Volume
-`<ShadowID>` -> Shadow copy specified by ShadowID
-
-Remove it with:
-```cmd
-vssadmin delete shadows /all
-```
-Random fact: Creating a `.bat` file for it & sending it into a discord channel will detect it as a virus.
-
 ```ps
 Disable-ComputerRestore -Drive "C:\"
 ```

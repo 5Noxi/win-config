@@ -729,8 +729,8 @@
         "IncreaseAdapterBuffers": {
           "Action": "ethernet_key",
           "Values": {
-            "*TransmitBuffers": { "Type": "REG_SZ", "Data": "4096" },
-            "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "4096" }
+            "*TransmitBuffers": { "Type": "REG_SZ", "Data": "2048" },
+            "*ReceiveBuffers": { "Type": "REG_SZ", "Data": "2048" }
           }
         }
       }

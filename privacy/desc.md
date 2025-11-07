@@ -489,17 +489,6 @@ ren %SystemRoot%\System32\psr.exe psr.exe.bak
 
 > https://learn.microsoft.com/en-us/windows-server/get-started/activation-slmgr-vbs-options#advanced-options
 
-# Clear SRUM Data
-
-Deletes the SRUM database file, which tracks app, service, and network usage.
-
-Location:
-```bat
-%windir%\System32\sru
-```
-Read the SRUM data:
-> https://github.com/MarkBaggett/srum-dump
-
 # Disable App Launch Tracking
 
 `Privacy & security > General : Let Windows improve Start and search results by tracking app launches`

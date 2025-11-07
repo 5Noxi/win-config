@@ -380,14 +380,5 @@
         "OverlayTestMode": { "Action": "deletevalue" }
       }
     }
-  },
-  "Clear Shader Cache": {
-    "__control": { "type": "button", "label": "Clear" },
-    "COMMANDS": {
-      "ClearCaches": {
-        "Action": "delete_path",
-        "Paths": [ "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache", "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\GLCache" ]
-      }
-    }
   }
 }

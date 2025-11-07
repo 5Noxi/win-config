@@ -242,17 +242,6 @@
       }
     }
   },
-  "Clear SRUM Data": {
-    "control": { "type": "button", "label": "Clear" },
-    "COMMANDS": {
-      "StopDPS": { "Action": "run_powershell", "Command": "Stop-Service -Name 'DPS' -Force" },
-      "DeleteSRUDB": {
-        "Action": "run_powershell",
-        "Elevated": true,
-        "Command": "Remove-Item -Path \"$env:windir\\System32\\sru\\SRUDB.dat\" -Force"
-      }
-    }
-  },
   "Disable App Launch Tracking": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {

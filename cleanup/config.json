@@ -1,0 +1,61 @@
+{
+  "Clean WinSxS Folder": {
+    "__control": { "type": "button", "label": "Clean" },
+    "COMMANDS": {
+      "RunDISM": { "Action": "run_powershell", "Command": "dism.exe /Online /Cleanup-Image /StartComponentCleanup /ResetBase" }
+    }
+  },
+  "Remove Windows.old": {
+    "__control": { "type": "button", "label": "Remove" },
+    "COMMANDS": {
+      "RemoveWindowsOld": { "Action": "elevated_priv", "Command": "Remove-Item -Path \"$env:SystemDrive\\Windows.old\" -Recurse -Force" }
+    }
+  },
+  "Clear SRUM Data": {
+    "control": { "type": "button", "label": "Clear" },
+    "COMMANDS": {
+      "StopDPS": { "Action": "run_powershell", "Command": "Stop-Service -Name 'DPS' -Force" },
+      "DeleteSRUDB": {
+        "Action": "run_powershell",
+        "Elevated": true,
+        "Command": "Remove-Item -Path \"$env:windir\\System32\\sru\\SRUDB.dat\" -Force"
+      }
+    }
+  },
+  "Clear NVIDIA Shader Cache": {
+    "__control": { "type": "button", "label": "Clear" },
+    "COMMANDS": {
+      "ClearCaches": {
+        "Action": "delete_path",
+        "Paths": [ "%LOCALAPPDATA%\\NVIDIA Corporation\\NV_Cache", "%USERPROFILE%\\AppData\\LocalLow\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\DXCache", "%LOCALAPPDATA%\\NVIDIA\\GLCache" ]
+      }
+    }
+  },
+  "Clear Recycle Bin": {
+    "__control": { "type": "button", "label": "Clear Recycle Bin" },
+    "COMMANDS": {
+      "ClearRecycleBin": {
+         "Action": "run_powershell",
+        "Command": "Clear-RecycleBin -Force"
+      }
+    }
+  },
+  "Remove Shadow Copies": {
+    "__control": { "type": "button", "label": "Remove" },
+    "COMMANDS": {
+      "RemoveAllShadowCopies": {
+        "Action": "run_powershell",
+        "Command": "vssadmin delete shadows /all"
+      }
+    }
+  },
+  "Clear Wallpaper History": {
+    "__control": { "type": "button", "label": "Clear Wallpaper History" },
+    "COMMANDS": {
+      "ClearWallpaperHistory": {
+        "Action": "run_powershell",
+        "Command": "for ($i=0; $i -le 4; $i++) { Remove-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Wallpapers' -Name \"BackgroundHistoryPath$($i)\" }"
+      }
+    }
+  }
+}

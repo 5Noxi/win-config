@@ -1098,10 +1098,10 @@
   "Increase TDR": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "TdrLimitTime": { "Type": "REG_DWORD", "Data": 60 },
+        "TdrLimitTime": { "Type": "REG_DWORD", "Data": 90 },
         "TdrLimitCount": { "Type": "REG_DWORD", "Data": 5 },
         "TdrLevel": { "Type": "REG_DWORD", "Data": 3 },
-        "TdrDelay": { "Type": "REG_DWORD", "Data": 8 },
+        "TdrDelay": { "Type": "REG_DWORD", "Data": 10 },
         "TdrDdiDelay": { "Type": "REG_DWORD", "Data": 10 }
       }
     },
