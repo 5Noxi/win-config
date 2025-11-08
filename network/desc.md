@@ -167,10 +167,14 @@ Capturing the network activity after adding the policy:
 # Disable Network Discovery
 
 "LLTDIO and Responder are network protocol drivers used for Link Layer Topology Discovery and network diagnostics. LLTDIO discovers network topology and supports QoS functions, while Responder allows the device to be identified and take part in network health assessments."
-> https://gpsearch.azurewebsites.net/#1829
+
+"The Link Layer Discovery Protocol (LLDP) is a vendor-neutral link layer protocol used by network devices for advertising their identity, capabilities, and neighbors on a local area network based on IEEE 802 technology, principally wired Ethernet. LLDP performs functions similar to several proprietary protocols, such as CDP, FDP, NDP and LLTD."
+
+> https://en.wikipedia.org/wiki/Link_Layer_Discovery_Protocol  
+> https://gpsearch.azurewebsites.net/#1829  
 > https://gpsearch.azurewebsites.net/#1830
 
-Disable network discovery (includes LLTDIO & Rspndr), by pasting the desired command into `powershell`:
+Disable network discovery (includes LLTDIO, Rspndr, LLTD), by pasting the desired command into `powershell`:
 ```ps
 Set-NetFirewallRule -DisplayGroup "Network Discovery" -Enabled False -Profile Any​ # Domain​, Private, Public​
 ```
@@ -248,6 +252,21 @@ NETDIS-UPnP-Out-TCP-Active            True        Private
 NETDIS-NB_Name-Out-UDP-Active         True        Private
 NETDIS-NB_Name-Out-UDP-NoScope       False         Domain
 ```
+
+```c
+RegistryKey<unsigned char>::Initialize(
+    this + 40,
+    *(ADAPTER_CONTEXT**)this,
+    *(((NDIS_HANDLE*)this) + 1),
+    "DisableLLDP",
+    0,
+    1,
+    0,  // default
+    0,
+    0
+)
+```
+> > [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/5Noxi/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
 
 ---
 
@@ -771,6 +790,10 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 
 # Enable Offloads
 
+Network offload features transfer processing tasks from the CPU to the network adapter hardware, reducing system overhead and improving overall network performance. Common offload features include TCP checksum offload, Large Send Offload (LSO), and Receive Side Scaling (RSS).
+
+Enabling network adapter offload features is usually beneficial. However, the network adapter might not be powerful enough to handle the offload capabilities with high throughput. For example, consider a network adapter with limited hardware resources. In that case, enabling segmentation offload features might reduce the maximum sustainable throughput of the adapter. However, if the reduced throughput is acceptable, you should enable the segmentation offload features.
+
 "*IPChecksumOffloadIPv4" = 3
 "*LsoV1IPv4" = 1
 "*LsoV2IPv4" = 1
@@ -783,15 +806,23 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 "*TCPConnectionOffloadIPv6" = 1
 "*TCPUDPChecksumOffloadIPv4" = 3
 "*TCPUDPChecksumOffloadIPv6" = 3
-"*PMARPOffload" = 1
+"*PMARPOffload" = 0
 "*PMNSOffload" = 0
 "*IPsecOffloadV1IPv4" = 3
 "*IPsecOffloadV2" = 3
 "*IPsecOffloadV2IPv4" = 3
 "*QoSOffload" = 1
 #"*PMWiFiRekeyOffload" = 1
+"*UsoIPv4" = 1
+"*UsoIPv6" = 1
+
+Excludes:
+"SaOffloadCapacityEnabled" = 0 # deprecated (Chimney too)
 
 Enable static offloads. For example, enable the UDP Checksums, TCP Checksums, and Send Large Offload (LSO) settings.
+
+> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top
+> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
 
 # Disable Wake On
 
@@ -806,6 +837,21 @@ Enable static offloads. For example, enable the UDP Checksums, TCP Checksums, an
 "WakeOn" = 0
 "WakeOnFastStartup" = 0
 "WakeOnLinkChange" = 0
+
+---
+
+Miscellaneous notes:
+```inf
+HKR, Ndi\Params\WakeUpModeCap,       ParamDesc,   0 , %WakeUpMode%
+HKR, Ndi\Params\WakeUpModeCap,       default,  0  , "2"
+HKR, Ndi\Params\WakeUpModeCap,       type,      0  , "enum"
+HKR, Ndi\Params\WakeUpModeCap\enum,  "0",        0 , %WakeUpMode_None%
+HKR, Ndi\Params\WakeUpModeCap\enum,  "1",        0 , %WakeUpMode_Magic%
+HKR, Ndi\Params\WakeUpModeCap\enum,  "2",        0 , %WakeUpMode_Pattern%
+```
+```c
+"WakeUpModeCap": { "Type": "REG_SZ", "Data": 0 },
+```
 
 # Increase Buffers
 
@@ -858,30 +904,15 @@ HKR, NDI\Params\*TransmitBuffers,  type,    0, "dword"
 HKR, "", *TransmitBuffers,  %REG_SZ%, "2048"
 ```
 
-# Enable USO
-
-"*UsoIPv4" = 1
-"*UsoIPv6" = 1
-
-# Disable Teredo
-
-HKLM\SOFTWARE\Policies\Microsoft\Windows\TCPIP\v6Transition
-Teredo_State = Disabled
-
-# Disable Chimney
-
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/information-about-tcp-chimney-offload-rss-netdma-feature
-
-
-> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top
-> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
+Reminder: Each adapter uses it's own default values, means that the `default`/`min`/`max` may be different for you.
 
 # Enable IM/ITR
 
 Some NICs expose multiple interrupt-moderation levels. Use interrupt moderation for CPU-bound workloads and weigh host-CPU savings against added latency. For the lowest possible latency, disable Interrupt Moderation, accepting higher CPU use as a tradeoff. At higher link speeds more interrupts drive up CPU and hurt performance, increasing the ITR lowers the interrupt rate and improves performance. IM batches received packets and starts a timer on first arrival, interrupting when the buffer fills or the timer expires. Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/interrupt-moderation-rate/  
-> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation
+> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation  
+> https://enterprise-support.nvidia.com/s/article/understanding-interrupt-moderation
 
 ```
 Off: ITR = 0 (no limit)
@@ -1042,3 +1073,98 @@ HKR, Ndi\params\*JumboPacket\enum,	"2",	0, "%Bytes9014%"
 HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 ```
 `1514` = Disabled.
+
+# Disable VMQ
+
+VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the networking performance of the Hyper-V switch bound to this network adapter may be reduced. VMQ offloads packet processing to NIC hardware queues, with each queue tied to a specific VM. This increases throughput, spreads work across CPU cores, lowers host CPU use, and scales effectively as more VMs are added on Hyper-V.
+
+VMQ is enabled by default:
+```inf
+HKR,Ndi\Params\*VMQ,ParamDesc, ,%VMQ%
+HKR,Ndi\Params\*VMQ,type,      ,enum
+HKR,Ndi\Params\*VMQ,default,   ,1
+HKR,Ndi\Params\*VMQ\enum,0,    ,%Disabled%
+HKR,Ndi\Params\*VMQ\enum,1,    ,%Enabled%
+```
+
+| Value | Description | Allowed Values | Default | Notes |
+| ----  | ---- | ---- | ---- | ---- |
+| `*VMQ`| Enable/disable the VMQ feature. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
+| `*VMQLookaheadSplit` | Enable/disable splitting RX buffers into lookahead and post-lookahead buffers. | `0` Disabled - `1` Enabled | `1` | Starting with NDIS 6.30 / Windows Server 2012, this keyword is no longer supported. |
+| `*VMQVlanFiltering` | Enable/disable filtering packets by VLAN ID in the MAC header. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
+| `*RssOrVmqPreference` | Define whether VMQ capabilities should be enabled instead of RSS. | `0` Report RSS capabilities - `1` Report VMQ capabilities | `0`     | - |
+| `*TenGigVmqEnabled` | Enable/disable VMQ on all 10 Gbps adapters. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
+| `*BelowTenGigVmqEnabled` | Enable/disable VMQ on all adapters <10 Gbps. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
+
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md  
+> https://docs.nvidia.com/networking/display/winofv55053000/ethernet+registry+keys#src-25134589_EthernetRegistryKeys-FlowControlOptions  
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/virtual-machine-queue-architecture.md  
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/introduction-to-ndis-virtual-machine-queue--vmq-.md
+
+# Enable RSC/URO
+
+When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.
+
+Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.
+
+Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing
+
+```c
+void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CONTEXT **this)
+{
+  RegistryKey<unsigned char>::Initialize(
+    (enum RegKeyState *)((char *)this + 36),
+    this[1],
+    *((NDIS_HANDLE *)this[1] + 383),
+    (PUCHAR)"*RSCIPv4",
+    0,      // default
+    1u,     // range 0-1
+    0,
+    0,
+    0);
+
+  RegistryKey<unsigned char>::Initialize(
+    (enum RegKeyState *)((char *)this + 44),
+    this[1],
+    *((NDIS_HANDLE *)this[1] + 383),
+    (PUCHAR)"*RSCIPv6",
+    0,      // default
+    1u,     // range 0-1
+    0,
+    0,
+    0);
+
+  RegistryKey<unsigned char>::Initialize(
+    (enum RegKeyState *)(this + 2),
+    this[1],
+    *((NDIS_HANDLE *)this[1] + 383),
+    (PUCHAR)"ForceRscEnabled",
+    0,      // default
+    1u,     // range 0-1
+    0,
+    0,
+    0);
+
+  RegistryKey<enum HdSplitLocation>::Initialize(
+    (enum RegKeyState *)(this + 3),
+    this[1],
+    *((NDIS_HANDLE *)this[1] + 383),
+    (PUCHAR)"RscMode",
+    0,      // default
+    2u,     // range 0-2
+    1u,     // step
+    0,
+    0);
+}
+```
+
+---
+
+Miscellaneous notes:
+```c
+"ForceRscEnabled": { "Type": "REG_SZ", "Data": 1 },
+"RscMode": { "Type": "REG_SZ", "Data": 1 },
+```

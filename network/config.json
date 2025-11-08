@@ -312,7 +312,13 @@
           "Action": "run_powershell",
           "Command": "Set-NetFirewallRule -DisplayGroup 'Network Discovery' -Enabled False -Profile Any"
         },
-        "DisableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr"], "State": "disable" }
+        "DisableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr", "ms_lldp"], "State": "disable" },
+        "DisableLLDP": {
+          "Action": "ethernet_key",
+          "Values": {
+            "DisableLLDP": { "Type": "REG_SZ", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
@@ -331,7 +337,13 @@
           "Action": "run_powershell",
           "Command": "$rules=@(@{Name='NETDIS-UPnPHost-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-SSDPSrv-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-LLMNR-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-In-UDP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-UPnP-Out-TCP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNTS-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-SSDPSrv-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Name-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Name-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-LLMNR-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-SSDPSrv-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-WSDEVNTS-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Datagram-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDPHOST-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNT-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDPHOST-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-UPnP-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')}); foreach($r in $rules){ $enabledEnum=[Enum]::Parse([Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetSecurity.Enabled], $r.Enabled); try { Set-NetFirewallRule -Name $r.Name -Enabled $enabledEnum -Profile $r.Profile -ea SilentlyContinue } catch {} }"
         },
-        "EnableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr"], "State": "enable" }
+        "EnableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr", "ms_lldp"], "State": "enable" },
+        "EnableLLDP": {
+          "Action": "ethernet_key",
+          "Values": {
+            "DisableLLDP": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -634,23 +646,26 @@
           "Action": "ethernet_key",
           "Values": {
             "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*IPsecOffloadV1IPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*IPsecOffloadV2": { "Type": "REG_SZ", "Data": 3 },
+            "*IPsecOffloadV2IPv4": { "Type": "REG_SZ", "Data": 3 },
             "*LsoV1IPv4": { "Type": "REG_SZ", "Data": 1 },
             "*LsoV2IPv4": { "Type": "REG_SZ", "Data": 1 },
             "*LsoV2IPv6": { "Type": "REG_SZ", "Data": 1 },
+            "*PMARPOffload": { "Type": "REG_SZ", "Data": 0 },
+            "*PMNSOffload": { "Type": "REG_SZ", "Data": 0 },
+            "*PMWiFiRekeyOffload": { "Type": "REG_SZ", "Data": 1 },
+            "*QoSOffload": { "Type": "REG_SZ", "Data": 1 },
             "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
             "*TCPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
-            "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-            "*UDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
             "*TCPConnectionOffloadIPv4": { "Type": "REG_SZ", "Data": 1 },
             "*TCPConnectionOffloadIPv6": { "Type": "REG_SZ", "Data": 1 },
             "*TCPUDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
             "*TCPUDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
-            "*PMARPOffload": { "Type": "REG_SZ", "Data": 1 },
-            "*PMNSOffload": { "Type": "REG_SZ", "Data": 0 },
-            "*IPsecOffloadV1IPv4": { "Type": "REG_SZ", "Data": 3 },
-            "*IPsecOffloadV2": { "Type": "REG_SZ", "Data": 3 },
-            "*IPsecOffloadV2IPv4": { "Type": "REG_SZ", "Data": 3 },
-            "*QoSOffload": { "Type": "REG_SZ", "Data": 1 }
+            "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*UDPChecksumOffloadIPv6": { "Type": "REG_SZ", "Data": 3 },
+            "*UsoIPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*UsoIPv6": { "Type": "REG_SZ", "Data": 1 }
           }
         }
       }
@@ -661,23 +676,26 @@
           "Action": "ethernet_key",
           "Values": {
             "*IPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*IPsecOffloadV1IPv4": { "Action": "deletevalue" },
+            "*IPsecOffloadV2": { "Action": "deletevalue" },
+            "*IPsecOffloadV2IPv4": { "Action": "deletevalue" },
             "*LsoV1IPv4": { "Action": "deletevalue" },
             "*LsoV2IPv4": { "Action": "deletevalue" },
             "*LsoV2IPv6": { "Action": "deletevalue" },
+            "*PMARPOffload": { "Action": "deletevalue" },
+            "*PMNSOffload": { "Action": "deletevalue" },
+            "*PMWiFiRekeyOffload": { "Action": "deletevalue" },
+            "*QoSOffload": { "Action": "deletevalue" },
             "*TCPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
             "*TCPChecksumOffloadIPv6": { "Action": "deletevalue" },
-            "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
-            "*UDPChecksumOffloadIPv6": { "Action": "deletevalue" },
             "*TCPConnectionOffloadIPv4": { "Action": "deletevalue" },
             "*TCPConnectionOffloadIPv6": { "Action": "deletevalue" },
             "*TCPUDPChecksumOffloadIPv4": { "Action": "deletevalue" },
             "*TCPUDPChecksumOffloadIPv6": { "Action": "deletevalue" },
-            "*PMARPOffload": { "Action": "deletevalue" },
-            "*PMNSOffload": { "Action": "deletevalue" },
-            "*IPsecOffloadV1IPv4": { "Action": "deletevalue" },
-            "*IPsecOffloadV2": { "Action": "deletevalue" },
-            "*IPsecOffloadV2IPv4": { "Action": "deletevalue" },
-            "*QoSOffload": { "Action": "deletevalue" }
+            "*UDPChecksumOffloadIPv4": { "Type": "REG_SZ", "Data": 3 },
+            "*UDPChecksumOffloadIPv6": { "Action": "deletevalue" },
+            "*UsoIPv4": { "Action": "deletevalue" },
+            "*UsoIPv6": { "Action": "deletevalue" }
           }
         }
       }
@@ -691,14 +709,15 @@
           "Values": {
             "*WakeOnMagicPacket": { "Type": "REG_SZ", "Data": 0 },
             "*WakeOnPattern": { "Type": "REG_SZ", "Data": 0 },
-            "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
-            "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
-            "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 },
-            "ForceWakeFromMagicPacketOnModernStandby": { "Type": "REG_SZ", "Data": 0 },
             "EnableWakeOnManagmentOnTCO": { "Type": "REG_SZ", "Data": 0 },
+            "ForceWakeFromMagicPacketOnModernStandby": { "Type": "REG_SZ", "Data": 0 },
+            "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
             "WakeFromS5": { "Type": "REG_SZ", "Data": 0 },
             "WakeOn": { "Type": "REG_SZ", "Data": 0 },
-            "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 }
+            "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOnLinkChange": { "Type": "REG_SZ", "Data": 0 },
+            "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 }
           }
         }
       }
@@ -710,14 +729,15 @@
           "Values": {
             "*WakeOnMagicPacket": { "Action": "deletevalue" },
             "*WakeOnPattern": { "Action": "deletevalue" },
-            "S5WakeOnLan": { "Action": "deletevalue" },
-            "WakeOnLink": { "Action": "deletevalue" },
-            "WakeOnMagicPacketFromS5": { "Action": "deletevalue" },
-            "ForceWakeFromMagicPacketOnModernStandby": { "Action": "deletevalue" },
             "EnableWakeOnManagmentOnTCO": { "Action": "deletevalue" },
+            "ForceWakeFromMagicPacketOnModernStandby": { "Action": "deletevalue" },
+            "S5WakeOnLan": { "Action": "deletevalue" },
             "WakeFromS5": { "Action": "deletevalue" },
             "WakeOn": { "Action": "deletevalue" },
-            "WakeOnFastStartup": { "Action": "deletevalue" }
+            "WakeOnFastStartup": { "Action": "deletevalue" },
+            "WakeOnLink": { "Action": "deletevalue" },
+            "WakeOnLinkChange": { "Action": "deletevalue" },
+            "WakeOnMagicPacketFromS5": { "Action": "deletevalue" }
           }
         }
       }
@@ -882,6 +902,58 @@
           "Action": "ethernet_key",
           "Values": {
             "*JumboPacket": { "Type": "REG_SZ", "Data": 1514 }
+          }
+        }
+      }
+    }
+  },
+  "Disable VMQ": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetDisableVMQ": {
+          "Action": "ethernet_key",
+          "Values": {
+            "VMQSupported": { "Type": "REG_SZ", "Data": "0" },
+            "*VMQ": { "Type": "REG_SZ", "Data": "0" },
+            "*RssOrVmqPreference": { "Type": "REG_SZ", "Data": "0" }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetDisableVMQRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "VMQSupported": { "Action": "deletevalue" },
+            "*VMQ": { "Action": "deletevalue" },
+            "*RssOrVmqPreference": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
+  "Enable RSC/URO": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetEnableRscUro": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*RscIPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*RscIPv6": { "Type": "REG_SZ", "Data": 1 },
+            "*UdpRsc": { "Type": "REG_SZ", "Data": 1 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetEnableRscUroRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*RscIPv4": { "Action": "deletevalue" },
+            "*RscIPv6": { "Action": "deletevalue" },
+            "*UdpRsc": { "Action": "deletevalue" }
           }
         }
       }

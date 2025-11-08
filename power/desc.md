@@ -285,7 +285,7 @@ Storport IPM allows the classpnp and disk class drivers to send the SCSI Stop Un
 Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled in the registry by setting the "EnableIdlePowerManagement" value in the "StorPort" subkey of the device's hardware key to any nonzero value. To do so, use the device INF file or manually edit the registry using the registry editor."
 
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
-> https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/storage/storport-idle-power-management.md  
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/pci.txt  
 > [power/assets | storport.c](https://github.com/5Noxi/win-config/blob/main/power/assets/storport.c)
@@ -505,8 +505,9 @@ This policy setting specifies that power management is disabled when the machine
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
 
-Trace of values which get read on boot (Intel adapter):
-> https://github.com/5Noxi/wpr-reg-records/blob/main/records/NIC-Intel.txt
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/NIC-Intel.txt  
+> [power/assets | intelnet6x.c](https://github.com/5Noxi/win-config/blob/main/power/assets/intelnet6x.c)  
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md
 
 ```inf
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
@@ -530,7 +531,7 @@ HKR,Ndi\params\*SelectiveSuspend\enum,   "1",        0, "Enabled"
 HKR,Ndi\Params\*SSIdleTimeout,      ParamDesc,  0, "SSIdleTimeout"
 HKR,Ndi\Params\*SSIdleTimeout,      Type,       0, "int"
 HKR,Ndi\Params\*SSIdleTimeout,      Default,    0, "60"
-HKR,Ndi\Params\*SSIdleTimeout,      Min,        0, "1"
+HKR,Ndi\Params\*SSIdleTimeout,      Min,        0, "1" ; might also be at 5, which is why I set it to 5
 HKR,Ndi\Params\*SSIdleTimeout,      Max,        0, "60"
 HKR,Ndi\Params\*SSIdleTimeout,      Step,       0, "1"
 HKR,Ndi\Params\*SSIdleTimeout,      Base,       0, "10"
@@ -582,6 +583,9 @@ HKR,Ndi\Params\ULPMode,                                 Default,                
 HKR,Ndi\Params\ULPMode\Enum,                            "1",                    0, %Enabled%
 HKR,Ndi\Params\ULPMode\Enum,                            "0",                    0, %Disabled%
 
+; Allow host driver to force exit ULP on ME systems
+HKR,,                                                   ForceHostExitUlp,       0, "1"
+
 HKR,Ndi\params\WolShutdownLinkSpeed,           ParamDesc,       0, %WolShutdownLinkSpeed%
 ;HKR,Ndi\params\WolShutdownLinkSpeed,          optional,        0, "1"
 HKR,Ndi\params\WolShutdownLinkSpeed,           Type,            0, "enum"
@@ -591,20 +595,23 @@ HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "1",             0, %100MbFirst%
 HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "2",             0, %NotSpeedDown%
 ```
 
+Reminder: Each adapter uses it's own default values, means that the `default`/`min`/`max` may be different for you. E.g. `SSIdleTimeout` minimum value was `1` in the first setup information file (`.inf`), but `5` in the second.
+
 ---
 
 Miscellaneous notes:
 
 ```c
-"EnableConnectedPowerGating" = 0
-"CLKREQ" = 0
-"DynamicLTR" = 0
-"S3S4WolPowerSaving" = 0
-AutoLinkDownPcieMacOff = 0 // "Auto Disable PCIe"
-BatteryModeLinkSpeed = 3  // ?
+"DynamicLTR" = : { "Type": "REG_SZ", "Data": 0 },
+"S3S4WolPowerSaving" = : { "Type": "REG_SZ", "Data": 0 },
+"AutoLinkDownPcieMacOff" = : { "Type": "REG_SZ", "Data": 0 }, // "Auto Disable PCIe"
+"BatteryModeLinkSpeed" = : { "Type": "REG_SZ", "Data": 2 },  // Similar to WolShutdownLinkSpeed?
 // 10MbFirst                      = "10 Mbps First"
 // 100MbFirst                     = "100 Mbps First"
 // NotSpeedDown                   = "Not Speed Down"
 // AdaptiveLinkSpeed              = "Adaptive Link Speed"
 // BatteryModeLinkSpeed           = "Battery Mode Link Speed"
+"CLKREQ" = : { "Type": "REG_SZ", "Data": 0 },
+"EnableCoalesce": { "Type": "REG_SZ", "Data": 0 },
+"*PacketCoalescing": { "Type": "REG_SZ", "Data": 0 },
 ```
