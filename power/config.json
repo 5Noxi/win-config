@@ -238,6 +238,7 @@
           "Operations": [
             { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "DisableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "MinimumIdleTimeoutInMS", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "DisableD3Cold", "Type": "REG_DWORD", "Value": 1 }
           ]
         }
@@ -251,6 +252,7 @@
           "Operations": [
             { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "DisableIdlePowerManagement", "Operation": "deletevalue" },
+            { "Name": "MinimumIdleTimeoutInMS", "Operation": "deletevalue" },
             { "Name": "DisableD3Cold", "Operation": "deletevalue" }
           ]
         }
@@ -403,6 +405,101 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
         "fDisablePowerManagement": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable NIC Power Savings": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetPowerTweaks": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*DeviceSleepOnDisconnect": { "Type": "REG_SZ", "Data": 0 },
+            "*EEE": { "Type": "REG_SZ", "Data": 0 },
+            "*EnableDynamicPowerGating": { "Type": "REG_SZ", "Data": 0 },
+            "*ModernStandbyWoLMagicPacket": { "Type": "REG_SZ", "Data": 0 },
+            "*NicAutoPowerSaver": { "Type": "REG_SZ", "Data": 0 },
+            "*SelectiveSuspend": { "Type": "REG_SZ", "Data": 0 },
+            "*SSIdleTimeout": { "Type": "REG_SZ", "Data": 1 },
+            "*SSIdleTimeoutScreenOff": { "Type": "REG_SZ", "Data": 5 },
+            "AdvancedEEE": { "Type": "REG_SZ", "Data": 0 },
+            "ASPM": { "Type": "REG_SZ", "Data": 0 },
+            "AutoPowerSaveModeEnabled": { "Type": "REG_SZ", "Data": 0 },
+            "EEELinkAdvertisement": { "Type": "REG_SZ", "Data": 0 },
+            "EEEPlus": { "Type": "REG_SZ", "Data": 0 },
+            "EnableAdvancedDynamicITR": { "Type": "REG_SZ", "Data": 0 },
+            "EnableAspm": { "Type": "REG_SZ", "Data": 0 },
+            "EnableD0PHYFlexibleSpeed": { "Type": "REG_SZ", "Data": 0 },
+            "EnableD3ColdInS0": { "Type": "REG_SZ", "Data": 0 },
+            "EnableDisconnectedStandby": { "Type": "REG_SZ", "Data": 0 },
+            "EnableExtraPowerSaving": { "Type": "REG_SZ", "Data": 0 },
+            "EnableGreenEthernet": { "Type": "REG_SZ", "Data": 0 },
+            "EnableModernStandby": { "Type": "REG_SZ", "Data": 0 },
+            "EnablePHYFlexibleSpeed": { "Type": "REG_SZ", "Data": 0 },
+            "EnablePHYWakeUp": { "Type": "REG_SZ", "Data": 0 },
+            "EnablePME": { "Type": "REG_SZ", "Data": 0 },
+            "EnablePowerManagement": { "Type": "REG_SZ", "Data": 0 },
+            "EnableSavePowerNow": { "Type": "REG_SZ", "Data": 0 },
+            "GigaLite": { "Type": "REG_SZ", "Data": 0 },
+            "IdleRestriction": { "Type": "REG_SZ", "Data": 1 },
+            "OBFFEnabled": { "Type": "REG_SZ", "Data": 0 },
+            "PnPCapabilities": { "Type": "REG_SZ", "Data": 24 },
+            "PowerDownPll": { "Type": "REG_SZ", "Data": 0 },
+            "PowerSavingMode": { "Type": "REG_SZ", "Data": 0 },
+            "ReduceSpeedOnPowerDown": { "Type": "REG_SZ", "Data": 0 },
+            "SipsEnabled": { "Type": "REG_SZ", "Data": 0 },
+            "SleepWhileWaiting": { "Type": "REG_SZ", "Data": 0 },
+            "ULPMode": { "Type": "REG_SZ", "Data": 0 },
+            "WolShutdownLinkSpeed": { "Type": "REG_SZ", "Data": 2 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetPowerTweaksRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*DeviceSleepOnDisconnect": { "Action": "deletevalue" },
+            "*EEE": { "Action": "deletevalue" },
+            "*EnableDynamicPowerGating": { "Action": "deletevalue" },
+            "*ModernStandbyWoLMagicPacket": { "Action": "deletevalue" },
+            "*NicAutoPowerSaver": { "Action": "deletevalue" },
+            "*SelectiveSuspend": { "Action": "deletevalue" },
+            "*SSIdleTimeout": { "Action": "deletevalue" },
+            "*SSIdleTimeoutScreenOff": { "Action": "deletevalue" },
+            "AdvancedEEE": { "Action": "deletevalue" },
+            "ASPM": { "Action": "deletevalue" },
+            "AutoPowerSaveModeEnabled": { "Action": "deletevalue" },
+            "EEELinkAdvertisement": { "Action": "deletevalue" },
+            "EEEPlus": { "Action": "deletevalue" },
+            "EnableAdvancedDynamicITR": { "Action": "deletevalue" },
+            "EnableAspm": { "Action": "deletevalue" },
+            "EnableD0PHYFlexibleSpeed": { "Action": "deletevalue" },
+            "EnableD3ColdInS0": { "Action": "deletevalue" },
+            "EnableDisconnectedStandby": { "Action": "deletevalue" },
+            "EnableExtraPowerSaving": { "Action": "deletevalue" },
+            "EnableGreenEthernet": { "Action": "deletevalue" },
+            "EnableModernStandby": { "Action": "deletevalue" },
+            "EnablePHYFlexibleSpeed": { "Action": "deletevalue" },
+            "EnablePHYWakeUp": { "Action": "deletevalue" },
+            "EnablePME": { "Action": "deletevalue" },
+            "EnablePowerManagement": { "Action": "deletevalue" },
+            "EnableSavePowerNow": { "Action": "deletevalue" },
+            "GigaLite": { "Action": "deletevalue" },
+            "IdleRestriction": { "Action": "deletevalue" },
+            "OBFFEnabled": { "Action": "deletevalue" },
+            "PnPCapabilities": { "Action": "deletevalue" },
+            "PowerDownPll": { "Action": "deletevalue" },
+            "PowerSavingMode": { "Action": "deletevalue" },
+            "ReduceSpeedOnPowerDown": { "Action": "deletevalue" },
+            "Selective Suspend Idle Timeout": { "Action": "deletevalue" },
+            "SipsEnabled": { "Action": "deletevalue" },
+            "SleepWhileWaiting": { "Action": "deletevalue" },
+            "ULPMode": { "Action": "deletevalue" },
+            "WolShutdownLinkSpeed": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   }

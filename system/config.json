@@ -42,6 +42,9 @@
         "EnableTickAccumulationFromAccountingPeriods": { "Type": "REG_DWORD", "Data": 0 },
         "EnableWerUserReporting": { "Type": "REG_DWORD", "Data": 0 },
         "HyperStartDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "MitigationAuditOptions": { "Type": "REG_DWORD", "Data": 0 },
+        "MitigationOptions": { "Type": "REG_DWORD", "Data": 0 },
+        "PowerOffFrozenProcessors": { "Type": "REG_DWORD", "Data": 1 },
         "ReadyTimeTicks": { "Type": "REG_DWORD", "Data": 6 },
         "ScanLatencyTicks": { "Type": "REG_DWORD", "Data": 7 },
         "SerializeTimerExpiration": { "Type": "REG_DWORD", "Data": 0 },
@@ -61,6 +64,9 @@
         "EnableTickAccumulationFromAccountingPeriods": { "Action": "deletevalue" },
         "EnableWerUserReporting": { "Action": "deletevalue" },
         "HyperStartDisabled": { "Action": "deletevalue" },
+        "MitigationAuditOptions": { "Action": "deletevalue" },
+        "MitigationOptions": { "Action": "deletevalue" },
+        "PowerOffFrozenProcessors": { "Action": "deletevalue" },
         "ReadyTimeTicks": { "Action": "deletevalue" },
         "ScanLatencyTicks": { "Action": "deletevalue" },
         "SerializeTimerExpiration": { "Action": "deletevalue" },
@@ -97,7 +103,7 @@
       },
       "SUBOPTION": {
         "Force DirectFlip": {
-          "DirectFlip": { "Type": "REG_DWORD", "Data": 1 }
+          "ForceDirectFlip": { "Type": "REG_DWORD", "Data": 1 }
         }
       }
     },
@@ -122,7 +128,7 @@
       },
       "SUBOPTION": {
         "Force DirectFlip": {
-          "DirectFlip": { "Action": "deletevalue" }
+          "ForceDirectFlip": { "Action": "deletevalue" }
         }
       }
     }

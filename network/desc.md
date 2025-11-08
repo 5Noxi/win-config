@@ -791,6 +791,8 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 "*QoSOffload" = 1
 #"*PMWiFiRekeyOffload" = 1
 
+Enable static offloads. For example, enable the UDP Checksums, TCP Checksums, and Send Large Offload (LSO) settings.
+
 # Disable Wake On
 
 "*WakeOnMagicPacket" = 0
@@ -803,11 +805,58 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 "WakeFromS5" = 0
 "WakeOn" = 0
 "WakeOnFastStartup" = 0
+"WakeOnLinkChange" = 0
 
 # Increase Buffers
 
-"*TransmitBuffers" = 4096
-"*ReceiveBuffers" = 4096
+The maximum data differs for users, e.g. if applying `4096` it may get rejected, see `inf` blocks below.
+
+Transmit Buffers:  
+> Defines the number of Transmit Descriptors. Transmit Descriptors are data segments that enable the adapter to track transmit packets in the system memory. Depending on the size of the packet, each transmit packet requires one or more Transmit Descriptors. You might choose to increase the number of Transmit Descriptors if you notice a problem with transmit performance. Increasing the number of Transmit Descriptors can enhance transmit performance. But, Transmit Descriptors consume system memory. If transmit performance is not an issue, use the default setting.
+
+Receive Buffers:  
+> Sets the number of buffers used by the driver when copying data to the protocol memory. Increasing this value can enhance the receive performance, but also consumes system memory. Receive Descriptors are data segments that enable the adapter to allocate received packets to memory. Each received packet requires one Receive Descriptor, and each descriptor uses 2 KB of memory.
+
+> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/29.3.1/receive-buffers/  
+> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/transmit-buffers/
+
+```inf
+; *TransmitBuffers
+HKR, Ndi\params\*TransmitBuffers,               ParamDesc,              0, %TransmitBuffers%
+HKR, Ndi\params\*TransmitBuffers,               default,                0, "512"
+HKR, Ndi\params\*TransmitBuffers,               min,                    0, "80"
+HKR, Ndi\params\*TransmitBuffers,               max,                    0, "2048"
+HKR, Ndi\params\*TransmitBuffers,               step,                   0, "8"
+HKR, Ndi\params\*TransmitBuffers,               Base,                   0, "10"
+HKR, Ndi\params\*TransmitBuffers,               type,                   0, "int"
+
+; *ReceiveBuffers
+HKR, Ndi\params\*ReceiveBuffers,                ParamDesc,              0, %ReceiveBuffers%
+HKR, Ndi\params\*ReceiveBuffers,                default,                0, "256"
+HKR, Ndi\params\*ReceiveBuffers,                min,                    0, "80"
+HKR, Ndi\params\*ReceiveBuffers,                max,                    0, "2048"
+HKR, Ndi\params\*ReceiveBuffers,                step,                   0, "8"
+HKR, Ndi\params\*ReceiveBuffers,                Base,                   0, "10"
+HKR, Ndi\params\*ReceiveBuffers,                type,                   0, "int"
+
+HKR, NDI\Params\*ReceiveBuffers,  ParamDesc, 0, "%RecvRingSize%"
+HKR, NDI\Params\*ReceiveBuffers,  default,    0, "512"
+HKR, NDI\Params\*ReceiveBuffers,  min, 	   0, "64"
+HKR, NDI\Params\*ReceiveBuffers,  max, 	   0, "4096"
+HKR, NDI\Params\*ReceiveBuffers,  step,	   0, "1"
+HKR, NDI\Params\*ReceiveBuffers,  Base,	   0, "10"
+HKR, NDI\Params\*ReceiveBuffers,  type,	   0, "dword"
+HKR, "", *ReceiveBuffers, 0, "512"
+
+HKR, NDI\Params\*TransmitBuffers,  ParamDesc, 0, "%SendRingSize%"
+HKR, NDI\Params\*TransmitBuffers,  default,	  0, "2048"
+HKR, NDI\Params\*TransmitBuffers,  min,	   0, "256"
+HKR, NDI\Params\*TransmitBuffers,  max,	   0, "4096"
+HKR, NDI\Params\*TransmitBuffers,  step,    0, "1"
+HKR, NDI\Params\*TransmitBuffers,  Base,    0, "10"
+HKR, NDI\Params\*TransmitBuffers,  type,    0, "dword"
+HKR, "", *TransmitBuffers,  %REG_SZ%, "2048"
+```
 
 # Enable USO
 
@@ -827,6 +876,49 @@ Teredo_State = Disabled
 > https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top
 > https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
 
+# Enable IM/ITR
+
+Some NICs expose multiple interrupt-moderation levels. Use interrupt moderation for CPU-bound workloads and weigh host-CPU savings against added latency. For the lowest possible latency, disable Interrupt Moderation, accepting higher CPU use as a tradeoff. At higher link speeds more interrupts drive up CPU and hurt performance, increasing the ITR lowers the interrupt rate and improves performance. IM batches received packets and starts a timer on first arrival, interrupting when the buffer fills or the timer expires. Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
+
+> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/interrupt-moderation-rate/  
+> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation
+
+```
+Off: ITR = 0 (no limit)
+Minimal: ITR = 200
+Low: ITR = 400
+Medium: ITR = 950
+High: ITR = 2000
+Extreme: ITR = 3600
+Adaptive: ITR = 65535
+```
+ITR = Interrupt Throttle Rate.
+
+```ìnf
+;  Interrupt Throttle Rate
+HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
+HKR, Ndi\Params\ITR,                                    default,                0, "65535"
+HKR, Ndi\Params\ITR\Enum,                               "65535",                0, %Adaptive%
+HKR, Ndi\Params\ITR\Enum,                               "3600",                 0, %Extreme%
+HKR, Ndi\Params\ITR\Enum,                               "2000",                 0, %High%
+HKR, Ndi\Params\ITR\Enum,                               "950",                  0, %Medium%
+HKR, Ndi\Params\ITR\Enum,                               "400",                  0, %Low%
+HKR, Ndi\Params\ITR\Enum,                               "200",                  0, %Minimal%
+HKR, Ndi\Params\ITR\Enum,                               "0",                    0, %Off%
+HKR, Ndi\Params\ITR,                                    type,                   0, "enum"
+
+; *InterruptModeration
+HKR, Ndi\Params\*InterruptModeration,                   ParamDesc,              0, %InterruptModeration%
+HKR, Ndi\Params\*InterruptModeration,                   default,                0, "1"
+HKR, Ndi\Params\*InterruptModeration\Enum,              "0",                    0, %Disabled%
+HKR, Ndi\Params\*InterruptModeration\Enum,              "1",                    0, %Enabled%
+HKR, Ndi\Params\*InterruptModeration,                   type,                   0, "enum"
+```
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : ITR
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *InterruptModeration
+```
 
 # Enable RSS
 
@@ -843,57 +935,6 @@ Teredo_State = Disabled
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/non-rss-receive-processing  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/rss-with-message-signaled-interrupts
-
-# Disable Power Savings
-
-"*EEE" = 0
-"AdvancedEEE" = 0
-
-"GigaLite" = 0
-"AutoPowerSaveModeEnabled" = 0
-"EnablePME" = 0
-"EEELinkAdvertisement" = 0
-#"EnableConnectedPowerGating" = 0
-"EnablePowerManagement" = 0
-"EnableGreenEthernet" = 0
-"PowerSavingMode" = 0
-"ReduceSpeedOnPowerDown" = 0
-
-"*ModernStandbyWoLMagicPacket" = 0
-"EnableModernStandby" = 0
-"ASPM" = 0
-"SipsEnabled" = 0
-
-"EnableSavePowerNow" = 0
-
-"*NicAutoPowerSaver" = 0
-"*DeviceSleepOnDisconnect" = 0
-"*EnableDynamicPowerGating" = 0
-"EnableAdvancedDynamicITR" = 0
-"PnPCapabilities" = 24
-"Selective Suspend Idle Timeout" = 60
-
-"*SSIdleTimeout" = 60
-"*SSIdleTimeoutScreenOff" = 5
-"*SelectiveSuspend" = 0
-"ULPMode" = 0
-
-"PowerDownPll" = 0
-
-"OBFFEnabled" = 0
-"EnableD0PHYFlexibleSpeed" = 0
-"EnablePHYWakeUp" = 0
-"EnablePHYFlexibleSpeed" = 0
-
-"SleepWhileWaiting" = 0
-"EnableD3ColdInS0" = 0
-"IdleRestriction" = 1
-"EnableDisconnectedStandby" = 0
-
-#"CLKREQ" = 0
-"EEEPlus" = 0
-"EnableAspm" = 0
-#"DynamicLTR" = 0
 
 # Disable File/Printer Sharing
 
@@ -940,3 +981,64 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
 					]
 },
 ```
+
+# Disable LLSE
+
+This setting is used to enable/disable the logging of link state changes. If enabled, a link-up change event or a link-down change event generates a message that is displayed in the system event logger. This message contains the link’s speed and duplex. Administrators view the event message from the system event log.
+
+The following events are logged:  
+- The link is up. (`LINK_UP_CHANGE`)
+- The link is down. (`LINK_DOWN_CHANGE`)
+- Mismatch in duplex. (`LINK_DUPLEX_MISMATCH`)
+- Spanning Tree Protocol detected.
+
+```inf
+;Log Link State Event
+HKR,Ndi\Params\LogLinkStateEvent,                       ParamDesc,              0, %LogLinkState%
+HKR,Ndi\Params\LogLinkStateEvent,                       Type,                   0, "enum"
+HKR,Ndi\Params\LogLinkStateEvent,                       Default,                0, "51"
+HKR,Ndi\Params\LogLinkStateEvent\Enum,                  "51",                   0, %Enabled%
+HKR,Ndi\Params\LogLinkStateEvent\Enum,                  "16",                   0, %Disabled%
+```
+
+---
+
+Miscellaenous notes:
+```c
+"LogWolEvent" = 16  // ?
+```
+
+# Disable Flow Control
+
+A sending station (computer or network switch) may be transmitting data faster than the other end of the link can accept it. Using flow control, the receiving station can signal the sender requesting suspension of transmissions until the receiver catches up.
+
+- For adapters to benefit from this feature, link partners must support flow control frames.  
+- On systems running a Microsoft Windows Server* operating system, enabling QoS/priority flow control will disable link level flow control.  
+- Some devices support Auto Negotiation. Selecting this will cause the device to advertise the value stored in its NVM (usually "Disabled").
+
+> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/
+
+# Enable Jumbo Packets
+
+As the name says ("Jumbo"), it is used for big packets, you won't use this feature. Jumbo packets are disabled by default. Enable Jumbo Packets **only if all devices across the network support them** and are configured to use the same frame size.
+
+The Jumbo Frames feature enables or disables Jumbo Packet capability. The standard Ethernet frame size is about `1514 bytes`, while Jumbo Packets are larger than this. Jumbo Packets can increase throughput and decrease CPU utilization. However, additional latency may be introduced.
+
+- Enable Jumbo frames only if devices across the network support them and are configured to use the same frame size. When setting up Jumbo Frames on other network devices, be aware that different network devices calculate Jumbo Frame sizes differently. Some devices include the header information in the frame size while others do not. Intel® adapters do not include header information in the frame size.
+- Supported protocols are limited to IP (TCP, UDP).
+- Using Jumbo frames at 10 or 100 Mbps can result in poor performance or loss of link.
+- You must not lower Receive_Buffers or Transmit_Buffers below 256 if jumbo frames are enabled. Doing so will cause loss of link.
+- When configuring Jumbo frames on a switch, set the frame size 4 bytes higher for CRC, plus 4 bytes if using VLANs or QoS packet tagging.
+
+> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html  
+> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/30.5/jumbo-frames/
+
+```inf
+HKR, Ndi\params\*JumboPacket,	ParamDesc,	0, %JumboPacket%
+HKR, Ndi\params\*JumboPacket,	Type,		0, "enum"
+HKR, Ndi\params\*JumboPacket\enum,	"0",	0, "%Bytes1514%"
+HKR, Ndi\params\*JumboPacket\enum,	"1",	0, "%Bytes4088%"
+HKR, Ndi\params\*JumboPacket\enum,	"2",	0, "%Bytes9014%"
+HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
+```
+`1514` = Disabled.

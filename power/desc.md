@@ -500,3 +500,25 @@ This policy setting specifies that power management is disabled when the machine
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fMinimizeConnections
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fSoftDisconnectConnections
 ```
+
+# Disable NIC Power Savings
+
+
+```inf
+[WolShutdownLinkSpeed.kw]
+HKR,Ndi\params\WolShutdownLinkSpeed,           ParamDesc,       0, %WolShutdownLinkSpeed%
+;HKR,Ndi\params\WolShutdownLinkSpeed,          optional,        0, "1"
+HKR,Ndi\params\WolShutdownLinkSpeed,           Type,            0, "enum"
+HKR,Ndi\params\WolShutdownLinkSpeed,           Default,         0, "0"
+HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "0",             0, %10MbFirst%
+HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "1",             0, %100MbFirst%
+HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "2",             0, %NotSpeedDown%
+HKR,,WolShutdownLinkSpeed,0,"0"
+```
+
+#"EnableConnectedPowerGating" = 0
+#"CLKREQ" = 0
+#"DynamicLTR" = 0
+#"S3S4WolPowerSaving" = 0
+#AutoLinkDownPcieMacOff = 0 ("Auto Disable PCIe")
+#BatteryModeLinkSpeed = 2

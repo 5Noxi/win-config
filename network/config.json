@@ -753,8 +753,8 @@
         "EnableAdapterUso": {
           "Action": "ethernet_key",
           "Values": {
-            "*UsoIPv4": { "Type": "REG_DWORD", "Data": 1 },
-            "*UsoIPv6": { "Type": "REG_DWORD", "Data": 1 }
+            "*UsoIPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*UsoIPv6": { "Type": "REG_SZ", "Data": 1 }
           }
         }
       }
@@ -766,6 +766,30 @@
           "Values": {
             "*UsoIPv4": { "Action": "deletevalue" },
             "*UsoIPv6": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
+  "Enable IM/ITR": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetInterruptModeration": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*InterruptModeration": { "Type": "REG_SZ", "Data": 1 },
+            "ITR": { "Type": "REG_SZ", "Data": 200 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetInterruptModerationRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*InterruptModeration": { "Type": "REG_SZ", "Data": 1 },
+            "ITR": { "Action": "deletevalue" }
           }
         }
       }
@@ -794,6 +818,72 @@
           "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Enable-NetFirewallRule"
         },
         "EnableMsServerBinding": { "Action": "netbind", "ComponentIDs": ["ms_server"], "State": "enable" }
+      }
+    }
+  },
+  "Disable LLSE": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetLogLinkStateEvent": {
+          "Action": "ethernet_key",
+          "Values": {
+            "LogLinkStateEvent": { "Type": "REG_SZ", "Data": 16 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetLogLinkStateEventRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "LogLinkStateEvent": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
+  "Disable Flow Control": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetFlowControl": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*FlowControl": { "Type": "REG_SZ", "Data": 0 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetFlowControlRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*FlowControl": { "Type": "REG_SZ", "Data": 3 }
+          }
+        }
+      }
+    }
+  },
+  "Enable Jumbo Packets": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetJumboPacket": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*JumboPacket": { "Type": "REG_SZ", "Data": 4088 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetJumboPacketRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*JumboPacket": { "Type": "REG_SZ", "Data": 1514 }
+          }
+        }
       }
     }
   }
