@@ -34,24 +34,24 @@ pip install PySide6 mistune requests
 ### Overview
 | Context | Allowed actions |
 | ------ | ------ |
-| `COMMANDS` | `run_powershell`, `delete_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent`, `nvidia_key`, `ethernet_key` |
+| `COMMANDS`                           | `run_powershell`, `delete_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent`, `nvidia_key`, `ethernet_key` |
 | Registry hives (`HKCU\`, `HKLM\`...) | Direct value set, `deletevalue` |
 
 ### Actions & Requirements
 | Action | Required / optional arguments |
 | ------ | ------ |
-| `run_powershell` | Required: `Command` - Optional: `Elevated` |
-| `delete_path` | Use one: `Path` or `Paths` (array) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
-| `scheduled_task` | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) |
-| `tcp_congestion` | Required: `Templates` (string or array), `Provider` (or `Value`) |
-| `netbind` | Required: component identifiers via one of `ComponentIDs` (array) / `Components` (array) / `ComponentID` / `Component` - Required state: `State` (`enable` | `disable`) (or boolean via `Enabled`/`Enable`) |
+| `run_powershell`   | Required: `Command` - Optional: `Elevated` |
+| `delete_path`      | Use one: `Path` or `Paths` (array) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
+| `scheduled_task`   | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) |
+| `tcp_congestion`   | Required: `Templates` (string or array), `Provider` (or `Value`) |
+| `netbind`          | Required: component identifiers via one of `ComponentIDs` (array) / `Components` (array) / `ComponentID` / `Component` - Required state: `State` (`enable` | `disable`) (or boolean via `Enabled`/`Enable`) |
 | `optional_feature` | Feature names: via one of `Features` (array) / `Name` / `Feature` / `FeatureName` - Required state: `State` (`Enabled` | `Disabled`) (or boolean via `Enabled`/`Enable`) - Optional: `Arguments` (array or string), `Elevated` |
 | `restart_explorer` | (no arguments) |
-| `bcdedit` | Required: `Name` (or `Option`) - One of: `Value` or `Delete`/`Remove` (bool) |
+| `bcdedit`          | Required: `Name` (or `Option`) - One of: `Value` or `Delete`/`Remove` (bool) |
 | `registry_pattern` | Required: `Pattern`, `Operations` (array) - Optional: `ExcludeSubPaths`, `ExcludePatterns`, `ExcludeSegments`, `Exclude`, `Root`, `Message` |
-| `mmagent` | Required: `Setting` (or `Option`/`Name`), desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
-| `nvidia_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
-| `ethernet_key` | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
+| `mmagent`          | Required: `Setting` (or `Option`/`Name`), desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
+| `nvidia_key`       | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
+| `ethernet_key`     | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter  |
 
 ### Buttons
 | Key | Purpose |
