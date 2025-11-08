@@ -503,9 +503,85 @@ This policy setting specifies that power management is disabled when the machine
 
 # Disable NIC Power Savings
 
+You can get a lot of information about data ranges and more from `.inf` files, see examples below.
+
+Trace of values which get read on boot (Intel adapter):
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/NIC-Intel.txt
 
 ```inf
-[WolShutdownLinkSpeed.kw]
+HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
+HKR,Ndi\Params\*DeviceSleepOnDisconnect,type,         ,enum
+HKR,Ndi\Params\*DeviceSleepOnDisconnect,default,      ,0
+HKR,Ndi\Params\*DeviceSleepOnDisconnect\enum,0,       ,%Disabled%
+HKR,Ndi\Params\*DeviceSleepOnDisconnect\enum,1,       ,%Enabled%
+
+HKR, Ndi\Params\*EEE,    	                ParamDesc,      0,       %EEE%
+HKR, Ndi\Params\*EEE,    	                Type,           0,       "enum"
+HKR, Ndi\Params\*EEE\enum, 	                "1",            0,       %Enabled%
+HKR, Ndi\Params\*EEE\enum, 	                "0",            0,       %Disabled%
+HKR, Ndi\Params\*EEE,    	                Default,        0,       "0"
+
+HKR,Ndi\params\*SelectiveSuspend,	    ParamDesc,  0, %SelectiveSuspend%
+HKR,Ndi\params\*SelectiveSuspend,	    default,    0, "1"
+HKR,Ndi\params\*SelectiveSuspend,	    type,       0, "enum"
+HKR,Ndi\params\*SelectiveSuspend\enum,   "0",        0, "Disabled"
+HKR,Ndi\params\*SelectiveSuspend\enum,   "1",        0, "Enabled"
+
+HKR,Ndi\Params\*SSIdleTimeout,      ParamDesc,  0, "SSIdleTimeout"
+HKR,Ndi\Params\*SSIdleTimeout,      Type,       0, "int"
+HKR,Ndi\Params\*SSIdleTimeout,      Default,    0, "60"
+HKR,Ndi\Params\*SSIdleTimeout,      Min,        0, "1"
+HKR,Ndi\Params\*SSIdleTimeout,      Max,        0, "60"
+HKR,Ndi\Params\*SSIdleTimeout,      Step,       0, "1"
+HKR,Ndi\Params\*SSIdleTimeout,      Base,       0, "10"
+
+HKR, Ndi\params\AdvancedEEE,        ParamDesc,  0, %AdvancedEEE%
+HKR, Ndi\params\AdvancedEEE,        optional,   0, "1"
+HKR, Ndi\params\AdvancedEEE,        Type,       0, "enum"
+HKR, Ndi\params\AdvancedEEE,        Default,    0, "0"
+HKR, Ndi\params\AdvancedEEE\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\AdvancedEEE\enum,   "1",        0, %Enabled%
+
+[DisableAutoPowerSave.reg]
+HKR,,				       AutoPowerSaveModeEnabled, 0, "0"
+
+HKR, Ndi\params\EnableGreenEthernet,        ParamDesc,  0, %GreenEthernet%
+;HKR, Ndi\params\EnableGreenEthernet,        optional,   0, "1"
+HKR, Ndi\params\EnableGreenEthernet,        Type,       0, "enum"
+HKR, Ndi\params\EnableGreenEthernet,        Default,    0, "0"
+HKR, Ndi\params\EnableGreenEthernet\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\EnableGreenEthernet\enum,   "1",        0, %Enabled%
+
+HKR, Ndi\params\GigaLite,        ParamDesc,  0, %GigaLite%
+;HKR, Ndi\params\GigaLite,        optional,   0, "1"
+HKR, Ndi\params\GigaLite,        Type,       0, "enum"
+HKR, Ndi\params\GigaLite,        Default,    0, "1"
+HKR, Ndi\params\GigaLite\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\GigaLite\enum,   "1",        0, %Enabled%
+
+HKR,Ndi\params\*IdleRestriction,        ParamDesc,  0, %IdleRestriction%
+HKR,Ndi\params\*IdleRestriction,        Type,       0, "enum"
+HKR,Ndi\params\*IdleRestriction,        Default,    0, "0"
+HKR,Ndi\params\*IdleRestriction\enum,   "0",        0, %RestrictionDisable%
+HKR,Ndi\params\*IdleRestriction\enum,   "1",        0, %RestrictionEnable%
+
+HKR,Ndi\params\PowerSavingMode,    ParamDesc,  0, %PowerSavingMode%
+HKR,Ndi\params\PowerSavingMode,    Type,       0, "enum"
+HKR,Ndi\params\PowerSavingMode,    Default,    0, "1"
+HKR,Ndi\params\PowerSavingMode\enum,   "0",    0, %Disabled%
+HKR,Ndi\params\PowerSavingMode\enum,   "1",    0, %Enabled%
+
+HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  ParamDesc,              0, %ReduceSpeedOnPowerDown%
+HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  Type,                   0, "enum"
+HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  Default,                0, "1"
+HKR,Ndi\Params\ReduceSpeedOnPowerDown\Enum,             "1",                    0, %Enabled%
+HKR,Ndi\Params\ReduceSpeedOnPowerDown\Enum,             "0",                    0, %Disabled%
+
+HKR,Ndi\Params\ULPMode,                                 Type,                   0, "enum"
+HKR,Ndi\Params\ULPMode,                                 Default,                0, "1"
+HKR,Ndi\Params\ULPMode\Enum,                            "1",                    0, %Enabled%
+HKR,Ndi\Params\ULPMode\Enum,                            "0",                    0, %Disabled%
+
 HKR,Ndi\params\WolShutdownLinkSpeed,           ParamDesc,       0, %WolShutdownLinkSpeed%
 ;HKR,Ndi\params\WolShutdownLinkSpeed,          optional,        0, "1"
 HKR,Ndi\params\WolShutdownLinkSpeed,           Type,            0, "enum"
@@ -513,12 +589,22 @@ HKR,Ndi\params\WolShutdownLinkSpeed,           Default,         0, "0"
 HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "0",             0, %10MbFirst%
 HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "1",             0, %100MbFirst%
 HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "2",             0, %NotSpeedDown%
-HKR,,WolShutdownLinkSpeed,0,"0"
 ```
 
-#"EnableConnectedPowerGating" = 0
-#"CLKREQ" = 0
-#"DynamicLTR" = 0
-#"S3S4WolPowerSaving" = 0
-#AutoLinkDownPcieMacOff = 0 ("Auto Disable PCIe")
-#BatteryModeLinkSpeed = 2
+---
+
+Miscellaneous notes:
+
+```c
+"EnableConnectedPowerGating" = 0
+"CLKREQ" = 0
+"DynamicLTR" = 0
+"S3S4WolPowerSaving" = 0
+AutoLinkDownPcieMacOff = 0 // "Auto Disable PCIe"
+BatteryModeLinkSpeed = 3  // ?
+// 10MbFirst                      = "10 Mbps First"
+// 100MbFirst                     = "100 Mbps First"
+// NotSpeedDown                   = "Not Speed Down"
+// AdaptiveLinkSpeed              = "Adaptive Link Speed"
+// BatteryModeLinkSpeed           = "Battery Mode Link Speed"
+```

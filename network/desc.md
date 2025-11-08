@@ -894,7 +894,7 @@ Adaptive: ITR = 65535
 ```
 ITR = Interrupt Throttle Rate.
 
-```ìnf
+```inf
 ;  Interrupt Throttle Rate
 HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
 HKR, Ndi\Params\ITR,                                    default,                0, "65535"
