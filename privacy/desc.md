@@ -2682,3 +2682,24 @@ If you disable this policy setting, Windows does not connect to an online font p
 					]
 },
 ```
+
+# Disable Local Security Questions
+
+Prevent the use of security questions for local accounts.
+
+```json
+	{
+	"File":  "CredUI.admx",
+	"NameSpace":  "Microsoft.Policies.CredentialsUI",
+	"Class":  "Machine",
+	"CategoryName":  "CredUI",
+	"DisplayName":  "Prevent the use of security questions for local accounts",
+	"ExplainText":  "If you turn this policy setting on, local users won't be able to set up and use security questions to reset their passwords.",
+	"Supported":  "Windows_10_0_RS6",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
+	"KeyName":  "NoLocalPasswordResetQuestions",
+	"Elements":  [
+
+					]
+},
+```

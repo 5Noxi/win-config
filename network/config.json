@@ -1010,5 +1010,27 @@
         }
       }
     }
+  },
+  "Disable FEC": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetDisableFec": {
+          "Action": "ethernet_key",
+          "Values": {
+            "FecMode": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetDisableFecRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "FecMode": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
   }
 }

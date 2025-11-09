@@ -2383,5 +2383,17 @@
         "EnableFontProviders": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable Local Security Questions": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+        "NoLocalPasswordResetQuestions": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+        "NoLocalPasswordResetQuestions": { "Action": "deletevalue" }
+      }
+    }
   }
 }

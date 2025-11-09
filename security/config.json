@@ -797,11 +797,25 @@
     "apply": {
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\CredUI": {
         "DisablePasswordReveal": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Require Trusted Path for Credential Entry": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+            "EnableSecureCredentialPrompting": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\CredUI": {
         "DisablePasswordReveal": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Require Trusted Path for Credential Entry": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+            "EnableSecureCredentialPrompting": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },

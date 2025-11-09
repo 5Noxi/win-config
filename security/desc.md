@@ -856,6 +856,47 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v BlockDomainPictureP
 "This policy setting allows you to control whether a domain user can sign in using a picture password. If you enable this policy setting, a domain user can't set up or sign in with a picture password. If you disable or don't configure this policy setting, a domain user can set up and use a picture password. Note that the user's domain password will be cached in the system vault when using this feature."
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Policies-System.txt
 
+`Require Trusted Path for Credential Entry`:  
+"This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user's Windows credentials. Note: This policy affects nonlogon authentication tasks only. As a security best practice, this policy should be enabled. If you enable this policy setting, users will be required to enter Windows credentials on the Secure Desktop by means of the trusted path mechanism. If you disable or do not configure this policy setting, users will enter Windows credentials within the user's desktop session, potentially allowing malicious code access to the user's Windows credentials."
+
+```json
+{
+	"File":  "CredUI.admx",
+	"NameSpace":  "Microsoft.Policies.CredentialsUI",
+	"Class":  "Both",
+	"CategoryName":  "CredUI",
+	"DisplayName":  "Do not display the password reveal button",
+	"ExplainText":  "This policy setting allows you to configure the display of the password reveal button in password entry user experiences.If you enable this policy setting, the password reveal button will not be displayed after a user types a password in the password entry text box.If you disable or do not configure this policy setting, the password reveal button will be displayed after a user types a password in the password entry text box.By default, the password reveal button is displayed after a user types a password in the password entry text box. To display the password, click the password reveal button.The policy applies to all Windows components and applications that use the Windows system controls, including Internet Explorer.",
+	"Supported":  "Windows8_Or_IE10",
+	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CredUI",
+	"KeyName":  "DisablePasswordReveal",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "0",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+{
+	"File":  "CredUI.admx",
+	"NameSpace":  "Microsoft.Policies.CredentialsUI",
+	"Class":  "Machine",
+	"CategoryName":  "CredUI",
+	"DisplayName":  "Require trusted path for credential entry",
+	"ExplainText":  "This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user's Windows credentials.Note: This policy affects nonlogon authentication tasks only. As a security best practice, this policy should be enabled.If you enable this policy setting, users will be required to enter Windows credentials on the Secure Desktop by means of the trusted path mechanism.If you disable or do not configure this policy setting, users will enter Windows credentials within the user's desktop session, potentially allowing malicious code access to the user's Windows credentials.",
+	"Supported":  "WindowsVista",
+	"KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI",
+	"KeyName":  "EnableSecureCredentialPrompting",
+	"Elements":  [
+
+					]
+},
+```
+
 # Disable P2P Updates
 
 Prevents updates that would be downloaded from PCs in your network (only downloads updates from micorosoft servers).

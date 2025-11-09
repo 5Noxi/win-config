@@ -1362,3 +1362,70 @@ HKR, NDI\Params\*VMQVlanFiltering\enum,  "0",  0, "%Disabled%"
 HKR, NDI\Params\*VMQVlanFiltering\enum,  "1",  0, "%Enabled%"
 HKR, "", *VMQVlanFiltering, %REG_SZ%, "1"
 ```
+
+# Disable FEC
+
+FEC (forwarded error correction) improves link stability, but increases latency. Many high quality optics, direct attach cables, and backplane channels provide a stable link without FEC.
+
+`Auto FEC`: Sets the FEC Mode based on the capabilities of the attached cable.  
+`CL108 RS-FEC`: Selects only RS-FEC ability and request capabilities.  
+`CL74 FC-FEC/BASE-R`: Selects only BASE-R ability and request capabilities.  
+`No FEC`: Disables FEC.
+
+> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/
+
+```c
+RegistryKey<enum HdSplitLocation>::Initialize(
+    (struct ADAPTER_CONTEXT *)((char *)*this + 1004),
+    *this,
+    *((NDIS_HANDLE *)*this + 383),
+    (PUCHAR)"FecMode",
+    0, // min
+    3u, // max
+    0, // default
+    0,
+    1);
+```
+
+Using the intel documentation above `0`-`3` could mean:  
+`0` = `Auto FEC`  
+`1` = `CL108 RS-FEC`  
+`2` = `CL74 FC-FEC/BASE-R`  
+`3` = `No FEC`
+
+At the moment, this is more of a speculation, so you should leave the option disabled until I add more information on this topic.
+
+# DNS Provider
+
+Cloudflare: `Cleartext`, `DoH`, `DoT`, `DNSCrypt`
+
+---
+
+DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution).
+
+The four types of DNS servers:
+The **recursive resolver** sends requests to the other three nameservers (root -> TLD -> authoritative), if there's no cached data. It saves the data from the authoritative nameserver so the resolver can skip the requests and send back the IP from the domain to the client. If you're not using any specific DNS server, you're using the resolver from your ISP.
+
+The resolver firstly queries a [**root nameserver**](https://root-servers.org/), which returns the [TLD](https://www.iana.org/domains/root/db) (extension or last segment) -> e.g. `.com`, `.org`, `.net` & more. The root servers are managed by [ICANN](https://www.icann.org/resources/pages/what-2012-02-25-en). If the extension e.g. ends with `.org`, the root server would direct to the `.org` TLD nameserver.
+
+The **TLD nameserver** includes data for domain names, it redirects to the authoritative nameserver, after the correct TLD nameserver was found. They are managed from [IANA](https://www.iana.org/domains/root/db), which splits the TLDs into two groups, generic/gTLD (sTLD and uTLD - sponsored & unsponsored, ngTLD counts as gTLD) and county code/ccTLD.
+
+Additional info - Types of TLDs:  
+> **gTLD** -> Generic, common domain names like `.com`, `.org`
+> **ccTLD** -> Country code TLDs, like `.us`, `.de`, `.uk` etc.
+> [**sTLD**](https://icannwiki.org/index.php?title=Sponsored_Top_level_Domain#List_of_Sponsored_Top_Level_Domains) -> Sponsored by private organizations, reserved for these groups: `.mil`, `.app`, `.gov`
+> [**ARPA**](https://www.iana.org/domains/arpa) -> Infrastructural TLD, only contains `.arpa`. Used for reversed DNS lookups, you won't use it
+> **ngTLD** -> New gTLD, used for branding, niches, etc.: `.shop`, `.online`, `.tech`
+> **Reserved TLD** -> Used for testing, they cannot be used: `.localhost`, `.example`
+
+The **authoritative nameserver** tells the resolver the IP address, from the [A record](https://support.dnsimple.com/articles/a-record/). [Records](https://www.cloudflare.com/learning/dns/dns-records/) are included in authoritative DNS servers and contain information like the IP address, TTL value and more.
+
+Step 9 is the HTTP request from the browser to the IP from the resolver & step 10 returns the web page (mostly HTML data). 
+
+![](https://github.com/5Noxi/win-config/blob/main/network/images/dnslookup.png?raw=true)
+
+Some additional info about HTTP request methods you may want to know:  
+> `GET` & `POST` HTTP request methods are the most common ones. `GET` request awaits data (read a web page), `POST` request means that the user is sending data. There more [request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods), but I won't add them here. You're able to turn off `GET` requests in the DDG search engine settings, to hide search queries in the request body (queries aren't visible in browser history or logs), which is why I added this info. You can see request in the network tab (`F12`).
+
+> https://www.privacyguides.org/en/dns/  
+> https://dnsimple.com/comics

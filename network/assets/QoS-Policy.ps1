@@ -29,4 +29,5 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\QoS\$nvpn" -Na
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\QoS\$nvpn" -Name "Remote IP Prefix Length" -Value "*" -Force
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\QoS\$nvpn" -Name "DSCP Value" -Value "46" -Force
 Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\QoS\$nvpn" -Name "Throttle Rate" -Value "-1" -Force
-Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\QoS" -Name "Do not use NLA" -Value "1" -Force
+if (!(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\QoS")) { New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\QoS" -Force | Out-Null }
+Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\Tcpip\QoS" -Name "Do not use NLA" -Type String -Value "1"
