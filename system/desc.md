@@ -1357,6 +1357,116 @@ Decrease timeout of dual-boot selection window (default of `10`).
 `bcdedit /set bootmenupolicy Legacy`
 "Defines the type of boot menu the system will use. For Windows 10, Windows 8.1, Windows 8 and Windows RT the default is Standard. For Windows Server 2012 R2, Windows Server 2012, the default is Legacy. When Legacy is selected, the Advanced options menu (F8) is available. When Standard is selected, the boot menu appears but only under certain conditions: for example, if there is a startup failure, if you are booting up from a repair disk or installation media, if you have configured multiple boot entries, or if you manually configured the computer to use Advanced startup. When Standard is selected, the F8 key is ignored during boot."
 
+---
+
+Personal notes on several features, used pseudocode:
+> [system/assets | bcdedit-HalpMiscGetParameters.c](https://github.com/5Noxi/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c)
+
+```c
+lkd> db HalpInterruptX2ApicPolicy l1
+fffff807`8d20a5dc  01
+
+if ( strstr(v3, "X2APICPOLICY=ENABLE") )
+    HalpInterruptX2ApicPolicy = 1;
+
+if ( strstr(v3, "X2APICPOLICY=DISABLE") )
+    HalpInterruptX2ApicPolicy = 0;
+
+if ( strstr(v3, "USELEGACYAPICMODE") )
+    HalpInterruptX2ApicPolicy = 0; // force disable
+```
+```c
+lkd> db HalpTscSyncPolicy l1
+Couldnt resolve error at HalpTscSyncPolicy // doesn't exist
+
+HalpTscSyncPolicy = 1; // TSCSYNCPOLICY=LEGACY
+HalpTscSyncPolicy = 2; // TSCSYNCPOLICY=ENHANCED
+```
+
+`bcdedit /set loadoptions SYSTEMWATCHDOGPOLICY=DISABLED`
+```c
+if ( strstr(v3, "SYSTEMWATCHDOGPOLICY=DISABLED") )
+{
+    HalpTimerWatchdogDisable = 1;
+}
+else if ( strstr(v3, "SYSTEMWATCHDOGPOLICY=PHYSICALONLY") )
+{
+    HalpTimerWatchdogPhysicalOnly = 1;
+}
+
+lkd> db HalpTimerWatchdogDisable l1
+fffff803`d21c0712  00 // default
+```
+```c
+lkd> db HalpTimerPlatformSourceForced l1
+fffff803`d21c25d0  00
+lkd> db HalpTimerPlatformClockSourceForced l1
+fffff803`d21c2678  00
+
+if ( strstr(v3, "USEPLATFORMCLOCK") )
+    HalpTimerPlatformSourceForced = 1;
+
+if ( strstr(v3, "USEPLATFORMTICK") )
+    HalpTimerPlatformClockSourceForced = 1;
+```
+```c
+lkd> db HalpMiscDiscardLowMemory l1
+fffff803`d21bff79  01 // USENONE / USEPRIVATE?
+lkd> db HalpHvCpuManager l1
+fffff804`c27c0490  00
+
+if ( (unsigned int)HalpInterruptModel() == 1 )
+    HalpMiscDiscardLowMemory = 1; // default if HalpInterruptModel() == 1
+
+if ( HalpHvCpuManager )
+{
+    v19[0] = 0;
+    if ( (unsigned __int8)HalpGetCpuInfo(0LL, 0LL, 0LL, v19) )
+    {
+        if ( v19[0] == 2 && (__readmsr(0xFEu) & 0x8000) != 0 )
+        HalpMiscDiscardLowMemory = 1; // 1 if HV CPU manager + CPU type 2 + MSR 0xFE bit 15 set
+    }
+}
+if (strstr(BootOptions, "FIRSTMEGABYTEPOLICY=USEALL") || // one of them have to be true to get 0
+    (HalpIsMicrosoftCompatibleHvLoaded() && !HalpHvCpuManager)) // system running under hypervisor & not HalpHvCpuManager
+{
+    HalpMiscDiscardLowMemory = 0; // forced 0 if above is true
+}
+```
+```c
+v3 = *(const char **)(a1 + 216);
+if ( v3 )
+{
+    strstr(*(const char **)(a1 + 216), "SAFEBOOT:"); // does nothing here
+
+    if ( strstr(v3, "ONECPU") )
+        HalpInterruptProcessorCap = 1;
+
+    if ( strstr(v3, "USEPHYSICALAPIC") )
+        HalpInterruptPhysicalModeOnly = 1;
+
+    if ( strstr(v3, "BREAK") )
+        HalpMiscDebugBreakRequested = 1;
+}
+```
+```c
+if ( strstr(v3, "CONFIGACCESSPOLICY=DISALLOWMMCONFIG") )
+    HalpAvoidMmConfigAccessMethod = 1; // force avoid
+```
+```c
+if ( strstr(v3, "MSIPOLICY=FORCEDISABLE") ) // HalpInterruptSetMsiOverride(0)
+{
+    v10 = 0LL;
+}
+else
+{
+    if ( !strstr(v3, "FORCEMSI") ) // HalpInterruptSetMsiOverride(1)
+        goto LABEL_46;
+    LOBYTE(v10) = 1;
+}
+HalpInterruptSetMsiOverride(v10);
+```
+
 Default entries:
 ```ps
 Windows Boot Manager
