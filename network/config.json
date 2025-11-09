@@ -701,7 +701,7 @@
       }
     }
   },
-  "Disable WOL": {
+  "Disable WoL": {
     "apply": {
       "COMMANDS": {
         "DisableAdapterWake": {
@@ -718,7 +718,8 @@
             "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnLinkChange": { "Type": "REG_SZ", "Data": 0 },
-            "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 }
+            "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 },
+            "WakeUpModeCap": { "Type": "REG_SZ", "Data": 0 }
           }
         }
       },
@@ -751,7 +752,8 @@
             "WakeOnFastStartup": { "Action": "deletevalue" },
             "WakeOnLink": { "Action": "deletevalue" },
             "WakeOnLinkChange": { "Action": "deletevalue" },
-            "WakeOnMagicPacketFromS5": { "Action": "deletevalue" }
+            "WakeOnMagicPacketFromS5": { "Action": "deletevalue" },
+            "WakeUpModeCap": { "Action": "deletevalue" }
           }
         }
       },

@@ -894,9 +894,9 @@ HKR, Ndi\Params\*LsoV2IPv6\Enum,                "1",                    0, %Enab
 HKR, Ndi\Params\*LsoV2IPv6,                     type,                   0, "enum"
 ```
 
-# Disable WOL
+# Disable WoL
 
-WOL is an Ethernet networking standard that allows a properly configured network computer to be turned on or awakened by a network message. WOL is an industry standard protocol for waking computers up from a low-power mode remotely. The definition of low-power mode means while the computer is off and has access to a power source. This is useful if you plan to access your computer remotely for any reason: It allows you to retain access to your files and programs, while keeping the computer in a low-power state.
+WoL is an Ethernet networking standard that allows a properly configured network computer to be turned on or awakened by a network message. WoL is an industry standard protocol for waking computers up from a low-power mode remotely. The definition of low-power mode means while the computer is off and has access to a power source. This is useful if you plan to access your computer remotely for any reason: It allows you to retain access to your files and programs, while keeping the computer in a low-power state.
 
 > https://www.dell.com/support/kbdoc/en-us/000129137/wake-on-lan-wol-troubleshooting-best-practices
 
@@ -920,8 +920,55 @@ HKR, Ndi\Params\WaitAutoNegComplete,            type,                   0, "enum
 
 ---
 
-Miscellaneous notes:
 ```inf
+HKR, Ndi\Params\*WakeOnMagicPacket,		ParamDesc,	0, 	%MagicPacket%
+HKR, Ndi\Params\*WakeOnMagicPacket,		Type,		0, 	"enum"
+HKR, Ndi\Params\*WakeOnMagicPacket\enum,	"1",		0, 	%Enabled%
+HKR, Ndi\Params\*WakeOnMagicPacket\enum,	"0",		0, 	%Disabled%
+HKR, Ndi\Params\*WakeOnMagicPacket,		Default,	0, 	"1"
+
+HKR, Ndi\Params\*WakeOnPattern,			ParamDesc,	0, 	%PatternMatch%
+HKR, Ndi\Params\*WakeOnPattern,			Type,		0, 	"enum"
+HKR, Ndi\Params\*WakeOnPattern\enum,		"1",		0, 	%Enabled%
+HKR, Ndi\Params\*WakeOnPattern\enum,		"0",		0, 	%Disabled%
+HKR, Ndi\Params\*WakeOnPattern,			Default,	0, 	"1"
+
+HKR,Ndi\params\S5WakeOnLan,       ParamDesc,  0, %S5WakeOnLan%
+HKR,Ndi\params\S5WakeOnLan,       Type,       0, "enum"
+HKR,Ndi\params\S5WakeOnLan,       Default,    0, "1"
+HKR,Ndi\params\S5WakeOnLan\enum,  "0",        0, %Disabled%
+HKR,Ndi\params\S5WakeOnLan\enum,  "1",        0, %Enabled%
+
+HKR, Ndi\Params\ShutdownWake,			ParamDesc,	0,	 %ShutDW%
+HKR, Ndi\Params\ShutdownWake,			Type,		0,	 "enum"
+HKR, Ndi\Params\ShutdownWake\enum,		1,		0,	 %Enabled%
+HKR, Ndi\Params\ShutdownWake\enum,		0,		0,	 %Disabled%
+HKR, Ndi\Params\ShutdownWake,			Default,	0,	 "1"
+
+HKR, Ndi\params\WakeFromS5,                     ParamDesc,  0, %WakeFromS5%
+HKR, Ndi\params\WakeFromS5,                     default,    0, "1"
+HKR, Ndi\params\WakeFromS5,                     type,       0, "enum"
+HKR, Ndi\params\WakeFromS5\enum,                "0",        0, %Disable%
+HKR, Ndi\params\WakeFromS5\enum,                "1",        0, %Enable%
+
+HKR, Ndi\Params\WakeOnLink,        ParamDesc, , %WakeOnLink%
+HKR, Ndi\Params\WakeOnLink,        default,   , "0"
+HKR, Ndi\Params\WakeOnLink,        type,      , "enum"
+HKR, Ndi\Params\WakeOnLink\enum,   0,         , %WakeOnLink_Disable%
+HKR, Ndi\Params\WakeOnLink\enum,   1,         , %WakeOnLink_Enable%
+
+HKR, Ndi\params\WakeOnLinkChange,        ParamDesc,  0, %LinkChgWol%
+HKR, Ndi\params\WakeOnLinkChange,        type,       0, "enum"
+HKR, Ndi\params\WakeOnLinkChange,        default,    0, "1"
+HKR, Ndi\params\WakeOnLinkChange\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\WakeOnLinkChange\enum,   "1",        0, %Enabled%
+
+HKR, Ndi\Params\WakeOnMagicPacketFromS5,                ParamDesc,              0, %WakeOnMagicPacketFromS5Settings%
+HKR, Ndi\Params\WakeOnMagicPacketFromS5\Enum,           "0",                    0, %Disabled%
+HKR, Ndi\Params\WakeOnMagicPacketFromS5\Enum,           "1",                    0, %Enabled%
+HKR, Ndi\Params\WakeOnMagicPacketFromS5,                type,                   0, "enum"
+HKR, Ndi\Params\WakeOnMagicPacketFromS5,                default,                0, "1"
+
 HKR, Ndi\Params\WakeUpModeCap,       ParamDesc,   0 , %WakeUpMode%
 HKR, Ndi\Params\WakeUpModeCap,       default,  0  , "2"
 HKR, Ndi\Params\WakeUpModeCap,       type,      0  , "enum"
@@ -929,9 +976,7 @@ HKR, Ndi\Params\WakeUpModeCap\enum,  "0",        0 , %WakeUpMode_None%
 HKR, Ndi\Params\WakeUpModeCap\enum,  "1",        0 , %WakeUpMode_Magic%
 HKR, Ndi\Params\WakeUpModeCap\enum,  "2",        0 , %WakeUpMode_Pattern%
 ```
-```c
-"WakeUpModeCap": { "Type": "REG_SZ", "Data": 0 },
-```
+
 
 # Increase Buffers
 
