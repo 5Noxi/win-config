@@ -816,6 +816,16 @@ Enabling network adapter offload features is usually beneficial. However, the ne
 "*UsoIPv4" = 1
 "*UsoIPv6" = 1
 
+```inf
+IPChksumOffv4                   = "IPv4 Checksum Offload"
+TCPChksumOffv4                  = "TCP Checksum Offload (IPv4)"
+TCPChksumOffv6                  = "TCP Checksum Offload (IPv6)"
+UDPChksumOffv4                  = "UDP Checksum Offload (IPv4)"
+UDPChksumOffv6                  = "UDP Checksum Offload (IPv6)"
+LsoV2IPv4                       = "Large Send Offload Version 2 (IPv4)"
+LsoV2IPv6                       = "Large Send Offload Version 2 (IPv6)"
+```
+
 Excludes:
 "SaOffloadCapacityEnabled" = 0 # deprecated (Chimney too)
 
@@ -824,19 +834,89 @@ Enable static offloads. For example, enable the UDP Checksums, TCP Checksums, an
 > https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top
 > https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
 
-# Disable Wake On
+```inf
+; *TCPChecksumOffloadIPv4
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4,        ParamDesc,              0, %TCPChksumOffv4%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4,        default,                0, "3"
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "0",                    0, %Disabled%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "1",                    0, %ChksumOffTx%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "2",                    0, %ChksumOffRx%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "3",                    0, %ChksumOffTxRx%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv4,        type,                   0, "enum"
 
-"*WakeOnMagicPacket" = 0
-"*WakeOnPattern" = 0
-"S5WakeOnLan" = 0
-"WakeOnLink" = 0
-"WakeOnMagicPacketFromS5" = 0
-"ForceWakeFromMagicPacketOnModernStandby" = 0
-"EnableWakeOnManagmentOnTCO" = 0
-"WakeFromS5" = 0
-"WakeOn" = 0
-"WakeOnFastStartup" = 0
-"WakeOnLinkChange" = 0
+; *TCPChecksumOffloadIPv6
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6,        ParamDesc,              0, %TCPChksumOffv6%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6,        default,                0, "3"
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "0",                    0, %Disabled%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "1",                    0, %ChksumOffTx%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "2",                    0, %ChksumOffRx%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "3",                    0, %ChksumOffTxRx%
+HKR, Ndi\Params\*TCPChecksumOffloadIPv6,        type,                   0, "enum"
+
+; *UDPChecksumOffloadIPv4
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4,        ParamDesc,              0, %UDPChksumOffv4%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4,        default,                0, "3"
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "0",                    0, %Disabled%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "1",                    0, %ChksumOffTx%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "2",                    0, %ChksumOffRx%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "3",                    0, %ChksumOffTxRx%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv4,        type,                   0, "enum"
+
+; *UDPChecksumOffloadIPv6
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6,        ParamDesc,              0, %UDPChksumOffv6%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6,        default,                0, "3"
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "0",                    0, %Disabled%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "1",                    0, %ChksumOffTx%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "2",                    0, %ChksumOffRx%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "3",                    0, %ChksumOffTxRx%
+HKR, Ndi\Params\*UDPChecksumOffloadIPv6,        type,                   0, "enum"
+
+; *IPChecksumOffloadIPv4
+HKR, Ndi\Params\*IPChecksumOffloadIPv4,         ParamDesc,              0, %IPChksumOffv4%
+HKR, Ndi\Params\*IPChecksumOffloadIPv4,         default,                0, "3"
+HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "0",                    0, %Disabled%
+HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "1",                    0, %ChksumOffTx%
+HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "2",                    0, %ChksumOffRx%
+HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "3",                    0, %ChksumOffTxRx%
+HKR, Ndi\Params\*IPChecksumOffloadIPv4,         type,                   0, "enum"
+
+; *LsoV2IPv4 / *LsoV2IPv6
+HKR, Ndi\Params\*LsoV2IPv4,                     ParamDesc,              0, %LsoV2IPv4%
+HKR, Ndi\Params\*LsoV2IPv4,                     default,                0, "1"
+HKR, Ndi\Params\*LsoV2IPv4\Enum,                "0",                    0, %Disabled%
+HKR, Ndi\Params\*LsoV2IPv4\Enum,                "1",                    0, %Enabled%
+HKR, Ndi\Params\*LsoV2IPv4,                     type,                   0, "enum"
+
+HKR, Ndi\Params\*LsoV2IPv6,                     ParamDesc,              0, %LsoV2IPv6%
+HKR, Ndi\Params\*LsoV2IPv6,                     default,                0, "1"
+HKR, Ndi\Params\*LsoV2IPv6\Enum,                "0",                    0, %Disabled%
+HKR, Ndi\Params\*LsoV2IPv6\Enum,                "1",                    0, %Enabled%
+HKR, Ndi\Params\*LsoV2IPv6,                     type,                   0, "enum"
+```
+
+# Disable WOL
+
+WOL is an Ethernet networking standard that allows a properly configured network computer to be turned on or awakened by a network message. WOL is an industry standard protocol for waking computers up from a low-power mode remotely. The definition of low-power mode means while the computer is off and has access to a power source. This is useful if you plan to access your computer remotely for any reason: It allows you to retain access to your files and programs, while keeping the computer in a low-power state.
+
+> https://www.dell.com/support/kbdoc/en-us/000129137/wake-on-lan-wol-troubleshooting-best-practices
+
+```bat
+powercfg /devicequery wake_programmable
+powercfg /devicequery wake_armed
+```
+`powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state
+`powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
+
+`Disable Wait for Link`:
+```inf
+; Wait for Link
+HKR, Ndi\Params\WaitAutoNegComplete,            ParamDesc,              0, %WaitAutoNegComplete%
+HKR, Ndi\Params\WaitAutoNegComplete,            default,                0, "2"
+HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "0",                    0, %Off%
+HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "1",                    0, %On%
+HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "2",                    0, %AutoDetect%
+HKR, Ndi\Params\WaitAutoNegComplete,            type,                   0, "enum"
+```
 
 ---
 
@@ -967,6 +1047,15 @@ HKR, Ndi\Params\*InterruptModeration,                   type,                   
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/non-rss-receive-processing  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/rss-with-message-signaled-interrupts
 
+```inf
+; *RSS
+HKR, Ndi\Params\*RSS,                           ParamDesc,              0, %RSS%
+HKR, Ndi\Params\*RSS,                           default,                0, "1"
+HKR, Ndi\Params\*RSS,                           type,                   0, "enum"
+HKR, Ndi\Params\*RSS\Enum,                      "0",                    0, %Disabled%
+HKR, Ndi\Params\*RSS\Enum,                      "1",                    0, %Enabled%
+```
+
 # Disable File/Printer Sharing
 
 Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_msclient`.
@@ -1049,6 +1138,17 @@ A sending station (computer or network switch) may be transmitting data faster t
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/
 
+```inf
+; *FlowControl
+HKR, Ndi\Params\*FlowControl,                   ParamDesc,              0, %FlowControl%
+HKR, Ndi\Params\*FlowControl,                   default,                0, "3"
+HKR, Ndi\Params\*FlowControl\Enum,              "0",                    0, %Disabled%
+HKR, Ndi\Params\*FlowControl\Enum,              "1",                    0, %FlowControl_TxOnly%
+HKR, Ndi\Params\*FlowControl\Enum,              "2",                    0, %FlowControl_RxOnly%
+HKR, Ndi\Params\*FlowControl\Enum,              "3",                    0, %FlowControl_Full%
+HKR, Ndi\Params\*FlowControl,                   type,                   0, "enum"
+```
+
 # Enable Jumbo Packets
 
 As the name says ("Jumbo"), it is used for big packets, you won't use this feature. Jumbo packets are disabled by default. Enable Jumbo Packets **only if all devices across the network support them** and are configured to use the same frame size.
@@ -1073,33 +1173,6 @@ HKR, Ndi\params\*JumboPacket\enum,	"2",	0, "%Bytes9014%"
 HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 ```
 `1514` = Disabled.
-
-# Disable VMQ
-
-VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the networking performance of the Hyper-V switch bound to this network adapter may be reduced. VMQ offloads packet processing to NIC hardware queues, with each queue tied to a specific VM. This increases throughput, spreads work across CPU cores, lowers host CPU use, and scales effectively as more VMs are added on Hyper-V.
-
-VMQ is enabled by default:
-```inf
-HKR,Ndi\Params\*VMQ,ParamDesc, ,%VMQ%
-HKR,Ndi\Params\*VMQ,type,      ,enum
-HKR,Ndi\Params\*VMQ,default,   ,1
-HKR,Ndi\Params\*VMQ\enum,0,    ,%Disabled%
-HKR,Ndi\Params\*VMQ\enum,1,    ,%Enabled%
-```
-
-| Value | Description | Allowed Values | Default | Notes |
-| ----  | ---- | ---- | ---- | ---- |
-| `*VMQ`| Enable/disable the VMQ feature. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
-| `*VMQLookaheadSplit` | Enable/disable splitting RX buffers into lookahead and post-lookahead buffers. | `0` Disabled - `1` Enabled | `1` | Starting with NDIS 6.30 / Windows Server 2012, this keyword is no longer supported. |
-| `*VMQVlanFiltering` | Enable/disable filtering packets by VLAN ID in the MAC header. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
-| `*RssOrVmqPreference` | Define whether VMQ capabilities should be enabled instead of RSS. | `0` Report RSS capabilities - `1` Report VMQ capabilities | `0`     | - |
-| `*TenGigVmqEnabled` | Enable/disable VMQ on all 10 Gbps adapters. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
-| `*BelowTenGigVmqEnabled` | Enable/disable VMQ on all adapters <10 Gbps. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
-
-> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md  
-> https://docs.nvidia.com/networking/display/winofv55053000/ethernet+registry+keys#src-25134589_EthernetRegistryKeys-FlowControlOptions  
-> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/virtual-machine-queue-architecture.md  
-> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/introduction-to-ndis-virtual-machine-queue--vmq-.md
 
 # Enable RSC/URO
 
@@ -1167,4 +1240,80 @@ Miscellaneous notes:
 ```c
 "ForceRscEnabled": { "Type": "REG_SZ", "Data": 1 },
 "RscMode": { "Type": "REG_SZ", "Data": 1 },
+```
+
+# Disable VMQ
+
+VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the networking performance of the Hyper-V switch bound to this network adapter may be reduced. VMQ offloads packet processing to NIC hardware queues, with each queue tied to a specific VM. This increases throughput, spreads work across CPU cores, lowers host CPU use, and scales effectively as more VMs are added on Hyper-V.
+
+VMQ is enabled by default:
+```inf
+HKR,Ndi\Params\*VMQ,ParamDesc, ,%VMQ%
+HKR,Ndi\Params\*VMQ,type,      ,enum
+HKR,Ndi\Params\*VMQ,default,   ,1
+HKR,Ndi\Params\*VMQ\enum,0,    ,%Disabled%
+HKR,Ndi\Params\*VMQ\enum,1,    ,%Enabled%
+```
+
+| Value | Description | Allowed Values | Default | Notes |
+| ----  | ---- | ---- | ---- | ---- |
+| `*VMQ`| Enable/disable the VMQ feature. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
+| `*VMQLookaheadSplit` | Enable/disable splitting RX buffers into lookahead and post-lookahead buffers. | `0` Disabled - `1` Enabled | `1` | Starting with NDIS 6.30 / Windows Server 2012, this keyword is no longer supported. |
+| `*VMQVlanFiltering` | Enable/disable filtering packets by VLAN ID in the MAC header. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
+| `*RssOrVmqPreference` | Define whether VMQ capabilities should be enabled instead of RSS. | `0` Report RSS capabilities - `1` Report VMQ capabilities | `0`     | - |
+| `*TenGigVmqEnabled` | Enable/disable VMQ on all 10 Gbps adapters. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
+| `*BelowTenGigVmqEnabled` | Enable/disable VMQ on all adapters <10 Gbps. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
+
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md  
+> https://docs.nvidia.com/networking/display/winofv55053000/ethernet+registry+keys#src-25134589_EthernetRegistryKeys-FlowControlOptions  
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/virtual-machine-queue-architecture.md  
+> https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/introduction-to-ndis-virtual-machine-queue--vmq-.md
+
+
+# Disable SR-IOV
+
+Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov
+
+SR-IOV is enabled by default:
+| SubkeyName            | Value       | EnumDesc |
+| --------------------  | ----------- | ---- |
+| `*SRIOV`              | 0           | Disabled |
+|                       | 1 (Default) | Enabled |
+| `*SriovPreferred`     | 0 (Default) | Report RSS/VMQ (per *VmqOrRssPreferrence), do not report SR-IOV |
+|                       | 1           | Report SR-IOV capabilities |
+
+```inf
+; SRIOV Default switch registry keys.
+;
+HKR, NicSwitches\0, *SwitchId,   %REG_DWORD%, 0
+HKR, NicSwitches\0, *SwitchName, %REG_SZ%, "%DefaultSwitchName%"
+HKR, NicSwitches\0, *SwitchType,   %REG_DWORD%, 1
+HKR, NicSwitches\0, *Flags,   %REG_DWORD%, 0
+HKR, NicSwitches\0, *NumVFs,   %REG_DWORD%, 32
+
+HKR, NDI\Params\*Sriov,      paramDesc, , %Sriov%
+HKR, NDI\Params\*Sriov,      type,      , "enum"
+HKR, NDI\Params\*Sriov,  Default,   0, "1"
+HKR, NDI\Params\*Sriov\enum, 0,         , %Disabled%
+HKR, NDI\Params\*Sriov\enum, 1,         , %Enabled%
+HKR, "", *SRIOV, %REG_SZ%, "1"
+
+HKR, NDI\Params\*VMQ,  ParamDesc, 0, "%VMQ%"
+HKR, NDI\Params\*VMQ,  Type,      0, "enum"
+HKR, NDI\Params\*VMQ,  Default,   0, "1"
+HKR, NDI\Params\*VMQ,  Optional,  0, "0"
+HKR, NDI\Params\*VMQ\enum,  "0",  0, "%Disabled%"
+HKR, NDI\Params\*VMQ\enum,  "1",  0, "%Enabled%"
+HKR, "", *VMQ, %REG_SZ%, "1"
+
+HKR, NDI\Params\*VMQVlanFiltering,  ParamDesc, 0, "%VMQVlanFiltering%"
+HKR, NDI\Params\*VMQVlanFiltering,  Type,      0, "enum"
+HKR, NDI\Params\*VMQVlanFiltering,  Default,   0, "1"
+HKR, NDI\Params\*VMQVlanFiltering,  Optional,  0, "0"
+HKR, NDI\Params\*VMQVlanFiltering\enum,  "0",  0, "%Disabled%"
+HKR, NDI\Params\*VMQVlanFiltering\enum,  "1",  0, "%Enabled%"
+HKR, "", *VMQVlanFiltering, %REG_SZ%, "1"
 ```

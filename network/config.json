@@ -701,7 +701,7 @@
       }
     }
   },
-  "Disable Wake On": {
+  "Disable WOL": {
     "apply": {
       "COMMANDS": {
         "DisableAdapterWake": {
@@ -712,12 +712,25 @@
             "EnableWakeOnManagmentOnTCO": { "Type": "REG_SZ", "Data": 0 },
             "ForceWakeFromMagicPacketOnModernStandby": { "Type": "REG_SZ", "Data": 0 },
             "S5WakeOnLan": { "Type": "REG_SZ", "Data": 0 },
+            "ShutdownWake": { "Type": "REG_SZ", "Data": 0 },
             "WakeFromS5": { "Type": "REG_SZ", "Data": 0 },
             "WakeOn": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnFastStartup": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnLink": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnLinkChange": { "Type": "REG_SZ", "Data": 0 },
             "WakeOnMagicPacketFromS5": { "Type": "REG_SZ", "Data": 0 }
+          }
+        }
+      },
+      "SUBOPTION": {
+        "Disable Wait for Link": {
+          "COMMANDS": {
+            "WaitForLink": {
+              "Action": "ethernet_key",
+              "Values": {
+                "WaitAutoNegComplete": { "Type":  "REG_SZ", "Data": 0 }
+              }
+            }
           }
         }
       }
@@ -732,12 +745,25 @@
             "EnableWakeOnManagmentOnTCO": { "Action": "deletevalue" },
             "ForceWakeFromMagicPacketOnModernStandby": { "Action": "deletevalue" },
             "S5WakeOnLan": { "Action": "deletevalue" },
+            "ShutdownWake": { "Action": "deletevalue" },
             "WakeFromS5": { "Action": "deletevalue" },
             "WakeOn": { "Action": "deletevalue" },
             "WakeOnFastStartup": { "Action": "deletevalue" },
             "WakeOnLink": { "Action": "deletevalue" },
             "WakeOnLinkChange": { "Action": "deletevalue" },
             "WakeOnMagicPacketFromS5": { "Action": "deletevalue" }
+          }
+        }
+      },
+      "SUBOPTION": {
+        "Disable Wait for Link": {
+          "COMMANDS": {
+            "WaitForLink": {
+              "Action": "ethernet_key",
+              "Values": {
+                "WaitAutoNegComplete": { "Action": "deletevalue" }
+              }
+            }
           }
         }
       }
@@ -907,6 +933,32 @@
       }
     }
   },
+  "Enable RSC/URO": {
+    "apply": {
+      "COMMANDS": {
+        "EthernetEnableRscUro": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*RscIPv4": { "Type": "REG_SZ", "Data": 1 },
+            "*RscIPv6": { "Type": "REG_SZ", "Data": 1 },
+            "*UdpRsc": { "Type": "REG_SZ", "Data": 1 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EthernetEnableRscUroRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "*RscIPv4": { "Action": "deletevalue" },
+            "*RscIPv6": { "Action": "deletevalue" },
+            "*UdpRsc": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
   "Disable VMQ": {
     "apply": {
       "COMMANDS": {
@@ -933,27 +985,25 @@
       }
     }
   },
-  "Enable RSC/URO": {
+  "Disable SR-IOV": {
     "apply": {
       "COMMANDS": {
-        "EthernetEnableRscUro": {
+        "EthernetDisableSriov": {
           "Action": "ethernet_key",
           "Values": {
-            "*RscIPv4": { "Type": "REG_SZ", "Data": 1 },
-            "*RscIPv6": { "Type": "REG_SZ", "Data": 1 },
-            "*UdpRsc": { "Type": "REG_SZ", "Data": 1 }
+            "*SRIOV": { "Type": "REG_SZ", "Data": "0" },
+            "*SriovPreferred": { "Type": "REG_SZ", "Data": "0" }
           }
         }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EthernetEnableRscUroRevert": {
+        "EthernetDisableSriovRevert": {
           "Action": "ethernet_key",
           "Values": {
-            "*RscIPv4": { "Action": "deletevalue" },
-            "*RscIPv6": { "Action": "deletevalue" },
-            "*UdpRsc": { "Action": "deletevalue" }
+            "*SRIOV": { "Action": "deletevalue" },
+            "*SriovPreferred": { "Action": "deletevalue" }
           }
         }
       }
