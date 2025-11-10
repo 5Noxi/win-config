@@ -16,8 +16,7 @@
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
         "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
         "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
-        "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
+        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "158" }
@@ -44,8 +43,7 @@
           "HKCU\\Control Panel\\Mouse": {
             "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
             "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
-            "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
-            "RawMouseThrottleLeeway": { "Type": "REG_DWORD", "Data": 2 }
+            "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
       }

@@ -1386,14 +1386,17 @@ RegistryKey<enum HdSplitLocation>::Initialize(
     0,
     1);
 ```
-
-Using the intel documentation above `0`-`3` could mean:  
-`0` = `Auto FEC`  
-`1` = `CL108 RS-FEC`  
-`2` = `CL74 FC-FEC/BASE-R`  
-`3` = `No FEC`
-
-At the moment, this is more of a speculation, so you should leave the option disabled until I add more information on this topic.
+```inf
+HKR, Ndi\Params\FecMode,                         ParamDesc,              0, %FecMode%
+HKR, Ndi\Params\FecMode,                         default,                0, "0"
+HKR, Ndi\Params\FecMode,                         min,                    0, "0"
+HKR, Ndi\Params\FecMode,                         max,                    0, "3"
+HKR, Ndi\Params\FecMode\Enum,                    "0",                    0, %Auto_FEC%
+HKR, Ndi\Params\FecMode\Enum,                    "1",                    0, %RS_FEC%
+HKR, Ndi\Params\FecMode\Enum,                    "2",                    0, %FC_FEC%
+HKR, Ndi\Params\FecMode\Enum,                    "3",                    0, %NO_FEC%
+HKR, Ndi\Params\FecMode,                         type,                   0, "enum"
+```
 
 # DNS Provider
 

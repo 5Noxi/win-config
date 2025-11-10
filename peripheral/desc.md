@@ -23,7 +23,7 @@ Max: `65534`? - It uses `StrToIntW` to read the value
 Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTester), move `MouseTester.exe` to the background after starting it by opening a different window.
 ```c
 *(_QWORD *)&v13 = 0LL;                      // Forced = 0 (default)
-*((_QWORD *)&v11 + 1) = 1LL;                // Enabled = 1 (default)
+*((_QWORD *)&v11 + 1) = 1LL;                // Enabled = 1 (default) - Forced to 1
 *(_QWORD *)&v11 = L"RawMouseThrottleEnabled";
 *((_QWORD *)&v12 + 1) = L"RawMouseThrottleForced";
 *(_QWORD *)&v14 = L"RawMouseThrottleDuration";

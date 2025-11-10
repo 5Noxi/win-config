@@ -38,9 +38,11 @@
   "Kernel Values": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+        "BugCheckUnexpectedInterrupts": { "Type": "REG_DWORD", "Data": 0 },
         "EnablePerCpuClockTickScheduling": { "Type": "REG_DWORD", "Data": 1 },
         "EnableTickAccumulationFromAccountingPeriods": { "Type": "REG_DWORD", "Data": 0 },
         "EnableWerUserReporting": { "Type": "REG_DWORD", "Data": 0 },
+        "ForceBugcheckForDpcWatchdog": { "Type": "REG_DWORD", "Data": 0 },
         "HyperStartDisabled": { "Type": "REG_DWORD", "Data": 1 },
         "MitigationAuditOptions": { "Type": "REG_DWORD", "Data": 0 },
         "MitigationOptions": { "Type": "REG_DWORD", "Data": 0 },
@@ -60,9 +62,11 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\kernel": {
+        "BugCheckUnexpectedInterrupts": { "Action": "deletevalue" },
         "EnablePerCpuClockTickScheduling": { "Action": "deletevalue" },
         "EnableTickAccumulationFromAccountingPeriods": { "Action": "deletevalue" },
         "EnableWerUserReporting": { "Action": "deletevalue" },
+        "ForceBugcheckForDpcWatchdog": { "Action": "deletevalue" },
         "HyperStartDisabled": { "Action": "deletevalue" },
         "MitigationAuditOptions": { "Action": "deletevalue" },
         "MitigationOptions": { "Action": "deletevalue" },
@@ -84,6 +88,7 @@
   "DXG Kernel Values": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "AllowAdvancedEtwLogging": { "Type": "REG_DWORD", "Data": 0 },
         "DisableBadDriverCheckForHwProtection": { "Type": "REG_DWORD", "Data": 1 },
         "DisableBoostedVSyncVirtualization": { "Type": "REG_DWORD", "Data": 1 },
         "DisableIndependentVidPnVSync": { "Type": "REG_DWORD", "Data": 1 },
@@ -91,6 +96,7 @@
         "EnableFuzzing": { "Type": "REG_DWORD", "Data": 0 },
         "EnableHMDTestMode": { "Type": "REG_DWORD", "Data": 0 },
         "EnableIgnoreWin32ProcessStatus": { "Type": "REG_DWORD", "Data": 1 },
+        "ForceExplicitResidencyNotification": { "Type": "REG_DWORD", "Data": 0 },
         "HwSchMode": { "Type": "REG_DWORD", "Data": 2 },
         "HwSchOverrideBlockList": { "Type": "REG_DWORD", "Data": 1 },
         "HwSchTreatExperimentalAsStable": { "Type": "REG_DWORD", "Data": 1 },
@@ -103,12 +109,18 @@
       },
       "SUBOPTION": {
         "Force DirectFlip": {
-          "ForceDirectFlip": { "Type": "REG_DWORD", "Data": 1 }
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+            "ForceDirectFlip": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Self Refresh VRAM In S3": {
+          "UseSelfRefreshVRAMInS3": { "Type": "REG_DWORD", "Data": 0 }
         }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+        "AllowAdvancedEtwLogging": { "Action": "deletevalue" },
         "DisableBadDriverCheckForHwProtection": { "Action": "deletevalue" },
         "DisableBoostedVSyncVirtualization": { "Action": "deletevalue" },
         "DisableIndependentVidPnVSync": { "Action": "deletevalue" },
@@ -116,6 +128,7 @@
         "EnableFuzzing": { "Action": "deletevalue" },
         "EnableHMDTestMode": { "Action": "deletevalue" },
         "EnableIgnoreWin32ProcessStatus": { "Action": "deletevalue" },
+        "ForceExplicitResidencyNotification": { "Action": "deletevalue" },
         "HwSchMode": { "Action": "deletevalue" },
         "HwSchOverrideBlockList": { "Action": "deletevalue" },
         "HwSchTreatExperimentalAsStable": { "Action": "deletevalue" },
@@ -128,7 +141,14 @@
       },
       "SUBOPTION": {
         "Force DirectFlip": {
-          "ForceDirectFlip": { "Action": "deletevalue" }
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+            "ForceDirectFlip": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Self Refresh VRAM In S3": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power": {
+            "UseSelfRefreshVRAMInS3": { "Action": "deletevalue" }
+          }
         }
       }
     }

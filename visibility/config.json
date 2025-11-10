@@ -680,7 +680,7 @@
         "MinAnimate": { "Type": "REG_SZ", "Data": "0" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarAnimations": { "Type": "REG_SZ", "Data": "0" }
+        "TaskbarAnimations": { "Type": "REG_DWORD", "Data": "0" }
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": {
         "DisallowAnimations": { "Type": "REG_DWORD", "Data": 1 }
@@ -703,7 +703,7 @@
         "MinAnimate": { "Type": "REG_SZ", "Data": "1" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "TaskbarAnimations": { "Type": "REG_SZ", "Data": "1" }
+        "TaskbarAnimations": { "Type": "REG_DWORD", "Data": "1" }
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM": {
         "DisallowAnimations": { "Action": "deletevalue" }

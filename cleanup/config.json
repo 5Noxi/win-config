@@ -57,5 +57,22 @@
         "Command": "for ($i=0; $i -le 4; $i++) { Remove-ItemProperty -Path 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Wallpapers' -Name \"BackgroundHistoryPath$($i)\" }"
       }
     }
+  },
+  "Rebuild Font Cache": {
+    "__control": { "type": "button", "label": "Rebuild" },
+    "COMMANDS": {
+      "StopFontCache": {
+        "Action": "run_powershell",
+        "Command": "Stop-Service -Name 'FontCache' -Force"
+      },
+      "DeleteFontCacheFiles": {
+        "Action": "delete_path",
+        "Paths": [ "%WinDir%\\ServiceProfiles\\LocalService\\AppData\\Local\\FontCache\\*FontCache*", "%WinDir%\\System32\\FNTCACHE.DAT" ]
+      },
+      "StartFontCache": {
+        "Action": "run_powershell",
+        "Command": "Start-Service -Name 'FontCache'"
+      }
+    }
   }
 }

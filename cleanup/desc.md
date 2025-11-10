@@ -94,3 +94,12 @@ vssadmin delete shadows /all
 ```
 
 # Clear Background History
+
+# Clear Font Boot Cache
+
+The font cache is a file or set of files used by Windows to manage and display the fonts installed on your PC so they load faster. Sometimes the font cache may become corrupted and cause fonts to be garbled, not rendering properly, or displaying invalid characters. To fix the font cache corruption, you will need to delete the old font cache and restart the computer afterwards to rebuild a new font cache.
+
+Paths the font cache is located at:
+```ps
+"%WinDir%\\ServiceProfiles\\LocalService\\AppData\\Local\\FontCache\\*FontCache*", "%WinDir%\\System32\\FNTCACHE.DAT"
+```

@@ -440,9 +440,6 @@ These are default values I found in `dxgkrnl.sys`, see link below for pseudocode
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power";
     "UseSelfRefreshVRAMInS3"; v166 = 1;
 
-"<PnPDeviceKey>\\DxgkSettings";
-    "UseSelfRefreshVRAMInS3"; v166 = 1;
-
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay";
     "BasicDisplayUserNotified"; v2 = 0;
 
@@ -486,7 +483,10 @@ These are default values I found in `dxgkrnl.sys`, see link below for pseudocode
     "HDREnabled"; v2 = 0;
     "MicrosoftApprovedAcmSupport"; v5 = 0;
 
-"AdapterPnpKey";
+"<PnPDeviceKey>\\DxgkSettings";
+    "UseSelfRefreshVRAMInS3"; v166 = 1;
+
+"<PnPDeviceKey>";
     "EnableVirtualTopologySupport"; v84 = 0;
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicDisplay : EnableVirtualTopologySupport
     "NeedToSuspendVidSchBeforeSetGammaRamp"; v83 = (AdapterBuild < 8704 ? 1 : 0)
