@@ -1,3 +1,81 @@
+# Encrypted DNS
+
+The option currently uses the encrypted `Mullvad` - `extended.dns.mullvad.net` (DoH), which includes blocklists against ads, tackers and malware by default. If you want the most private setup, run your self hosted DNS server. This option will only work on W11.
+
+| Hostname                 | IPv4        | IPv6         | DoH port | DoT port | Ads | Trackers | Malware | Adult | Gambling | Social media |
+| ------------------------ | ----------- | ------------ | -------: | -------: | :-: | :------: | :-----: | :---: | :------: | :----------: |
+| dns.mullvad.net          | 194.242.2.2 | 2a07:e340::2 |      443 |      853 |     |          |         |       |          |              |
+| adblock.dns.mullvad.net  | 194.242.2.3 | 2a07:e340::3 |      443 |      853 |  x  |     x    |         |       |          |              |
+| base.dns.mullvad.net     | 194.242.2.4 | 2a07:e340::4 |      443 |      853 |  x  |     x    |    x    |       |          |              |
+| extended.dns.mullvad.net | 194.242.2.5 | 2a07:e340::5 |      443 |      853 |  x  |     x    |    x    |       |          |              |
+| family.dns.mullvad.net   | 194.242.2.6 | 2a07:e340::6 |      443 |      853 |  x  |     x    |    x    |   x   |     x    |              |
+| all.dns.mullvad.net      | 194.242.2.9 | 2a07:e340::9 |      443 |      853 |  x  |     x    |    x    |   x   |     x    |       x      |
+
+> https://github.com/mullvad/dns-blocklists
+
+The DNS server get's applied via registry (tracked while applying it via the settings):
+```csv
+HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{NetID}\NameServer  Type: REG_SZ, Length: 24, Data: 194.242.2.5
+HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohTemplate  Type: ad.net/dns-query
+HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohFlags  Type: REG_QWORD, Length: 8, Data: 2
+```
+`NetID` is saved in your network adapter GUID key (`{4d36e972-e325-11ce-bfc1-08002be10318}`) named `NetCfgInstanceId`.
+
+---
+
+| DNS Provider | Protocols | Logging / Privacy Policy | [ECS](https://www.privacyguides.org/en/advanced/dns-overview/#what-is-edns-client-subnet-ecs) | Filtering | Signed Apple Profile |
+|---|---|---|---|---|---|
+| [**AdGuard Public DNS**](https://adguard-dns.io/en/public-dns.html) | Cleartext <br>DoH/3 <br>DoT <br>DoQ <br>DNSCrypt | Anonymized | Anonymized | Based on server choice. Filter list being used can be found here. [*](https://github.com/AdguardTeam/AdGuardSDNSFilter) | Yes [*](https://adguard-dns.io/en/blog/encrypted-dns-ios-14.html) |
+| [**Cloudflare**](https://developers.cloudflare.com/1.1.1.1/setup) | Cleartext <br>DoH/3 <br>DoT | Anonymized | No | Based on server choice. | No [*](https://community.cloudflare.com/t/requesting-1-1-1-1-signed-profiles-for-apple/571846) |
+| [**Control D Free DNS**](https://controld.com/free-dns) | Cleartext <br>DoH/3 <br>DoT <br>DoQ | No | No | Based on server choice. | Yes <br>[*IOS](https://docs.controld.com/docs/ios-platform) <br>[*MacOS](https://docs.controld.com/docs/macos-platform#manual-setup-profile) |
+| [**Mullvad**](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls) | DoH <br>DoT | No | No | Based on server choice. Filter list being used can be found here. [*](https://github.com/mullvad/dns-adblock) | Yes [*](https://github.com/mullvad/encrypted-dns-profiles) |
+| [**Quad9**](https://quad9.net) | Cleartext <br>DoH <br>DoT <br>DNSCrypt | Anonymized | Optional | Based on server choice. Malware blocking is included by default. | Yes <br>[*IOS](https://docs.quad9.net/Setup_Guides/iOS/iOS_14_and_later_(Encrypted) <br>[*MacOS](https://docs.quad9.net/Setup_Guides/MacOS/Big_Sur_and_later_(Encrypted) |
+
+> https://www.privacyguides.org/en/dns/  
+
+| Protocol  | Explanation |
+| --------- | ---- |
+| Cleartext | Traditional DNS over UDP/TCP 53 with no encryption, so anyone on the path can read or alter your queries. |
+| DoH/3     | DNS sent inside HTTPS using HTTP/3 on port 443, encrypting lookups and making them look like normal web traffic. |
+| DoT       | DNS sent over a TLS encrypted connection on port 853, protecting queries in transit at the transport layer. |
+| DoQ       | DNS carried over QUIC with built in encryption and faster handshakes, improving reliability.|
+| DNSCrypt  | A non IETF protocol that encrypts and authenticates DNS between client and resolver, with more limited ecosystem support. |
+| DoH       | DNS sent inside HTTPS (typically HTTP/2) on port 443, providing encrypted lookups that blend in with regular HTTPS traffic. |
+
+> https://www.cloudflare.com/learning/dns/dns-over-tls/  
+> https://www.privacyguides.org/en/advanced/dns-overview/
+
+## DNS Explained
+
+DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution).
+
+The four types of DNS servers:  
+The **recursive resolver** sends requests to the other three nameservers (root -> TLD -> authoritative), if there's no cached data. It saves the data from the authoritative nameserver so the resolver can skip the requests and send back the IP from the domain to the client. If you're not using any specific DNS server, you're using the resolver from your ISP.
+
+The resolver firstly queries a [**root nameserver**](https://root-servers.org/), which returns the [TLD](https://www.iana.org/domains/root/db) (extension or last segment) -> e.g. `.com`, `.org`, `.net` & more. The root servers are managed by [ICANN](https://www.icann.org/resources/pages/what-2012-02-25-en). If the extension e.g. ends with `.org`, the root server would direct to the `.org` TLD nameserver.
+
+The **TLD nameserver** includes data for domain names, it redirects to the authoritative nameserver, after the correct TLD nameserver was found. They are managed from [IANA](https://www.iana.org/domains/root/db), which splits the TLDs into two groups, generic/gTLD (sTLD and uTLD - sponsored & unsponsored, ngTLD counts as gTLD) and county code/ccTLD.
+
+Types of TLDs:  
+- **gTLD** -> Generic, common domain names like `.com`, `.org`
+- **ccTLD** -> Country code TLDs, like `.us`, `.de`, `.uk` etc.
+- [**sTLD**](https://icannwiki.org/index.php?title=Sponsored_Top_level_Domain#List_of_Sponsored_Top_Level_Domains) -> Sponsored by private organizations, reserved for these groups: `.mil`, `.app`, `.gov`
+- [**ARPA**](https://www.iana.org/domains/arpa) -> Infrastructural TLD, only contains `.arpa`. Used for reversed DNS lookups, you won't use it
+- **ngTLD** -> New gTLD, used for branding, niches, etc.: `.shop`, `.online`, `.tech`
+- **Reserved TLD** -> Used for testing, they cannot be used: `.localhost`, `.example`
+
+The **authoritative nameserver** tells the resolver the IP address, from the [A record](https://support.dnsimple.com/articles/a-record/). [Records](https://www.cloudflare.com/learning/dns/dns-records/) are included in authoritative DNS servers and contain information like the IP address, TTL value and more.
+
+Step 9 is the HTTP request from the browser to the IP from the resolver & step 10 returns the web page (mostly HTML data). 
+
+![](https://github.com/5Noxi/win-config/blob/main/network/images/dnslookup.png?raw=true)
+
+Some additional info about HTTP request methods you may want to know:  
+`GET` & `POST` HTTP request methods are the most common ones. `GET` request awaits data (read a web page), `POST` request means that the user is sending data. There more [request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods), but I won't add them here. You're able to turn off `GET` requests in the DDG search engine settings, to hide search queries in the request body (queries aren't visible in browser history or logs), which is why I added this info. You can see request in the network tab (`F12`).
+
+> https://www.privacyguides.org/en/dns/  
+> https://dnsimple.com/comics
+
 # SMB Configuration
 
 SMB Client -> Outbound connections:  
@@ -146,7 +224,7 @@ HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Throttle Rate    Type: REG
 ```
 Capturing the network activity after adding the policy:
 ```ps
-+ Versions: IPv4, Internet Protocol; Header Length = 20
++ Versions: IPv4, Internet Protocol, Header Length = 20
 - DifferentiatedServicesField: DSCP: 46, ECN: 0 # Works
    DSCP: (101110..) Differentiated services codepoint 46
    ECT:  (......0.) ECN-Capable Transport not set
@@ -488,17 +566,17 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\RasMan\Parameters\Config\VpnCost
 ```
 ```c
 OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters_1 = 
-    L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings";
+    L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings",
 
 VpnRegQueryDWord(
     v13,
     OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters_1,
     L"NoCostedNetwork",
     &g_donotUseCosted,
-    v17);
+    v17),
 
 if ( !v17[0] )
-    g_donotUseCosted = 0; // default
+    g_donotUseCosted = 0, // default
 ```
 Disable `Allow VPN while Roaming` (`0` = On, `1` = Off):
 ```ps
@@ -506,17 +584,17 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\RasMan\Parameters\Config\VpnCost
 ```
 ```c
 OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters = 
-    L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings";
+    L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings",
 
 VpnRegQueryDWord(
     v15,
     OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters,
     L"NoRoamingNetwork",
     &g_donotUseRoaming,
-    v17);
+    v17),
 
 if ( !v17[0] )
-    g_donotUseRoaming = 0; // default
+    g_donotUseRoaming = 0, // default
 ```
 
 > [network/assets | vpn-NlmGetCostedNetworkSettings.c](https://github.com/5Noxi/win-config/blob/main/network/assets/vpn-NlmGetCostedNetworkSettings.c)
@@ -835,7 +913,7 @@ Enable static offloads. For example, enable the UDP Checksums, TCP Checksums, an
 > https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
 
 ```inf
-; *TCPChecksumOffloadIPv4
+, *TCPChecksumOffloadIPv4
 HKR, Ndi\Params\*TCPChecksumOffloadIPv4,        ParamDesc,              0, %TCPChksumOffv4%
 HKR, Ndi\Params\*TCPChecksumOffloadIPv4,        default,                0, "3"
 HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "0",                    0, %Disabled%
@@ -844,7 +922,7 @@ HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "2",                    0, %Chks
 HKR, Ndi\Params\*TCPChecksumOffloadIPv4\Enum,   "3",                    0, %ChksumOffTxRx%
 HKR, Ndi\Params\*TCPChecksumOffloadIPv4,        type,                   0, "enum"
 
-; *TCPChecksumOffloadIPv6
+, *TCPChecksumOffloadIPv6
 HKR, Ndi\Params\*TCPChecksumOffloadIPv6,        ParamDesc,              0, %TCPChksumOffv6%
 HKR, Ndi\Params\*TCPChecksumOffloadIPv6,        default,                0, "3"
 HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "0",                    0, %Disabled%
@@ -853,7 +931,7 @@ HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "2",                    0, %Chks
 HKR, Ndi\Params\*TCPChecksumOffloadIPv6\Enum,   "3",                    0, %ChksumOffTxRx%
 HKR, Ndi\Params\*TCPChecksumOffloadIPv6,        type,                   0, "enum"
 
-; *UDPChecksumOffloadIPv4
+, *UDPChecksumOffloadIPv4
 HKR, Ndi\Params\*UDPChecksumOffloadIPv4,        ParamDesc,              0, %UDPChksumOffv4%
 HKR, Ndi\Params\*UDPChecksumOffloadIPv4,        default,                0, "3"
 HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "0",                    0, %Disabled%
@@ -862,7 +940,7 @@ HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "2",                    0, %Chks
 HKR, Ndi\Params\*UDPChecksumOffloadIPv4\Enum,   "3",                    0, %ChksumOffTxRx%
 HKR, Ndi\Params\*UDPChecksumOffloadIPv4,        type,                   0, "enum"
 
-; *UDPChecksumOffloadIPv6
+, *UDPChecksumOffloadIPv6
 HKR, Ndi\Params\*UDPChecksumOffloadIPv6,        ParamDesc,              0, %UDPChksumOffv6%
 HKR, Ndi\Params\*UDPChecksumOffloadIPv6,        default,                0, "3"
 HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "0",                    0, %Disabled%
@@ -871,7 +949,7 @@ HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "2",                    0, %Chks
 HKR, Ndi\Params\*UDPChecksumOffloadIPv6\Enum,   "3",                    0, %ChksumOffTxRx%
 HKR, Ndi\Params\*UDPChecksumOffloadIPv6,        type,                   0, "enum"
 
-; *IPChecksumOffloadIPv4
+, *IPChecksumOffloadIPv4
 HKR, Ndi\Params\*IPChecksumOffloadIPv4,         ParamDesc,              0, %IPChksumOffv4%
 HKR, Ndi\Params\*IPChecksumOffloadIPv4,         default,                0, "3"
 HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "0",                    0, %Disabled%
@@ -880,7 +958,7 @@ HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "2",                    0, %Chks
 HKR, Ndi\Params\*IPChecksumOffloadIPv4\Enum,    "3",                    0, %ChksumOffTxRx%
 HKR, Ndi\Params\*IPChecksumOffloadIPv4,         type,                   0, "enum"
 
-; *LsoV2IPv4 / *LsoV2IPv6
+, *LsoV2IPv4 / *LsoV2IPv6
 HKR, Ndi\Params\*LsoV2IPv4,                     ParamDesc,              0, %LsoV2IPv4%
 HKR, Ndi\Params\*LsoV2IPv4,                     default,                0, "1"
 HKR, Ndi\Params\*LsoV2IPv4\Enum,                "0",                    0, %Disabled%
@@ -909,7 +987,7 @@ powercfg /devicequery wake_armed
 
 `Disable Wait for Link`:
 ```inf
-; Wait for Link
+, Wait for Link
 HKR, Ndi\Params\WaitAutoNegComplete,            ParamDesc,              0, %WaitAutoNegComplete%
 HKR, Ndi\Params\WaitAutoNegComplete,            default,                0, "2"
 HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "0",                    0, %Off%
@@ -992,7 +1070,7 @@ Receive Buffers:
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/transmit-buffers/
 
 ```inf
-; *TransmitBuffers
+, *TransmitBuffers
 HKR, Ndi\params\*TransmitBuffers,               ParamDesc,              0, %TransmitBuffers%
 HKR, Ndi\params\*TransmitBuffers,               default,                0, "512"
 HKR, Ndi\params\*TransmitBuffers,               min,                    0, "80"
@@ -1001,7 +1079,7 @@ HKR, Ndi\params\*TransmitBuffers,               step,                   0, "8"
 HKR, Ndi\params\*TransmitBuffers,               Base,                   0, "10"
 HKR, Ndi\params\*TransmitBuffers,               type,                   0, "int"
 
-; *ReceiveBuffers
+, *ReceiveBuffers
 HKR, Ndi\params\*ReceiveBuffers,                ParamDesc,              0, %ReceiveBuffers%
 HKR, Ndi\params\*ReceiveBuffers,                default,                0, "256"
 HKR, Ndi\params\*ReceiveBuffers,                min,                    0, "80"
@@ -1051,7 +1129,7 @@ Adaptive: ITR = 65535
 ITR = Interrupt Throttle Rate.
 
 ```inf
-;  Interrupt Throttle Rate
+,  Interrupt Throttle Rate
 HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
 HKR, Ndi\Params\ITR,                                    default,                0, "65535"
 HKR, Ndi\Params\ITR\Enum,                               "65535",                0, %Adaptive%
@@ -1063,7 +1141,7 @@ HKR, Ndi\Params\ITR\Enum,                               "200",                  
 HKR, Ndi\Params\ITR\Enum,                               "0",                    0, %Off%
 HKR, Ndi\Params\ITR,                                    type,                   0, "enum"
 
-; *InterruptModeration
+, *InterruptModeration
 HKR, Ndi\Params\*InterruptModeration,                   ParamDesc,              0, %InterruptModeration%
 HKR, Ndi\Params\*InterruptModeration,                   default,                0, "1"
 HKR, Ndi\Params\*InterruptModeration\Enum,              "0",                    0, %Disabled%
@@ -1093,7 +1171,7 @@ HKR, Ndi\Params\*InterruptModeration,                   type,                   
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/rss-with-message-signaled-interrupts
 
 ```inf
-; *RSS
+, *RSS
 HKR, Ndi\Params\*RSS,                           ParamDesc,              0, %RSS%
 HKR, Ndi\Params\*RSS,                           default,                0, "1"
 HKR, Ndi\Params\*RSS,                           type,                   0, "enum"
@@ -1158,7 +1236,7 @@ The following events are logged:
 - Spanning Tree Protocol detected.
 
 ```inf
-;Log Link State Event
+,Log Link State Event
 HKR,Ndi\Params\LogLinkStateEvent,                       ParamDesc,              0, %LogLinkState%
 HKR,Ndi\Params\LogLinkStateEvent,                       Type,                   0, "enum"
 HKR,Ndi\Params\LogLinkStateEvent,                       Default,                0, "51"
@@ -1184,7 +1262,7 @@ A sending station (computer or network switch) may be transmitting data faster t
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/
 
 ```inf
-; *FlowControl
+, *FlowControl
 HKR, Ndi\Params\*FlowControl,                   ParamDesc,              0, %FlowControl%
 HKR, Ndi\Params\*FlowControl,                   default,                0, "3"
 HKR, Ndi\Params\*FlowControl\Enum,              "0",                    0, %Disabled%
@@ -1242,7 +1320,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     1u,     // range 0-1
     0,
     0,
-    0);
+    0),
 
   RegistryKey<unsigned char>::Initialize(
     (enum RegKeyState *)((char *)this + 44),
@@ -1253,7 +1331,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     1u,     // range 0-1
     0,
     0,
-    0);
+    0),
 
   RegistryKey<unsigned char>::Initialize(
     (enum RegKeyState *)(this + 2),
@@ -1264,7 +1342,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     1u,     // range 0-1
     0,
     0,
-    0);
+    0),
 
   RegistryKey<enum HdSplitLocation>::Initialize(
     (enum RegKeyState *)(this + 3),
@@ -1275,7 +1353,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     2u,     // range 0-2
     1u,     // step
     0,
-    0);
+    0),
 }
 ```
 
@@ -1331,8 +1409,8 @@ SR-IOV is enabled by default:
 |                       | 1           | Report SR-IOV capabilities |
 
 ```inf
-; SRIOV Default switch registry keys.
-;
+, SRIOV Default switch registry keys.
+,
 HKR, NicSwitches\0, *SwitchId,   %REG_DWORD%, 0
 HKR, NicSwitches\0, *SwitchName, %REG_SZ%, "%DefaultSwitchName%"
 HKR, NicSwitches\0, *SwitchType,   %REG_DWORD%, 1
@@ -1384,7 +1462,7 @@ RegistryKey<enum HdSplitLocation>::Initialize(
     3u, // max
     0, // default
     0,
-    1);
+    1),
 ```
 ```inf
 HKR, Ndi\Params\FecMode,                         ParamDesc,              0, %FecMode%
@@ -1397,38 +1475,3 @@ HKR, Ndi\Params\FecMode\Enum,                    "2",                    0, %FC_
 HKR, Ndi\Params\FecMode\Enum,                    "3",                    0, %NO_FEC%
 HKR, Ndi\Params\FecMode,                         type,                   0, "enum"
 ```
-
-# DNS Provider
-
-Cloudflare: `Cleartext`, `DoH`, `DoT`, `DNSCrypt`
-
----
-
-DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution).
-
-The four types of DNS servers:
-The **recursive resolver** sends requests to the other three nameservers (root -> TLD -> authoritative), if there's no cached data. It saves the data from the authoritative nameserver so the resolver can skip the requests and send back the IP from the domain to the client. If you're not using any specific DNS server, you're using the resolver from your ISP.
-
-The resolver firstly queries a [**root nameserver**](https://root-servers.org/), which returns the [TLD](https://www.iana.org/domains/root/db) (extension or last segment) -> e.g. `.com`, `.org`, `.net` & more. The root servers are managed by [ICANN](https://www.icann.org/resources/pages/what-2012-02-25-en). If the extension e.g. ends with `.org`, the root server would direct to the `.org` TLD nameserver.
-
-The **TLD nameserver** includes data for domain names, it redirects to the authoritative nameserver, after the correct TLD nameserver was found. They are managed from [IANA](https://www.iana.org/domains/root/db), which splits the TLDs into two groups, generic/gTLD (sTLD and uTLD - sponsored & unsponsored, ngTLD counts as gTLD) and county code/ccTLD.
-
-Additional info - Types of TLDs:  
-> **gTLD** -> Generic, common domain names like `.com`, `.org`
-> **ccTLD** -> Country code TLDs, like `.us`, `.de`, `.uk` etc.
-> [**sTLD**](https://icannwiki.org/index.php?title=Sponsored_Top_level_Domain#List_of_Sponsored_Top_Level_Domains) -> Sponsored by private organizations, reserved for these groups: `.mil`, `.app`, `.gov`
-> [**ARPA**](https://www.iana.org/domains/arpa) -> Infrastructural TLD, only contains `.arpa`. Used for reversed DNS lookups, you won't use it
-> **ngTLD** -> New gTLD, used for branding, niches, etc.: `.shop`, `.online`, `.tech`
-> **Reserved TLD** -> Used for testing, they cannot be used: `.localhost`, `.example`
-
-The **authoritative nameserver** tells the resolver the IP address, from the [A record](https://support.dnsimple.com/articles/a-record/). [Records](https://www.cloudflare.com/learning/dns/dns-records/) are included in authoritative DNS servers and contain information like the IP address, TTL value and more.
-
-Step 9 is the HTTP request from the browser to the IP from the resolver & step 10 returns the web page (mostly HTML data). 
-
-![](https://github.com/5Noxi/win-config/blob/main/network/images/dnslookup.png?raw=true)
-
-Some additional info about HTTP request methods you may want to know:  
-> `GET` & `POST` HTTP request methods are the most common ones. `GET` request awaits data (read a web page), `POST` request means that the user is sending data. There more [request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods), but I won't add them here. You're able to turn off `GET` requests in the DDG search engine settings, to hide search queries in the request body (queries aren't visible in browser history or logs), which is why I added this info. You can see request in the network tab (`F12`).
-
-> https://www.privacyguides.org/en/dns/  
-> https://dnsimple.com/comics

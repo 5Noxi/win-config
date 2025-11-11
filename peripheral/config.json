@@ -64,8 +64,7 @@
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
         "RawMouseThrottleDuration": { "Action": "deletevalue" },
         "RawMouseThrottleEnabled": { "Action": "deletevalue" },
-        "RawMouseThrottleForced": { "Action": "deletevalue" },
-        "RawMouseThrottleLeeway": { "Action": "deletevalue" }
+        "RawMouseThrottleForced": { "Action": "deletevalue" }
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "62" }
@@ -92,8 +91,7 @@
           "HKCU\\Control Panel\\Mouse": {
             "RawMouseThrottleDuration": { "Action": "deletevalue" },
             "RawMouseThrottleEnabled": { "Action": "deletevalue" },
-            "RawMouseThrottleForced": { "Action": "deletevalue" },
-            "RawMouseThrottleLeeway": { "Action": "deletevalue" }
+            "RawMouseThrottleForced": { "Action": "deletevalue" }
           }
         }
       }

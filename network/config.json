@@ -1,4 +1,92 @@
 {
+  "Encrypted DNS": {
+    "apply": {
+      "COMMANDS": {
+        "SetInterfaceNameServer": {
+          "Action": "ethernet_key",
+          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "Values": {
+            "NameServer": { "Type": "REG_SZ", "Data": "194.242.2.5" }
+          }
+        },
+        "SetInterfaceDoh": {
+          "Action": "ethernet_key",
+          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters\\{NetID}\\DohInterfaceSettings\\Doh\\194.242.2.5",
+          "Values": {
+            "DohTemplate": { "Type": "REG_SZ", "Data": "https://extended.dns.mullvad.net/dns-query" },
+            "DohFlags": { "Type": "REG_QWORD", "Data": 2 }
+          }
+        }
+      },
+      "SUBOPTION": {
+        "Cloudflare DNS": {
+          "COMMANDS": {
+            "SetDnsCloudflare": {
+              "Action": "ethernet_key",
+              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "Values": {
+                "NameServer": { "Type": "REG_SZ", "Data": "1.1.1.1,1.0.0.1" }
+              }
+            }
+          }
+        },
+        "Quad9 DNS": {
+          "COMMANDS": {
+            "SetDnsQuad9": {
+              "Action": "ethernet_key",
+              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "Values": {
+                "NameServer": { "Type": "REG_SZ", "Data": "9.9.9.9,149.112.112.112" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "UnsetInterfaceNameServer": {
+          "Action": "ethernet_key",
+          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "Values": {
+            "NameServer": { "Action": "deletevalue" }
+          }
+        },
+        "UnsetInterfaceDoh": {
+          "Action": "ethernet_key",
+          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters\\{NetID}\\DohInterfaceSettings\\Doh\\194.242.2.5",
+          "Values": {
+            "DohTemplate": { "Action": "deletevalue" },
+            "DohFlags": { "Action": "deletevalue" }
+          }
+        }
+      },
+      "SUBOPTION": {
+        "Cloudflare DNS": {
+          "COMMANDS": {
+            "UnsetDnsCloudflare": {
+              "Action": "ethernet_key",
+              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "Values": {
+                "NameServer": { "Action": "deletevalue" }
+              }
+            }
+          }
+        },
+        "Quad9 DNS": {
+          "COMMANDS": {
+            "UnsetDnsQuad9": {
+              "Action": "ethernet_key",
+              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "Values": {
+                "NameServer": { "Action": "deletevalue" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
   "SMB Configuration": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation\\Parameters": {
