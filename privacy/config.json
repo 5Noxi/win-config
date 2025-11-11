@@ -16,15 +16,15 @@
         "DisablePCA": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
-        "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 },
-        "DisableOneSettingsDownloads": { "Type": "REG_DWORD", "Data": 1 },
-        "LimitDiagnosticLogCollection": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableDiagnosticDataViewer": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableTelemetryOptInSettingsUx": { "Type": "REG_DWORD", "Data": 1 },
-        "LimitDumpCollection": { "Type": "REG_DWORD", "Data": 1 },
-        "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Type": "REG_DWORD", "Data": 0 },
         "AllowDeviceNameInTelemetry": { "Type": "REG_DWORD", "Data": 0 },
-        "DisableTelemetryOptInChangeNotification": { "Type": "REG_DWORD", "Data": 1 }
+        "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableDiagnosticDataViewer": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableOneSettingsDownloads": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableTelemetryOptInChangeNotification": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableTelemetryOptInSettingsUx": { "Type": "REG_DWORD", "Data": 1 },
+        "LimitDiagnosticLogCollection": { "Type": "REG_DWORD", "Data": 1 },
+        "LimitDumpCollection": { "Type": "REG_DWORD", "Data": 1 },
+        "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\AutoLogger-Diagtrack-Listener": {
         "Start": { "Type": "REG_DWORD", "Data": 0 }
@@ -67,15 +67,15 @@
         "DisablePCA": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
-        "AllowTelemetry": { "Action": "deletevalue" },
-        "DisableOneSettingsDownloads": { "Action": "deletevalue" },
-        "LimitDiagnosticLogCollection": { "Action": "deletevalue" },
-        "DisableDiagnosticDataViewer": { "Action": "deletevalue" },
-        "DisableTelemetryOptInSettingsUx": { "Action": "deletevalue" },
-        "LimitDumpCollection": { "Action": "deletevalue" },
-        "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Action": "deletevalue" },
         "AllowDeviceNameInTelemetry": { "Action": "deletevalue" },
-        "DisableTelemetryOptInChangeNotification": { "Action": "deletevalue" }
+        "AllowTelemetry": { "Action": "deletevalue" },
+        "DisableDiagnosticDataViewer": { "Action": "deletevalue" },
+        "DisableOneSettingsDownloads": { "Action": "deletevalue" },
+        "DisableTelemetryOptInChangeNotification": { "Action": "deletevalue" },
+        "DisableTelemetryOptInSettingsUx": { "Action": "deletevalue" },
+        "LimitDiagnosticLogCollection": { "Action": "deletevalue" },
+        "LimitDumpCollection": { "Action": "deletevalue" },
+        "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Action": "deletevalue" }
       },
       "HKLM\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\AutoLogger-Diagtrack-Listener": {
         "Start": { "Action": "deletevalue" }
@@ -259,8 +259,8 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors": {
         "DisableLocation": { "Type": "REG_DWORD", "Data": 1 },
         "DisableLocationScripting": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableWindowsLocationProvider": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableSensors": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableSensors": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsLocationProvider": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration": {
         "Status": { "Type": "REG_DWORD", "Data": 0 }
@@ -287,8 +287,8 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LocationAndSensors": {
         "DisableLocation": { "Action": "deletevalue" },
         "DisableLocationScripting": { "Action": "deletevalue" },
-        "DisableWindowsLocationProvider": { "Action": "deletevalue" },
-        "DisableSensors": { "Action": "deletevalue" }
+        "DisableSensors": { "Action": "deletevalue" },
+        "DisableWindowsLocationProvider": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc\\Service\\Configuration": {
         "Status": { "Type": "REG_DWORD", "Data": 0 }
@@ -315,9 +315,9 @@
   "Disable Windows Insider": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PreviewBuilds": {
-        "EnableExperimentation": { "Type": "REG_DWORD", "Data": 0 },
+        "AllowBuildPreview": { "Type": "REG_DWORD", "Data": 0 },
         "EnableConfigFlighting": { "Type": "REG_DWORD", "Data": 0 },
-        "AllowBuildPreview": { "Type": "REG_DWORD", "Data": 0 }
+        "EnableExperimentation": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\System\\AllowExperimentation": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
@@ -331,9 +331,9 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PreviewBuilds": {
-        "EnableExperimentation": { "Action": "deletevalue" },
+        "AllowBuildPreview": { "Action": "deletevalue" },
         "EnableConfigFlighting": { "Action": "deletevalue" },
-        "AllowBuildPreview": { "Action": "deletevalue" }
+        "EnableExperimentation": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\System\\AllowExperimentation": {
         "value": { "Type": "REG_DWORD", "Data": 1 }
@@ -390,20 +390,20 @@
   "Disable Reserved Storage": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ReserveManager": {
-        "ShippedWithReserves": { "Type": "REG_DWORD", "Data": 0 },
-        "PassedPolicy": { "Type": "REG_DWORD", "Data": 0 },
-        "MiscPolicyInfo": { "Type": "REG_DWORD", "Data": 2 },
         "ActiveScenario": { "Type": "REG_DWORD", "Data": 0 },
-        "DisableDeletes": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableDeletes": { "Type": "REG_DWORD", "Data": 1 },
+        "MiscPolicyInfo": { "Type": "REG_DWORD", "Data": 2 },
+        "PassedPolicy": { "Type": "REG_DWORD", "Data": 0 },
+        "ShippedWithReserves": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ReserveManager": {
-        "ShippedWithReserves": { "Type": "REG_DWORD", "Data": 1 },
-        "PassedPolicy": { "Type": "REG_DWORD", "Data": 0 },
-        "MiscPolicyInfo": { "Action": "deletevalue" },
         "ActiveScenario": { "Action": "deletevalue" },
-        "DisableDeletes": { "Type": "REG_DWORD", "Data": 0 }
+        "DisableDeletes": { "Type": "REG_DWORD", "Data": 0 },
+        "MiscPolicyInfo": { "Action": "deletevalue" },
+        "PassedPolicy": { "Type": "REG_DWORD", "Data": 0 },
+        "ShippedWithReserves": { "Type": "REG_DWORD", "Data": 1 }
       }
     }
   },
@@ -1212,17 +1212,17 @@
         "PreventHandwritingErrorReports": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Microsoft\\Input\\Settings": {
-        "InsightsEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "EnableHwkbAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
         "EnableHwkbTextPrediction": { "Type": "REG_DWORD", "Data": 0 },
+        "InsightsEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "MultilingualEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "EnableAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableSpellchecking": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableTextPrediction": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 },
         "EnablePredictionSpaceInsertion": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 }
+        "EnableSpellchecking": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableTextPrediction": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\TextInput": {
         "AllowLinguisticDataCollection": { "Type": "REG_DWORD", "Data": 0 }
@@ -1270,17 +1270,17 @@
         "PreventHandwritingErrorReports": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Input\\Settings": {
-        "InsightsEnabled": { "Action": "deletevalue" },
         "EnableHwkbAutocorrection": { "Action": "deletevalue" },
         "EnableHwkbTextPrediction": { "Action": "deletevalue" },
+        "InsightsEnabled": { "Action": "deletevalue" },
         "MultilingualEnabled": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "EnableAutocorrection": { "Action": "deletevalue" },
-        "EnableSpellchecking": { "Action": "deletevalue" },
-        "EnableTextPrediction": { "Action": "deletevalue" },
+        "EnableDoubleTapSpace": { "Action": "deletevalue" },
         "EnablePredictionSpaceInsertion": { "Action": "deletevalue" },
-        "EnableDoubleTapSpace": { "Action": "deletevalue" }
+        "EnableSpellchecking": { "Action": "deletevalue" },
+        "EnableTextPrediction": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\TextInput": {
         "AllowLinguisticDataCollection": { "Action": "deletevalue" }
@@ -1407,8 +1407,8 @@
   "Disable Recall": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
-        "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 },
-        "AllowRecallEnablement": { "Type": "REG_DWORD", "Data": 0 }
+        "AllowRecallEnablement": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Type": "REG_DWORD", "Data": 1 }
@@ -1428,8 +1428,8 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
-        "DisableAIDataAnalysis": { "Action": "deletevalue" },
-        "AllowRecallEnablement": { "Action": "deletevalue" }
+        "AllowRecallEnablement": { "Action": "deletevalue" },
+        "DisableAIDataAnalysis": { "Action": "deletevalue" }
       },
       "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI": {
         "DisableAIDataAnalysis": { "Action": "deletevalue" }
@@ -1484,14 +1484,14 @@
       },
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "EnableAutocorrection": { "Type": "REG_DWORD", "Data": 0 },
-        "TipbandDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableSpellchecking": { "Type": "REG_DWORD", "Data": 0 },
         "EnableAutoShiftEngage": { "Type": "REG_DWORD", "Data": 0 },
         "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 },
         "EnableKeyAudioFeedback": { "Type": "REG_DWORD", "Data": 0 },
-        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 },
         "EnablePredictionSpaceInsertion": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableTextPrediction": { "Type": "REG_DWORD", "Data": 0 }
+        "EnableSpellchecking": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableTextPrediction": { "Type": "REG_DWORD", "Data": 0 },
+        "TipbandDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 },
+        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\input\\Settings": {
         "IsVoiceTypingKeyEnabled": { "Type": "REG_DWORD", "Data": 0 },
@@ -1547,14 +1547,14 @@
       },
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
         "EnableAutocorrection": { "Action": "deletevalue" },
-        "TipbandDesiredVisibility": { "Action": "deletevalue" },
-        "EnableSpellchecking": { "Action": "deletevalue" },
         "EnableAutoShiftEngage": { "Action": "deletevalue" },
         "EnableDoubleTapSpace": { "Action": "deletevalue" },
         "EnableKeyAudioFeedback": { "Action": "deletevalue" },
-        "TouchKeyboardTapInvoke": { "Action": "deletevalue" },
         "EnablePredictionSpaceInsertion": { "Action": "deletevalue" },
-        "EnableTextPrediction": { "Action": "deletevalue" }
+        "EnableSpellchecking": { "Action": "deletevalue" },
+        "EnableTextPrediction": { "Action": "deletevalue" },
+        "TipbandDesiredVisibility": { "Action": "deletevalue" },
+        "TouchKeyboardTapInvoke": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\input\\Settings": {
         "IsVoiceTypingKeyEnabled": { "Action": "deletevalue" },
@@ -1586,12 +1586,10 @@
   "Disable Synchronization": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync": {
-        "DisableSyncOnPaidNetwork": { "Type": "REG_DWORD", "Data": 1 },
-        "SyncPolicy": { "Type": "REG_DWORD", "Data": 5 },
-        "DisableAppSyncSettingSync": { "Type": "REG_DWORD", "Data": 2 },
-        "DisableAppSyncSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
         "DisableApplicationSettingSync": { "Type": "REG_DWORD", "Data": 1 },
         "DisableApplicationSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableAppSyncSettingSync": { "Type": "REG_DWORD", "Data": 2 },
+        "DisableAppSyncSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
         "DisableCredentialsSettingSync": { "Type": "REG_DWORD", "Data": 2 },
         "DisableDesktopThemeSettingSync": { "Type": "REG_DWORD", "Data": 2 },
         "DisableDesktopThemeSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
@@ -1601,10 +1599,12 @@
         "DisableSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
         "DisableStartLayoutSettingSync": { "Type": "REG_DWORD", "Data": 2 },
         "DisableStartLayoutSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableSyncOnPaidNetwork": { "Type": "REG_DWORD", "Data": 1 },
         "DisableWebBrowserSettingSync": { "Type": "REG_DWORD", "Data": 2 },
         "DisableWebBrowserSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
         "DisableWindowsSettingSync": { "Type": "REG_DWORD", "Data": 2 },
-        "DisableWindowsSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableWindowsSettingSyncUserOverride": { "Type": "REG_DWORD", "Data": 1 },
+        "SyncPolicy": { "Type": "REG_DWORD", "Data": 5 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Accessibility": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -1636,12 +1636,10 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\SettingSync": {
-        "DisableSyncOnPaidNetwork": { "Action": "deletevalue" },
-        "SyncPolicy": { "Action": "deletevalue" },
-        "DisableAppSyncSettingSync": { "Action": "deletevalue" },
-        "DisableAppSyncSettingSyncUserOverride": { "Action": "deletevalue" },
         "DisableApplicationSettingSync": { "Action": "deletevalue" },
         "DisableApplicationSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableAppSyncSettingSync": { "Action": "deletevalue" },
+        "DisableAppSyncSettingSyncUserOverride": { "Action": "deletevalue" },
         "DisableCredentialsSettingSync": { "Action": "deletevalue" },
         "DisableDesktopThemeSettingSync": { "Action": "deletevalue" },
         "DisableDesktopThemeSettingSyncUserOverride": { "Action": "deletevalue" },
@@ -1651,10 +1649,12 @@
         "DisableSettingSyncUserOverride": { "Action": "deletevalue" },
         "DisableStartLayoutSettingSync": { "Action": "deletevalue" },
         "DisableStartLayoutSettingSyncUserOverride": { "Action": "deletevalue" },
+        "DisableSyncOnPaidNetwork": { "Action": "deletevalue" },
         "DisableWebBrowserSettingSync": { "Action": "deletevalue" },
         "DisableWebBrowserSettingSyncUserOverride": { "Action": "deletevalue" },
         "DisableWindowsSettingSync": { "Action": "deletevalue" },
-        "DisableWindowsSettingSyncUserOverride": { "Action": "deletevalue" }
+        "DisableWindowsSettingSyncUserOverride": { "Action": "deletevalue" },
+        "SyncPolicy": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Accessibility": {
         "Enabled": { "Action": "deletevalue" }
@@ -1980,10 +1980,10 @@
         "BackgroundAppGlobalToggle": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
-        "LetAppsRunInBackground": { "Type": "REG_DWORD", "Data": 2 },
-        "LetAppsRunInBackground_UserInControlOfTheseApps": { "Action": "deletevalue" },
         "LetAppsRunInBackground_ForceAllowTheseApps": { "Action": "deletevalue" },
-        "LetAppsRunInBackground_ForceDenyTheseApps": { "Action": "deletevalue" }
+        "LetAppsRunInBackground_ForceDenyTheseApps": { "Action": "deletevalue" },
+        "LetAppsRunInBackground_UserInControlOfTheseApps": { "Action": "deletevalue" },
+        "LetAppsRunInBackground": { "Type": "REG_DWORD", "Data": 2 }
       }
     },
     "revert": {
@@ -2010,10 +2010,10 @@
       },
       "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting": {
         "Disabled": { "Type": "REG_DWORD", "Data": 1 },
-        "DontShowUI": { "Type": "REG_DWORD", "Data": 1 },
-        "LoggingDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWerUpload": { "Type": "REG_DWORD", "Data": 1 },
         "DontSendAdditionalData": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableWerUpload": { "Type": "REG_DWORD", "Data": 1 }
+        "DontShowUI": { "Type": "REG_DWORD", "Data": 1 },
+        "LoggingDisabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting\\Consent": {
         "DefaultConsent": { "Type": "REG_DWORD", "Data": 1 },
@@ -2059,10 +2059,10 @@
       },
       "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting": {
         "Disabled": { "Action": "deletevalue" },
-        "DontShowUI": { "Action": "deletevalue" },
-        "LoggingDisabled": { "Action": "deletevalue" },
+        "DisableWerUpload": { "Action": "deletevalue" },
         "DontSendAdditionalData": { "Action": "deletevalue" },
-        "DisableWerUpload": { "Action": "deletevalue" }
+        "DontShowUI": { "Action": "deletevalue" },
+        "LoggingDisabled": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\Microsoft\\Windows\\Windows Error Reporting\\Consent": {
         "DefaultConsent": { "Type": "REG_DWORD", "Data": 4 },
@@ -2101,13 +2101,14 @@
   "Disable Crash Dumps": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
-        "CrashDumpEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "AllowCrashDump": { "Type": "REG_DWORD", "Data": 0 },
-        "LogEvent": { "Type": "REG_DWORD", "Data": 0 },
+        "CrashDumpEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "DumpEncryptionEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "DumpLogLevel": { "Type": "REG_DWORD", "Data": 0 },
         "EnableLogFile": { "Type": "REG_DWORD", "Data": 0 },
-        "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "FilterPages": { "Action": "deletevalue" }
+        "FilterPages": { "Action": "deletevalue" },
+        "LogEvent": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl\\StorageTelemetry": {
         "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -2115,13 +2116,14 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl": {
-        "CrashDumpEnabled": { "Type": "REG_DWORD", "Data": 7 },
         "AllowCrashDump": { "Action": "deletevalue" },
-        "LogEvent": { "Type": "REG_DWORD", "Data": 1 },
+        "CrashDumpEnabled": { "Type": "REG_DWORD", "Data": 7 },
+        "DeviceDumpEnabled": { "Action": "deletevalue" },
+        "DumpEncryptionEnabled": { "Action": "deletevalue" },
         "DumpLogLevel": { "Type": "REG_DWORD", "Data": 0 },
         "EnableLogFile": { "Type": "REG_DWORD", "Data": 1 },
-        "DeviceDumpEnabled": { "Action": "deletevalue" },
-        "FilterPages": { "Action": "deletevalue" }
+        "FilterPages": { "Action": "deletevalue" },
+        "LogEvent": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CrashControl\\StorageTelemetry": {
         "DeviceDumpEnabled": { "Type": "REG_DWORD", "Data": 1 }
@@ -2147,7 +2149,9 @@
         "WdfGlobalSleepStudyDisabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-        "SleepstudyAccountingEnabled": { "Type": "REG_DWORD", "Data": 0 }
+        "SleepstudyAccountingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "SleepstudyLibraryBlockerLimit": { "Type": "REG_DWORD", "Data": 1 },
+        "SleepstudyGlobalBlockerLimit": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
         "DisablePowerEfficiencyDiagnosticsTaskDisable": {
@@ -2182,7 +2186,9 @@
         "WdfGlobalSleepStudyDisabled": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-        "SleepstudyAccountingEnabled": { "Action": "deletevalue" }
+        "SleepstudyAccountingEnabled": { "Action": "deletevalue" },
+        "SleepstudyLibraryBlockerLimit": { "Action": "deletevalue" },
+        "SleepstudyGlobalBlockerLimit": { "Action": "deletevalue" }
       },
       "COMMANDS": {
         "EnablePowerEfficiencyDiagnosticsTaskDisable": {
@@ -2245,8 +2251,8 @@
   "Disable CSC": {
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetCache": {
-        "Enabled": { "Type": "REG_DWORD", "Data": 0 },
         "BackgroundSyncEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "Enabled": { "Type": "REG_DWORD", "Data": 0 },
         "NoReminders": { "Type": "REG_DWORD", "Data": 1 },
         "SyncAtLogoff": { "Type": "REG_DWORD", "Data": 0 },
         "SyncAtLogon": { "Type": "REG_DWORD", "Data": 0 },
@@ -2273,8 +2279,8 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetCache": {
-        "Enabled": { "Action": "deletevalue" },
         "BackgroundSyncEnabled": { "Action": "deletevalue" },
+        "Enabled": { "Action": "deletevalue" },
         "NoReminders": { "Action": "deletevalue" },
         "SyncAtLogoff": { "Action": "deletevalue" },
         "SyncAtLogon": { "Action": "deletevalue" },

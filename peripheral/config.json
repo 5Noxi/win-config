@@ -2,21 +2,21 @@
   "Mouse Values": {
     "apply": {
       "HKCU\\Control Panel\\Mouse": {
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
+        "Beep": { "Type": "REG_SZ", "Data": "No" },
+        "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
+        "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
+        "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" },
         "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
         "MouseSpeed": { "Type": "REG_SZ", "Data": "0" },
         "MouseThreshold1": { "Type": "REG_SZ", "Data": "0" },
         "MouseThreshold2": { "Type": "REG_SZ", "Data": "0" },
-        "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" },
         "MouseTrails": { "Type": "REG_SZ", "Data": "0" },
-        "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
-        "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
-        "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
-        "Beep": { "Type": "REG_SZ", "Data": "No" },
-        "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
         "RawMouseThrottleDuration": { "Type": "REG_DWORD", "Data": 20 },
         "RawMouseThrottleEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 }
+        "RawMouseThrottleForced": { "Type": "REG_DWORD", "Data": 1 },
+        "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
+        "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" }
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "158" }
@@ -50,21 +50,21 @@
     },
     "revert": {
       "HKCU\\Control Panel\\Mouse": {
+        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
+        "Beep": { "Type": "REG_SZ", "Data": "No" },
+        "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" },
+        "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
+        "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" },
         "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
         "MouseSpeed": { "Type": "REG_SZ", "Data": "1" },
         "MouseThreshold1": { "Type": "REG_SZ", "Data": "6" },
         "MouseThreshold2": { "Type": "REG_SZ", "Data": "10" },
-        "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" },
         "MouseTrails": { "Type": "REG_SZ", "Data": "0" },
-        "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" },
-        "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" },
-        "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
-        "ActiveWindowTracking": { "Type": "REG_DWORD", "Data": 0 },
-        "Beep": { "Type": "REG_SZ", "Data": "No" },
-        "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
         "RawMouseThrottleDuration": { "Action": "deletevalue" },
         "RawMouseThrottleEnabled": { "Action": "deletevalue" },
-        "RawMouseThrottleForced": { "Action": "deletevalue" }
+        "RawMouseThrottleForced": { "Action": "deletevalue" },
+        "SnapToDefaultButton": { "Type": "REG_SZ", "Data": "0" },
+        "SwapMouseButtons": { "Type": "REG_SZ", "Data": "0" }
       },
       "HKCU\\Control Panel\\Accessibility\\MouseKeys": {
         "Flags": { "Type": "REG_SZ", "Data": "62" }
@@ -100,9 +100,9 @@
   "Keyboard Values": {
     "apply": {
       "HKCU\\Control Panel\\Keyboard": {
+        "InitialKeyboardIndicators": { "Type": "REG_SZ", "Data": "0" },
         "KeyboardDelay": { "Type": "REG_SZ", "Data": "0" },
         "KeyboardSpeed": { "Type": "REG_SZ", "Data": "31" },
-        "InitialKeyboardIndicators": { "Type": "REG_SZ", "Data": "0" },
         "PrintScreenKeyForSnippingEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Control Panel\\Desktop": {
@@ -110,11 +110,11 @@
       },
       "HKCU\\Control Panel\\Accessibility\\Keyboard Response": {
         "BounceTime": { "Type": "REG_SZ", "Data": "0" },
+        "Flags": { "Type": "REG_DWORD", "Data": 98 },
         "Last BounceKey Setting": { "Type": "REG_DWORD", "Data": 0 },
         "Last Valid Delay": { "Type": "REG_DWORD", "Data": 0 },
         "Last Valid Repeat": { "Type": "REG_DWORD", "Data": 0 },
-        "Last Valid Wait": { "Type": "REG_DWORD", "Data": 0 },
-        "Flags": { "Type": "REG_DWORD", "Data": 98 }
+        "Last Valid Wait": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Control Panel\\Accessibility\\StickyKeys": {
         "Flags": { "Type": "REG_DWORD", "Data": 482 }
@@ -154,9 +154,9 @@
     },
     "revert": {
       "HKCU\\Control Panel\\Keyboard": {
+        "InitialKeyboardIndicators": { "Type": "REG_SZ", "Data": "0" },
         "KeyboardDelay": { "Type": "REG_SZ", "Data": "1" },
         "KeyboardSpeed": { "Type": "REG_SZ", "Data": "31" },
-        "InitialKeyboardIndicators": { "Type": "REG_SZ", "Data": "0" },
         "PrintScreenKeyForSnippingEnabled": { "Action": "deletevalue" }
       },
       "HKCU\\Control Panel\\Desktop": {
@@ -164,11 +164,11 @@
       },
       "HKCU\\Control Panel\\Accessibility\\Keyboard Response": {
         "BounceTime": { "Type": "REG_SZ", "Data": "0" },
+        "Flags": { "Type": "REG_DWORD", "Data": 126 },
         "Last BounceKey Setting": { "Type": "REG_DWORD", "Data": 0 },
         "Last Valid Delay": { "Type": "REG_DWORD", "Data": 0 },
         "Last Valid Repeat": { "Type": "REG_DWORD", "Data": 0 },
-        "Last Valid Wait": { "Type": "REG_DWORD", "Data": 1000 },
-        "Flags": { "Type": "REG_DWORD", "Data": 126 }
+        "Last Valid Wait": { "Type": "REG_DWORD", "Data": 1000 }
       },
       "HKCU\\Control Panel\\Accessibility\\StickyKeys": {
         "Flags": { "Type": "REG_DWORD", "Data": 510 }
@@ -312,16 +312,16 @@
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio": {
         "DisableSpatialAudioGlobal": { "Type": "REG_DWORD", "Data": 1 },
         "DisableSpatialAudioVssFeature": { "Type": "REG_DWORD", "Data": 1 },
-        "SpatialAudioHrtfOnByDefault": { "Type": "REG_DWORD", "Data": 0 },
-        "DisableSpatialOnComboEndpoints": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableSpatialOnComboEndpoints": { "Type": "REG_DWORD", "Data": 1 },
+        "SpatialAudioHrtfOnByDefault": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio": {
         "DisableSpatialAudioGlobal": { "Action": "deletevalue" },
         "DisableSpatialAudioVssFeature": { "Action": "deletevalue" },
-        "SpatialAudioHrtfOnByDefault": { "Action": "deletevalue" },
-        "DisableSpatialOnComboEndpoints": { "Type": "REG_DWORD", "Data": 0 }
+        "DisableSpatialOnComboEndpoints": { "Type": "REG_DWORD", "Data": 0 },
+        "SpatialAudioHrtfOnByDefault": { "Action": "deletevalue" }
       }
     }
   },
@@ -847,18 +847,18 @@
         "TurnOffTouchInput": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
-        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 },
         "EnableAutoShiftEngage": { "Type": "REG_DWORD", "Data": 0 },
         "EnableDoubleTapSpace": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableKeyAudioFeedback": { "Type": "REG_DWORD", "Data": 0 }
+        "EnableKeyAudioFeedback": { "Type": "REG_DWORD", "Data": 0 },
+        "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Microsoft\\TabletTip\\1.7": {
         "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
-        "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "ConvertibleSlateModePromptPreference": { "Type": "REG_DWORD", "Data": 0 },
         "SignInMode": { "Type": "REG_DWORD", "Data": 1 },
-        "ConvertibleSlateModePromptPreference": { "Type": "REG_DWORD", "Data": 0 }
+        "TabletMode": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
@@ -877,15 +877,15 @@
         "TurnOffTouchInput": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\TabletTip\\1.7": {
-        "TouchKeyboardTapInvoke": { "Action": "deletevalue" },
         "EnableAutoShiftEngage": { "Action": "deletevalue" },
         "EnableDoubleTapSpace": { "Action": "deletevalue" },
-        "EnableKeyAudioFeedback": { "Action": "deletevalue" }
+        "EnableKeyAudioFeedback": { "Action": "deletevalue" },
+        "TouchKeyboardTapInvoke": { "Action": "deletevalue" }
       },
       "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
-        "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "ConvertibleSlateModePromptPreference": { "Action": "deletevalue" },
         "SignInMode": { "Action": "deletevalue" },
-        "ConvertibleSlateModePromptPreference": { "Action": "deletevalue" }
+        "TabletMode": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
@@ -941,8 +941,8 @@
     "apply": {
       "HKCU\\Software\\Microsoft\\Lighting": {
         "AmbientLightingEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "ControlledByForegroundApp": { "Type": "REG_DWORD", "Data": 0 },
         "Brightness": { "Type": "REG_DWORD", "Data": 0 },
+        "ControlledByForegroundApp": { "Type": "REG_DWORD", "Data": 0 },
         "EffectMode": { "Type": "REG_DWORD", "Data": 0 },
         "EffectType": { "Type": "REG_DWORD", "Data": 0 },
         "Speed": { "Type": "REG_DWORD", "Data": 1 },
@@ -952,8 +952,8 @@
     "revert": {
       "HKCU\\Software\\Microsoft\\Lighting": {
         "AmbientLightingEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "ControlledByForegroundApp": { "Action": "deletevalue" },
         "Brightness": { "Type": "REG_DWORD", "Data": 100 },
+        "ControlledByForegroundApp": { "Action": "deletevalue" },
         "EffectMode": { "Type": "REG_DWORD", "Data": 0 },
         "EffectType": { "Type": "REG_DWORD", "Data": 0 },
         "Speed": { "Type": "REG_DWORD", "Data": 7 },
@@ -1040,13 +1040,13 @@
         "ConfigurePrintingFeatures": {
           "Action": "optional_feature",
           "Features": [
+            { "Name": "Printing-Foundation-Features", "State": "Enabled" },
+            { "Name": "Printing-Foundation-InternetPrinting-Client", "State": "Enabled" },
+            { "Name": "Printing-Foundation-LPDPrintService", "State": "Disabled" },
             { "Name": "Printing-Foundation-LPRPortMonitor", "State": "Disabled" },
             { "Name": "Printing-PrintToPDFServices-Features", "State": "Enabled" },
             { "Name": "Printing-XPSServices-Features", "State": "Disabled" },
-            { "Name": "Printing-Foundation-Features", "State": "Enabled" },
-            { "Name": "WorkFolders-Client", "State": "Enabled" },
-            { "Name": "Printing-Foundation-InternetPrinting-Client", "State": "Enabled" },
-            { "Name": "Printing-Foundation-LPDPrintService", "State": "Disabled" }
+            { "Name": "WorkFolders-Client", "State": "Enabled" }
           ]
         }
       }

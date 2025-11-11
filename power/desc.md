@@ -84,14 +84,10 @@ HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,ASPMOptIn,0x10001,1
 ```c
 dq offset aPower_2      ; "Power" // HKLM\SYSTEM\CurrentControlSet\Control\Power
 dq offset aHibernateenabl_0 ; "HibernateEnabledDefault"
-dq offset PopHiberEnabledDefaultReg
-lkd> dq PopHiberEnabledDefaultReg l1
-fffff806`c53c327c  ffffffff`ffffffff // 4294967295
+dq offset PopHiberEnabledDefaultReg // PopHiberEnabledDefaultReg   00000000
 
 dq offset aAllowhibernate ; "AllowHibernate"
-dq offset PopAllowHibernateReg
-lkd> dq PopAllowHibernateReg l1
-fffff806`c53c30f4  ffffffff`ffffffff
+dq offset PopAllowHibernateReg // PopAllowHibernateReg   00000000
 ```
 `powercfg.exe /hibernate off`
 
@@ -105,9 +101,20 @@ Miscellaneous notes:
 ```c
 dq offset aPower_2      ; "Power"
 dq offset aHibernatecheck ; "HibernateChecksummingEnabled"
-dq offset PopHiberChecksummingEnabledReg
+dq offset PopHiberChecksummingEnabledReg // PopHiberChecksummingEnabledReg   00000001
 
-PopHiberChecksummingEnabledReg   00000001
+dq offset aPower_2      ; "Power"
+dq offset aHiberfiletyped ; "HiberFileTypeDefault"
+dq offset PopHiberFileTypeDefaultReg // PopHiberFileTypeDefaultReg   ffffffff
+
+// Power\\ForceHibernateDisabled
+dq offset aPowerForcehibe ; "Power\\ForceHibernateDisabled"
+dq offset aPolicy_0     ; "Policy"
+dq offset PopHiberForceDisabledReg // PopHiberForceDisabledReg   00000000
+align 20h
+dq offset aPowerForcehibe ; "Power\\ForceHibernateDisabled"
+dq offset aGuardedhost_0 ; "GuardedHost"
+dq offset unk_140FC5234
 ```
 
 # Remove Power Options
@@ -116,6 +123,40 @@ Removes the `Hibernate`, `Lock`, `Sleep` power options.
 
 # Disable Hiberboot
 
+Disables the use of fast startup. All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
+
+```c
+// \\SYSTEM\\CurrentControlSet\\Control\\Power
+dq offset aPower_2      ; "Power"
+dq offset aHiberbootenabl ; "HiberbootEnabled"
+dq offset PopHiberbootEnabledReg // PopHiberbootEnabledReg   00000000
+
+dq offset aPower_2      ; "Power"
+dq offset aDisableidlesta ; "DisableIdleStatesAtBoot"
+dq offset PpmIdleDisableStatesAtBoot // PpmIdleDisableStatesAtBoot   00000000
+```
+```c
+// PopOpenPowerKey
+{
+  return PopOpenKey(a1, L"Control\\Session Manager\\Power");
+}
+
+// PopReadHiberbootPolicy
+result = PopOpenPowerKey(&KeyHandle);
+if ( result >= 0 )
+{
+  RtlInitUnicodeString(&DestinationString, L"HiberbootEnabled");
+  if ( ZwQueryValueKey(
+         KeyHandle,
+         &DestinationString,
+         KeyValuePartialInformation,
+         &KeyValueInformation,
+         0x14u,
+         &ResultLength) >= 0 )
+    v1 = BYTE12(KeyValueInformation);
+  result = ZwClose(KeyHandle);
+}
+```
 ```json
 {
     "File":  "WinInit.admx",
@@ -139,6 +180,9 @@ Removes the `Hibernate`, `Lock`, `Sleep` power options.
                     ]
 },
 ```
+
+> [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
+
 
 # Disable Power Throttling
 

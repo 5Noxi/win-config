@@ -2256,7 +2256,10 @@ CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dum
 > https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/automatic-memory-dump  
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/CrashControl.txt  
-> [system/assets | crashdmp.c](https://github.com/5Noxi/win-config/blob/main/system/assets/crashdmp.c)
+> [privacy/assets | crashdmp.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/crashdmp.c)  
+> [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
+
+---
 
 # Disable Sleep Study
 
@@ -2273,8 +2276,8 @@ wevtutil sl Microsoft-Windows-UserModePowerService/Diagnostic /e:false
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-UserModePowerService/Diagnostic\Enabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-> [system/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)  
-> [system/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/5Noxi/win-config/blob/main/system/assets/sleepstudy-PoFxInitPowerManagement.c)
+> [privacy/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)  
+> [privacy/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/5Noxi/win-config/blob/main/privacy/assets/sleepstudy-PoFxInitPowerManagement.c)
 
 ---
 
@@ -2282,11 +2285,11 @@ Miscellaenous notes:
 ```c
 dq offset aPower_2      ; "Power"
 dq offset aSleepstudylibr ; "SleepstudyLibraryBlockerLimit"
-dq offset SleepstudyHelperBlockerLibraryLimit
+dq offset SleepstudyHelperBlockerLibraryLimit // SleepstudyHelperBlockerLibraryLimit   000000c8 = 200 Dec
 align 20h
 dq offset aPower_2      ; "Power"
 dq offset aSleepstudyglob ; "SleepstudyGlobalBlockerLimit"
-dq offset SleepstudyHelperBlockerGlobalLimit
+dq offset SleepstudyHelperBlockerGlobalLimit // SleepstudyHelperBlockerGlobalLimit   00000bb8 = 3000 Dec
 ```
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState

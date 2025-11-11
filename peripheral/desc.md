@@ -498,18 +498,18 @@ Higher sampling rates reduce jitter and latency and ensure more accurate cursor 
 Before starting the configuration, load your default settings, as many settings are already correctly configured by default.
 
 ## **Game Mode** - `User`  
-Each profile has preconfigured settings. E.g. 'Read mode' is optimized for viewing documents, it probably decreases the brightness and increases the color temperature. Choose the profile you're satisfied with, for example the sRGB profile if you're a editor, then configure the other settings.
+Each profile has preconfigured settings. E.g. 'Read mode' is optimized for viewing documents, it probably decreases the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) and increases the color temperature. Choose the profile you're satisfied with, for example the sRGB profile if you're a editor, then configure the other settings.
 
 ## **Overdrive/OD/Response Time** - `Test`  
 If you experience [ghosting](https://www.testufo.com/ghosting) (most noticeable in fast paced motions, e.g. FPS games), caused by a slow response time, which cannot keep up with the speed of the changing image, you should try to increase the OD option, which will increase the response time of your monitor. Ghosting looks like a image artifact that appears as a trail of pixels behind a moving object (pixels can't change color fast enough when a new image appears, parts of the old image remain visible), which is why it gets called ghosting -> the trace looks like a ghost of the object. Increasing the overdrive setting can end up in overshooting/inverse ghosting, which is the opposite of ghosting and get's caused from a too high OD. Which means that the response time is too fast for your monitor to handle it, resulting in pixels changing their color too fast. Ghosting (normally) ends up in a trace behind the object (like motion blur), inverse ghosting can cause artifacts in front and behind the object. Search for your monitor [here](https://www.rtings.com/), scroll down to the motion section and compare the response times, to see if your monitor even performs the best one the fastest option. And no you won't "see" a difference between them, if you experience inverse ghosting, renounce the lowest response time and decrease it (as ghosting makes the image unclear -> annoying), if you experience ghosting increase and test it.
 
 ![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/monitor1.png?raw=true)
 
-## [**Sharpness**](http://www.lagom.nl/lcd-test/sharpness.php) - `0%`  
-Personal preference. Increasing it too much will end up in artificial sharpening = exaggerated outlines.
+## **Sharpness** - `0%`  
+Personal preference. Increasing it too much will end up in [artificial sharpening](http://www.lagom.nl/lcd-test/sharpness.php) = exaggerated outlines.
 
-## [**Dark Boost/Black Boost**](https://www.testufo.com/blacklevels) - `Off`  
-Improved vision in dark scenes when increased, but can end up making black look gray, so don't increase it too much. 
+## **Dark Boost/Black Boost** - `Off`  
+Improved vision in [dark scenes](https://www.testufo.com/blacklevels) when increased, but can end up making black look gray, so don't increase it too much. 
 
 ## **FreeSync, G-Sync...** - `Disabled`  
 G-Sync matches the monitor's refresh rate to the frame rate. The setting is used to eliminate screen tearing, if you don't experience [screen tearing](https://www.youtube.com/watch?v=5mWMP96UdGU&t=110s), leave it disabled. If you want to use it, set your framerate limit a bit lower (kind of a buffer, `freq-(freq*freq)/3600`) than your refresh rate. Optimally set the limit within the game. Never use pure V-Sync -> G-Sync + V-Sync + Reflex & limit. [Gsync/gsync101-input-lag-tests-and-settings](https://blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/) can still be read. It is old, but most of it is still correct. If information from the text above and from the website text don't match, the channel information is correct.
@@ -519,10 +519,10 @@ Changing it is one of the best ways to reduce eye stain. Using a warm temperatur
 
 ![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/monitor2.png?raw=true)
 
-## [**Brightness**](https://plano.co/does-screen-brightness-affect-your-eyes/) - `50-70`  
-Depends on how much light there is in your room. If there's a lot of light, you'll have to increase the brightness. If you mainly play in the dark, it's recommended to reduce the brightness to a level that is comfortable for your eyes. Remember: decreasing it *can* lower the [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) by `50+%` -> known to be phototoxic to your eyes ([retina](https://en.wikipedia.org/wiki/Retina) - light sensitive tissue), therefore lower the brightness to reduce the intensity of [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/). For your general knowledge, [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) has a short wavelength (~[`450-500`](https://www.livephysics.com/physical-constants/optics-pc/wavelength-colors/)), which means that it carries more energy -> higher impact. Don't dim it too much, or it may end up in worse focus.
+## **Brightness** - `50-70`  
+Depends on how much light there is in your room. If there's a lot of light, you'll have to increase the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/). If you mainly play in the dark, it's recommended to reduce the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to a level that is comfortable for your eyes. Remember: decreasing it *can* lower the [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) by `50+%` -> known to be phototoxic to your eyes ([retina](https://en.wikipedia.org/wiki/Retina) - light sensitive tissue), therefore lower the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to reduce the intensity of [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/). For your general knowledge, [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) has a short wavelength (~[`450-500`](https://www.livephysics.com/physical-constants/optics-pc/wavelength-colors/)), which means that it carries more energy -> higher impact. Don't dim it too much, or it may end up in worse focus.
 
 ![](https://github.com/5Noxi/win-config/blob/main/peripheral/images/monitor3.png?raw=true)
 
-## [**Contrast**](https://www.testufo.com/whitelevels) - `~60`  
-It shouldn't be set too high, otherwise you will not be able to see any details and not too low, or it will be too dark. You'll have to test it yourself and find the best value.
+## **Contrast** - `~60`  
+It shouldn't be set too high, otherwise you will [not be able to see any details](https://www.testufo.com/whitelevels) and not too low, or it will be too dark. You'll have to test it yourself and find the best value.

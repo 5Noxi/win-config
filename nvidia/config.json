@@ -136,18 +136,18 @@
   "Disable Logging": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "LogWarningEntries": { "Type": "REG_DWORD", "Data": 0 },
-        "LogPagingEntries": { "Type": "REG_DWORD", "Data": 0 },
+        "LogErrorEntries": { "Type": "REG_DWORD", "Data": 0 },
         "LogEventEntries": { "Type": "REG_DWORD", "Data": 0 },
-        "LogErrorEntries": { "Type": "REG_DWORD", "Data": 0 }
+        "LogPagingEntries": { "Type": "REG_DWORD", "Data": 0 },
+        "LogWarningEntries": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "LogWarningEntries": { "Action": "deletevalue" },
-        "LogPagingEntries": { "Action": "deletevalue" },
+        "LogErrorEntries": { "Action": "deletevalue" },
         "LogEventEntries": { "Action": "deletevalue" },
-        "LogErrorEntries": { "Action": "deletevalue" }
+        "LogPagingEntries": { "Action": "deletevalue" },
+        "LogWarningEntries": { "Action": "deletevalue" }
       }
     }
   },
@@ -157,15 +157,15 @@
         "SetNvidiaPowerSavings": {
           "Action": "nvidia_key",
           "Values": {
+            "RMBlcg": { "Type": "REG_DWORD", "Data": 286331153 },
             "RmDisableACPI": { "Type": "REG_DWORD", "Data": 1023 },
             "RMDisableGpuASPMFlags": { "Type": "REG_DWORD", "Data": 3 },
-            "RMFspg": { "Type": "REG_DWORD", "Data": 15 },
-            "RMBlcg": { "Type": "REG_DWORD", "Data": 286331153 },
             "RMElcg": { "Type": "REG_DWORD", "Data": 1431655765 },
             "RmElpg": { "Type": "REG_DWORD", "Data": 4095 },
-            "RMSlcg": { "Type": "REG_DWORD", "Data": 262143 },
+            "RMFspg": { "Type": "REG_DWORD", "Data": 15 },
+            "RMLpwrArch": { "Type": "REG_DWORD", "Data": 349525 },
             "RMOPSB": { "Type": "REG_DWORD", "Data": 10914 },
-            "RMLpwrArch": { "Type": "REG_DWORD", "Data": 349525 }
+            "RMSlcg": { "Type": "REG_DWORD", "Data": 262143 }
           }
         }
       }
@@ -175,15 +175,15 @@
         "ClearNvidiaPowerSavings": {
           "Action": "nvidia_key",
           "Values": {
+            "RMBlcg": { "Action": "deletevalue" },
             "RmDisableACPI": { "Action": "deletevalue" },
             "RMDisableGpuASPMFlags": { "Action": "deletevalue" },
-            "RMFspg": { "Action": "deletevalue" },
-            "RMBlcg": { "Action": "deletevalue" },
             "RMElcg": { "Action": "deletevalue" },
             "RmElpg": { "Action": "deletevalue" },
-            "RMSlcg": { "Action": "deletevalue" },
+            "RMFspg": { "Action": "deletevalue" },
+            "RMLpwrArch": { "Action": "deletevalue" },
             "RMOPSB": { "Action": "deletevalue" },
-            "RMLpwrArch": { "Action": "deletevalue" }
+            "RMSlcg": { "Action": "deletevalue" }
           }
         }
       }
@@ -204,16 +204,16 @@
   "Enable Preemption": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "DisablePreemption": { "Type": "REG_DWORD", "Data": 0 },
         "DisableCudaContextPreemption": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableCEPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "DisablePreemption": { "Type": "REG_DWORD", "Data": 0 },
         "DisablePreemptionOnS3S4": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableSCGMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableAsyncMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableCEPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMidBufferPreemptionForHighTdrTimeout": { "Type": "REG_DWORD", "Data": 1 },
         "EnableMidGfxPreemption": { "Type": "REG_DWORD", "Data": 1 },
         "EnableMidGfxPreemptionVGPU": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableMidBufferPreemptionForHighTdrTimeout": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
-        "EnableAsyncMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableSCGMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 },
         "PerfAnalyzeMidBufferPreemption": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {
@@ -222,16 +222,16 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters": {
-        "DisablePreemption": { "Action": "deletevalue" },
         "DisableCudaContextPreemption": { "Action": "deletevalue" },
-        "EnableCEPreemption": { "Action": "deletevalue" },
+        "DisablePreemption": { "Action": "deletevalue" },
         "DisablePreemptionOnS3S4": { "Action": "deletevalue" },
-        "EnableSCGMidBufferPreemption": { "Action": "deletevalue" },
+        "EnableAsyncMidBufferPreemption": { "Action": "deletevalue" },
+        "EnableCEPreemption": { "Action": "deletevalue" },
+        "EnableMidBufferPreemption": { "Action": "deletevalue" },
+        "EnableMidBufferPreemptionForHighTdrTimeout": { "Action": "deletevalue" },
         "EnableMidGfxPreemption": { "Action": "deletevalue" },
         "EnableMidGfxPreemptionVGPU": { "Action": "deletevalue" },
-        "EnableMidBufferPreemptionForHighTdrTimeout": { "Action": "deletevalue" },
-        "EnableMidBufferPreemption": { "Action": "deletevalue" },
-        "EnableAsyncMidBufferPreemption": { "Action": "deletevalue" },
+        "EnableSCGMidBufferPreemption": { "Action": "deletevalue" },
         "PerfAnalyzeMidBufferPreemption": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler": {

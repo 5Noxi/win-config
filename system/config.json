@@ -160,8 +160,8 @@
           "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
             "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
             "\\Microsoft\\Windows\\Autochk\\Proxy",
@@ -210,8 +210,8 @@
           "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
             "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
             "\\Microsoft\\Windows\\Autochk\\Proxy",
@@ -549,12 +549,12 @@
         "RunningState": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
-        "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+        "DetailedFeedback": { "Type": "REG_DWORD", "Data": 0 },
         "DuckAudio": { "Type": "REG_DWORD", "Data": 0 },
-        "WinEnterLaunchEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "ScriptingEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "OnlineServicesEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "DetailedFeedback": { "Type": "REG_DWORD", "Data": 0 }
+        "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+        "ScriptingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "WinEnterLaunchEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
         "AutoStart": { "Type": "REG_DWORD", "Data": 0 }
@@ -565,8 +565,8 @@
       "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
         "Flags": { "Type": "REG_SZ", "Data": "3" },
         "FSTextEffect": { "Type": "REG_SZ", "Data": "0" },
-        "WindowsEffect": { "Type": "REG_SZ", "Data": "0" },
-        "TextEffect": { "Type": "REG_SZ", "Data": "0" }
+        "TextEffect": { "Type": "REG_SZ", "Data": "0" },
+        "WindowsEffect": { "Type": "REG_SZ", "Data": "0" }
       },
       "HKCU\\Control Panel\\Accessibility\\Blind Access": {
         "On": { "Type": "REG_SZ", "Data": "0" }
@@ -604,12 +604,12 @@
         },
         "Disable Narrator": {
           "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
-            "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+            "DetailedFeedback": { "Type": "REG_DWORD", "Data": 0 },
             "DuckAudio": { "Type": "REG_DWORD", "Data": 0 },
-            "WinEnterLaunchEnabled": { "Type": "REG_DWORD", "Data": 0 },
-            "ScriptingEnabled": { "Type": "REG_DWORD", "Data": 0 },
             "OnlineServicesEnabled": { "Type": "REG_DWORD", "Data": 0 },
-            "DetailedFeedback": { "Type": "REG_DWORD", "Data": 0 }
+            "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+            "ScriptingEnabled": { "Type": "REG_DWORD", "Data": 0 },
+            "WinEnterLaunchEnabled": { "Type": "REG_DWORD", "Data": 0 }
           },
           "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
             "AutoStart": { "Type": "REG_DWORD", "Data": 0 }
@@ -622,8 +622,8 @@
           "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
             "Flags": { "Type": "REG_SZ", "Data": "3" },
             "FSTextEffect": { "Type": "REG_SZ", "Data": "0" },
-            "WindowsEffect": { "Type": "REG_SZ", "Data": "0" },
-            "TextEffect": { "Type": "REG_SZ", "Data": "0" }
+            "TextEffect": { "Type": "REG_SZ", "Data": "0" },
+            "WindowsEffect": { "Type": "REG_SZ", "Data": "0" }
           }
         },
         "Disable Color Filters": {
@@ -647,12 +647,12 @@
         "RunningState": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
-        "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+        "DetailedFeedback": { "Action": "deletevalue" },
         "DuckAudio": { "Action": "deletevalue" },
-        "WinEnterLaunchEnabled": { "Action": "deletevalue" },
-        "ScriptingEnabled": { "Action": "deletevalue" },
         "OnlineServicesEnabled": { "Action": "deletevalue" },
-        "DetailedFeedback": { "Action": "deletevalue" }
+        "RunningState": { "Type": "REG_DWORD", "Data": 0 },
+        "ScriptingEnabled": { "Action": "deletevalue" },
+        "WinEnterLaunchEnabled": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
         "AutoStart": { "Action": "deletevalue" }
@@ -702,12 +702,12 @@
         },
         "Disable Narrator": {
           "HKCU\\Software\\Microsoft\\Narrator\\NoRoam": {
-            "RunningState": { "Action": "deletevalue" },
+            "DetailedFeedback": { "Action": "deletevalue" },
             "DuckAudio": { "Action": "deletevalue" },
-            "WinEnterLaunchEnabled": { "Action": "deletevalue" },
-            "ScriptingEnabled": { "Action": "deletevalue" },
             "OnlineServicesEnabled": { "Action": "deletevalue" },
-            "DetailedFeedback": { "Action": "deletevalue" }
+            "RunningState": { "Action": "deletevalue" },
+            "ScriptingEnabled": { "Action": "deletevalue" },
+            "WinEnterLaunchEnabled": { "Action": "deletevalue" }
           },
           "HKCU\\Software\\Microsoft\\Narrator\\NarratorHome": {
             "AutoStart": { "Action": "deletevalue" }
@@ -720,8 +720,8 @@
           "HKCU\\Control Panel\\Accessibility\\SoundSentry": {
             "Flags": { "Action": "deletevalue" },
             "FSTextEffect": { "Action": "deletevalue" },
-            "WindowsEffect": { "Action": "deletevalue" },
-            "TextEffect": { "Action": "deletevalue" }
+            "TextEffect": { "Action": "deletevalue" },
+            "WindowsEffect": { "Action": "deletevalue" }
           }
         },
         "Disable Color Filters": {
@@ -798,10 +798,10 @@
         "Enabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
-        "HeapSegmentReserve": { "Type": "REG_DWORD", "Data": 1048576 },
-        "HeapSegmentCommit": { "Type": "REG_DWORD", "Data": 8192 },
+        "HeapDeCommitFreeBlockThreshold": { "Type": "REG_DWORD", "Data": 4096 },
         "HeapDeCommitTotalFreeThreshold": { "Type": "REG_DWORD", "Data": 65536 },
-        "HeapDeCommitFreeBlockThreshold": { "Type": "REG_DWORD", "Data": 4096 }
+        "HeapSegmentCommit": { "Type": "REG_DWORD", "Data": 8192 },
+        "HeapSegmentReserve": { "Type": "REG_DWORD", "Data": 1048576 }
       }
     },
     "revert": {
@@ -809,10 +809,10 @@
         "Enabled": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager": {
-        "HeapSegmentReserve": { "Action": "deletevalue" },
-        "HeapSegmentCommit": { "Action": "deletevalue" },
+        "HeapDeCommitFreeBlockThreshold": { "Action": "deletevalue" },
         "HeapDeCommitTotalFreeThreshold": { "Action": "deletevalue" },
-        "HeapDeCommitFreeBlockThreshold": { "Action": "deletevalue" }
+        "HeapSegmentCommit": { "Action": "deletevalue" },
+        "HeapSegmentReserve": { "Action": "deletevalue" }
       }
     }
   },
@@ -833,9 +833,9 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
         "DisallowNotificationMirroring": { "Type": "REG_DWORD", "Data": 1 },
+        "NoTileApplicationNotification": { "Type": "REG_DWORD", "Data": 1 },
         "NoToastApplicationNotification": { "Type": "REG_DWORD", "Data": 1 },
-        "NoToastApplicationNotificationOnLockScreen": { "Type": "REG_DWORD", "Data": 1 },
-        "NoTileApplicationNotification": { "Type": "REG_DWORD", "Data": 1 }
+        "NoToastApplicationNotificationOnLockScreen": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "DisableNotificationCenter": { "Type": "REG_DWORD", "Data": 1 },
@@ -887,9 +887,9 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
         "DisallowNotificationMirroring": { "Action": "deletevalue" },
+        "NoTileApplicationNotification": { "Action": "deletevalue" },
         "NoToastApplicationNotification": { "Action": "deletevalue" },
-        "NoToastApplicationNotificationOnLockScreen": { "Action": "deletevalue" },
-        "NoTileApplicationNotification": { "Action": "deletevalue" }
+        "NoToastApplicationNotificationOnLockScreen": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "DisableNotificationCenter": { "Action": "deletevalue" },
@@ -958,9 +958,9 @@
   "Disable Prefetch & Superfetch": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters": {
-        "EnableSuperfetch": { "Type": "REG_DWORD", "Data": 0 },
-        "EnablePrefetcher": { "Type": "REG_DWORD", "Data": 0 },
         "EnableBoottrace": { "Type": "REG_DWORD", "Data": 0 },
+        "EnablePrefetcher": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableSuperfetch": { "Type": "REG_DWORD", "Data": 0 },
         "SfTracingState": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
@@ -970,9 +970,9 @@
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management\\PrefetchParameters": {
-        "EnableSuperfetch": { "Type": "REG_DWORD", "Data": 3 },
-        "EnablePrefetcher": { "Type": "REG_DWORD", "Data": 3 },
         "EnableBoottrace": { "Action": "deletevalue" },
+        "EnablePrefetcher": { "Type": "REG_DWORD", "Data": 3 },
+        "EnableSuperfetch": { "Type": "REG_DWORD", "Data": 3 },
         "SfTracingState": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
@@ -985,54 +985,54 @@
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
         "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 },
+        "DontVerifyRandomDrivers": { "Type": "REG_DWORD", "Data": 1 },
+        "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 },
         "NtfsAllowExtendedCharacter8dot3Rename": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsDefaultTier": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 1 },
         "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 1 },
         "NtfsDisableCompressionLimit": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 1 },
-        "NtfsEncryptPagingFile": { "Type": "REG_DWORD", "Data": 0 },
-        "NtfsMftZoneReservation": { "Type": "REG_DWORD", "Data": 2 },
-        "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 },
-        "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
-        "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 },
-        "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 1 },
-        "DontVerifyRandomDrivers": { "Type": "REG_DWORD", "Data": 1 },
         "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
+        "NtfsEncryptPagingFile": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsMemoryUsage": { "Type": "REG_DWORD", "Data": 2 },
+        "NtfsMftZoneReservation": { "Type": "REG_DWORD", "Data": 2 },
         "NtfsParallelFlushThreshold": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsParallelFlushWorkers": { "Type": "REG_DWORD", "Data": 0 },
-        "NtfsMemoryUsage": { "Type": "REG_DWORD", "Data": 2 },
-        "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
-        "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 },
         "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
         "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
-        "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+        "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
+        "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
         "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 },
+        "DontVerifyRandomDrivers": { "Action": "deletevalue" },
+        "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 },
         "NtfsAllowExtendedCharacter8dot3Rename": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsDefaultTier": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 2 },
         "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsDisableCompressionLimit": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 0 },
-        "NtfsEncryptPagingFile": { "Type": "REG_DWORD", "Data": 0 },
-        "NtfsMftZoneReservation": { "Type": "REG_DWORD", "Data": 0 },
-        "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 },
-        "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
-        "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 },
-        "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 2 },
-        "DontVerifyRandomDrivers": { "Action": "deletevalue" },
         "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
-        "NtfsParallelFlushThreshold": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsEncryptPagingFile": { "Type": "REG_DWORD", "Data": 0 },
         "NtfsMemoryUsage": { "Type": "REG_DWORD", "Data": 0 },
-        "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
-        "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsMftZoneReservation": { "Type": "REG_DWORD", "Data": 0 },
+        "NtfsParallelFlushThreshold": { "Type": "REG_DWORD", "Data": 0 },
+        "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 },
         "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
         "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 1 },
-        "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+        "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+        "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
+        "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
   },

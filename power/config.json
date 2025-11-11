@@ -94,16 +94,34 @@
   "Disable Hibernation": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "AllowHibernate": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableMinimalHiberFile": { "Type": "REG_DWORD", "Data": 1 },
+        "ForceMinimalHiberFile": { "Type": "REG_DWORD", "Data": 1 },
+        "HiberFileSizePercent": { "Type": "REG_DWORD", "Data": 0 },
+        "HibernateBootOptimizationEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "HibernateChecksummingEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "HibernateEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 0 },
-        "AllowHibernate": { "Type": "REG_DWORD", "Data": 0 }
+        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled": {
+        "Policy": { "Type": "REG_DWORD", "Data": 1 },
+        "GuardedHost": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "AllowHibernate": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableMinimalHiberFile": { "Action": "deletevalue" },
+        "ForceMinimalHiberFile": { "Action": "deletevalue" },
+        "HiberFileSizePercent": { "Action": "deletevalue" },
+        "HibernateBootOptimizationEnabled": { "Action": "deletevalue" },
+        "HibernateChecksummingEnabled": { "Action": "deletevalue" },
         "HibernateEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 1 },
-        "AllowHibernate": { "Type": "REG_DWORD", "Data": 1 }
+        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled": {
+        "Policy": { "Action": "deletevalue" },
+        "GuardedHost": { "Action": "deletevalue" }
       }
     }
   },
@@ -162,16 +180,36 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power": {
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Idle States At Boot": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+            "DisableIdleStatesAtBoot": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power": {
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 1 }
       },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "HiberbootEnabled": { "Action": "deletevalue" }
+      },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
-        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 1 }
+        "HiberbootEnabled": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Idle States At Boot": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+            "DisableIdleStatesAtBoot": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -190,18 +228,18 @@
   "Disable Energy Estimation": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-        "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "EnergyEstimationDisabled": { "Type": "REG_DWORD", "Data": 1 },
-        "UserBatteryDischargeEstimator": { "Type": "REG_DWORD", "Data": 0 },
-        "UserBatteryChargeEstimator": { "Type": "REG_DWORD", "Data": 0 }
+        "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "UserBatteryChargeEstimator": { "Type": "REG_DWORD", "Data": 0 },
+        "UserBatteryDischargeEstimator": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-        "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 1 },
         "EnergyEstimationDisabled": { "Action": "deletevalue" },
-        "UserBatteryDischargeEstimator": { "Action": "deletevalue" },
-        "UserBatteryChargeEstimator": { "Action": "deletevalue" }
+        "EnergyEstimationEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "UserBatteryChargeEstimator": { "Action": "deletevalue" },
+        "UserBatteryDischargeEstimator": { "Action": "deletevalue" }
       }
     }
   },
@@ -236,10 +274,10 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
           "Operations": [
-            { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "DisableD3Cold", "Type": "REG_DWORD", "Value": 1 },
             { "Name": "DisableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
-            { "Name": "MinimumIdleTimeoutInMS", "Type": "REG_DWORD", "Value": 0 },
-            { "Name": "DisableD3Cold", "Type": "REG_DWORD", "Value": 1 }
+            { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "MinimumIdleTimeoutInMS", "Type": "REG_DWORD", "Value": 0 }
           ]
         }
       }
@@ -250,10 +288,10 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\**\\Device Parameters\\StorPort",
           "Operations": [
-            { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "DisableD3Cold", "Operation": "deletevalue" },
             { "Name": "DisableIdlePowerManagement", "Operation": "deletevalue" },
-            { "Name": "MinimumIdleTimeoutInMS", "Operation": "deletevalue" },
-            { "Name": "DisableD3Cold", "Operation": "deletevalue" }
+            { "Name": "EnableIdlePowerManagement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "MinimumIdleTimeoutInMS", "Operation": "deletevalue" }
           ]
         }
       }

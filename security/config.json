@@ -2,54 +2,54 @@
   "Disable UAC": {
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 },
         "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
         "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableLUA": { "Type": "REG_DWORD", "Data": 0 },
         "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableLUA": { "Type": "REG_DWORD", "Data": 0 }
+        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
       },
       "SUBOPTION": {
         "UAC: Disable completely": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 0 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 0 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Windows default (prompt, secure desktop)": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Always notify": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Notify apps only (no desktop dimming)": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Elevate without prompting (admins)": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 0 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
@@ -58,54 +58,54 @@
     },
     "revert": {
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
         "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
         "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 0 },
-        "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 }
+        "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
+        "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
+        "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
       },
       "SUBOPTION": {
         "UAC: Disable completely": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Windows default (prompt, secure desktop)": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Always notify": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 2 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Notify apps only (no desktop dimming)": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 0 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "UAC: Elevate without prompting (admins)": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
-            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "ConsentPromptBehaviorAdmin": { "Type": "REG_DWORD", "Data": 5 },
             "ConsentPromptBehaviorUser": { "Type": "REG_DWORD", "Data": 3 },
+            "EnableLUA": { "Type": "REG_DWORD", "Data": 1 },
             "PromptOnSecureDesktop": { "Type": "REG_DWORD", "Data": 1 },
             "ValidateAdminCodeSignatures": { "Type": "REG_DWORD", "Data": 0 }
           }
@@ -179,16 +179,16 @@
     "apply": {
       "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UX\\Settings": {
         "PauseFeatureUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
-        "PauseQualityUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
-        "PauseUpdatesExpiryTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
         "PauseFeatureUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
+        "PauseQualityUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
         "PauseQualityUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
+        "PauseUpdatesExpiryTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
         "PauseUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\WindowsUpdate\\UpdatePolicy\\PolicyState": {
         "PauseFeatureUpdatesEndTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
-        "PauseQualityUpdatesEndTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
         "PauseFeatureUpdatesStartTime": { "Type": "REG_SZ", "Data": "2050-01-01T00:00:00Z" },
+        "PauseQualityUpdatesEndTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" },
         "PauseQualityUpdatesStartTime": { "Type": "REG_SZ", "Data": "2000-01-01T00:00:00Z" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuauserv": {
@@ -354,10 +354,10 @@
         "EnableWebContentEvaluation": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
-        "ServiceEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "NotifyMalicious": { "Type": "REG_DWORD", "Data": 0 },
         "NotifyPasswordReuse": { "Type": "REG_DWORD", "Data": 0 },
-        "NotifyUnsafeApp": { "Type": "REG_DWORD", "Data": 0 }
+        "NotifyUnsafeApp": { "Type": "REG_DWORD", "Data": 0 },
+        "ServiceEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy": {
         "VerifiedAndReputablePolicyState": { "Type": "REG_DWORD", "Data": 0 }
@@ -433,10 +433,10 @@
         "EnableWebContentEvaluation": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
-        "ServiceEnabled": { "Action": "deletevalue" },
         "NotifyMalicious": { "Action": "deletevalue" },
         "NotifyPasswordReuse": { "Action": "deletevalue" },
-        "NotifyUnsafeApp": { "Action": "deletevalue" }
+        "NotifyUnsafeApp": { "Action": "deletevalue" },
+        "ServiceEnabled": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\CI\\Policy": {
         "VerifiedAndReputablePolicyState": { "Type": "REG_DWORD", "Data": 2 }
@@ -602,19 +602,19 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
         "EnableVirtualizationBasedSecurity": { "Type": "REG_DWORD", "Data": 0 },
         "Locked": { "Type": "REG_DWORD", "Data": 0 },
-        "RequirePlatformSecurityFeatures": { "Type": "REG_DWORD", "Data": 0 },
-        "RequireMicrosoftSignedBootChain": { "Type": "REG_DWORD", "Data": 0 }
+        "RequireMicrosoftSignedBootChain": { "Type": "REG_DWORD", "Data": 0 },
+        "RequirePlatformSecurityFeatures": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard": {
         "EnableVirtualizationBasedSecurity": { "Type": "REG_DWORD", "Data": 0 },
-        "HypervisorEnforcedCodeIntegrity": { "Type": "REG_DWORD", "Data": 0 },
-        "RequirePlatformSecurityFeatures": { "Type": "REG_DWORD", "Data": 0 },
         "HVCIMATRequired": { "Type": "REG_DWORD", "Data": 0 },
-        "LsaCfgFlags": { "Type": "REG_DWORD", "Data": 0 }
+        "HypervisorEnforcedCodeIntegrity": { "Type": "REG_DWORD", "Data": 0 },
+        "LsaCfgFlags": { "Type": "REG_DWORD", "Data": 0 },
+        "RequirePlatformSecurityFeatures": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
-        "HVCIMATRequired": { "Type": "REG_DWORD", "Data": 0 },
         "Enabled": { "Type": "REG_DWORD", "Data": 0 },
+        "HVCIMATRequired": { "Type": "REG_DWORD", "Data": 0 },
         "Locked": { "Type": "REG_DWORD", "Data": 0 },
         "WasEnabledBy": { "Action": "deletevalue" }
       },
@@ -705,19 +705,19 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
         "EnableVirtualizationBasedSecurity": { "Action": "deletevalue" },
         "Locked": { "Action": "deletevalue" },
-        "RequirePlatformSecurityFeatures": { "Action": "deletevalue" },
-        "RequireMicrosoftSignedBootChain": { "Type": "REG_DWORD", "Data": 1 }
+        "RequireMicrosoftSignedBootChain": { "Type": "REG_DWORD", "Data": 1 },
+        "RequirePlatformSecurityFeatures": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DeviceGuard": {
         "EnableVirtualizationBasedSecurity": { "Action": "deletevalue" },
-        "HypervisorEnforcedCodeIntegrity": { "Action": "deletevalue" },
-        "RequirePlatformSecurityFeatures": { "Action": "deletevalue" },
         "HVCIMATRequired": { "Action": "deletevalue" },
-        "LsaCfgFlags": { "Action": "deletevalue" }
+        "HypervisorEnforcedCodeIntegrity": { "Action": "deletevalue" },
+        "LsaCfgFlags": { "Action": "deletevalue" },
+        "RequirePlatformSecurityFeatures": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard\\Scenarios\\HypervisorEnforcedCodeIntegrity": {
-        "HVCIMATRequired": { "Action": "deletevalue" },
         "Enabled": { "Action": "deletevalue" },
+        "HVCIMATRequired": { "Action": "deletevalue" },
         "Locked": { "Action": "deletevalue" },
         "WasEnabledBy": { "Action": "deletevalue" }
       },
@@ -961,8 +961,8 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL": {
         "AllowInsecureRenegoClients": { "Type": "REG_DWORD", "Data": 0 },
         "AllowInsecureRenegoServers": { "Type": "REG_DWORD", "Data": 0 },
-        "DisableRenegoOnServer": { "Type": "REG_DWORD", "Data": 1 },
         "DisableRenegoOnClient": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableRenegoOnServer": { "Type": "REG_DWORD", "Data": 1 },
         "UseScsvForTls": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
@@ -1073,8 +1073,8 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL": {
         "AllowInsecureRenegoClients": { "Action": "deletevalue" },
         "AllowInsecureRenegoServers": { "Action": "deletevalue" },
-        "DisableRenegoOnServer": { "Action": "deletevalue" },
         "DisableRenegoOnClient": { "Action": "deletevalue" },
+        "DisableRenegoOnServer": { "Action": "deletevalue" },
         "UseScsvForTls": { "Action": "deletevalue" }
       },
       "COMMANDS": {
@@ -1112,20 +1112,20 @@
   "Increase TDR": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "TdrLimitTime": { "Type": "REG_DWORD", "Data": 90 },
-        "TdrLimitCount": { "Type": "REG_DWORD", "Data": 5 },
-        "TdrLevel": { "Type": "REG_DWORD", "Data": 3 },
+        "TdrDdiDelay": { "Type": "REG_DWORD", "Data": 10 },
         "TdrDelay": { "Type": "REG_DWORD", "Data": 10 },
-        "TdrDdiDelay": { "Type": "REG_DWORD", "Data": 10 }
+        "TdrLevel": { "Type": "REG_DWORD", "Data": 3 },
+        "TdrLimitCount": { "Type": "REG_DWORD", "Data": 5 },
+        "TdrLimitTime": { "Type": "REG_DWORD", "Data": 90 }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-        "TdrLimitTime": { "Action": "deletevalue" },
-        "TdrLimitCount": { "Action": "deletevalue" },
-        "TdrLevel": { "Action": "deletevalue" },
+        "TdrDdiDelay": { "Action": "deletevalue" },
         "TdrDelay": { "Action": "deletevalue" },
-        "TdrDdiDelay": { "Action": "deletevalue" }
+        "TdrLevel": { "Action": "deletevalue" },
+        "TdrLimitCount": { "Action": "deletevalue" },
+        "TdrLimitTime": { "Action": "deletevalue" }
       }
     }
   },
