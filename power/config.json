@@ -435,6 +435,17 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
         "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disable Modern Standby": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+            "MSDisabled": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep": {
+            "EnabledActions": { "Type": "REG_DWORD", "Data": 0 },
+            "EnableDsNetRefresh": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
@@ -443,6 +454,17 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
         "fDisablePowerManagement": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Modern Standby": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+            "MSDisabled": { "Action": "deletevalue" }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep": {
+            "EnabledActions": { "Action": "deletevalue" },
+            "EnableDsNetRefresh": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -541,6 +563,18 @@
             "WolShutdownLinkSpeed": { "Action": "deletevalue" }
           }
         }
+      }
+    }
+  },
+  "Disable Audio Execution Power Requests": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "AllowAudioToEnableExecutionRequiredPowerRequests": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "AllowAudioToEnableExecutionRequiredPowerRequests": { "Action": "deletevalue" }
       }
     }
   }

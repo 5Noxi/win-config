@@ -116,6 +116,38 @@ dq offset aPowerForcehibe ; "Power\\ForceHibernateDisabled"
 dq offset aGuardedhost_0 ; "GuardedHost"
 dq offset unk_140FC5234
 ```
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "HibernateEnabledDefault"; = 1; // PopHiberEnabledDefaultReg 
+    "HiberbootEnabled"; = 0; // PopHiberbootEnabledReg 
+    "HibernateChecksummingEnabled"; = 1; // PopHiberChecksummingEnabledReg 
+    "EnableMinimalHiberFile"; = 0; // PopEnableMinimalHiberFile 
+    "ForceMinimalHiberFile"; = 0; // PopForceMinimalHiberFile 
+    "HibernateBootOptimizationEnabled"; = 0; // PopHiberBootOptimizationEnabledReg 
+    "HiberFileTypeDefault"; = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF) 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\Power\\ForceHibernateDisabled";
+    "Policy"; = 0; // PopHiberForceDisabledReg 
+    "GuardedHost"; = ?; // unk_140FC5234
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
+    "Percent1GBFull"; = ?; // unk_140FC3670
+    "Percent1GBReduced"; = ?; // unk_140FC366C
+    "Percent2GBFull"; = ?; // unk_140FC3688
+    "Percent2GBReduced"; = ?; // unk_140FC3684
+    "Percent4GBFull"; = ?; // unk_140FC36A0
+    "Percent4GBReduced"; = ?; // unk_140FC369C
+    "Percent8GBFull"; = ?; // unk_140FC36B8
+    "Percent8GBReduced"; = ?; // unk_140FC36B4
+    "Percent16GBFull"; = ?; // unk_140FC36D0
+    "Percent16GBReduced"; = ?; // unk_140FC36CC
+    "Percent32GBFull"; = ?; // unk_140FC36E8
+    "Percent32GBReduced"; = ?; // unk_140FC36E4
+    "PercentUnlimitedFull"; = ?; // unk_140FC3700
+    "PercentUnlimitedReduced"; = ?; // unk_140FC36FC
+```
+
+> https://github.com/5Noxi/wpr-reg-records#power-values
 
 # Remove Power Options
 
@@ -124,6 +156,8 @@ Removes the `Hibernate`, `Lock`, `Sleep` power options.
 # Disable Hiberboot
 
 Disables the use of fast startup. All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
+
+> https://github.com/5Noxi/wpr-reg-records#power-values
 
 ```c
 // \\SYSTEM\\CurrentControlSet\\Control\\Power
@@ -193,12 +227,11 @@ You can see processes, which use power throttling by enabling the column (`Detai
 > https://systeminformer.io/
 
 ```c
-dq offset aPowerPowerthro ; "Power\\PowerThrottling"
-dq offset aPowerthrottlin ; "PowerThrottlingOff"
-dq offset PpmPerfQosGroupPolicyDisable
-
-PpmPerfQosGroupPolicyDisable dd 0 // Throttling enabled
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
+    "PowerThrottlingOff"; = 0; // PpmPerfQosGroupPolicyDisable 
 ```
+
+> https://github.com/5Noxi/wpr-reg-records#power-values
 
 ![](https://github.com/5Noxi/win-config/blob/main/power/images/powerth.png?raw=true)
 
@@ -211,22 +244,13 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEner
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEnergy" /v TelemetryMaxTagPerApplication /t REG_DWORD /d 0 /f
 ```
 ```c
-dq offset aPower_2      ; "Power"
-dq offset aUserbatterydis ; "UserBatteryDischargeEstimator"
-dq offset PopDisableBatteryDischargeEstimator
-PopDisableBatteryDischargeEstimator   00000000
-
-dq offset aPower_2      ; "Power"
-dq offset aUserbatterycha ; "UserBatteryChargeEstimator"
-dq offset PopUserBatteryChargingEstimator
-PopUserBatteryChargingEstimator   00000000
-
-dq offset aPower_2      ; "Power"
-dq offset aEnergyestimati ; "EnergyEstimationEnabled"
-dq offset PopEnergyEstimationEnabled
-PopEnergyEstimationEnabled   00000001
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "UserBatteryDischargeEstimator"; = 0; // PopDisableBatteryDischargeEstimator 
+    "UserBatteryChargeEstimator"; = 0; // PopUserBatteryChargingEstimator 
+    "EnergyEstimationEnabled"; = 1; // PopEnergyEstimationEnabled 
 ```
 
+> https://github.com/5Noxi/wpr-reg-records#power-values  
 > [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/5Noxi/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/5Noxi/win-config/blob/main/power/images/energyesti.png?raw=true)
@@ -358,9 +382,12 @@ It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely 
 "CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
 
 ```c
-PopCoalescingTimerInterval dd 5DCh // 1500
-PopDeepIoCoalescingEnabled dd 0
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "CoalescingTimerInterval"; = 1500; // PopCoalescingTimerInterval (0x000005DC) 
+    "DeepIoCoalescingEnabled"; = 0; // PopDeepIoCoalescingEnabled 
 ```
+> https://github.com/5Noxi/wpr-reg-records?tab=readme-ov-file#power-values
+
 ```c
 void InitTimerPowerSaving(void)
 {
@@ -506,6 +533,17 @@ If `IdleStatesNumber` is set, the other values are ignored? Let me know if you h
 This policy setting specifies that power management is disabled when the machine enters connected standby mode.
 - If this policy setting is enabled, Windows Connection Manager doesn't manage adapter radios to reduce power consumption when the machine enters connected standby mode.
 - If this policy setting isn't configured or is disabled, power management is enabled when the machine enters connected standby mode.
+
+`Disable Modern Standby`:
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power"; 
+    "MSDisabled"; = 1; // PopModernStandbyDisabled
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep";
+    "EnabledActions"; = 0; // PopAggressiveStandbyActionsRegValue 
+    "EnableDsNetRefresh"; = 0; // PopEnableDsNetRefresh 
+```
+> https://github.com/5Noxi/wpr-reg-records?tab=readme-ov-file#power-values
 
 ```json
 {
@@ -723,4 +761,32 @@ Miscellaneous notes:
 "CLKREQ" = : { "Type": "REG_SZ", "Data": 0 },
 "EnableCoalesce": { "Type": "REG_SZ", "Data": 0 },
 "*PacketCoalescing": { "Type": "REG_SZ", "Data": 0 },
+```
+
+# Disable Audio Execution Power Requests
+
+There's no official documentation on this value, but it probably controls whether audio activity can trigger power execution requests, reducing the responsiveness of the system to power management events, maybe ending up with less efficient power usage or preventing certain power related actions from being triggered.
+
+```c
+// Allowed by default
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "AllowAudioToEnableExecutionRequiredPowerRequests"; = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
+```
+
+> https://github.com/5Noxi/wpr-reg-records#power-values
+
+```c
+bool PopPowerRequestEvaluateExecutionRequiredStatus()
+{
+  char v0; // r8
+
+  v0 = 0;
+  if ( PopExecutionRequiredTimeout )
+    return !byte_140F0D173
+        || PopPowerRequestActiveAudioEnablesExecutionRequired && byte_140F0D172
+        || byte_140F0D171
+        || MEMORY[0xFFFFF78000000008] - qword_140F0D178 < 10000000
+                                                        * (unsigned __int64)(unsigned int)PopExecutionRequiredTimeout;
+  return v0;
+}
 ```
