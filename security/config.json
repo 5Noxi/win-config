@@ -1187,5 +1187,17 @@
         "ClearPageFileAtShutdown": { "Type": "REG_DWORD", "Data": 0 }
       }
     }
+  },
+  "Trusted Path Credential Prompting": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+        "EnableSecureCredentialPrompting": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+        "EnableSecureCredentialPrompting": { "Action": "deletevalue" }
+      }
+    }
   }
 }
