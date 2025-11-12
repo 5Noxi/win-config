@@ -1,4 +1,9 @@
 {
+  "copyright": "(C) 2025 Noverse. All Rights Reserved.",
+  "note": "This JSON is proprietary and should not be redistributed without permission.",
+  "github": "https://github.com/5Noxi",
+  "discord": "https://discord.gg/E2ybG4j9jU",
+
   "Encrypted DNS": {
     "apply": {
       "COMMANDS": {
