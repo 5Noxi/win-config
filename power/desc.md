@@ -102,7 +102,7 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
     "EnableMinimalHiberFile"; = 0; // PopEnableMinimalHiberFile 
     "ForceMinimalHiberFile"; = 0; // PopForceMinimalHiberFile 
     "HiberbootEnabled"; = 0; // PopHiberbootEnabledReg 
-    "HiberFileSizePercent"; = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024
+    "HiberFileSizePercent"; = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default
     "HibernateBootOptimizationEnabled"; = 0; // PopHiberBootOptimizationEnabledReg 
     "HibernateChecksummingEnabled"; = 1; // PopHiberChecksummingEnabledReg 
     "HibernateEnabledDefault"; = 1; // PopHiberEnabledDefaultReg 
@@ -130,7 +130,7 @@ Hibernation files are used for hybrid sleep, fast startup, and [standard hiberna
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "HiberFileSizePercent"; = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024
+    "HiberFileSizePercent"; = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default
 
     // DWORD 1 = Reduced, DWORD 2 = Full
     "HiberFileType"; = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF)
@@ -475,7 +475,7 @@ Needs more research (`ClassGetServiceParameter.c` - default `0`?):
 Additional notes: `EnableALPEDisableHotplug` (`0`), `AhciDisablePxHotplug` - `amdsbs.c`
 
 > https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm  
-> [power/assets | hddpark-ClassGetServiceParameter.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-ClassGetServiceParameter.c)
+> [power/assets | hddpark-ClassGetServiceParameter.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-ClassGetServiceParameter.c)  
 > [power/assets | hddpark-DllInitialize.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hddpark-DllInitialize.c)
 
 # Disable Storport Idle

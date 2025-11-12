@@ -34,24 +34,25 @@ pip install PySide6 mistune requests
 ### Overview
 | Context | Allowed actions |
 | ------ | ------ |
-| `COMMANDS`                           | `run_powershell`, `delete_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent`, `nvidia_key`, `ethernet_key` |
+| `COMMANDS`                           | `run_powershell`, `delete_path`, `create_path`, `scheduled_task`, `tcp_congestion`, `netbind`, `optional_feature`, `restart_explorer`, `bcdedit`, `registry_pattern`, `mmagent`, `nvidia_key`, `ethernet_key` |
 | Registry hives (`HKCU\`, `HKLM\`...) | Direct value set, `deletevalue` |
 
 ### Actions & Requirements
 | Action | Required / optional arguments |
 | ------ | ------ |
 | `run_powershell`   | Required: `Command` - Optional: `Elevated` |
-| `delete_path`      | Use one: `Path` or `Paths` (array) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
+| `delete_path`      | Required: `Paths` (array or string) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
+| `create_path`      | Use one: `Path` or `Paths` (array) - Optional: `File` / `IsFile` (bool) to create a file instead of directories |
 | `scheduled_task`   | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) |
 | `tcp_congestion`   | Required: `Templates` (string or array), `Provider` (or `Value`) |
-| `netbind`          | Required: component identifiers via one of `ComponentIDs` (array) / `Components` (array) / `ComponentID` / `Component` - Required state: `State` (`enable` | `disable`) (or boolean via `Enabled`/`Enable`) |
-| `optional_feature` | Feature names: via one of `Features` (array) / `Name` / `Feature` / `FeatureName` - Required state: `State` (`Enabled` | `Disabled`) (or boolean via `Enabled`/`Enable`) - Optional: `Arguments` (array or string), `Elevated` |
+| `netbind`          | Required: `Components` (array or string) - Required: `State` (`enable` \| `disable`) |
+| `optional_feature` | Required: `Features` (array or string) - Required: `State` (`enable` \| `disable`) - Optional: `Arguments` (array or string), `Elevated` |
 | `restart_explorer` | (no arguments) |
 | `bcdedit`          | Required: `Name` (or `Option`) - One of: `Value` or `Delete`/`Remove` (bool) |
 | `registry_pattern` | Required: `Pattern`, `Operations` (array) - Optional: `ExcludeSubPaths`, `ExcludePatterns`, `ExcludeSegments`, `Exclude`, `Root`, `Message` |
 | `mmagent`          | Required: `Setting` (or `Option`/`Name`), desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
 | `nvidia_key`       | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
-| `ethernet_key`     | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter  |
+| `ethernet_key`     | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey`, `Refresh` to rescan adapter, `NetIdPath` template containing the literal `{NetID}` placeholder to target other hives |
 
 ### Buttons
 | Key | Purpose |
@@ -83,10 +84,20 @@ pip install PySide6 mistune requests
       "HKCU\\Software\\Noverse": {
         "": { "Type": "REG_SZ", "Data": "DefaultDisplayName" },
         "Version": { "Type": "REG_SZ", "Data": "1.0.0" }
+      },
+      "COMMANDS": {
+        "EnsureCacheFolder": {
+          "Action": "create_path",
+          "Paths": "%PROGRAMDATA%\\Noverse\\Cache"
+        }
       }
     },
     "revert": {
-      "HKCU\\Software\\Noverse": { "Action": "delete_path", "Recurse": true } // Deletes the key - "Recurse" is required if the key includes subkeys
+      "HKCU\\Software\\Noverse": {
+        "Action": "delete_path",
+        "Paths": "HKCU\\Software\\Noverse",
+        "Recurse": true
+      }
     }
   },
   "Option Name - Only update if value exists": {
@@ -127,7 +138,7 @@ pip install PySide6 mistune requests
       }
     }
   },
-  "Option Name - Target a service/device style subtree with exclusions (advanced)": {
+  "Option Name - Target a service/device style subtree with exclusions": {
     "apply": {
       "COMMANDS": {
         "SetNoverseAdvanced": {
@@ -280,7 +291,7 @@ pip install PySide6 mistune requests
       "COMMANDS": {
         "DisableBindings": {
           "Action": "netbind",
-          "ComponentIDs": ["ms_tcpip6", "ms_lltdio"],
+          "Components": ["ms_tcpip6", "ms_lltdio"],
           "State": "disable"
         }
       }
@@ -305,7 +316,7 @@ pip install PySide6 mistune requests
             "TelnetClient",
             "SMB1Protocol"
           ],
-          "State": "Disabled"
+          "State": "disable"
         }
       }
     },
@@ -317,7 +328,7 @@ pip install PySide6 mistune requests
             "TelnetClient",
             "SMB1Protocol"
           ],
-          "State": "Enabled"
+          "State": "enable"
         }
       }
     }
@@ -382,9 +393,16 @@ pip install PySide6 mistune requests
     "apply": {
       "COMMANDS": {
         "SetAdapterPowerSave": {
-          "Action": "ethernet_key", // searches for an active adapter (excluding VM adapters) then sets the key in the network adapter key (4d36e972-e325-11ce-bfc1-08002be10318)
+          "Action": "ethernet_key", // searches for an active adapter (excluding VM adapters) then sets the value directly under that adapter key
           "Values": {
             "AutoPowerSaveModeEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "SetInterfaceDnsWithNetId": {
+          "Action": "ethernet_key", // gets NetCfgInstanceId from the ethernet key ({NetID})
+          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "Values": {
+            "NameServer": { "Type": "REG_SZ", "Data": "1.1.1.1" }
           }
         }
       }
@@ -395,6 +413,13 @@ pip install PySide6 mistune requests
           "Action": "ethernet_key",
           "Values": {
             "AutoPowerSaveModeEnabled": { "Action": "deletevalue" }
+          }
+        },
+        "ResetInterfaceDnsWithNetId": {
+          "Action": "ethernet_key",
+          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "Values": {
+            "NameServer": { "Action": "deletevalue" }
           }
         }
       }

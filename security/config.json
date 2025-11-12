@@ -596,7 +596,7 @@
         "DisableMicrosoftHyperVFeature": {
           "Action": "optional_feature",
           "Features": [ "Microsoft-Hyper-V-All", "Microsoft-Hyper-V", "Microsoft-Hyper-V-Tools-All", "HypervisorPlatform", "Microsoft-Hyper-V-Hypervisor", "Microsoft-Hyper-V-Services" ],
-          "State": "Disabled"
+          "State": "disable"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
@@ -699,7 +699,7 @@
         "EnableMicrosoftHyperVFeature": {
           "Action": "optional_feature",
           "Features": [ "Microsoft-Hyper-V-All", "Microsoft-Hyper-V", "Microsoft-Hyper-V-Tools-All", "HypervisorPlatform", "Microsoft-Hyper-V-Hypervisor", "Microsoft-Hyper-V-Services" ],
-          "State": "Disabled"
+          "State": "enable"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\DeviceGuard": {
@@ -871,7 +871,7 @@
       }
     }
   },
-  "Disable Insecure Connections": {
+  "Disable Legacy TLS/Crypto": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Ciphers\\RC2 40/128": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -911,9 +911,6 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\SHA": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
-        "SMB1": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\SSL 2.0\\Server": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 },
@@ -1023,9 +1020,6 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Hashes\\SHA": {
         "Enabled": { "Action": "deletevalue" }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters": {
-        "SMB1": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\SSL 2.0\\Server": {
         "Enabled": { "Action": "deletevalue" },

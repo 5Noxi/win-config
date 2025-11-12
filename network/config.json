@@ -400,7 +400,7 @@
           "Action": "run_powershell",
           "Command": "Set-NetFirewallRule -DisplayGroup 'Network Discovery' -Enabled False -Profile Any"
         },
-        "DisableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr", "ms_lldp"], "State": "disable" },
+        "DisableLLTDIORspndr": { "Action": "netbind", "Components": ["ms_lltdio", "ms_rspndr", "ms_lldp"], "State": "disable" },
         "DisableLLDP": {
           "Action": "ethernet_key",
           "Values": {
@@ -425,7 +425,7 @@
           "Action": "run_powershell",
           "Command": "$rules=@(@{Name='NETDIS-UPnPHost-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-SSDPSrv-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-Out-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-LLMNR-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-In-UDP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-UPnP-Out-TCP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNTS-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNT-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNTS-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-SSDPSrv-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-DAS-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Name-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Datagram-In-UDP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Name-In-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-LLMNR-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-UPnPHost-In-TCP-Teredo';Enabled='True';Profile=@('Public')},@{Name='NETDIS-FDRESPUB-WSD-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-SSDPSrv-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-LLMNR-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-WSDEVNT-Out-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-WSDEVNTS-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-NB_Datagram-In-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-SSDPSrv-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-NB_Datagram-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-FDPHOST-Out-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-WSDEVNT-In-TCP';Enabled='False';Profile=@('Public')},@{Name='NETDIS-UPnPHost-In-TCP-NoScope';Enabled='False';Profile=@('Domain')},@{Name='NETDIS-WSDEVNTS-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDRESPUB-WSD-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-FDPHOST-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-FDPHOST-In-UDP';Enabled='False';Profile=@('Domain','Public')},@{Name='NETDIS-UPnP-Out-TCP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-Active';Enabled='True';Profile=@('Private')},@{Name='NETDIS-NB_Name-Out-UDP-NoScope';Enabled='False';Profile=@('Domain')}); foreach($r in $rules){ $enabledEnum=[Enum]::Parse([Microsoft.PowerShell.Cmdletization.GeneratedTypes.NetSecurity.Enabled], $r.Enabled); try { Set-NetFirewallRule -Name $r.Name -Enabled $enabledEnum -Profile $r.Profile -ea SilentlyContinue } catch {} }"
         },
-        "EnableLLTDIORspndr": { "Action": "netbind", "ComponentID": ["ms_lltdio", "ms_rspndr", "ms_lldp"], "State": "enable" },
+        "EnableLLTDIORspndr": { "Action": "netbind", "Components": ["ms_lltdio", "ms_rspndr", "ms_lldp"], "State": "enable" },
         "EnableLLDP": {
           "Action": "ethernet_key",
           "Values": {
@@ -540,7 +540,7 @@
         "SMB2": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
-        "DisableSMB1Feature": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Disabled" }
+        "DisableSMB1Feature": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "disable" }
       },
       "SUBOPTION": {
         "Disable SMBv1": {
@@ -548,7 +548,7 @@
             "SMB1": { "Type": "REG_DWORD", "Data": 0 }
           },
           "COMMANDS": {
-            "DisableSMB1Feature": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Disabled" }
+            "DisableSMB1Feature": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "disable" }
           }
         },
         "Disable SMBv2": {
@@ -564,7 +564,7 @@
         "SMB2": { "Action": "deletevalue" }
       },
       "COMMANDS": {
-        "DisableSMB1FeatureAgain": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Disabled" }
+        "DisableSMB1FeatureAgain": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "disable" }
       },
       "SUBOPTION": {
         "Disable SMBv1": {
@@ -572,7 +572,7 @@
             "SMB1": { "Action": "deletevalue" }
           },
           "COMMANDS": {
-            "DisableSMB1FeatureAgain": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "Enabled" }
+            "DisableSMB1FeatureAgain": { "Action": "optional_feature", "Features": ["SMB1Protocol"], "State": "enable" }
           }
         },
         "Disable SMBv2": {
@@ -691,7 +691,7 @@
         "DisabledComponents": { "Type": "REG_DWORD", "Data": 255 }
       },
       "COMMANDS": {
-        "DisableIPv6Bindings": { "Action": "netbind", "ComponentID": ["ms_tcpip6"], "State": "disable" }
+        "DisableIPv6Bindings": { "Action": "netbind", "Components": ["ms_tcpip6"], "State": "disable" }
       }
     },
     "revert": {
@@ -699,7 +699,7 @@
         "DisabledComponents": { "Action": "deletevalue" }
       },
       "COMMANDS": {
-        "EnableIPv6Bindings": { "Action": "netbind", "ComponentID": ["ms_tcpip6"], "State": "enable" }
+        "EnableIPv6Bindings": { "Action": "netbind", "Components": ["ms_tcpip6"], "State": "enable" }
       }
     }
   },
@@ -941,7 +941,7 @@
           "Action": "run_powershell",
           "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Disable-NetFirewallRule"
         },
-        "DisableMsServerBinding": { "Action": "netbind", "ComponentIDs": ["ms_server"], "State": "disable" }
+        "DisableMsServerBinding": { "Action": "netbind", "Components": ["ms_server"], "State": "disable" }
       }
     },
     "revert": {
@@ -953,7 +953,7 @@
           "Action": "run_powershell",
           "Command": "Get-NetFirewallRule -Group '@FirewallAPI.dll,-28502' | Enable-NetFirewallRule"
         },
-        "EnableMsServerBinding": { "Action": "netbind", "ComponentIDs": ["ms_server"], "State": "enable" }
+        "EnableMsServerBinding": { "Action": "netbind", "Components": ["ms_server"], "State": "enable" }
       }
     }
   },

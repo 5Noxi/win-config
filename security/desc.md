@@ -910,9 +910,9 @@ By default it uses a minimum size of `1024` bits (both) - hardens Windows TLS en
 > https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF  
 > https://learn.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings?tabs=diffie-hellman
 
-# Disable Insecure Connections
+# Disable Legacy TLS/Crypto
 
-Disables insecure protocols, ciphers, renegotiation, hashes, and forces .NET apps to use strong cryptography. Windows may use insecure connections for e.g. older software (compatibility reasons), so disabling them can cause issues with old software.
+Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .NET apps to use strong cryptography (Disables RC2 (40/56/128), RC4 (40/56/64/128), DES, 3DES, NULL, MD5/SHA-1, SSL 2.0/3.0, TLS 1.0/1.1, DTLS 1.0, insecure TLS renegotiation - Enables TLS SCSV, .NET StrongCrypto & SystemDefaultTlsVersions, NTLMv2 only). Windows may use insecure connections for e.g. older software (compatibility reasons), so disabling them can cause issues with old software.
 
 | Setting                                                    | Description                                                                                                                                                                                                              | Registry security level |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------- |

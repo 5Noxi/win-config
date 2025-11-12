@@ -306,9 +306,8 @@
         "DisableSearchFeature": {
           "Action": "optional_feature",
           "Arguments": [ "/NoRestart" ],
-          "Features": [
-            { "Name": "SearchEngine-Client-Package", "State": "Disabled" }
-          ]
+          "Features": [ "SearchEngine-Client-Package" ],
+          "State": "disable"
         },
         "RenameStartMenuExperienceHost": {
           "Action": "run_powershell",
@@ -384,9 +383,8 @@
         "EnableSearchFeature": {
           "Action": "optional_feature",
           "Arguments": [ "/NoRestart" ],
-          "Features": [
-            { "Name": "SearchEngine-Client-Package", "State": "Enabled" }
-          ]
+          "Features": [ "SearchEngine-Client-Package" ],
+          "State": "enable"
         },
         "RenameStartMenuExperienceHost": {
           "Action": "run_powershell",

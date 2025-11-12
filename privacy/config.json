@@ -1420,9 +1420,8 @@
         "DisableRecallFeature": {
           "Action": "optional_feature",
           "Arguments": [ "/Quiet", "/NoRestart" ],
-          "Features": [
-            { "Name": "Recall", "State": "Disabled" }
-          ]
+          "Features": [ "Recall" ],
+          "State": "disable"
         }
       }
     },
@@ -1441,9 +1440,8 @@
         "EnableRecallFeature": {
           "Action": "optional_feature",
           "Arguments": [ "/Quiet", "/NoRestart" ],
-          "Features": [
-            { "Name": "Recall", "State": "Enabled" }
-          ]
+          "Features": [ "Recall" ],
+          "State": "enable"
         }
       }
     }

@@ -999,7 +999,7 @@
         "DisablePrintingFeatures": {
           "Action": "optional_feature",
           "Features": [ "Printing-Foundation-InternetPrinting-Client", "Printing-Foundation-LPRPortMonitor", "Printing-PrintToPDFServices-Features", "Printing-XPSServices-Features", "Printing-Foundation-Features", "WorkFolders-Client", "Printing-Foundation-LPDPrintService" ],
-          "State": "Disabled"
+          "State": "disable"
         }
       }
     },
@@ -1037,17 +1037,15 @@
           "TaskNames": [ "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask", "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask", "\\Microsoft\\Windows\\Printing\\EduPrintProv" ],
           "TaskAction": "enable"
         },
-        "ConfigurePrintingFeatures": {
+        "EnablePrintingFeatures": {
           "Action": "optional_feature",
-          "Features": [
-            { "Name": "Printing-Foundation-Features", "State": "Enabled" },
-            { "Name": "Printing-Foundation-InternetPrinting-Client", "State": "Enabled" },
-            { "Name": "Printing-Foundation-LPDPrintService", "State": "Disabled" },
-            { "Name": "Printing-Foundation-LPRPortMonitor", "State": "Disabled" },
-            { "Name": "Printing-PrintToPDFServices-Features", "State": "Enabled" },
-            { "Name": "Printing-XPSServices-Features", "State": "Disabled" },
-            { "Name": "WorkFolders-Client", "State": "Enabled" }
-          ]
+          "Features": [ "Printing-Foundation-Features", "Printing-Foundation-InternetPrinting-Client", "Printing-PrintToPDFServices-Features", "WorkFolders-Client" ],
+          "State": "enable"
+        },
+        "DisableLegacyPrintingFeatures": {
+          "Action": "optional_feature",
+          "Features": [ "Printing-Foundation-LPDPrintService", "Printing-Foundation-LPRPortMonitor", "Printing-XPSServices-Features" ],
+          "State": "disable"
         }
       }
     }
