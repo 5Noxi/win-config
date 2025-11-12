@@ -81,94 +81,229 @@ HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,ASPMOptIn,0x10001,1
 
 # Disable Hibernation
 
+Windows uses hibernation to provide a fast startup experience. When available, it's also used on mobile devices to extend the usable battery life of a system by giving a mechanism to save all of the user's state prior to shutting down the system. In a hibernate transition, all the contents of memory are written to a file on the primary system drive, the hibernation file. This preserves the state of the operating system, applications, and devices. In the case where the combined memory footprint consumes all of physical memory, the hibernation file must be large enough to ensure there's space to save all the contents of physical memory. Since data is written to non-volatile storage, DRAM does not need to maintain self-refresh and can be powered off, which means power consumption of hibernation is very low, almost the same as power off.
+
+During a full shutdown and boot (S5), the entire user session is torn down and restarted on the next boot. In contrast, during a hibernation (S4), the user session is closed and the user state is saved.
+
+| Power state | ACPI state | Description | 
+|-------------|------------|-------------|
+| Working | *S0* | The system is fully usable. Hardware components that aren't in use can save power by entering a lower power state. | 
+| Sleep (Modern Standby) | *S0* low-power idle | Some SoC systems support a low-power idle state known as [Modern Standby](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby). In this state, the system can very quickly switch from a low-power state to high-power state in response to hardware and network events. **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
+| Sleep | *S1*<br> *S2*<br> *S3* | The system appears to be off. The amount of power consumed in states *S1-S3* is less than *S0* and more than *S4*. *S3* consumes less power than *S2*, and *S2* consumes less power than *S1*. Systems typically support one of these three states, not all three.<br><br> In states *S1-S3*, volatile memory is kept refreshed to maintain the system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device.<br><br> *Hybrid sleep*, used on desktops, is where a system uses a hibernation file with *S1-S3*. The hibernation file saves the system state in case the system loses power while in sleep.<br><br> **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
+| Hibernate | *S4* | The system appears to be off. Power consumption is reduced to the lowest level. The system saves the contents of volatile memory to a hibernation file to preserve system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device. The working context can be restored if it's stored on nonvolatile media.<br><br> *Fast startup* is where the user is logged off before the hibernation file is created. This allows for a smaller hibernation file, more appropriate for systems with less storage capabilities. | 
+| Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
+| Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
+
+> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
+
 ```c
-dq offset aPower_2      ; "Power" // HKLM\SYSTEM\CurrentControlSet\Control\Power
-dq offset aHibernateenabl_0 ; "HibernateEnabledDefault"
-dq offset PopHiberEnabledDefaultReg // PopHiberEnabledDefaultReg   00000000
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "AllowHibernate"; = 4294967295; // PopAllowHibernateReg (0xFFFFFFFF) 
+    "EnableMinimalHiberFile"; = 0; // PopEnableMinimalHiberFile 
+    "ForceMinimalHiberFile"; = 0; // PopForceMinimalHiberFile 
+    "HiberbootEnabled"; = 0; // PopHiberbootEnabledReg 
+    "HiberFileSizePercent"; = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024
+    "HibernateBootOptimizationEnabled"; = 0; // PopHiberBootOptimizationEnabledReg 
+    "HibernateChecksummingEnabled"; = 1; // PopHiberChecksummingEnabledReg 
+    "HibernateEnabledDefault"; = 1; // PopHiberEnabledDefaultReg 
+    "PromoteHibernateToShutdown"; = 0; // PopPromoteHibernateToShutdown 
+    "SkipHibernateMemoryMapValidation"; = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (0xFFFFFFFF) 
 
-dq offset aAllowhibernate ; "AllowHibernate"
-dq offset PopAllowHibernateReg // PopAllowHibernateReg   00000000
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
+    "GuardedHost"; = ?; // unk_140FC5234
+    "Policy"; = 0; // PopHiberForceDisabledReg 
 ```
-`powercfg.exe /hibernate off`
 
-`HibernateEnabledDefault`, `AllowHibernate` take a default value of `4294967295` dec. `hiber.c` includes some snippets (notes).
+`powercfg /hibernate off` sets:
+```c
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HibernateEnabled	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+> https://github.com/5Noxi/wpr-reg-records#power-values  
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation  
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Power.txt
 
----
 
-Miscellaneous notes:
-```c
-dq offset aPower_2      ; "Power"
-dq offset aHibernatecheck ; "HibernateChecksummingEnabled"
-dq offset PopHiberChecksummingEnabledReg // PopHiberChecksummingEnabledReg   00000001
+# Reduced HiberFile
 
-dq offset aPower_2      ; "Power"
-dq offset aHiberfiletyped ; "HiberFileTypeDefault"
-dq offset PopHiberFileTypeDefaultReg // PopHiberFileTypeDefaultReg   ffffffff
+Hibernation files are used for hybrid sleep, fast startup, and [standard hibernation](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#hibernate-state-s4). There are two types, differentiated by size, a full and reduced size hibernation file. Only fast startup can use a reduced hibernation file.
 
-// Power\\ForceHibernateDisabled
-dq offset aPowerForcehibe ; "Power\\ForceHibernateDisabled"
-dq offset aPolicy_0     ; "Policy"
-dq offset PopHiberForceDisabledReg // PopHiberForceDisabledReg   00000000
-align 20h
-dq offset aPowerForcehibe ; "Power\\ForceHibernateDisabled"
-dq offset aGuardedhost_0 ; "GuardedHost"
-dq offset unk_140FC5234
-```
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "HibernateEnabledDefault"; = 1; // PopHiberEnabledDefaultReg 
-    "HiberbootEnabled"; = 0; // PopHiberbootEnabledReg 
-    "HibernateChecksummingEnabled"; = 1; // PopHiberChecksummingEnabledReg 
-    "EnableMinimalHiberFile"; = 0; // PopEnableMinimalHiberFile 
-    "ForceMinimalHiberFile"; = 0; // PopForceMinimalHiberFile 
-    "HibernateBootOptimizationEnabled"; = 0; // PopHiberBootOptimizationEnabledReg 
-    "HiberFileTypeDefault"; = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF) 
+    "HiberFileSizePercent"; = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024
 
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\Power\\ForceHibernateDisabled";
-    "Policy"; = 0; // PopHiberForceDisabledReg 
-    "GuardedHost"; = ?; // unk_140FC5234
+    // DWORD 1 = Reduced, DWORD 2 = Full
+    "HiberFileType"; = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF)
+    "HiberFileTypeDefault"; = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
-    "Percent1GBFull"; = ?; // unk_140FC3670
-    "Percent1GBReduced"; = ?; // unk_140FC366C
-    "Percent2GBFull"; = ?; // unk_140FC3688
-    "Percent2GBReduced"; = ?; // unk_140FC3684
-    "Percent4GBFull"; = ?; // unk_140FC36A0
-    "Percent4GBReduced"; = ?; // unk_140FC369C
-    "Percent8GBFull"; = ?; // unk_140FC36B8
-    "Percent8GBReduced"; = ?; // unk_140FC36B4
-    "Percent16GBFull"; = ?; // unk_140FC36D0
-    "Percent16GBReduced"; = ?; // unk_140FC36CC
-    "Percent32GBFull"; = ?; // unk_140FC36E8
-    "Percent32GBReduced"; = ?; // unk_140FC36E4
-    "PercentUnlimitedFull"; = ?; // unk_140FC3700
-    "PercentUnlimitedReduced"; = ?; // unk_140FC36FC
+    "Percent16GBFull"; = ?; // unk_140FC36D0 - 28Hex/40Dec
+    "Percent16GBReduced"; = ?; // unk_140FC36CC - 14Hex/20Dec
+    "Percent1GBFull"; = ?; // unk_140FC3670 - 28Hex/40Dec
+    "Percent1GBReduced"; = ?; // unk_140FC366C - 14Hex/20Dec
+    "Percent2GBFull"; = ?; // unk_140FC3688 - 28Hex/40Dec
+    "Percent2GBReduced"; = ?; // unk_140FC3684 - 14Hex/20Dec
+    "Percent32GBFull"; = ?; // unk_140FC36E8 - 28Hex/40Dec
+    "Percent32GBReduced"; = ?; // unk_140FC36E4 - 14Hex/20Dec
+    "Percent4GBFull"; = ?; // unk_140FC36A0 - 28Hex/40Dec
+    "Percent4GBReduced"; = ?; // unk_140FC369C - 14Hex/20Dec
+    "Percent8GBFull"; = ?; // unk_140FC36B8 - 28Hex/40Dec
+    "Percent8GBReduced"; = ?; // unk_140FC36B4 - 14Hex/20Dec
+    "PercentUnlimitedFull"; = ?; // unk_140FC3700 - 28Hex/40Dec
+    "PercentUnlimitedReduced"; = ?; // unk_140FC36FC - 14Hex/20Dec
 ```
 
-> https://github.com/5Noxi/wpr-reg-records#power-values
+`powercfg /h /size 0`:
+```c
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileSizePercent	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
+```
+`powercfg /h /type full`:
+```c
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 2
+```
+`powercfg /h /type reduced`:
+```c
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+| Hibernation file type | Default size           | Supports                              |
+|-----------------------|------------------------|---------------------------------------|
+| Full                  | 40% of physical memory | hibernate, hybrid sleep, fast startup |
+| Reduced               | 20% of physical memory | fast startup                          |
+
+To verify or change the type of hibernation file used, run the *powercfg.exe* utility. The following examples demonstrate how.
+
+| Example      |Description   |
+|--------------|--------------|
+| `powercfg /a`                      | **Verify the hibernation file type.** When a full hibernation file is used, the results state that hibernation is an available option. When a reduced hibernation file is used, the results say hibernation is not supported. If the system has no hibernation file at all, the results say hibernation hasn't been enabled. |
+| `powercfg /h /type full`           | **Change the hibernation file type to full.** This isn't recommended on systems with less than 32GB of storage.                      |
+| `powercfg /h /type reduced`        | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example.      |
+| `powercfg /h /size 0`<br> `powercfg /h /type reduced`  | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration.     |
+
+> https://github.com/5Noxi/wpr-reg-records#power-values  
+> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
 
 # Remove Power Options
 
 Removes the `Hibernate`, `Lock`, `Sleep` power options.
 
+If hiding `Lock` for example via `Control Panel > All Control Panel Items > Power Options > Choose what the power buttons do > Change settings that are currently unavailable`, it sets:
+```c
+DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+LGPE would set the values in `HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer`:
+```json
+{
+    "File":  "WindowsExplorer.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsExplorer",
+    "Class":  "Machine",
+    "CategoryName":  "WindowsExplorer",
+    "DisplayName":  "Show lock in the user tile menu",
+    "ExplainText":  "Shows or hides lock from the user tile menu.If you enable this policy setting, the lock option will be shown in the User Tile menu.If you disable this policy setting, the lock option will never be shown in the User Tile menu.If you do not configure this policy setting, users will be able to choose whether they want lock to show through the Power Options Control Panel.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "KeyName":  "ShowLockOption",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "WindowsExplorer.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsExplorer",
+    "Class":  "Machine",
+    "CategoryName":  "WindowsExplorer",
+    "DisplayName":  "Show sleep in the power options menu",
+    "ExplainText":  "Shows or hides sleep from the power options menu.If you enable this policy setting, the sleep option will be shown in the Power Options menu (as long as it is supported by the machine\u0027s hardware).If you disable this policy setting, the sleep option will never be shown in the Power Options menu.If you do not configure this policy setting, users will be able to choose whether they want sleep to show through the Power Options Control Panel.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "KeyName":  "ShowSleepOption",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "WindowsExplorer.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsExplorer",
+    "Class":  "Machine",
+    "CategoryName":  "WindowsExplorer",
+    "DisplayName":  "Show hibernate in the power options menu",
+    "ExplainText":  "Shows or hides hibernate from the power options menu.If you enable this policy setting, the hibernate option will be shown in the Power Options menu (as long as it is supported by the machine\u0027s hardware).If you disable this policy setting, the hibernate option will never be shown in the Power Options menu.If you do not configure this policy setting, users will be able to choose whether they want hibernate to show through the Power Options Control Panel.",
+    "Supported":  "Windows8",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "KeyName":  "ShowHibernateOption",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+```
+
+---
+
+Miscellaneous keys:
+```ps
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HidePowerButton
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideRestart
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideShutDown
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
+```
+
 # Disable Hiberboot
 
-Disables the use of fast startup. All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
+Fast startup is a type of shutdown that uses a hibernation file to speed up the subsequent boot. During this type of shutdown, the user is logged off before the hibernation file is created. Fast startup allows for a smaller hibernation file, more appropriate for systems with less storage capabilities.
+
+When using fast startup, the system appears to the user as though a full shutdown (S5) has occurred, even though the system has actually gone through S4. This includes how the system responds to device wake alarms.
+
+Fast startup logs off user sessions, but the contents of kernel (session 0) are written to hard disk. This enables faster boot.
+
+To programmatically initiate a fast startup-style shutdown, call the [InitiateShutdown](https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-initiateshutdowna) function with the `SHUTDOWN_HYBRID` flag or the [ExitWindowsEx](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-exitwindowsex) function with the `EWX_HYBRID_SHUTDOWN` flag.
+
+In Windows, fast startup is the default transition when a system shutdown is requested. A full shutdown (S5) occurs when a system restart is requested or when an application calls a shutdown API.
+
+---
+
+All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
 
 > https://github.com/5Noxi/wpr-reg-records#power-values
 
 ```c
-// \\SYSTEM\\CurrentControlSet\\Control\\Power
-dq offset aPower_2      ; "Power"
-dq offset aHiberbootenabl ; "HiberbootEnabled"
-dq offset PopHiberbootEnabledReg // PopHiberbootEnabledReg   00000000
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "HiberbootEnabled"; = 0; // PopHiberbootEnabledReg 
+    "DisableIdleStatesAtBoot"; = 0; // PpmIdleDisableStatesAtBoot 
+    "HibernateBootOptimizationEnabled"; = 0; // PopHiberBootOptimizationEnabledReg 
 
-dq offset aPower_2      ; "Power"
-dq offset aDisableidlesta ; "DisableIdleStatesAtBoot"
-dq offset PpmIdleDisableStatesAtBoot // PpmIdleDisableStatesAtBoot   00000000
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
+    "HiberbootEnabled"; = 0; // REG_DWORD, range: 0-1
+
+    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and chaning their data won't affect the boot.
+    "HybridBootAnimationTime"; = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "HiberIoCpuTime"; = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "ResumeCompleteTimestamp"; = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
 ```
+> https://github.com/5Noxi/wpr-reg-records?tab=readme-ov-file#power-values  
+> https://github.com/marcosd4h/memhunter/blob/f68bca7efe31f49c0dc9ad988fb17bec443a1ca7/libs/boost/interprocess/detail/win32_api.hpp#L2373
 ```c
 // PopOpenPowerKey
 {
@@ -216,7 +351,6 @@ if ( result >= 0 )
 ```
 
 > [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/5Noxi/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
-
 
 # Disable Power Throttling
 
@@ -463,6 +597,17 @@ Get-ChildItem 'HKLM:\SYSTEM\CurrentControlSet\Control\usbflags' -ErrorAction Sil
 ```
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/USB-Flags.txt
 
+| Power state | ACPI state | Description | 
+|-------------|------------|-------------|
+| Working | *S0* | The system is fully usable. Hardware components that aren't in use can save power by entering a lower power state. | 
+| Sleep (Modern Standby) | *S0* low-power idle | Some SoC systems support a low-power idle state known as [Modern Standby](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby). In this state, the system can very quickly switch from a low-power state to high-power state in response to hardware and network events. **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
+| Sleep | *S1*<br> *S2*<br> *S3* | The system appears to be off. The amount of power consumed in states *S1-S3* is less than *S0* and more than *S4*. *S3* consumes less power than *S2*, and *S2* consumes less power than *S1*. Systems typically support one of these three states, not all three.<br><br> In states *S1-S3*, volatile memory is kept refreshed to maintain the system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device.<br><br> *Hybrid sleep*, used on desktops, is where a system uses a hibernation file with *S1-S3*. The hibernation file saves the system state in case the system loses power while in sleep.<br><br> **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
+| Hibernate | *S4* | The system appears to be off. Power consumption is reduced to the lowest level. The system saves the contents of volatile memory to a hibernation file to preserve system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device. The working context can be restored if it's stored on nonvolatile media.<br><br> *Fast startup* is where the user is logged off before the hibernation file is created. This allows for a smaller hibernation file, more appropriate for systems with less storage capabilities. | 
+| Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
+| Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
+
+> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
+
 # Disable Audio Idle
 
 | Parameter              | Desc                                                                                    | Default  | Notes                                                                 |
@@ -544,6 +689,17 @@ This policy setting specifies that power management is disabled when the machine
     "EnableDsNetRefresh"; = 0; // PopEnableDsNetRefresh 
 ```
 > https://github.com/5Noxi/wpr-reg-records?tab=readme-ov-file#power-values
+
+| Power state | ACPI state | Description | 
+|-------------|------------|-------------|
+| Working | *S0* | The system is fully usable. Hardware components that aren't in use can save power by entering a lower power state. | 
+| Sleep (Modern Standby) | *S0* low-power idle | Some SoC systems support a low-power idle state known as [Modern Standby](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby). In this state, the system can very quickly switch from a low-power state to high-power state in response to hardware and network events. **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
+| Sleep | *S1*<br> *S2*<br> *S3* | The system appears to be off. The amount of power consumed in states *S1-S3* is less than *S0* and more than *S4*. *S3* consumes less power than *S2*, and *S2* consumes less power than *S1*. Systems typically support one of these three states, not all three.<br><br> In states *S1-S3*, volatile memory is kept refreshed to maintain the system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device.<br><br> *Hybrid sleep*, used on desktops, is where a system uses a hibernation file with *S1-S3*. The hibernation file saves the system state in case the system loses power while in sleep.<br><br> **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
+| Hibernate | *S4* | The system appears to be off. Power consumption is reduced to the lowest level. The system saves the contents of volatile memory to a hibernation file to preserve system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device. The working context can be restored if it's stored on nonvolatile media.<br><br> *Fast startup* is where the user is logged off before the hibernation file is created. This allows for a smaller hibernation file, more appropriate for systems with less storage capabilities. | 
+| Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
+| Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
+
+> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
 
 ```json
 {

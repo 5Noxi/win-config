@@ -974,9 +974,9 @@ HKR, Ndi\Params\*LsoV2IPv6,                     type,                   0, "enum
 
 # Disable WoL
 
-WoL is an Ethernet networking standard that allows a properly configured network computer to be turned on or awakened by a network message. WoL is an industry standard protocol for waking computers up from a low-power mode remotely. The definition of low-power mode means while the computer is off and has access to a power source. This is useful if you plan to access your computer remotely for any reason: It allows you to retain access to your files and programs, while keeping the computer in a low-power state.
+The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from *S3* sleep or *S4* hibernate. It's not supported from fast startup or *S5* soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the *S5* soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.
 
-> https://www.dell.com/support/kbdoc/en-us/000129137/wake-on-lan-wol-troubleshooting-best-practices
+> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior
 
 ```bat
 powercfg /devicequery wake_programmable

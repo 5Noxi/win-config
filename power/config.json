@@ -98,10 +98,11 @@
         "EnableMinimalHiberFile": { "Type": "REG_DWORD", "Data": 1 },
         "ForceMinimalHiberFile": { "Type": "REG_DWORD", "Data": 1 },
         "HiberFileSizePercent": { "Type": "REG_DWORD", "Data": 0 },
-        "HibernateBootOptimizationEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "HibernateChecksummingEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "HibernateEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 0 }
+        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 0 },
+        "PromoteHibernateToShutdown": { "Type": "REG_DWORD", "Data": 0 },
+        "SkipHibernateMemoryMapValidation": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled": {
         "Policy": { "Type": "REG_DWORD", "Data": 1 },
@@ -114,14 +115,77 @@
         "EnableMinimalHiberFile": { "Action": "deletevalue" },
         "ForceMinimalHiberFile": { "Action": "deletevalue" },
         "HiberFileSizePercent": { "Action": "deletevalue" },
-        "HibernateBootOptimizationEnabled": { "Action": "deletevalue" },
         "HibernateChecksummingEnabled": { "Action": "deletevalue" },
         "HibernateEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 1 }
+        "HibernateEnabledDefault": { "Type": "REG_DWORD", "Data": 1 },
+        "PromoteHibernateToShutdown": { "Action": "deletevalue" },
+        "SkipHibernateMemoryMapValidation": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled": {
         "Policy": { "Action": "deletevalue" },
         "GuardedHost": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Reduced HiberFile": {
+    "apply": {
+      "HKLM\\System\\CurrentControlSet\\Control\\Power": {
+        "HiberFileType": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket": {
+        "Percent16GBReduced": { "Type": "REG_DWORD", "Data": 20 },
+        "Percent1GBReduced": { "Type": "REG_DWORD", "Data": 20 },
+        "Percent2GBReduced": { "Type": "REG_DWORD", "Data": 20 },
+        "Percent32GBReduced": { "Type": "REG_DWORD", "Data": 20 },
+        "Percent4GBReduced": { "Type": "REG_DWORD", "Data": 20 },
+        "Percent8GBReduced": { "Type": "REG_DWORD", "Data": 20 },
+        "PercentUnlimitedReduced": { "Type": "REG_DWORD", "Data": 20 }
+      },
+      "SUBOPTION": {
+        "Full HiberFile": {
+          "HKLM\\System\\CurrentControlSet\\Control\\Power": {
+            "HiberFileType": { "Type": "REG_DWORD", "Data": 2 }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket": {
+            "Percent16GBFull": { "Type": "REG_DWORD", "Data": 40 },
+            "Percent1GBFull": { "Type": "REG_DWORD", "Data": 40 },
+            "Percent2GBFull": { "Type": "REG_DWORD", "Data": 40 },
+            "Percent32GBFull": { "Type": "REG_DWORD", "Data": 40 },
+            "Percent4GBFull": { "Type": "REG_DWORD", "Data": 40 },
+            "Percent8GBFull": { "Type": "REG_DWORD", "Data": 40 },
+            "PercentUnlimitedFull": { "Type": "REG_DWORD", "Data": 40 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\System\\CurrentControlSet\\Control\\Power": {
+        "HiberFileType": { "Action": "deletevalue" }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket": {
+        "Percent16GBReduced": { "Action": "deletevalue" },
+        "Percent1GBReduced": { "Action": "deletevalue" },
+        "Percent2GBReduced": { "Action": "deletevalue" },
+        "Percent32GBReduced": { "Action": "deletevalue" },
+        "Percent4GBReduced": { "Action": "deletevalue" },
+        "Percent8GBReduced": { "Action": "deletevalue" },
+        "PercentUnlimitedReduced": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Full HiberFile": {
+          "HKLM\\System\\CurrentControlSet\\Control\\Power": {
+            "HiberFileType": { "Action": "deletevalue" }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket": {
+            "Percent16GBFull": { "Action": "deletevalue" },
+            "Percent1GBFull": { "Action": "deletevalue" },
+            "Percent2GBFull": { "Action": "deletevalue" },
+            "Percent32GBFull": { "Action": "deletevalue" },
+            "Percent4GBFull": { "Action": "deletevalue" },
+            "Percent8GBFull": { "Action": "deletevalue" },
+            "PercentUnlimitedFull": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -132,20 +196,52 @@
         "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 },
         "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 },
+        "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideHibernate": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideLock": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideSleep": {
+        "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "SUBOPTION": {
         "Hide Hibernate": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideHibernate": {
+            "value": { "Type": "REG_DWORD", "Data": 1 }
           }
         },
         "Hide Lock": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideLock": {
+            "value": { "Type": "REG_DWORD", "Data": 1 }
           }
         },
         "Hide Sleep": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideSleep": {
+            "value": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
       }
@@ -156,20 +252,52 @@
         "ShowLockOption": { "Action": "deletevalue" },
         "ShowSleepOption": { "Action": "deletevalue" }
       },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+        "ShowHibernateOption": { "Action": "deletevalue" },
+        "ShowLockOption": { "Action": "deletevalue" },
+        "ShowSleepOption": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideHibernate": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideLock": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideSleep": {
+        "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "SUBOPTION": {
         "Hide Hibernate": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowHibernateOption": { "Action": "deletevalue" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "ShowHibernateOption": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideHibernate": {
+            "value": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "Hide Lock": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowLockOption": { "Action": "deletevalue" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "ShowLockOption": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideLock": {
+            "value": { "Type": "REG_DWORD", "Data": 0 }
           }
         },
         "Hide Sleep": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowSleepOption": { "Action": "deletevalue" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "ShowSleepOption": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideSleep": {
+            "value": { "Type": "REG_DWORD", "Data": 0 }
           }
         }
       }
@@ -181,7 +309,8 @@
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
+        "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "HibernateBootOptimizationEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
@@ -199,7 +328,8 @@
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
-        "HiberbootEnabled": { "Action": "deletevalue" }
+        "HiberbootEnabled": { "Action": "deletevalue" },
+        "HibernateBootOptimizationEnabled": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
         "HiberbootEnabled": { "Action": "deletevalue" }
