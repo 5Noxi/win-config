@@ -402,6 +402,8 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance"
 
 WMPlayer (Windows Media Player) sends player usage data by default, if using the "Recommended ". This option turns off the `Diagnistics and Feedback` option, use the suboptions for further configuration.
 
+![](https://github.com/5Noxi/win-config/blob/main/privacy/images/wmplayer.png?raw=true)
+
 Note: I gathered all registry values via the legacy WMPlayer.
 
 | Option | Description |

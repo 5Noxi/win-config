@@ -158,6 +158,87 @@
       }
     }
   },
+  "DWM Values": {
+    "apply": {
+      "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+        "DisableAdvancedDirectFlip": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableDrawListCaching": { "Type": "REG_DWORD", "Data": 0 },
+        "DisallowAnimations": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableBackdropBlurCaching": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableEffectCaching": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableResizeOptimization": { "Type": "REG_DWORD", "Data": 1 },
+        "ForceBasicDisplayAdapterOnDWMRestart": { "Type": "REG_DWORD", "Data": 0 },
+        "ForceEffectMode": { "Type": "REG_DWORD", "Data": 0 },
+        "LogExpressionPerfStats": { "Type": "REG_DWORD", "Data": 0 },
+        "MousewheelScrollingMode": { "Type": "REG_DWORD", "Data": 0 },
+        "OneCoreNoBootDWM": { "Type": "REG_DWORD", "Data": 0 },
+        "OptimizeForDirtyExpressions": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\Dwm\\Scene": {
+        "EnableBloom": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableDrawToBackbuffer": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableImageProcessing": { "Type": "REG_DWORD", "Data": 1 },
+        "ForceNonPrimaryDisplayAdapter": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable MPO": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+            "OverlayTestMode": { "Type": "REG_DWORD", "Data": 5 }
+          }
+        },
+        "MSAA Quality Mode 0": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm\\Scene": {
+            "MsaaQualityMode": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Front Buffer Render Checks": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+            "EnableFrontBufferRenderChecks": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+        "DisableAdvancedDirectFlip": { "Action": "deletevalue" },
+        "DisableDrawListCaching": { "Action": "deletevalue" },
+        "DisallowAnimations": { "Action": "deletevalue" },
+        "EnableBackdropBlurCaching": { "Action": "deletevalue" },
+        "EnableEffectCaching": { "Action": "deletevalue" },
+        "EnableResizeOptimization": { "Action": "deletevalue" },
+        "ForceBasicDisplayAdapterOnDWMRestart": { "Action": "deletevalue" },
+        "ForceEffectMode": { "Action": "deletevalue" },
+        "LogExpressionPerfStats": { "Action": "deletevalue" },
+        "MousewheelScrollingMode": { "Action": "deletevalue" },
+        "OneCoreNoBootDWM": { "Type": "REG_DWORD", "Data": 0 },
+        "OptimizeForDirtyExpressions": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\Dwm\\Scene": {
+        "EnableBloom": { "Action": "deletevalue" },
+        "EnableDrawToBackbuffer": { "Action": "deletevalue" },
+        "EnableImageProcessing": { "Action": "deletevalue" },
+        "MsaaQualityMode": { "Action": "deletevalue" },
+        "ForceNonPrimaryDisplayAdapter": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable MPO": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+            "OverlayTestMode": { "Action": "deletevalue" }
+          }
+        },
+        "MSAA Quality Mode 0": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm\\Scene": {
+            "MsaaQualityMode": { "Action": "deletevalue" }
+          }
+        },
+        "Disable Front Buffer Render Checks": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+            "EnableFrontBufferRenderChecks": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
@@ -1010,6 +1091,57 @@
         "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
         "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
         "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Enable Long Paths": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable NTFS Compression": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable NTFS Encryption": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Last Access Timestamp": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
+            "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Symlink Remote Evaluation": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+            "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+            "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+            "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable NTFS Bugcheck on Corruption": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Enable TRIM": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable 8dot3 Name Creation": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Spot Corruption Handling": {
+          "HKLM\\System\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisableSpotCorruptionHandling": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
@@ -1036,6 +1168,57 @@
         "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
         "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
         "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "SUBOPTION": {
+      "Enable Long Paths": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Disable NTFS Compression": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Disable NTFS Encryption": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Disable Last Access Timestamp": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
+          "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Disable Symlink Remote Evaluation": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+          "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+          "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+          "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Disable NTFS Bugcheck on Corruption": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Enable TRIM": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Disable 8dot3 Name Creation": {
+        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+          "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 2 }
+        }
+      },
+      "Disable Spot Corruption Handling": {
+        "HKLM\\System\\CurrentControlSet\\Control\\FileSystem": {
+          "NtfsDisableSpotCorruptionHandling": { "Type": "REG_DWORD", "Data": 0 }
+        }
       }
     }
   },

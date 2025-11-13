@@ -521,6 +521,117 @@ These are default values I found in `dxgkrnl.sys`, see link below for pseudocode
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicDisplay : ForceDualViewBehavior
 ```
 
+# DWM Values
+
+This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
+
+---
+
+See [dwm.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/dwm.c) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`).
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\Dwm";
+    "BlackOutAllReadback"; = 0;
+    "ConfigureInput"; = 1;
+    "CpuClipAASinkEnableIntermediates"; = 1;
+    "CpuClipAASinkEnableOcclusion"; = 1;
+    "CpuClipAASinkEnableRender"; = 1;
+    "CpuClipAreaThreshold"; = 20000;
+    "CpuClipWarpPartitionThreshold"; = 1024;
+    "DisableDrawListCaching"; = 0;
+    "DisableProjectedShadows"; = 0;
+    "DisplayChangeTimeoutMs"; = 1000;
+    "EnableBackdropBlurCaching"; = 1;
+    "EnableCommonSuperSets"; = 1;
+    "EnableCpuClipping"; = 1;
+    "EnableDDisplayScanoutCaching"; = 1;
+    "EnableEffectCaching"; = 1;
+    "EnableFrontBufferRenderChecks"; = 1;
+    "EnableMegaRects"; = 1;
+    "EnablePrimitiveReordering"; = 1;
+    "ForceFullDirtyRendering"; = 0;
+    "GammaBlendPencil"; = 1;
+    "GammaBlendWithFP16"; = 1;
+    "InkGPUAccelOverrideVendorWhitelist"; = 0;
+    "LayerClippingMode"; = 2;
+    "LogExpressionPerfStats"; = 0;
+    "MajorityScreenTest_MinArea"; = 80;
+    "MajorityScreenTest_MinLength"; = 80;
+    "MaxD3DFeatureLevel"; = 0;
+    "MegaRectSearchCount"; = 100;
+    "MegaRectSize"; = 100000;
+    "MousewheelAnimationDurationMs"; = 250;
+    "MousewheelScrollingMode"; = 0;
+    "OptimizeForDirtyExpressions"; = 1;
+    "OverlayMinFPS"; = 15; // If this value is present and set to zero, the Desktop Window Manager disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
+    "RenderThreadTimeoutMilliseconds"; = 5000;
+    "SuperWetExtensionTimeMicroseconds"; = 1000;
+    "TelemetryFramesReportPeriodMilliseconds"; = 300000;
+    "TelemetryFramesSequenceIdleIntervalMilliseconds"; = 1000;
+    "TelemetryFramesSequenceMaximumPeriodMilliseconds"; = 1000;
+    "UniformSpaceDpiMode"; = 1;
+    "UseFastestMonitorAsPrimary"; = 0;
+    "vBlankWaitTimeoutMonitorOffMs"; = 250;
+    "WarpEnableDebugColor"; = 0;
+
+    "BackdropBlurCachingThrottleMs"; = 25; // 25ms if missing, clamped to <=1000ms when present?
+    "CompositorClockPolicy"; = 1; // range: 0-1
+    "CpuClipFlatteningTolerance"; = 0; // scaled /1000
+    "CustomRefreshRateMode"; = 0; // range: 0-2
+    "DisableAdvancedDirectFlip"; = 0;
+    "DisableIndependentFlip"; = 0;
+    "DisableProjectedShadowsRendering"; = 0;
+    "FlattenVirtualSurfaceEffectInput"; = 0;
+    "ForceEffectMode"; = 0; // range: 0-2
+    "FrameCounterPosition"; = 0;
+    "InteractionOutputPredictionDisabled"; = 0;
+    "OverlayTestMode"; = 0; // 5 = MPO disabled
+    "ParallelModePolicy"; = 1; // >=3 coerced to 1
+    "ParallelModeRateThreshold"; = 119; // divisor for g_qpcFrequency, missing key defaults to 119 Hz (units: Hz)? 0 disables
+    "ResampleInLinearSpace"; = 0;
+    "ResampleModeOverride"; = 0;
+    "SDRBoostPercentOverride"; = 0; // scaled /100
+    "ShowDirtyRegions"; = 0;
+
+    "AnimationsShiftKey"; = 0;
+    "DisableLockingMemory"; = 0;
+    "ModeChangeCurtainUseDebugColor"; = 0;
+    "UseDPIScaling"; = 1;
+
+    "ChildWindowDpiIsolation"; = 1; // range: 0-1
+    "DisableDeviceBitmaps"; = 0; // range: 0-1
+    "EnableResizeOptimization"; = 0; // range: 0-1
+    "ResizeTimeoutGdi"; = 0; // range: 0-0xFFFFFFFF (ms)
+    "ResizeTimeoutModern"; = 0; // range: 0-0xFFFFFFFF (ms)
+
+    "DefaultColorizationColorState"; = 0;
+    "DisallowAnimations"; = 0;
+    "DisallowColorizationColorChanges"; = 0;
+
+    "DisableSessionTermination"; = 0; // range: 0–1
+    "ForceBasicDisplayAdapterOnDWMRestart"; = 0; // range: 0–1
+    "OneCoreNoBootDWM"; = 0; // range: 0–1
+
+"HKLM\\Software\\Microsoft\\Windows\\Dwm\\Scene";
+    "EnableBloom"; = 0;
+    "EnableDrawToBackbuffer"; = 1;
+    "EnableImageProcessing"; = 1;
+    "ImageProcessingResizeGrowth"; = 200;
+    "MsaaQualityMode"; = 2;
+    "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed"; = 5;
+    "SceneVisualCutoffThresholdInMS"; = 1000;
+
+    "ForceNonPrimaryDisplayAdapter"; = 0;
+    "ImageProcessingResizeThreshold"; = 0; // scaled /100
+
+"HKLM\\Software\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
+    "ExtensionTimeMicroseconds"; = 1000;
+    "PeriodicFenceMinDifferenceMicroseconds"; = 500;
+    "RefreshRatePercentage"; = 10;
+```
+
+> https://github.com/5Noxi/wpr-reg-records#dwm-values
+
 # Disable Scheduled Tasks
 
 Disables all kind of scheduled tasks most users don't need. Read through the list before switching the option.
@@ -1072,11 +1183,27 @@ More detailed information about prefetch and superfetch on page `413`f & `472`f.
 
 # Optimize File System
 
-If you're confused about `NTFSDisableLastAccessUpdate /t REG_DWORD /d 2147483649`:
-> https://www.tenforums.com/tutorials/139015-enable-disable-ntfs-last-access-time-stamp-updates-windows-10-a.html
+Small documentation on several values the option applies, see links below for more details.
 
-`NtfsMftZoneReservation` is currently set to `2` (valid range is 1-4 -> 4 MFT zone size to the maximum)
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/backup-and-storage/ntfs-reserves-space-for-mft
+| Value | Description |
+| ----- | ------------ |
+| `DisableDeleteNotification` | 0 = TRIM/UNMAP enabled, 1 = disabled. Controls whether delete operations send trim/unmap notifications to the underlying storage. |
+| `DontVerifyRandomDrivers` | 0 = Driver Verifier may pick random drivers, 1 = random selection suppressed, so only explicitly chosen drivers are verified. |
+| `LongPathsEnabled` | 0 = legacy `MAX_PATH` limit, 1 = Win32 long paths enabled (paths up to ~32k characters for apps and policies that opt in). |
+| `NtfsAllowExtendedCharacter8dot3Rename` | 0 = 8.3 short names restricted to basic ASCII, 1 = extended characters (including diacritics). |
+| `NtfsBugcheckOnCorrupt` | 0 = NTFS attempts self healing without forcing a bugcheck, 1 = triggers a bugcheck when corruption is detected on an NTFS volume, avoiding "silent" data loss with self healing NTFS. |
+| `NtfsDisable8dot3NameCreation` | Disables the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes. |
+| `NtfsDisableCompression` | 0 = NTFS compression allowed, 1 = new compressed files/folders cannot be created (existing compressed data remains readable). |
+| `NtfsDisableCompressionLimit` | 0 = when a compressed file gets highly fragmented, NTFS stops compressing new extents so the file can grow larger uncompressed, 1 = disables this behavior and enforces the internal compression limit. |
+| `NtfsDisableEncryption` | 0 = NTFS EFS file/folder encryption available, 1 = EFS disabled on NTFS volumes. |
+| `NTFSDisableLastAccessUpdate` | Controls Last Access Time updates on NTFS files/directories. |
+| `NtfsDisableSpotCorruptionHandling` | 0 = NTFS spot corruption handling active, 1 = disabled, so NTFS relies on manual tools. Also allows running CHKDSK to analyze a volume online without taking it offline. |
+| `NtfsEncryptPagingFile` | 0 = pagefile.sys stored unencrypted, 1 = paging file encrypted. |
+| `NtfsMemoryUsage` | Configures the internal cache levels of NTFS paged-pool memory and NTFS nonpaged-pool memory. |
+| `NtfsMftZoneReservation` | Sets reserved NTFS MFT zone size as 200 MB x value: 1 = 200 MB (default), up to 4 = 800 MB. Larger values reduce MFT fragmentation on volumes with many small files. |
+| `RefsDisableLastAccessUpdate` | Related to NTFSDisableLastAccessUpdate (both get set via disablelastaccess). |
+| `SymlinkXToXEvaluation` | 0 = x->x symlinks not followed, 1 = resolved (X = Local/Remote). |
+| `Win31FileSystem` | 0 = standard modern FAT behavior (long filenames, richer timestamps), 1 = legacy Windows 3.1–compatible mode with stricter 8.3 naming and older timestamp semantics. |
 
 Scan current 8dot3 files names: `fsutil 8dot3name scan C:\`
 
