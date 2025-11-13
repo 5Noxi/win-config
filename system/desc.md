@@ -527,7 +527,7 @@ This option currently includes some speculations and default values. I haven't h
 
 ---
 
-See [dwm.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/dwm.c) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`).
+See [dwm.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/dwm.c) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\Dwm";
@@ -611,6 +611,9 @@ See [dwm.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/dwm.c) for
     "DisableSessionTermination"; = 0; // range: 0–1
     "ForceBasicDisplayAdapterOnDWMRestart"; = 0; // range: 0–1
     "OneCoreNoBootDWM"; = 0; // range: 0–1
+
+    "DisableHologramCompositor"; = 0; // range: 0–1
+
 
 "HKLM\\Software\\Microsoft\\Windows\\Dwm\\Scene";
     "EnableBloom"; = 0;
@@ -1192,7 +1195,7 @@ Small documentation on several values the option applies, see links below for mo
 | `LongPathsEnabled` | 0 = legacy `MAX_PATH` limit, 1 = Win32 long paths enabled (paths up to ~32k characters for apps and policies that opt in). |
 | `NtfsAllowExtendedCharacter8dot3Rename` | 0 = 8.3 short names restricted to basic ASCII, 1 = extended characters (including diacritics). |
 | `NtfsBugcheckOnCorrupt` | 0 = NTFS attempts self healing without forcing a bugcheck, 1 = triggers a bugcheck when corruption is detected on an NTFS volume, avoiding "silent" data loss with self healing NTFS. |
-| `NtfsDisable8dot3NameCreation` | Disables the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes. |
+| `NtfsDisable8dot3NameCreation` | Disables the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes.<br>0: Enables 8dot3 name creation for all volumes on the system.<br>1: Disables 8dot3 name creation for all volumes on the system.<br>2: Sets 8dot3 name creation on a per volume basis.<br>3: Disables 8dot3 name creation for all volumes except the system volume. |
 | `NtfsDisableCompression` | 0 = NTFS compression allowed, 1 = new compressed files/folders cannot be created (existing compressed data remains readable). |
 | `NtfsDisableCompressionLimit` | 0 = when a compressed file gets highly fragmented, NTFS stops compressing new extents so the file can grow larger uncompressed, 1 = disables this behavior and enforces the internal compression limit. |
 | `NtfsDisableEncryption` | 0 = NTFS EFS file/folder encryption available, 1 = EFS disabled on NTFS volumes. |
@@ -1212,6 +1215,7 @@ File at: `C:\Projects\Game\assets\logo.png`
 Symlink: `C:\Users\YourName\Desktop\logo.png`
 
 > https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior  
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-8dot3name  
 > https://github.com/MicrosoftDocs/windows-driver-docs/blob/5e03e46194f2a977da34fdf453f2703262370a23/windows-driver-docs-pr/ifs/offloaded-data-transfers.md?plain=1#L104  
 > https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry  
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/FileSystem.txt
@@ -1627,3 +1631,27 @@ resumeobject            {cad1d575-b437-11f0-ab05-d9233ecd39d1}
 nx                      OptIn
 bootmenupolicy          Standard
 ```
+
+# Disable Autoruns
+
+The `Open` buttons downloads & executes [`Autoruns.exe`](https://live.sysinternals.com/Autoruns.exe). It's recommended to disable all kind of autoruns in the `Logon` section that you don't need, examples:
+```c
+Spotify
+Discord
+Steam
+WingetUI
+Lghub
+SecurityHealth
+```
+Try to minimize the amount of applications that run automatically on system startup. You can go trough the other sections, but this option was created for the `Logon` section, see `Disable Scheduled Tasks`/`Disable Services`.
+
+See your current autoruns of installed apps:
+```ps
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+```
+```ps
+HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+```
+
+> https://live.sysinternals.com/  
+> https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns

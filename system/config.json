@@ -195,6 +195,11 @@
           "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
             "EnableFrontBufferRenderChecks": { "Type": "REG_DWORD", "Data": 0 }
           }
+        },
+        "Disable VR/MR Compositor": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+            "DisableHologramCompositor": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
@@ -234,6 +239,11 @@
         "Disable Front Buffer Render Checks": {
           "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
             "EnableFrontBufferRenderChecks": { "Action": "deletevalue" }
+          }
+        },
+        "Disable VR/MR Compositor": {
+          "HKLM\\Software\\Microsoft\\Windows\\Dwm": {
+            "DisableHologramCompositor": { "Action": "deletevalue" }
           }
         }
       }
@@ -1168,56 +1178,56 @@
         "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 },
         "UdfsSoftwareDefectManagement": { "Type": "REG_DWORD", "Data": 0 },
         "Win31FileSystem": { "Type": "REG_DWORD", "Data": 0 }
-      }
-    },
-    "SUBOPTION": {
-      "Enable Long Paths": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 1 }
-        }
       },
-      "Disable NTFS Compression": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 0 }
-        }
-      },
-      "Disable NTFS Encryption": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 0 }
-        }
-      },
-      "Disable Last Access Timestamp": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483649 },
-          "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 1 }
-        }
-      },
-      "Disable Symlink Remote Evaluation": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
-          "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 1 },
-          "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
-          "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 }
-        }
-      },
-      "Disable NTFS Bugcheck on Corruption": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 0 }
-        }
-      },
-      "Enable TRIM": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 0 }
-        }
-      },
-      "Disable 8dot3 Name Creation": {
-        "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
-          "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 2 }
-        }
-      },
-      "Disable Spot Corruption Handling": {
-        "HKLM\\System\\CurrentControlSet\\Control\\FileSystem": {
-          "NtfsDisableSpotCorruptionHandling": { "Type": "REG_DWORD", "Data": 0 }
+      "SUBOPTION": {
+        "Enable Long Paths": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "LongPathsEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable NTFS Compression": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisableCompression": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable NTFS Encryption": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisableEncryption": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Last Access Timestamp": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NTFSDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 2147483648 },
+            "RefsDisableLastAccessUpdate": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Symlink Remote Evaluation": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "SymlinkLocalToLocalEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+            "SymlinkLocalToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 1 },
+            "SymlinkRemoteToLocalEvaluation": { "Type": "REG_DWORD", "Data": 0 },
+            "SymlinkRemoteToRemoteEvaluation": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable NTFS Bugcheck on Corruption": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsBugcheckOnCorrupt": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Enable TRIM": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "DisableDeleteNotification": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable 8dot3 Name Creation": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisable8dot3NameCreation": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Disable Spot Corruption Handling": {
+          "HKLM\\System\\CurrentControlSet\\Control\\FileSystem": {
+            "NtfsDisableSpotCorruptionHandling": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     }
@@ -1499,6 +1509,15 @@
       "COMMANDS": {
         "SetTimeoutDefault": { "Action": "bcdedit", "Name": "timeout", "Value": "30" },
         "UnsetBootMenuPolicy": { "Action": "bcdedit", "Name": "bootmenupolicy", "Delete": true }
+      }
+    }
+  },
+  "Disable Autoruns": {
+    "__control": { "type": "button", "label": "Open" },
+    "COMMANDS": {
+      "DownloadAutoruns": {
+        "Action": "run_powershell",
+        "Command": "$dst = \"$env:TEMP\\Autoruns.exe\"; Invoke-WebRequest -Uri 'https://live.sysinternals.com/Autoruns.exe' -OutFile $dst -UseBasicParsing; Start-Process $dst"
       }
     }
   }
