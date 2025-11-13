@@ -6,9 +6,6 @@
   
   "Disable General Telemetry": {
     "apply": {
-      "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
-        "UsageTracking": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Bluetooth": {
         "AllowAdvertising": { "Type": "REG_DWORD", "Data": 0 }
       },
@@ -57,9 +54,6 @@
       }
     },
     "revert": {
-      "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
-        "UsageTracking": { "Action": "deletevalue" }
-      },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\device\\Bluetooth": {
         "AllowAdvertising": { "Action": "deletevalue" }
       },
@@ -162,6 +156,162 @@
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Schedule\\Maintenance": {
         "MaintenanceDisabled": { "Action": "deletevalue" },
         "WakeUp": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Disable WMPlayer Telemetry": {
+    "apply": {
+      "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+        "UsageTracking": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "WMPWowHME": {
+          "Action": "registry_pattern",
+          "Pattern": "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\MediaPlayer\\PREFERENCES\\HME\\*",
+          "Operations": [
+            { "Name": "AcceptedPrivacyStatement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "UsageTracking", "Type": "REG_DWORD", "Value": 0 },
+            { "Name": "ForceUsageTracking", "Type": "REG_DWORD", "Value": 0 }
+          ]
+        }
+      },
+      "SUBOPTION": {
+        "Disable History": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "DisableMRUMusic": { "Type": "REG_DWORD", "Data": 1 },
+            "DisableMRUPictures": { "Type": "REG_DWORD", "Data": 1 },
+            "DisableMRUVideo": { "Type": "REG_DWORD", "Data": 1 },
+            "DisableMRUPlaylists": { "Type": "REG_DWORD", "Data": 1 },
+            "UsageLoggerCategories": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Prevent Send User ID": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "SendUserGUID": { "Type": "REG_BINARY", "Data": "00" }
+          }
+        },
+        "Disable Metadata Retrieval": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "MetadataRetrieval": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        },
+        "Prevent Usage Rights Download": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "SilentAcquisition": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Prevent Auto Clock": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "SilentDRMConfiguration": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Max Connection Speed": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "MaxBandwidth": { "Type": "REG_DWORD", "Data": 2147483647 }
+          }
+        },
+        "Prevent Frame Dropping": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings": {
+            "IgnoreAVSync": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Disable Video Smoothing": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings": {
+            "DontUseFrameInterpolation": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Disable Multicast Streams": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "UseMulticast": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Enable Screensaver": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "EnableScreensaver": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Prevent Internet Connection": {
+          "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+            "ForceOnline": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
+      }
+    }
+  },
+  "revert": {
+    "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+      "UsageTracking": { "Type": "REG_DWORD", "Data": 1 }
+    },
+    "COMMANDS": {
+      "WMPWowHME_Revert": {
+        "Action": "registry_pattern",
+        "Pattern": "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\MediaPlayer\\PREFERENCES\\HME\\*",
+        "Operations": [
+          { "Name": "AcceptedPrivacyStatement", "Type": "REG_DWORD", "Value": 1 },
+          { "Name": "UsageTracking", "Type": "REG_DWORD", "Value": 1 },
+          { "Name": "ForceUsageTracking", "Type": "REG_DWORD", "Value": 0 }
+        ]
+      }
+    },
+    "SUBOPTION": {
+      "Disable History": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "DisableMRUMusic": { "Type": "REG_DWORD", "Data": 0 },
+          "DisableMRUPictures": { "Type": "REG_DWORD", "Data": 0 },
+          "DisableMRUVideo": { "Type": "REG_DWORD", "Data": 0 },
+          "DisableMRUPlaylists": { "Type": "REG_DWORD", "Data": 0 },
+          "UsageLoggerCategories": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Prevent Send User ID": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "SendUserGUID": { "Type": "REG_BINARY", "Data": "01" }
+        }
+      },
+      "Disable Metadata Retrieval": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "MetadataRetrieval": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Prevent Usage Rights Download": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "SilentAcquisition": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Prevent Auto Clock": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "SilentDRMConfiguration": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Max Connection Speed": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "MaxBandwidth": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Prevent Frame Dropping": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings": {
+          "IgnoreAVSync": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Disable Video Smoothing": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences\\VideoSettings": {
+          "DontUseFrameInterpolation": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Disable Multicast Streams": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "UseMulticast": { "Type": "REG_DWORD", "Data": 1 }
+        }
+      },
+      "Enable Screensaver": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "EnableScreensaver": { "Type": "REG_DWORD", "Data": 0 }
+        }
+      },
+      "Prevent Internet Connection": {
+        "HKCU\\Software\\Microsoft\\MediaPlayer\\Preferences": {
+          "ForceOnline": { "Type": "REG_DWORD", "Data": 1 }
+        }
       }
     }
   },

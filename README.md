@@ -1,8 +1,8 @@
 # Noverse Windows Configuration
 
-This tool is based on my personal research on several topics, which I began documenting around July 2024. Initially, I uploaded them individually as messages on the [Discord server}(https://discord.gg/E2ybG4j9jU), but the amount of different configurations became too large and hard to manage (and Discord isn't ideal for projects like this). If I used information from specific sources, I've included the links. Information gathered via binary string extraction, WPR, IDA, Procmon, etc. Default values from WinDbg, IDA, and stock installations. Some options lack proof, as they're easily traceable. Minor mistakes or misinterpretations may exist, corrections are welcome.
+This tool is based on my personal research on several topics, which I began documenting around July 2024. Initially, I uploaded them individually as messages on the [Discord server](https://discord.gg/E2ybG4j9jU), but the amount of different configurations became too large and hard to manage (and Discord isn't ideal for projects like this). If I used information from specific sources, I've included the links. Information gathered via binary string extraction, WPR, IDA, Procmon, etc. Default values from WinDbg, IDA, and stock installations. Minor mistakes or misinterpretations may exist, **corrections are welcome**.
 
-The tool is based on the GitHub repository and parses it's information out of it. All [`App Tools`](https://github.com/5Noxi/app-tools)/[`Game Tools`](https://github.com/5Noxi/game-tools) are external PowerShell scripts, same goes for the [`Component Manager`](https://github.com/5Noxi/comp-mgr), [`Blocklist Manager`](https://github.com/5Noxi/blocklist-mgr) & [`Bitmask Calculator`](https://github.com/5Noxi/bitmask-calc).
+It's based on the GitHub repository and parses it's information out of it. All [`App Tools`](https://github.com/5Noxi/app-tools)/[`Game Tools`](https://github.com/5Noxi/game-tools) are external PowerShell scripts, same goes for the [`Component Manager`](https://github.com/5Noxi/comp-mgr), [`Blocklist Manager`](https://github.com/5Noxi/blocklist-mgr) & [`Bitmask Calculator`](https://github.com/5Noxi/bitmask-calc).
 
 ## Licencing
 
@@ -17,15 +17,9 @@ You can find all of my other projects here:
 More miscellaneous uploads:
 > https://discord.gg/E2ybG4j9jU
 
-## Issues
-
-Report any kind of issues either in the repository or on the Discord server:
-> https://github.com/5Noxi/win-config/issues  
-> https://discord.com/channels/836870260715028511/1372991172015820900
-
 ## Requirements
 
-> https://www.python.org/downloads/windows (V3.13)
+> https://www.python.org/downloads/release/python-3130/?featured_on=pythonbytes
 
 ```ps
 pip install PySide6 mistune requests
