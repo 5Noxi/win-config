@@ -268,40 +268,6 @@ Topic should speak for itself.
 > https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Software/Microsoft/CTF/LangBar/index  
 > https://gist.github.com/omar-irizarry/d469e1642e3b27df1eebd1e907ffe61d
 
-# OEM Information
-
-Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
-```
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
-```
-You used to change the logo with:
-```ps
-reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" /v Logo /t REG_SZ /d "path\OEM.bmp" /f
-```
-But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels, `.bmp` file & `32-bit` color depth.
-
-Edit registered owner/orga (visible in `winver`) with:
-```ps
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d Nohuxi /f
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d Noverse /f
-```
-Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`):
-> https://www.angusj.com/resourcehacker/
-
----
-
-Example:
-```ps
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Manufacturer" /t REG_SZ /d "Noverse" /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Model" /t REG_SZ /d "Windows 11" /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportHours" /t REG_SZ /d "24 Hours" /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportPhone" /t REG_SZ /d "noverse@gmail.com" /f
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportURL" /t REG_SZ /d "https://discord.gg/noverse" /f
-```
-
-![](https://github.com/5Noxi/win-config/blob/main/visibility/images/oem.png?raw=true)
-
-
 # System Clock Seconds
 
 "Uses more power" (in relation to laptops).
@@ -349,7 +315,7 @@ Disables the `- Shortcut` text, hides the shortcut & compression arrows.
 Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you can add these options to the 'new' context menu. This may also change the `Type` shown in the explorer (only `.bat` is affected of the three).
 
 Edit the text, by editing `Default` (value empty) and `FriendlyTypeName`:
-```ps
+```bat
 :: PowerShell
 reg add "HKCR\ps1legacy" /ve /d "pwsh" /f
 reg add "HKCR\ps1legacy" /v FriendlyTypeName /t REG_SZ /d "pwsh" /f
@@ -432,35 +398,6 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Bags\1\Desktop" /v LogicalViewMod
 `100px`:
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
-
-# Settings Page Visibility 
-
-It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).
-
-```
-This policy allows an administrator to block a given set of pages from the System Settings app. Blocked pages will not be visible in the app, and if all pages in a category are blocked the category will be hidden as well. Direct navigation to a blocked page via URI, context menu in Explorer or other means will result in the front page of Settings being shown instead.
-```
-Path (`String Value`):
-```
-HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer : SettingsPageVisibility
-```
-`showonly:` followed by a semicolon separated list of page identifiers to allow
-`hide:` followed by a list of pages to block
-
-Page identifiers are the part after `ms-settings:` in a settings URI.
-
-Example:
-`showonly:bluetooth` only shows the `Bluetooth` page
-`hide:bluetooth;windowsdefender` hides the `Bluetooth` & `Windows Security` pages
-
-All categories of `ms-settings` URIs:
-> https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-settings-app#ms-settings-uri-scheme-reference
-
-Example value:
-```bat
-hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
-```
-It depends on the user what he wants to see and what not, so I won't upload a batch for it.
 
 # Detailed File Transfer
 
@@ -1056,3 +993,65 @@ Category view:
                     ]
 },
 ```
+
+# OEM Information
+
+Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
+```
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
+```
+You used to change the logo with:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" /v Logo /t REG_SZ /d "path\OEM.bmp" /f
+```
+But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels, `.bmp` file & `32-bit` color depth.
+
+Edit registered owner/orga (visible in `winver`) with:
+```ps
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d Nohuxi /f
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d Noverse /f
+```
+Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`):
+> https://www.angusj.com/resourcehacker/
+
+---
+
+Example:
+```ps
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Manufacturer" /t REG_SZ /d "Noverse" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Model" /t REG_SZ /d "Windows 11" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportHours" /t REG_SZ /d "24 Hours" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportPhone" /t REG_SZ /d "noverse@gmail.com" /f
+reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportURL" /t REG_SZ /d "https://discord.gg/noverse" /f
+```
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/oem.png?raw=true)
+
+# Settings Page Visibility 
+
+It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).
+
+```
+This policy allows an administrator to block a given set of pages from the System Settings app. Blocked pages will not be visible in the app, and if all pages in a category are blocked the category will be hidden as well. Direct navigation to a blocked page via URI, context menu in Explorer or other means will result in the front page of Settings being shown instead.
+```
+Path (`String Value`):
+```
+HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer : SettingsPageVisibility
+```
+`showonly:` followed by a semicolon separated list of page identifiers to allow
+`hide:` followed by a list of pages to block
+
+Page identifiers are the part after `ms-settings:` in a settings URI.
+
+Example:
+`showonly:bluetooth` only shows the `Bluetooth` page
+`hide:bluetooth;windowsdefender` hides the `Bluetooth` & `Windows Security` pages
+
+All categories of `ms-settings` URIs:
+> https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-settings-app#ms-settings-uri-scheme-reference
+
+Example value:
+```bat
+hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
+```
+It depends on the user what he wants to see and what not, so I won't add a switch for it.

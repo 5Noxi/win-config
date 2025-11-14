@@ -612,15 +612,13 @@ Disable it with (`$true` to enable it):
 Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
 Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
 ```
-, use the batch or turn off the feature off in `optionalfeatures` -> '**SMB 1.0/CIFS File Sharing Support**'
 
-If you want to disable SMB2 & SMB3:
+If you want to disable SMBv2 (& SMBv3):
 ```ps
 Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
 ```
 `Set-SmbServerConfiguration $false`:
 ```ps
-"Process Name","Operation","Path","Detail"
 "wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2","Type: REG_DWORD, Length: 4, Data: 0"
 "wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB1","Type: REG_DWORD, Length: 4, Data: 0"
 ```
@@ -672,11 +670,11 @@ Disabling `NetbiosOptions` via network center:
 RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
 ```
 
-| Protocol                                     | Purpose                                                                   | How it works                                                                                                                      | Notes                                                                                   |
-| -------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| LLMNR (Link-Local Multicast Name Resolution) | Local name resolution when DNS isn't available                            | Sends multicast queries on the local link (IPv4 224.0.0.252, UDP 5355) asking "who has this name?", hosts that own the name reply | Windows-specific legacy fallback, vulnerable to spoofing/poisoning                      |
-| mDNS (Multicast DNS)                         | Zero-config service/host discovery on local networks (e.g. printer.local) | Uses multicast to 224.0.0.251 (IPv6 ff02::fb) on UDP 5353, devices answer for their own .local names                              | Cross-platform (Apple Bonjour, now Windows), modern replacement for LLMNR in many cases |
-| NetBIOS over TCP/IP                          | Legacy Windows naming, service announcement and sessions                  | Uses broadcasts or WINS to resolve NetBIOS names, historically used by SMB/Windows networking                                     | Very old, chatty, bigger attack surface, kept for backward compatibility                |
+| Protocol | Purpose | How it works | Notes |
+| -------- | ------- | ------------ | ----- |
+| LLMNR (Link-Local Multicast Name Resolution) | Local name resolution when DNS isn't available | Sends multicast queries on the local link (IPv4 224.0.0.252, UDP 5355) asking "who has this name?", hosts that own the name reply | Windows-specific legacy fallback, vulnerable to spoofing/poisoning |
+| mDNS (Multicast DNS) | Zero-config service/host discovery on local networks (e.g. printer.local) | Uses multicast to 224.0.0.251 (IPv6 ff02::fb) on UDP 5353, devices answer for their own .local names | Cross-platform (Apple Bonjour, now Windows), modern replacement for LLMNR in many cases |
+| NetBIOS over TCP/IP | Legacy Windows naming, service announcement and sessions | Uses broadcasts or WINS to resolve NetBIOS names, historically used by SMB/Windows networking | Very old, chatty, bigger attack surface, kept for backward compatibility |
 
 > https://en.wikipedia.org/wiki/Link-Local_Multicast_Name_Resolution  
 > https://en.wikipedia.org/wiki/Multicast_DNS  

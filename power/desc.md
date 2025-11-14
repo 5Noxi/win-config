@@ -541,7 +541,7 @@ fffff806`d31c3278  00000000
 
 The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIo...` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RIT...` & `TimerCoalescing` ones get read.
 
-`TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`). `InitTimerCoalescing.c` shows all info about it, the batch should add it correctly, still needs some further reading. `InitTimerCoalescing.c` includes detail about it and some comments I added.
+`TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`). `InitTimerCoalescing.c` includes detail about it and some comments I added.
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/Winows-NT.txt
 ```c
 v20[0..3] = 0

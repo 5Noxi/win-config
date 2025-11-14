@@ -53,7 +53,7 @@ You can either change it yourself in:
 ```
 HKCR\batfile\shell\edit\command
 ```
-or use the following batch, which selects [notepad++](https://notepad-plus-plus.org/downloads/) as default editor.
+or use the option switch, which selects [notepad++](https://notepad-plus-plus.org/downloads/) as default editor.
 
 # StartAllBack Settings
 

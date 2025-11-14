@@ -252,7 +252,7 @@
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
-        "DisableScheduledTasksBatch": {
+        "DisableScheduledTasks": {
           "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
@@ -302,7 +302,7 @@
     },
     "revert": {
       "COMMANDS": {
-        "EnableScheduledTasksBatch": {
+        "EnableScheduledTasks": {
           "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",

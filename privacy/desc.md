@@ -359,7 +359,6 @@ Using `Set-WinAcceptLanguageFromLanguageListOptOut`
 ```ps
 Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 ```
-does the same as the batch:
 ```c
 // $True
 "powershell.exe","RegSetValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut","Type: REG_DWORD, Length: 4, Data: 1"
@@ -373,7 +372,7 @@ does the same as the batch:
 
 # Disable Auto Maintenance
 
-Runs updates and scans daily when your PC is idle, it helps keep your system secure and efficient without affecting performance. Theres no actual reason to disable it, as it doesn't do anything while being active, however if you've any reason for not wanting it to run the tasks while being in idle, run  the batch. Revert it by setting it to `0` or remove the value. 
+Runs updates and scans daily when your PC is idle, it helps keep your system secure and efficient without affecting performance. Theres no actual reason to disable it, as it doesn't do anything while being active, however if you've any reason for not wanting it to run the tasks while being in idle, toggle the switch.
 
 You can see your current maintenance tasks with:
 ```ps
@@ -562,7 +561,9 @@ It is a deprecated feature, as the banner shows:
 
 `PSR` = Problem Steps Recorder
 
-Using the batch is enough - adding for information:
+---
+
+Miscellaneous notes:
 ```bat
 takeown /f %SystemRoot%\System32\psr.exe
 icacls %SystemRoot%\System32\psr.exe /grant administrators:F
@@ -1875,6 +1876,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\SQM" /v DisableCusto
 Turn off Windows Messenger CEIP:
 ```bat
 reg add "HKCU\Software\Policies\Microsoft\Messenger\Client" /v CEIP /t REG_DWORD /d 2 /f
+```
 
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-internetexplorer#disablecustomerexperienceimprovementprogramparticipation
 
