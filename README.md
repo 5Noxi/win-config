@@ -14,6 +14,18 @@ Many people repackage configs from projects like this, or from places full of mi
 
 Hint: Check what a seller shares for free, if their free content already looks low effort or shows a lack of understanding, you can safely assume their paid product won't be any better. And if they refuse to share anything for free at all, you should question what their actual goal is. This is just a warning.
 
+## Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| `Ctrl+F` | Focus the search bar and select the current query |
+| `Ctrl+H` / `Ctrl+0` | Jump back to the Home view |
+| `Ctrl+Tab` | Cycle forward through sections |
+| `Ctrl+Shift+Tab` | Cycle backward through sections |
+| `Ctrl+R` / `F5` | Refresh the active section or rerun the current search |
+| `Ctrl+{num}` | Load the corresponding section (`{num}` = e.g. `1` for the first section) |
+| `Space` / `Enter` | Run the currently focused option card (toggle/execute) |
+
 ## My Projects
 
 You can find all of my other projects here:
@@ -33,4 +45,4 @@ pip install PySide6 mistune requests
 
 ## Contribution
 
-If you've something useful that isn't available in the tool yet, you're welcome to create a pull request. Note the JSON structure and provide appropriate documentation for the option - see [contribution.md](/contribution.md) for JSON structure details.
+If you've something useful that isn't available in the tool yet, you're welcome to create a pull request. Note the JSON structure and provide appropriate documentation for the option - see [contribution.md](https://github.com/5Noxi/win-config/blob/main/contribution.md) for JSON structure details.
