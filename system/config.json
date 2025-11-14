@@ -320,7 +320,7 @@
             }
           }
         },
-        "Disable WER Tasks": {
+        "Disable Error Reporting Tasks": {
           "COMMANDS": {
             "DisableWerTasks": {
               "Action": "scheduled_task",
@@ -651,7 +651,7 @@
             }
           }
         },
-        "Disable WER Tasks": {
+        "Disable Error Reporting Tasks": {
           "COMMANDS": {
             "EnableWerTasks": {
               "Action": "scheduled_task",
@@ -1145,7 +1145,9 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
         "AllowStorageSenseGlobal": { "Type": "REG_DWORD", "Data": 0 },
-        "AllowStorageSenseTemporaryFilesCleanup": { "Type": "REG_DWORD", "Data": 0 }
+        "AllowStorageSenseTemporaryFilesCleanup": { "Type": "REG_DWORD", "Data": 0 },
+        "ConfigStorageSenseDownloadsCleanupThreshold": { "Type": "REG_DWORD", "Data": 0 },
+        "ConfigStorageSenseRecycleBinCleanupThreshold": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -1154,7 +1156,9 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense": {
         "AllowStorageSenseGlobal": { "Action": "deletevalue" },
-        "AllowStorageSenseTemporaryFilesCleanup": { "Action": "deletevalue" }
+        "AllowStorageSenseTemporaryFilesCleanup": { "Action": "deletevalue" },
+        "ConfigStorageSenseDownloadsCleanupThreshold": { "Action": "deletevalue" },
+        "ConfigStorageSenseRecycleBinCleanupThreshold": { "Action": "deletevalue" }
       }
     }
   },

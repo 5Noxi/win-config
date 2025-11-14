@@ -114,6 +114,20 @@
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps": {
         "AllowUntriggeredNetworkTrafficOnSettingsPage": { "Type": "REG_DWORD", "Data": 0 },
         "AutoDownloadAndUpdateMapData": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Maps Update Task": {
+          "COMMANDS": {
+            "DisableMapsUpdate": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Maps\\MapsUpdateTask"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        }
       }
     },
     "revert": {
@@ -127,6 +141,20 @@
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps": {
         "AllowUntriggeredNetworkTrafficOnSettingsPage": { "Action": "deletevalue" },
         "AutoDownloadAndUpdateMapData": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Maps Update Task": {
+          "COMMANDS": {
+            "EnableMapsUpdate": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Maps\\MapsUpdateTask"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        }
       }
     }
   },
@@ -169,7 +197,7 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\MediaPlayer\\PREFERENCES\\HME\\*",
           "Operations": [
-            { "Name": "AcceptedPrivacyStatement", "Type": "REG_DWORD", "Value": 1 },
+            { "Name": "AcceptedPrivacyStatement", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "UsageTracking", "Type": "REG_DWORD", "Value": 0 },
             { "Name": "ForceUsageTracking", "Type": "REG_DWORD", "Value": 0 }
           ]
@@ -1470,6 +1498,19 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Speech": {
         "AllowSpeechModelUpdate": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Speech Model Download Task": {
+          "COMMANDS": {
+            "DisableSpeechModel": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask"
+              ],
+              "State": "disable"
+            }
+          }
+        }
       }
     },
     "revert": {
@@ -1481,6 +1522,19 @@
       },
       "HKLM\\Software\\Policies\\Microsoft\\Speech": {
         "AllowSpeechModelUpdate": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Speech Model Download Task": {
+          "COMMANDS": {
+            "EnableSpeechModel": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask"
+              ],
+              "State": "enable"
+            }
+          }
+        }
       }
     }
   },
@@ -1785,6 +1839,20 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Windows": {
         "Enabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable Time Sync Tasks": {
+          "COMMANDS": {
+            "DisableTimeTask": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
+                "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime"
+              ],
+              "State": "disable"
+            }
+          }
+        }
       }
     },
     "revert": {
@@ -1835,6 +1903,20 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\SettingSync\\Groups\\Windows": {
         "Enabled": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Time Sync Tasks": {
+          "COMMANDS": {
+            "EnableTimeTask": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
+                "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime"
+              ],
+              "State": "enable"
+            }
+          }
+        }
       }
     }
   },
@@ -1975,6 +2057,16 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "DoNotShowFeedbackNotifications": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "COMMANDS": {
+        "DisableFeedbackHubTask": {
+          "Action": "scheduled_task",
+          "TaskNames": [ 
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload"
+           ],
+          "TaskAction": "disable"
+        }
       }
     },
     "revert": {
@@ -1987,6 +2079,16 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "DoNotShowFeedbackNotifications": { "Action": "deletevalue" }
+      },
+      "COMMANDS": {
+        "EnableFeedbackHubTask": {
+          "Action": "scheduled_task",
+          "TaskNames": [ 
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+            "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload"
+           ],
+          "TaskAction": "enable"
+        }
       }
     }
   },
@@ -2013,7 +2115,15 @@
       "COMMANDS": {
         "DisableCeipTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [ "\\Microsoft\\Windows\\Autochk\\Proxy", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector" ],
+          "TaskNames": [ 
+            "\\Microsoft\\Windows\\Autochk\\Proxy",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector",
+            "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector"
+          ],
           "TaskAction": "disable"
         }
       }
@@ -2040,7 +2150,15 @@
       "COMMANDS": {
         "EnableCeipTasks": {
           "Action": "scheduled_task",
-          "TaskNames": [ "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant", "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector" ],
+          "TaskNames": [ 
+            "\\Microsoft\\Windows\\Autochk\\Proxy",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+            "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector",
+            "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector"
+          ],
           "TaskAction": "enable"
         }
       }

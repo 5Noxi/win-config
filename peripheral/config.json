@@ -860,7 +860,7 @@
       "HKLM\\Software\\Microsoft\\TabletTip\\1.7": {
         "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
         "ConvertibleSlateModePromptPreference": { "Type": "REG_DWORD", "Data": 0 },
         "SignInMode": { "Type": "REG_DWORD", "Data": 1 },
         "TabletMode": { "Type": "REG_DWORD", "Data": 0 }
@@ -872,6 +872,16 @@
       "HKCU\\Control Panel\\Cursors": {
         "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 },
         "GestureVisualization": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "DisableSyncData": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "Microsoft\\Windows\\input\\PenSyncDataAvailable",
+            "Microsoft\\Windows\\input\\syncpensettings",
+            "Microsoft\\Windows\\input\\TouchpadSyncDataAvailable"
+          ]
+        }
       }
     },
     "revert": {

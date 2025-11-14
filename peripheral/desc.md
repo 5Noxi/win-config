@@ -288,6 +288,29 @@ TabletModeCoverWindow
 TabletModeInputHandler
 ```
 
+Windows 7/XP:
+```json
+"HKLM\\Software\\Policies\\Microsoft\\TabletTip\\1.7": {
+    "DisablePrediction": { "Type": "REG_DWORD", "Data": 1 },
+    "DisableACIntegration": { "Type": "REG_DWORD", "Data": 1 },
+    "DisableEdgeTarget": { "Type": "REG_DWORD", "Data": 1 },
+    "HideIPTIPTargets": { "Type": "REG_DWORD", "Data": 1 },
+    "HideIPTIPTouchTargets": { "Type": "REG_DWORD", "Data": 1 },
+    "PasswordSecurityState": { "Type": "REG_DWORD", "Data": 0 },
+    "IncludeRareChar": { "Type": "REG_DWORD", "Data": 0 },
+    "ScratchOutState": { "Type": "REG_DWORD", "Data": 3 }
+},
+"HKLM\\SOFTWARE\\Policies\\Microsoft\\TabletPC": {
+    "DisableInkball": { "Type": "REG_DWORD", "Data": 1 },
+    "DisableJournal": { "Type": "REG_DWORD", "Data": 1 },
+    "DisableNoteWriterPrinting": { "Type": "REG_DWORD", "Data": 1 },
+    "DisableSnippingTool": { "Type": "REG_DWORD", "Data": 1 },
+    "TurnOffPenFeedback": { "Type": "REG_DWORD", "Data": 1 },
+    "PreventFlicksLearningMode": { "Type": "REG_DWORD", "Data": 1 },
+    "PreventFlicks": { "Type": "REG_DWORD", "Data": 1 }
+}
+```
+
 # Disable Wake on Input
 
 ```bat
