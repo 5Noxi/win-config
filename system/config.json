@@ -256,8 +256,10 @@
           "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
             "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+            "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
             "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
             "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
             "\\Microsoft\\Windows\\Autochk\\Proxy",
@@ -296,18 +298,299 @@
             "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr",
             "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
           ],
-          "TaskAction": "disable"
+          "TaskAction": "disable",
+          "Elevated": true
+        }
+      },
+      "SUBOPTION": {
+        "Disable CEIP Tasks": {
+          "COMMANDS": {
+            "DisableCeipTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Autochk\\Proxy",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable WER Tasks": {
+          "COMMANDS": {
+            "DisableWerTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
+                "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Offline Files Tasks": {
+          "COMMANDS": {
+            "DisableOfflineFiles": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Offline Files\\Background Synchronization",
+                "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Printing Tasks": {
+          "COMMANDS": {
+            "DisablePrintingTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask",
+                "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask",
+                "\\Microsoft\\Windows\\Printing\\EduPrintProv"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Wi-Fi Service Tasks": {
+          "COMMANDS": {
+            "DisableWifiTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\WCM\\WiFiTask",
+                "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
+                "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
+                "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
+                "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Office Telemetry Tasks": {
+          "COMMANDS": {
+            "DisableOfficeTelemetry": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
+                "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
+                "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
+                "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable NVIDIA Telemetry Tasks": {
+          "COMMANDS": {
+            "DisableNvTelemetry": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "NvTmRep_*",
+                "NvTmRepOnLogon*",
+                "NvTmMon_*"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Feedback Tasks": {
+          "COMMANDS": {
+            "DisableFeedback": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+                "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Application Experience Tasks": {
+          "COMMANDS": {
+            "DisableAppExperience": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Application Experience\\MareBackup",
+                "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+                "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+                "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+                "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
+                "\\Microsoft\\Windows\\Application Experience\\StartupAppTask"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Maintenance Tasks": {
+          "COMMANDS": {
+            "DisableMaintenanceGroup": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
+                "\\Microsoft\\Windows\\CloudExperienceHost\\CreateObjectTask",
+                "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+                "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
+                "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
+                "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
+                "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup",
+                "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
+                "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticResolver",
+                "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
+                "\\Microsoft\\Windows\\DiskFootprint\\StorageSense",
+                "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask",
+                "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
+                "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
+                "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Update Service Tasks": {
+          "COMMANDS": {
+            "DisableUpdateService": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\InstallService\\ScanForUpdates",
+                "\\Microsoft\\Windows\\InstallService\\ScanForUpdatesAsUser",
+                "\\Microsoft\\Windows\\InstallService\\SmartRetry",
+                "\\Microsoft\\Windows\\InstallService\\WakeUpAndContinueUpdates",
+                "\\Microsoft\\Windows\\InstallService\\WakeUpAndScanForUpdates"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Localization Tasks": {
+          "COMMANDS": {
+            "DisableLocalization": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\International\\Synchronize Language Settings",
+                "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Installation",
+                "\\Microsoft\\Windows\\LanguageComponentsInstaller\\ReconcileLanguageResources",
+                "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Uninstallation"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Maps Update Task": {
+          "COMMANDS": {
+            "DisableMapsUpdate": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Maps\\MapsUpdateTask"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Sleep Study Task": {
+          "COMMANDS": {
+            "DisableSleepStudy": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Time Sync Tasks": {
+          "COMMANDS": {
+            "DisableTimeSync": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
+                "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Miscellaneous Tasks": {
+          "COMMANDS": {
+            "DisableMiscTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Registry\\RegIdleBackup",
+                "\\Microsoft\\Windows\\RetailDemo\\CleanupOfflineContent"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable WU Tasks": {
+          "COMMANDS": {
+            "EnableWUService": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Report policies",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Maintenance Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Scan",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Scan Static Task",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Wake To Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Start Oobe Expedite Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\StartOobeAppsScan_LicenseAccepted",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\StartOobeAppsScanAfterUpdate",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\USO_UxBroker",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\UUS Failover Task",
+                "\\Microsoft\\Windows\\WindowsUpdate\\Scheduled Start",
+                "\\Microsoft\\Windows\\WindowsUpdate\\Refresh Group Policy Cache"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable BitLocker Tasks": {
+          "COMMANDS": {
+            "DisableBitLockerTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\BitLocker\\BitLocker Encrypt All Drives",
+                "\\Microsoft\\Windows\\BitLocker\\BitLocker MDM Policy Refresh"
+              ],
+              "TaskAction": "disable",
+              "Elevated": true
+            }
+          }
         }
       }
     },
     "revert": {
       "COMMANDS": {
         "EnableScheduledTasks": {
-          "Action": "scheduled_task",
+          "Action":           "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
             "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+            "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
             "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
             "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
             "\\Microsoft\\Windows\\Autochk\\Proxy",
@@ -346,7 +629,286 @@
             "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr",
             "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
           ],
-          "TaskAction": "enable"
+          "TaskAction": "enable",
+          "Elevated": true
+        }
+      },
+      "SUBOPTION": {
+        "Disable CEIP Tasks": {
+          "COMMANDS": {
+            "EnableCeipTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Autochk\\Proxy",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Uploader",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerCeipAssistant",
+                "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Server\\ServerRoleUsageCollector"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable WER Tasks": {
+          "COMMANDS": {
+            "EnableWerTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\ErrorDetails\\EnableErrorDetailsUpdate",
+                "\\Microsoft\\Windows\\Windows Error Reporting\\QueueReporting"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Offline Files Tasks": {
+          "COMMANDS": {
+            "EnableOfflineFiles": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Offline Files\\Background Synchronization",
+                "\\Microsoft\\Windows\\Offline Files\\Logon Synchronization"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Printing Tasks": {
+          "COMMANDS": {
+            "EnablePrintingTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask",
+                "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask",
+                "\\Microsoft\\Windows\\Printing\\EduPrintProv"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Wi-Fi Service Tasks": {
+          "COMMANDS": {
+            "EnableWifiTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\WCM\\WiFiTask",
+                "\\Microsoft\\Windows\\WlanSvc\\CDSSync",
+                "\\Microsoft\\Windows\\WwanSvc\\NotificationTask",
+                "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery",
+                "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Office Telemetry Tasks": {
+          "COMMANDS": {
+            "EnableOfficeTelemetry": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack",
+                "\\Microsoft\\Office\\OfficeTelemetryAgentFallBack2016",
+                "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn",
+                "\\Microsoft\\Office\\OfficeTelemetryAgentLogOn2016"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable NVIDIA Telemetry Tasks": {
+          "COMMANDS": {
+            "EnableNvTelemetry": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "NvTmRep_*",
+                "NvTmRepOnLogon*",
+                "NvTmMon_*"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Feedback Tasks": {
+          "COMMANDS": {
+            "EnableFeedback": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClient",
+                "\\Microsoft\\Windows\\Feedback\\Siuf\\DmClientOnScenarioDownload"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Application Experience Tasks": {
+          "COMMANDS": {
+            "EnableAppExperience": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Application Experience\\MareBackup",
+                "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+                "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+                "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+                "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
+                "\\Microsoft\\Windows\\Application Experience\\StartupAppTask"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Maintenance Tasks": {
+          "COMMANDS": {
+            "EnableMaintenanceGroup": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\ApplicationData\\DsSvcCleanup",
+                "\\Microsoft\\Windows\\CloudExperienceHost\\CreateObjectTask",
+                "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+                "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
+                "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
+                "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
+                "\\Microsoft\\Windows\\DiskCleanup\\SilentCleanup",
+                "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticDataCollector",
+                "\\Microsoft\\Windows\\DiskDiagnostic\\Microsoft-Windows-DiskDiagnosticResolver",
+                "\\Microsoft\\Windows\\DiskFootprint\\Diagnostics",
+                "\\Microsoft\\Windows\\DiskFootprint\\StorageSense",
+                "\\Microsoft\\Windows\\Speech\\SpeechModelDownloadTask",
+                "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
+                "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
+                "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Update Service Tasks": {
+          "COMMANDS": {
+            "EnableUpdateService": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\InstallService\\ScanForUpdates",
+                "\\Microsoft\\Windows\\InstallService\\ScanForUpdatesAsUser",
+                "\\Microsoft\\Windows\\InstallService\\SmartRetry",
+                "\\Microsoft\\Windows\\InstallService\\WakeUpAndContinueUpdates",
+                "\\Microsoft\\Windows\\InstallService\\WakeUpAndScanForUpdates"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Localization Tasks": {
+          "COMMANDS": {
+            "EnableLocalization": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\International\\Synchronize Language Settings",
+                "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Installation",
+                "\\Microsoft\\Windows\\LanguageComponentsInstaller\\ReconcileLanguageResources",
+                "\\Microsoft\\Windows\\LanguageComponentsInstaller\\Uninstallation"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Maps Update Task": {
+          "COMMANDS": {
+            "EnableMapsUpdate": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Maps\\MapsUpdateTask"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Sleep Study Task": {
+          "COMMANDS": {
+            "EnableSleepStudy": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Power Efficiency Diagnostics\\AnalyzeSystem"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Time Sync Tasks": {
+          "COMMANDS": {
+            "EnableTimeSync": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Time Synchronization\\ForceSynchronizeTime",
+                "\\Microsoft\\Windows\\Time Synchronization\\SynchronizeTime"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Miscellaneous Tasks": {
+          "COMMANDS": {
+            "EnableMiscTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Registry\\RegIdleBackup",
+                "\\Microsoft\\Windows\\RetailDemo\\CleanupOfflineContent"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable WU Tasks": {
+          "COMMANDS": {
+            "EnableWUService": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Report policies",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Maintenance Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Scan",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Scan Static Task",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Wake To Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Schedule Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\Start Oobe Expedite Work",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\StartOobeAppsScan_LicenseAccepted",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\StartOobeAppsScanAfterUpdate",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\USO_UxBroker",
+                "\\Microsoft\\Windows\\UpdateOrchestrator\\UUS Failover Task",
+                "\\Microsoft\\Windows\\WindowsUpdate\\Scheduled Start",
+                "\\Microsoft\\Windows\\WindowsUpdate\\Refresh Group Policy Cache"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable BitLocker Tasks": {
+          "COMMANDS": {
+            "DisableBitLockerTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\BitLocker\\BitLocker Encrypt All Drives",
+                "\\Microsoft\\Windows\\BitLocker\\BitLocker MDM Policy Refresh"
+              ],
+              "TaskAction": "enable",
+              "Elevated": true
+            }
+          }
         }
       }
     }

@@ -637,7 +637,7 @@ See [dwm.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/dwm.c) for
 
 # Disable Scheduled Tasks
 
-Disables all kind of scheduled tasks most users don't need. Read through the list before switching the option.
+Disables all kind of scheduled tasks most users don't need. Read through the list before switching the option. See suboptions for customization - enabling all suboptions until `Disable Miscellaenous Tasks` is the same as enabling the option switch.
 
 Currently disables:
 ```ps
@@ -692,11 +692,8 @@ for %%a in (
     "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64",
     "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 Critica",
     "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319",
-    "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataReceiver",
     "\Microsoft\Windows\Active Directory Rights Management Services Client\AD RMS Rights Policy Template Management (Manual)",
     "\Microsoft\Windows\AppID\EDP Policy Manager",
-    "\Microsoft\Windows\BitLocker\BitLocker Encrypt All Drives",
-    "\Microsoft\Windows\BitLocker\BitLocker MDM Policy Refresh",
     "\Microsoft\Windows\BrokerInfrastructure\BgTaskRegistrationMaintenanceTask",
     "\Microsoft\Windows\CloudRestore\Backup",
     "\Microsoft\Windows\CloudRestore\Restore",
@@ -713,27 +710,8 @@ for %%a in (
     "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataReceiver",
     "\Microsoft\Windows\Flighting\FeatureConfig\UsageDataReporting",
     "\Microsoft\Windows\Flighting\OneSettings\RefreshCache",
-    "\Microsoft\Windows\Printing\EduPrintProv",
-    "\Microsoft\Windows\Printing\PrinterCleanupTask",
-    "\Microsoft\Windows\Printing\PrintJobCleanupTask",
     "\Microsoft\Windows\Security\Pwdless\IntelligentPwdlessTask",
-    # WU
-    "\Microsoft\Windows\UpdateOrchestrator\Report policies",
-    "\Microsoft\Windows\UpdateOrchestrator\Schedule Maintenance Work",
-    "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan",
-    "\Microsoft\Windows\UpdateOrchestrator\Schedule Scan Static Task",
-    "\Microsoft\Windows\UpdateOrchestrator\Schedule Wake To Work",
-    "\Microsoft\Windows\UpdateOrchestrator\Schedule Work",
-    "\Microsoft\Windows\UpdateOrchestrator\Start Oobe Expedite Work",
-    "\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScan_LicenseAccepted",
-    "\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScanAfterUpdate",
-    "\Microsoft\Windows\UpdateOrchestrator\USO_UxBroker",
-    "\Microsoft\Windows\UpdateOrchestrator\UUS Failover Task",
-    "\Microsoft\Windows\WindowsUpdate\Scheduled Start",
-    "\Microsoft\Windows\WindowsUpdate\Refresh Group Policy Cache",
-    # WiFi
-    "\Microsoft\Windows\WlanSvc\CDSSync",
-    "\Microsoft\Windows\WlanSvc\MoProfileManagement"
+
 ) do (
     schtasks.exe /change /disable /TN %%a
 )

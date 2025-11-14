@@ -2397,14 +2397,17 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 
 Miscellaenous notes:
 ```c
-dq offset aPower_2      ; "Power"
-dq offset aSleepstudylibr ; "SleepstudyLibraryBlockerLimit"
-dq offset SleepstudyHelperBlockerLibraryLimit // SleepstudyHelperBlockerLibraryLimit   000000c8 = 200 Dec
-align 20h
-dq offset aPower_2      ; "Power"
-dq offset aSleepstudyglob ; "SleepstudyGlobalBlockerLimit"
-dq offset SleepstudyHelperBlockerGlobalLimit // SleepstudyHelperBlockerGlobalLimit   00000bb8 = 3000 Dec
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "SleepstudyAccountingEnabled"; = 1; // SleepstudyHelperAccountingEnabled 
+    "SleepstudyGlobalBlockerLimit"; = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
+    "SleepstudyLibraryBlockerLimit"; = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
+    "SleepStudyDeviceAccountingLevel"; = 4; // PopSleepStudyDeviceAccountingLevel 
+    "SleepStudyDisabled"; = 0; // PopSleepStudyDisabled 
 ```
+> https://github.com/5Noxi/wpr-reg-records#power-values
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0030\0\Device Parameters\Wdf : SleepstudyState
@@ -2819,4 +2822,18 @@ Prevent the use of security questions for local accounts.
 
 					]
 },
+```
+
+# Disable Application Experience
+
+Disables Windows Application Experience telemetry and compatibility components, Microsoft Compatibility Appraiser (including its daily task and `CompatTelRunner.exe`) and the Application Experience tasks. It reduces telemetry, and some attack surface, but removes most automatic compatibility checks, upgrade assessments and some app related backup/recovery features.
+
+Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Experience\\` (LTSC IoT Enterprise 2024):
+```ps
+"\\Microsoft\\Windows\\Application Experience\\MareBackup",
+"\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+"\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+"\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+"\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
+"\\Microsoft\\Windows\\Application Experience\\StartupAppTask"
 ```

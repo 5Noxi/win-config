@@ -2554,5 +2554,51 @@
         "NoLocalPasswordResetQuestions": { "Action": "deletevalue" }
       }
     }
+  },
+  "Disable Application Experience": {
+    "apply": {
+      "COMMANDS": {
+        "EnableApplicationExperienceTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+            "\\Microsoft\\Windows\\Application Experience\\ProgramDataUpdater",
+            "\\Microsoft\\Windows\\Application Experience\\AitAgent",
+            "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
+            "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+            "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
+            "\\Microsoft\\Windows\\Application Experience\\MareBackup"
+          ],
+          "TaskAction": "disable"
+        },
+        "RestoreCompatTelRunner": {
+          "Action": "run_powershell",
+          "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exe CompatTelRunner.exee",
+          "Elevated": true
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EnableApplicationExperienceTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
+            "\\Microsoft\\Windows\\Application Experience\\ProgramDataUpdater",
+            "\\Microsoft\\Windows\\Application Experience\\AitAgent",
+            "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
+            "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
+            "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
+            "\\Microsoft\\Windows\\Application Experience\\MareBackup"
+          ],
+          "TaskAction": "enable"
+        },
+        "RestoreCompatTelRunner": {
+          "Action": "run_powershell",
+          "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exee CompatTelRunner.exe",
+          "Elevated": true
+        }
+      }
+    }
   }
 }

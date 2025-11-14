@@ -45,7 +45,7 @@ pip install PySide6 mistune requests
 | `run_powershell`   | Required: `Command` - Optional: `Elevated` |
 | `delete_path`      | Required: `Paths` (array or string) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
 | `create_path`      | Use one: `Path` or `Paths` (array) - Optional: `File` / `IsFile` (bool) to create a file instead of directories |
-| `scheduled_task`   | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) |
+| `scheduled_task`   | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) - Optional: `Elevated` |
 | `tcp_congestion`   | Required: `Templates` (string or array), `Provider` (or `Value`) |
 | `netbind`          | Required: `Components` (array or string) - Required: `State` (`enable` \| `disable`) |
 | `optional_feature` | Required: `Features` (array or string) - Required: `State` (`enable` \| `disable`) - Optional: `Arguments` (array or string), `Elevated` |
