@@ -290,7 +290,7 @@ TabletModeInputHandler
 
 Windows 7/XP:
 ```json
-"HKLM\\Software\\Policies\\Microsoft\\TabletTip\\1.7": {
+"HKLM\\SOFTWARE\\Policies\\Microsoft\\TabletTip\\1.7": {
     "DisablePrediction": { "Type": "REG_DWORD", "Data": 1 },
     "DisableACIntegration": { "Type": "REG_DWORD", "Data": 1 },
     "DisableEdgeTarget": { "Type": "REG_DWORD", "Data": 1 },

@@ -192,7 +192,7 @@ If hiding `Lock` for example via `Control Panel > All Control Panel Items > Powe
 DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-LGPE would set the values in `HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer`:
+LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer`:
 ```json
 {
     "File":  "WindowsExplorer.admx",

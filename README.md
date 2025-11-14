@@ -44,17 +44,17 @@ pip install PySide6 mistune requests
 | ------ | ------ |
 | `run_powershell`   | Required: `Command` - Optional: `Elevated` |
 | `delete_path`      | Required: `Paths` (array or string) - Optional: `Recurse` (use %ENV%, not $env:ENV here) |
-| `create_path`      | Use one: `Path` or `Paths` (array) - Optional: `File` / `IsFile` (bool) to create a file instead of directories |
-| `scheduled_task`   | Use one: `TaskName` or `TaskNames` (array) - Required: `TaskAction` (`run`, `stop`, `enable`, `disable`, `delete`) - Optional: `Elevated` |
+| `create_path`      | Use one: `Path` or `Paths` (array) - Optional: `File` (bool) to create a file instead of directories |
+| `scheduled_task`   | Use one: `TaskName` or `TaskNames` (array) - Required: `Operation` (`run`, `stop`, `enable`, `disable`, `delete`) - Optional: `Elevated` |
 | `tcp_congestion`   | Required: `Templates` (string or array), `Provider` (or `Value`) |
 | `netbind`          | Required: `Components` (array or string) - Required: `State` (`enable` \| `disable`) |
 | `optional_feature` | Required: `Features` (array or string) - Required: `State` (`enable` \| `disable`) - Optional: `Arguments` (array or string), `Elevated` |
 | `restart_explorer` | (no arguments) |
-| `bcdedit`          | Required: `Name` (or `Option`) - One of: `Value` or `Delete`/`Remove` (bool) |
+| `bcdedit`          | Required: `Name` - One of: `Value` or `Delete`/`Remove` (bool) |
 | `registry_pattern` | Required: `Pattern`, `Operations` (array) - Optional: `ExcludeSubPaths`, `ExcludePatterns`, `ExcludeSegments`, `Exclude`, `Root`, `Message` |
-| `mmagent`          | Required: `Setting` (or `Option`/`Name`), desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
-| `nvidia_key`       | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey` for relative subkey, `Refresh` to rescan adapter |
-| `ethernet_key`     | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubPath`/`SubKey`, `Refresh` to rescan adapter, `NetIdPath` template containing the literal `{NetID}` placeholder to target other hives |
+| `mmagent`          | Required: `Name`, desired state via one of `Enabled`/`Enable`/`State` (bool) - Optional: `Elevated` |
+| `nvidia_key`       | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubKey` for a relative subkey, `Refresh` to rescan adapter |
+| `ethernet_key`     | Required: `Values` -> map of valueName -> `{ Type, Data }` (or `{ Action: "deletevalue" }`) - Optional: `SubKey`, `Refresh` to rescan adapter, `NetIDPath` template (must contain the literal `{NetID}` placeholder) to target other hives |
 
 ### Buttons
 | Key | Purpose |
@@ -121,8 +121,8 @@ pip install PySide6 mistune requests
           "Action": "registry_pattern",
           "Pattern": "HKCU\\Software\\**Noverse**\\**\\Profiles\\*",
           "Operations": [
-            { "SubPath": "Settings1", "Name": "Enabled", "Type": "REG_DWORD", "Value": 1 },
-            { "SubPath": "Settings2", "Name": "Channel", "Type": "REG_SZ", "Value": "Test" }
+            { "SubKey": "Settings1", "Name": "Enabled", "Type": "REG_DWORD", "Value": 1 },
+            { "SubKey": "Settings2", "Name": "Channel", "Type": "REG_SZ", "Value": "Test" }
           ]
         }
       }
@@ -133,8 +133,8 @@ pip install PySide6 mistune requests
           "Action": "registry_pattern",
           "Pattern": "HKCU\\Software\\**Noverse**\\**\\Profiles\\*",
           "Operations": [
-            { "SubPath": "Settings1", "Name": "Enabled", "Operation": "deletevalue" },
-            { "SubPath": "Settings2", "Name": "Channel", "Operation": "deletevalue" }
+            { "SubKey": "Settings1", "Name": "Enabled", "Operation": "deletevalue" },
+            { "SubKey": "Settings2", "Name": "Channel", "Operation": "deletevalue" }
           ]
         }
       }
@@ -149,7 +149,7 @@ pip install PySide6 mistune requests
           "ExcludeSubPaths": ["KeyName"],
           "Operations": [
             { "Name": "Throttle", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Parameters", "Name": "TraceLevel", "Operation": "deletevalue" }
+            { "SubKey": "Parameters", "Name": "TraceLevel", "Operation": "deletevalue" }
           ]
         }
       }
@@ -214,7 +214,7 @@ pip install PySide6 mistune requests
             "\\Noverse\\Telemetry*",
             "\\Microsoft\\Windows\\Noverse\\Update"
           ],
-          "TaskAction": "disable"
+          "Operation": "disable"
         }
       }
     },
@@ -226,7 +226,7 @@ pip install PySide6 mistune requests
             "\\Noverse\\Telemetry*",
             "\\Microsoft\\Windows\\Noverse\\Update"
           ],
-          "TaskAction": "enable"
+          "Operation": "enable"
         }
       }
     }
@@ -237,12 +237,12 @@ pip install PySide6 mistune requests
         "RunOnce": { 
           "Action": "scheduled_task", 
           "TaskName": "\\Noverse\\Telemetry Daily", 
-          "TaskAction": "run" 
+          "Operation": "run" 
         },
         "StopNow": { 
           "Action": "scheduled_task", 
           "TaskName": "\\Noverse\\Telemetry Daily", 
-          "TaskAction": "stop" 
+          "Operation": "stop" 
         }
       }
     },
@@ -251,7 +251,7 @@ pip install PySide6 mistune requests
         "DeleteTask": { 
           "Action": "scheduled_task", 
           "TaskName": "\\Noverse\\Telemetry Daily", 
-          "TaskAction": "delete" 
+          "Operation": "delete" 
         }
       }
     }
@@ -402,7 +402,7 @@ pip install PySide6 mistune requests
         },
         "SetInterfaceDnsWithNetId": {
           "Action": "ethernet_key", // gets NetCfgInstanceId from the ethernet key ({NetID})
-          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
           "Values": {
             "NameServer": { "Type": "REG_SZ", "Data": "1.1.1.1" }
           }
@@ -419,7 +419,7 @@ pip install PySide6 mistune requests
         },
         "ResetInterfaceDnsWithNetId": {
           "Action": "ethernet_key",
-          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
           "Values": {
             "NameServer": { "Action": "deletevalue" }
           }
@@ -432,7 +432,7 @@ pip install PySide6 mistune requests
       "COMMANDS": {
         "EnableMemCompr": { 
           "Action": "mmagent", 
-          "Setting": "MemoryCompression", 
+          "Name": "MemoryCompression", 
           "Enabled": true, 
           "Elevated": true 
         }
@@ -442,7 +442,7 @@ pip install PySide6 mistune requests
       "COMMANDS": {
         "DisableMemCompr": { 
           "Action": "mmagent", 
-          "Setting": "MemoryCompression", 
+          "Name": "MemoryCompression", 
           "Enabled": false, 
           "Elevated": true 
         }

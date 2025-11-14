@@ -125,7 +125,7 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
         "DisplayPowerSaving": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\NVIDIA Corporation\\Global\\NVTweak": {
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NVTweak": {
         "DisplayPowerSaving": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
@@ -133,7 +133,7 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\NVTweak": {
         "DisplayPowerSaving": { "Action": "deletevalue" }
       },
-      "HKLM\\Software\\NVIDIA Corporation\\Global\\NVTweak": {
+      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\NVTweak": {
         "DisplayPowerSaving": { "Action": "deletevalue" }
       }
     }
@@ -197,12 +197,12 @@
   "Disable Scheduled Tasks": {
     "apply": {
       "COMMANDS": {
-        "DisableNvTelemetryTasks": { "Action": "scheduled_task", "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"], "TaskAction": "disable" }
+        "DisableNvTelemetryTasks": { "Action": "scheduled_task", "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"], "Operation": "disable" }
       }
     },
     "revert": {
       "COMMANDS": {
-        "EnableNvTelemetryTasks": { "Action": "scheduled_task", "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"], "TaskAction": "enable" }
+        "EnableNvTelemetryTasks": { "Action": "scheduled_task", "TaskNames": ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"], "Operation": "enable" }
       }
     }
   },
@@ -338,7 +338,7 @@
   },
   "Disable Telemetry": {
     "apply": {
-      "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
+      "HKCU\\Software\\NVIDIA Corporation\\NVControlPanel2\\Client": {
         "OptInOrOutPreference": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
@@ -374,7 +374,7 @@
       }
     },
     "revert": {
-      "HKCU\\SOFTWARE\\NVIDIA Corporation\\NVControlPanel2\\Client": {
+      "HKCU\\Software\\NVIDIA Corporation\\NVControlPanel2\\Client": {
         "OptInOrOutPreference": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {

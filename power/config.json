@@ -201,7 +201,7 @@
         "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 },
         "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
         "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 },
         "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 },
         "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
@@ -220,7 +220,7 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 }
           },
-          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
             "ShowHibernateOption": { "Type": "REG_DWORD", "Data": 0 }
           },
           "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideHibernate": {
@@ -231,7 +231,7 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 }
           },
-          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
             "ShowLockOption": { "Type": "REG_DWORD", "Data": 0 }
           },
           "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideLock": {
@@ -242,7 +242,7 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
           },
-          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
             "ShowSleepOption": { "Type": "REG_DWORD", "Data": 0 }
           },
           "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideSleep": {
@@ -257,7 +257,7 @@
         "ShowLockOption": { "Action": "deletevalue" },
         "ShowSleepOption": { "Action": "deletevalue" }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
         "ShowHibernateOption": { "Action": "deletevalue" },
         "ShowLockOption": { "Action": "deletevalue" },
         "ShowSleepOption": { "Action": "deletevalue" }
@@ -276,7 +276,7 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowHibernateOption": { "Action": "deletevalue" }
           },
-          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
             "ShowHibernateOption": { "Action": "deletevalue" }
           },
           "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideHibernate": {
@@ -287,7 +287,7 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowLockOption": { "Action": "deletevalue" }
           },
-          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
             "ShowLockOption": { "Action": "deletevalue" }
           },
           "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideLock": {
@@ -298,7 +298,7 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FlyoutMenuSettings": {
             "ShowSleepOption": { "Action": "deletevalue" }
           },
-          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer": {
             "ShowSleepOption": { "Action": "deletevalue" }
           },
           "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Start\\HideSleep": {
@@ -317,7 +317,7 @@
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "HibernateBootOptimizationEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "HiberbootEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "SUBOPTION": {
@@ -336,7 +336,7 @@
         "HiberbootEnabled": { "Action": "deletevalue" },
         "HibernateBootOptimizationEnabled": { "Action": "deletevalue" }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "HiberbootEnabled": { "Action": "deletevalue" }
       },
       "SUBOPTION": {
@@ -565,10 +565,10 @@
   },
   "Disable PM in Standby Mode": {
     "apply": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
         "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
         "fDisablePowerManagement": { "Type": "REG_DWORD", "Data": 1 }
       },
       "SUBOPTION": {
@@ -584,10 +584,10 @@
       }
     },
     "revert": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy": {
         "fDisablePowerManagement": { "Action": "deletevalue" }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WcmSvc\\Local": {
         "fDisablePowerManagement": { "Action": "deletevalue" }
       },
       "SUBOPTION": {

@@ -275,9 +275,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture\\*",
           "Operations": [
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Type": "REG_DWORD", "Value": 0 },
-            { "SubPath": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Type": "REG_DWORD", "Value": 1 }
+            { "SubKey": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Type": "REG_DWORD", "Value": 0 },
+            { "SubKey": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Type": "REG_DWORD", "Value": 0 },
+            { "SubKey": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Type": "REG_DWORD", "Value": 1 }
           ]
         },
         "DisableAudioEnhRender": {
@@ -296,9 +296,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\MMDevices\\Audio\\Capture\\*",
           "Operations": [
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "deletevalue" },
-            { "SubPath": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "deletevalue" },
-            { "SubPath": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Operation": "deletevalue" }
+            { "SubKey": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},3", "Operation": "deletevalue" },
+            { "SubKey": "Properties", "Name": "{b3f8fa53-0004-438e-9003-51a46e139bfc},4", "Operation": "deletevalue" },
+            { "SubKey": "FxProperties", "Name": "{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5", "Operation": "deletevalue" }
           ]
         },
         "RevertAudioEnhRender": {
@@ -647,7 +647,7 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers": {
         "DisableAutoplay": { "Type": "REG_DWORD", "Data": 1 }
       },
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "NoDriveTypeAutoRun": { "Type": "REG_DWORD", "Data": 255 },
         "NoAutorun": { "Type": "REG_DWORD", "Data": 1 }
       },
@@ -659,7 +659,7 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\AutoplayHandlers": {
         "DisableAutoplay": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "NoDriveTypeAutoRun": { "Action": "deletevalue" },
         "NoAutorun": { "Action": "deletevalue" }
       },
@@ -857,7 +857,7 @@
         "EnableKeyAudioFeedback": { "Type": "REG_DWORD", "Data": 0 },
         "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\Software\\Microsoft\\TabletTip\\1.7": {
+      "HKLM\\SOFTWARE\\Microsoft\\TabletTip\\1.7": {
         "TouchKeyboardTapInvoke": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
@@ -897,7 +897,7 @@
         "EnableKeyAudioFeedback": { "Action": "deletevalue" },
         "TouchKeyboardTapInvoke": { "Action": "deletevalue" }
       },
-      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
         "ConvertibleSlateModePromptPreference": { "Action": "deletevalue" },
         "SignInMode": { "Action": "deletevalue" },
         "TabletMode": { "Type": "REG_DWORD", "Data": 0 }
@@ -931,9 +931,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\**\\Device Parameters\\Interrupt Management",
           "Operations": [
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Type": "REG_DWORD", "Value": 1 },
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "deletevalue" },
-            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Operation": "deletevalue" }
+            { "SubKey": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Type": "REG_DWORD", "Value": 1 },
+            { "SubKey": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "deletevalue" },
+            { "SubKey": "Affinity Policy", "Name": "DevicePriority", "Operation": "deletevalue" }
           ]
         }
       }
@@ -944,9 +944,9 @@
           "Action": "registry_pattern",
           "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\PCI\\**\\Device Parameters\\Interrupt Management",
           "Operations": [
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Operation": "deletevalue" },
-            { "SubPath": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "deletevalue" },
-            { "SubPath": "Affinity Policy", "Name": "DevicePriority", "Operation": "deletevalue" }
+            { "SubKey": "MessageSignaledInterruptProperties", "Name": "MSISupported", "Operation": "deletevalue" },
+            { "SubKey": "MessageSignaledInterruptProperties", "Name": "MessageNumberLimit", "Operation": "deletevalue" },
+            { "SubKey": "Affinity Policy", "Name": "DevicePriority", "Operation": "deletevalue" }
           ]
         }
       }
@@ -1009,7 +1009,7 @@
         "DisablePrintingTasks": {
           "Action": "scheduled_task",
           "TaskNames": [ "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask", "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask", "\\Microsoft\\Windows\\Printing\\EduPrintProv" ],
-          "TaskAction": "disable"
+          "Operation": "disable"
         },
         "DisablePrintingFeatures": {
           "Action": "optional_feature",
@@ -1050,7 +1050,7 @@
         "EnablePrintingTasks": {
           "Action": "scheduled_task",
           "TaskNames": [ "\\Microsoft\\Windows\\Printing\\PrintJobCleanupTask", "\\Microsoft\\Windows\\Printing\\PrinterCleanupTask", "\\Microsoft\\Windows\\Printing\\EduPrintProv" ],
-          "TaskAction": "enable"
+          "Operation": "enable"
         },
         "EnablePrintingFeatures": {
           "Action": "optional_feature",

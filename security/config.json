@@ -126,7 +126,7 @@
       "HKLM\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell": {
         "ExecutionPolicy": { "Type": "REG_SZ", "Data": "Unrestricted" }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\PowerShell": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell": {
         "EnableScripts": { "Type": "REG_DWORD", "Data": 1 },
         "ExecutionPolicy": { "Type": "REG_SZ", "Data": "Unrestricted" }
       },
@@ -156,7 +156,7 @@
       "HKLM\\SOFTWARE\\Microsoft\\PowerShell\\1\\ShellIds\\Microsoft.PowerShell": {
         "ExecutionPolicy": { "Action": "deletevalue" }
       },
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\PowerShell": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\PowerShell": {
         "EnableScripts": { "Action": "deletevalue" },
         "ExecutionPolicy": { "Action": "deletevalue" }
       },
@@ -355,7 +355,7 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "EnableSmartScreen": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
         "EnableWebContentEvaluation": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
@@ -434,7 +434,7 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\System": {
         "EnableSmartScreen": { "Action": "deletevalue" }
       },
-      "HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppHost": {
         "EnableWebContentEvaluation": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WTDS\\Components": {
@@ -800,24 +800,24 @@
   },
   "Disable Password Reveal": {
     "apply": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CredUI": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CredUI": {
         "DisablePasswordReveal": { "Type": "REG_DWORD", "Data": 1 }
       },
       "SUBOPTION": {
         "Require Trusted Path for Credential Entry": {
-          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
             "EnableSecureCredentialPrompting": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
       }
     },
     "revert": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CredUI": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CredUI": {
         "DisablePasswordReveal": { "Action": "deletevalue" }
       },
       "SUBOPTION": {
         "Require Trusted Path for Credential Entry": {
-          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
             "EnableSecureCredentialPrompting": { "Action": "deletevalue" }
           }
         }
@@ -1189,12 +1189,12 @@
   },
   "Trusted Path Credential Prompting": {
     "apply": {
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
         "EnableSecureCredentialPrompting": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
-      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\CredUI": {
         "EnableSecureCredentialPrompting": { "Action": "deletevalue" }
       }
     }

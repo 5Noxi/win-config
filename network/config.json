@@ -9,14 +9,14 @@
       "COMMANDS": {
         "SetInterfaceNameServer": {
           "Action": "ethernet_key",
-          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
           "Values": {
             "NameServer": { "Type": "REG_SZ", "Data": "194.242.2.5" }
           }
         },
         "SetInterfaceDoh": {
           "Action": "ethernet_key",
-          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters\\{NetID}\\DohInterfaceSettings\\Doh\\194.242.2.5",
+          "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters\\{NetID}\\DohInterfaceSettings\\Doh\\194.242.2.5",
           "Values": {
             "DohTemplate": { "Type": "REG_SZ", "Data": "https://extended.dns.mullvad.net/dns-query" },
             "DohFlags": { "Type": "REG_QWORD", "Data": 2 }
@@ -28,7 +28,7 @@
           "COMMANDS": {
             "SetDnsCloudflare": {
               "Action": "ethernet_key",
-              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
               "Values": {
                 "NameServer": { "Type": "REG_SZ", "Data": "1.1.1.1,1.0.0.1" }
               }
@@ -39,7 +39,7 @@
           "COMMANDS": {
             "SetDnsQuad9": {
               "Action": "ethernet_key",
-              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
               "Values": {
                 "NameServer": { "Type": "REG_SZ", "Data": "9.9.9.9,149.112.112.112" }
               }
@@ -52,14 +52,14 @@
       "COMMANDS": {
         "UnsetInterfaceNameServer": {
           "Action": "ethernet_key",
-          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+          "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
           "Values": {
             "NameServer": { "Action": "deletevalue" }
           }
         },
         "UnsetInterfaceDoh": {
           "Action": "ethernet_key",
-          "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters\\{NetID}\\DohInterfaceSettings\\Doh\\194.242.2.5",
+          "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Dnscache\\InterfaceSpecificParameters\\{NetID}\\DohInterfaceSettings\\Doh\\194.242.2.5",
           "Values": {
             "DohTemplate": { "Action": "deletevalue" },
             "DohFlags": { "Action": "deletevalue" }
@@ -71,7 +71,7 @@
           "COMMANDS": {
             "UnsetDnsCloudflare": {
               "Action": "ethernet_key",
-              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
               "Values": {
                 "NameServer": { "Action": "deletevalue" }
               }
@@ -82,7 +82,7 @@
           "COMMANDS": {
             "UnsetDnsQuad9": {
               "Action": "ethernet_key",
-              "NetIdPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
+              "NetIDPath": "HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{NetID}",
               "Values": {
                 "NameServer": { "Action": "deletevalue" }
               }
@@ -390,7 +390,7 @@
   },
   "Disable Network Discovery": {
     "apply": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LLTD": {
         "AllowLLTDIOOnDomain": { "Type": "REG_DWORD", "Data": 0 },
         "AllowLLTDIOOnPublicNet": { "Type": "REG_DWORD", "Data": 0 },
         "AllowRspndrOnDomain": { "Type": "REG_DWORD", "Data": 0 },
@@ -415,7 +415,7 @@
       }
     },
     "revert": {
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\LLTD": {
         "AllowLLTDIOOnDomain": { "Action": "deletevalue" },
         "AllowLLTDIOOnPublicNet": { "Action": "deletevalue" },
         "AllowRspndrOnDomain": { "Action": "deletevalue" },
@@ -446,7 +446,7 @@
         "DisableWiFiTasks": {
           "Action": "scheduled_task",
           "TaskNames": [ "\\Microsoft\\Windows\\WCM\\WiFiTask", "\\Microsoft\\Windows\\WlanSvc\\CDSSync", "\\Microsoft\\Windows\\WwanSvc\\NotificationTask", "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery", "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement" ],
-          "TaskAction": "disable"
+          "Operation": "disable"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc": {
@@ -470,7 +470,7 @@
         "EnableWiFiTasks": {
           "Action": "scheduled_task",
           "TaskNames": [ "\\Microsoft\\Windows\\WCM\\WiFiTask", "\\Microsoft\\Windows\\WlanSvc\\CDSSync", "\\Microsoft\\Windows\\WwanSvc\\NotificationTask", "\\Microsoft\\Windows\\WwanSvc\\OobeDiscovery", "\\Microsoft\\Windows\\WlanSvc\\MoProfileManagement" ],
-          "TaskAction": "enable"
+          "Operation": "enable"
         }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc": {
