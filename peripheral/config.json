@@ -884,19 +884,19 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad": {
         "AAPThreshold": { "Type": "REG_DWORD", "Data": 2 },
-        "CursorSpeed": { "Type": "REG_DWORD", "Data": 10 },
-        "FeedbackIntensity": { "Type": "REG_DWORD", "Data": 0 },
         "ClickForceSensitivity": { "Type": "REG_DWORD", "Data": 0 },
-        "LeaveOnWithMouse" : { "Type": "REG_DWORD", "Data": 0 },
+        "CursorSpeed": { "Type": "REG_DWORD", "Data": 10 },
         "FeedbackEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "TapsEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "TapAndDrag": { "Type": "REG_DWORD", "Data": 0 },
-        "TwoFingerTapEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "RightClickZoneEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "FeedbackIntensity": { "Type": "REG_DWORD", "Data": 0 },
+        "HonorMouseAccelSetting": { "Type": "REG_DWORD", "Data": 1 },
+        "LeaveOnWithMouse" : { "Type": "REG_DWORD", "Data": 0 },
         "PanEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "RightClickZoneEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "ScrollDirection": { "Type": "REG_DWORD", "Data": 0 },
-        "ZoomEnabled": { "Type": "REG_DWORD", "Data": 0 },
-        "HonorMouseAccelSetting": { "Type": "REG_DWORD", "Data": 1 }
+        "TapAndDrag": { "Type": "REG_DWORD", "Data": 0 },
+        "TapsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "TwoFingerTapEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "ZoomEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
         "DisableSyncData": {
@@ -947,19 +947,19 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad": {
         "AAPThreshold": { "Type": "REG_DWORD", "Data": 2 },
-        "CursorSpeed": { "Type": "REG_DWORD", "Data": 10 },
-        "FeedbackIntensity": { "Type": "REG_DWORD", "Data": 50 },
         "ClickForceSensitivity": { "Type": "REG_DWORD", "Data": 50 },
-        "LeaveOnWithMouse" : { "Type": "REG_DWORD", "Data": 1 },
+        "CursorSpeed": { "Type": "REG_DWORD", "Data": 10 },
         "FeedbackEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "TapsEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "TapAndDrag": { "Type": "REG_DWORD", "Data": 1 },
-        "TwoFingerTapEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "RightClickZoneEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "FeedbackIntensity": { "Type": "REG_DWORD", "Data": 50 },
+        "HonorMouseAccelSetting": { "Type": "REG_DWORD", "Data": 0 },
+        "LeaveOnWithMouse" : { "Type": "REG_DWORD", "Data": 1 },
         "PanEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "RightClickZoneEnabled": { "Type": "REG_DWORD", "Data": 1 },
         "ScrollDirection": { "Type": "REG_DWORD", "Data": 0 },
-        "ZoomEnabled": { "Type": "REG_DWORD", "Data": 1 },
-        "HonorMouseAccelSetting": { "Type": "REG_DWORD", "Data": 0 }
+        "TapAndDrag": { "Type": "REG_DWORD", "Data": 1 },
+        "TapsEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "TwoFingerTapEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "ZoomEnabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
         "EnableSyncData": {

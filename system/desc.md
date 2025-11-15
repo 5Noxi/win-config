@@ -150,6 +150,8 @@ Since many people don't yet know which values exist and what default value they 
 
 See [kernel-symbols](https://github.com/5Noxi/wpr-reg-records/blob/main/kernel-values.txt) for reference.
 
+Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
     "AdjustDpcThreshold"; = 20; // KiAdjustDpcThreshold
@@ -281,6 +283,8 @@ These are default values I found in `dxgkrnl.sys`, see link below for pseudocode
 
 > https://github.com/5Noxi/wpr-reg-records/blob/main/dxgkrnl.c  
 > https://github.com/5Noxi/wpr-reg-records#kernel--dxg-kernel-values
+
+Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
@@ -528,6 +532,8 @@ This option currently includes some speculations and default values. I haven't h
 ---
 
 See [dwm.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/dwm.c) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
+
+Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm";

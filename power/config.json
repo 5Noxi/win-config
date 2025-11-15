@@ -4,6 +4,88 @@
   "github": "https://github.com/5Noxi",
   "discord": "https://discord.gg/E2ybG4j9jU",
   
+  "Power Values": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "ActiveIdleLevel": { "Type": "REG_DWORD", "Data": 0 },
+        "AlwaysComputeQosHints": { "Type": "REG_DWORD", "Data": 0 },
+        "CheckpointSystemSleep": { "Type": "REG_DWORD", "Data": 0 },
+        "CheckpointSystemSleepSimulateFlags": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableDisplayBurstOnPowerSourceChange": { "Type": "REG_DWORD", "Data": 1 },
+        "DripsSwHwDivergenceEnableLiveDump": { "Type": "REG_DWORD", "Data": 0 },
+        "EnergySaverState": { "Type": "REG_DWORD", "Data": 2 },
+        "EnforceAusterityMode": { "Type": "REG_DWORD", "Data": 0 },
+        "EnforceConsoleLockScreenTimeout": { "Type": "REG_DWORD", "Data": 0 },
+        "EnforceDisconnectedStandby": { "Type": "REG_DWORD", "Data": 0 },
+        "FxAccountingTelemetryDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "FxRuntimeLogNumberEntries": { "Type": "REG_DWORD", "Data": 0 },
+        "IdleDurationExpirationTimeout": { "Type": "REG_DWORD", "Data": 0 },
+        "IdleProcessorsRequireQosManagement": { "Type": "REG_DWORD", "Data": 0 },
+        "IdleStateTimeout": { "Type": "REG_DWORD", "Data": 0 },
+        "IgnoreCsComplianceCheck": { "Type": "REG_DWORD", "Data": 1 },
+        "ManualDimTimeout": { "Type": "REG_DWORD", "Data": 0 },
+        "MfOverridesDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "PdcOneWayEntry": { "Type": "REG_DWORD", "Data": 0 },
+        "PerfCalculateActualUtilization": { "Type": "REG_DWORD", "Data": 1 },
+        "PerfCheckTimerImplementation": { "Type": "REG_DWORD", "Data": 0 },
+        "PerfQueryOnDevicePowerChanges": { "Type": "REG_DWORD", "Data": 0 },
+        "PoFxSystemIrpWaitForReportDevicePowered": { "Type": "REG_DWORD", "Data": 0 },
+        "ProximityEscapeMsec": { "Type": "REG_DWORD", "Data": 0 },
+        "RestrictedStandbyDozeTimeoutSeconds": { "Type": "REG_DWORD", "Data": 0 },
+        "SmartUserPresenceAction": { "Type": "REG_DWORD", "Data": 0 },
+        "StandbyConnectivityGracePeriod": { "Type": "REG_DWORD", "Data": 0 },
+        "ThermalPollingMode": { "Type": "REG_DWORD", "Data": 0 },
+        "TtmEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "SUBOPTION": {
+        "Disable VSync Latency Update": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+            "DisableVsyncLatencyUpdate": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+        "ActiveIdleLevel": { "Action": "deletevalue" },
+        "AlwaysComputeQosHints": { "Action": "deletevalue" },
+        "CheckpointSystemSleep": { "Action": "deletevalue" },
+        "CheckpointSystemSleepSimulateFlags": { "Action": "deletevalue" },
+        "DisableDisplayBurstOnPowerSourceChange": { "Action": "deletevalue" },
+        "DripsSwHwDivergenceEnableLiveDump": { "Action": "deletevalue" },
+        "EnergySaverState": { "Action": "deletevalue" },
+        "EnforceAusterityMode": { "Action": "deletevalue" },
+        "EnforceConsoleLockScreenTimeout": { "Action": "deletevalue" },
+        "EnforceDisconnectedStandby": { "Action": "deletevalue" },
+        "FxAccountingTelemetryDisabled": { "Action": "deletevalue" },
+        "FxRuntimeLogNumberEntries": { "Action": "deletevalue" },
+        "IdleDurationExpirationTimeout": { "Action": "deletevalue" },
+        "IdleProcessorsRequireQosManagement": { "Action": "deletevalue" },
+        "IdleStateTimeout": { "Action": "deletevalue" },
+        "IgnoreCsComplianceCheck": { "Action": "deletevalue" },
+        "ManualDimTimeout": { "Action": "deletevalue" },
+        "MfOverridesDisabled": { "Action": "deletevalue" },
+        "PdcOneWayEntry": { "Action": "deletevalue" },
+        "PerfCalculateActualUtilization": { "Type": "REG_DWORD", "Data": 1 },
+        "PerfCheckTimerImplementation": { "Action": "deletevalue" },
+        "PerfQueryOnDevicePowerChanges": { "Action": "deletevalue" },
+        "PoFxSystemIrpWaitForReportDevicePowered": { "Action": "deletevalue" },
+        "ProximityEscapeMsec": { "Action": "deletevalue" },
+        "RestrictedStandbyDozeTimeoutSeconds": { "Action": "deletevalue" },
+        "SmartUserPresenceAction": { "Action": "deletevalue" },
+        "StandbyConnectivityGracePeriod": { "Action": "deletevalue" },
+        "ThermalPollingMode": { "Action": "deletevalue" },
+        "TtmEnabled": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable VSync Latency Update": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power": {
+            "DisableVsyncLatencyUpdate": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
   "Disable Device Powersavings": {
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
