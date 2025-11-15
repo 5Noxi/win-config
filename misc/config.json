@@ -99,12 +99,12 @@
         "UndeadControlPanel": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 15 },
+        "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 20 },
         "MMTaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
         "ShowStatusBar": { "Type": "REG_DWORD", "Data": 1 },
         "ShowSystrayDateTimeValueName": { "Type": "REG_DWORD", "Data": 1 },
         "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 },
-        "Start_JumpListItems": { "Type": "REG_DWORD", "Data": 15 },
+        "Start_JumpListItems": { "Type": "REG_DWORD", "Data": 20 },
         "Start_PowerButtonAction": { "Type": "REG_DWORD", "Data": 2 },
         "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 0 },
         "Start_TrackProgs": { "Type": "REG_DWORD", "Data": 0 },

@@ -34,10 +34,17 @@
         "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 },
         "ShowTypeOverlay": { "Type": "REG_DWORD", "Data": 0 },
         "TypeAhead": { "Type": "REG_DWORD", "Data": 0 },
-        "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 }
+        "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 },
+        "Start_PowerButtonAction": { "Type": "REG_DWORD", "Data": 2 },
+        "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 20 },
+        "Start_JumpListItems": { "Type": "REG_DWORD", "Data": 20 },
+        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
         "FullPath": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoRecentDocsHistory": { "Type": "REG_DWORD", "Data": 1 }
       },
       "SUBOPTION": {
         "Show Full Path in Title": {
@@ -133,6 +140,20 @@
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
             "NoDesktop": { "Type": "REG_DWORD", "Data": 1 }
           }
+        },
+        "Increase Number of Jump List": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 20 },
+            "Start_JumpListItems": { "Type": "REG_DWORD", "Data": 20 }
+          }
+        },
+        "Hide Recent Items in Jump Lists": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+            "NoRecentDocsHistory": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
@@ -165,7 +186,17 @@
         "ShowSyncProviderNotifications": { "Action": "deletevalue" },
         "ShowTypeOverlay": { "Action": "deletevalue" },
         "TypeAhead": { "Action": "deletevalue" },
-        "UseCompactMode": { "Action": "deletevalue" }
+        "UseCompactMode": { "Action": "deletevalue" },
+        "Start_PowerButtonAction": { "Action": "deletevalue" },
+        "JumpListItems_Maximum": { "Action": "deletevalue" },
+        "Start_JumpListItems": { "Action": "deletevalue" },
+        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
+        "FullPath": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+        "NoRecentDocsHistory": { "Action": "deletevalue" }
       },
       "SUBOPTION": {
         "Show Full Path in Title": {
@@ -260,6 +291,20 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
             "NoDesktop": { "Action": "deletevalue" }
+          }
+        },
+        "Increase Number of Jump List": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "JumpListItems_Maximum": { "Action": "deletevalue" },
+            "Start_JumpListItems": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Recent Items in Jump Lists": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 1 }
+          },
+          "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
+            "NoRecentDocsHistory": { "Action": "deletevalue" }
           }
         }
       }
@@ -853,7 +898,8 @@
         "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "MMTaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
         "TaskbarEndTask": { "Type": "REG_DWORD", "Data": 1 }
@@ -869,6 +915,15 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
         "AllowNewsAndInterests": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
+        "SystemTrayChevronVisibility": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Control Panel\\Bluetooth": {
+        "Notification Area Icon": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+        "PenWorkspaceButtonDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 }
       },
       "SUBOPTION": {
         "Hide Task View Button": {
@@ -903,6 +958,26 @@
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
             "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 }
           }
+        },
+        "Hide Time and Date in SysTray": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowSystrayDateTimeValueName": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Icon Menu": {
+          "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
+            "SystemTrayChevronVisibility": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Bluetooth Icon in SysTray": {
+          "HKCU\\Control Panel\\Bluetooth": {
+            "Notification Area Icon": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Pen Menu from SysTray": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+            "PenWorkspaceButtonDesiredVisibility": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     },
@@ -920,7 +995,8 @@
         "TaskbarGlomLevel": { "Action": "deletevalue" },
         "TaskbarSd": { "Action": "deletevalue" },
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
+        "MMTaskbarGlomLevel": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
         "TaskbarEndTask": { "Action": "deletevalue" }
@@ -932,7 +1008,18 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
         "EnableAutoTray": { "Action": "deletevalue" }
       },
-      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": { "Action": "deletevalue" },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh": {
+        "AllowNewsAndInterests": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
+        "SystemTrayChevronVisibility": { "Action": "deletevalue" }
+      },
+      "HKCU\\Control Panel\\Bluetooth": {
+        "Notification Area Icon": { "Action": "deletevalue" }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+        "PenWorkspaceButtonDesiredVisibility": { "Action": "deletevalue" }
+      },
       "SUBOPTION": {
         "Hide Task View Button": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
@@ -965,6 +1052,26 @@
         "Disable Far Corner Section": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
             "TaskbarSd": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Time and Date in SysTray": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowSystrayDateTimeValueName": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Icon Menu": {
+          "HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows\\CurrentVersion\\TrayNotify": {
+            "SystemTrayChevronVisibility": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Bluetooth Icon in SysTray": {
+          "HKCU\\Control Panel\\Bluetooth": {
+            "Notification Area Icon": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Pen Menu from SysTray": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PenWorkspace": {
+            "PenWorkspaceButtonDesiredVisibility": { "Action": "deletevalue" }
           }
         }
       }
