@@ -77,7 +77,12 @@
         },
         "Show Hidden Files/Folders": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-            "Hidden": { "Type": "REG_DWORD", "Data": 2 }
+            "Hidden": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Show Protected System Files": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowSuperHidden": { "Type": "REG_DWORD", "Data": 1 }
           }
         },
         "Show Drives Without Media": {
@@ -201,6 +206,11 @@
         "Show Hidden Files/Folders": {
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
             "Hidden": { "Action": "deletevalue" }
+          }
+        },
+        "Show Protected System Files": {
+          "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+            "ShowSuperHidden": { "Action": "deletevalue" }
           }
         },
         "Show Drives Without Media": {

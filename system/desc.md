@@ -994,6 +994,24 @@ Self explaining.
 
 Allows modern apps to use a more efficient memory allocator.
 
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
+    "HeapDeCommitFreeBlockThreshold"; = 4096; // qword_140FC3210 dq 1000
+    "HeapDeCommitTotalFreeThreshold"; = 65536; // qword_140FC3218 dq 10000
+    "HeapSegmentCommit"; = 8192; // qword_140FC3220 dq 2000
+    "HeapSegmentReserve"; = 1048576; // qword_140FC3228 dq 100000
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
+    "Enabled"; = 0; // if present with DataLength==4 and nonzero type:
+                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
+                    //    if (value & 0x2)                      // low byte, bit 1
+                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
+                    // if the value exists but is stored as REG_NONE (type==0):
+                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
+```
+> https://github.com/5Noxi/wpr-reg-records#session-manager-values  
+> [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/5Noxi/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
+
 For a specific executeable:
 ```
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\
@@ -1011,50 +1029,15 @@ Enabled = (DWORD)
 ```
 Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors.
 
-`heapmisc.c` includes info for the 4 comments (default values).
-
 > https://blog.s-schoener.com/2024-11-05-segment-heap/  
 > https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf  
 > https://github.com/5Noxi/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (Page `334`f.)  
-> [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/5Noxi/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
-
 
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/segment1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/segment2.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/segment3.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/segment4.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/segment5.png?raw=true)
-
----
-
-Miscellaneous notes:
-```c
-INIT:0000000140C6A660                 dq offset aSessionManager_6 ; "Session Manager"
-INIT:0000000140C6A668                 dq offset aHeapsegmentres ; "HeapSegmentReserve"
-INIT:0000000140C6A670                 dq offset qword_140FC4228
-INIT:0000000140C6A678                 dq 3 dup(0)
-INIT:0000000140C6A690                 dq offset aSessionManager_6 ; "Session Manager"
-INIT:0000000140C6A698                 dq offset aHeapsegmentcom ; "HeapSegmentCommit"
-INIT:0000000140C6A6A0                 dq offset qword_140FC4220
-INIT:0000000140C6A6A8                 align 20h
-INIT:0000000140C6A6C0                 dq offset aSessionManager_6 ; "Session Manager"
-INIT:0000000140C6A6C8                 dq offset aHeapdecommitto ; "HeapDeCommitTotalFreeThreshold"
-INIT:0000000140C6A6D0                 dq offset qword_140FC4218
-INIT:0000000140C6A6D8                 dq 3 dup(0)
-INIT:0000000140C6A6F0                 dq offset aSessionManager_6 ; "Session Manager"
-INIT:0000000140C6A6F8                 dq offset aHeapdecommitfr ; "HeapDeCommitFreeBlockThreshold"
-INIT:0000000140C6A700                 dq offset qword_140FC4210
-INIT:0000000140C6A708                 align 20h
-
-ALMOSTRO:0000000140FC4210 qword_140FC4210 dq 1000h                ; DATA XREF: sub_1404F2FA0+2F9↑r
-ALMOSTRO:0000000140FC4210                                         ; sub_14097DBCC+134↑r ...
-ALMOSTRO:0000000140FC4218 qword_140FC4218 dq 10000h               ; DATA XREF: sub_1404F2FA0+31C↑r
-ALMOSTRO:0000000140FC4218                                         ; sub_14097DBCC+127↑r ...
-ALMOSTRO:0000000140FC4220 qword_140FC4220 dq 2000h                ; DATA XREF: sub_1404F2FA0+2DE↑r
-ALMOSTRO:0000000140FC4220                                         ; sub_14097E0AC+1AD↑r ...
-ALMOSTRO:0000000140FC4228 qword_140FC4228 dq 100000h              ; DATA XREF: sub_1404F2FA0+2C3↑r
-ALMOSTRO:0000000140FC4228                                         ; sub_14097E0AC+19E↑r ...
-```
 
 # Disable Notifications
 

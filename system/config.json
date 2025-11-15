@@ -8,11 +8,25 @@
     "apply": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
         "Win32PrioritySeparation": { "Type": "REG_DWORD", "Data": 36 }
+      },
+      "SUBOPTION": {
+        "18 Hex (24 Dec)": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
+            "Win32PrioritySeparation": { "Type": "REG_DWORD", "Data": 24 }
+          }
+        }
       }
     },
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
         "Win32PrioritySeparation": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "SUBOPTION": {
+        "18 Hex (24 Dec)": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\PriorityControl": {
+            "Win32PrioritySeparation": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        }
       }
     }
   },
