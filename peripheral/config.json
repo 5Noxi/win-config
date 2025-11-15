@@ -846,7 +846,8 @@
   "Disable Touch & Tablet": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
-        "TouchGate": { "Type": "REG_DWORD", "Data": 0 }
+        "TouchGate": { "Type": "REG_DWORD", "Data": 0 },
+        "PanningDisabled": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
         "TurnOffTouchInput": { "Type": "REG_DWORD", "Data": 1 }
@@ -863,7 +864,12 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
         "ConvertibleSlateModePromptPreference": { "Type": "REG_DWORD", "Data": 0 },
         "SignInMode": { "Type": "REG_DWORD", "Data": 1 },
-        "TabletMode": { "Type": "REG_DWORD", "Data": 0 }
+        "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "TabletModeActivated": { "Type": "REG_DWORD", "Data": 0 },
+        "ExitedTabletModeWhileCSMActive": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
+        "AllowPPITabletModeExit": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
@@ -873,6 +879,25 @@
         "ContactVisualization": { "Type": "REG_DWORD", "Data": 0 },
         "GestureVisualization": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SOFTWARE\\Microsoft\\Wisp\\MultiTouch": {
+        "MultiTouchEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad": {
+        "AAPThreshold": { "Type": "REG_DWORD", "Data": 2 },
+        "CursorSpeed": { "Type": "REG_DWORD", "Data": 10 },
+        "FeedbackIntensity": { "Type": "REG_DWORD", "Data": 0 },
+        "ClickForceSensitivity": { "Type": "REG_DWORD", "Data": 0 },
+        "LeaveOnWithMouse" : { "Type": "REG_DWORD", "Data": 0 },
+        "FeedbackEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "TapsEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "TapAndDrag": { "Type": "REG_DWORD", "Data": 0 },
+        "TwoFingerTapEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "RightClickZoneEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "PanEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "ScrollDirection": { "Type": "REG_DWORD", "Data": 0 },
+        "ZoomEnabled": { "Type": "REG_DWORD", "Data": 0 },
+        "HonorMouseAccelSetting": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
         "DisableSyncData": {
           "Action": "scheduled_task",
@@ -880,13 +905,15 @@
             "Microsoft\\Windows\\input\\PenSyncDataAvailable",
             "Microsoft\\Windows\\input\\syncpensettings",
             "Microsoft\\Windows\\input\\TouchpadSyncDataAvailable"
-          ]
+          ],
+          "Operation": "disable"
         }
       }
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Wisp\\Touch": {
-        "TouchGate": { "Type": "REG_DWORD", "Data": 1 }
+        "TouchGate": { "Type": "REG_DWORD", "Data": 1 },
+        "PanningDisabled": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\TabletPC": {
         "TurnOffTouchInput": { "Action": "deletevalue" }
@@ -900,7 +927,12 @@
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
         "ConvertibleSlateModePromptPreference": { "Action": "deletevalue" },
         "SignInMode": { "Action": "deletevalue" },
-        "TabletMode": { "Type": "REG_DWORD", "Data": 0 }
+        "TabletMode": { "Type": "REG_DWORD", "Data": 0 },
+        "TabletModeActivated": { "Action": "deletevalue" },
+        "ExitedTabletModeWhileCSMActive": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell": {
+        "AllowPPITabletModeExit": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
         "TaskbarAutoHideInTabletMode": { "Type": "REG_DWORD", "Data": 0 },
@@ -909,6 +941,36 @@
       "HKCU\\Control Panel\\Cursors": {
         "ContactVisualization": { "Type": "REG_DWORD", "Data": 1 },
         "GestureVisualization": { "Type": "REG_DWORD", "Data": 31 }
+      },
+      "HKLM\\SOFTWARE\\Microsoft\\Wisp\\MultiTouch": {
+        "MultiTouchEnabled": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad": {
+        "AAPThreshold": { "Type": "REG_DWORD", "Data": 2 },
+        "CursorSpeed": { "Type": "REG_DWORD", "Data": 10 },
+        "FeedbackIntensity": { "Type": "REG_DWORD", "Data": 50 },
+        "ClickForceSensitivity": { "Type": "REG_DWORD", "Data": 50 },
+        "LeaveOnWithMouse" : { "Type": "REG_DWORD", "Data": 1 },
+        "FeedbackEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "TapsEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "TapAndDrag": { "Type": "REG_DWORD", "Data": 1 },
+        "TwoFingerTapEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "RightClickZoneEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "PanEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "ScrollDirection": { "Type": "REG_DWORD", "Data": 0 },
+        "ZoomEnabled": { "Type": "REG_DWORD", "Data": 1 },
+        "HonorMouseAccelSetting": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "COMMANDS": {
+        "EnableSyncData": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "Microsoft\\Windows\\input\\PenSyncDataAvailable",
+            "Microsoft\\Windows\\input\\syncpensettings",
+            "Microsoft\\Windows\\input\\TouchpadSyncDataAvailable"
+          ],
+          "Operation": "enable"
+        }
       }
     }
   },

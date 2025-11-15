@@ -261,31 +261,85 @@ Click on `View` > `Devices by connection`.
 
 # Disable Touch & Tablet
 
-```
-\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : TouchKeyboardTapInvoke
-\Registry\User\S-ID\SOFTWARE\Microsoft\TabletTip\1.7 : TouchKeyboardTapInvoke
-\Registry\User\S-ID\SOFTWARE\Microsoft\TabletTip\1.7 : EnableAutoShiftEngage
-\Registry\User\S-ID\SOFTWARE\Microsoft\TabletTip\1.7 : EnableDoubleTapSpace
-```
 Disable the touch screen feature of your device with:
-```bat
-devmanview /disable "HID-compliant touch screen"
+```ps
+Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch screen' | % { pnputil /disable-device "$($_.InstanceId)" }
 ```
-> https://www.nirsoft.net/utils/device_manager_view.html
 
 "Tablet mode makes Windows more touch friendly and is helpful on touch capable devices."
 
 > https://support.microsoft.com/en-us/windows/turn-tablet-mode-on-or-off-in-windows-add3fbce-5cb5-bf76-0f9c-8d7b30041f30  
-> https://superuser.com/questions/1194038/windows-10-command-line-to-enable-disable-tablet-mode  
+> https://github.com/5Noxi/wpr-reg-records/blob/main/records/Wisp.txt  
 > [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
 
 ---
 
 Miscellaneous notes:
+```c
+"HKCU\\Software\\Microsoft\\Wisp\\Touch";
+    "TouchGate"; = 1; // 0 = touch disabled, 1 = enabled
+    "PanningDisabled"; = 0; // 0 = panning enabled , 1 = panning disabled.
+    // "PanningDisabled", "Inertia", "Bouncing", "Friction",
+    // "TouchModeN_DtapDist", "TouchModeN_DtapTime",
+    // "TouchGate", "TouchModeN_HoldTime_Animation",
+    // "TouchModeN_HoldTime_BeforeAnimation", "TouchMode_hold",
+    // "Mobile_Inertia_Enabled", "Minimum_Velocity", "Thumb_Flick_Enabled"
+
+"HKCU\\Software\\Microsoft\\Wisp\\MultiTouch";
+    "MultiTouchEnabled"; = 1;
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad";
+    "AAPThreshold"; = 2; // range 0–4, touchpad sensitivity
+    "CursorSpeed"; = 10; // range 1–20, pointer speed
+    "FeedbackIntensity"; = 50; // range 0–100 (%), haptic feedback strength
+    "ClickForceSensitivity"; = 50; // range 0–100 (%), relative click-force sensitivity
+    "LeaveOnWithMouse"; = 1; // 0 = disable touchpad when mouse present, 1 = leave enabled
+    "FeedbackEnabled"; = 1; // 0 = no haptics, 1 = haptics on
+    "TapsEnabled"; = 1; // 0/1, single-finger tap-to-click
+    "TapAndDrag"; = 1; // 0/1, double-tap-and-drag
+    "TwoFingerTapEnabled"; = 1; // 0/1
+    "RightClickZoneEnabled"; = 1; // 0/1
+    "PanEnabled"; = 1; // 0/1, two-finger scrolling
+    "ScrollDirection"; = 0; // 0 = natural, 1 = reversed
+    "ZoomEnabled"; = 1;
+    "HonorMouseAccelSetting" = 0; // 0 = always apply acceleration, 1 = honor SPI mouse accel?
+
+"HKCU\\Software\\Microsoft\\Wisp\\Pen\\SysEventParameters";
+    // "Splash", "DblDist", "DblTime", "TapTime", "WaitTime", "HoldTime", "FlickMode", "FlickTolerance", 
+    // "Left", "UpLeft", "Up", "UpRight", "Right", "DownRight", "Down", "DownLeft"
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TabletMode";
+    "STCDefaultMigrationCompleted"; = 0; // SHRegValueExists
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell";
+    "TabletMode"; = 0; // 0 = desktop mode, 1 = tablet mode?
+    "ExitedTabletModeWhileCSMActive"; = 0; // set to 1 when a3 == 4, HasConvertibleSlateModeChanged() is true
+    "TabletModeActivated"; = 0; // set to 1 when SetModeInternal() switches into tablet mode
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell";
+    "AllowPPITabletModeExit"; = 0; // SHRegGetBOOLWithREGSAM, non-zero allows the mode switch
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell\\OverrideScaling";
+    "SmallScreen"; = 83; // ?
+    "VerySmallScreen"; = 71; // ?
+    "TabletSmallScreen"; = 83; // ?
+```
+> [peripheral/assets | touch-twinui.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-twinui.c)  
+> [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)
+
 ```
 TabletModeActivated
 TabletModeCoverWindow
 TabletModeInputHandler
+```
+```c
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : EnableDesktopModeAutoInvoke
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : EnableDesktopModePenAutoInvoke
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : LastTipXPositionOnScreen
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : TipbandDesiredVisibility
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : TipbandDesiredVisibilityTabletMode
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : TipPinnedToMonitor
+\Registry\Machine\SOFTWARE\Microsoft\TabletTip\1.7 : TouchKeyboardTapInvoke
 ```
 
 Windows 7/XP:
