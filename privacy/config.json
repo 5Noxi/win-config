@@ -601,6 +601,9 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WbioSrvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Biometrics\\FacialFeatures": {
+        "EnhancedAntiSpoofing": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -613,6 +616,9 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WbioSrvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Biometrics\\FacialFeatures": {
+        "EnhancedAntiSpoofing": { "Action": "deletevalue" }
       }
     }
   },

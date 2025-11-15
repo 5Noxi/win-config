@@ -263,10 +263,46 @@ The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` k
 
 # Hide Language Bar
 
-Topic should speak for itself.
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/languagebar.png?raw=true)
 
-> https://renenyffenegger.ch/notes/Windows/registry/tree/HKEY_CURRENT_USER/Software/Microsoft/CTF/LangBar/index  
-> https://gist.github.com/omar-irizarry/d469e1642e3b27df1eebd1e907ffe61d
+`Time & language > Typing > Advanced keyboard settings > Language bar options`:
+```c
+// Floating On Desktop
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 0
+
+// Hidden
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 3
+
+// Docked in the taskbar
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 4
+```
+
+`Show the Language bar as transparent when inactive`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 64
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 255
+```
+
+`Show additional Language bar icons in the taskbar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+`Show text labels on the Language bar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
+```
 
 # System Clock Seconds
 
@@ -293,22 +329,42 @@ SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Ex
 
 # Optimize Visual Effects
 
-Open `SystemPropertiesPerformance.exe` & apply the following settings, turning on/off other options is personal preference. A system restart may be required to apply the changes:
-```bat
-shutdown -r -t 0
-```
-`Perf-Options.bat` leaves font smoothing on (improves the appearance of text on screens by softening the edges of characters), if you want to disable it (for whatever reason):
-```bat
-reg add "HKCU\Control Panel\Desktop" /v FontSmoothing /t REG_SZ /d 0 /f
-reg add "HKCU\Control Panel\Desktop" /v FontSmoothingType /t REG_DWORD /d 1 /f
-```
+`UserPreferencesMask`:
+
+|Position|Meaning|
+|:------:|:-----:|
+|1|N/A|
+|5|Smooth-scroll list boxes|
+|6|Slide open combo boxes|
+|7|Fade or slied Menus in to view|
+|8|N/A|
+|11|Show shadows under mouse pointer|
+|12|N/A|
+|13|Fade or slide tooltips in to view|
+|14|Fade out menu items after clicking|
+|15|N/A|
+|18|Show shadows under windows|
+|19|N/A|
+|39|Animate controls and elements inside windows|
+|48|Use the desktop language bar for when it’s available|
+|64|N/A|
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/visual1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/visual2.png?raw=true)
 
+> https://gist.github.com/omar-irizarry/d469e1642e3b27df1eebd1e907ffe61d
+
 # Hide Shortcut Icon
 
-Disables the `- Shortcut` text, hides the shortcut & compression arrows.
+Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by replacing the shortcut `.ico` with a [blank image](https://github.com/5Noxi/Files/releases/download/miscellaneous/Blank.ico).
+
+Before:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/shortcutbefore.png?raw=true)
+
+After:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/shortcutafter.png?raw=true)
 
 # 'New' Context Menu
 

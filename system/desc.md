@@ -988,7 +988,8 @@ reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d ""C:\Path\Picture
 > [system/assets | jpeg-TranscodeImage.c](https://github.com/5Noxi/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
 
 # Disable Low Disk Space Checks
-Self explaining.
+
+Disables the `Low Disk Space` notification.
 
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/CV-Explorer.txt
 

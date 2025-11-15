@@ -760,6 +760,33 @@
         "Label": { "Type": "REG_DWORD", "Data": 0 },
         "ShowStatus": { "Type": "REG_DWORD", "Data": 3 },
         "Transparency": { "Type": "REG_DWORD", "Data": 255 }
+      },
+      "SUBOPTION": {
+        "Language Bar: Docked in the taskbar": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "ShowStatus": { "Type": "REG_DWORD", "Data": 4 }
+          }
+        },
+        "Language Bar: Floating On Desktop": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "ShowStatus": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Show the Language bar as transparent when inactive": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "Transparency": { "Type": "REG_DWORD", "Data": 64 }
+          }
+        },
+        "Show additional Language bar icons in the taskbar": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "ExtraIconsOnMinimized": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Show text labels on the Language bar": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "Label": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
@@ -768,6 +795,33 @@
         "Label": { "Action": "deletevalue" },
         "ShowStatus": { "Action": "deletevalue" },
         "Transparency": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Language Bar: Docked in the taskbar": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "ShowStatus": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        },
+        "Language Bar: Floating On Desktop": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "ShowStatus": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        },
+        "Show the Language bar as transparent when inactive": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "Transparency": { "Type": "REG_DWORD", "Data": 255 }
+          }
+        },
+        "Show additional Language bar icons in the taskbar": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "ExtraIconsOnMinimized": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Show text labels on the Language bar": {
+          "HKCU\\Software\\Microsoft\\CTF\\LangBar": {
+            "Label": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     }
   },
