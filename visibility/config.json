@@ -20,6 +20,7 @@
         "HideFileExt": { "Type": "REG_DWORD", "Data": 0 },
         "HideMergeConflicts": { "Type": "REG_DWORD", "Data": 0 },
         "IconsOnly": { "Type": "REG_DWORD", "Data": 0 },
+        "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 20 },
         "NavPaneExpandToCurrentFolder": { "Type": "REG_DWORD", "Data": 0 },
         "NavPaneShowAllCloudStates": { "Type": "REG_DWORD", "Data": 0 },
         "NavPaneShowAllFolders": { "Type": "REG_DWORD", "Data": 0 },
@@ -33,12 +34,11 @@
         "ShowSuperHidden": { "Type": "REG_DWORD", "Data": 0 },
         "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 },
         "ShowTypeOverlay": { "Type": "REG_DWORD", "Data": 0 },
-        "TypeAhead": { "Type": "REG_DWORD", "Data": 0 },
-        "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 },
-        "Start_PowerButtonAction": { "Type": "REG_DWORD", "Data": 2 },
-        "JumpListItems_Maximum": { "Type": "REG_DWORD", "Data": 20 },
         "Start_JumpListItems": { "Type": "REG_DWORD", "Data": 20 },
-        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 0 }
+        "Start_PowerButtonAction": { "Type": "REG_DWORD", "Data": 2 },
+        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 0 },
+        "TypeAhead": { "Type": "REG_DWORD", "Data": 0 },
+        "UseCompactMode": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
         "FullPath": { "Type": "REG_DWORD", "Data": 1 }
@@ -172,6 +172,7 @@
         "HideFileExt": { "Action": "deletevalue" },
         "HideMergeConflicts": { "Action": "deletevalue" },
         "IconsOnly": { "Action": "deletevalue" },
+        "JumpListItems_Maximum": { "Action": "deletevalue" },
         "NavPaneExpandToCurrentFolder": { "Action": "deletevalue" },
         "NavPaneShowAllCloudStates": { "Action": "deletevalue" },
         "NavPaneShowAllFolders": { "Action": "deletevalue" },
@@ -185,12 +186,11 @@
         "ShowSuperHidden": { "Action": "deletevalue" },
         "ShowSyncProviderNotifications": { "Action": "deletevalue" },
         "ShowTypeOverlay": { "Action": "deletevalue" },
-        "TypeAhead": { "Action": "deletevalue" },
-        "UseCompactMode": { "Action": "deletevalue" },
-        "Start_PowerButtonAction": { "Action": "deletevalue" },
-        "JumpListItems_Maximum": { "Action": "deletevalue" },
         "Start_JumpListItems": { "Action": "deletevalue" },
-        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 1 }
+        "Start_PowerButtonAction": { "Action": "deletevalue" },
+        "Start_TrackDocs": { "Type": "REG_DWORD", "Data": 1 },
+        "TypeAhead": { "Action": "deletevalue" },
+        "UseCompactMode": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
         "FullPath": { "Type": "REG_DWORD", "Data": 0 }
@@ -891,6 +891,7 @@
         "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "MMTaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
         "ShowTaskViewButton": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarAl": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarBadges": { "Type": "REG_DWORD", "Data": 0 },
@@ -898,8 +899,7 @@
         "TaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSd": { "Type": "REG_DWORD", "Data": 0 },
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
-        "MMTaskbarGlomLevel": { "Type": "REG_DWORD", "Data": 0 }
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
         "TaskbarEndTask": { "Type": "REG_DWORD", "Data": 1 }
@@ -986,6 +986,7 @@
         "SearchboxTaskbarMode": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+        "MMTaskbarGlomLevel": { "Action": "deletevalue" },
         "PeopleBand": { "Action": "deletevalue" },
         "ShowTaskViewButton": { "Action": "deletevalue" },
         "TaskbarAl": { "Action": "deletevalue" },
@@ -995,8 +996,7 @@
         "TaskbarGlomLevel": { "Action": "deletevalue" },
         "TaskbarSd": { "Action": "deletevalue" },
         "TaskbarSizeMove": { "Type": "REG_DWORD", "Data": 0 },
-        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 },
-        "MMTaskbarGlomLevel": { "Action": "deletevalue" }
+        "TaskbarSmallIcons": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\TaskbarDeveloperSettings": {
         "TaskbarEndTask": { "Action": "deletevalue" }
