@@ -1500,7 +1500,8 @@
         "LockScreenToastEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 }
+        "ShowSyncProviderNotifications": { "Type": "REG_DWORD", "Data": 0 },
+        "Start_AccountNotifications": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
         "NoCloudApplicationNotification": { "Type": "REG_DWORD", "Data": 1 }
@@ -1541,6 +1542,9 @@
           },
           "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization": {
             "EnableForToasts": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Reporting": {
+            "DisableEnhancedNotifications": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
       }
@@ -1554,7 +1558,8 @@
         "LockScreenToastEnabled": { "Action": "deletevalue" }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-        "ShowSyncProviderNotifications": { "Action": "deletevalue" }
+        "ShowSyncProviderNotifications": { "Action": "deletevalue" },
+        "Start_AccountNotifications": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications": {
         "NoCloudApplicationNotification": { "Action": "deletevalue" }
@@ -1595,6 +1600,9 @@
           },
           "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization": {
             "EnableForToasts": { "Action": "deletevalue" }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Reporting": {
+            "DisableEnhancedNotifications": { "Action": "deletevalue" }
           }
         }
       }

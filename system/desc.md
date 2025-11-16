@@ -1052,22 +1052,99 @@ Disables lock screen, desktop, feature advertisement balloon notifications, noti
 
 "`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
 
-Disable security center notifications with (`WindowsDefenderSecurityCenter.admx`):
-```bat
-reg add "HKLM\SOFTWARE\Microsoft\Security Center" /v AntiVirusDisableNotify /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Microsoft\Security Center" /v FirewallDisableNotify /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Microsoft\Security Center" /v UpdatesDisableNotify /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" /v DisableEnhancedNotifications /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications" /v DisableNotifications /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Enterprise Customization" /v EnableForToasts /t REG_DWORD /d 0 /f
-```
-
 ---
 
 Miscellaneous notes:
 ```ps
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v WnsEndpoint /t REG_SZ /d client.wns.windows.com /f
+```
+
+```json
+{
+    "File":  "WindowsDefenderSecurityCenter.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsDefenderSecurityCenter",
+    "Class":  "Machine",
+    "CategoryName":  "Notifications",
+    "DisplayName":  "Hide non-critical notifications",
+    "ExplainText":  " Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
+    "Supported":  "Windows_10_0_RS3",
+    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications",
+    "KeyName":  "DisableEnhancedNotifications",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "WindowsDefender.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsDefender",
+    "Class":  "Machine",
+    "CategoryName":  "Reporting",
+    "DisplayName":  "Turn off enhanced notifications",
+    "ExplainText":  " Use this policy setting to specify if you want Microsoft Defender Antivirus enhanced notifications to display on clients. If you disable or do not configure this setting, Microsoft Defender Antivirus enhanced notifications will display on clients. If you enable this setting, Microsoft Defender Antivirus enhanced notifications will not display on clients.",
+    "Supported":  "Windows_10_0",
+    "KeyPath":  "Software\\Policies\\Microsoft\\Windows Defender\\Reporting",
+    "KeyName":  "DisableEnhancedNotifications",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "WindowsDefenderSecurityCenter.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsDefenderSecurityCenter",
+    "Class":  "Machine",
+    "CategoryName":  "Notifications",
+    "DisplayName":  "Hide all notifications",
+    "ExplainText":  " Hide notifications from Windows Security. Enabled: Local users will not see notifications from Windows Security. Disabled: Local users can see notifications from Windows Security. Not configured: Same as Disabled.",
+    "Supported":  "Windows_10_0_RS3",
+    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications",
+    "KeyName":  "DisableNotifications",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
+{
+    "File":  "WindowsDefenderSecurityCenter.admx",
+    "NameSpace":  "Microsoft.Policies.WindowsDefenderSecurityCenter",
+    "Class":  "Machine",
+    "CategoryName":  "EnterpriseCustomization",
+    "DisplayName":  "Configure customized notifications",
+    "ExplainText":  " Display specified contact information to local users in Windows Security notifications. Enabled: Your company contact information will be displayed in notifications that come from Windows Security. After setting this to Enabled, you must configure the Specify contact company name GP setting and at least one of the following GP settings: -Specify contact phone number or Skype ID -Specify contact email number or email ID -Specify contact website Please note that in some cases we will be limiting the contact options that are displayed based on the notification space available. Disabled: No contact information will be shown on notifications. Not configured: Same as Disabled.",
+    "Supported":  "Windows_10_0_RS3",
+    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization",
+    "KeyName":  "EnableForToasts",
+    "Elements":  [
+                        {
+                            "Value":  "1",
+                            "Type":  "EnabledValue"
+                        },
+                        {
+                            "Value":  "0",
+                            "Type":  "DisabledValue"
+                        }
+                    ]
+},
 ```
 
 # Export Explorer/Taskbar Pins
