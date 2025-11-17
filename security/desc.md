@@ -14,25 +14,25 @@ reg delete "HKCR\exefile\shell\runas" /f
 
 UAC Values (`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System`) - `UserAccountControlSettings.exe`:
 `Always notify me when: ...`
-```ps
+```powershell
 EnableLUA - Data: 1
 ConsentPromptBehaviorAdmin - Data: 2
 PromptOnSecureDesktop - Data: 1
 ```
 `Notify me only when apps try to make changes to my computer (default)`
-```ps
+```powershell
 EnableLUA - Data: 1
 ConsentPromptBehaviorAdmin - Data: 5
 PromptOnSecureDesktop - Data: 1
 ```
 `Notify me only when apps try to make changes to my computer (do not dim my desktop)`
-```ps
+```powershell
 EnableLUA - Data: 1
 ConsentPromptBehaviorAdmin - Data: 5
 PromptOnSecureDesktop - Data: 0
 ```
 `Never notify me when: ...`
-```ps
+```powershell
 EnableLUA - Data: 1
 ConsentPromptBehaviorAdmin - Data: 0
 PromptOnSecureDesktop - Data: 0
@@ -136,7 +136,7 @@ Used to make powershell (`.ps1`) scripts work on your PC without showing any war
 | `Unrestricted` | Unsigned scripts can run. Prompts for scripts from outside the intranet zone. |
 
 See your current execution policies via:
-```ps
+```powershell
 Get-ExecutionPolicy -l
 ```
 `Set-ExecutionPolicy Unrestricted -Force`:
@@ -182,7 +182,7 @@ reg add "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UpdatePolicy\PolicyState" /v Paus
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v WUServer /t REG_SZ /d " " /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v WUStatusServer /t REG_SZ /d " " /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /v UpdateServiceUrlAlternate /t REG_SZ /d " " /f
@@ -203,13 +203,13 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Up
 Security features that protect against memory based attacks like buffer overflows and code injection. Enabling this option will reduce system security.
 
 It currently applies all valid values **system wide** using `Set-ProcessMitigation -System`:
-```ps
+```powershell
 powershell.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationOptions	Type: REG_BINARY, Length: 24, Data: 00 22 22 20 22 20 22 22 22 20 22 22 22 22 22 22
 powershell.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationAuditOptions	Type: REG_BINARY, Length: 24, Data: 02 22 22 02 02 02 20 22 22 22 22 22 22 22 22 22
 ```
 
 Disable specific mitigation:
-```ps
+```powershell
 Set-ProcessMitigation -Name process.exe -Disable Value
 ```
 
@@ -229,7 +229,7 @@ Editing process mitigations via LGPE (`Administrative Templates\System\Mitigatio
 > https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies
 
 `(gcm set-processmitigation).Parameters.Disable.Attributes.ValidValues`:
-```ps
+```powershell
 DEP
 EmulateAtlThunks
 ForceRelocateImages
@@ -323,7 +323,7 @@ reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Mem
 
 "Do not include drivers with Windows Updates", "Prevent device metadata retrieval from the Internet":
 
-```ps
+```powershell
 {
 	"File":  "WindowsUpdate.admx",
 	"NameSpace":  "Microsoft.Policies.WindowsUpdate",
@@ -437,7 +437,7 @@ netsh advfirewall set allprofiles state off
 You'll need [powerrun](https://www.sordum.org/downloads/?power-run) to apply the edits.
 
 If the `netsh` command doesn't work:
-```ps
+```powershell
 $paths = @('HKLM:\SOFTWARE\Policies\Microsoft\WindowsFirewall','HKLM:\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy')
 'StandardProfile','PublicProfile','PrivateProfile','DomainProfile' | % {foreach ($p in $paths) {sp -Path "$p\$_" -Name EnableFirewall -Type DWord -Value 0 -Force}}
 ```
@@ -452,7 +452,7 @@ rmdir /s /q "%windir%\System32\Tasks\Microsoft\Windows\Windows Defender"
 MinSudo -NoL -P -TI cmd /c ren "%windir%\System32\smartscreen.exe" "smartscreen.exee"
 ```
 
-```ps
+```powershell
 @echo off
 setlocal
 
@@ -521,7 +521,7 @@ endlocal
 > https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md
 
 Example paths:
-```ps
+```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\msisadrv\Parameters : DmaRemappingCompatible
 \Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingFlags
 \Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingSupported
@@ -543,11 +543,11 @@ DisableNativeNVMeStack db 0 // default
 
 # Disable System Restore
 
-```ps
+```powershell
 Disable-ComputerRestore -Drive "C:\"
 ```
 Does:
-```ps
+```powershell
 "wmiprvse.exe", "RegSetValue","HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\RPSessionInterval","Type: REG_DWORD, Length: 4, Data: 0"
 ```
 
@@ -559,7 +559,7 @@ Does:
 # Disable Downloads Blocking
 
 Windows adds a hidden tag called `Zone.Identifier` to files downloaded from the internet. This tag (also known as MotW) stores info about the file's origin and helps apply security warnings, see files including the tag with:
-```ps
+```powershell
 gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
 ```
 
@@ -567,7 +567,7 @@ gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
 > https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN  
 > https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)?redirectedfrom=MSDN
 
-```ps
+```powershell
 gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
 ```
 
@@ -579,13 +579,13 @@ gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
 `4` – Untrusted / Restricted sites (flagged as dangerous by smartscreen)
 
 Files downloaded from the internet still getting blocked? Unblock it/them with (one of them):
-```ps
+```powershell
 Unblock-File -Path "C:\Path\Script.ps1" -> File
 
 dir C:\Path\*Files* | Unblock-File -> Multiple files 
 ```
 
-```ps
+```powershell
 {
 	"File":  "AttachmentManager.admx",
 	"NameSpace":  "Microsoft.Policies.AttachmentManager",
@@ -622,7 +622,7 @@ WPBT allows hardware manufacturers to run programs during Windows startup that m
 > https://github.com/Jamesits/dropWPBT
 
 Disable WPBT within a image (`sources\install.wim`):
-```ps
+```powershell
 dism /get-imageinfo /imagefile:"<wimpath>"
 dism /mount-image /imagefile:"<wimpath>" /index:<index> /mountdir:"<tempmountdir>" /optimize /checkintegrity
 reg load "HKLM\image" "<tempmountdir>\windows\system32\config\system"
@@ -634,7 +634,7 @@ dism /unmount-image /mountdir:"<tempmountdir>" /commit /checkintegrity
 # Block MRT via WU
 
 MRT takes a lot of time - there are better tools. It blocks 
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Policies\Microsoft\MRT" /v DontReportInfectionInformation /t REG_DWORD /d 1 /f
 ```
 Blocks infection reporting, if using MRT.
@@ -644,7 +644,7 @@ Blocks infection reporting, if using MRT.
 # Disable Bitlocker & EFS
 
 Disable bitlocker on all volumes:
-```ps
+```powershell
 $nvbvol = Get-BitLockerVolume
 Disable-BitLocker -MountPoint $nvbvol
 ```
@@ -653,7 +653,7 @@ Disable-BitLocker -MountPoint $nvbvol
 > https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps
 
 `fsutil behavior set disableencryption 1` sets:
-```ps
+```powershell
 fsutil.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\FileSystem\NtfsDisableEncryption	Type: REG_DWORD, Length: 4, Data: 1
 ```
 ```
@@ -932,7 +932,7 @@ Level `5` gets applied.
 ![](https://github.com/5Noxi/win-config/blob/main/security/images/insecureconn.png?raw=true)
 
 Enable DTLS 1.2 & TLS 1.3 with:
-```ps
+```powershell
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\DTLS 1.2\Server" /v Enabled /t REG_DWORD /d 1 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\DTLS 1.2\Server" /v DisabledByDefault /t REG_DWORD /d 0 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\SecurityProviders\SCHANNEL\Protocols\DTLS 1.2\Client" /v Enabled /t REG_DWORD /d 1 /f
@@ -1043,7 +1043,7 @@ if (dword_1C015B874 != v15) {
 `/MAXPWAGE:{days | UNLIMITED}`:  
 "Sets the maximum number of days that a password is valid. No limit is specified by using UNLIMITED. /MAXPWAGE can't be less than /MINPWAGE. The range is 1-999; the default is 90 days."
 
-```ps
+```powershell
 NET ACCOUNTS  
 [/FORCELOGOFF:{minutes | NO}]  
 [/MINPWLEN:length]  

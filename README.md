@@ -39,7 +39,7 @@ More miscellaneous uploads:
 
 > https://www.python.org/downloads/release/python-3130/?featured_on=pythonbytes
 
-```ps
+```powershell
 pip install PySide6 mistune requests
 ```
 

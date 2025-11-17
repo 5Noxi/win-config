@@ -7,7 +7,7 @@ Used to be my personal `neofetch`/`fastfetch` replacement with more details. Som
 > https://github.com/5Noxi/nvfetch
 
 It currently gets most of the information using the [`Get-CimInstance`](https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance?view=powershell-7.5) cmdlet and `nvidia-smi` for NVIDIA GPUs.
-```ps
+```powershell
 nvidia-smi -q
 ```
 [`nvfetch-win32cimv2.txt`]((https://github.com/5Noxi/win-config/blob/main/misc/assets)) shows class names in the `root\CIMV2` namespace, filtered with `Win32*`.
@@ -34,7 +34,7 @@ nvidia-smi -q
 |                 | GPU UUID | `nvidia-smi` - `--query-gpu=uuid` - GPU UUID if `nvidia-smi` is available |
 
 A valid argument is the color name, default is `Blue`. It changes the color of the ASCII logo. Change it by simply adding a valid color name:
-```ps
+```powershell
 nvfetch # Uses 'Blue'
 
 nvfetch yellow
@@ -58,7 +58,7 @@ or use the option switch, which selects [notepad++](https://notepad-plus-plus.or
 # StartAllBack Settings
 
 Installation:
-```ps
+```powershell
 winget install StartIsBack.StartAllBack --scope machine
 ```
 
@@ -69,7 +69,7 @@ All `StartAllBackCfg.exe` settings, which I currently use:
 ![](https://github.com/5Noxi/win-config/blob/main/system/images/startallback.png?raw=true)
 
 All values `StartAllBack` reads that are located in `HKCU\Software\StartIsBack` (after clicking on `Properties`):
-```ps
+```powershell
 "HKCU\Software\StartIsBack\CompactMenus","Length: 16"
 "HKCU\Software\StartIsBack\Language","Length: 12"
 "HKCU\Software\StartIsBack\Disabled","Type: REG_DWORD, Length: 4, Data: 0"
@@ -184,7 +184,7 @@ Since system informer is a lot better than the default task manager, it is recom
 Undo it by removing the first line and executing the second command (delete the `::`), or just paste the second one in cmd.
 
 Enable `Theme support` (dark mode) and disable `Check for updates automatically` with:
-```ps
+```powershell
 (gc "$env:appdata\SystemInformer\settings.xml") -replace '(?<=<setting name="ProcessHacker\.UpdateChecker\.PromptStart">)\d(?=</setting>)','0' -replace '(?<=<setting name="EnableThemeSupport">)\d(?=</setting>)','1' | sc "$appdata\SystemInformer\settings.xml"
 ```
 
@@ -193,15 +193,15 @@ Enable `Theme support` (dark mode) and disable `Check for updates automatically`
 An improved editor that supports dark mode, a far better `Find` tool, and much more. 
 
 Installation:
-```ps
+```powershell
 winget install SergeyFilippov.RegistryFinder
 ```
 You can replace it the same way as `System Informer` (edit the path if needed):
-```ps
+```powershell
 reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\regedit.exe" /v Debugger /t REG_SZ /d "\"C:\Program Files\Registry Finder\RegistryFinder.exe\" -z" /f
 ```
 Revert it by deleting the value or via `RegistryFinder --regedit`:
-```ps
+```powershell
 reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v Debugger /f
 ```
 > https://registry-finder.com
@@ -213,7 +213,7 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Executi
 ![](https://github.com/5Noxi/win-config/blob/main/misc/images/7zip.png?raw=true)
 
 A good replacement would be NanaZip:
-```ps
+```powershell
 winget install M2Team.NanaZip
 ```
 New features etc. can be found here:
@@ -255,7 +255,7 @@ export const enum TelemetryLevel {
 
 Disables VS telemetry, SQM data collection, IntelliCode remote analysis, feedback features, and the `DiagnosticsHub` logger. Disabling `VSStandardCollectorService150` could cause issues, I added it as a comment.
 
-```ps
+```powershell
 "14.0" = "VS 2015"
 "15.0" = "VS 2017" 
 "16.0" = "VS 2019"
@@ -304,7 +304,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v DisableEmail
 reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v DisableFeedbackDialog /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v DisableScreenshotCapture /t REG_DWORD /d 1 /f
 ```
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\VSCommon\14.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\VSCommon\15.0\SQM" /v OptIn /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\VSCommon\16.0\SQM" /v OptIn /t REG_DWORD /d 0 /f

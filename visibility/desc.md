@@ -20,7 +20,7 @@ Set `Hidden` to `2` and `ShowSuperHidden` to `0` to disable it.
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 "TaskbarDa": { "Type": "REG_DWORD", "Data": 0 } # Access denied
 
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v ShellState /t REG_BINARY /d 24,00,00,00,3e,20,00,00,00,00,00,00,00,00,00,00,00,00,00,00,01,00,00,00,13,00,00,00,00,00,00,00,42,00,00,00 /f
@@ -107,7 +107,7 @@ Disabled:
 ---
 
 Hide preview pane:
-```ps
+```powershell
 "Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\Sizer\DetailsContainerSizer","Type: REG_BINARY, Length: 16, Data: 15 01 00 00 00 00 00 00 00 00 00 00 6B 03 00 00"
 "Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\DetailsContainer\DetailsContainer","Type: REG_BINARY, Length: 8, Data: 02 00 00 00 02 00 00 00"
 ```
@@ -127,7 +127,7 @@ reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v 
 ---
 
 Miscellaneous comments:
-```ps
+```powershell
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f
 ```
@@ -319,7 +319,7 @@ Remove the `End Task` option to the taskbar right click menu with:
 reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings" /v TaskbarEndTask /f
 ```
 Enabling it via `System > For developers`:
-```ps
+```powershell
 SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDeveloperSettings\TaskbarEndTask	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
@@ -494,7 +494,7 @@ Either select a installed font with the command shown below or install new fonts
 > https://www.nerdfonts.com/font-downloads
 
 Apply the selected font replacing the data (`Replace` in the example below):
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Segoe UI (TrueType)" /t REG_SZ /d "" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Segoe UI Black (TrueType)" /t REG_SZ /d "" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Segoe UI Black Italic (TrueType)" /t REG_SZ /d "" /f
@@ -516,15 +516,15 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\FontSubstitutes" /v "
 ::shutdown -l
 ```
 Applying a new font needs a restart or logout, reverting doesn't.
-```ps
+```powershell
 shutdown -l # logout
 ```
 List all available font families on your system with the `Open` option, or via `Personalization > Fonts`:
-```ps
+```powershell
 Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % {$_.Name}
 ```
 Revert the changes using:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Segoe UI (TrueType)" /t REG_SZ /d "segoeui.ttf" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Segoe UI Black (TrueType)" /t REG_SZ /d "seguibl.ttf" /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts" /v "Segoe UI Black Italic (TrueType)" /t REG_SZ /d "seguibli.ttf" /f
@@ -922,15 +922,15 @@ White: `1111` (`15`)
 Calculate it on your own, by using [bitmask-calc](https://github.com/5Noxi/bitmask-calc) - e.g. set bit `1-3` and `7`, to get `Yellow` (foreground) and `DarkGray` (background).
 
 If you've set a custom foreground/background color, they won't override the colors changed within the code, e.g.:
-```ps
+```powershell
 Write-Host "Noverse"
 ```
 -> `Noverse` will have use foreground & background color of `ScreenColors`
-```ps
+```powershell
 Write-Host "Noverse" -ForegroundColor Blue
 ```
 -> `Noverse` will be blue, `ScreenColors` gets skipped.
-```ps
+```powershell
 [console]::BackgroundColor = 'Black'
 ```
 -> If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
@@ -946,7 +946,7 @@ Install the latest PowerShell for new features and improvements! https://aka.ms/
 
 PS C:\Users\Nohuxi>
 ```
-```ps
+```powershell
 for %%L in ("%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\*.lnk") do powershell -c "$s=New-Object -ComObject WScript.Shell; $lnk=$s.CreateShortcut('%%~fL'); $lnk.TargetPath='%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe'; $lnk.Arguments='-NoLogo'; $lnk.Save()"
 ```
 
@@ -1057,13 +1057,13 @@ Set your own support information in `System > About` (or `Control Panel > System
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
 ```
 You used to change the logo with:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation" /v Logo /t REG_SZ /d "path\OEM.bmp" /f
 ```
 But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels, `.bmp` file & `32-bit` color depth.
 
 Edit registered owner/orga (visible in `winver`) with:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOwner /t REG_SZ /d Nohuxi /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v RegisteredOrganization /t REG_SZ /d Noverse /f
 ```
@@ -1073,7 +1073,7 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
 ---
 
 Example:
-```ps
+```powershell
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Manufacturer" /t REG_SZ /d "Noverse" /f
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "Model" /t REG_SZ /d "Windows 11" /f
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\OEMInformation" /v "SupportHours" /t REG_SZ /d "24 Hours" /f

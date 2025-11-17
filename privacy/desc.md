@@ -2,7 +2,7 @@
 
 Prevents sending info about your computer to microsoft, disables the diagnostic log collection, bluetooth ads (`DataCollection.admx`), the inventory collector. It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase. See policy explanations below for more details.
 
-```ps
+```powershell
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
 ```
 Seems to be a fallback if `AllowTelemetry` isn't set.
@@ -26,7 +26,7 @@ Kills the device and configuration data collection tool and telemetry collector 
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\CompatTelRunner.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
 reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\DeviceCensus.exe" /v Debugger /t REG_SZ /d "%windir%\System32\taskkill.exe" /f
 ```
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\wbem\Tracing" /v enableWinmgmtTelemetry /t REG_DWORD /d 0 /f
 ```
 
@@ -356,7 +356,7 @@ return v5;
 "Sets the HTTP Accept Language from the Language List opt-out setting." Disables `Let websites provide locally relevant content by accessing my language list`.
 
 Using `Set-WinAcceptLanguageFromLanguageListOptOut`
-```ps
+```powershell
 Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 ```
 ```c
@@ -375,7 +375,7 @@ Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 Runs updates and scans daily when your PC is idle, it helps keep your system secure and efficient without affecting performance. Theres no actual reason to disable it, as it doesn't do anything while being active, however if you've any reason for not wanting it to run the tasks while being in idle, toggle the switch.
 
 You can see your current maintenance tasks with:
-```ps
+```powershell
 Get-ScheduledTask | ? {$_.Settings.MaintenanceSettings}
 ```
 `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance` trace:
@@ -390,7 +390,7 @@ Get-ScheduledTask | ? {$_.Settings.MaintenanceSettings}
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModel\StateRepository" /v MaintenanceInterval /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\Repository" /v MaintenanceInterval /t REG_DWORD /d 0 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance" /v Random Delay /t REG_DWORD /d 0 /f
@@ -422,7 +422,7 @@ Note: I gathered all registry values via the legacy WMPlayer.
 ---
 
 Registry values `setup_wm.exe` creates on first start, if unticking all options:
-```ps
+```powershell
 HKCU\Software\Microsoft\MediaPlayer\Preferences\AcceptedPrivacyStatement	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
 HKCU\Software\Microsoft\MediaPlayer\Setup\UserOptions\DesktopShortcut	SUCCESS	Type: REG_SZ, Length: 6, Data: no
 HKCU\Software\Microsoft\MediaPlayer\Preferences\MetadataRetrieval	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
@@ -439,7 +439,7 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3B
 ```
 
 All queried values in the `Player` section:
-```ps
+```powershell
 HKCU\Software\Microsoft\MediaPlayer\Preferences\AlwaysOnTopVTenSkin	Type: REG_DWORD, Length: 4, Data: 0
 HKCU\Software\Microsoft\MediaPlayer\Preferences\EnableScreensaver	Type: REG_DWORD, Length: 4, Data: 1
 HKCU\Software\Microsoft\MediaPlayer\Preferences\AutoAddMusicToLibrary	Type: REG_DWORD, Length: 4, Data: 1
@@ -451,7 +451,7 @@ HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageLoggerCategories	Type: REG_
 ```
 
 All queried values in the `Privacy` section:
-```ps
+```powershell
 HKCU\Software\Microsoft\MediaPlayer\Preferences\MetadataRetrieval	Type: REG_DWORD, Length: 4, Data: 0
 HKCU\Software\Microsoft\MediaPlayer\Preferences\SendUserGUID	Type: REG_BINARY, Length: 1, Data: 00
 HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentAcquisition	Type: REG_DWORD, Length: 4, Data: 0
@@ -473,7 +473,7 @@ HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWOR
 ```
 
 All queried values in the `Performance` section:
-```ps
+```powershell
 HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DontUseFrameInterpolation	Type: REG_DWORD, Length: 4, Data: 1
 HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseFullScrMS	Type: REG_DWORD, Length: 4, Data: 1
 HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DVDUseVMRFSCntrls	Type: REG_DWORD, Length: 4, Data: 1
@@ -496,7 +496,7 @@ HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWOR
 ```
 
 All queried values in the `Network` section:
-```ps
+```powershell
 HKCU\Software\Microsoft\MediaPlayer\Preferences\UseUDP	Type: REG_DWORD, Length: 4, Data: 1
 HKCU\Software\Microsoft\MediaPlayer\Preferences\UseCustomUDPPort	Type: REG_DWORD, Length: 4, Data: 0
 HKCU\Software\Microsoft\MediaPlayer\Preferences\UseMulticast	Type: REG_DWORD, Length: 4, Data: 0
@@ -522,7 +522,7 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 \Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : AppCaptureEnabled
 \Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : CameraCaptureEnabledByDefault
 \Registry\User\S-0\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\GameDVR : HistoricalCaptureEnabled
@@ -620,7 +620,7 @@ Disable Device Sensors:
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-sensors#disablesensors_1
 
 `Privacy & security` > `Location`:
-```ps
+```powershell
 "Process Name","Operation","Path","Detail"
 "svchost.exe","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location\NonPackaged\Value","Type: REG_SZ, Length: 10, Data: Deny"
 "svchost.exe","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location\Value","Type: REG_SZ, Length: 10, Data: Deny"
@@ -1080,11 +1080,11 @@ Disables remote desktop, remote assistance, RPC traffic, and device redirection.
 ---
 
 Miscellaneous notes:`
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services" /v fEncryptRPCTraffic /t REG_DWORD /d 1 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v fLogonDisabled /t REG_DWORD /d 1 /f
 ```
-```ps
+```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\WinStations : DWMFRAMEINTERVAL
 \Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : GlassSessionId
 \Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : NotificationTimeOut
@@ -1147,13 +1147,13 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\picturesLibrary\Value	Type: REG_SZ, Length: 10, Data: Deny
 ```
 Disable app access to the microphone with (or apply it via the suboptions):
-```ps
+```powershell
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v Value /t REG_SZ /d Deny /f
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v Value /t REG_SZ /d Deny /f
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\NonPackaged" /v Value /t REG_SZ /d Deny /f
 ```
 Adding the `HKLM` value is enough, changing it via the settings would:
-```ps
+```powershell
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone\Value	Type: REG_SZ, Length: 10, Data: Deny
 ```
 
@@ -1240,7 +1240,7 @@ ValueW = RegGetValueW(
 v16 = L"FailedToGetReason"; // if value is missing
 ```
 
-```ps
+```powershell
 reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Copilot" /v CopilotDisabledReason /t REG_SZ /d "" /f
 ```
 ```json
@@ -1298,7 +1298,7 @@ reg add "HKCU\SOFTWARE\Microsoft\Windows\Shell\Copilot" /v CopilotDisabledReason
 ---
 
 Disables generative fill, cocreator & image creator in paint:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v DisableGenerativeFill /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v DisableCocreator /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Paint" /v DisableImageCreator /t REG_DWORD /d 1 /f
@@ -1441,7 +1441,7 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility" /v OptedIn /t 
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 for /f "skip=2 tokens=1" %%N in ('reg query "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" 2^>nul') do (
     echo %%N | findstr /R "SubscribedContent-[0-9]*Enabled" >nul && (
         reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager" /v "%%~nxN" /t REG_DWORD /d 0 /f
@@ -2071,7 +2071,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 Computer Configuration\Administrative Templates\Windows Components\App Privacy
 ```
 `Enabled` -> `Deny All changes`:
-```ps
+```powershell
 mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground	Type: REG_DWORD, Length: 4, Data: 2
 mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_UserInControlOfTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
 mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceAllowTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
@@ -2140,7 +2140,7 @@ WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps 
 `Disable DHA Report`:  
 "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows."
 
-```ps
+```powershell
 \Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ArchiveFolderCountLimit
 \Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : AutoApproveOSDumps
 \Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassDataThrottling
@@ -2465,7 +2465,7 @@ CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dum
 
 Sleep Study tracks modern sleep states to analyze energy usage and pinpoint battery drain. It disables Sleep Study by making ETL logs read-only, disabling related diagnostics, and turning off the scheduled task.
 
-```ps
+```powershell
 wevtutil sl Microsoft-Windows-SleepStudy/Diagnostic /e:false
 svchost.exe	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Channels\Microsoft-Windows-SleepStudy/Diagnostic\Enabled	Type: REG_DWORD, Length: 4, Data: 0
 
@@ -2915,7 +2915,7 @@ Prevent the use of security questions for local accounts.
 Disables Windows Application Experience telemetry and compatibility components, Microsoft Compatibility Appraiser (including its daily task and `CompatTelRunner.exe`) and the Application Experience tasks. It reduces telemetry, and some attack surface, but removes most automatic compatibility checks, upgrade assessments and some app related backup/recovery features.
 
 Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Experience\\` (LTSC IoT Enterprise 2024):
-```ps
+```powershell
 "\\Microsoft\\Windows\\Application Experience\\MareBackup",
 "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
 "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",

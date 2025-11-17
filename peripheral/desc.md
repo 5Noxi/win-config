@@ -52,7 +52,7 @@ Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTes
 | **Cursor Blink Rate** | Controls the speed at which the text cursor blinks on the screen. You can set it to be faster or slower. | 530         | 900            |
 
 `Disable Language Switch Hotkey` applies: `Time & language > Typing > Advanced keyboard settings : Input language hot keys`, `Between input languages` to `Not assigned` (`None`):
-```ps
+```powershell
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Language Hotkey	Type: REG_SZ, Length: 4, Data: 3
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Hotkey	Type: REG_SZ, Length: 4, Data: 3
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Layout Hotkey	Type: REG_SZ, Length: 4, Data: 3
@@ -69,19 +69,19 @@ reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v UserDuckingPreference /t R
 ```
 
 `Mute all other sounds`:
-```ps
+```powershell
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 0
 ```
 `Reduce the volume of other sounds by 80%` (default):
-```ps
+```powershell
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 1
 ```
 `Reduce the volume of other sounds by 50%`:
-```ps
+```powershell
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 2
 ```
 `Do nothing`:
-```ps
+```powershell
 RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 3
 ```
 
@@ -91,7 +91,7 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 
 The difference is minor (picture), preferable just disable them. Open `mmsys.cpl`, go into propeties of your used device, click on the `Advanced` tab and disable all enhancements. Run `Disable-Exclusive-Mode.bat` with [powerrun](https://www.sordum.org/downloads/?power-run), otherwise the values won't get applied.
 
-```ps
+```powershell
 "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Render\{4bff9f8d-ead4-4ae3-962e-10358e158daf}\Properties\{b3f8fa53-0004-438e-9003-51a46e139bfc},3","Type: REG_DWORD, Length: 4, Data: 0"
 "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Render\{4bff9f8d-ead4-4ae3-962e-10358e158daf}\Properties\{b3f8fa53-0004-438e-9003-51a46e139bfc},4","Type: REG_DWORD, Length: 4, Data: 0"
 "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Capture\{6119fee4-d49c-474d-978c-0e5f9a67acb3}\Properties\{b3f8fa53-0004-438e-9003-51a46e139bfc},3","Type: REG_DWORD, Length: 4, Data: 0"
@@ -113,14 +113,14 @@ Spatial audio positions sounds in 3D space around you, surround sound mainly anc
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Audio" /v DisableSpatialOnLowLatency /t REG_DWORD /d 1 /f
 ```
 
 # Disable System Sounds
 
 Disables system sounds and removes sound events. I did use the keys, which Windows would disable:
-```ps
+```powershell
 "HKCU\AppEvents\Schemes\Apps\.Default\SystemAsterisk\.Current\(Default)","Type: REG_SZ, Length: 0"
 "HKCU\AppEvents\Schemes\Apps\.Default\Notification.Reminder\.Current\(Default)","Type: REG_SZ, Length: 0"
 "HKCU\AppEvents\Schemes\Apps\.Default\Close\.Current\(Default)","Type: REG_SZ, Length: 0"
@@ -262,7 +262,7 @@ Click on `View` > `Devices by connection`.
 # Disable Touch & Tablet
 
 Disable the touch screen feature of your device with:
-```ps
+```powershell
 Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch screen' | % { pnputil /disable-device "$($_.InstanceId)" }
 ```
 
@@ -436,7 +436,7 @@ add "\MessageSignaledInterruptProperties" /v MSISupported /t REG_DWORD /d 1 /f
 delete "\MessageSignaledInterruptProperties" /v MessageNumberLimit /f
 ```
 `AssignmentSetOverride` calculation:
-```ps
+```powershell
 $cpus = @(5)
 $mask = 0
 $cpus | % { $mask = $mask -bor (1 -shl $_) }
@@ -519,20 +519,20 @@ Remove-Item "Registry::HKEY_CLASSES_ROOT\zapfile\shell\print" -Force -Recurse
 ```
 
 This list was created on a stock `W11 LTSC IoT Enterprise 2024` installation via:
-```ps
+```powershell
 dir Registry::HKEY_CLASSES_ROOT -Recurse -ea SilentlyContinue | ? { $_.Name -like '*\shell\print' } | select -ExpandProperty Name
 ```
 
 ---
 
 List all printer connections:
-```ps
+```powershell
 Get-Printer
 ```
 > https://learn.microsoft.com/en-us/powershell/module/printmanagement/get-printer?view=windowsserver2025-ps
 
 Remove a specific printer using it's name:
-```ps
+```powershell
 Remove-Printer -Name "Printer Name"
 ```
 > https://learn.microsoft.com/en-us/powershell/module/printmanagement/remove-printer?view=windowsserver2025-ps

@@ -84,7 +84,7 @@ SMB Client -> Outbound connections:
 SMB Server -> Inbound connections:  
 > https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbserverconfiguration?view=windowsserver2025-ps
 
-```ps
+```powershell
 Set-SmbClientConfiguration -EnableBandwidthThrottling $false
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableBandwidthThrottling	Type: REG_DWORD, Length: 4, Data: 1
 
@@ -92,7 +92,7 @@ Set-SmbClientConfiguration -EnableLargeMtu $true
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableLargeMtu	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-```ps
+```powershell
 Set-SmbClientConfiguration -RequireSecuritySignature $true
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\RequireSecuritySignature	Type: REG_DWORD, Length: 4, Data: 1
 
@@ -121,7 +121,7 @@ Encryption is enabled by default, some users reported slow read and write speeds
 > https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/overview-server-message-block-signing  
 > https://techcommunity.microsoft.com/blog/filecab/configure-smb-signing-with-confidence/2418102
 
-```ps
+```powershell
 Set-SmbClientConfiguration -EnableMultiChannel $true
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableMultiChannel	Type: REG_DWORD, Length: 4, Data: 0
 ```
@@ -129,13 +129,13 @@ Part of SMB3, is enabled by default. "Multichannel enables file servers to use m
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/dn610980(v=ws.11)
 
 Disabling leasing may help, but it disables core features like read/write/handle caching that negatively impact many applications, which rely on it.
-```ps
+```powershell
 Set-SmbServerConfiguration -EnableLeasing $false
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\DisableLeasing	Type: REG_DWORD, Length: 4, Data: 1
 ```
 > https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/slow-smb-file-transfer#slow-open-of-office-documents
 
-```ps
+```powershell
 Set-SmbClientConfiguration -EnableSMBQUIC $true
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnableSMBQUIC	Type: REG_DWORD, Length: 4, Data: 1
 
@@ -152,7 +152,7 @@ Uses QUIC instead of TCP - [SMB over QUIC prerequisites](https://learn.microsoft
 `SMB302` - SMB 3.0.2
 `SMB311` - SMB 3.1.1
 
-```ps
+```powershell
 Set-SmbServerConfiguration -Smb2DialectMin SMB311 -Smb2DialectMax None
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\MaxSmb2Dialect	Type: REG_DWORD, Length: 4, Data: 65536
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\MinSmb2Dialect	Type: REG_DWORD, Length: 4, Data: 785
@@ -166,7 +166,7 @@ By default is it set to `None`, which means that the client can use any supporte
 > https://techcommunity.microsoft.com/blog/filecab/controlling-smb-dialects/860024
 
 Disable default sharing:
-```ps
+```powershell
 Set-SmbServerConfiguration -AutoShareServer $false -AutoShareWorkstation $false -Force
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareServer	Type: REG_DWORD, Length: 4, Data: 0
 RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareWks	Type: REG_DWORD, Length: 4, Data: 0
@@ -209,7 +209,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\
 # QoS Policy
 
 Adding the QoS policy via LGPE:
-```ps
+```powershell
 HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Version    Type: REG_SZ, Length: 8, Data: 1.0
 HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Application Name    Type: REG_SZ, Length: 68, Data: FortniteClient-Win64-Shipping.exe
 HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Protocol    Type: REG_SZ, Length: 4, Data: * # TCP and UDP
@@ -223,7 +223,7 @@ HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\DSCP Value    Type: REG_SZ
 HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Throttle Rate    Type: REG_SZ, Length: 6, Data: -1 # Unspecified throttle rate (none), 'Data' would specify rate in KBps
 ```
 Capturing the network activity after adding the policy:
-```ps
+```powershell
 + Versions: IPv4, Internet Protocol, Header Length = 20
 - DifferentiatedServicesField: DSCP: 46, ECN: 0 # Works
    DSCP: (101110..) Differentiated services codepoint 46
@@ -253,16 +253,16 @@ Capturing the network activity after adding the policy:
 > https://gpsearch.azurewebsites.net/#1830
 
 Disable network discovery (includes LLTDIO, Rspndr, LLTD), by pasting the desired command into `powershell`:
-```ps
+```powershell
 Set-NetFirewallRule -DisplayGroup "Network Discovery" -Enabled False -Profile Any​ # Domain​, Private, Public​
 ```
 Get the current states with:
-```ps
+```powershell
 Get-NetFirewallRule -DisplayGroup "Network Discovery" | Select-Object Name, Enabled, Profile
 ```
 > https://learn.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallrule?view=windowsserver2025-ps
 
-```ps
+```powershell
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\EnableLLTDIO	Type: REG_DWORD, Length: 4, Data: 0
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowLLTDIOOnDomain	Type: REG_DWORD, Length: 4, Data: 0
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowLLTDIOOnPublicNet	Type: REG_DWORD, Length: 4, Data: 0
@@ -461,7 +461,7 @@ Get-NetTCPSetting | Select SettingName, CongestionProvider
 ![](https://github.com/5Noxi/win-config/blob/main/network/images/congnet2.png?raw=true)
 
 BBR2 (used):
-```ps
+```powershell
 netsh int ipv6 set gl loopbacklargemtu=disable
 netsh int ipv4 set gl loopbacklargemtu=disable
 netsh int tcp set supplemental Template=Internet CongestionProvider=bbr2
@@ -471,7 +471,7 @@ netsh int tcp set supplemental Template=DatacenterCustom CongestionProvider=bbr2
 netsh int tcp set supplemental Template=InternetCustom CongestionProvider=bbr2
 ```
 CTCP:
-```ps
+```powershell
 netsh int tcp set supplemental template=internet congestionprovider=CTCP
 netsh int tcp set supplemental template=internetcustom congestionprovider=CTCP
 netsh int tcp set supplemental Template=Compat CongestionProvider=CTCP
@@ -479,7 +479,7 @@ netsh int tcp set supplemental template=Datacenter congestionprovider=CTCP
 netsh int tcp set supplemental template=Datacentercustom congestionprovider=CTCP
 ```
 CUBIC:
-```ps
+```powershell
 netsh int tcp set supplemental template=internet congestionprovider=CUBIC
 netsh int tcp set supplemental template=internetcustom congestionprovider=CUBIC
 netsh int tcp set supplemental Template=Compat CongestionProvider=CUBIC
@@ -487,7 +487,7 @@ netsh int tcp set supplemental template=Datacenter congestionprovider=CUBIC
 netsh int tcp set supplemental template=Datacentercustom congestionprovider=CUBIC
 ```
 NewReno:
-```ps
+```powershell
 netsh int tcp set supplemental Template=Internet CongestionProvider=NewReno
 netsh int tcp set supplemental Template=Datacenter CongestionProvider=NewReno
 netsh int tcp set supplemental Template=Compat CongestionProvider=NewReno
@@ -524,7 +524,7 @@ NCSI package name: `NcsiUwpApp` (breaks connection status icon)
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 reg add "HKLM\System\CurrentControlSet\services\NlaSvc\Parameters\Internet" /v EnableUserActiveProbing /t REG_DWORD /d 0 /f
 reg add "HKLM\System\CurrentControlSet\services\NlaSvc\Parameters\Internet" /v MaxActiveProbes /t REG_DWORD /d 1 /f
 
@@ -548,7 +548,7 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\Disallo
 SSTP VPN & other VPNs - enable the services, to revert it.
 
 Get current VPN connections:
-```ps
+```powershell
 Get-VpnConnection
 ```
 Remove a VPN connection with (or `Remove-VpnConnection`):
@@ -561,7 +561,7 @@ or `WIN + I` > Network & Internet > VPN > Remove
 > https://learn.microsoft.com/en-us/powershell/module/vpnclient/?view=windowsserver2025-ps
 
 Disable `Allow VPN over metered networks` (`0` = On, `1` = Off):
-```ps
+```powershell
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\RasMan\Parameters\Config\VpnCostedNetworkSettings" /v NoCostedNetwork /d 1 /f
 ```
 ```c
@@ -579,7 +579,7 @@ if ( !v17[0] )
     g_donotUseCosted = 0, // default
 ```
 Disable `Allow VPN while Roaming` (`0` = On, `1` = Off):
-```ps
+```powershell
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\RasMan\Parameters\Config\VpnCostedNetworkSettings" /v NoRoamingNetwork /d 1 /f
 ```
 ```c
@@ -604,21 +604,21 @@ if ( !v17[0] )
 SMBv1 is only needed for old computers or software (that you usually don't have) and should be disabled, as it's unsafe & not efficient.
 
 Detect current states with:
-```ps
+```powershell
 Get-SmbServerConfiguration | Select EnableSMB1Protocol, EnableSMB2Protocol
 ```
 Disable it with (`$true` to enable it):
-```ps
+```powershell
 Set-SmbServerConfiguration -EnableSMB1Protocol $false -Force
 Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol
 ```
 
 If you want to disable SMBv2 (& SMBv3):
-```ps
+```powershell
 Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
 ```
 `Set-SmbServerConfiguration $false`:
-```ps
+```powershell
 "wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2","Type: REG_DWORD, Length: 4, Data: 0"
 "wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB1","Type: REG_DWORD, Length: 4, Data: 0"
 ```
@@ -666,7 +666,7 @@ Enabling the option includes disabling `LMHOSTS Lookups` - "LMHOSTS is a local t
 | 2     | Specifies that NetBIOS is disabled.                                                         |
 
 Disabling `NetbiosOptions` via network center:
-```ps
+```powershell
 RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
 ```
 
@@ -1181,7 +1181,7 @@ HKR, Ndi\Params\*RSS\Enum,                      "1",                    0, %Enab
 
 Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_msclient`.
 
-```ps
+```powershell
 PS C:\Users\Nohuxi> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
 
 DisplayGroup                                                                      Group

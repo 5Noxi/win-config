@@ -15,7 +15,7 @@ Using a boost (bit `1-2`) would set the threads of foreground processes `2-3` ti
 As you can see in this [table](https://github.com/djdallmann/GamingPCSetup/blob/d865b755a9b6af65a470b8840af54729c75a6ae7/CONTENT/RESEARCH/FINDINGS/win32prisep0to271.csv), the values repeat. Using a extremely high number therefore won't do anything else. `Win32PrioritySeparation.ps1` can be used to get the info, increase `for ($i=0; $i -le 271; $i++) {` (`271`), if you want to see more. It's a lighter version of [win32prisepcalc](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/SCRIPTS/win32prisepcalc.ps1).
 
 Paste it into a terminal to see a table with all values:
-```ps
+```powershell
 for ($i=0; $i -le 271; $i++) {
     $bin = [Convert]::ToString($i,2).PadLeft(6,'0')[-6..-1]
     $interval = if (('00','10','11' -contains ($bin[0,1] -join''))) {'Short'} else {'Long'}
@@ -84,7 +84,7 @@ CiSystemResponsiveness = 10 * (value / 10);
 > 100  -> 20   (fallback)
 ```
 Lowest effective value:
-```ps
+```powershell
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v SystemResponsiveness /t REG_DWORD /d 10 /f
 ```
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/MultiMedia.txt  
@@ -646,7 +646,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 Disables all kind of scheduled tasks most users don't need. Read through the list before switching the option. See suboptions for customization - enabling all suboptions until `Disable Miscellaenous Tasks` is the same as enabling the option switch.
 
 Currently disables:
-```ps
+```powershell
 "\Microsoft\Windows\Application Experience\MareBackup",
 "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser",
 "\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser Exp",
@@ -692,7 +692,7 @@ Currently disables:
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 for %%a in (
     "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64 Critica",
     "\Microsoft\Windows\.NET Framework\.NET Framework NGEN v4.0.30319 64",
@@ -742,7 +742,7 @@ reg add "HKCU\Software\Microsoft\GameBar" /v AllowAutoGameMode /t REG_DWORD /d 1
 reg add "HKCU\Software\Microsoft\GameBar" /v AutoGameModeEnabled /t REG_DWORD /d 1 /f
 ```
 Enabling/disabling it via the system settings only switches `AutoGameModeEnabled`:
-```ps
+```powershell
 SystemSettings.exe  HKCU\Software\Microsoft\GameBar\AutoGameModeEnabled	Type: REG_DWORD, Length: 4, Data: 1
 ```
 The value doesn't exist by default (not existing = `1`). Ignore `GameBar.txt`, it shows read values.
@@ -754,7 +754,7 @@ The value doesn't exist by default (not existing = `1`). Ignore `GameBar.txt`, i
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadDoublePressIntervalMs
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadShortPressIntervalMs
 ```
@@ -788,7 +788,7 @@ The command below includes some of my personal settings. They're saved in:
 %appdata%\Everything\Everything.ini
 ```
 If you want to revert the changes, either remove the `Everything.ini` file or restore the settings via the options (`STRG + P`).
-```ps
+```powershell
 $nvp = "$env:appdata\Everything\Everything.ini";(gc $nvp) -replace '^normal_background_color=.*', 'normal_background_color=#353535' -replace '^normal_foreground_color=.*', 'normal_foreground_color=#ffffff' -replace '^single_click_open=.*', 'single_click_open=2' -replace '^hide_empty_search_results=.*', 'hide_empty_search_results=1' -replace '^double_click_path=.*', 'double_click_path=1' -replace '^show_mouseover=.*', 'show_mouseover=1' -replace '^show_number_of_results_with_selection=.*', 'show_number_of_results_with_selection=1' -replace '^tooltips=.*', 'tooltips=0' -replace '^search_history_enabled=.*', 'search_history_enabled=0' -replace '^run_history_enabled=.*', 'run_history_enabled=0' -replace '^index_date_modified=.*', 'index_date_modified=0' -replace '^exclude_list_enabled=.*', 'exclude_list_enabled=0' -replace '^language=.*', 'language=1033' | sc $nvp
 ```
 
@@ -807,11 +807,11 @@ HAGS should be enabled, there're many reasons like different threads... may add 
 ---
 
 Enable HAGS:
-```ps
+```powershell
 SystemSettingsAdminFlows.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 2
 ```
 Disable HAGS:
-```ps
+```powershell
 SystemSettingsAdminFlows.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
@@ -1055,7 +1055,7 @@ Disables lock screen, desktop, feature advertisement balloon notifications, noti
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings" /v NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND /t REG_DWORD /d 0 /f
 reg add "HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v WnsEndpoint /t REG_SZ /d client.wns.windows.com /f
 ```
@@ -1163,14 +1163,14 @@ Taskbar pins are saved in a folder and a key, the folder includes the shortcuts:
 ```bat
 %appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
 ```
-```ps
+```powershell
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband # Only "Favorites" is needed
 ```
 You can convert the exported `.reg` to `.ps1` with:
 > https://reg2ps.azurewebsites.net/
 
 Post install example (copy the `TaskBar` folder to any folder):
-```ps
+```powershell
 del "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" -Recurse -Force
 xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" /e /i /y
 ```
@@ -1409,10 +1409,10 @@ Example:
 4. When the data is needed again, it's decompressed back to 24 MB
 
 See the current memory compresstion state on your system via:
-```ps
+```powershell
 Get-MMAgent
 ```
-```ps
+```powershell
 ApplicationLaunchPrefetching : True
 ApplicationPreLaunch         : True
 MaxOperationAPIFiles         : 512
@@ -1434,10 +1434,10 @@ PSComputerName               :
 Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
 
 See the current page combining state on your system via:
-```ps
+```powershell
 Get-MMAgent
 ```
-```ps
+```powershell
 ApplicationLaunchPrefetching : True
 ApplicationPreLaunch         : True
 MaxOperationAPIFiles         : 512
@@ -1643,7 +1643,7 @@ HalpInterruptSetMsiOverride(v10);
 ```
 
 Default entries:
-```ps
+```powershell
 Windows Boot Manager
 --------------------
 identifier              {bootmgr}
@@ -1690,10 +1690,10 @@ SecurityHealth
 Try to minimize the amount of applications that run automatically on system startup. You can go trough the other sections, but this option was created for the `Logon` section, see `Disable Scheduled Tasks`/`Disable Services`.
 
 See your current autoruns of installed apps:
-```ps
+```powershell
 HKCU\Software\Microsoft\Windows\CurrentVersion\Run
 ```
-```ps
+```powershell
 HKLM\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 

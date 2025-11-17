@@ -205,7 +205,7 @@ HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,D3ColdSupported,0x10001,1
 ---
 
 Miscellaneous comments:
-```ps
+```powershell
 Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\usbhub\hubg' -Name 'DisableSelectiveSuspendUI' -Value 1
 Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\usbhub\hubg' -Name 'DisableUxdSupport' -Value 1
 Set-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Services\usbhub\hubg' -Name 'WakeOnConnectUI' -Value 0
@@ -436,7 +436,7 @@ LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Expl
 ---
 
 Miscellaneous keys:
-```ps
+```powershell
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HidePowerButton
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideRestart
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideShutDown
@@ -568,7 +568,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\EnergyEstimation\TaggedEner
 Use the commands below, to import power plans by double-clicking them. Modify the powerplan via `PowerSettingsExplorer.exe`.
 > http://www.mediafire.com/file/wt37sbsejk7iepm/PowerSettingsExplorer.zip
 
-```ps
+```powershell
 reg add "HKCR\.pow" /ve /t REG_SZ /d "Power Plan" /f
 reg add "HKCR\.pow" /v FriendlyTypeName /t REG_SZ /d "Power Plan" /f
 reg add "HKCR\.pow\DefaultIcon" /ve /t REG_EXPAND_SZ /d "%%SystemRoot%%\System32\powercfg.cpl,-202" /f
@@ -725,7 +725,7 @@ v20[12..15] ≤ 0x7FFFFFF5 // ^
 v20[16..19] = 0
 ```
 `Coalescing-Timer-Interval.bat` would currently use the upper bound (`ToleranceDelay`?)
-```ps
+```powershell
 reg add "HKLM\Software\Microsoft\Windows NT\CurrentVersion\Windows" /v TimerCoalescing /t REG_BINARY /d 00000000000000000000000000000000F5FFFF7FF5FFFF7FF5FFFF7FF5FFFF7F00000000000000000000000000000000F5FFFF7FF5FFFF7FF5FFFF7FF5FFFF7F00000000000000000000000000000000 /f
 ```
 I removed it, since it causes a BSOD on my testing VMs.
@@ -750,7 +750,7 @@ Stop USB devices when my screen is off to help battery.
 ---
 
 Miscellaneous notes:
-```ps
+```powershell
 for /f "delims=" %%k in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\USB" /s /f "AttemptRecoveryFromUsbPowerDrain" ^| findstr "HKEY"') do reg add "%%k" /v AttemptRecoveryFromUsbPowerDrain /t REG_DWORD /d 0 /f
 ```
 
@@ -762,7 +762,7 @@ In `USBXHCI.SYS`. Disables S0 idle on the host controller - remains in the worki
 \Registry\Machine\SYSTEM\ControlSet001\Control\usbflags : DisableHCS0Idle
 ```
 I didn't do proper research for them, either test them or leave it:
-```ps
+```powershell
 Get-ChildItem 'HKLM:\SYSTEM\CurrentControlSet\Control\usbflags' -ErrorAction SilentlyContinue | ForEach-Object {
     Set-ItemProperty -Path $_.PSPath -Name 'DisableOnSoftRemove' -Value 1
     Set-ItemProperty -Path $_.PSPath -Name 'DisableRecoveryFromPowerDrain' -Value 0
@@ -898,7 +898,7 @@ This policy setting specifies that power management is disabled when the machine
                     ]
 },
 ```
-```ps
+```powershell
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fAllowFailoverToCellular
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fBlockNonDomain
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fBlockRoaming
