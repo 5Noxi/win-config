@@ -60,13 +60,10 @@ rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Layout Hotkey	Type: REG_SZ,
 
 # Disable Audio Ducking
 
-"*Windows audio ducking is a dynamic audio processing technique that enables the **automatic adjustment of audio levels** between different audio sources on a Windows-based computer or operating system.*"
+"Windows audio ducking is a dynamic audio processing technique that enables the **automatic adjustment of audio levels** between different audio sources on a Windows-based computer or operating system."
 > https://multimedia.easeus.com/ai-article/windows-audio-ducking.html
 
-Go into your sound settings (`mmsys.cpl`), click on the `Communications` tab and select `Do nothing`:
-```bat
-reg add "HKCU\Software\Microsoft\Multimedia\Audio" /v UserDuckingPreference /t REG_DWORD /d 3 /f
-```
+Can be disabled manually via `mmsys.cpl > Communications` `Do nothing`.
 
 `Mute all other sounds`:
 ```powershell
@@ -235,17 +232,19 @@ Otherwise `v11 * 24`
 
 The `Clean` option removes non present devices (`-PresentOnly:$false`/`Status -eq 'Unknown'`) via `/remove-device` ([`pnputil`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax)).
 
-`Microphone`, `Speakers`, `High Definition Audio Controller`  - Disable unused ones  
-`Generic Monitor`  - You can try disabling it, but this may restrict functionality (resolution, brightness on laptop?)  
-`WAN Miniports` - Virtual network adapters, used for VPN protocols, remote access etc.  
-`Microsoft ISATAP Adapter` - Disabled, enables transport IPv6 traffic over an IPv4 infrastructure  
-`SM Bus Controller` - Used for communication with onboard sensors and devices for system monitoring...  
-`Microsoft iSCSI Initiator` - Disabled, connect to storage devices over a network  
-`Microsoft Virtual Drive Enumerator` - Disabled, breaks `diskmgmt.msc`  
-`Microsoft RRAS Root Enumerator` - Disabled, driver that helps initialize older or virtual devices during system boot  
-`Microsoft System Management BIOS Driver` - Disabling it breaks GTA5 and maybe other system information fetching  
-`System Speaker` - Disabling breaks monitor audio  
-`AMD/Intel PSP (ME)` - Platform Security Processor  
+| Component | Description | Note |
+| ---- | ---- | ---- |
+| `Microphone` | Audio input device | Disable if unused |
+| `Speakers` | Audio output device | Disable if unused |
+| `High Definition Audio Controller` | Main audio bus/controller for sound devices | Disable if not in use |
+| `Generic Monitor` | Basic display driver for monitors | Disabling may affect resolution/brightness (esp. laptops) |
+| `WAN Miniports` | Virtual NICs for VPN, PPPoE, remote access, tunneling protocols | Keep if you use VPN/remote access, else can disable |
+| `Microsoft ISATAP Adapter` | Tunnels IPv6 over IPv4 infrastructure | Usually safe to disable |
+| `Microsoft iSCSI Initiator` | Connects to iSCSI storage targets over network | Disable if you don't use network storage |
+| `Microsoft Virtual Drive Enumerator` | Enumerator for virtual drives | Disabling breaks `diskmgmt.msc` |
+| `Microsoft RRAS Root Enumerator` | Helper/legacy driver for initializing certain (virtual/older) devices at boot | Usually safe, but can affect legacy/virtual HW |
+| `Microsoft System Management BIOS Driver` | Exposes SMBIOS/system info to OS | Disabling breaks GTA V and some system info tools |
+| `System Speaker` | Handles system/PC speaker audio (can include monitor audio routing) | Disabling can break monitor audio |
 
 ---
 

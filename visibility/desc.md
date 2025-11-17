@@ -603,45 +603,79 @@ Disables the lock screen (skips the lock screen and go directly to the login scr
     { "Type": "Boolean", "ValueName": "LockScreenOverlaysDisabled", "TrueValue": "1", "FalseValue": "0" }
   ]
 },
-```
-
----
-
-Miscellaneous (`ControlPanelDisplay.admx`):  
-
-Prevent lock screen background motion:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v AnimateLockScreenBackground /t REG_DWORD /d 1 /f
-```
-Prevent enabling lock screen slide show:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\Personalization" /v NoLockScreenSlideshow /t REG_DWORD /d 1 /f
-```
-Show clear logon background:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\System" /v DisableAcrylicBackgroundOnLogon /t REG_DWORD /d 1 /f
+{
+  "File": "ControlPanelDisplay.admx",
+  "CategoryName": "Personalization",
+  "PolicyName": "CPL_Personalization_AnimateLockScreenBackground",
+  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
+  "Supported": "Windows_10_0_NOSERVER",
+  "DisplayName": "Prevent lock screen background motion",
+  "ExplainText": "This policy setting controls whether the lock screen image is static or has a subtle panning effect driven by the device's accelerometer output. If you enable this setting, motion will be prevented and the user will see the traditional static lock screen background image. If you disable this setting (and the device has an accelerometer), the user will see the lock screen background pan around a still image as they physically move their device.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
+  ],
+  "ValueName": "AnimateLockScreenBackground",
+  "Elements": []
+},
+{
+  "File": "ControlPanelDisplay.admx",
+  "CategoryName": "Personalization",
+  "PolicyName": "CPL_Personalization_NoLockScreenSlideshow",
+  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
+  "Supported": "Windows_6_3",
+  "DisplayName": "Prevent enabling lock screen slide show",
+  "ExplainText": "Disables the lock screen slide show settings in PC Settings and prevents a slide show from playing on the lock screen. By default, users can enable a slide show that will run after they lock the machine. If you enable this setting, users will no longer be able to modify slide show settings in PC Settings, and no slide show will ever start.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
+  ],
+  "ValueName": "NoLockScreenSlideshow",
+  "Elements": []
+},
+{
+  "File": "Logon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "DisableAcrylicBackgroundOnLogon",
+  "NameSpace": "Microsoft.Policies.WindowsLogon",
+  "Supported": "Windows_10_0_RS6",
+  "DisplayName": "Show clear logon background",
+  "ExplainText": "This policy setting disables the acrylic blur effect on logon background image. If you enable this policy, the logon background image shows without blur. If you disable or do not configure this policy, the logon background image adopts the acrylic blur effect.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "DisableAcrylicBackgroundOnLogon",
+  "Elements": []
+},
+{
+  "File": "ControlPanelDisplay.admx",
+  "CategoryName": "Personalization",
+  "PolicyName": "CPL_Personalization_NoChangingLockScreen",
+  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
+  "Supported": "Windows8",
+  "DisplayName": "Prevent changing lock screen and logon image",
+  "ExplainText": "Prevents users from changing the background image shown when the machine is locked or when on the logon screen. By default, users can change the background image shown when the machine is locked or displaying the logon screen. If you enable this setting, the user will not be able to change their lock screen and logon image, and they will instead see the default image.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
+  ],
+  "ValueName": "NoChangingLockScreen",
+  "Elements": []
+},
+{
+  "File": "ControlPanelDisplay.admx",
+  "CategoryName": "Personalization",
+  "PolicyName": "CPL_Personalization_NoLockScreenCamera",
+  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
+  "Supported": "Windows_6_3",
+  "DisplayName": "Prevent enabling lock screen camera",
+  "ExplainText": "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen. By default, users can enable invocation of an available camera on the lock screen. If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
+  ],
+  "ValueName": "NoLockScreenCamera",
+  "Elements": []
+},
 ```
 
 # Hide Most Used Apps
-
-Hide recently added apps with:
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\Explorer" /v HideRecentlyAddedApps /t REG_DWORD /d 1 /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Start" /v ShowRecentList /t REG_DWORD /d 0 /f
-```
-Remove frequently used programs list from the start menu with:
-```bat
-reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v NoStartMenuMFUprogramsList /t REG_DWORD /d 1 /f
-```
-Hide new apps notification with ("`You have new apps that can open this type of file`"):
-```bat
-reg add "HKLM\Software\Policies\Microsoft\Windows\Explorer" /v NoNewAppAlert /t REG_DWORD /d 1 /f
-```
-```c
-dq offset POLID_NoNewAppAlert
-dq offset aExplorer     ; "Explorer"
-dq offset aNonewappalert ; "NoNewAppAlert"
-```
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/mostused.jpg?raw=true)
 
@@ -833,26 +867,27 @@ Spotlight is used to provide new pictures on your lock screen.
 Since `powershell.exe` has default color of white (foreground) and blue (background), some may want to change it.
 
 `ScreenColors` value, located in `HKCU\Console\%SystemRoot%_System32_WindowsPowerShell_v1.0_powershell.exe`  
-> `0-3` bit = `Foreground color`  
-> `4-7` bit = `Background color`  
+`0-3` bit = `Foreground color`  
+`4-7` bit = `Background color`
 
-Valid colors bits - `binary` (`dec`):  
-Black: `0000` (`0`)  
-DarkBlue: `0001` (`1`)  
-DarkGreen: `0010` (`2`)  
-DarkCyan: `0011` (`3`)  
-DarkRed: `0100` (`4`)  
-DarkMagenta: `0101` (`5`)  
-DarkYellow: `0110` (`6`)  
-Gray: `0111` (`7`)  
-DarkGray: `1000` (`8`)  
-Blue: `1001` (`9`)  
-Green: `1010` (`10`)  
-Cyan: `1011` (`11`)  
-Red: `1100` (`12`)  
-Magenta: `1101` (`13`)  
-Yellow: `1110` (`14`)  
-White: `1111` (`15`)
+| Color | Binary | Decimal |
+| ----- | :----: | :-----: |
+| Black | `0000` | `0` |
+| DarkBlue | `0001` | `1` |
+| DarkGreen | `0010` | `2` |
+| DarkCyan | `0011` | `3` |
+| DarkRed | `0100` | `4` |
+| DarkMagenta | `0101` | `5` |
+| DarkYellow | `0110` | `6` |
+| Gray | `0111` | `7` |
+| DarkGray | `1000` | `8` |
+| Blue | `1001` | `9` |
+| Green | `1010` | `10` |
+| Cyan | `1011` | `11` |
+| Red | `1100` | `12` |
+| Magenta | `1101` | `13` |
+| Yellow | `1110` | `14` |
+| White | `1111` | `15` |
 
 Calculate it on your own, by using [bitmask-calc](https://github.com/5Noxi/bitmask-calc) - e.g. set bit `1-3` and `7`, to get `Yellow` (foreground) and `DarkGray` (background).
 
