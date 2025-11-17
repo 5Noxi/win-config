@@ -824,46 +824,38 @@ Storage Sense deletes temporary files automatically - revert it by changing it b
 
 ```json
 {
-    "File":  "StorageSense.admx",
-    "NameSpace":  "Microsoft.Policies.StorageSense",
-    "Class":  "Machine",
-    "CategoryName":  "StorageSense",
-    "DisplayName":  "Allow Storage Sense",
-    "ExplainText":  "Storage Sense can automatically clean some of the user's files to free up disk space. By default, Storage Sense is automatically turned on when the machine runs into low disk space and is set to run whenever the machine runs into storage pressure. This cadence can be changed in Storage settings or set with the \"Configure Storage Sense cadence\" group policy.Enabled:Storage Sense is turned on for the machine, with the default cadence as â€˜during low free disk space'. Users cannot disable Storage Sense, but they can adjust the cadence (unless you also configure the \"Configure Storage Sense cadence\" group policy).Disabled:Storage Sense is turned off the machine. Users cannot enable Storage Sense.Not Configured:By default, Storage Sense is turned off until the user runs into low disk space or the user enables it manually. Users can configure this setting in Storage settings.",
-    "Supported":  "Windows_10_0_RS6",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\StorageSense",
-    "KeyName":  "AllowStorageSenseGloba",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "StorageSense.admx",
+  "CategoryName": "StorageSense",
+  "PolicyName": "SS_AllowStorageSenseGlobal",
+  "NameSpace": "Microsoft.Policies.StorageSense",
+  "Supported": "Windows_10_0_RS6",
+  "DisplayName": "Allow Storage Sense",
+  "ExplainText": "Storage Sense can automatically clean some of the user\u2019s files to free up disk space. By default, Storage Sense is automatically turned on when the machine runs into low disk space and is set to run whenever the machine runs into storage pressure. This cadence can be changed in Storage settings or set with the \"Configure Storage Sense cadence\" group policy. Enabled: Storage Sense is turned on for the machine, with the default cadence as \u2018during low free disk space\u2019. Users cannot disable Storage Sense, but they can adjust the cadence (unless you also configure the \"Configure Storage Sense cadence\" group policy). Disabled: Storage Sense is turned off the machine. Users cannot enable Storage Sense. Not Configured: By default, Storage Sense is turned off until the user runs into low disk space or the user enables it manually. Users can configure this setting in Storage settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
+  ],
+  "ValueName": "AllowStorageSenseGlobal",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "StorageSense.admx",
-    "NameSpace":  "Microsoft.Policies.StorageSense",
-    "Class":  "Machine",
-    "CategoryName":  "StorageSense",
-    "DisplayName":  "Allow Storage Sense Temporary Files cleanup",
-    "ExplainText":  "When Storage Sense runs, it can delete the user's temporary files that are not in use.If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect.Enabled:Storage Sense will delete the user's temporary files that are not in use. Users cannot disable this setting in Storage settings.Disabled:Storage Sense will not delete the user's temporary files. Users cannot enable this setting in Storage settings.Not Configured:By default, Storage Sense will delete the user's temporary files. Users can configure this setting in Storage settings.",
-    "Supported":  "Windows_10_0_RS6",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\StorageSense",
-    "KeyName":  "AllowStorageSenseTemporaryFilesCleanup",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "StorageSense.admx",
+  "CategoryName": "StorageSense",
+  "PolicyName": "SS_AllowStorageSenseTemporaryFilesCleanup",
+  "NameSpace": "Microsoft.Policies.StorageSense",
+  "Supported": "Windows_10_0_RS6",
+  "DisplayName": "Allow Storage Sense Temporary Files cleanup",
+  "ExplainText": "When Storage Sense runs, it can delete the user\u2019s temporary files that are not in use. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: Storage Sense will delete the user\u2019s temporary files that are not in use. Users cannot disable this setting in Storage settings. Disabled: Storage Sense will not delete the user\u2019s temporary files. Users cannot enable this setting in Storage settings. Not Configured: By default, Storage Sense will delete the user\u2019s temporary files. Users can configure this setting in Storage settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
+  ],
+  "ValueName": "AllowStorageSenseTemporaryFilesCleanup",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -920,18 +912,18 @@ Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff 
 
 ```json
 {
-    "File":  "Logon.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsLogon",
-    "Class":  "Machine",
-    "CategoryName":  "System",
-    "DisplayName":  "Display highly detailed status messages",
-    "ExplainText":  "This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system.If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes.Note: This policy setting is ignored if the \"\"Remove Boot/Shutdown/Logon/Logoff status messages\"\" policy setting is enabled.",
-    "Supported":  "Win2k",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-    "KeyName":  "VerboseStatus",
-    "Elements":  [
-
-                    ]
+  "File": "Logon.admx",
+  "CategoryName": "System",
+  "PolicyName": "VerboseStatus",
+  "NameSpace": "Microsoft.Policies.WindowsLogon",
+  "Supported": "Win2k",
+  "DisplayName": "Display highly detailed status messages",
+  "ExplainText": "This policy setting directs the system to display highly detailed status messages. This policy setting is designed for advanced users who require this information. If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"\"Remove Boot/Shutdown/Logon/Logoff status messages\"\" policy setting is enabled.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "VerboseStatus",
+  "Elements": []
 },
 ```
 
@@ -943,25 +935,21 @@ Prevents windows from being minimized or restored when the active window is shak
 
 ```json
 {
-    "File":  "Desktop.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsDesktop",
-    "Class":  "User",
-    "CategoryName":  "Desktop",
-    "DisplayName":  "Turn off Aero Shake window minimizing mouse gesture",
-    "ExplainText":  "Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse. If you enable this policy, application windows will not be minimized or restored when the active window is shaken back and forth with the mouse.If you disable or do not configure this policy, this window minimizing and restoring gesture will apply.",
-    "Supported":  "Windows7",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "KeyName":  "NoWindowMinimizingShortcuts",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "Desktop.admx",
+  "CategoryName": "Desktop",
+  "PolicyName": "NoWindowMinimizingShortcuts",
+  "NameSpace": "Microsoft.Policies.WindowsDesktop",
+  "Supported": "Windows7",
+  "DisplayName": "Turn off Aero Shake window minimizing mouse gesture",
+  "ExplainText": "Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse. If you enable this policy, application windows will not be minimized or restored when the active window is shaken back and forth with the mouse. If you disable or do not configure this policy, this window minimizing and restoring gesture will apply.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "NoWindowMinimizingShortcuts",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -1062,88 +1050,72 @@ reg add "HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotificatio
 
 ```json
 {
-    "File":  "WindowsDefenderSecurityCenter.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsDefenderSecurityCenter",
-    "Class":  "Machine",
-    "CategoryName":  "Notifications",
-    "DisplayName":  "Hide non-critical notifications",
-    "ExplainText":  " Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
-    "Supported":  "Windows_10_0_RS3",
-    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications",
-    "KeyName":  "DisableEnhancedNotifications",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsDefenderSecurityCenter.admx",
+  "CategoryName": "Notifications",
+  "PolicyName": "Notifications_DisableEnhancedNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
+  "Supported": "Windows_10_0_RS3",
+  "DisplayName": "Hide non-critical notifications",
+  "ExplainText": "Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
+  ],
+  "ValueName": "DisableEnhancedNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "WindowsDefender.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsDefender",
-    "Class":  "Machine",
-    "CategoryName":  "Reporting",
-    "DisplayName":  "Turn off enhanced notifications",
-    "ExplainText":  " Use this policy setting to specify if you want Microsoft Defender Antivirus enhanced notifications to display on clients. If you disable or do not configure this setting, Microsoft Defender Antivirus enhanced notifications will display on clients. If you enable this setting, Microsoft Defender Antivirus enhanced notifications will not display on clients.",
-    "Supported":  "Windows_10_0",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows Defender\\Reporting",
-    "KeyName":  "DisableEnhancedNotifications",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsDefender.admx",
+  "CategoryName": "Reporting",
+  "PolicyName": "Reporting_DisableEnhancedNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefender",
+  "Supported": "Windows_10_0",
+  "DisplayName": "Turn off enhanced notifications",
+  "ExplainText": "Use this policy setting to specify if you want Microsoft Defender Antivirus enhanced notifications to display on clients. If you disable or do not configure this setting, Microsoft Defender Antivirus enhanced notifications will display on clients. If you enable this setting, Microsoft Defender Antivirus enhanced notifications will not display on clients.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows Defender\\Reporting"
+  ],
+  "ValueName": "DisableEnhancedNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "WindowsDefenderSecurityCenter.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsDefenderSecurityCenter",
-    "Class":  "Machine",
-    "CategoryName":  "Notifications",
-    "DisplayName":  "Hide all notifications",
-    "ExplainText":  " Hide notifications from Windows Security. Enabled: Local users will not see notifications from Windows Security. Disabled: Local users can see notifications from Windows Security. Not configured: Same as Disabled.",
-    "Supported":  "Windows_10_0_RS3",
-    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications",
-    "KeyName":  "DisableNotifications",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsDefenderSecurityCenter.admx",
+  "CategoryName": "Notifications",
+  "PolicyName": "Notifications_DisableNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
+  "Supported": "Windows_10_0_RS3",
+  "DisplayName": "Hide all notifications",
+  "ExplainText": "Hide notifications from Windows Security. Enabled: Local users will not see notifications from Windows Security. Disabled: Local users can see notifications from Windows Security. Not configured: Same as Disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
+  ],
+  "ValueName": "DisableNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "WindowsDefenderSecurityCenter.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsDefenderSecurityCenter",
-    "Class":  "Machine",
-    "CategoryName":  "EnterpriseCustomization",
-    "DisplayName":  "Configure customized notifications",
-    "ExplainText":  " Display specified contact information to local users in Windows Security notifications. Enabled: Your company contact information will be displayed in notifications that come from Windows Security. After setting this to Enabled, you must configure the Specify contact company name GP setting and at least one of the following GP settings: -Specify contact phone number or Skype ID -Specify contact email number or email ID -Specify contact website Please note that in some cases we will be limiting the contact options that are displayed based on the notification space available. Disabled: No contact information will be shown on notifications. Not configured: Same as Disabled.",
-    "Supported":  "Windows_10_0_RS3",
-    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization",
-    "KeyName":  "EnableForToasts",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsDefenderSecurityCenter.admx",
+  "CategoryName": "EnterpriseCustomization",
+  "PolicyName": "EnterpriseCustomization_EnableCustomizedToasts",
+  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
+  "Supported": "Windows_10_0_RS3",
+  "DisplayName": "Configure customized notifications",
+  "ExplainText": "Display specified contact information to local users in Windows Security notifications. Enabled: Your company contact information will be displayed in notifications that come from Windows Security. After setting this to Enabled, you must configure the Specify contact company name GP setting and at least one of the following GP settings: -Specify contact phone number or Skype ID -Specify contact email number or email ID -Specify contact website Please note that in some cases we will be limiting the contact options that are displayed based on the notification space available. Disabled: No contact information will be shown on notifications. Not configured: Same as Disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization"
+  ],
+  "ValueName": "EnableForToasts",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -1280,88 +1252,72 @@ reg add "HKCU\Software\Microsoft\Clipboard" /v EnableClipboardHistory /t REG_DWO
 ```
 ```json
 {
-    "File":  "TerminalServer.admx",
-    "NameSpace":  "Microsoft.Policies.TerminalServer",
-    "Class":  "Machine",
-    "CategoryName":  "TS_REDIRECTION",
-    "DisplayName":  "Do not allow Clipboard redirection",
-    "ExplainText":  "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session.You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection.If you enable this policy setting, users cannot redirect Clipboard data.If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection.If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
-    "Supported":  "WindowsXP",
-    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services",
-    "KeyName":  "fDisableClip",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "TerminalServer.admx",
+  "CategoryName": "TS_REDIRECTION",
+  "PolicyName": "TS_CLIENT_CLIPBOARD",
+  "NameSpace": "Microsoft.Policies.TerminalServer",
+  "Supported": "WindowsXP",
+  "DisplayName": "Do not allow Clipboard redirection",
+  "ExplainText": "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session. You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection. If you enable this policy setting, users cannot redirect Clipboard data. If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection. If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services"
+  ],
+  "ValueName": "fDisableClip",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "WindowsSandbox.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsSandbox",
-    "Class":  "Machine",
-    "CategoryName":  "WindowsSandbox",
-    "DisplayName":  "Allow clipboard sharing with Windows Sandbox",
-    "ExplainText":  "This policy setting enables or disables clipboard sharing with the sandbox.If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted.If you do not configure this policy setting, clipboard sharing will be enabled.",
-    "Supported":  "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
-    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox",
-    "KeyName":  "AllowClipboardRedirection",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsSandbox.admx",
+  "CategoryName": "WindowsSandbox",
+  "PolicyName": "AllowClipboardRedirection",
+  "NameSpace": "Microsoft.Policies.WindowsSandbox",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
+  "DisplayName": "Allow clipboard sharing with Windows Sandbox",
+  "ExplainText": "This policy setting enables or disables clipboard sharing with the sandbox. If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted. If you do not configure this policy setting, clipboard sharing will be enabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
+  ],
+  "ValueName": "AllowClipboardRedirection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "OSPolicy.admx",
-    "NameSpace":  "Microsoft.Policies.OSPolicy",
-    "Class":  "Machine",
-    "CategoryName":  "PolicyPolicies",
-    "DisplayName":  "Allow Clipboard synchronization across devices",
-    "ExplainText":  " This policy setting determines whether Clipboard contents can be synchronized across devices. If you enable this policy setting, Clipboard contents are allowed to be synchronized across devices logged in under the same Microsoft account or Azure AD account. If you disable this policy setting, Clipboard contents cannot be shared to other devices. Policy change takes effect immediately.",
-    "Supported":  "Windows_10_0",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
-    "KeyName":  "AllowCrossDeviceClipboard",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "OSPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "AllowCrossDeviceClipboard",
+  "NameSpace": "Microsoft.Policies.OSPolicy",
+  "Supported": "Windows_10_0",
+  "DisplayName": "Allow Clipboard synchronization across devices",
+  "ExplainText": "This policy setting determines whether Clipboard contents can be synchronized across devices. If you enable this policy setting, Clipboard contents are allowed to be synchronized across devices logged in under the same Microsoft account or Azure AD account. If you disable this policy setting, Clipboard contents cannot be shared to other devices. Policy change takes effect immediately.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "AllowCrossDeviceClipboard",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "OSPolicy.admx",
-    "NameSpace":  "Microsoft.Policies.OSPolicy",
-    "Class":  "Machine",
-    "CategoryName":  "PolicyPolicies",
-    "DisplayName":  "Allow Clipboard History",
-    "ExplainText":  " This policy setting determines whether history of Clipboard contents can be stored in memory. If you enable this policy setting, history of Clipboard contents are allowed to be stored. If you disable this policy setting, history of Clipboard contents are not allowed to be stored. Policy change takes effect immediately.",
-    "Supported":  "Windows_10_0",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
-    "KeyName":  "AllowClipboardHistory",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "OSPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "AllowClipboardHistory",
+  "NameSpace": "Microsoft.Policies.OSPolicy",
+  "Supported": "Windows_10_0",
+  "DisplayName": "Allow Clipboard History",
+  "ExplainText": "This policy setting determines whether history of Clipboard contents can be stored in memory. If you enable this policy setting, history of Clipboard contents are allowed to be stored. If you disable this policy setting, history of Clipboard contents are not allowed to be stored. Policy change takes effect immediately.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "AllowClipboardHistory",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -1371,18 +1327,18 @@ reg add "HKCU\Software\Microsoft\Clipboard" /v EnableClipboardHistory /t REG_DWO
 
 ```json
 {
-    "File":  "GroupPolicy.admx",
-    "NameSpace":  "Microsoft.Policies.GroupPolicy",
-    "Class":  "Machine",
-    "CategoryName":  "PolicyPolicies",
-    "DisplayName":  "Turn off background refresh of Group Policy",
-    "ExplainText":  "This policy setting prevents Group Policy from being updated while the computer is in use. This policy setting applies to Group Policy for computers, users, and domain controllers.If you enable this policy setting, the system waits until the current user logs off the system before updating the computer and user settings.If you disable or do not configure this policy setting, updates can be applied while users are working. The frequency of updates is determined by the \"Set Group Policy refresh interval for computers\" and \"Set Group Policy refresh interval for users\" policy settings.Note: If you make changes to this policy setting, you must restart your computer for it to take effect.",
-    "Supported":  "Win2k",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-    "KeyName":  "DisableBkGndGroupPolicy",
-    "Elements":  [
-
-                    ]
+  "File": "GroupPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "DisableBackgroundPolicy",
+  "NameSpace": "Microsoft.Policies.GroupPolicy",
+  "Supported": "Win2k",
+  "DisplayName": "Turn off background refresh of Group Policy",
+  "ExplainText": "This policy setting prevents Group Policy from being updated while the computer is in use. This policy setting applies to Group Policy for computers, users, and domain controllers. If you enable this policy setting, the system waits until the current user logs off the system before updating the computer and user settings. If you disable or do not configure this policy setting, updates can be applied while users are working. The frequency of updates is determined by the \"Set Group Policy refresh interval for computers\" and \"Set Group Policy refresh interval for users\" policy settings. Note: If you make changes to this policy setting, you must restart your computer for it to take effect.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "DisableBkGndGroupPolicy",
+  "Elements": []
 },
 ```
 

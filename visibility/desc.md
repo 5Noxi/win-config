@@ -28,27 +28,23 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\CabinetState" /
 ```
 
 ```json
-{
-    "File":  "WindowsConnectNow.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsConnectNow",
-    "Class":  "Machine",
-    "CategoryName":  "WCN_Category",
-    "DisplayName":  "Prohibit access of the Windows Connect Now wizards",
-    "ExplainText":  "This policy setting prohibits access to Windows Connect Now (WCN) wizards. If you enable this policy setting, the wizards are turned off and users have no access to any of the wizard tasks. All the configuration related tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device\" are disabled. If you disable or do not configure this policy setting, users can access the wizard tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device.\" The default for this policy setting allows users to access all WCN wizards.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\WCN\\UI",
-    "KeyName":  "DisableWcnUi",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
-},
+  {
+    "File": "WindowsConnectNow.admx",
+    "CategoryName": "WCN_Category",
+    "PolicyName": "WCN_DisableWcnUi_2",
+    "NameSpace": "Microsoft.Policies.WindowsConnectNow",
+    "Supported": "WindowsVista",
+    "DisplayName": "Prohibit access of the Windows Connect Now wizards",
+    "ExplainText": "This policy setting prohibits access to Windows Connect Now (WCN) wizards. If you enable this policy setting, the wizards are turned off and users have no access to any of the wizard tasks. All the configuration related tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device\" are disabled. If you disable or do not configure this policy setting, users can access the wizard tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device.\" The default for this policy setting allows users to access all WCN wizards.",
+    "KeyPath": [
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI"
+    ],
+    "ValueName": "DisableWcnUi",
+    "Elements": [
+      { "Type": "EnabledValue", "Data": "1" },
+      { "Type": "DisabledValue", "Data": "0" }
+    ]
+  },
 ```
 
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-windowsconnectnow
@@ -186,67 +182,55 @@ CMachine::RegQueryDWORD(
 
 ```json
 {
-    "File":  "Explorer.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsExplorer2",
-    "Class":  "User",
-    "CategoryName":  "WindowsExplorer",
-    "DisplayName":  "Turn off common control and window animations",
-    "ExplainText":  "This policy is similar to settings directly available to computer users. Disabling animations can improve usability for users with some visual disabilities as well as improving performance and battery life in some scenarios.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "KeyName":  "TurnOffSPIAnimations",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "Explorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "TurnOffSPIAnimations",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer2",
+  "Supported": "WindowsVista",
+  "DisplayName": "Turn off common control and window animations",
+  "ExplainText": "This policy is similar to settings directly available to computer users. Disabling animations can improve usability for users with some visual disabilities as well as improving performance and battery life in some scenarios.",
+  "KeyPath": [
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "TurnOffSPIAnimations",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "Logon.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsLogon",
-    "Class":  "Machine",
-    "CategoryName":  "Logon",
-    "DisplayName":  "Show first sign-in animation ",
-    "ExplainText":  "This policy setting allows you to control whether users see the first sign-in animation when signing in to the computer for the first time. This applies to both the first user of the computer who completes the initial setup and users who are added to the computer later. It also controls if Microsoft account users will be offered the opt-in prompt for services during their first sign-in.If you enable this policy setting, Microsoft account users will see the opt-in prompt for services, and users with other accounts will see the sign-in animation.If you disable this policy setting, users will not see the animation and Microsoft account users will not see the opt-in prompt for services.If you do not configure this policy setting, the user who completes the initial Windows setup will see the animation during their first sign-in. If the first user had already completed the initial setup and this policy setting is not configured, users new to this computer will not see the animation. Note: The first sign-in animation will not be shown on Server, so this policy will have no effect.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-    "KeyName":  "EnableFirstLogonAnimation",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "Logon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "EnableFirstLogonAnimation",
+  "NameSpace": "Microsoft.Policies.WindowsLogon",
+  "Supported": "Windows8",
+  "DisplayName": "Show first sign-in animation",
+  "ExplainText": "This policy setting allows you to control whether users see the first sign-in animation when signing in to the computer for the first time. This applies to both the first user of the computer who completes the initial setup and users who are added to the computer later. It also controls if Microsoft account users will be offered the opt-in prompt for services during their first sign-in. If you enable this policy setting, Microsoft account users will see the opt-in prompt for services, and users with other accounts will see the sign-in animation. If you disable this policy setting, users will not see the animation and Microsoft account users will not see the opt-in prompt for services. If you do not configure this policy setting, the user who completes the initial Windows setup will see the animation during their first sign-in. If the first user had already completed the initial setup and this policy setting is not configured, users new to this computer will not see the animation. Note: The first sign-in animation will not be shown on Server, so this policy will have no effect.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "EnableFirstLogonAnimation",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "DWM.admx",
-    "NameSpace":  "Microsoft.Policies.DesktopWindowManager",
-    "Class":  "User",
-    "CategoryName":  "CAT_DesktopWindowManager",
-    "DisplayName":  "Do not allow window animations",
-    "ExplainText":  "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\DWM",
-    "KeyName":  "DisallowAnimations",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "DWM.admx",
+  "CategoryName": "CAT_DesktopWindowManager",
+  "PolicyName": "DwmDisallowAnimations_2",
+  "NameSpace": "Microsoft.Policies.DesktopWindowManager",
+  "Supported": "WindowsVista",
+  "DisplayName": "Do not allow window animations",
+  "ExplainText": "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM"
+  ],
+  "ValueName": "DisallowAnimations",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -590,41 +574,34 @@ Disables the lock screen (skips the lock screen and go directly to the login scr
 
 ```json
 {
-    "File":  "ControlPanelDisplay.admx",
-    "NameSpace":  "Microsoft.Policies.ControlPanelDisplay",
-    "Class":  "Machine",
-    "CategoryName":  "Personalization",
-    "DisplayName":  "Do not display the lock screen",
-    "ExplainText":  "This policy setting controls whether the lock screen appears for users.If you enable this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see their selected tile after locking their PC.If you disable or do not configure this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see a lock screen after locking their PC. They must dismiss the lock screen using touch, the keyboard, or by dragging it with the mouse.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Personalization",
-    "KeyName":  "NoLockScreen",
-    "Elements":  [
-
-                    ]
-}, 
+  "File": "ControlPanelDisplay.admx",
+  "CategoryName": "Personalization",
+  "PolicyName": "CPL_Personalization_NoLockScreen",
+  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
+  "Supported": "Windows8",
+  "DisplayName": "Do not display the lock screen",
+  "ExplainText": "This policy setting controls whether the lock screen appears for users. If you enable this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see their selected tile after locking their PC. If you disable or do not configure this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see a lock screen after locking their PC. They must dismiss the lock screen using touch, the keyboard, or by dragging it with the mouse.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
+  ],
+  "ValueName": "NoLockScreen",
+  "Elements": []
+},
 {
-    "File":  "ControlPanelDisplay.admx",
-    "NameSpace":  "Microsoft.Policies.ControlPanelDisplay",
-    "Class":  "Machine",
-    "CategoryName":  "Personalization",
-    "DisplayName":  "Force a specific default lock screen and logon image",
-    "ExplainText":  "This setting allows you to force a specific default lock screen and logon image by entering the path (location) of the image file. The same image will be used for both the lock and logon screens.This setting lets you specify the default lock screen and logon image shown when no user is signed in, and also sets the specified image as the default for all users (it replaces the inbox default image).To use this setting, type the fully qualified path and name of the file that stores the default lock screen and logon image. You can type a local path, such as C:\\Windows\\Web\\Screen\\img104.jpg or a UNC path, such as \\\\Server\\Share\\Corp.jpg.This can be used in conjunction with the \"Prevent changing lock screen and logon image\" setting to always force the specified lock screen and logon image to be shown.Note: This setting only applies to Enterprise, Education, and Server SKUs.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows",
-    "KeyName":  "Personalization",
-    "Elements":  [
-                        {
-                            "ValueName":  "LockScreenImage",
-                            "Type":  "Text"
-                        },
-                        {
-                            "ValueName":  "LockScreenOverlaysDisabled",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        }
-                    ]
+  "File": "ControlPanelDisplay.admx",
+  "CategoryName": "Personalization",
+  "PolicyName": "CPL_Personalization_ForceDefaultLockScreen",
+  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
+  "Supported": "Windows8",
+  "DisplayName": "Force a specific default lock screen and logon image",
+  "ExplainText": "This setting allows you to force a specific default lock screen and logon image by entering the path (location) of the image file. The same image will be used for both the lock and logon screens. This setting lets you specify the default lock screen and logon image shown when no user is signed in, and also sets the specified image as the default for all users (it replaces the inbox default image). To use this setting, type the fully qualified path and name of the file that stores the default lock screen and logon image. You can type a local path, such as C:\\Windows\\Web\\Screen\\img104.jpg or a UNC path, such as \\\\Server\\Share\\Corp.jpg. This can be used in conjunction with the \"Prevent changing lock screen and logon image\" setting to always force the specified lock screen and logon image to be shown. Note: This setting only applies to Enterprise, Education, and Server SKUs.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
+  ],
+  "Elements": [
+    { "Type": "Text", "ValueName": "LockScreenImage" },
+    { "Type": "Boolean", "ValueName": "LockScreenOverlaysDisabled", "TrueValue": "1", "FalseValue": "0" }
+  ]
 },
 ```
 
@@ -670,63 +647,54 @@ dq offset aNonewappalert ; "NoNewAppAlert"
 
 ```json
 {
-    "File":  "StartMenu.admx",
-    "NameSpace":  "Microsoft.Policies.StartMenu",
-    "Class":  "Both",
-    "CategoryName":  "StartMenu",
-    "DisplayName":  "Hide",
-    "ExplainText":  "If you enable this policy setting, you can configure Start menu to show or hide the list of user\u0027s most used apps, regardless of user settings.Selecting \"Show\" will force the \"Most used\" list to be shown, and user cannot change to hide it using the Settings app.Selecting \"Hide\" will force the \"Most used\" list to be hidden, and user cannot change to show it using the Settings app.Selecting \"Not Configured\", or if you disable or do not configure this policy setting, all will allow users to turn on or off the display of \"Most used\" list using the Settings app. This is default behavior.Note: configuring this policy to \"Show\" or \"Hide\" on supported versions of Windows 10 will supercede any policy setting of \"Remove frequent programs list from the Start Menu\" (which manages same part of Start menu but with fewer options).",
-    "Supported":  "Windows_10_0_21H2",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows",
-    "KeyName":  "Explorer",
-    "Elements":  [
-                      {
-                          "Type":  "Enum",
-                          "ValueName":  "ShowOrHideMostUsedApps",
-                          "Items":  [
-                                        {
-                                            "DisplayName":  "Not Configured",
-                                            "Value":  "0"
-                                        },
-                                        {
-                                            "DisplayName":  "Show",
-                                            "Value":  "1"
-                                        },
-                                        {
-                                            "DisplayName":  "Hide",
-                                            "Value":  "2"
-                                        }
-                                    ]
-                      }
-                  ]
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "ShowOrHideMostUsedApps",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "Windows_10_0_21H2",
+  "DisplayName": "Show or hide \"Most used\" list from Start menu",
+  "ExplainText": "If you enable this policy setting, you can configure Start menu to show or hide the list of user's most used apps, regardless of user settings. Selecting \"Show\" will force the \"Most used\" list to be shown, and user cannot change to hide it using the Settings app. Selecting \"Hide\" will force the \"Most used\" list to be hidden, and user cannot change to show it using the Settings app. Selecting \"Not Configured\", or if you disable or do not configure this policy setting, all will allow users to turn on or off the display of \"Most used\" list using the Settings app. This is default behavior. Note: configuring this policy to \"Show\" or \"Hide\" on supported versions of Windows 10 will supercede any policy setting of \"Remove frequent programs list from the Start Menu\" (which manages same part of Start menu but with fewer options).",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "ShowOrHideMostUsedApps", "Items": [
+        { "DisplayName": "Not Configured", "Data": "0" },
+        { "DisplayName": "Show", "Data": "1" },
+        { "DisplayName": "Hide", "Data": "2" }
+      ]
+    }
+  ]
 },
 {
-    "File":  "StartMenu.admx",
-    "NameSpace":  "Microsoft.Policies.StartMenu",
-    "Class":  "Both",
-    "CategoryName":  "StartMenu",
-    "DisplayName":  "Remove frequent programs list from the Start Menu",
-    "ExplainText":  "If you enable this setting, the frequently used programs list is removed from the Start menu.If you disable this setting or do not configure it, the frequently used programs list remains on the simple Start menu.",
-    "Supported":  "Windows7ToXPAndWindows10",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "KeyName":  "NoStartMenuMFUprogramsList",
-    "Elements":  [
-
-                  ]
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "NoFrequentUsedPrograms",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "Windows7ToXPAndWindows10",
+  "DisplayName": "Remove frequent programs list from the Start Menu",
+  "ExplainText": "If you enable this setting, the frequently used programs list is removed from the Start menu. If you disable this setting or do not configure it, the frequently used programs list remains on the simple Start menu.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "NoStartMenuMFUprogramsList",
+  "Elements": []
 },
 {
-    "File":  "StartMenu.admx",
-    "NameSpace":  "Microsoft.Policies.StartMenu",
-    "Class":  "User",
-    "CategoryName":  "StartMenu",
-    "DisplayName":  "Turn off user tracking",
-    "ExplainText":  "This policy setting allows you to turn off user tracking.If you enable this policy setting, the system does not track the programs that the user runs, and does not display frequently used programs in the Start Menu.If you disable or do not configure this policy setting, the system tracks the programs that the user runs. The system uses this information to customize Windows features, such as showing frequently used programs in the Start Menu.Also, see these related policy settings: \"Remove frequent programs liist from the Start Menu\" and \"Turn off personalized menus\".This policy setting does not prevent users from pinning programs to the Start Menu or Taskbar. See the \"Remove pinned programs list from the Start Menu\" and \"Do not allow pinning programs to the Taskbar\" policy settings.",
-    "Supported":  "WindowsVistaTo2k",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "KeyName":  "NoInstrumentation",
-    "Elements":  [
-
-                  ]
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "NoInstrumentation",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "WindowsVistaTo2k",
+  "DisplayName": "Turn off user tracking",
+  "ExplainText": "This policy setting allows you to turn off user tracking. If you enable this policy setting, the system does not track the programs that the user runs, and does not display frequently used programs in the Start Menu. If you disable or do not configure this policy setting, the system tracks the programs that the user runs. The system uses this information to customize Windows features, such as showing frequently used programs in the Start Menu. Also, see these related policy settings: \"Remove frequent programs liist from the Start Menu\" and \"Turn off personalized menus\". This policy setting does not prevent users from pinning programs to the Start Menu or Taskbar. See the \"Remove pinned programs list from the Start Menu\" and \"Do not allow pinning programs to the Taskbar\" policy settings.",
+  "KeyPath": [
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "NoInstrumentation",
+  "Elements": []
 },
 ```
 
@@ -739,157 +707,124 @@ Spotlight is used to provide new pictures on your lock screen.
 
 ```json
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Turn off all Windows spotlight features",
-    "ExplainText":  "This policy setting lets you turn off all Windows Spotlight features at once.If you enable this policy setting, Windows spotlight on lock screen, Windows tips, Microsoft consumer features and other related features will be turned off. You should enable this policy setting if your goal is to minimize network traffic from target devices.If you disable or do not configure this policy setting, Windows spotlight features are allowed and may be controlled individually using their corresponding policy settings.",
-    "Supported":  "Windows_10_0_NOSERVER",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "DisableWindowsSpotlightFeatures",
-    "Elements":  [
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "0",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableWindowsSpotlightFeatures",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER",
+  "DisplayName": "Turn off all Windows spotlight features",
+  "ExplainText": "This policy setting lets you turn off all Windows Spotlight features at once. If you enable this policy setting, Windows spotlight on lock screen, Windows tips, Microsoft consumer features and other related features will be turned off. You should enable this policy setting if your goal is to minimize network traffic from target devices. If you disable or do not configure this policy setting, Windows spotlight features are allowed and may be controlled individually using their corresponding policy settings.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableWindowsSpotlightFeatures",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Turn off the Windows Welcome Experience",
-    "ExplainText":  "This policy setting lets you turn off the Windows Spotlight Windows Welcome experience. This feature helps onboard users to Windows, for instance launching Microsoft Edge with a web page highlighting new features.If you enable this policy, the Windows Welcome Experience will no longer display when there are updates and changes to Windows and its apps.If you disable or do not configure this policy, the Windows Welcome Experience will be launched to help onboard users to Windows telling them about what\u0027s new, changed, and suggested.",
-    "Supported":  "Windows_10_0_RS2",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "DisableWindowsSpotlightWindowsWelcomeExperience",
-    "Elements":  [
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "0",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableWindowsSpotlightWindowsWelcomeExperience",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_RS2",
+  "DisplayName": "Turn off the Windows Welcome Experience",
+  "ExplainText": "This policy setting lets you turn off the Windows Spotlight Windows Welcome experience. This feature helps onboard users to Windows, for instance launching Microsoft Edge with a web page highlighting new features. If you enable this policy, the Windows Welcome Experience will no longer display when there are updates and changes to Windows and its apps. If you disable or do not configure this policy, the Windows Welcome Experience will be launched to help onboard users to Windows telling them about what's new, changed, and suggested.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableWindowsSpotlightWindowsWelcomeExperience",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Turn off Windows Spotlight on Action Center",
-    "ExplainText":  "If you enable this policy, Windows Spotlight notifications will no longer be shown on Action Center.If you disable or do not configure this policy, Microsoft may display notifications in Action Center that will suggest apps or features to help users be more productive on Windows.",
-    "Supported":  "Windows_10_0_RS2",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "DisableWindowsSpotlightOnActionCenter",
-    "Elements":  [
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "0",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableWindowsSpotlightOnActionCenter",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_RS2",
+  "DisplayName": "Turn off Windows Spotlight on Action Center",
+  "ExplainText": "If you enable this policy, Windows Spotlight notifications will no longer be shown on Action Center. If you disable or do not configure this policy, Microsoft may display notifications in Action Center that will suggest apps or features to help users be more productive on Windows.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableWindowsSpotlightOnActionCenter",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Turn off Windows Spotlight on Settings",
-    "ExplainText":  "If you enable this policy, Windows Spotlight suggestions will no longer be shown in Settings app.If you disable or do not configure this policy, Microsoft may suggest apps or features in Settings app to help users be productive on Windows or their linked phone.",
-    "Supported":  "Windows_10_0_RS4",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "DisableWindowsSpotlightOnSettings",
-    "Elements":  [
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "0",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableWindowsSpotlightOnSettings",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_RS4",
+  "DisplayName": "Turn off Windows Spotlight on Settings",
+  "ExplainText": "If you enable this policy, Windows Spotlight suggestions will no longer be shown in Settings app. If you disable or do not configure this policy, Microsoft may suggest apps or features in Settings app to help users be productive on Windows or their linked phone.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableWindowsSpotlightOnSettings",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Turn off Spotlight collection on Desktop",
-    "ExplainText":  "This policy setting removes the Spotlight collection setting in Personalization, rendering the user unable to select and subsequentyly download daily images from Microsoft to desktop.If you enable this policy, \"Spotlight collection\" will not be available as an option in Personalization settings.If you disable or do not configure this policy, \"Spotlight collection\" will appear as an option in Personalization settings, allowing the user to select \"Spotlight collection\" as the Desktop provider and display daily images from Microsoft on the desktop.",
-    "Supported":  "Windows_10_0_NOSERVER",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "DisableSpotlightCollectionOnDesktop",
-    "Elements":  [
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "0",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableSpotlightCollectionOnDesktop",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER",
+  "DisplayName": "Turn off Spotlight collection on Desktop",
+  "ExplainText": "This policy setting removes the Spotlight collection setting in Personalization, rendering the user unable to select and subsequentyly download daily images from Microsoft to desktop. If you enable this policy, \"Spotlight collection\" will not be available as an option in Personalization settings. If you disable or do not configure this policy, \"Spotlight collection\" will appear as an option in Personalization settings, allowing the user to select \"Spotlight collection\" as the Desktop provider and display daily images from Microsoft on the desktop.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableSpotlightCollectionOnDesktop",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Do not suggest third-party content in Windows spotlight",
-    "ExplainText":  "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps.If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
-    "Supported":  "Windows_10_0_NOSERVER",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "DisableThirdPartySuggestions",
-    "Elements":  [
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "0",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableThirdPartySuggestions",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER",
+  "DisplayName": "Do not suggest third-party content in Windows spotlight",
+  "ExplainText": "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps. If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableThirdPartySuggestions",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "CloudContent.admx",
-    "NameSpace":  "Microsoft.Policies.CloudContent",
-    "Class":  "User",
-    "CategoryName":  "CloudContent",
-    "DisplayName":  "Configure Windows spotlight on lock screen",
-    "ExplainText":  "This policy setting lets you configure Windows spotlight on the lock screen.If you enable this policy setting, \"Windows spotlight\" will be set as the lock screen provider and users will not be able to modify their lock screen. \"Windows spotlight\" will display daily images from Microsoft on the lock screen.Additionally, if you check the \"Include content from Enterprise spotlight\" checkbox and your organization has setup an Enterprise spotlight content service in Azure, the lock screen will display internal messages and communications configured in that service, when available. If your organization does not have an Enterprise spotlight content service, the checkbox will have no effect.If you disable this policy setting, Windows spotlight will be turned off and users will no longer be able to select it as their lock screen. Users will see the default lock screen image and will be able to select another image, unless you have enabled the \"Prevent changing lock screen image\" policy.If you do not configure this policy, Windows spotlight will be available on the lock screen and will be selected by default, unless you have configured another default lock screen image using the \"Force a specific default lock screen and logon image\" policy.Note: This policy is only available for Enterprise SKUs",
-    "Supported":  "Windows_10_0_NOSERVER",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\CloudContent",
-    "KeyName":  "ConfigureWindowsSpotlight",
-    "Elements":  [
-                      {
-                          "ValueName":  "IncludeEnterpriseSpotlight",
-                          "FalseValue":  "0",
-                          "TrueValue":  "1",
-                          "Type":  "Boolean"
-                      },
-                      {
-                          "Value":  "1",
-                          "Type":  "EnabledValue"
-                      },
-                      {
-                          "Value":  "2",
-                          "Type":  "DisabledValue"
-                      }
-                  ]
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "ConfigureWindowsSpotlight",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER",
+  "DisplayName": "Configure Windows spotlight on lock screen",
+  "ExplainText": "This policy setting lets you configure Windows spotlight on the lock screen. If you enable this policy setting, \"Windows spotlight\" will be set as the lock screen provider and users will not be able to modify their lock screen. \"Windows spotlight\" will display daily images from Microsoft on the lock screen. Additionally, if you check the \"Include content from Enterprise spotlight\" checkbox and your organization has setup an Enterprise spotlight content service in Azure, the lock screen will display internal messages and communications configured in that service, when available. If your organization does not have an Enterprise spotlight content service, the checkbox will have no effect. If you disable this policy setting, Windows spotlight will be turned off and users will no longer be able to select it as their lock screen. Users will see the default lock screen image and will be able to select another image, unless you have enabled the \"Prevent changing lock screen image\" policy. If you do not configure this policy, Windows spotlight will be available on the lock screen and will be selected by default, unless you have configured another default lock screen image using the \"Force a specific default lock screen and logon image\" policy. Note: This policy is only available for Enterprise SKUs",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "ConfigureWindowsSpotlight",
+  "Elements": [
+    { "Type": "Boolean", "ValueName": "IncludeEnterpriseSpotlight", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "2" }
+  ]
 },
 ```
 
@@ -992,25 +927,21 @@ reg add "HKCU\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d ""C:\Path\Wallpap
 
 ```json
 {
-    "File":  "Cpls.admx",
-    "NameSpace":  "Microsoft.Policies.ControlPanel2",
-    "Class":  "Machine",
-    "CategoryName":  "Users",
-    "DisplayName":  "Apply the default account picture to all users",
-    "ExplainText":  "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture. One application for this policy setting is to standardize the account pictures to a company logo.Note: The default account picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\user.jpg. The default guest picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\guest.jpg. If the default pictures do not exist, an empty frame is displayed.If you enable this policy setting, the default user account picture will display for all users on the system with no customization allowed.If you disable or do not configure this policy setting, users will be able to customize their account pictures.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "KeyName":  "UseDefaultTile",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "Cpls.admx",
+  "CategoryName": "Users",
+  "PolicyName": "UseDefaultTile",
+  "NameSpace": "Microsoft.Policies.ControlPanel2",
+  "Supported": "WindowsVista",
+  "DisplayName": "Apply the default account picture to all users",
+  "ExplainText": "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture. One application for this policy setting is to standardize the account pictures to a company logo. Note: The default account picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\user.jpg. The default guest picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\guest.jpg. If the default pictures do not exist, an empty frame is displayed. If you enable this policy setting, the default user account picture will display for all users on the system with no customization allowed. If you disable or do not configure this policy setting, users will be able to customize their account pictures.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "UseDefaultTile",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -1028,25 +959,21 @@ Category view:
 
 ```json
 {
-    "File":  "ControlPanel.admx",
-    "NameSpace":  "Microsoft.Policies.ControlPanel",
-    "Class":  "User",
-    "CategoryName":  "ControlPanel",
-    "DisplayName":  "Always open All Control Panel Items when opening Control Panel",
-    "ExplainText":  "This policy setting controls the default Control Panel view, whether by category or icons.If this policy setting is enabled, the Control Panel opens to the icon view.If this policy setting is disabled, the Control Panel opens to the category view.If this policy setting is not configured, the Control Panel opens to the view used in the last Control Panel session.Note: Icon size is dependent upon what the user has set it to in the previous session.",
-    "Supported":  "WindowsXP",
-    "KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "KeyName":  "ForceClassicControlPanel",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "ControlPanel.admx",
+  "CategoryName": "ControlPanel",
+  "PolicyName": "ForceClassicControlPanel",
+  "NameSpace": "Microsoft.Policies.ControlPanel",
+  "Supported": "WindowsXP",
+  "DisplayName": "Always open All Control Panel Items when opening Control Panel",
+  "ExplainText": "This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view. If this policy setting is not configured, the Control Panel opens to the view used in the last Control Panel session. Note: Icon size is dependent upon what the user has set it to in the previous session.",
+  "KeyPath": [
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "ForceClassicControlPanel",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 

@@ -1523,6 +1523,9 @@
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsLogon\\DisableLockScreenAppNotifications": {
         "value": { "Type": "REG_DWORD", "Data": 1 }
       },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\AccountNotifications": {
+        "DisableAccountNotifications": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "COMMANDS": {
         "SetEnabled": {
           "Action": "run_powershell",
@@ -1580,6 +1583,9 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\WindowsLogon\\DisableLockScreenAppNotifications": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\AccountNotifications": {
+        "DisableAccountNotifications": { "Action": "deletevalue" }
       },
       "COMMANDS": {
         "DelEnabled": {

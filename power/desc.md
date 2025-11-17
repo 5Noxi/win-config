@@ -369,67 +369,55 @@ DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\
 LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer`:
 ```json
 {
-    "File":  "WindowsExplorer.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsExplorer",
-    "Class":  "Machine",
-    "CategoryName":  "WindowsExplorer",
-    "DisplayName":  "Show lock in the user tile menu",
-    "ExplainText":  "Shows or hides lock from the user tile menu.If you enable this policy setting, the lock option will be shown in the User Tile menu.If you disable this policy setting, the lock option will never be shown in the User Tile menu.If you do not configure this policy setting, users will be able to choose whether they want lock to show through the Power Options Control Panel.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "KeyName":  "ShowLockOption",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "ShowLockOption",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows8",
+  "DisplayName": "Show lock in the user tile menu",
+  "ExplainText": "Shows or hides lock from the user tile menu. If you enable this policy setting, the lock option will be shown in the User Tile menu. If you disable this policy setting, the lock option will never be shown in the User Tile menu. If you do not configure this policy setting, users will be able to choose whether they want lock to show through the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "ShowLockOption",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "WindowsExplorer.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsExplorer",
-    "Class":  "Machine",
-    "CategoryName":  "WindowsExplorer",
-    "DisplayName":  "Show sleep in the power options menu",
-    "ExplainText":  "Shows or hides sleep from the power options menu.If you enable this policy setting, the sleep option will be shown in the Power Options menu (as long as it is supported by the machine\u0027s hardware).If you disable this policy setting, the sleep option will never be shown in the Power Options menu.If you do not configure this policy setting, users will be able to choose whether they want sleep to show through the Power Options Control Panel.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "KeyName":  "ShowSleepOption",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "ShowSleepOption",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows8",
+  "DisplayName": "Show sleep in the power options menu",
+  "ExplainText": "Shows or hides sleep from the power options menu. If you enable this policy setting, the sleep option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the sleep option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want sleep to show through the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "ShowSleepOption",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "WindowsExplorer.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsExplorer",
-    "Class":  "Machine",
-    "CategoryName":  "WindowsExplorer",
-    "DisplayName":  "Show hibernate in the power options menu",
-    "ExplainText":  "Shows or hides hibernate from the power options menu.If you enable this policy setting, the hibernate option will be shown in the Power Options menu (as long as it is supported by the machine\u0027s hardware).If you disable this policy setting, the hibernate option will never be shown in the Power Options menu.If you do not configure this policy setting, users will be able to choose whether they want hibernate to show through the Power Options Control Panel.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "KeyName":  "ShowHibernateOption",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "ShowHibernateOption",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows8",
+  "DisplayName": "Show hibernate in the power options menu",
+  "ExplainText": "Shows or hides hibernate from the power options menu. If you enable this policy setting, the hibernate option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the hibernate option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want hibernate to show through the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "ShowHibernateOption",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -502,25 +490,21 @@ if ( result >= 0 )
 ```
 ```json
 {
-    "File":  "WinInit.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsInitialization",
-    "Class":  "Machine",
-    "CategoryName":  "ShutdownOptions",
-    "DisplayName":  "Require use of fast startup",
-    "ExplainText":  "This policy setting controls the use of fast startup. If you enable this policy setting, the system requires hibernate to be enabled.If you disable or do not configure this policy setting, the local setting is used.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\System",
-    "KeyName":  "HiberbootEnabled",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WinInit.admx",
+  "CategoryName": "ShutdownOptions",
+  "PolicyName": "Hiberboot",
+  "NameSpace": "Microsoft.Policies.WindowsInitialization",
+  "Supported": "Windows8",
+  "DisplayName": "Require use of fast startup",
+  "ExplainText": "This policy setting controls the use of fast startup. If you enable this policy setting, the system requires hibernate to be enabled. If you disable or do not configure this policy setting, the local setting is used.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "HiberbootEnabled",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -877,25 +861,21 @@ This policy setting specifies that power management is disabled when the machine
 
 ```json
 {
-    "File":  "WCM.admx",
-    "NameSpace":  "Microsoft.Policies.WindowsConnectionManager",
-    "Class":  "Machine",
-    "CategoryName":  "WCM_Category",
-    "DisplayName":  "Disable power management in connected standby mode",
-    "ExplainText":  "This policy setting specifies that power management is disabled when the machine enters connected standby mode.If this policy setting is enabled, Windows Connection Manager does not manage adapter radios to reduce power consumption when the machine enters connected standby mode.If this policy setting is not configured or is disabled, power management is enabled when the machine enters connected standby mode.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy",
-    "KeyName":  "fDisablePowerManagement",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "WCM.admx",
+  "CategoryName": "WCM_Category",
+  "PolicyName": "WCM_DisablePowerManagement",
+  "NameSpace": "Microsoft.Policies.WindowsConnectionManager",
+  "Supported": "Windows8",
+  "DisplayName": "Disable power management in connected standby mode",
+  "ExplainText": "This policy setting specifies that power management is disabled when the machine enters connected standby mode. If this policy setting is enabled, Windows Connection Manager does not manage adapter radios to reduce power consumption when the machine enters connected standby mode. If this policy setting is not configured or is disabled, power management is enabled when the machine enters connected standby mode.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WcmSvc\\GroupPolicy"
+  ],
+  "ValueName": "fDisablePowerManagement",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 ```powershell

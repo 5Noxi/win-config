@@ -377,115 +377,91 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 
 ```json
 {
-	"File":  "SkyDrive.admx",
-	"NameSpace":  "Microsoft.Policies.OneDrive",
-	"Class":  "Machine",
-	"CategoryName":  "OneDrive",
-	"DisplayName":  "Save documents to OneDrive by default",
-	"ExplainText":  "This policy setting lets you disable OneDrive as the default save location. It does not prevent apps and users from saving files on OneDrive. If you disable this policy setting, files will be saved locally by default. Users will still be able to change the value of this setting to save to OneDrive by default. They will also be able to open and save files on OneDrive using the OneDrive app and file picker, and packaged Microsoft Store apps will still be able to access OneDrive using the WinRT API. If you enable or do not configure this policy setting, users with a connected account will save documents to OneDrive by default.",
-	"Supported":  "Windows_6_3only",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\OneDrive",
-	"KeyName":  "DisableLibrariesDefaultSaveToOneDrive",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "DisableLibrariesDefaultSaveToOneDrive",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows_6_3only",
+  "DisplayName": "Save documents to OneDrive by default",
+  "ExplainText": "This policy setting lets you disable OneDrive as the default save location. It does not prevent apps and users from saving files on OneDrive. If you disable this policy setting, files will be saved locally by default. Users will still be able to change the value of this setting to save to OneDrive by default. They will also be able to open and save files on OneDrive using the OneDrive app and file picker, and packaged Microsoft Store apps will still be able to access OneDrive using the WinRT API. If you enable or do not configure this policy setting, users with a connected account will save documents to OneDrive by default.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
+  ],
+  "ValueName": "DisableLibrariesDefaultSaveToOneDrive",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "SkyDrive.admx",
-	"NameSpace":  "Microsoft.Policies.OneDrive",
-	"Class":  "Machine",
-	"CategoryName":  "OneDrive",
-	"DisplayName":  "Prevent the usage of OneDrive for file storage on Windows 8.1",
-	"ExplainText":  "This policy setting lets you prevent apps and features from working with files on OneDrive for Windows 8.1.If you enable this policy setting:* Users can't access OneDrive from the OneDrive app and file picker.* Packaged Microsoft Store apps can't access OneDrive using the WinRT API.* OneDrive doesn't appear in the navigation pane in File Explorer.* OneDrive files aren't kept in sync with the cloud.* Users can't automatically upload photos and videos from the camera roll folder.If you disable or do not configure this policy setting, apps and features can work with OneDrive file storage.",
-	"Supported":  "Windows_6_3only",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\OneDrive",
-	"KeyName":  "DisableFileSync",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventOnedriveFileSyncForBlue",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows_6_3only",
+  "DisplayName": "Prevent the usage of OneDrive for file storage on Windows 8.1",
+  "ExplainText": "This policy setting lets you prevent apps and features from working with files on OneDrive for Windows 8.1. If you enable this policy setting: * Users can\u2019t access OneDrive from the OneDrive app and file picker. * Packaged Microsoft Store apps can\u2019t access OneDrive using the WinRT API. * OneDrive doesn\u2019t appear in the navigation pane in File Explorer. * OneDrive files aren\u2019t kept in sync with the cloud. * Users can\u2019t automatically upload photos and videos from the camera roll folder. If you disable or do not configure this policy setting, apps and features can work with OneDrive file storage.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
+  ],
+  "ValueName": "DisableFileSync",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "SkyDrive.admx",
-	"NameSpace":  "Microsoft.Policies.OneDrive",
-	"Class":  "Machine",
-	"CategoryName":  "OneDrive",
-	"DisplayName":  "Prevent the usage of OneDrive for file storage",
-	"ExplainText":  "This policy setting lets you prevent apps and features from working with files on OneDrive.If you enable this policy setting:* Users can't access OneDrive from the OneDrive app and file picker.* Packaged Microsoft Store apps can't access OneDrive using the WinRT API.* OneDrive doesn't appear in the navigation pane in File Explorer.* OneDrive files aren't kept in sync with the cloud.* Users can't automatically upload photos and videos from the camera roll folder.If you disable or do not configure this policy setting, apps and features can work with OneDrive file storage.",
-	"Supported":  "Windows7",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\OneDrive",
-	"KeyName":  "DisableFileSyncNGSC",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventOnedriveFileSync",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows7",
+  "DisplayName": "Prevent the usage of OneDrive for file storage",
+  "ExplainText": "This policy setting lets you prevent apps and features from working with files on OneDrive. If you enable this policy setting: * Users can\u2019t access OneDrive from the OneDrive app and file picker. * Packaged Microsoft Store apps can\u2019t access OneDrive using the WinRT API. * OneDrive doesn\u2019t appear in the navigation pane in File Explorer. * OneDrive files aren\u2019t kept in sync with the cloud. * Users can\u2019t automatically upload photos and videos from the camera roll folder. If you disable or do not configure this policy setting, apps and features can work with OneDrive file storage.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
+  ],
+  "ValueName": "DisableFileSyncNGSC",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "SkyDrive.admx",
-	"NameSpace":  "Microsoft.Policies.OneDrive",
-	"Class":  "Machine",
-	"CategoryName":  "OneDrive",
-	"DisplayName":  "Block syncing on metered connections only when roaming",
-	"ExplainText":  "This policy setting allows configuration of OneDrive file sync behavior on metered connections.",
-	"Supported":  "Windows_6_3only",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows",
-	"KeyName":  "OneDrive",
-	"Elements":  [
-						{
-							"Type":  "Enum",
-							"ValueName":  "DisableMeteredNetworkFileSync",
-							"Items":  [
-										{
-											"DisplayName":  "Block syncing on all metered connections",
-											"Value":  "0"
-										},
-										{
-											"DisplayName":  "Block syncing on metered connections only when roaming",
-											"Value":  "1"
-										}
-									]
-						}
-					]
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventOneDriveFileSyncOnMeteredNetwork",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows_6_3only",
+  "DisplayName": "Prevent OneDrive files from syncing over metered connections",
+  "ExplainText": "This policy setting allows configuration of OneDrive file sync behavior on metered connections.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "DisableMeteredNetworkFileSync", "Items": [
+        { "DisplayName": "Block syncing on all metered connections", "Data": "0" },
+        { "DisplayName": "Block syncing on metered connections only when roaming", "Data": "1" }
+      ]
+    }
+  ]
 },
 {
-	"File":  "SkyDrive.admx",
-	"NameSpace":  "Microsoft.Policies.OneDrive",
-	"Class":  "Machine",
-	"CategoryName":  "OneDrive",
-	"DisplayName":  "Prevent OneDrive from generating network traffic until the user signs in to OneDrive",
-	"ExplainText":  "Enable this setting to prevent the OneDrive sync client (OneDrive.exe) from generating network traffic (checking for updates, etc.) until the user signs in to OneDrive or starts syncing files to the local computer.If you enable this setting, users must sign in to the OneDrive sync client on the local computer, or select to sync OneDrive or SharePoint files on the computer, for the sync client to start automatically.If this setting is not enabled, the OneDrive sync client will start automatically when users sign in to Windows.If you enable or disable this setting, do not return the setting to Not Configured. Doing so will not change the configuration and the last configured setting will remain in effect.",
-	"Supported":  "Windows7",
-	"KeyPath":  "SOFTWARE\\Microsoft\\OneDrive",
-	"KeyName":  "PreventNetworkTrafficPreUserSignIn",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventNetworkTrafficPreUserSignIn",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows7",
+  "DisplayName": "Prevent OneDrive from generating network traffic until the user signs in to OneDrive",
+  "ExplainText": "Enable this setting to prevent the OneDrive sync client (OneDrive.exe) from generating network traffic (checking for updates, etc.) until the user signs in to OneDrive or starts syncing files to the local computer. If you enable this setting, users must sign in to the OneDrive sync client on the local computer, or select to sync OneDrive or SharePoint files on the computer, for the sync client to start automatically. If this setting is not enabled, the OneDrive sync client will start automatically when users sign in to Windows. If you enable or disable this setting, do not return the setting to Not Configured. Doing so will not change the configuration and the last configured setting will remain in effect.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Microsoft\\OneDrive"
+  ],
+  "ValueName": "PreventNetworkTrafficPreUserSignIn",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -536,129 +512,107 @@ See all edge policies here:
 
 ```json
 {
-	"File":  "EdgeUI.admx",
-	"NameSpace":  "Microsoft.Policies.EdgeUI",
-	"Class":  "User",
-	"CategoryName":  "EdgeUI",
-	"DisplayName":  "Turn off switching between recent apps",
-	"ExplainText":  "If you enable this setting, users will not be allowed to switch between recent apps. The App Switching option in the PC settings app will be disabled as well.If you disable or do not configure this policy setting, users will be allowed to switch between recent apps.",
-	"Supported":  "Windows8",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-	"KeyName":  "TurnOffBackstack",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "EdgeUI.admx",
+  "CategoryName": "EdgeUI",
+  "PolicyName": "TurnOffBackstack",
+  "NameSpace": "Microsoft.Policies.EdgeUI",
+  "Supported": "Windows8",
+  "DisplayName": "Turn off switching between recent apps",
+  "ExplainText": "If you enable this setting, users will not be allowed to switch between recent apps. The App Switching option in the PC settings app will be disabled as well. If you disable or do not configure this policy setting, users will be allowed to switch between recent apps.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+  ],
+  "ValueName": "TurnOffBackstack",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "EdgeUI.admx",
-	"NameSpace":  "Microsoft.Policies.EdgeUI",
-	"Class":  "User",
-	"CategoryName":  "EdgeUI",
-	"DisplayName":  "Turn off tracking of app usage",
-	"ExplainText":  "This policy setting prevents Windows from keeping track of the apps that are used and searched most frequently. If you enable this policy setting, apps will be sorted alphabetically in: - search results - the Search and Share panes - the drop-down app list in the Picker If you disable or don\u0027t configure this policy setting, Windows will keep track of the apps that are used and searched most frequently. Most frequently used apps will appear at the top.",
-	"Supported":  "Windows8",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-	"KeyName":  "DisableMFUTracking",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "EdgeUI.admx",
+  "CategoryName": "EdgeUI",
+  "PolicyName": "DisableMFUTracking",
+  "NameSpace": "Microsoft.Policies.EdgeUI",
+  "Supported": "Windows8",
+  "DisplayName": "Turn off tracking of app usage",
+  "ExplainText": "This policy setting prevents Windows from keeping track of the apps that are used and searched most frequently. If you enable this policy setting, apps will be sorted alphabetically in: - search results - the Search and Share panes - the drop-down app list in the Picker If you disable or don't configure this policy setting, Windows will keep track of the apps that are used and searched most frequently. Most frequently used apps will appear at the top.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+  ],
+  "ValueName": "DisableMFUTracking",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "EdgeUI.admx",
-	"NameSpace":  "Microsoft.Policies.EdgeUI",
-	"Class":  "User",
-	"CategoryName":  "EdgeUI",
-	"DisplayName":  "Do not show recent apps when the mouse is pointing to the upper-left corner of the screen",
-	"ExplainText":  "This policy setting allows you to prevent the last app and the list of recent apps from appearing when the mouse is pointing to the upper-left corner of the screen.If you enable this policy setting, the user will no longer be able to switch to recent apps using the mouse. The user will still be able to switch apps using touch gestures, keyboard shortcuts, and the Start screen.If you disable or don\u0027t configure this policy setting, the recent apps will be available by default, and the user can configure this setting.",
-	"Supported":  "Windows_6_3",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-	"KeyName":  "DisableRecentApps",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "EdgeUI.admx",
+  "CategoryName": "EdgeUI",
+  "PolicyName": "DisableRecentApps",
+  "NameSpace": "Microsoft.Policies.EdgeUI",
+  "Supported": "Windows_6_3",
+  "DisplayName": "Do not show recent apps when the mouse is pointing to the upper-left corner of the screen",
+  "ExplainText": "This policy setting allows you to prevent the last app and the list of recent apps from appearing when the mouse is pointing to the upper-left corner of the screen. If you enable this policy setting, the user will no longer be able to switch to recent apps using the mouse. The user will still be able to switch apps using touch gestures, keyboard shortcuts, and the Start screen. If you disable or don't configure this policy setting, the recent apps will be available by default, and the user can configure this setting.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+  ],
+  "ValueName": "DisableRecentApps",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "EdgeUI.admx",
-	"NameSpace":  "Microsoft.Policies.EdgeUI",
-	"Class":  "User",
-	"CategoryName":  "EdgeUI",
-	"DisplayName":  "Search, Share, Start, Devices, and Settings don\u0027t appear when the mouse is pointing to the upper-right corner of the screen",
-	"ExplainText":  "This policy setting allows you to prevent Search, Share, Start, Devices, and Settings from appearing when the mouse is pointing to the upper-right corner of the screen.If you enable this policy setting, Search, Share, Start, Devices, and Settings will no longer appear when the mouse is pointing to the upper-right corner. They\u0027ll still be available if the mouse is pointing to the lower-right corner.If you disable or don\u0027t configure this policy setting, Search, Share, Start, Devices, and Settings will be available by default, and the user can configure this setting.",
-	"Supported":  "Windows_6_3",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-	"KeyName":  "DisableCharms",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "EdgeUI.admx",
+  "CategoryName": "EdgeUI",
+  "PolicyName": "DisableCharms",
+  "NameSpace": "Microsoft.Policies.EdgeUI",
+  "Supported": "Windows_6_3",
+  "DisplayName": "Search, Share, Start, Devices, and Settings don't appear when the mouse is pointing to the upper-right corner of the screen",
+  "ExplainText": "This policy setting allows you to prevent Search, Share, Start, Devices, and Settings from appearing when the mouse is pointing to the upper-right corner of the screen. If you enable this policy setting, Search, Share, Start, Devices, and Settings will no longer appear when the mouse is pointing to the upper-right corner. They'll still be available if the mouse is pointing to the lower-right corner. If you disable or don't configure this policy setting, Search, Share, Start, Devices, and Settings will be available by default, and the user can configure this setting.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+  ],
+  "ValueName": "DisableCharms",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "EdgeUI.admx",
-	"NameSpace":  "Microsoft.Policies.EdgeUI",
-	"Class":  "Both",
-	"CategoryName":  "EdgeUI",
-	"DisplayName":  "Disable help tips",
-	"ExplainText":  "Disables help tips that Windows shows to the user.By default, Windows will show the user help tips until the user has successfully completed the scenarios.If this setting is enabled, Windows will not show any help tips to the user.",
-	"Supported":  "Windows_6_3",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-	"KeyName":  "DisableHelpSticker",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "EdgeUI.admx",
+  "CategoryName": "EdgeUI",
+  "PolicyName": "DisableHelpSticker",
+  "NameSpace": "Microsoft.Policies.EdgeUI",
+  "Supported": "Windows_6_3",
+  "DisplayName": "Disable help tips",
+  "ExplainText": "Disables help tips that Windows shows to the user. By default, Windows will show the user help tips until the user has successfully completed the scenarios. If this setting is enabled, Windows will not show any help tips to the user.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\EdgeUI",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+  ],
+  "ValueName": "DisableHelpSticker",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-	"File":  "EdgeUI.admx",
-	"NameSpace":  "Microsoft.Policies.EdgeUI",
-	"Class":  "Both",
-	"CategoryName":  "EdgeUI",
-	"DisplayName":  "Allow edge swipe",
-	"ExplainText":  "If you disable this policy setting, users will not be able to invoke any system UI by swiping in from any screen edge.If you enable or do not configure this policy setting, users will be able to invoke system UI by swiping in from the screen edges.",
-	"Supported":  "Windows_10_0",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-	"KeyName":  "AllowEdgeSwipe",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "EdgeUI.admx",
+  "CategoryName": "EdgeUI",
+  "PolicyName": "AllowEdgeSwipe",
+  "NameSpace": "Microsoft.Policies.EdgeUI",
+  "Supported": "Windows_10_0",
+  "DisplayName": "Allow edge swipe",
+  "ExplainText": "If you disable this policy setting, users will not be able to invoke any system UI by swiping in from any screen edge. If you enable or do not configure this policy setting, users will be able to invoke system UI by swiping in from the screen edges.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\EdgeUI",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+  ],
+  "ValueName": "AllowEdgeSwipe",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```

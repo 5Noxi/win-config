@@ -350,82 +350,44 @@ RegistryKey<unsigned char>::Initialize(
 
 ```json
 {
-    "File":  "LinkLayerTopologyDiscovery.admx",
-    "NameSpace":  "Microsoft.Policies.LinkLayerTopology",
-    "Class":  "Machine",
-    "CategoryName":  "LLTD_Category",
-    "DisplayName":  "Turn on Mapper I/O (LLTDIO) driver",
-    "ExplainText":  "This policy setting changes the operational behavior of the Mapper I/O network protocol driver.LLTDIO allows a computer to discover the topology of a network it\u0027s connected to. It also allows a computer to initiate Quality-of-Service requests such as bandwidth estimation and network health analysis.If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow LLTDIO to operate on a network interface that\u0027s connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead.If you disable or do not configure this policy setting, the default behavior of LLTDIO will apply.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LLTD",
-    "KeyName":  "EnableLLTDIO",
-    "Elements":  [
-                        {
-                            "ValueName":  "AllowLLTDIOOnDomain",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        },
-                        {
-                            "ValueName":  "AllowLLTDIOOnPublicNet",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        },
-                        {
-                            "ValueName":  "ProhibitLLTDIOOnPrivateNet",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        },
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+"File": "LinkLayerTopologyDiscovery.admx",
+"CategoryName": "LLTD_Category",
+"PolicyName": "LLTD_EnableLLTDIO",
+"NameSpace": "Microsoft.Policies.LinkLayerTopology",
+"Supported": "WindowsVista",
+"DisplayName": "Turn on Mapper I/O (LLTDIO) driver",
+"ExplainText": "This policy setting changes the operational behavior of the Mapper I/O network protocol driver. LLTDIO allows a computer to discover the topology of a network it's connected to. It also allows a computer to initiate Quality-of-Service requests such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow LLTDIO to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior of LLTDIO will apply.",
+"KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD"
+],
+"ValueName": "EnableLLTDIO",
+"Elements": [
+    { "Type": "Boolean", "ValueName": "AllowLLTDIOOnDomain", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Boolean", "ValueName": "AllowLLTDIOOnPublicNet", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Boolean", "ValueName": "ProhibitLLTDIOOnPrivateNet", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+]
 },
 {
-    "File":  "LinkLayerTopologyDiscovery.admx",
-    "NameSpace":  "Microsoft.Policies.LinkLayerTopology",
-    "Class":  "Machine",
-    "CategoryName":  "LLTD_Category",
-    "DisplayName":  "Turn on Responder (RSPNDR) driver",
-    "ExplainText":  "This policy setting changes the operational behavior of the Responder network protocol driver.The Responder allows a computer to participate in Link Layer Topology Discovery requests so that it can be discovered and located on the network. It also allows a computer to participate in Quality-of-Service activities such as bandwidth estimation and network health analysis.If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow the Responder to operate on a network interface that\u0027s connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead.If you disable or do not configure this policy setting, the default behavior for the Responder will apply.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows\\LLTD",
-    "KeyName":  "EnableRspndr",
-    "Elements":  [
-                        {
-                            "ValueName":  "AllowRspndrOnDomain",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        },
-                        {
-                            "ValueName":  "AllowRspndrOnPublicNet",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        },
-                        {
-                            "ValueName":  "ProhibitRspndrOnPrivateNet",
-                            "FalseValue":  "0",
-                            "TrueValue":  "1",
-                            "Type":  "Boolean"
-                        },
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+"File": "LinkLayerTopologyDiscovery.admx",
+"CategoryName": "LLTD_Category",
+"PolicyName": "LLTD_EnableRspndr",
+"NameSpace": "Microsoft.Policies.LinkLayerTopology",
+"Supported": "WindowsVista",
+"DisplayName": "Turn on Responder (RSPNDR) driver",
+"ExplainText": "This policy setting changes the operational behavior of the Responder network protocol driver. The Responder allows a computer to participate in Link Layer Topology Discovery requests so that it can be discovered and located on the network. It also allows a computer to participate in Quality-of-Service activities such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow the Responder to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior for the Responder will apply.",
+"KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD"
+],
+"ValueName": "EnableRspndr",
+"Elements": [
+    { "Type": "Boolean", "ValueName": "AllowRspndrOnDomain", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Boolean", "ValueName": "AllowRspndrOnPublicNet", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Boolean", "ValueName": "ProhibitRspndrOnPrivateNet", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+]
 },
 ```
 
@@ -682,102 +644,76 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
 
 ```json
 {
-    "File":  "DnsClient.admx",
-    "NameSpace":  "Microsoft.Policies.DNSClient",
-    "Class":  "Machine",
-    "CategoryName":  "DNS_Client",
-    "DisplayName":  "Configure multicast DNS (mDNS) protocol",
-    "ExplainText":  "Specifies if the DNS client will perform name resolution over mDNS.If you enable this policy, the DNS client will use mDNS protocol.If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
-    "Supported":  "Windows_10_0_RS2",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\DNSClient",
-    "KeyName":  "EnableMDNS",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "DnsClient.admx",
+  "CategoryName": "DNS_Client",
+  "PolicyName": "DNS_MDNS",
+  "NameSpace": "Microsoft.Policies.DNSClient",
+  "Supported": "Windows_10_0_RS2",
+  "DisplayName": "Configure multicast DNS (mDNS) protocol",
+  "ExplainText": "Specifies if the DNS client will perform name resolution over mDNS. If you enable this policy, the DNS client will use mDNS protocol. If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
+  ],
+  "ValueName": "EnableMDNS",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "DnsClient.admx",
-    "NameSpace":  "Microsoft.Policies.DNSClient",
-    "Class":  "Machine",
-    "CategoryName":  "DNS_Client",
-    "DisplayName":  "Turn off smart multi-homed name resolution",
-    "ExplainText":  "Specifies that a multi-homed DNS client should optimize name resolution across networks. The setting improves performance by issuing parallel DNS, link local multicast name resolution (LLMNR) and NetBIOS over TCP/IP (NetBT) queries across all networks. In the event that multiple positive responses are received, the network binding order is used to determine which response to accept.If you enable this policy setting, the DNS client will not perform any optimizations. DNS queries will be issued across all networks first. LLMNR queries will be issued if the DNS queries fail, followed by NetBT queries if LLMNR queries fail.If you disable this policy setting, or if you do not configure this policy setting, name resolution will be optimized when issuing DNS, LLMNR and NetBT queries.",
-    "Supported":  "Windows8",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\DNSClient",
-    "KeyName":  "DisableSmartNameResolution",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "DnsClient.admx",
+  "CategoryName": "DNS_Client",
+  "PolicyName": "DNS_SmartMultiHomedNameResolution",
+  "NameSpace": "Microsoft.Policies.DNSClient",
+  "Supported": "Windows8",
+  "DisplayName": "Turn off smart multi-homed name resolution",
+  "ExplainText": "Specifies that a multi-homed DNS client should optimize name resolution across networks. The setting improves performance by issuing parallel DNS, link local multicast name resolution (LLMNR) and NetBIOS over TCP/IP (NetBT) queries across all networks. In the event that multiple positive responses are received, the network binding order is used to determine which response to accept. If you enable this policy setting, the DNS client will not perform any optimizations. DNS queries will be issued across all networks first. LLMNR queries will be issued if the DNS queries fail, followed by NetBT queries if LLMNR queries fail. If you disable this policy setting, or if you do not configure this policy setting, name resolution will be optimized when issuing DNS, LLMNR and NetBT queries.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
+  ],
+  "ValueName": "DisableSmartNameResolution",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 {
-    "File":  "DnsClient.admx",
-    "NameSpace":  "Microsoft.Policies.DNSClient",
-    "Class":  "Machine",
-    "CategoryName":  "DNS_Client",
-    "DisplayName":  "NetBIOS learning mode",
-    "ExplainText":  "Specifies if the DNS client will perform name resolution over NetBIOS.By default, the DNS client will disable NetBIOS name resolution on public networks for security reasons.To use this policy setting, click Enabled, and then select one of the following options from the drop-down list:Disable NetBIOS name resolution: Never allow NetBIOS name resolution.Allow NetBIOS name resolution: Always allow NetBIOS name resolution.Disable NetBIOS name resolution on public networks: Only allow NetBIOS name resolution on network adapters which are not connected to public networks.NetBIOS learning mode: Always allow NetBIOS name resolution and use it as a fallback after mDNS/LLMNR queries fail.If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT",
-    "KeyName":  "DNSClient",
-    "Elements":  [
-                        {
-                            "Type":  "Enum",
-                            "ValueName":  "EnableNetbios",
-                            "Items":  [
-                                        {
-                                            "DisplayName":  "Disable NetBIOS name resolution",
-                                            "Value":  "0"
-                                        },
-                                        {
-                                            "DisplayName":  "Allow NetBIOS name resolution",
-                                            "Value":  "1"
-                                        },
-                                        {
-                                            "DisplayName":  "Disable NetBIOS name resolution on public networks",
-                                            "Value":  "2"
-                                        },
-                                        {
-                                            "DisplayName":  "NetBIOS learning mode",
-                                            "Value":  "3"
-                                        }
-                                    ]
-                        }
-                    ]
+  "File": "DnsClient.admx",
+  "CategoryName": "DNS_Client",
+  "PolicyName": "DNS_Netbios",
+  "NameSpace": "Microsoft.Policies.DNSClient",
+  "Supported": "WindowsVista",
+  "DisplayName": "Configure NetBIOS settings",
+  "ExplainText": "Specifies if the DNS client will perform name resolution over NetBIOS. By default, the DNS client will disable NetBIOS name resolution on public networks for security reasons. To use this policy setting, click Enabled, and then select one of the following options from the drop-down list: Disable NetBIOS name resolution: Never allow NetBIOS name resolution. Allow NetBIOS name resolution: Always allow NetBIOS name resolution. Disable NetBIOS name resolution on public networks: Only allow NetBIOS name resolution on network adapters which are not connected to public networks. NetBIOS learning mode: Always allow NetBIOS name resolution and use it as a fallback after mDNS/LLMNR queries fail. If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "EnableNetbios", "Items": [
+        { "DisplayName": "Disable NetBIOS name resolution", "Data": "0" },
+        { "DisplayName": "Allow NetBIOS name resolution", "Data": "1" },
+        { "DisplayName": "Disable NetBIOS name resolution on public networks", "Data": "2" },
+        { "DisplayName": "NetBIOS learning mode", "Data": "3" }
+      ]
+    }
+  ]
 },
 {
-    "File":  "DnsClient.admx",
-    "NameSpace":  "Microsoft.Policies.DNSClient",
-    "Class":  "Machine",
-    "CategoryName":  "DNS_Client",
-    "DisplayName":  "Turn off multicast name resolution",
-    "ExplainText":  "Specifies that link local multicast name resolution (LLMNR) is disabled on the DNS client.LLMNR is a secondary name resolution protocol. With LLMNR, queries are sent using multicast over a local network link on a single subnet from a DNS client to another DNS client on the same subnet that also has LLMNR enabled. LLMNR does not require a DNS server or DNS client configuration, and provides name resolution in scenarios in which conventional DNS name resolution is not possible.If you enable this policy setting, LLMNR will be disabled on all available network adapters on the DNS client.If you disable this policy setting, or you do not configure this policy setting, LLMNR will be enabled on all available network adapters.",
-    "Supported":  "WindowsVista",
-    "KeyPath":  "Software\\Policies\\Microsoft\\Windows NT\\DNSClient",
-    "KeyName":  "EnableMulticast",
-    "Elements":  [
-                        {
-                            "Value":  "0",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "1",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "DnsClient.admx",
+  "CategoryName": "DNS_Client",
+  "PolicyName": "Turn_Off_Multicast",
+  "NameSpace": "Microsoft.Policies.DNSClient",
+  "Supported": "WindowsVista",
+  "DisplayName": "Turn off multicast name resolution",
+  "ExplainText": "Specifies that link local multicast name resolution (LLMNR) is disabled on the DNS client. LLMNR is a secondary name resolution protocol. With LLMNR, queries are sent using multicast over a local network link on a single subnet from a DNS client to another DNS client on the same subnet that also has LLMNR enabled. LLMNR does not require a DNS server or DNS client configuration, and provides name resolution in scenarios in which conventional DNS name resolution is not possible. If you enable this policy setting, LLMNR will be disabled on all available network adapters on the DNS client. If you disable this policy setting, or you do not configure this policy setting, LLMNR will be enabled on all available network adapters.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
+  ],
+  "ValueName": "EnableMulticast",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
 },
 ```
 
@@ -842,25 +778,21 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 
 ```json
 {
-    "File":  "wlansvc.admx",
-    "NameSpace":  "Microsoft.Policies.WlanSvc",
-    "Class":  "Machine",
-    "CategoryName":  "WlanSettings_Category",
-    "DisplayName":  "Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services",
-    "ExplainText":  "This policy setting determines whether users can enable the following WLAN settings: \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\".\"Connect to suggested open hotspots\" enables Windows to automatically connect users to open hotspots it knows about by crowdsourcing networks that other people using Windows have connected to.\"Connect to networks shared by my contacts\" enables Windows to automatically connect to networks that the user\u0027s contacts have shared with them, and enables users on this device to share networks with their contacts.\"Enable paid services\" enables Windows to temporarily connect to open hotspots to determine if paid services are available.If this policy setting is disabled, both \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\" will be turned off and users on this device will be prevented from enabling them.If this policy setting is not configured or is enabled, users can choose to enable or disable either \"Connect to suggested open hotspots\" or \"Connect to networks shared by my contacts\".",
-    "Supported":  "Windows_10_0_NOSERVER",
-    "KeyPath":  "Software\\Microsoft\\wcmsvc\\wifinetworkmanager\\config",
-    "KeyName":  "AutoConnectAllowedOEM",
-    "Elements":  [
-                        {
-                            "Value":  "1",
-                            "Type":  "EnabledValue"
-                        },
-                        {
-                            "Value":  "0",
-                            "Type":  "DisabledValue"
-                        }
-                    ]
+  "File": "wlansvc.admx",
+  "CategoryName": "WlanSettings_Category",
+  "PolicyName": "WiFiSense",
+  "NameSpace": "Microsoft.Policies.WlanSvc",
+  "Supported": "Windows_10_0_NOSERVER",
+  "DisplayName": "Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services",
+  "ExplainText": "This policy setting determines whether users can enable the following WLAN settings: \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\". \"Connect to suggested open hotspots\" enables Windows to automatically connect users to open hotspots it knows about by crowdsourcing networks that other people using Windows have connected to. \"Connect to networks shared by my contacts\" enables Windows to automatically connect to networks that the user's contacts have shared with them, and enables users on this device to share networks with their contacts. \"Enable paid services\" enables Windows to temporarily connect to open hotspots to determine if paid services are available. If this policy setting is disabled, both \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\" will be turned off and users on this device will be prevented from enabling them. If this policy setting is not configured or is enabled, users can choose to enable or disable either \"Connect to suggested open hotspots\" or \"Connect to networks shared by my contacts\".",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\wcmsvc\\wifinetworkmanager\\config"
+  ],
+  "ValueName": "AutoConnectAllowedOEM",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
@@ -1201,25 +1133,21 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
 
 ```json
 {
-	"File":  "WindowsSandbox.admx",
-	"NameSpace":  "Microsoft.Policies.WindowsSandbox",
-	"Class":  "Machine",
-	"CategoryName":  "WindowsSandbox",
-	"DisplayName":  "Allow printer sharing with Windows Sandbox",
-	"ExplainText":  "This policy setting enables or disables printer sharing from the host into the Sandbox.If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host.If you do not configure this policy setting, printer redirection will be disabled.",
-	"Supported":  "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
-	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox",
-	"KeyName":  "AllowPrinterRedirection",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "WindowsSandbox.admx",
+  "CategoryName": "WindowsSandbox",
+  "PolicyName": "AllowPrinterRedirection",
+  "NameSpace": "Microsoft.Policies.WindowsSandbox",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
+  "DisplayName": "Allow printer sharing with Windows Sandbox",
+  "ExplainText": "This policy setting enables or disables printer sharing from the host into the Sandbox. If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host. If you do not configure this policy setting, printer redirection will be disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
+  ],
+  "ValueName": "AllowPrinterRedirection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
 },
 ```
 
