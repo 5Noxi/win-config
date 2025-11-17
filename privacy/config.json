@@ -1433,6 +1433,9 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\AllowInputPersonalization": {
         "value": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\WindowsInkWorkspace": {
+        "AllowWindowsInkWorkspace": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -1491,6 +1494,9 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\default\\Privacy\\AllowInputPersonalization": {
         "value": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\WindowsInkWorkspace": {
+        "AllowWindowsInkWorkspace": { "Action": "deletevalue" }
       }
     }
   },

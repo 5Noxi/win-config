@@ -572,6 +572,15 @@ IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00
 
 Disables the lock screen (skips the lock screen and go directly to the login screen). Revert it by removing the value (2nd command).
 
+Add a custom text to the sign in screen via:
+```powershell
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
+# legalnoticecaption -	Type: REG_SZ - Data: Noverse
+# legalnoticetext	- Type: REG_SZ - Data: https://5noxi.github.io
+```
+
+---
+
 ```json
 {
   "File": "ControlPanelDisplay.admx",

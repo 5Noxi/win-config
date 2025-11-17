@@ -1431,6 +1431,18 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "NoWindowMinimizingShortcuts": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disable Aero Snap": {
+          "HKCU\\Control Panel\\Desktop": {
+            "WindowArrangementActive": { "Type": "REG_SZ", "Data": "0" }
+          }
+        },
+        "Disable Drag to Snap": {
+          "HKCU\\Control Panel\\Desktop": {
+            "DockMoving": { "Type": "REG_SZ", "Data": "0" }
+          }
+        }
       }
     },
     "revert": {
@@ -1439,6 +1451,18 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
         "NoWindowMinimizingShortcuts": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Aero Snap": {
+          "HKCU\\Control Panel\\Desktop": {
+            "WindowArrangementActive": { "Type": "REG_SZ", "Data": "1" }
+          }
+        },
+        "Disable Drag to Snap": {
+          "HKCU\\Control Panel\\Desktop": {
+            "DockMoving": { "Type": "REG_SZ", "Data": "1" }
+          }
+        }
       }
     }
   },
@@ -1549,6 +1573,11 @@
           "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Reporting": {
             "DisableEnhancedNotifications": { "Type": "REG_DWORD", "Data": 1 }
           }
+        },
+        "Turn off access to the Store": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "NoUseStoreOpenWith": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
@@ -1609,6 +1638,11 @@
           },
           "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender\\Reporting": {
             "DisableEnhancedNotifications": { "Action": "deletevalue" }
+          }
+        },
+        "Turn off access to the Store": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer": {
+            "NoUseStoreOpenWith": { "Action": "deletevalue" }
           }
         }
       }

@@ -1031,6 +1031,26 @@ Used for better suggestions by creating a custom dictionary using your typing hi
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+{
+  "File": "WindowsInkWorkspace.admx",
+  "CategoryName": "WindowsInkWorkspace",
+  "PolicyName": "AllowWindowsInkWorkspace",
+  "NameSpace": "Microsoft.Policies.WindowsInkWorkspace",
+  "Supported": "WIN10_RS1",
+  "DisplayName": "Allow Windows Ink Workspace",
+  "ExplainText": "Allow Windows Ink Workspace",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\WindowsInkWorkspace"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "AllowWindowsInkWorkspace", "Items": [
+        { "DisplayName": "Disabled", "Data": "0" },
+        { "DisplayName": "On, but disallow access above lock", "Data": "1" },
+        { "DisplayName": "On", "Data": "2" }
+      ]
+    }
+  ]
+},
 ```
 
 # Disable Online Speech Recognition
