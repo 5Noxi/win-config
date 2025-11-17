@@ -578,6 +578,9 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 # legalnoticecaption -	Type: REG_SZ - Data: Noverse
 # legalnoticetext	- Type: REG_SZ - Data: https://5noxi.github.io
 ```
+By adding them, you'll have to click `OK` every time you boot/log in:
+
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/legalnotice.png?raw=true)
 
 ---
 
