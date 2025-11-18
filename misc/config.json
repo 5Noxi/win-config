@@ -585,6 +585,9 @@
         "TextPredictionEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "TrackingPrevention": { "Type": "REG_DWORD", "Data": 3 },
         "UserFeedbackAllowed": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+        "MicrosoftEdgeDataOptIn": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -625,6 +628,9 @@
         "TextPredictionEnabled": { "Action": "deletevalue" },
         "TrackingPrevention": { "Action": "deletevalue" },
         "UserFeedbackAllowed": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\DataCollection": {
+        "MicrosoftEdgeDataOptIn": { "Action": "deletevalue" }
       }
     }
   }

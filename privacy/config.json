@@ -20,6 +20,7 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "AllowDeviceNameInTelemetry": { "Type": "REG_DWORD", "Data": 0 },
         "AllowTelemetry": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableDeviceDelete": { "Type": "REG_DWORD", "Data": 0 },
         "DisableDiagnosticDataViewer": { "Type": "REG_DWORD", "Data": 1 },
         "DisableOneSettingsDownloads": { "Type": "REG_DWORD", "Data": 1 },
         "DisableTelemetryOptInChangeNotification": { "Type": "REG_DWORD", "Data": 1 },
@@ -68,6 +69,7 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection": {
         "AllowDeviceNameInTelemetry": { "Action": "deletevalue" },
         "AllowTelemetry": { "Action": "deletevalue" },
+        "DisableDeviceDelete": { "Action": "deletevalue" },
         "DisableDiagnosticDataViewer": { "Action": "deletevalue" },
         "DisableOneSettingsDownloads": { "Action": "deletevalue" },
         "DisableTelemetryOptInChangeNotification": { "Action": "deletevalue" },
@@ -639,6 +641,14 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Rpc": {
         "RestrictRemoteClients": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "SUBOPTION": {
+        "Disallow Projection to this PC": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Connect": {
+            "AllowProjectionToPC": { "Type": "REG_DWORD", "Data": 0 },
+            "RequirePinForPairing": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        }
       }
     },
     "revert": {
@@ -657,6 +667,14 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Rpc": {
         "RestrictRemoteClients": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disallow Projection to this PC": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\Connect": {
+            "AllowProjectionToPC": { "Action": "deletevalue" },
+            "RequirePinForPairing": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -1015,6 +1033,11 @@
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
           }
+        },
+        "Deny 'Cellular data'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\WwanSvc\\CellularDataAccess": {
+            "LetAppsAccessCellularData": { "Type": "REG_DWORD", "Data": 3 }
+          }
         }
       }
     },
@@ -1371,6 +1394,11 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          }
+        },
+        "Deny 'Cellular data'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\WwanSvc\\CellularDataAccess": {
+            "LetAppsAccessCellularData": { "Action": "deletevalue" }
           }
         }
       }
@@ -1741,6 +1769,9 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
         "BingSearchEnabled": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
+        "DisableSoftLanding": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
@@ -1799,6 +1830,9 @@
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search": {
         "BingSearchEnabled": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
+        "DisableSoftLanding": { "Action": "deletevalue" }
       }
     }
   },
@@ -2232,6 +2266,16 @@
           "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
             "DontDisplayLastUserName": { "Type": "REG_DWORD", "Data": 1 }
           }
+        },
+        "Hide previous Logon Info at Sign-In": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "DisplayLastLogonInfo": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        },
+        "Hide Logon Hours Expiry Warnings": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "DontDisplayLogonHoursWarnings": { "Type": "REG_DWORD", "Data": 1 }
+          }
         }
       }
     },
@@ -2249,6 +2293,16 @@
           },
           "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon": {
             "DontDisplayLastUserName": { "Action": "deletevalue" }
+          }
+        },
+        "Hide previous Logon Info at Sign-In": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "DisplayLastLogonInfo": { "Action": "deletevalue" }
+          }
+        },
+        "Hide Logon Hours Expiry Warnings": {
+          "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+            "DontDisplayLogonHoursWarnings": { "Action": "deletevalue" }
           }
         }
       }

@@ -1086,27 +1086,69 @@ HKR, Ndi\Params\*InterruptModeration,                   type,                   
 
 # Enable RSS
 
-"*NumRssQueues" = 2
-"*NumaNodeId"= 0
-"*RSS"= 1
-"*RSSProfile"= 4
-"*RssBaseProcGroup"= 0
-#"*RssBaseProcNumber"= 2
-"*RssMaxProcGroup"= 0
-#"*RssMaxProcNumber" = 2
-#"RssV2" = 1
+"Receive-Side Scaling (RSS), also known as multi-queue receive, distributes network receive processing across several hardware-based receive queues, allowing inbound network traffic to be processed by multiple CPUs. RSS can be used to relieve bottlenecks in receive interrupt processing caused by overloading a single CPU, and to reduce network latency."
 
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/non-rss-receive-processing  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/rss-with-message-signaled-interrupts
+> https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/performance_tuning_guide/network-rss
 
-```inf
-, *RSS
-HKR, Ndi\Params\*RSS,                           ParamDesc,              0, %RSS%
-HKR, Ndi\Params\*RSS,                           default,                0, "1"
-HKR, Ndi\Params\*RSS,                           type,                   0, "enum"
-HKR, Ndi\Params\*RSS\Enum,                      "0",                    0, %Disabled%
-HKR, Ndi\Params\*RSS\Enum,                      "1",                    0, %Enabled%
+Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
+
+I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below) - disabling the option therefore won't "disable" RSS, it only removes the created values.
+
+`*MaxRssProcessors`:  
+The maximum number of RSS processors.
+
+`*NumRssQueues`:  
+The maximum number of the RSS queues that the device should use.
+
+`*RssBaseProcGroup`:  
+Sets the RSS base processor group for systems with more than 64 processors.
+
+`*RssBaseProcNumber`:  
+Sets the desired base CPU number for each interface. The number can be different for each interface. This allows partitioning of CPUs across network adapters.
+
+`*RssMaxProcGroup`:  
+The maximum processor group of the RSS interface.
+
+`*RssMaxProcNumber`:  
+The maximum processor number of the RSS interface. If `*RssMaxProcNumber` is specified, then `*RssMaxProcGroup` should also be specified.
+
+`*RssProfile`:  
+|SubkeyName|ParamDesc|Value|EnumDesc|
+|--- |--- |--- |--- |
+|**\*RSSProfile**|RSS load balancing profile|1|**ClosestProcessor**: Default behavior is consistent with that of Windows Server 2008 R2.|
+|||2|**ClosestProcessorStatic**: No dynamic load-balancing - Distribute but don't load-balance at runtime.|
+|||3|**NUMAScaling**: Assign RSS CPUs in a round robin basis across every NUMA node to enable applications that are running on NUMA servers to scale well.|
+|||4 (Default)|**NUMAScalingStatic**: RSS processor selection is the same as for NUMA scalability without dynamic load-balancing.|
+|||5|**ConservativeScaling**: RSS uses as few processors as possible to sustain the load. This option helps reduce the number of interrupts.|
+|||6 (Default on heterogeneous CPU systems)|**NdisRssProfileBalanced**: RSS processor selection is based on traffic workload. Only available in [NetAdapterCx](https://learn.microsoft.com/en-us/windows-hardware/drivers/netcx/netadaptercx-receive-side-scaling-rss-), starting in WDK preview version 25197.|
+
+`RssV2`:  
+Enables the RSS v2 feature which improves the Receive Side Scaling by offering dynamic, per-VPort spreading of queues. It reduces the time to update the indirection table. Note: RSSv2 is only supported by NDIS 6.80 and later versions.
+
+`ValidateRssV2`:  
+Enables strict argument validation for upper layer testing. Set along with the RssV2 key to enable the RSSv2 feature.  
+
+> https://docs.kernel.org/networking/scaling.html  
+> https://docs.nvidia.com/networking/display/winof2v280/configuring+the+driver+registry+keys  
+> https://docs.nvidia.com/networking/display/winofv55052000/receive+side+scaling+(rss)  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling
+
+---
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *MaxRssProcessors
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *NumRssQueues
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *Rss
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *RssBaseProcGroup
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *RssBaseProcNumber
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *RssMaxProcGroup
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *RssMaxProcNumber
+\Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX : *RssProfile
+\Registry\Machine\SYSTEM\ControlSet001\Services\HTTP\Parameters : RssStatusCheckControl
+\Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : MaxNumRssCpus
+\Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : RssBaseCpu
+\Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : MaxNumRssCpus
+\Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : RssBaseCpu
 ```
 
 # Disable File/Printer Sharing

@@ -234,6 +234,23 @@ reg add "HKLM\SOFTWARE\Microsoft\wbem\Tracing" /v enableWinmgmtTelemetry /t REG_
   "ValueName": "DisableInventory",
   "Elements": []
 },
+{
+  "File": "DataCollection.admx",
+  "CategoryName": "DataCollectionAndPreviewBuilds",
+  "PolicyName": "DisableDeviceDelete",
+  "NameSpace": "Microsoft.Policies.DataCollection",
+  "Supported": "Windows_10_0_RS5 - At least Windows Server 2016, Windows 10 Version 1809",
+  "DisplayName": "Disable deleting diagnostic data",
+  "ExplainText": "This policy setting controls whether the Delete diagnostic data button is enabled in Diagnostic & feedback Settings page. If you enable this policy setting, the Delete diagnostic data button will be disabled in Settings page, preventing the deletion of diagnostic data collected by Microsoft from the device. If you disable or don't configure this policy setting, the Delete diagnostic data button will be enabled in Settings page, which allows people to erase all diagnostic data collected by Microsoft from that device.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
+  ],
+  "ValueName": "DisableDeviceDelete",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
 ```
 
 # Disable Automatic Map Downloads
@@ -898,6 +915,43 @@ Disables remote desktop, remote assistance, RPC traffic, and device redirection.
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WirelessDisplay.admx",
+  "CategoryName": "Connect",
+  "PolicyName": "AllowProjectionToPC",
+  "NameSpace": "Microsoft.Policies.Connect",
+  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+  "DisplayName": "Don't allow this PC to be projected to",
+  "ExplainText": "This policy setting allows you to turn off projection to a PC. If you turn it on, your PC isn't discoverable and can't be projected to except if the user manually launches the Wireless Display app. If you turn it off or don't configure it, your PC is discoverable and can be projected to above lock screen only. The user has an option to turn it always on or off except for manual launch, too.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Connect"
+  ],
+  "ValueName": "AllowProjectionToPC",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WirelessDisplay.admx",
+  "CategoryName": "Connect",
+  "PolicyName": "RequirePinForPairing",
+  "NameSpace": "Microsoft.Policies.Connect",
+  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+  "DisplayName": "Require pin for pairing",
+  "ExplainText": "This policy setting allows you to require a pin for pairing. If you set this to 'Never', a pin isn't required for pairing. If you set this to 'First Time', the pairing ceremony for new devices will always require a PIN. If you set this to 'Always', all pairings will require PIN.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Connect"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "RequirePinForPairing", "Items": [
+        { "DisplayName": "Never", "Data": "0" },
+        { "DisplayName": "First Time", "Data": "1" },
+        { "DisplayName": "Always", "Data": "2" }
+      ]
+    }
   ]
 },
 ```
@@ -1748,6 +1802,45 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 ```
 
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name
+
+---
+
+```json
+{
+  "File": "WinLogon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "DisplayLastLogonInfoDescription",
+  "NameSpace": "Microsoft.Policies.WindowsLogon2",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Display information about previous logons during user logon",
+  "ExplainText": "This policy setting controls whether or not the system displays information about previous logons and logon failures to the user. For local user accounts and domain user accounts in domains of at least a Windows Server 2008 functional level, if you enable this setting, a message appears after the user logs on that displays the date and time of the last successful logon by that user, the date and time of the last unsuccessful logon attempted with that user name, and the number of unsuccessful logons since the last successful logon by that user. This message must be acknowledged by the user before the user is presented with the Microsoft Windows desktop. For domain user accounts in Windows Server 2003, Windows 2000 native, or Windows 2000 mixed functional level domains, if you enable this setting, a warning message will appear that Windows could not retrieve the information and the user will not be able to log on. Therefore, you should not enable this policy setting if the domain is not at the Windows Server 2008 domain functional level. If you disable or do not configure this setting, messages about the previous logon or logon failures are not displayed.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "DisplayLastLogonInfo",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WinLogon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "LogonHoursNotificationPolicyDescription",
+  "NameSpace": "Microsoft.Policies.WindowsLogon2",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Remove logon hours expiration warnings",
+  "ExplainText": "This policy controls whether the logged on user should be notified when his logon hours are about to expire. By default, a user is notified before logon hours expire, if actions have been set to occur when the logon hours expire. If you enable this setting, warnings are not displayed to the user before the logon hours expire. If you disable or do not configure this setting, users receive warnings before the logon hours expire, if actions have been set to occur when the logon hours expire. Note: If you configure this setting, you might want to examine and appropriately configure the \u201cSet action to take when logon hours expire\u201d setting. If \u201cSet action to take when logon hours expire\u201d is disabled or not configured, the \u201cRemove logon hours expiration warnings\u201d setting will have no effect, and users receive no warnings about logon hour expiration",
+  "KeyPath": [
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "DontDisplayLogonHoursWarnings",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+```
 
 # Disable Background Apps
 
