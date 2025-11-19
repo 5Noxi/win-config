@@ -900,71 +900,35 @@ You can get a lot of information about data ranges and more from `.inf` files, s
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/NIC-Intel.txt  
 > https://github.com/5Noxi/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md
 
-I created the list below using following pseudocode (snippets from different binaries):
-> [power/assets | intelnet6x.c](https://github.com/5Noxi/win-config/blob/main/power/assets/intelnet6x.c)
+See [intelnet6x.c](https://github.com/5Noxi/win-config/blob/main/power/assets/intelnet6x.c) for reference.
+
+Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-    "EnablePowerManagement" = 1; // 0–1, default 1
-    "ULPMode" = 1; // 0–1, default 1
-    "SidebandUngateOverride" = 0; // 0–1, default 0
-    "I218DisablePLLShut" = 0; // 0–1, default 0
-    "I218DisablePLLShutGiga" = 0; // 0–1, default 0
-    "I219DisableK1Off" = 0; // 0–1, default 0
-    "DisableIntelRST" = 1; // 0–1, default 1
-    "ForceHostExitUlp" = 0; // 0–1, default 0
-    "ForceLtrValue" = 65535; // 0–65535, default 65535
-    "WakeOnLink" = 0; // 0–2, default 0
-    "WakeFromS5" = 2; // 0–65535, default 2
-    "WakeOn" = 0; // 0–4, default 0
-    "*WakeOnPattern" = 1; // 0–1, default 1
-    "*WakeOnMagicPacket" = 1; // 0–1, default 1
-    "EnableDisconnectedStandby" = 0; // 0–1, default 0
-    "*EnableDynamicPowerGating" = 1; // 0–1, default 1
-    "EnableHWAutonomous" = 0; // 0–1, default 0
-    "DMACoalescing" = 0; // 0–10240, default 0
-    "EnablePME" = 0; // 0–1, default 0
-    "*DeviceSleepOnDisconnect" = 0; // 0–1, default 0
-    "EnableModernStandby" = 0; // 0–1, default 0
-    "*PMARPOffload" = 0; // 0–1, default 0
-    "*PMNSOffload" = 0; // 0–1, default 0
-    "DisableReset" = 0; // 0–1, default 0
-    "CheckForHangTime" = 2; // 0–60, default 2
-    "ResetTest" = 0; // 0–1, default 0
-    "ResetTestTime" = 300; // 20–604800, default 300
-    "*VMQ" = 0; // 0–1, default 0
-    "*VMQLookaheadSplit" = 0; // 0–1, default 0
-    "*VMQVlanFiltering" = 1; // 0–1, default 1
-    "*RssOrVmqPreference" = 0; // 0–1, default 0
-    "VMQSupported" = 0; // 0–1, default 0
-    "*FlowControl" = 4; // 0–4, default 4
-    "*SpeedDuplex" = 0; // 0–50000, default 0
-    "FecMode" = 0; // 0–3, default 0
-    "*RSCIPv4" = 0; // 0–1, default 0
-    "*RSCIPv6" = 0; // 0–1, default 0
-    "ForceRscEnabled" = 0; // 0–1, default 0
-    "RscMode" = 1; // 0–2, default 1
-    "*HeaderDataSplit" = 0; // 0–1, default 0
-    "HDSplitSize" = 128; // 128–960, default 128
-    "HDSplitAlways" = 0; // 0–1, default 0
-    "HDSplitLocation" = 2; // 0–3, default 2
-    "HDSplitBufferPad" = 2; // 0–2, default 2
-    "*ReceiveBuffers" = 512; // 128–4096, default 512
-    "ReceiveBuffersOverride" = 1; // 0–1, default 1
-    "MaxPacketCountPerDPC" = 256; // 8–65535, default 256
-    "MaxPacketCountPerIndicate" = 64; // 1–65535, default 64
-    "RxDescriptorCountPerTailWrite" = 8; // 4–4096, default 8
-    "MinHardwareOwnedPacketCount" = 32; // 8–4096, default 32
-    "RxBufferPad" = 10; // 0–63, default 10
-    "RegForceRxPathSerialization" = 0; // 0–1, default 0
-    "EnableRxDescriptorChaining" = 1; // 0–1, default 1
-    "EnableAdaptiveQueuing" = 1; // 0–1, default 1
-    "AdaptiveQSize" = 128; // 64–8192, default 128
-    "AdaptiveQWorkSet" = 96; // 32–8192, default 96
-    "AdaptiveQHysteresis" = 64; // 16–1024, default 64
-    "PadReceiveBuffer" = 0; // 0–1, default 0
-    "StoreBadPackets" = 0; // 0–1, default 0
+    "*DeviceSleepOnDisconnect" = 0; // range 0-1
+    "*EnableDynamicPowerGating" = 1; // range 0-1
+    "CheckForHangTime" = 2; // range 0-60
+    "DisableIntelRST" = 1; // range 0-1
+    "DisableReset" = 0; // range 0-1
+    "DMACoalescing" = 0; // range 0-10240
+    "EnableAdaptiveQueuing" = 1; // range 0-1
+    "EnableDisconnectedStandby" = 0; // range 0-1
+    "EnableHWAutonomous" = 0; // range 0-1
+    "EnableModernStandby" = 0; // range 0-1
+    "EnablePME" = 0; // range 0-1
+    "EnablePowerManagement" = 1; // range 0-1
+    "ForceHostExitUlp" = 0; // range 0-1
+    "ForceLtrValue" = 65535; // range 0-65535
+    "I218DisablePLLShut" = 0; // range 0-1
+    "I218DisablePLLShutGiga" = 0; // range 0-1
+    "I219DisableK1Off" = 0; // range 0-1
+    "RegForceRxPathSerialization" = 0; // range 0-1
+    "SidebandUngateOverride" = 0; // range 0-1
+    "ULPMode" = 1; // range 0-1
 ```
+
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values
 
 ```inf
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%

@@ -852,28 +852,6 @@ Network offload features transfer processing tasks from the CPU to the network a
 
 Enabling network adapter offload features is usually beneficial. However, the network adapter might not be powerful enough to handle the offload capabilities with high throughput. For example, consider a network adapter with limited hardware resources. In that case, enabling segmentation offload features might reduce the maximum sustainable throughput of the adapter. However, if the reduced throughput is acceptable, you should enable the segmentation offload features.
 
-"*IPChecksumOffloadIPv4" = 3
-"*LsoV1IPv4" = 1
-"*LsoV2IPv4" = 1
-"*LsoV2IPv6" = 1
-"*TCPChecksumOffloadIPv4" = 3
-"*TCPChecksumOffloadIPv6" = 3
-"*UDPChecksumOffloadIPv4" = 3
-"*UDPChecksumOffloadIPv6" = 3
-"*TCPConnectionOffloadIPv4" = 1
-"*TCPConnectionOffloadIPv6" = 1
-"*TCPUDPChecksumOffloadIPv4" = 3
-"*TCPUDPChecksumOffloadIPv6" = 3
-"*PMARPOffload" = 0
-"*PMNSOffload" = 0
-"*IPsecOffloadV1IPv4" = 3
-"*IPsecOffloadV2" = 3
-"*IPsecOffloadV2IPv4" = 3
-"*QoSOffload" = 1
-#"*PMWiFiRekeyOffload" = 1
-"*UsoIPv4" = 1
-"*UsoIPv6" = 1
-
 ```inf
 IPChksumOffv4                   = "IPv4 Checksum Offload"
 TCPChksumOffv4                  = "TCP Checksum Offload (IPv4)"
@@ -884,11 +862,26 @@ LsoV2IPv4                       = "Large Send Offload Version 2 (IPv4)"
 LsoV2IPv6                       = "Large Send Offload Version 2 (IPv6)"
 ```
 
-Excludes:
-"SaOffloadCapacityEnabled" = 0 # deprecated (Chimney too)
+Excludes (deprecated, chimney too):
+```json
+"SaOffloadCapacityEnabled" = 0
+```
 
-Enable static offloads. For example, enable the UDP Checksums, TCP Checksums, and Send Large Offload (LSO) settings.
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+  "*IPChecksumOffloadIPv4" = 3; // range 0-3
+  "*LsoV1IPv4" = 1; // range 0-1
+  "*LsoV2IPv4" = 1; // range 0-1
+  "*LsoV2IPv6" = 1; // range 0-1
+  "*PMARPOffload" = 0; // range 0-1
+  "*PMNSOffload" = 0; // range 0-1
+  "*TCPChecksumOffloadIPv4" = 3; // range 0-3
+  "*TCPChecksumOffloadIPv6" = 3; // range 0-3
+  "*UDPChecksumOffloadIPv4" = 3; // range 0-3
+  "*UDPChecksumOffloadIPv6" = 3; // range 0-3
+```
 
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values  
 > https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top
 > https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
 
@@ -964,6 +957,17 @@ powercfg /devicequery wake_armed
 ```
 `powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+  "*WakeOnMagicPacket" = 1; // range 0-1
+  "*WakeOnPattern" = 1; // range 0-1
+  "WakeFromS5" = 2; // range 0-65535
+  "WakeOn" = 0; // range 0-4
+  "WakeOnLink" = 0; // range 0-2
+```
+
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values
 
 `Disable Wait for Link`:
 ```inf
@@ -1144,6 +1148,25 @@ Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
 
 I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below) - disabling the option therefore won't "disable" RSS, it only removes the created values.
 
+`RSS::RssReadRegistryParameters` shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/5Noxi/wpr-reg-records/blob/main/assets/intelnet6x.c) for reference:
+```c
+void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
+{
+  v5 = L"*RSS";
+  v13 = L"*RssBaseProcNumber";
+  v21 = L"*MaxRssProcessors";
+  v29 = L"*NumaNodeId";
+  v37 = L"DisablePortScaling";
+  v45 = L"ManyCoreScaling";
+  v52 = L"*NumRssQueues";
+  v60 = L"NumRssQueuesPerVPort";
+  v69 = L"EnableLHRssWA";
+  v77 = L"ReceiveScalingMode";
+  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
+}
+```
+--- 
+
 `*MaxRssProcessors`:  
 The maximum number of RSS processors.
 
@@ -1279,6 +1302,13 @@ A sending station (computer or network switch) may be transmitting data faster t
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/
 
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*FlowControl" = 4; // range 0-4
+```
+
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values
+
 ```inf
 , *FlowControl
 HKR, Ndi\Params\*FlowControl,                   ParamDesc,              0, %FlowControl%
@@ -1289,6 +1319,8 @@ HKR, Ndi\Params\*FlowControl\Enum,              "2",                    0, %Flow
 HKR, Ndi\Params\*FlowControl\Enum,              "3",                    0, %FlowControl_Full%
 HKR, Ndi\Params\*FlowControl,                   type,                   0, "enum"
 ```
+
+These 2 examples also show that each adapter/driver have their own defaults.
 
 # Enable Jumbo Packets
 
@@ -1329,6 +1361,17 @@ Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwid
 `"*UdpRsc": { "Type": "REG_SZ", "Data": 1 }` causes high usage of the system idle process for whatever reason, I'll leave it out for now.
 
 ```c
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*RSCIPv4" = 0; // range 0-1
+    "*RSCIPv6" = 0; // range 0-1
+    "ForceRscEnabled" = 0; // range 0-1
+    "RscMode" = 1; // range 0-2
+```
+
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values
+
+```c
 void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CONTEXT **this)
 {
   RegistryKey<unsigned char>::Initialize(
@@ -1336,7 +1379,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     this[1],
     *((NDIS_HANDLE *)this[1] + 383),
     (PUCHAR)"*RSCIPv4",
-    0,      // default
+    0,
     1u,     // range 0-1
     0,
     0,
@@ -1347,7 +1390,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     this[1],
     *((NDIS_HANDLE *)this[1] + 383),
     (PUCHAR)"*RSCIPv6",
-    0,      // default
+    0,
     1u,     // range 0-1
     0,
     0,
@@ -1358,7 +1401,7 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     this[1],
     *((NDIS_HANDLE *)this[1] + 383),
     (PUCHAR)"ForceRscEnabled",
-    0,      // default
+    0,
     1u,     // range 0-1
     0,
     0,
@@ -1369,9 +1412,9 @@ void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CON
     this[1],
     *((NDIS_HANDLE *)this[1] + 383),
     (PUCHAR)"RscMode",
-    0,      // default
+    0,
     2u,     // range 0-2
-    1u,     // step
+    1u,
     0,
     0),
 }
@@ -1389,13 +1432,30 @@ Miscellaneous notes:
 
 VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the networking performance of the Hyper-V switch bound to this network adapter may be reduced. VMQ offloads packet processing to NIC hardware queues, with each queue tied to a specific VM. This increases throughput, spreads work across CPU cores, lowers host CPU use, and scales effectively as more VMs are added on Hyper-V.
 
-VMQ is enabled by default:
+It depends on your adapter/driver if VMQ is enabled/disabled by default:
+
+```c
+// Intel
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*RssOrVmqPreference" = 0; // range 0-1
+    "*VMQ" = 0; // range 0-1
+    "*VMQLookaheadSplit" = 0; // range 0-1
+    "*VMQVlanFiltering" = 1; // range 0-1
+    "VMQSupported" = 0; // range 0-1
+```
+
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values
+
 ```inf
-HKR,Ndi\Params\*VMQ,ParamDesc, ,%VMQ%
-HKR,Ndi\Params\*VMQ,type,      ,enum
-HKR,Ndi\Params\*VMQ,default,   ,1
-HKR,Ndi\Params\*VMQ\enum,0,    ,%Disabled%
-HKR,Ndi\Params\*VMQ\enum,1,    ,%Enabled%
+; Mellanox
+; mlx4eth NT specific
+HKR, Ndi\Params\*VMQ,  ParamDesc, 0, "%VMQ%"
+HKR, Ndi\Params\*VMQ,  Type,      0, "enum"
+HKR, Ndi\Params\*VMQ,  Default,   0, "1"
+HKR, Ndi\Params\*VMQ,  Optional,  0, "0"
+HKR, Ndi\Params\*VMQ\enum,  "0",  0, "%Disabled%"
+HKR, Ndi\Params\*VMQ\enum,  "1",  0, "%Enabled%"
+HKR, "", *VMQ, %REG_SZ%, "1"
 ```
 
 | Value | Description | Allowed Values | Default | Notes |
@@ -1418,15 +1478,25 @@ HKR,Ndi\Params\*VMQ\enum,1,    ,%Enabled%
 Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.
 
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov
 
-SR-IOV is enabled by default:
+It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*Sriov" = 0; // range 0-1
+    "*SriovPreferred" = 0; // range 0-1
+```
+
+> https://github.com/5Noxi/wpr-reg-records#intel-nic-values
+
 | SubkeyName            | Value       | EnumDesc |
 | --------------------  | ----------- | ---- |
 | `*SRIOV`              | 0           | Disabled |
 |                       | 1 (Default) | Enabled |
 | `*SriovPreferred`     | 0 (Default) | Report RSS/VMQ (per *VmqOrRssPreferrence), do not report SR-IOV |
 |                       | 1           | Report SR-IOV capabilities |
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov
 
 ```inf
 , SRIOV Default switch registry keys.
@@ -1471,6 +1541,14 @@ FEC (forwarded error correction) improves link stability, but increases latency.
 `No FEC`: Disables FEC.
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/
+
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "FecMode" = 0; // range 0-3
+```
+
+> https://github.com/5Noxi/wpr-reg-records?tab=readme-ov-file#intel-nic-values
 
 ```c
 RegistryKey<enum HdSplitLocation>::Initialize(
