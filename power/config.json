@@ -714,7 +714,7 @@
             "EnablePHYFlexibleSpeed": { "Type": "REG_SZ", "Data": 0 },
             "EnablePHYWakeUp": { "Type": "REG_SZ", "Data": 0 },
             "EnablePME": { "Type": "REG_SZ", "Data": 0 },
-            "EnablePowerManagement": { "Type": "REG_DWORD", "Data": 0 },
+            "EnablePowerManagement": { "Type": "REG_SZ", "Data": 0 },
             "EnableSavePowerNow": { "Type": "REG_SZ", "Data": 0 },
             "ForceHostExitUlp": { "Type": "REG_SZ", "Data": 1 },
             "GigaLite": { "Type": "REG_SZ", "Data": 0 },

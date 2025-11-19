@@ -1152,14 +1152,31 @@
         "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
       },
       "SUBOPTION": {
-        "Enable HAGS": {
-          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-            "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
-          }
-        },
-        "Disable HAGS": {
-          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-            "HwSchMode": { "Type": "REG_DWORD", "Data": 1 }
+        "Hardware Accelerated GPU Scheduling": {
+         "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+           "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
+         },
+         "__control": {
+           "type": "dropdown",
+            "fallback": "Select",
+            "options": [
+              {
+                "label": "Enable",
+                "config": {
+                  "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+                    "HwSchMode": { "Type": "REG_DWORD", "Data": 2 }
+                  }
+                }
+              },
+              {
+                "label": "Disable",
+                "config": {
+                  "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
+                    "HwSchMode": { "Type": "REG_DWORD", "Data": 1 }
+                  }
+                }
+              }
+            ]
           }
         }
       }
@@ -1167,18 +1184,6 @@
     "revert": {
       "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
         "HwSchMode": { "Action": "deletevalue" }
-      },
-      "SUBOPTION": {
-        "Enable HAGS": {
-          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-            "HwSchMode": { "Action": "deletevalue" }
-          }
-        },
-        "Disable HAGS": {
-          "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers": {
-            "HwSchMode": { "Action": "deletevalue" }
-          }
-        }
       }
     }
   },

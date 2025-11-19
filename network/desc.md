@@ -955,7 +955,7 @@ The wake-on-LAN (WOL) feature wakes the computer from a low power state when a n
 powercfg /devicequery wake_programmable
 powercfg /devicequery wake_armed
 ```
-`powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state
+`powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state  
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
 
 ```c

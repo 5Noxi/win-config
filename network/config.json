@@ -276,59 +276,71 @@
   },
   "Congestion Provider": {
     "apply": {
-      "COMMANDS": {
-        "SetTCP_BBR2": {
-          "Action": "tcp_congestion",
-          "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-          "Provider": "bbr2"
-        }
-      },
-      "SUBOPTION": {
-        "BBR2": {
-          "COMMANDS": {
-            "SetTCP_BBR2": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "bbr2"
+      "__control": {
+        "type": "dropdown",
+        "fallback": "Select",
+        "options": [
+          {
+            "label": "BBR2",
+            "config": {
+              "COMMANDS": {
+                "SetTCP_BBR2": {
+                  "Action": "tcp_congestion",
+                  "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
+                  "Provider": "bbr2"
+                }
+              }
+            }
+          },
+          {
+            "label": "CUBIC",
+            "config": {
+              "COMMANDS": {
+                "SetTCP_CUBIC": {
+                  "Action": "tcp_congestion",
+                  "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
+                  "Provider": "cubic"
+                }
+              }
+            }
+          },
+          {
+            "label": "DCTCP",
+            "config": {
+              "COMMANDS": {
+                "SetTCP_DCTCP": {
+                  "Action": "tcp_congestion",
+                  "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
+                  "Provider": "dctcp"
+                }
+              }
+            }
+          },
+          {
+            "label": "CTCP",
+            "config": {
+              "COMMANDS": {
+                "SetTCP_CTCP": {
+                  "Action": "tcp_congestion",
+                  "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
+                  "Provider": "ctcp"
+                }
+              }
+            }
+          },
+          {
+            "label": "NewReno",
+            "config": {
+              "COMMANDS": {
+                "SetTCP_NewReno": {
+                  "Action": "tcp_congestion",
+                  "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
+                  "Provider": "newreno"
+                }
+              }
             }
           }
-        },
-        "CUBIC": {
-          "COMMANDS": {
-            "SetTCP_CUBIC": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "cubic"
-            }
-          }
-        },
-        "DCTCP": {
-          "COMMANDS": {
-            "SetTCP_DCTCP": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "dctcp"
-            }
-          }
-        },
-        "CTCP": {
-          "COMMANDS": {
-            "SetTCP_CTCP": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "ctcp"
-            }
-          }
-        },
-        "NewReno": {
-          "COMMANDS": {
-            "SetTCP_NewReno": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "newreno"
-            }
-          }
-        }
+        ]
       }
     },
     "revert": {
@@ -337,53 +349,6 @@
           "Action": "tcp_congestion",
           "Templates": [ "Internet", "InternetCustom", "Compat", "Datacenter", "DatacenterCustom" ],
           "Provider": "cubic"
-        }
-      },
-      "SUBOPTION": {
-        "BBR2": {
-          "COMMANDS": {
-            "RevertTCP_BBR2": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "cubic"
-            }
-          }
-        },
-        "CUBIC": {
-          "COMMANDS": {
-            "RevertTCP_CUBIC": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "cubic"
-            }
-          }
-        },
-        "DCTCP": {
-          "COMMANDS": {
-            "RevertTCP_DCTCP": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "cubic"
-            }
-          }
-        },
-        "CTCP": {
-          "COMMANDS": {
-            "RevertTCP_CTCP": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "cubic"
-            }
-          }
-        },
-        "NewReno": {
-          "COMMANDS": {
-            "RevertTCP_NewReno": {
-              "Action": "tcp_congestion",
-              "Templates": [ "Internet", "Datacenter", "Compat", "DatacenterCustom", "InternetCustom" ],
-              "Provider": "cubic"
-            }
-          }
         }
       }
     }

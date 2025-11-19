@@ -1807,77 +1807,72 @@
   },
   "Decrease Mouse Hover Time": {
     "apply": {
-      "HKCU\\Control Panel\\Desktop": {
-        "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
-      },
-      "SUBOPTION": {
-        "10ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "10" }
+      "__control": {
+        "type": "dropdown",
+        "fallback": "Select",
+        "options": [
+          {
+            "label": "10 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "10" }
+              }
+            }
+          },
+          {
+            "label": "100 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
+              }
+            }
+          },
+          {
+            "label": "200 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "200" }
+              }
+            }
+          },
+          {
+            "label": "300 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "300" }
+              }
+            }
+          },
+          {
+            "label": "400 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+              }
+            }
+          },
+          {
+            "label": "500 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "500" }
+              }
+            }
+          },
+          {
+            "label": "1000 ms",
+            "config": {
+              "HKCU\\Control Panel\\Desktop": {
+                "MenuShowDelay": { "Type": "REG_SZ", "Data": "1000" }
+              }
+            }
           }
-        },
-        "200ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "200" }
-          }
-        },
-        "300ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "300" }
-          }
-        },
-        "400ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        },
-        "500ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "500" }
-          }
-        },
-        "1000ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "1000" }
-          }
-        }
+        ]
       }
     },
     "revert": {
       "HKCU\\Control Panel\\Desktop": {
         "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-      },
-      "SUBOPTION": {
-        "10ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        },
-        "200ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        },
-        "300ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        },
-        "400ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        },
-        "500ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        },
-        "1000ms": {
-          "HKCU\\Control Panel\\Desktop": {
-            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
-          }
-        }
       }
     }
   }
