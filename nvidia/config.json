@@ -344,11 +344,6 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
         "SendTelemetryData": { "Type": "REG_DWORD", "Data": 0 }
       },
-      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
-        "EnableRID44231": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableRID64640": { "Type": "REG_DWORD", "Data": 0 },
-        "EnableRID66610": { "Type": "REG_DWORD", "Data": 0 }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
         "": { "Type": "REG_DWORD", "Data": 0 }
       },
@@ -379,11 +374,6 @@
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup": {
         "SendTelemetryData": { "Action": "deletevalue" }
-      },
-      "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
-        "EnableRID44231": { "Action": "deletevalue" },
-        "EnableRID64640": { "Action": "deletevalue" },
-        "EnableRID66610": { "Action": "deletevalue" }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
         "": { "Action": "deletevalue" }
