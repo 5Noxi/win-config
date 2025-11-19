@@ -1323,6 +1323,8 @@ Disables NVIDIA scheduled tasks recusively. All 3 tasks no longer seem to be cre
 
 # Disable Telemetry
 
+Removes several files & preventing the system from sending telemetry data.
+
 ---
 
 Block NVIDIA telemetry domains (`C:\Windows\System32\drivers\etc\hosts`):

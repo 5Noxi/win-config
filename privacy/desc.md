@@ -1212,6 +1212,23 @@ reg add "HKLM\Software\Policies\Microsoft\Camera" /v AllowCamera /t REG_DWORD /d
   "ValueName": "NoLockScreenCamera",
   "Elements": []
 },
+{
+  "File": "Camera.admx",
+  "CategoryName": "L_Camera_GroupPolicyCategory",
+  "PolicyName": "L_AllowCamera",
+  "NameSpace": "Microsoft.Policies.Camera",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Use of Camera",
+  "ExplainText": "This policy setting allow the use of Camera devices on the machine. If you enable or do not configure this policy setting, Camera devices will be enabled. If you disable this property setting, Camera devices will be disabled.",
+  "KeyPath": [
+    "HKLM\\software\\Policies\\Microsoft\\Camera"
+  ],
+  "ValueName": "AllowCamera",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
 ```
 
 # Disable Suggestions/Tips/Tricks
@@ -2156,6 +2173,29 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+{
+  "File": "ErrorReporting.admx",
+  "CategoryName": "CAT_WindowsErrorReportingAdvanced",
+  "PolicyName": "WerArchive_2",
+  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Configure Report Archive",
+  "ExplainText": "This policy setting controls the behavior of the Windows Error Reporting archive. If you enable this policy setting, you can configure Windows Error Reporting archiving behavior. If Archive behavior is set to Store all, all data collected for each error report is stored in the appropriate location. If Archive behavior is set to Store parameters only, only the minimum information required to check for an existing solution is stored. The Maximum number of reports to store setting determines how many reports are stored before older reports are automatically deleted. If you disable or do not configure this policy setting, no Windows Error Reporting information is stored.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
+  ],
+  "ValueName": "DisableArchive",
+  "Elements": [
+    { "Type": "Enum", "ValueName": "ConfigureArchive", "Items": [
+        { "DisplayName": "Store all", "Data": "2" },
+        { "DisplayName": "Store parameters only", "Data": "1" }
+      ]
+    },
+    { "Type": "Decimal", "ValueName": "MaxArchiveCount", "MinValue": null, "MaxValue": "5000" },
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+},
 ```
 
 # Disable Crash Dumps
@@ -2571,4 +2611,22 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
 "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
 "\\Microsoft\\Windows\\Application Experience\\StartupAppTask"
+```
+
+# Disable Census Data Collection
+
+`DeviceCensus.exe` = "Device and configuration data collection tool"
+
+"In a nutshell, Device Census is a telemetry process from Microsoft. It will analyze the use of the webcam and other components. Then, the data will be transmitted anonymously to Microsoft to help optimize Windows for future versions and fix bugs. In addition, it only checks how often the devices are used and don't record anything."
+
+> https://www.partitionwizard.com/partitionmanager/devicecensus-exe.html
+
+`\Microsoft\Windows\Device Information` runs:
+```powershell
+%windir%\system32\devicecensus.exe SystemCxt
+```
+
+`\Microsoft\Windows\Device Information` runs:
+```powershell
+%windir%\system32\devicecensus.exe UserCxt
 ```

@@ -497,6 +497,16 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
         "NoActiveProbe": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disable Passive Polling": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet": {
+            "PassivePollPeriod": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
+            "DisablePassivePolling": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        }
       }
     },
     "revert": {
@@ -505,6 +515,16 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
         "NoActiveProbe": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disable Passive Polling": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet": {
+            "PassivePollPeriod": { "Type": "REG_DWORD", "Data": 15}
+          },
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
+            "DisablePassivePolling": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -1093,8 +1113,7 @@
           "Action": "ethernet_key",
           "Values": {
             "*RscIPv4": { "Type": "REG_SZ", "Data": 1 },
-            "*RscIPv6": { "Type": "REG_SZ", "Data": 1 },
-            "*UdpRsc": { "Type": "REG_SZ", "Data": 1 }
+            "*RscIPv6": { "Type": "REG_SZ", "Data": 1 }
           }
         }
       }
@@ -1105,8 +1124,7 @@
           "Action": "ethernet_key",
           "Values": {
             "*RscIPv4": { "Action": "deletevalue" },
-            "*RscIPv6": { "Action": "deletevalue" },
-            "*UdpRsc": { "Action": "deletevalue" }
+            "*RscIPv6": { "Action": "deletevalue" }
           }
         }
       }

@@ -1699,11 +1699,25 @@
     "apply": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
         "NoLockScreenCamera": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "SUBOPTION": {
+        "Disallow Use of Camera": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Camera": {
+            "AllowCamera": { "Type": "REG_DWORD", "Data": 0 }
+          }
+        }
       }
     },
     "revert": {
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Personalization": {
         "NoLockScreenCamera": { "Action": "deletevalue" }
+      },
+      "SUBOPTION": {
+        "Disallow Use of Camera": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Camera": {
+            "AllowCamera": { "Action": "deletevalue" }
+          }
+        }
       }
     }
   },
@@ -1771,7 +1785,8 @@
         "BingSearchEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
-        "DisableSoftLanding": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableSoftLanding": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWindowsConsumerFeatures": { "Type": "REG_DWORD", "Data": 1 }
       }
     },
     "revert": {
@@ -1832,7 +1847,8 @@
         "BingSearchEnabled": { "Action": "deletevalue" }
       },
       "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
-        "DisableSoftLanding": { "Action": "deletevalue" }
+        "DisableSoftLanding": { "Action": "deletevalue" },
+        "DisableWindowsConsumerFeatures": { "Action": "deletevalue" }
       }
     }
   },
@@ -2346,11 +2362,13 @@
         "AutoApproveOSDumps": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting": {
+        "DisableArchive": { "Type": "REG_DWORD", "Data": 1 },
         "Disabled": { "Type": "REG_DWORD", "Data": 1 },
         "DisableWerUpload": { "Type": "REG_DWORD", "Data": 1 },
         "DontSendAdditionalData": { "Type": "REG_DWORD", "Data": 1 },
         "DontShowUI": { "Type": "REG_DWORD", "Data": 1 },
-        "LoggingDisabled": { "Type": "REG_DWORD", "Data": 1 }
+        "LoggingDisabled": { "Type": "REG_DWORD", "Data": 1 },
+        "MaxArchiveCount": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting\\Consent": {
         "DefaultConsent": { "Type": "REG_DWORD", "Data": 1 },
@@ -2370,6 +2388,7 @@
         "DisableSendRequestAdditionalSoftwareToWER": { "Type": "REG_DWORD", "Data": 1 },
         "DisableSendGenericDriverNotFoundToWER": { "Type": "REG_DWORD", "Data": 1 }
       },
+
       "COMMANDS": {
         "DisableWerTasks": {
           "Action": "scheduled_task",
@@ -2395,11 +2414,13 @@
         "AutoApproveOSDumps": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting": {
+        "DisableArchive": { "Action": "deletevalue" },
         "Disabled": { "Action": "deletevalue" },
         "DisableWerUpload": { "Action": "deletevalue" },
         "DontSendAdditionalData": { "Action": "deletevalue" },
         "DontShowUI": { "Action": "deletevalue" },
-        "LoggingDisabled": { "Action": "deletevalue" }
+        "LoggingDisabled": { "Action": "deletevalue" },
+        "MaxArchiveCount": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\Windows Error Reporting\\Consent": {
         "DefaultConsent": { "Type": "REG_DWORD", "Data": 4 },
@@ -2780,6 +2801,42 @@
         "RestoreCompatTelRunner": {
           "Action": "run_powershell",
           "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exee CompatTelRunner.exe",
+          "Elevated": true
+        }
+      }
+    }
+  },
+  "Disable Census Data Collection": {
+    "apply": {
+      "COMMANDS": {
+        "DisableCensusTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Device Information\\Device User",
+            "\\Microsoft\\Windows\\Device Information\\Device"
+          ],
+          "Operation": "disable"
+        },
+        "RenameCensus": {
+          "Action": "run_powershell",
+          "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exe DeviceCensus.exee",
+          "Elevated": true
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EnableCensusTasks": {
+          "Action": "scheduled_task",
+          "TaskNames": [
+            "\\Microsoft\\Windows\\Device Information\\Device User",
+            "\\Microsoft\\Windows\\Device Information\\Device"
+          ],
+          "Operation": "enable"
+        },
+        "RestoreCensus": {
+          "Action": "run_powershell",
+          "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exee DeviceCensus.exe",
           "Elevated": true
         }
       }

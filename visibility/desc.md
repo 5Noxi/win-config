@@ -110,15 +110,8 @@ Hide preview pane:
 
 # Remove Home & Gallery
 
-Remove the recycle bin icon (desktop) with:
-```bat
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\ClassicStartMenu" /v {645FF040-5081-101B-9F08-00AA002F954E} /t REG_DWORD /d 1 /f
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" /v {645FF040-5081-101B-9F08-00AA002F954E} /t REG_DWORD /d 1 /f
-```
-Remove the network sharing folder with:
-```bat
-reg add "HKCU\Software\Classes\CLSID\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}" /v System.IsPinnedToNameSpaceTree /t REG_DWORD /d 0 /f
-```
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/homegal.png?raw=true)
+![](https://github.com/5Noxi/win-config/blob/main/visibility/images/homenet.png?raw=true)
 
 ---
 
@@ -127,9 +120,6 @@ Miscellaneous comments:
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f
 ```
-
-![](https://github.com/5Noxi/win-config/blob/main/visibility/images/homegal.png?raw=true)
-![](https://github.com/5Noxi/win-config/blob/main/visibility/images/homenet.png?raw=true)
 
 # Classic Context Menu
 
@@ -366,31 +356,8 @@ reg add "HKCR\txtlegacy" /v FriendlyTypeName /t REG_SZ /d "txt" /f
 reg add "HKCR\batfile" /ve /d "bat" /f
 reg add "HKCR\batfile" /v FriendlyTypeName /t REG_SZ /d "bat" /f
 ```
-Remove a specific block from `New-Context-Menu.bat`, or add a different one - personal preference.
 
-Additionaly I added `Classic-Context-Menu`, which gets rid of the compact menu (W11). It's personal preference, but it's a "must do" in my opinion.
-
-Enable the classic context menu with:
-```bat
-reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
-```
-Remove `Add to Favorites` option with:
-```bat
-reg delete "HKCR\*\shell\pintohomefile" /f
-```
-Remove `Share` option with:
-```bat
-reg delete "HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\ModernSharing" /f
-```
-Remove `Send to` option with:
-```bat
-reg delete "HKCR\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo" /f
-```
-Remove miscellaneous stock windows context menu options:
-```bat
-reg delete "HKCR\.bmp\ShellNew" /f
-reg delete "HKCR\.zip\CompressedFolder\ShellNew" /f
-```
+`Remove 'Add to Favorites' Option`, `Remove 'Share' Option`, `Remove 'Send to' Option`, `Remove 'bmp'/'zip' Options` don't have a revert yet.
 
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/newcontext1.png?raw=true)
 ![](https://github.com/5Noxi/win-config/blob/main/visibility/images/newcontext2.png?raw=true)
@@ -1085,3 +1052,18 @@ Example value:
 hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
 ```
 It depends on the user what he wants to see and what not, so I won't add a switch for it.
+
+# Decrease Mouse Hover Time
+
+Hover time is the time in milliseconds that the mouse pointer has to stay hovered over something before an event happens, personal preference.
+
+Default/fallback value:
+```c
+g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // 400
+```
+Type: `String`
+Min: `0`
+Max: `65534`? - It uses `StrToIntW` to read the value
+
+> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw  
+> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime

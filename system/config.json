@@ -270,8 +270,8 @@
           "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
             "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
             "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
@@ -281,6 +281,8 @@
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
             "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+            "\\Microsoft\\Windows\\Device Information\\Device User",
+            "\\Microsoft\\Windows\\Device Information\\Device",
             "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
             "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
             "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
@@ -475,6 +477,19 @@
             }
           }
         },
+        "Disable Census Tasks": {
+          "COMMANDS": {
+            "DisableCensusTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Device Information\\Device User",
+                "\\Microsoft\\Windows\\Device Information\\Device"
+              ],
+              "Operation": "disable",
+              "Elevated": true
+            }
+          }
+        },
         "Disable Update Service Tasks": {
           "COMMANDS": {
             "DisableUpdateService": {
@@ -598,11 +613,11 @@
     "revert": {
       "COMMANDS": {
         "EnableScheduledTasks": {
-          "Action":           "scheduled_task",
+          "Action": "scheduled_task",
           "TaskNames": [
             "\\Microsoft\\Windows\\Application Experience\\MareBackup",
-            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
+            "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
             "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
             "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
             "\\Microsoft\\Windows\\Application Experience\\StartupAppTask",
@@ -612,6 +627,8 @@
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\Consolidator",
             "\\Microsoft\\Windows\\Customer Experience Improvement Program\\UsbCeip",
             "\\Microsoft\\Windows\\Defrag\\ScheduledDefrag",
+            "\\Microsoft\\Windows\\Device Information\\Device User",
+            "\\Microsoft\\Windows\\Device Information\\Device",
             "\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner",
             "\\Microsoft\\Windows\\Diagnosis\\Scheduled",
             "\\Microsoft\\Windows\\Diagnosis\\UnexpectedCodePath",
@@ -800,6 +817,19 @@
                 "\\Microsoft\\Windows\\Sysmain\\ResPriStaticDbSync",
                 "\\Microsoft\\Windows\\Sysmain\\WsSwapAssessmentTask",
                 "\\Microsoft\\Windows\\UNP\\RunUpdateNotificationMgr"
+              ],
+              "Operation": "enable",
+              "Elevated": true
+            }
+          }
+        },
+        "Disable Census Tasks": {
+          "COMMANDS": {
+            "DisableCensusTasks": {
+              "Action": "scheduled_task",
+              "TaskNames": [
+                "\\Microsoft\\Windows\\Device Information\\Device User",
+                "\\Microsoft\\Windows\\Device Information\\Device"
               ],
               "Operation": "enable",
               "Elevated": true

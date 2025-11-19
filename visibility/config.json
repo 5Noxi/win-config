@@ -361,12 +361,14 @@
   "Disable Transparency": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize": {
-        "EnableTransparency": { "Type": "REG_DWORD", "Data": 0 }
+        "EnableTransparency": { "Type": "REG_DWORD", "Data": 0 },
+        "EnableBlurBehind": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize": {
-        "EnableTransparency": { "Type": "REG_DWORD", "Data": 1 }
+        "EnableTransparency": { "Type": "REG_DWORD", "Data": 1 },
+        "EnableBlurBehind": { "Action": "deletevalue" }
       }
     }
   },
@@ -688,6 +690,11 @@
           "HKCU\\Software\\Classes\\CLSID\\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}": {
             "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 0 }
           }
+        },
+        "Remove Libaries Folder": {
+          "HKCU\\Software\\Classes\\CLSID\\{031E4825-7B94-4dc3-B131-E946B44C8DD5}": {
+            "System.IsPinnedToNameSpaceTree": { "Type": "REG_DWORD", "Data": 0 }
+          }
         }
       }
     },
@@ -712,6 +719,11 @@
         },
         "Remove Network Sharing Folder": {
           "HKCU\\Software\\Classes\\CLSID\\{F02C1A0D-BE21-4350-88B0-7367FC96EF3C}": {
+            "System.IsPinnedToNameSpaceTree": { "Action": "deletevalue" }
+          }
+        },
+        "Remove Libaries Folder": {
+          "HKCU\\Software\\Classes\\CLSID\\{031E4825-7B94-4dc3-B131-E946B44C8DD5}": {
             "System.IsPinnedToNameSpaceTree": { "Action": "deletevalue" }
           }
         }
@@ -1338,6 +1350,29 @@
           "COMMANDS": {
             "RestartExplorer": { "Action": "restart_explorer" }
           }
+        },
+        "Remove 'Add to Favorites' Option": {
+          "HKCR\\*\\shell\\pintohomefile": {
+            "Action": "delete_path", "Recurse": true
+          }
+        },
+        "Remove 'Share' Option": {
+          "HKCR\\AllFilesystemObjects\\shellex\\ContextMenuHandlers\\ModernSharing": {
+            "Action": "delete_path", "Recurse": true
+          }
+        },
+        "Remove 'Send to' Option": {
+          "HKCR\\AllFilesystemObjects\\shellex\\ContextMenuHandlers\\SendTo": {
+            "Action": "delete_path", "Recurse": true
+          }
+        },
+        "Remove 'bmp'/'zip' Options": {
+          "HKCR\\.bmp\\ShellNew": {
+            "Action": "delete_path", "Recurse": true
+          },
+          "HKCR\\.zip\\CompressedFolder\\ShellNew": {
+            "Action": "delete_path", "Recurse": true
+          }
         }
       }
     },
@@ -1767,6 +1802,82 @@
     "revert": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "ForceClassicControlPanel": { "Action": "deletevalue" }
+      }
+    }
+  },
+  "Decrease Mouse Hover Time": {
+    "apply": {
+      "HKCU\\Control Panel\\Mouse": {
+        "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
+      },
+      "SUBOPTION": {
+        "10ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "10" }
+          }
+        },
+        "200ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "200" }
+          }
+        },
+        "300ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "300" }
+          }
+        },
+        "400ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "500ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "500" }
+          }
+        },
+        "1000ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "1000" }
+          }
+        }
+      }
+    },
+    "revert": {
+      "HKCU\\Control Panel\\Mouse": {
+        "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+      },
+      "SUBOPTION": {
+        "10ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "200ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "300ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "400ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "500ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        },
+        "1000ms": {
+          "HKCU\\Control Panel\\Mouse": {
+            "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+          }
+        }
       }
     }
   }

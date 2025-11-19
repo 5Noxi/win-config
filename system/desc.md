@@ -706,8 +706,6 @@ for %%a in (
     "\Microsoft\Windows\Data Integrity Scan\Data Integrity Check And Scan",
     "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan",
     "\Microsoft\Windows\Data Integrity Scan\Data Integrity Scan For Crash Recovery",
-    "\Microsoft\Windows\Device Information\Device",
-    "\Microsoft\Windows\Device Information\Device User",
     "\Microsoft\Windows\Device Setup\Metadata Refresh",
     "\Microsoft\Windows\FileHistory\File History (maintenance mode)",
     "\Microsoft\Windows\Flighting\FeatureConfig\BootstrapUsageDataReporting",
