@@ -463,17 +463,23 @@ Self explaining.
 
 # Disable Active Probing
 
-Disables active internet probing (prevents windows from automatically checking if an internet connection is available). `MaxActiveProbes` (comment) is set to `1`, as `0` = unlimited (breaks connection status).
+Active probing sends HTTP requests from the client to a predefined web probe server (by default `www.msftconnecttest.com/connecttest.txt`), using both IPv4 and IPv6 in parallel. If it gets an HTTP 200 response with the expected payload, NCSI marks the interface as having internet connectivity, if the probe fails or returns errors (for example, blocked by a proxy or DNS issues), NCSI treats connectivity as limited.
 
+Passive probing doesn't send its own traffic, it inspects received packets and uses their hop count to infer connectivity. If the measured hop count for an interface meets or exceeds a system minimum (default 8, often changed to 3 in enterprises), NCSI upgrades the interface to "internet" and suppresses further active probes until conditions change, if the hop count is too low, missing, or there's no route to the internet, and no successful active probe has occurred, connectivity is treated as local-only. Passive probes run periodically (every 15 seconds by default) when allowed by Group Policy and when a user has recently logged on, and they serve to keep connectivity status accurate, especially with intermittent network issues.
+
+See links below for a detailed documentation.
+
+|Icon|Description|
+|--|--|
+|![](https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wired.jpg?raw=true)| Connected (Wired) |
+|![](https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-wireless.jpg?raw=true)| Connected (Wireless) |
+|![](https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/networking/media/ncsi/ncsi-overview/ncsi-icon-connected-no-internet.jpg?raw=true)| Connected (No internet) |
+
+`PassivePollPeriod` is set to `15` by default = Runs passive probe every 15 seconds. `MaxActiveProbes` to `0` (unlimited) = breaks connection status. If disabling active probes, but leaving passive probes enabled, enable `Enable Passive Mode`.
+
+> https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-overview  
+> https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-frequently-asked-questions  
 > https://github.com/5Noxi/wpr-reg-records/blob/main/records/NlaSvc.txt  
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/troubleshoot-ncsi-guidance  
-> https://privacylearn.com/windows/disable-os-data-collection/disable-connectivity-checks/disable-active-connectivity-tests-breaks-internet-connection-status-captive-portals
-
-
-"Passive connectivity tests (NCSI) check internet status every 15 seconds by sending requests to Microsoft servers, which can expose network details, create privacy risks, and trigger unwanted connections. Disabling them stops this monitoring, reducing background network activity and potential VPN/firewall conflicts. However, it can cause Windows to falsely report no internet and break features that rely on NCSI for connectivity detection."
-
-NCSI package name: `NcsiUwpApp` (breaks connection status icon)
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/internet-explorer-edge-open-connect-corporate-public-network  
 > [network/assets | probing-NcsiConfigData.c](https://github.com/5Noxi/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
 ---
@@ -528,6 +534,23 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\Disallo
   ],
   "Elements": [
     { "Type": "Boolean", "ValueName": "DisablePassivePolling", "TrueValue": "1", "FalseValue": "0" }
+  ]
+},
+{
+  "File": "nca.admx",
+  "CategoryName": "NetworkConnectivityAssistant",
+  "PolicyName": "PassiveMode",
+  "NameSpace": "Microsoft.Policies.NetworkConnectivityAssistant",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "DirectAccess Passive Mode",
+  "ExplainText": "Specifies whether NCA service runs in Passive Mode or not. Set this to Disabled to keep NCA probing actively all the time. If this setting is not configured, NCA probing is in active mode by default.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityAssistant"
+  ],
+  "ValueName": "PassiveMode",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
   ]
 },
 ```
@@ -1222,7 +1245,7 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
 
 # Disable LLSE
 
-This setting is used to enable/disable the logging of link state changes. If enabled, a link-up change event or a link-down change event generates a message that is displayed in the system event logger. This message contains the link’s speed and duplex. Administrators view the event message from the system event log.
+This setting is used to enable/disable the logging of link state changes. If enabled, a link-up change event or a link-down change event generates a message that is displayed in the system event logger. This message contains the link's speed and duplex. Administrators view the event message from the system event log.
 
 The following events are logged:  
 - The link is up. (`LINK_UP_CHANGE`)

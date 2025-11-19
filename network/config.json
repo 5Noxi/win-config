@@ -499,12 +499,17 @@
         "NoActiveProbe": { "Type": "REG_DWORD", "Data": 1 }
       },
       "SUBOPTION": {
-        "Disable Passive Polling": {
+        "Disable Passive Probing": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet": {
             "PassivePollPeriod": { "Type": "REG_DWORD", "Data": 0 }
           },
           "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
             "DisablePassivePolling": { "Type": "REG_DWORD", "Data": 1 }
+          }
+        },
+        "Enable Passive Mode": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityAssistant": {
+            "PassiveMode": { "Type": "REG_DWORD", "Data": 1 }
           }
         }
       }
@@ -517,12 +522,17 @@
         "NoActiveProbe": { "Action": "deletevalue" }
       },
       "SUBOPTION": {
-        "Disable Passive Polling": {
+        "Disable Passive Probing": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\NlaSvc\\Parameters\\Internet": {
-            "PassivePollPeriod": { "Type": "REG_DWORD", "Data": 15}
+            "PassivePollPeriod": { "Type": "REG_DWORD", "Data": 15 }
           },
           "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator": {
             "DisablePassivePolling": { "Action": "deletevalue" }
+          }
+        },
+        "Enable Passive Mode": {
+          "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityAssistant": {
+            "PassiveMode": { "Action": "deletevalue" }
           }
         }
       }

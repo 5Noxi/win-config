@@ -991,6 +991,21 @@ Category view:
 },
 ```
 
+# Decrease Mouse Hover Time
+
+Hover time is the time in milliseconds that the mouse pointer has to stay hovered over something before an event happens, personal preference.
+
+Default/fallback value:
+```c
+g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // 400
+```
+Type: `String`
+Min: `0`
+Max: `65534`? - It uses `StrToIntW` to read the value
+
+> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw  
+> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime
+
 # OEM Information
 
 Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
@@ -1052,18 +1067,3 @@ Example value:
 hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
 ```
 It depends on the user what he wants to see and what not, so I won't add a switch for it.
-
-# Decrease Mouse Hover Time
-
-Hover time is the time in milliseconds that the mouse pointer has to stay hovered over something before an event happens, personal preference.
-
-Default/fallback value:
-```c
-g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // 400
-```
-Type: `String`
-Min: `0`
-Max: `65534`? - It uses `StrToIntW` to read the value
-
-> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw  
-> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime
