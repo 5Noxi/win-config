@@ -2430,3 +2430,557 @@ void __fastcall Power::ReadRegistryParameters(Power *this)
     0,
     0);
 }
+
+void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
+{
+  REGISTRY *v3; // rcx
+  int v4; // [rsp+30h] [rbp-D0h] BYREF
+  const wchar_t *v5; // [rsp+38h] [rbp-C8h]
+  __int64 v6; // [rsp+40h] [rbp-C0h]
+  int v7; // [rsp+48h] [rbp-B8h]
+  __int64 v8; // [rsp+4Ch] [rbp-B4h]
+  int v9; // [rsp+54h] [rbp-ACh]
+  int v10; // [rsp+58h] [rbp-A8h]
+  __int16 v11; // [rsp+5Ch] [rbp-A4h]
+  int v12; // [rsp+60h] [rbp-A0h]
+  const wchar_t *v13; // [rsp+68h] [rbp-98h]
+  __int64 v14; // [rsp+70h] [rbp-90h]
+  int v15; // [rsp+78h] [rbp-88h]
+  __int64 v16; // [rsp+7Ch] [rbp-84h]
+  int v17; // [rsp+84h] [rbp-7Ch]
+  int v18; // [rsp+88h] [rbp-78h]
+  __int16 v19; // [rsp+8Ch] [rbp-74h]
+  int v20; // [rsp+90h] [rbp-70h]
+  const wchar_t *v21; // [rsp+98h] [rbp-68h]
+  __int64 v22; // [rsp+A0h] [rbp-60h]
+  int v23; // [rsp+A8h] [rbp-58h]
+  __int64 v24; // [rsp+ACh] [rbp-54h]
+  int v25; // [rsp+B4h] [rbp-4Ch]
+  int v26; // [rsp+B8h] [rbp-48h]
+  __int16 v27; // [rsp+BCh] [rbp-44h]
+  int v28; // [rsp+C0h] [rbp-40h]
+  const wchar_t *v29; // [rsp+C8h] [rbp-38h]
+  __int64 v30; // [rsp+D0h] [rbp-30h]
+  int v31; // [rsp+D8h] [rbp-28h]
+  __int64 v32; // [rsp+DCh] [rbp-24h]
+  int v33; // [rsp+E4h] [rbp-1Ch]
+  int v34; // [rsp+E8h] [rbp-18h]
+  __int16 v35; // [rsp+ECh] [rbp-14h]
+  int v36; // [rsp+F0h] [rbp-10h]
+  const wchar_t *v37; // [rsp+F8h] [rbp-8h]
+  __int64 v38; // [rsp+100h] [rbp+0h]
+  int v39; // [rsp+108h] [rbp+8h]
+  __int64 v40; // [rsp+10Ch] [rbp+Ch]
+  int v41; // [rsp+114h] [rbp+14h]
+  int v42; // [rsp+118h] [rbp+18h]
+  __int16 v43; // [rsp+11Ch] [rbp+1Ch]
+  int v44; // [rsp+120h] [rbp+20h]
+  const wchar_t *v45; // [rsp+128h] [rbp+28h]
+  __int64 v46; // [rsp+130h] [rbp+30h]
+  int v47; // [rsp+138h] [rbp+38h]
+  __int64 v48; // [rsp+13Ch] [rbp+3Ch]
+  __int64 v49; // [rsp+144h] [rbp+44h]
+  __int16 v50; // [rsp+14Ch] [rbp+4Ch]
+  int v51; // [rsp+150h] [rbp+50h]
+  const wchar_t *v52; // [rsp+158h] [rbp+58h]
+  __int64 v53; // [rsp+160h] [rbp+60h]
+  int v54; // [rsp+168h] [rbp+68h]
+  __int64 v55; // [rsp+16Ch] [rbp+6Ch]
+  int v56; // [rsp+174h] [rbp+74h]
+  int v57; // [rsp+178h] [rbp+78h]
+  __int16 v58; // [rsp+17Ch] [rbp+7Ch]
+  int v59; // [rsp+180h] [rbp+80h]
+  const wchar_t *v60; // [rsp+188h] [rbp+88h]
+  __int64 v61; // [rsp+190h] [rbp+90h]
+  int v62; // [rsp+198h] [rbp+98h]
+  int v63; // [rsp+19Ch] [rbp+9Ch]
+  int v64; // [rsp+1A0h] [rbp+A0h]
+  int v65; // [rsp+1A4h] [rbp+A4h]
+  int v66; // [rsp+1A8h] [rbp+A8h]
+  __int16 v67; // [rsp+1ACh] [rbp+ACh]
+  int v68; // [rsp+1B0h] [rbp+B0h]
+  const wchar_t *v69; // [rsp+1B8h] [rbp+B8h]
+  __int64 v70; // [rsp+1C0h] [rbp+C0h]
+  int v71; // [rsp+1C8h] [rbp+C8h]
+  __int64 v72; // [rsp+1CCh] [rbp+CCh]
+  int v73; // [rsp+1D4h] [rbp+D4h]
+  int v74; // [rsp+1D8h] [rbp+D8h]
+  __int16 v75; // [rsp+1DCh] [rbp+DCh]
+  int v76; // [rsp+1E0h] [rbp+E0h]
+  const wchar_t *v77; // [rsp+1E8h] [rbp+E8h]
+  __int64 v78; // [rsp+1F0h] [rbp+F0h]
+  int v79; // [rsp+1F8h] [rbp+F8h]
+  int v80; // [rsp+1FCh] [rbp+FCh]
+  int v81; // [rsp+200h] [rbp+100h]
+  int v82; // [rsp+204h] [rbp+104h]
+  int v83; // [rsp+208h] [rbp+108h]
+  __int16 v84; // [rsp+20Ch] [rbp+10Ch]
+
+  v4 = 655368;
+  v6 = 0LL;
+  v5 = L"*RSS";
+  v7 = 3096;
+  v13 = L"*RssBaseProcNumber";
+  v11 = 256;
+  v17 = 0xFFFF;
+  v18 = 0xFFFF;
+  v25 = 0xFFFF;
+  v21 = L"*MaxRssProcessors";
+  v29 = L"*NumaNodeId";
+  v37 = L"DisablePortScaling";
+  v45 = L"ManyCoreScaling";
+  v52 = L"*NumRssQueues";
+  v26 = 0xFFFF;
+  v33 = 0xFFFF;
+  v34 = 0xFFFF;
+  v60 = L"NumRssQueuesPerVPort";
+  v8 = 1LL;
+  v9 = 1;
+  v10 = 1;
+  v12 = 2490404;
+  v14 = 0LL;
+  v15 = 3104;
+  v16 = 4LL;
+  v19 = 256;
+  v20 = 2359330;
+  v22 = 0LL;
+  v23 = 3108;
+  v24 = 4LL;
+  v27 = 256;
+  v28 = 1572886;
+  v30 = 0LL;
+  v31 = 135200;
+  v32 = 4LL;
+  v35 = 256;
+  v36 = 2490404;
+  v38 = 0LL;
+  v39 = 3097;
+  v40 = 1LL;
+  v41 = 1;
+  v42 = 1;
+  v43 = 256;
+  v44 = 2097182;
+  v46 = 0LL;
+  v47 = 3100;
+  v48 = 4LL;
+  v49 = 1LL;
+  v50 = 256;
+  v51 = 1835034;
+  v53 = 0LL;
+  v54 = 3112;
+  v55 = 4LL;
+  v56 = 16;
+  v57 = 1;
+  v58 = 256;
+  v59 = 2752552;
+  v61 = 0LL;
+  v62 = 3116;
+  v63 = 4;
+  v64 = 2;
+  v65 = 2;
+  v66 = 2;
+  v67 = 256;
+  v68 = 1835034;
+  v69 = L"EnableLHRssWA";
+  v82 = 2;
+  v77 = L"ReceiveScalingMode";
+  v3 = (REGISTRY *)*((_QWORD *)a2 + 14912);
+  v83 = 2;
+  v70 = 0LL;
+  v71 = 3098;
+  v72 = 1LL;
+  v73 = 1;
+  v74 = 1;
+  v75 = 256;
+  v76 = 2490404;
+  v78 = 0LL;
+  v79 = 3120;
+  v80 = 4;
+  v81 = 1;
+  v84 = 256;
+  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
+}
+
+void __fastcall TIMESTAMP::ReadRegistryParameters(TIMESTAMP *this, struct ADAPTER_CONTEXT *a2, void *a3)
+{
+  REGISTRY *v3; // rcx
+  int v4; // [rsp+30h] [rbp-D0h] BYREF
+  const wchar_t *v5; // [rsp+38h] [rbp-C8h]
+  __int64 v6; // [rsp+40h] [rbp-C0h]
+  int v7; // [rsp+48h] [rbp-B8h]
+  __int64 v8; // [rsp+4Ch] [rbp-B4h]
+  int v9; // [rsp+54h] [rbp-ACh]
+  int v10; // [rsp+58h] [rbp-A8h]
+  __int16 v11; // [rsp+5Ch] [rbp-A4h]
+  int v12; // [rsp+60h] [rbp-A0h]
+  const wchar_t *v13; // [rsp+68h] [rbp-98h]
+  __int64 v14; // [rsp+70h] [rbp-90h]
+  int v15; // [rsp+78h] [rbp-88h]
+  __int64 v16; // [rsp+7Ch] [rbp-84h]
+  __int64 v17; // [rsp+84h] [rbp-7Ch]
+  __int16 v18; // [rsp+8Ch] [rbp-74h]
+  int v19; // [rsp+90h] [rbp-70h]
+  const wchar_t *v20; // [rsp+98h] [rbp-68h]
+  __int64 v21; // [rsp+A0h] [rbp-60h]
+  int v22; // [rsp+A8h] [rbp-58h]
+  __int64 v23; // [rsp+ACh] [rbp-54h]
+  int v24; // [rsp+B4h] [rbp-4Ch]
+  int v25; // [rsp+B8h] [rbp-48h]
+  __int16 v26; // [rsp+BCh] [rbp-44h]
+  int v27; // [rsp+C0h] [rbp-40h]
+  const wchar_t *v28; // [rsp+C8h] [rbp-38h]
+  __int64 v29; // [rsp+D0h] [rbp-30h]
+  int v30; // [rsp+D8h] [rbp-28h]
+  __int64 v31; // [rsp+DCh] [rbp-24h]
+  __int64 v32; // [rsp+E4h] [rbp-1Ch]
+  __int16 v33; // [rsp+ECh] [rbp-14h]
+  int v34; // [rsp+F0h] [rbp-10h]
+  const wchar_t *v35; // [rsp+F8h] [rbp-8h]
+  __int64 v36; // [rsp+100h] [rbp+0h]
+  int v37; // [rsp+108h] [rbp+8h]
+  __int64 v38; // [rsp+10Ch] [rbp+Ch]
+  __int64 v39; // [rsp+114h] [rbp+14h]
+  __int16 v40; // [rsp+11Ch] [rbp+1Ch]
+  int v41; // [rsp+120h] [rbp+20h]
+  const wchar_t *v42; // [rsp+128h] [rbp+28h]
+  __int64 v43; // [rsp+130h] [rbp+30h]
+  int v44; // [rsp+138h] [rbp+38h]
+  __int64 v45; // [rsp+13Ch] [rbp+3Ch]
+  __int64 v46; // [rsp+144h] [rbp+44h]
+  __int16 v47; // [rsp+14Ch] [rbp+4Ch]
+
+  v4 = 2490404;
+  v6 = 0LL;
+  v5 = L"AdvertiseTimestamp";
+  v7 = 118096;
+  v13 = L"AllTransmitHw";
+  v8 = 1LL;
+  v20 = L"TaggedTransmitHw";
+  v9 = 1;
+  v28 = L"*PtpHardwareTimestamp";
+  v35 = L"*SoftwareTimestamp";
+  v42 = L"TimeSync";
+  v3 = (REGISTRY *)*((_QWORD *)a2 + 14912);
+  v10 = 1;
+  v11 = 256;
+  v12 = 1835034;
+  v14 = 0LL;
+  v15 = 118104;
+  v16 = 1LL;
+  v17 = 1LL;
+  v18 = 256;
+  v19 = 2228256;
+  v21 = 0LL;
+  v22 = 118105;
+  v23 = 1LL;
+  v24 = 1;
+  v25 = 1;
+  v26 = 256;
+  v27 = 2883626;
+  v29 = 0LL;
+  v30 = 118097;
+  v31 = 1LL;
+  v32 = 1LL;
+  v33 = 256;
+  v34 = 2490404;
+  v36 = 0LL;
+  v37 = 118100;
+  v38 = 4LL;
+  v39 = 5LL;
+  v40 = 256;
+  v41 = 1179664;
+  v43 = 0LL;
+  v44 = 118106;
+  v45 = 1LL;
+  v46 = 1LL;
+  v47 = 256;
+  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 6u);
+}
+
+void __fastcall SRIOV_CTRL::IovReadRegistryParameters(
+        SRIOV_CTRL *this,
+        REGISTRY **DstBuf,
+        NDIS_HANDLE ConfigurationHandle)
+{
+  bool v6; // cc
+  UNICODE_STRING SubKeyName; // [rsp+50h] [rbp+7h] BYREF
+  int v8; // [rsp+60h] [rbp+17h] BYREF
+  const wchar_t *v9; // [rsp+68h] [rbp+1Fh]
+  __int64 v10; // [rsp+70h] [rbp+27h]
+  int v11; // [rsp+78h] [rbp+2Fh]
+  int v12; // [rsp+7Ch] [rbp+33h]
+  int v13; // [rsp+80h] [rbp+37h]
+  int v14; // [rsp+84h] [rbp+3Bh]
+  int v15; // [rsp+88h] [rbp+3Fh]
+  __int16 v16; // [rsp+8Ch] [rbp+43h]
+  int Status; // [rsp+B0h] [rbp+67h] BYREF
+  PVOID SubKeyHandle; // [rsp+B8h] [rbp+6Fh] BYREF
+
+  SubKeyHandle = 0LL;
+  *(_DWORD *)&SubKeyName.Length = 1835034;
+  SubKeyName.Buffer = L"NicSwitches\\0";
+  REGKEY<unsigned int>::Initialize(
+    (enum _REGKEY_STATE *)(DstBuf + 14656),
+    (struct ADAPTER_CONTEXT *)DstBuf,
+    ConfigurationHandle,
+    (PUCHAR)"*SriovPreferred",
+    0,
+    1u,
+    0,
+    0,
+    1);
+  REGKEY<unsigned int>::Initialize(
+    (enum _REGKEY_STATE *)((char *)DstBuf + 117260),
+    (struct ADAPTER_CONTEXT *)DstBuf,
+    ConfigurationHandle,
+    (PUCHAR)"*Sriov",
+    0,
+    1u,
+    0,
+    0,
+    1);
+  v10 = 0LL;
+  v13 = 0;
+  v6 = *((_DWORD *)DstBuf + 29935) < 18;
+  v9 = L"*NumVFs";
+  v15 = *((_DWORD *)this + 141);
+  v8 = 1048590;
+  v11 = 117284;
+  v12 = 4;
+  v14 = 7;
+  v16 = 256;
+  if ( v6 )
+    *((_DWORD *)DstBuf + 29316) = 0;
+  NdisOpenConfigurationKeyByName_0(&Status, ConfigurationHandle, &SubKeyName, &SubKeyHandle);
+  if ( SubKeyHandle )
+  {
+    REGISTRY::RegReadRegTable(
+      DstBuf[14912],
+      (struct ADAPTER_CONTEXT *)DstBuf,
+      SubKeyHandle,
+      (struct REGTABLE_ENTRY *)&v8,
+      1u);
+    NdisCloseConfiguration_0(SubKeyHandle);
+  }
+  SRIOV_CTRL::CalculateNumVfs(this, (struct ADAPTER_CONTEXT *)DstBuf);
+  *(_WORD *)(*((_QWORD *)this + 73) + 16LL) = *((_WORD *)this + 282);
+}
+
+void __fastcall DcaReadRegistryParameters(struct ADAPTER_CONTEXT *a1, void *a2)
+{
+  REGISTRY *v4; // rcx
+  int v5; // [rsp+30h] [rbp-49h] BYREF
+  const wchar_t *v6; // [rsp+38h] [rbp-41h]
+  __int64 v7; // [rsp+40h] [rbp-39h]
+  int v8; // [rsp+48h] [rbp-31h]
+  int v9; // [rsp+4Ch] [rbp-2Dh]
+  int v10; // [rsp+50h] [rbp-29h]
+  int v11; // [rsp+54h] [rbp-25h]
+  int v12; // [rsp+58h] [rbp-21h]
+  __int16 v13; // [rsp+5Ch] [rbp-1Dh]
+  int v14; // [rsp+60h] [rbp-19h]
+  const wchar_t *v15; // [rsp+68h] [rbp-11h]
+  __int64 v16; // [rsp+70h] [rbp-9h]
+  int v17; // [rsp+78h] [rbp-1h]
+  int v18; // [rsp+7Ch] [rbp+3h]
+  int v19; // [rsp+80h] [rbp+7h]
+  int v20; // [rsp+84h] [rbp+Bh]
+  int v21; // [rsp+88h] [rbp+Fh]
+  __int16 v22; // [rsp+8Ch] [rbp+13h]
+  int v23; // [rsp+90h] [rbp+17h]
+  const wchar_t *v24; // [rsp+98h] [rbp+1Fh]
+  __int64 v25; // [rsp+A0h] [rbp+27h]
+  int v26; // [rsp+A8h] [rbp+2Fh]
+  int v27; // [rsp+ACh] [rbp+33h]
+  int v28; // [rsp+B0h] [rbp+37h]
+  int v29; // [rsp+B4h] [rbp+3Bh]
+  int v30; // [rsp+B8h] [rbp+3Fh]
+  __int16 v31; // [rsp+BCh] [rbp+43h]
+
+  v7 = 0LL;
+  v10 = 0;
+  v16 = 0LL;
+  v19 = 0;
+  v25 = 0LL;
+  v28 = 0;
+  v6 = L"EnableDCA";
+  v18 = 4;
+  v27 = 4;
+  v15 = L"DcaRxSettings";
+  v4 = (REGISTRY *)*((_QWORD *)a1 + 14912);
+  v21 = 3;
+  v5 = 1310738;
+  v8 = 2840;
+  v9 = 1;
+  v11 = 1;
+  v12 = 1;
+  v13 = 256;
+  v14 = 1835034;
+  v17 = 2912;
+  v20 = 7;
+  v22 = 256;
+  v23 = 1835034;
+  v24 = L"DcaTxSettings";
+  v26 = 2916;
+  v29 = 1;
+  v30 = 1;
+  v31 = 256;
+  REGISTRY::RegReadRegTable(v4, a1, a2, (struct REGTABLE_ENTRY *)&v5, 3u);
+}
+
+void __fastcall OffLdReadRegistryParameters(REGISTRY **DstBuf, NDIS_HANDLE ConfigurationHandle)
+{
+  int v4; // [rsp+50h] [rbp-B0h] BYREF
+  const wchar_t *v5; // [rsp+58h] [rbp-A8h]
+  __int64 v6; // [rsp+60h] [rbp-A0h]
+  int v7; // [rsp+68h] [rbp-98h]
+  __int64 v8; // [rsp+6Ch] [rbp-94h]
+  int v9; // [rsp+74h] [rbp-8Ch]
+  int v10; // [rsp+78h] [rbp-88h]
+  __int16 v11; // [rsp+7Ch] [rbp-84h]
+  int v12; // [rsp+80h] [rbp-80h]
+  const wchar_t *v13; // [rsp+88h] [rbp-78h]
+  __int64 v14; // [rsp+90h] [rbp-70h]
+  int v15; // [rsp+98h] [rbp-68h]
+  __int64 v16; // [rsp+9Ch] [rbp-64h]
+  int v17; // [rsp+A4h] [rbp-5Ch]
+  int v18; // [rsp+A8h] [rbp-58h]
+  __int16 v19; // [rsp+ACh] [rbp-54h]
+  int v20; // [rsp+B0h] [rbp-50h]
+  const wchar_t *v21; // [rsp+B8h] [rbp-48h]
+  __int64 v22; // [rsp+C0h] [rbp-40h]
+  int v23; // [rsp+C8h] [rbp-38h]
+  __int64 v24; // [rsp+CCh] [rbp-34h]
+  int v25; // [rsp+D4h] [rbp-2Ch]
+  int v26; // [rsp+D8h] [rbp-28h]
+  __int16 v27; // [rsp+DCh] [rbp-24h]
+  int v28; // [rsp+E0h] [rbp-20h]
+  const wchar_t *v29; // [rsp+E8h] [rbp-18h]
+  __int64 v30; // [rsp+F0h] [rbp-10h]
+  int v31; // [rsp+F8h] [rbp-8h]
+  __int64 v32; // [rsp+FCh] [rbp-4h]
+  int v33; // [rsp+104h] [rbp+4h]
+  int v34; // [rsp+108h] [rbp+8h]
+  __int16 v35; // [rsp+10Ch] [rbp+Ch]
+  int v36; // [rsp+110h] [rbp+10h]
+  const wchar_t *v37; // [rsp+118h] [rbp+18h]
+  __int64 v38; // [rsp+120h] [rbp+20h]
+  int v39; // [rsp+128h] [rbp+28h]
+  __int64 v40; // [rsp+12Ch] [rbp+2Ch]
+  int v41; // [rsp+134h] [rbp+34h]
+  int v42; // [rsp+138h] [rbp+38h]
+  __int16 v43; // [rsp+13Ch] [rbp+3Ch]
+  int v44; // [rsp+140h] [rbp+40h]
+  const wchar_t *v45; // [rsp+148h] [rbp+48h]
+  __int64 v46; // [rsp+150h] [rbp+50h]
+  int v47; // [rsp+158h] [rbp+58h]
+  __int64 v48; // [rsp+15Ch] [rbp+5Ch]
+  __int64 v49; // [rsp+164h] [rbp+64h]
+  __int16 v50; // [rsp+16Ch] [rbp+6Ch]
+  int v51; // [rsp+170h] [rbp+70h]
+  const wchar_t *v52; // [rsp+178h] [rbp+78h]
+  __int64 v53; // [rsp+180h] [rbp+80h]
+  int v54; // [rsp+188h] [rbp+88h]
+  __int64 v55; // [rsp+18Ch] [rbp+8Ch]
+  int v56; // [rsp+194h] [rbp+94h]
+  int v57; // [rsp+198h] [rbp+98h]
+  __int16 v58; // [rsp+19Ch] [rbp+9Ch]
+  int v59; // [rsp+1A0h] [rbp+A0h]
+  const wchar_t *v60; // [rsp+1A8h] [rbp+A8h]
+  __int64 v61; // [rsp+1B0h] [rbp+B0h]
+  int v62; // [rsp+1B8h] [rbp+B8h]
+  __int64 v63; // [rsp+1BCh] [rbp+BCh]
+  int v64; // [rsp+1C4h] [rbp+C4h]
+  int v65; // [rsp+1C8h] [rbp+C8h]
+  __int16 v66; // [rsp+1CCh] [rbp+CCh]
+
+  v4 = 3014700;
+  v5 = L"*IPChecksumOffloadIPv4";
+  v13 = L"*TCPChecksumOffloadIPv4";
+  v6 = 0LL;
+  v21 = L"*TCPChecksumOffloadIPv6";
+  v7 = 119368;
+  v29 = L"*UDPChecksumOffloadIPv4";
+  v8 = 4LL;
+  v37 = L"*UDPChecksumOffloadIPv6";
+  v45 = L"*LsoV1IPv4";
+  v52 = L"*LsoV2IPv4";
+  v60 = L"*LsoV2IPv6";
+  v9 = 3;
+  v10 = 3;
+  v11 = 256;
+  v12 = 3145774;
+  v14 = 0LL;
+  v15 = 119372;
+  v16 = 4LL;
+  v17 = 3;
+  v18 = 3;
+  v19 = 256;
+  v20 = 3145774;
+  v22 = 0LL;
+  v23 = 119380;
+  v24 = 4LL;
+  v25 = 3;
+  v26 = 3;
+  v27 = 256;
+  v28 = 3145774;
+  v30 = 0LL;
+  v31 = 119376;
+  v32 = 4LL;
+  v33 = 3;
+  v34 = 3;
+  v35 = 256;
+  v36 = 3145774;
+  v38 = 0LL;
+  v39 = 119384;
+  v40 = 4LL;
+  v41 = 3;
+  v42 = 3;
+  v43 = 256;
+  v44 = 1441812;
+  v46 = 0LL;
+  v47 = 119388;
+  v48 = 1LL;
+  v49 = 1LL;
+  v50 = 256;
+  v51 = 1441812;
+  v53 = 0LL;
+  v54 = 119389;
+  v55 = 1LL;
+  v56 = 1;
+  v57 = 1;
+  v58 = 256;
+  v59 = 1441812;
+  v61 = 0LL;
+  v62 = 119390;
+  v63 = 1LL;
+  v64 = 1;
+  v65 = 1;
+  v66 = 256;
+  REGKEY<unsigned char>::Initialize(
+    (enum _REGKEY_STATE *)(DstBuf + 14928),
+    (struct ADAPTER_CONTEXT *)DstBuf,
+    ConfigurationHandle,
+    (PUCHAR)"*EncapsulatedPacketTaskOffloadVxlan",
+    0,
+    1u,
+    0,
+    0,
+    0);
+  REGKEY<short>::Initialize(
+    (enum _REGKEY_STATE *)(DstBuf + 14929),
+    (struct ADAPTER_CONTEXT *)DstBuf,
+    ConfigurationHandle,
+    (PUCHAR)"*VxlanUDPPortNumber",
+    1u,
+    0xFFFFu,
+    0x12B5u,
+    0,
+    0);
+  REGISTRY::RegReadRegTable(
+    DstBuf[14912],
+    (struct ADAPTER_CONTEXT *)DstBuf,
+    ConfigurationHandle,
+    (struct REGTABLE_ENTRY *)&v4,
+    8u);
+}

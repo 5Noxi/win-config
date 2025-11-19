@@ -1196,7 +1196,7 @@
         "EthernetDisableFec": {
           "Action": "ethernet_key",
           "Values": {
-            "FecMode": { "Type": "REG_DWORD", "Data": 3 }
+            "FecMode": { "Type": "REG_SZ", "Data": 3 }
           }
         }
       }
@@ -1207,6 +1207,28 @@
           "Action": "ethernet_key",
           "Values": {
             "FecMode": { "Action": "deletevalue" }
+          }
+        }
+      }
+    }
+  },
+  "Enable Legacy Switch Compatibility Mode": {
+    "apply": {
+      "COMMANDS": {
+        "EnableMode": {
+          "Action": "ethernet_key",
+          "Values": {
+            "LinkNegotiationProcess": { "Type": "REG_SZ", "Data": 2 }
+          }
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "EnableModeRevert": {
+          "Action": "ethernet_key",
+          "Values": {
+            "LinkNegotiationProcess": { "Action": "deletevalue" }
           }
         }
       }
