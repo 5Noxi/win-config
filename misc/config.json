@@ -30,6 +30,38 @@
       }
     }
   },
+  "Explorer Blur": {
+    "apply": {
+      "COMMANDS": {
+        "Wait": true,
+        "ExplorerBlurDownload": {
+          "Action": "run_powershell",
+          "Command": "$destblur = Join-Path $env:APPDATA 'Noverse\\ExplorerBlur'; $zip = Join-Path $env:TEMP 'ExplorerBlur.zip'; Invoke-WebRequest 'https://github.com/Maplespe/ExplorerBlurMica/releases/download/2.0.1/Release_x64.zip' -OutFile $zip; if (!(Test-Path -LiteralPath $destblur)) { New-Item -ItemType Directory -Path $destblur -Force | Out-Null }; Expand-Archive -LiteralPath $zip -DestinationPath $destblur -Force"
+        },
+        "ExplorerBlurRegister": {
+          "Action": "run_powershell",
+          "Command": "$dll = Join-Path $env:APPDATA 'Noverse\\ExplorerBlur\\Release\\ExplorerBlurMica.dll'; if (Test-Path -LiteralPath $dll) { & regsvr32 $dll }"
+        }
+      }
+    },
+    "revert": {
+      "COMMANDS": {
+        "Wait": true,
+        "ExplorerBlurUninstall": {
+          "Action": "run_powershell",
+          "Command": "$dll = Join-Path $env:APPDATA 'Noverse\\ExplorerBlur\\Release\\ExplorerBlurMica.dll'; if (Test-Path -LiteralPath $dll) { & regsvr32 /u $dll }"
+        },
+        "ExplorerBlurCleanup": {
+          "Action": "delete_path",
+          "Paths": [
+            "%APPDATA%\\Noverse\\ExplorerBlur"
+          ],
+          "Recurse": true,
+          "Elevated": true
+        }
+      }
+    }
+  },
   "Notepad++": {
     "apply": {
       "HKCR\\batfile\\shell\\edit\\command": {

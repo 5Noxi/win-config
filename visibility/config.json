@@ -4,7 +4,7 @@
   "github": "https://github.com/5Noxi",
   "discord": "https://discord.gg/E2ybG4j9jU",
   
-  "Desktop Wallpapers": {
+  "Desktop Wallpaper": {
     "apply": {
       "__control": {
         "type": "dropdown",
@@ -13,294 +13,357 @@
           {
             "label": "Asia",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Asia.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Asia.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperAsiaDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Asia.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Asia.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Asia.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Asia.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Austria",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Austria.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Austria.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperAustriaDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Austria.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Austria.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Austria.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Austria.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Beach",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Beach.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Beach.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperBeachDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Beach.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Beach.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Beach.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Beach.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Blue Flowers",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Blue-Flowers.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Blue-Flowers.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperBlueFlowersDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Blue-Flowers.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Blue-Flowers.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Blue-Flowers.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Blue-Flowers.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Castle",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Castle.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Castle.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperCastleDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Castle.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Castle.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Castle.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Castle.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Cat",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Cat.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Cat.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperCatDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Cat.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Cat.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Cat.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Cat.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Flowers",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Flowers.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Flowers.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperFlowersDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Flowers.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Flowers.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Flowers.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Flowers.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Heaven",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Heaven.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Heaven.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperHeavenDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Heaven.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Heaven.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Heaven.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Heaven.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Lake",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Lake.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Lake.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperLakeDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Lake.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Lake.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Lake.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Lake.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Mac",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Mac.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Mac.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperMacDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Mac.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Mac.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Mac.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Mac.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Moon",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Moon.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Moon.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperMoonDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Moon.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Moon.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Moon.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Moon.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Moon Castle",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Moon-Castle.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Moon-Castle.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperMoonCastleDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Moon-Castle.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Moon-Castle.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Moon-Castle.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Moon-Castle.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Plants Room",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Plants-Room.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Plants-Room.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperPlantsRoomDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Plants-Room.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Plants-Room.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Plants-Room.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Plants-Room.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Pokemon",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Pokemon.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Pokemon.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperPokemonDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Pokemon.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Pokemon.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Pokemon.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Pokemon.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Rain",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Rain.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Rain.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperRainDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Rain.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Rain.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Rain.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Rain.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Sea",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Sea.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Sea.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperSeaDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Sea.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Sea.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Sea.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Sea.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Stars",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Stars.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Stars.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperStarsDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Stars.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Stars.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Stars.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Stars.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Sunset",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Sunset.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Sunset.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperSunsetDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Sunset.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Sunset.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Sunset.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Sunset.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Village",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Village.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Village.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperVillageDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Village.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Village.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Village.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Village.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Workplace",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Workplace.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Workplace.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperWorkplaceDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Workplace.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Workplace.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Workplace.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Workplace.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           },
           {
             "label": "Zelda",
             "config": {
-              "HKCU\\Control Panel\\Desktop": {
-                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Zelda.png" }
+              "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System": {
+                "Wallpaper": { "Type": "REG_SZ", "Data": "%APPDATA%\\Noverse\\Wallpaper\\Zelda.png" },
+                "WallpaperStyle": { "Type": "REG_SZ", "Data": "4" }
               },
               "COMMANDS": {
+                "Wait": true,
                 "WallpaperZeldaDownload": {
                   "Action": "run_powershell",
-                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (!(Test-Path -LiteralPath $destDir)) { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Zelda.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Zelda.png' -OutFile $file -UseBasicParsing"
-                }
+                  "Command": "$destDir = Join-Path $env:APPDATA 'Noverse\\Wallpaper'; if (Test-Path -LiteralPath $destDir) { Remove-Item -Path (Join-Path $destDir '*') -Force -Recurse -ErrorAction SilentlyContinue } else { New-Item -Path $destDir -ItemType Directory -Force | Out-Null }; $file = Join-Path $destDir 'Zelda.png'; Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/5Noxi/win-config/main/visibility/images/wallpaper/Zelda.png' -OutFile $file -UseBasicParsing"
+                },
+                "RestartExplorer": { "Action": "restart_explorer" }
               }
             }
           }

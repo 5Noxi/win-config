@@ -79,7 +79,7 @@
         "LimitEnhancedDiagnosticDataWindowsAnalytics": { "Action": "deletevalue" }
       },
       "HKLM\\System\\CurrentControlSet\\Control\\WMI\\Autologger\\AutoLogger-Diagtrack-Listener": {
-        "Start": { "Action": "deletevalue" }
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\System\\CurrentControlSet\\Services\\DiagTrack": {
         "Start": { "Type": "REG_DWORD", "Data": 2 }
@@ -1630,6 +1630,48 @@
       }
     }
   },
+  "Disable Startup ETS": {
+    "apply": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\DiagLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\Diagtrack-Listener": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FilterMgr-Logger": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\LwtNetLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\NtfsLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\ReFSLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\DiagLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\Diagtrack-Listener": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\FilterMgr-Logger": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\LwtNetLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\NtfsLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Autologger\\ReFSLog": {
+        "Start": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
+  },
   "Disable Inking & Typing Personalization": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Personalization\\Settings": {
@@ -3105,6 +3147,20 @@
           "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exe.nv DeviceCensus.exe",
           "Elevated": true
         }
+      }
+    }
+  },
+  "Disable OneSettings Download": {
+    "apply": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection": {
+        "EnableOneSettingsAuditing": { "Type": "REG_DWORD", "Data": 0 },
+        "DisableOneSettingsDownloads": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    },
+    "revert": {
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection": {
+        "EnableOneSettingsAuditing": { "Action": "deletevalue" },
+        "DisableOneSettingsDownloads": { "Action": "deletevalue" }
       }
     }
   }

@@ -1556,6 +1556,42 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 },
 ```
 
+# Disable Startup ETS
+
+"The AutoLogger event tracing session records events that occur early in the operating system boot process. Applications and device drivers can use the AutoLogger session to capture traces before the user logs in. Note that some device drivers, such as disk device drivers, are not loaded at the time the AutoLogger session begins."
+
+See your current running ETS via `Performance Monitor > Data Collector Sets > Startup Event Trace Sessions`.
+
+Logs are saved in:
+```c
+C:\WINDOWS\system32\Logfiles\WMI
+
+// C:\Windows\System32\drivers\DriverData\LogFiles\WMI
+// C:\PerfLogs\Admin
+```
+
+Removing all autologgers will cause issues, therefore it's not recommended to remove all of them.
+
+| Value | Type | Description | 
+|-------|------|-------------|
+| <strong>BufferSize</strong> | <strong>REG_DWORD</strong> | The size of each buffer, in kilobytes. Should be less than one megabyte. ETW uses the size of physical memory to calculate this value.<br /> | 
+| <strong>ClockType</strong> | <strong>REG_DWORD</strong> | The timer to use when logging the time stamp for each event.<ul><li>1 = Performance counter value (high resolution)</li><li>2 = System timer</li><li>3 = CPU cycle counter</li></ul>For a description of each clock type, see the <strong>ClientContext</strong> member of [WNODE_HEADER](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ETW/wnode-header.md).<br /> The default value is 1 (performance counter value) on Windows Vista and later. Prior to Windows Vista, the default value is 2 (system timer).<br /> | 
+| <strong>DisableRealtimePersistence</strong> | <strong>REG_DWORD</strong> | To disable real time persistence, set this value to 1. The default is 0 (enabled) for real time sessions.<br /> If real time persistence is enabled, real-time events that were not delivered by the time the computer was shutdown will be persisted. The events will then be delivered to the consumer the next time the consumer connects to the session. <br /> | 
+| <strong>FileCounter</strong> | <strong>REG_DWORD</strong> | Do not set or modify this value. This value is the serial number used to increment the log file name if <strong>FileMax</strong> is specified. If the value is not valid, 1 will be assumed.<br /> | 
+| <strong>FileName</strong> | <strong>REG_SZ</strong> | The fully qualified path of the log file. The path to this file must exist. The log file is a sequential log file. The path is limited to 1024 characters.<br /> If <strong>FileName</strong> is not specified, events are written to %SystemRoot%\System32\LogFiles\WMI\\<!--no-escape-->&lt;sessionname&gt;.etl. <br /> | 
+| <strong>FileMax</strong> | <strong>REG_DWORD</strong> | The maximum number of instances of the log file that ETW creates. If the log file specified in <strong>FileName</strong> exists, ETW appends the <strong>FileCounter</strong> value to the file name. For example, if the default log file name is used, the form is %SystemRoot%\System32\LogFiles\WMI\\<!--no-escape-->&lt;sessionname&gt;.etl.NNNN. <br /> The first time the computer is started, the file name is &lt;sessionname&gt;.etl.0001, the second time the file name is &lt;sessionname&gt;.etl.0002, and so on. If <strong>FileMax</strong> is 3, on the fourth restart of the computer, ETW resets the counter to 1 and overwrites &lt;sessionname&gt;.etl.0001, if it exists.<br /> The maximum number of instances of the log file that are supported is 16.<br /> Do not use this feature with the [EVENT_TRACE_FILE_MODE_NEWFILE](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ETW/logging-mode-constants.md) log file mode.<br /> | 
+| <strong>FlushTimer</strong> | <strong>REG_DWORD</strong> | How often, in seconds, the trace buffers are forcibly flushed. The minimum flush time is 1 second. This forced flush is in addition to the automatic flush that occurs when a buffer is full and when the trace session stops. <br /> For the case of a real-time logger, a value of zero (the default value) means that the flush time will be set to 1 second. A real-time logger is when <strong>LogFileMode</strong> is set to <strong>EVENT_TRACE_REAL_TIME_MODE</strong>.<br /> The default value is 0. By default, buffers are flushed only when they are full. <br /> | 
+| <strong>Guid</strong> | <strong>REG_SZ</strong> | A string that contains a GUID that uniquely identifies the session. This value is required. | 
+| <strong>LogFileMode</strong> | <strong>REG_DWORD</strong> | Specify one or more log modes. For possible values, see [Logging Mode Constants](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ETW/logging-mode-constants.md). The default is <strong>EVENT_TRACE_FILE_MODE_SEQUENTIAL</strong>. Instead of writing to a log file, you can specify either <strong>EVENT_TRACE_BUFFERING_MODE</strong> or <strong>EVENT_TRACE_REAL_TIME_MODE</strong>.<br /> Specifying <strong>EVENT_TRACE_BUFFERING_MODE</strong> avoids the cost of flushing the contents of the session to disk when the file system becomes available. <br /> Note that using <strong>EVENT_TRACE_BUFFERING_MODE</strong> will cause the system to ignore the <strong>MaximumBuffers</strong> value, as the buffer size is instead the product of <strong>MinimumBuffers</strong> and <strong>BufferSize</strong>.<br /> AutoLogger sessions do not support the <strong>EVENT_TRACE_FILE_MODE_NEWFILE</strong> logging mode.<br /> If <strong>EVENT_TRACE_FILE_MODE_APPEND</strong> is specified, <strong>BufferSize</strong> must be explicitly provided and must be the same in both the logger and the file being appended.<br /> | 
+| <strong>MaxFileSize</strong> | <strong>REG_DWORD</strong> | The maximum file size of the log file, in megabytes. The session is closed when the maximum size is reached, unless you are in circular log file mode. To specify no limit, set value to 0. The default is 100 MB, if not set. The behavior that occurs when the maximum file size is reached depends on the value of <strong>LogFileMode</strong>.<br /> | 
+| <strong>MaximumBuffers</strong> | <strong>REG_DWORD</strong> | The maximum number of buffers to allocate. Typically, this value is the minimum number of buffers plus twenty. ETW uses the buffer size and the size of physical memory to calculate this value. This value must be greater than or equal to the value for <strong>MinimumBuffers</strong>.<br /> | 
+| <strong>MinimumBuffers</strong> | <strong>REG_DWORD</strong> | The minimum number of buffers to allocate at startup. The minimum number of buffers that you can specify is two buffers per processor. For example, on a single processor computer, the minimum number of buffers is two.<br /> | 
+| <strong>Start</strong> | <strong>REG_DWORD</strong> | To have the AutoLogger session start the next time the computer is restarted, set this value to 1; otherwise, set this value to 0.<br /> | 
+| <strong>Status</strong> | <strong>REG_DWORD</strong> | The startup status of the AutoLogger. If the AutoLogger failed to start, the value of this key is the appropriate Win32 error code. If the AutoLogger successfully started, the value of this key is <strong>ERROR_SUCCESS</strong> (0).<br /> | 
+| <strong>Boot</strong> | <strong>REG_DWORD</strong> | This feature should not be used outside of debugging scenarios.<br /> If this registry key is set to 1, the autologger will be started earlier than normal during kernel initialization, allowing it to capture events during the initialization of many important kernel subsystems. However, <b>enabling this option has a negative impact on boot times</b> and imposes additional restrictions on the autologger. If this feature is enabled, the autologger session GUID <b>must</b> be populated, and many other autologger settings may not work. <br /> This key is supported on Windows Server 2022 and later. <br /> |
+
+> https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ETW/configuring-and-starting-an-autologger-session.md
+
 # Disable Inking & Typing Personalization
 
 Used for better suggestions by creating a custom dictionary using your typing history and handwriting patterns. Disables autocorrection of misspelled words, highlight of misspelled words, and typing insights - would use AI to suggest words, autocorrect spelling mistakes etc. (`Privacy & security > Inking & typing personalization` & `Time & Language > Typing`).
@@ -3277,4 +3313,49 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 `\Microsoft\Windows\Device Information` runs:
 ```powershell
 %windir%\system32\devicecensus.exe UserCxt
+```
+
+# Disable OneSettings Download
+
+Services Configuration is used by Windows components and apps, such as the telemetry service, to dynamically update their configuration. If you turn off this service, apps using this service may stop working.
+
+If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
+
+> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#31-services-configuration
+
+```json
+{
+  "File": "DataCollection.admx",
+  "CategoryName": "DataCollectionAndPreviewBuilds",
+  "PolicyName": "EnableOneSettingsAuditing",
+  "NameSpace": "Microsoft.Policies.DataCollection",
+  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
+  "DisplayName": "Enable OneSettings Auditing",
+  "ExplainText": "This policy setting controls whether Windows records attempts to connect with the OneSettings service to the EventLog. If you enable this policy, Windows will record attempts to connect with the OneSettings service to the Microsoft\\Windows\\Privacy-Auditing\\Operational EventLog channel. If you disable or don't configure this policy setting, Windows will not record attempts to connect with the OneSettings service to the EventLog.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
+  ],
+  "ValueName": "EnableOneSettingsAuditing",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "DataCollection.admx",
+  "CategoryName": "DataCollectionAndPreviewBuilds",
+  "PolicyName": "DisableOneSettingsDownloads",
+  "NameSpace": "Microsoft.Policies.DataCollection",
+  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
+  "DisplayName": "Disable OneSettings Downloads",
+  "ExplainText": "This policy setting controls whether Windows attempts to connect with the OneSettings service. If you enable this policy, Windows will not attempt to connect with the OneSettings Service. If you disable or don't configure this policy setting, Windows will periodically attempt to connect with the OneSettings service to download configuration settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
+  ],
+  "ValueName": "DisableOneSettingsDownloads",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
 ```
