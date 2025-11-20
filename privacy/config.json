@@ -466,6 +466,9 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
         "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+        "LetAppsAccessLocation": { "Type": "REG_DWORD", "Data": 2 }
       }
     },
     "revert": {
@@ -494,6 +497,9 @@
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
         "Value": { "Type": "REG_SZ", "Data": "Deny" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+        "LetAppsAccessLocation": { "Action": "deletevalue" }
       }
     }
   },
@@ -834,6 +840,31 @@
         "AgentActivationOnLockScreenEnabled": { "Type": "REG_DWORD", "Data": 0 },
         "AgentActivationEnabled": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+        "LetAppsAccessAccountInfo": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessBackgroundSpatialPerception": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessCalendar": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessCallHistory": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessCamera": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessContacts": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessEmail": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessGazeInput": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessGraphicsCaptureProgrammatic": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessGraphicsCaptureWithoutBorder": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessHumanPresence": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessLocation": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessMessaging": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessMotion": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessNotifications": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessPhone": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessRadios": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessTasks": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsAccessTrustedDevices": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsActivateWithVoice": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsActivateWithVoiceAboveLock": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsGetDiagnosticInfo": { "Type": "REG_DWORD", "Data": 2 },
+        "LetAppsSyncWithDevices": { "Type": "REG_DWORD", "Data": 2 }
+      },
       "SUBOPTION": {
         "Deny 'Account info'": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
@@ -841,6 +872,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessAccountInfo": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'App diagnostics'": {
@@ -849,6 +883,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsGetDiagnosticInfo": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Location'": {
@@ -857,6 +894,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessLocation": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Camera'": {
@@ -865,6 +905,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessCamera": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Notifications'": {
@@ -873,6 +916,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessNotifications": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Contacts'": {
@@ -881,6 +927,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessContacts": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Calendar'": {
@@ -889,6 +938,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessCalendar": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Phone calls'": {
@@ -897,6 +949,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessPhone": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Call history'": {
@@ -905,6 +960,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessCallHistory": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Email'": {
@@ -913,6 +971,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessEmail": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Tasks'": {
@@ -921,6 +982,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessTasks": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Messaging'": {
@@ -929,6 +993,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessMessaging": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Radios'": {
@@ -937,6 +1004,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessRadios": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Other devices'": {
@@ -945,6 +1015,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsSyncWithDevices": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Documents'": {
@@ -1004,6 +1077,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessGraphicsCaptureProgrammatic": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Screenshot borders'": {
@@ -1015,12 +1091,19 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessGraphicsCaptureWithoutBorder": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Voice activation'": {
           "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps": {
             "AgentActivationOnLockScreenEnabled": { "Type": "REG_DWORD", "Data": 0 },
             "AgentActivationEnabled": { "Type": "REG_DWORD", "Data": 0 }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsActivateWithVoice": { "Type": "REG_DWORD", "Data": 2 },
+            "LetAppsActivateWithVoiceAboveLock": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Microphone'": {
@@ -1032,11 +1115,44 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Deny" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessMicrophone": { "Type": "REG_DWORD", "Data": 2 }
           }
         },
         "Deny 'Cellular data'": {
           "HKLM\\Software\\Policies\\Microsoft\\Windows\\WwanSvc\\CellularDataAccess": {
             "LetAppsAccessCellularData": { "Type": "REG_DWORD", "Data": 3 }
+          }
+        },
+        "Deny 'Presence Sensing'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessHumanPresence": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Deny 'Access Motion'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessMotion": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Deny 'Trusted Devices'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessTrustedDevices": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Deny 'Eye Tracker Device'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessGazeInput": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Deny 'Movements While in Background'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessBackgroundSpatialPerception": { "Type": "REG_DWORD", "Data": 2 }
+          }
+        },
+        "Deny 'User Info Access'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\System": {
+            "AllowUserInfoAccess": { "Type": "REG_DWORD", "Data": 2 }
           }
         }
       }
@@ -1196,6 +1312,31 @@
         "AgentActivationOnLockScreenEnabled": { "Action": "deletevalue" },
         "AgentActivationEnabled": { "Action": "deletevalue" }
       },
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+        "LetAppsAccessAccountInfo": { "Action": "deletevalue" },
+        "LetAppsAccessBackgroundSpatialPerception": { "Action": "deletevalue" },
+        "LetAppsAccessCalendar": { "Action": "deletevalue" },
+        "LetAppsAccessCallHistory": { "Action": "deletevalue" },
+        "LetAppsAccessCamera": { "Action": "deletevalue" },
+        "LetAppsAccessContacts": { "Action": "deletevalue" },
+        "LetAppsAccessEmail": { "Action": "deletevalue" },
+        "LetAppsAccessGazeInput": { "Action": "deletevalue" },
+        "LetAppsAccessGraphicsCaptureProgrammatic": { "Action": "deletevalue" },
+        "LetAppsAccessGraphicsCaptureWithoutBorder": { "Action": "deletevalue" },
+        "LetAppsAccessHumanPresence": { "Action": "deletevalue" },
+        "LetAppsAccessLocation": { "Action": "deletevalue" },
+        "LetAppsAccessMessaging": { "Action": "deletevalue" },
+        "LetAppsAccessMotion": { "Action": "deletevalue" },
+        "LetAppsAccessNotifications": { "Action": "deletevalue" },
+        "LetAppsAccessPhone": { "Action": "deletevalue" },
+        "LetAppsAccessRadios": { "Action": "deletevalue" },
+        "LetAppsAccessTasks": { "Action": "deletevalue" },
+        "LetAppsAccessTrustedDevices": { "Action": "deletevalue" },
+        "LetAppsActivateWithVoice": { "Action": "deletevalue" },
+        "LetAppsActivateWithVoiceAboveLock": { "Action": "deletevalue" },
+        "LetAppsGetDiagnosticInfo": { "Action": "deletevalue" },
+        "LetAppsSyncWithDevices": { "Action": "deletevalue" }
+      },
       "SUBOPTION": {
         "Deny 'Account info'": {
           "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
@@ -1203,6 +1344,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userAccountInformation": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessAccountInfo": { "Action": "deletevalue" }
           }
         },
         "Deny 'App diagnostics'": {
@@ -1211,6 +1355,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appDiagnostics": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsGetDiagnosticInfo": { "Action": "deletevalue" }
           }
         },
         "Deny 'Location'": {
@@ -1219,6 +1366,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessLocation": { "Action": "deletevalue" }
           }
         },
         "Deny 'Camera'": {
@@ -1227,6 +1377,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\webcam": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessCamera": { "Action": "deletevalue" }
           }
         },
         "Deny 'Notifications'": {
@@ -1235,6 +1388,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userNotificationListener": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessNotifications": { "Action": "deletevalue" }
           }
         },
         "Deny 'Contacts'": {
@@ -1243,6 +1399,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\contacts": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessContacts": { "Action": "deletevalue" }
           }
         },
         "Deny 'Calendar'": {
@@ -1251,6 +1410,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\appointments": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessCalendar": { "Action": "deletevalue" }
           }
         },
         "Deny 'Phone calls'": {
@@ -1259,6 +1421,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCall": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessPhone": { "Action": "deletevalue" }
           }
         },
         "Deny 'Call history'": {
@@ -1267,6 +1432,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\phoneCallHistory": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessCallHistory": { "Action": "deletevalue" }
           }
         },
         "Deny 'Email'": {
@@ -1275,6 +1443,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\email": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessEmail": { "Action": "deletevalue" }
           }
         },
         "Deny 'Tasks'": {
@@ -1283,6 +1454,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\userDataTasks": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessTasks": { "Action": "deletevalue" }
           }
         },
         "Deny 'Messaging'": {
@@ -1291,6 +1465,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\chat": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessMessaging": { "Action": "deletevalue" }
           }
         },
         "Deny 'Radios'": {
@@ -1299,6 +1476,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\radios": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessRadios": { "Action": "deletevalue" }
           }
         },
         "Deny 'Other devices'": {
@@ -1307,6 +1487,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\bluetoothSync": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsSyncWithDevices": { "Action": "deletevalue" }
           }
         },
         "Deny 'Documents'": {
@@ -1366,6 +1549,9 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureProgrammatic\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessGraphicsCaptureProgrammatic": { "Action": "deletevalue" }
           }
         },
         "Deny 'Screenshot borders'": {
@@ -1377,12 +1563,19 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\graphicsCaptureWithoutBorder\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessGraphicsCaptureWithoutBorder": { "Action": "deletevalue" }
           }
         },
         "Deny 'Voice activation'": {
           "HKCU\\Software\\Microsoft\\Speech_OneCore\\Settings\\VoiceActivation\\UserPreferenceForAllApps": {
             "AgentActivationOnLockScreenEnabled": { "Action": "deletevalue" },
             "AgentActivationEnabled": { "Action": "deletevalue" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsActivateWithVoice": { "Action": "deletevalue" },
+            "LetAppsActivateWithVoiceAboveLock": { "Action": "deletevalue" }
           }
         },
         "Deny 'Microphone'": {
@@ -1394,11 +1587,44 @@
           },
           "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone\\NonPackaged": {
             "Value": { "Type": "REG_SZ", "Data": "Allow" }
+          },
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessMicrophone": { "Action": "deletevalue" }
           }
         },
         "Deny 'Cellular data'": {
           "HKLM\\Software\\Policies\\Microsoft\\Windows\\WwanSvc\\CellularDataAccess": {
             "LetAppsAccessCellularData": { "Action": "deletevalue" }
+          }
+        },
+        "Deny 'Presence Sensing'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessHumanPresence": { "Action": "deletevalue" }
+          }
+        },
+        "Deny 'Access Motion'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessMotion": { "Action": "deletevalue" }
+          }
+        },
+        "Deny 'Trusted Devices'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessTrustedDevices": { "Action": "deletevalue" }
+          }
+        },
+        "Deny 'Eye Tracker Device'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessGazeInput": { "Action": "deletevalue" }
+          }
+        },
+        "Deny 'Movements While in Background'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsAccessBackgroundSpatialPerception": { "Action": "deletevalue" }
+          }
+        },
+        "Deny 'Diagnostic Info'": {
+          "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy": {
+            "LetAppsGetDiagnosticInfo": { "Action": "deletevalue" }
           }
         }
       }
@@ -1731,7 +1957,8 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
         "DisableThirdPartySuggestions": { "Type": "REG_DWORD", "Data": 1 },
-        "DisableCloudOptimizedContent": { "Type": "REG_DWORD", "Data": 1 }
+        "DisableCloudOptimizedContent": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableConsumerAccountStateContent": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "AllowOnlineTips": { "Type": "REG_DWORD", "Data": 0 }
@@ -1798,7 +2025,8 @@
       },
       "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent": {
         "DisableThirdPartySuggestions": { "Action": "deletevalue" },
-        "DisableCloudOptimizedContent": { "Action": "deletevalue" }
+        "DisableCloudOptimizedContent": { "Action": "deletevalue" },
+        "DisableConsumerAccountStateContent": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer": {
         "AllowOnlineTips": { "Action": "deletevalue" }
@@ -2041,7 +2269,8 @@
         "NearShareChannelUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage": {
-        "BluetoothLastDisabledNearShare": { "Type": "REG_DWORD", "Data": 0 }
+        "BluetoothLastDisabledNearShare": { "Type": "REG_DWORD", "Data": 0 },
+        "WifiLastDisabledNearShare": { "Type": "REG_DWORD", "Data": 0 }
       }
     },
     "revert": {
@@ -2054,7 +2283,8 @@
         "NearShareChannelUserAuthzPolicy": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage": {
-        "BluetoothLastDisabledNearShare": { "Action": "deletevalue" }
+        "BluetoothLastDisabledNearShare": { "Action": "deletevalue" },
+        "WifiLastDisabledNearShare": { "Action": "deletevalue" }
       }
     }
   },
@@ -2168,6 +2398,15 @@
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows": {
         "CEIPEnable": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\Software\\Policies\\Microsoft\\Messenger\\Client": {
+        "CEIP": { "Type": "REG_DWORD", "Data": 2 }
+      },
+      "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows Kits\\Ceip": {
+        "OptIn": { "Type": "REG_DWORD", "Data": 0 }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Internet Explorer\\SQM": {
+        "DisableCustomerImprovementProgram": { "Type": "REG_DWORD", "Data": 1 }
+      },
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\CompatTelRunner.exe": {
         "Debugger": { "Type": "REG_SZ", "Data": "%windir%\\System32\\taskkill.exe" }
       },
@@ -2202,6 +2441,15 @@
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\SQMClient\\Windows": {
         "CEIPEnable": { "Action": "deletevalue" }
+      },
+      "HKLM\\Software\\Policies\\Microsoft\\Messenger\\Client": {
+        "CEIP": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows Kits\\Ceip": {
+        "OptIn": { "Action": "deletevalue" }
+      },
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Internet Explorer\\SQM": {
+        "DisableCustomerImprovementProgram": { "Action": "deletevalue" }
       },
       "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\CompatTelRunner.exe": {
         "Debugger": { "Action": "deletevalue" }
@@ -2631,7 +2879,7 @@
         "NeutralizeSyncCenterExe": {
           "Action": "run_powershell",
           "Elevated": true,
-          "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exe mobsync.exee"
+          "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exe mobsync.exe.nv"
         }
       }
     },
@@ -2659,7 +2907,7 @@
         "RestoreSyncCenterExe": {
           "Action": "run_powershell",
           "Elevated": true,
-          "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exee mobsync.exe"
+          "Command": "ren $env:SYSTEMROOT\\System32\\mobsync.exe.nv mobsync.exe"
         }
       }
     }
@@ -2760,8 +3008,17 @@
       }
     }
   },
-  "Disable Application Experience": {
+  "Disable Application Compatibility": {
     "apply": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
+        "DisableAPISamping": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableApplicationFootprint": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableEngine": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableInstallTracing": { "Type": "REG_DWORD", "Data": 1 },
+        "DisablePCA": { "Type": "REG_DWORD", "Data": 1 },
+        "DisableWin32AppBackup": { "Type": "REG_DWORD", "Data": 1 },
+        "SbEnable": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "COMMANDS": {
         "EnableApplicationExperienceTasks": {
           "Action": "scheduled_task",
@@ -2778,12 +3035,21 @@
         },
         "RestoreCompatTelRunner": {
           "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exe CompatTelRunner.exee",
+          "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exe CompatTelRunner.exe.nv",
           "Elevated": true
         }
       }
     },
     "revert": {
+      "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\AppCompat": {
+        "DisableAPISamping": { "Action": "deletevalue" },
+        "DisableApplicationFootprint": { "Action": "deletevalue" },
+        "DisableEngine": { "Action": "deletevalue" },
+        "DisableInstallTracing": { "Action": "deletevalue" },
+        "DisablePCA": { "Action": "deletevalue" },
+        "DisableWin32AppBackup": { "Action": "deletevalue" },
+        "SbEnable": { "Action": "deletevalue" }
+      },
       "COMMANDS": {
         "EnableApplicationExperienceTasks": {
           "Action": "scheduled_task",
@@ -2800,7 +3066,7 @@
         },
         "RestoreCompatTelRunner": {
           "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exee CompatTelRunner.exe",
+          "Command": "ren $env:SYSTEMROOT\\System32\\CompatTelRunner.exe.nv CompatTelRunner.exe",
           "Elevated": true
         }
       }
@@ -2819,7 +3085,7 @@
         },
         "RenameCensus": {
           "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exe DeviceCensus.exee",
+          "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exe DeviceCensus.exe.nv",
           "Elevated": true
         }
       }
@@ -2836,7 +3102,7 @@
         },
         "RestoreCensus": {
           "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exee DeviceCensus.exe",
+          "Command": "ren $env:SYSTEMROOT\\System32\\DeviceCensus.exe.nv DeviceCensus.exe",
           "Elevated": true
         }
       }

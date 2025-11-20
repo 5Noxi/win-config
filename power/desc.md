@@ -1024,6 +1024,7 @@ Miscellaneous notes:
 
 ```c
 "DynamicLTR" = : { "Type": "REG_SZ", "Data": 0 },
+"EnableAdvancedDynamicITR" = : { "Type": "REG_SZ", "Data": 0 },
 "S3S4WolPowerSaving" = : { "Type": "REG_SZ", "Data": 0 },
 "AutoLinkDownPcieMacOff" = : { "Type": "REG_SZ", "Data": 0 }, // "Auto Disable PCIe"
 "BatteryModeLinkSpeed" = : { "Type": "REG_SZ", "Data": 2 },  // Similar to WolShutdownLinkSpeed?
@@ -1034,7 +1035,16 @@ Miscellaneous notes:
 // BatteryModeLinkSpeed           = "Battery Mode Link Speed"
 "CLKREQ" = : { "Type": "REG_SZ", "Data": 0 },
 "EnableCoalesce": { "Type": "REG_SZ", "Data": 0 },
+"DMACoalescing": { "Type": "REG_SZ", "Data": 0 },
+"CoalesceBufferSize": { "Type": "REG_SZ", "Data": 0 },
 "*PacketCoalescing": { "Type": "REG_SZ", "Data": 0 },
+
+"SVOFFMode" = 1 // SV = Save?
+"SVOFFModeHWM" = 0
+"SVOFFModeTimer" = 0
+
+"EnabledDatapathCycleCounters" = ?
+"EnabledDatapathEventCounters" = ?
 ```
 
 # Disable Audio Execution Power Requests

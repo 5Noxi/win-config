@@ -1014,12 +1014,12 @@
         "RenameStartMenuExperienceHost": {
           "Action": "run_powershell",
           "Elevated": true,
-          "Command": "ren $env:SYSTEMROOT\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe StartMenuExperienceHost.exee"
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe StartMenuExperienceHost.exe.nv"
         },
         "RenameSearchHost": {
           "Action": "run_powershell",
           "Elevated": true,
-          "Command": "ren $env:SYSTEMROOT\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe SearchHost.exee"
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe SearchHost.exe.nv"
         }
       },
       "SUBOPTION": {
@@ -1091,12 +1091,12 @@
         "RenameStartMenuExperienceHost": {
           "Action": "run_powershell",
           "Elevated": true,
-          "Command": "ren $env:SYSTEMROOT\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exee StartMenuExperienceHost.exe"
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\\StartMenuExperienceHost.exe.nv StartMenuExperienceHost.exe"
         },
         "RenameSearchHost": {
           "Action": "run_powershell",
           "Elevated": true,
-          "Command": "ren $env:SYSTEMROOT\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exee SearchHost.exe"
+          "Command": "ren $env:SYSTEMROOT\\SystemApps\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\SearchHost.exe.nv SearchHost.exe"
         }
       },
       "SUBOPTION": {
@@ -1190,7 +1190,8 @@
   "Disable Storage Sense": {
     "apply": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy": {
-        "01": { "Type": "REG_DWORD", "Data": 0 }
+        "01": { "Type": "REG_DWORD", "Data": 0 },
+        "04": { "Type": "REG_DWORD", "Data": 0 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\StorageSense": {
         "AllowStorageSenseGlobal": { "Type": "REG_DWORD", "Data": 0 },
@@ -1201,7 +1202,8 @@
     },
     "revert": {
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy": {
-        "01": { "Type": "REG_DWORD", "Data": 0 }
+        "01": { "Type": "REG_DWORD", "Data": 1 },
+        "04": { "Type": "REG_DWORD", "Data": 1 }
       },
       "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\StorageSense": {
         "AllowStorageSenseGlobal": { "Action": "deletevalue" },

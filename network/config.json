@@ -917,6 +917,19 @@
             "ITR": { "Type": "REG_SZ", "Data": 200 }
           }
         }
+      },
+      "SUBOPTION": {
+        "Disable IM/ITR": {
+          "COMMANDS": {
+            "EthernetInterruptModerationDisable": {
+              "Action": "ethernet_key",
+              "Values": {
+                "*InterruptModeration": { "Type": "REG_SZ", "Data": 0 },
+                "ITR": { "Type": "REG_SZ", "Data": 0 }
+              }
+            }
+          }
+        }
       }
     },
     "revert": {
@@ -928,6 +941,19 @@
             "ITR": { "Action": "deletevalue" }
           }
         }
+      },
+      "SUBOPTION": {
+        "Disable IM/ITR": {
+          "COMMANDS": {
+            "EthernetInterruptModerationDisableRevert": {
+              "Action": "ethernet_key",
+              "Values": {
+                "*InterruptModeration": { "Type": "REG_SZ", "Data": 1 },
+                "ITR": { "Action": "deletevalue" }
+              }
+            }
+          }
+        }
       }
     }
   },
@@ -937,14 +963,14 @@
         "EthernetEnableRSS": {
           "Action": "ethernet_key",
           "Values": {
+            "*NumRssQueues": { "Type": "REG_SZ", "Data": 2 },
             "*RSS": { "Type": "REG_SZ", "Data": 1 },
             "*RssBaseProcGroup": { "Type": "REG_SZ", "Data": 0 },
-            "*RssMaxProcGroup": { "Type": "REG_SZ", "Data": 0 }
+            "*RssBaseProcNumber": { "Type": "REG_SZ", "Data": 2 },
+            "*MaxRssProcessors": { "Type": "REG_SZ", "Data": 2 },
+            "*RssMaxProcGroup": { "Type": "REG_SZ", "Data": 0 },
+            "*RSSProfile": { "Type": "REG_SZ", "Data": 4 }
           }
-        },
-        "EthernetRssQueuesIf4Cores": {
-          "Action": "run_powershell",
-          "Command": "$cores = (Get-CimInstance Win32_Processor | Measure-Object -Property NumberOfCores -Sum).Sum; if ($cores -lt 4) { return }; try { $adapter = Get-NetAdapter | Where-Object { $_.Status -eq 'Up' -and $_.HardwareInterface -eq $true -and $_.Name -notmatch 'virtual|vmware|hyper-v|loopback' } | Sort-Object -Property ifIndex | Select-Object -First 1; if (!$adapter) { return }; $pnpId = $adapter.PnPDeviceID; if ([string]::IsNullOrWhiteSpace($pnpId)) { return }; $device = Get-CimInstance -ClassName Win32_PnPEntity | Where-Object { $_.PNPDeviceID -like ('*' + $pnpId + '*') } | Select-Object -First 1; if (!$device) { return }; $props = $device | Invoke-CimMethod -MethodName GetDeviceProperties; if (!$props) { return }; $driverKey = $props.DeviceProperties | Where-Object { $_.KeyName -eq 'DEVPKEY_Device_Driver' } | Select-Object -ExpandProperty Data -ErrorAction SilentlyContinue; if ($driverKey) { $regPath = 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\Class\\' + $driverKey; Set-ItemProperty -Path $regPath -Name '*NumRSSQueues' -Value 4 -Force; Set-ItemProperty -Path $regPath -Name '*MaxRssProcessors' -Value 4 -Force } } catch { return }"
         }
       },
       "SUBOPTION": {
@@ -966,11 +992,13 @@
         "EthernetEnableRSSRevert": {
           "Action": "ethernet_key",
           "Values": {
+            "*NumRSSQueues": { "Action": "deletevalue" },
             "*RSS": { "Action": "deletevalue" },
             "*RssBaseProcGroup": { "Action": "deletevalue" },
+            "*RssBaseProcNumber": { "Action": "deletevalue" },
+            "*MaxRssProcessors": { "Action": "deletevalue" },
             "*RssMaxProcGroup": { "Action": "deletevalue" },
-            "*NumRSSQueues": { "Action": "deletevalue" },
-            "*MaxRssProcessors": { "Action": "deletevalue" }
+            "*RSSProfile": { "Action": "deletevalue" }
           }
         }
       },

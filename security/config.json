@@ -374,7 +374,7 @@
       "COMMANDS": {
         "RenameSmartScreen": {
           "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\smartscreen.exe smartscreen.exee",
+          "Command": "ren $env:SYSTEMROOT\\System32\\smartscreen.exe smartscreen.exe.nv",
           "Elevated": true
         }
       }
@@ -452,7 +452,7 @@
       "COMMANDS": {
         "RenameSmartScreen": {
           "Action": "run_powershell",
-          "Command": "ren $env:SYSTEMROOT\\System32\\smartscreen.exee smartscreen.exe",
+          "Command": "ren $env:SYSTEMROOT\\System32\\smartscreen.exe.nv smartscreen.exe",
           "Elevated": true
         }
       }
@@ -509,7 +509,7 @@
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
       "COMMANDS": {
-        "RenameRstrui": { "Action": "run_powershell", "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.exe rstrui.bak", "Elevated": true }
+        "RenameRstrui": { "Action": "run_powershell", "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.exe rstrui.exe.nv", "Elevated": true }
       }
     },
     "revert": {
@@ -524,7 +524,7 @@
         "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "COMMANDS": {
-        "RestoreRstrui": { "Action": "run_powershell", "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.bak rstrui.exe", "Elevated": true }
+        "RestoreRstrui": { "Action": "run_powershell", "Command": "ren $env:SYSTEMROOT\\System32\\rstrui.exe.nv rstrui.exe", "Elevated": true }
       }
     }
   },

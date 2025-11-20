@@ -449,7 +449,7 @@ rmdir /s /q "%windir%\System32\Tasks\Microsoft\Windows\Windows Defender"
 ```
 `smartscreen.exe` may still continue to run. Renaming it will block execution:
 ```bat
-MinSudo -NoL -P -TI cmd /c ren "%windir%\System32\smartscreen.exe" "smartscreen.exee"
+MinSudo -NoL -P -TI cmd /c ren "%windir%\System32\smartscreen.exe" "smartscreen.exe.nv"
 ```
 
 ```powershell

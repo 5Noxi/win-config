@@ -1173,17 +1173,32 @@ The maximum number of RSS processors.
 `*NumRssQueues`:  
 The maximum number of the RSS queues that the device should use.
 
+Configures the number of RSS queues:  
+- One queue is used when low CPU utilization is required.
+- Two queues are used when good throughput and low CPU utilization are required.
+- Four or more queues are used for applications that demand high transaction rates such as web server based applications. With this setting, the CPU utilization may be higher.
+
+(Not all adapters support all RSS queue settings. RSS is not supported on some adapters configured to use Virtual Machine Queues (VMQ). For these adapters VMQ takes precedence over RSS. RSS is disabled.)
+
 `*RssBaseProcGroup`:  
 Sets the RSS base processor group for systems with more than 64 processors.
 
 `*RssBaseProcNumber`:  
 Sets the desired base CPU number for each interface. The number can be different for each interface. This allows partitioning of CPUs across network adapters.
 
+You might want to set it to a different core than 0 default / 1, e.g. core 2/3.
+
 `*RssMaxProcGroup`:  
 The maximum processor group of the RSS interface.
 
 `*RssMaxProcNumber`:  
 The maximum processor number of the RSS interface. If `*RssMaxProcNumber` is specified, then `*RssMaxProcGroup` should also be specified.
+
+```json
+{ "*NumRssQueues", "2" },
+{ "*RssBaseProcNumber", "2" },
+{ "*RssMaxProcNumber", "3" },
+```
 
 `*RssProfile`:  
 |SubkeyName|ParamDesc|Value|EnumDesc|
@@ -1204,7 +1219,8 @@ Enables strict argument validation for upper layer testing. Set along with the R
 > https://docs.kernel.org/networking/scaling.html  
 > https://docs.nvidia.com/networking/display/winof2v280/configuring+the+driver+registry+keys  
 > https://docs.nvidia.com/networking/display/winofv55052000/receive+side+scaling+(rss)  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling  
+> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
 
 ---
 

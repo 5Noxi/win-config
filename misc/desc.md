@@ -47,6 +47,10 @@ Valid colors: `Black`, `Blue`, `Cyan`, `DarkBlue`, `DarkCyan`, `DarkGray`, `Dark
 > https://github.com/fastfetch-cli/fastfetch  
 > https://github.com/dylanaraps/neofetch
 
+# Explorer Blur
+
+Installs [ExplorerBlurMica](https://github.com/Maplespe/ExplorerBlurMica), which adds a background blur/acrylic/mica effect effect to the explorer.
+
 # Notepad++
 
 You can either change it yourself in:

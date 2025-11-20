@@ -347,6 +347,9 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendTelemetryData": {
         "": { "Type": "REG_DWORD", "Data": 0 }
       },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Global\\Startup\\SendNonNvDisplayDetails": {
+        "": { "Type": "REG_DWORD", "Data": 0 }
+      },
       "COMMANDS": {
         "RemoveNvTelemetryDLL": {
           "Action": "run_powershell",
@@ -358,7 +361,8 @@
         },
         "RenameNvTelemetryFiles": {
           "Action": "run_powershell",
-          "Command": "$file = \"$env:SystemRoot\\System32\\DriverStore\\FileRepository\\NvTelemetry*.dll\"; $enviro = [System.Environment]::ExpandEnvironmentVariables($file); $paths = Get-ChildItem -Path $enviro -Force -Recurse | Select-Object -ExpandProperty FullName | Select-Object -Unique | Sort-Object Length -Descending; foreach ($telpath in $paths) { if (-not (Test-Path -Path $telpath -PathType Container)) { Move-Item -LiteralPath $telpath -Destination (\"$telpath.old\") -Force } }"
+          "Command": "$patterns = @(\"$env:SystemRoot\\System32\\DriverStore\\FileRepository\\NvTelemetry*.dll\",\"$env:SystemRoot\\System32\\DriverStore\\FileRepository\\*\\Display.NvContainer\\plugins\\Session\\*_NvGSTPlugin.dll\"); $paths = foreach ($file in $patterns) { $enviro = [System.Environment]::ExpandEnvironmentVariables($file); Get-ChildItem -Path $enviro -Force -Recurse -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName }; $paths = $paths | Select-Object -Unique | Sort-Object Length -Descending; foreach ($telpath in $paths) { if (-not (Test-Path -Path $telpath -PathType Container)) { Move-Item -LiteralPath $telpath -Destination (\"$telpath.nv\") -Force } }",
+          "Elevated": true
         },
         "RemoveNvProgramFiles": {
           "Action": "delete_path",

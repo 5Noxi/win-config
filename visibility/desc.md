@@ -1,3 +1,53 @@
+# Desktop Wallpaper
+
+This is a collection of a few wallapapers I collected. This was added for people who may never have spent time changing their background, or for anyone else.
+
+`Asia`:
+
+![]
+
+`Austria`:
+
+![]
+
+`Beach`:
+
+`Blue Flowers`:
+
+`Castle`:
+
+`Cat`:
+
+`Flowers`:
+
+`Heaven`:
+
+`Lake`:
+
+`Mac`:
+
+`Moon`:
+
+`Moon Caste`:
+
+`Plants Room`:
+
+`Pokemon`:
+
+`Rain`:
+
+`Sea`:
+
+`Stars`:
+
+`Sunset`:
+
+`Village`:
+
+`Workplace`:
+
+`Zelda`:
+
 # Explorer Options
 
 It changes every setting, which is shown in the `Folder Options` window. Some are personal preference.
@@ -116,7 +166,12 @@ Hide preview pane:
 ---
 
 Miscellaneous comments:
-```powershell
+```bat
+:: LaunchTo:
+:: 1 = This PC
+:: 2 = Home (default)
+:: 3 = Downloads
+:: 4 = OneDrive
 reg add "HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v LaunchTo /t REG_DWORD /d 1 /f
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v HubMode /t REG_DWORD /d 1 /f
 ```
