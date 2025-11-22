@@ -959,48 +959,6 @@
   },
   "Disable Services/Drivers": {
     "apply": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ShellHWDetection": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTAGService": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthA2dp": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthAvctpSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthEnum": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthHFEnum": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthLEEnum": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthMini": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHMODEM": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHPORT": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bthserv": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHUSB": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationBrokerSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationService": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DusmSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
@@ -1016,10 +974,7 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TroubleshootingSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Ndu": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": {
@@ -1082,12 +1037,6 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cdrom": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dhcp": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MicrosoftEdgeElevationService": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
@@ -1098,27 +1047,6 @@
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ClickToRunSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AppXSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\camsvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ClipSVC": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\InstallService": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LicenseManager": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PushToInstall": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lmhosts": {
@@ -1142,34 +1070,13 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\rspndr": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
-			"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
-				"Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-			},
-			"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
-				"Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-			},
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
+        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\GameInputSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\McpManagementService": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintDeviceConfigurationService": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintNotify": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintScanBrokerService": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintWorkflowUserSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Spooler": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbprint": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RemoteAccess": {
@@ -1229,28 +1136,16 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuqisvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MapsBroker": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PhoneSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TapiSrv": {
+        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Themes": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\autotimesvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\tzautoupdate": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\luafv": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WerSvc": {
@@ -1259,66 +1154,36 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wercplsupport": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\FrameServer": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\FrameServerMonitor": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CloudBackupRestoreSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SDRSVC": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\swprv": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\VSS": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wbengine": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WaaSMedicSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UsoSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuauserv": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wisvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XboxGipSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\xboxgip": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XblAuthManager": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XblGameSave": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XboxNetApiSvc": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WpcMonSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
       },
       "SUBOPTION": {
+        "Activity Moderation": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bam": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\dam": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
         "Autplay": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ShellHWDetection": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "Beep": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Beep": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "Biometrics": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WbioSrvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
@@ -1361,6 +1226,29 @@
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationService": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "UserService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 4 }
+              }
+            }
+          }
+        },
+        "Broadcasts": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "BcastDVRUserService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 4 }
+              }
+            }
           }
         },
         "Camera": {
@@ -1373,6 +1261,25 @@
         },
         "CDROM": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cdrom": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "Clipboard": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "CbdService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc_*",
+              "Operations": { 
+                "Start": { "Type": "REG_DWORD", "Data": 4 }
+              }
+            }
+          }
+        },
+        "Device Setup Manager": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DsmSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
@@ -1395,6 +1302,9 @@
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TroubleshootingSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Ndu": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
@@ -1487,6 +1397,14 @@
         "IPv6": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\IpxlatCfgSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "IP Helper": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\iphlpsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
         "Location": {
@@ -1518,10 +1436,10 @@
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\rspndr": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           },
-        	"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           },
-        	"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
@@ -1530,8 +1448,16 @@
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
-        "Phone": {
+        "Telephony": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PhoneSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TapiSrv": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "Parental Control": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WpcMonSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
@@ -1603,6 +1529,11 @@
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
+        "Sign-In Assistant": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wlidsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
         "Smart Card": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CertPropSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
@@ -1617,6 +1548,11 @@
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\scfilter": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "SysMain": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SysMain": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
@@ -1686,6 +1622,30 @@
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
           }
         },
+        "User Data & Sync Platform": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UnistoreSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UserDataSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "UnistoreSvc": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UnistoreSvc_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 4 }
+              }
+            },
+            "UserDataSvc": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UserDataSvc_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 4 }
+              }
+            }
+          }
+        },
         "WER": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WerSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
@@ -1738,53 +1698,31 @@
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XboxNetApiSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          }
+        },
+        "Miscellaneous": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WalletService": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PenService": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\buttonconverter": {
+            "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "PenService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PenService_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 4 }
+              }
+            }
           }
         }
       }
     },
     "revert": {
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ShellHWDetection": {
-        "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTAGService": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthA2dp": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthAvctpSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthEnum": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthHFEnum": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthLEEnum": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BthMini": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHMODEM": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHPORT": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bthserv": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BTHUSB": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationBrokerSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationService": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DusmSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
       },
@@ -1800,10 +1738,7 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TroubleshootingSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanServer": {
-        "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LanmanWorkstation": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Ndu": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bttflt": {
@@ -1866,12 +1801,6 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vpci": {
         "Start": { "Type": "REG_DWORD", "Data": 0, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cdrom": {
-        "Start": { "Type": "REG_DWORD", "Data": 1, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Dhcp": {
-        "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MicrosoftEdgeElevationService": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
@@ -1882,27 +1811,6 @@
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ClickToRunSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\AppXSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\camsvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ClipSVC": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\InstallService": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\LicenseManager": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PushToInstall": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lmhosts": {
@@ -1926,34 +1834,13 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\rspndr": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
       },
-			"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
-				"Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-			},
-			"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
-				"Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-			},
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\GameInputSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\McpManagementService": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintDeviceConfigurationService": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintNotify": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintScanBrokerService": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintWorkflowUserSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Spooler": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbprint": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
+        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+      },
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\GameInputSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\RemoteAccess": {
@@ -2013,9 +1900,6 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuqisvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lfsvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\MapsBroker": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
       },
@@ -2025,85 +1909,43 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Themes": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\W32Time": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\autotimesvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\tzautoupdate": {
-        "Start": { "Type": "REG_DWORD", "Data": 4, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\luafv": {
-        "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WerSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wercplsupport": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\FrameServer": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\FrameServerMonitor": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CloudBackupRestoreSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SDRSVC": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\swprv": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\VSS": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wbengine": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WlanSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\vwififlt": {
-        "Start": { "Type": "REG_DWORD", "Data": 1, "OnlyExisting": true }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WSearch": {
         "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WaaSMedicSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UsoSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wuauserv": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wisvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XboxGipSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\xboxgip": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XblAuthManager": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XblGameSave": {
-        "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XboxNetApiSvc": {
+      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WpcMonSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
       },
       "SUBOPTION": {
+        "Activity Moderation": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\bam": {
+            "Start": { "Type": "REG_DWORD", "Data": 1, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\dam": {
+            "Start": { "Type": "REG_DWORD", "Data": 1, "OnlyExisting": true }
+          }
+        },
         "Autplay": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ShellHWDetection": {
             "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
+          }
+        },
+        "Beep": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Beep": {
+            "Start": { "Type": "REG_DWORD", "Data": 1, "OnlyExisting": true }
+          }
+        },
+        "Biometrics": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WbioSrvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
           }
         },
         "Bluetooth": {
@@ -2145,6 +1987,29 @@
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DeviceAssociationService": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "UserService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BluetoothUserService_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "OnlyExisting": true, "Data": 3 }
+              }
+            }
+          }
+        },
+        "Broadcasts": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "BcastDVRUserService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\BcastDVRUserService_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 3 }
+              }
+            }
           }
         },
         "Camera": {
@@ -2158,6 +2023,25 @@
         "CDROM": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cdrom": {
             "Start": { "Type": "REG_DWORD", "Data": 1, "OnlyExisting": true }
+          }
+        },
+        "Clipboard": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "CbdService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 2 }
+              }
+            }
+          }
+        },
+        "Device Setup Manager": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\DsmSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
           }
         },
         "DHCP": {
@@ -2180,6 +2064,9 @@
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TroubleshootingSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Ndu": {
+            "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
           }
         },
         "Edge": {
@@ -2271,6 +2158,14 @@
         "IPv6": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\IpxlatCfgSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          }
+        },
+        "IP Helper": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\iphlpsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
           }
         },
         "Location": {
@@ -2302,20 +2197,28 @@
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\rspndr": {
             "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
           },
-					"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
-						"Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
-					},
-					"HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
-						"Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
-					}
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdio": {
+            "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\lltdsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          }
         },
         "Office": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\ClickToRunSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
           }
         },
-        "Phone": {
+        "Telephony": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PhoneSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\TapiSrv": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          }
+        },
+        "Parental Control": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WpcMonSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
           }
         },
@@ -2387,6 +2290,11 @@
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
           }
         },
+        "Sign-In Assistant": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\wlidsvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          }
+        },
         "Smart Card": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\CertPropSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
@@ -2402,6 +2310,11 @@
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\scfilter": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          }
+        },
+        "SysMain": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\SysMain": {
+            "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
           }
         },
         "Microsoft Store": {
@@ -2470,6 +2383,30 @@
             "Start": { "Type": "REG_DWORD", "Data": 2, "OnlyExisting": true }
           }
         },
+        "User Data & Sync Platform": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UnistoreSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UserDataSvc": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "UnistoreSvc": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UnistoreSvc_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 3 }
+              }
+            },
+            "UserDataSvc": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\UserDataSvc_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 3 }
+              }
+            }
+          }
+        },
         "WER": {
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WerSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
@@ -2522,6 +2459,26 @@
           },
           "HKLM\\SYSTEM\\CurrentControlSet\\Services\\XboxNetApiSvc": {
             "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          }
+        },
+        "Miscellaneous": {
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\WalletService": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PenService": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "HKLM\\SYSTEM\\CurrentControlSet\\Services\\buttonconverter": {
+            "Start": { "Type": "REG_DWORD", "Data": 3, "OnlyExisting": true }
+          },
+          "COMMANDS": {
+            "PenService": {
+              "Action": "registry_pattern",
+              "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PenService_*",
+              "Operations": {
+                "Start": { "Type": "REG_DWORD", "Data": 3 }
+              }
+            }
           }
         }
       }
@@ -3489,9 +3446,12 @@
         "value": { "Type": "REG_DWORD", "Data": 1 }
       },
       "COMMANDS": {
-        "DisableCbdhsvcServices": {
-          "Action": "run_powershell",
-          "Command": "$base='HKLM:\\SYSTEM\\CurrentControlSet\\Services'; Get-ChildItem $base | Where-Object { $_.PSChildName -like 'cbdhsvc*' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name Start -PropertyType DWord -Value 4 -Force -ErrorAction SilentlyContinue }"
+        "CbdService": {
+          "Action": "registry_pattern",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc_*",
+          "Operations": {
+            "Start": { "Type": "REG_DWORD", "Data": 4 }
+          }
         }
       },
       "SUBOPTION": {
@@ -3523,9 +3483,12 @@
         "value": { "Type": "REG_DWORD", "Data": 0 }
       },
       "COMMANDS": {
-        "EnableCbdhsvcServices": {
-          "Action": "run_powershell",
-          "Command": "$base='HKLM:\\SYSTEM\\CurrentControlSet\\Services'; Get-ChildItem $base | Where-Object { $_.PSChildName -like 'cbdhsvc*' } | ForEach-Object { New-ItemProperty -Path $_.PSPath -Name Start -PropertyType DWord -Value 2 -Force -ErrorAction SilentlyContinue }"
+        "CbdService": {
+          "Action": "registry_pattern",
+          "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Services\\cbdhsvc_*",
+          "Operations": {
+            "Start": { "Type": "REG_DWORD", "Data": 2 }
+          }
         }
       },
       "SUBOPTION": {

@@ -492,7 +492,7 @@ $cpus | % { $mask = $mask -bor (1 -shl $_) }
 
 # Disable Printing
 
-Disables printer related services (`Spooler`, `PrintWorkFlowUserSvc`, `StiSvc`, `PrintNotify`, `usbprint`, `McpManagementService`, `PrintScanBrokerService`, `PrintDeviceConfigurationService`), and various optional features / scheduled tasks.
+Disables printer related services (`Spooler`, `PrintWorkFlowUserSvc`, `PrintNotify`, `usbprint`, `McpManagementService`, `PrintScanBrokerService`, `PrintDeviceConfigurationService`), and various optional features / scheduled tasks.
 
 Remove the `Print` option from the context menu:
 ```
