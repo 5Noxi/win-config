@@ -1034,9 +1034,6 @@
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintWorkFlowUserSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\StiSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 4 }
-      },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintNotify": {
         "Start": { "Type": "REG_DWORD", "Data": 4 }
       },
@@ -1073,9 +1070,6 @@
         "Start": { "Type": "REG_DWORD", "Data": 2 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintWorkFlowUserSvc": {
-        "Start": { "Type": "REG_DWORD", "Data": 3 }
-      },
-      "HKLM\\SYSTEM\\CurrentControlSet\\Services\\StiSvc": {
         "Start": { "Type": "REG_DWORD", "Data": 3 }
       },
       "HKLM\\SYSTEM\\CurrentControlSet\\Services\\PrintNotify": {

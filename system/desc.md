@@ -723,6 +723,139 @@ for %%a in (
 powershell -Command "Get-ScheduledTask -TaskPath '\' | Where-Object { $_.TaskName -like 'MicrosoftEdgeUpdateTaskMachine*' } | ForEach-Object { Disable-ScheduledTask -TaskName $_.TaskName -TaskPath '\' }"
 ```
 
+# Disable Services/Drivers
+
+The main option doesn't apply all suboptions. For further custumization use [serviwin](https://www.nirsoft.net/utils/serviwin.html).
+
+| Option Name | Service/Driver | Description |
+| --- | --- | --- |
+| Autplay | `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
+| Bluetooth | `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
+| | `BthA2dp` | - |
+| | `BthAvctpSvc` | This is Audio Video Control Transport Protocol service |
+| | `BthEnum` | - |
+| | `BthHFEnum` | - |
+| | `BthLEEnum` | - |
+| | `BthMini` | - |
+| | `BTHMODEM` | - |
+| | `BTHPORT` | - |
+| | `bthserv` | The Bluetooth service supports discovery and association of remote Bluetooth devices.  Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated. |
+| | `BTHUSB` | - |
+| | `DeviceAssociationBrokerSvc` | - |
+| | `DeviceAssociationService` | Enables pairing between the system and wired or wireless devices. |
+| Camera | `FrameServer` | Enables multiple clients to access video frames from camera devices. |
+| | `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
+| CDROM | `cdrom` | - |
+| DHCP | `Dhcp` | Registers and updates IP addresses and DNS records for this computer. If this service is stopped, this computer will not receive dynamic IP addresses and DNS updates. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| Diagnostics | `DusmSvc` | Network data usage, data limit, restrict background data, metered networks. |
+| | `DPS` | The Diagnostic Policy Service enables problem detection, troubleshooting and resolution for Windows components.  If this service is stopped, diagnostics will no longer function. |
+| | `WdiServiceHost` | The Diagnostic Service Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local Service context.  If this service is stopped, any diagnostics that depend on it will no longer function. |
+| | `WdiSystemHost` | The Diagnostic System Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local System context.  If this service is stopped, any diagnostics that depend on it will no longer function. |
+| | `TroubleshootingSvc` | Enables automatic mitigation for known problems by applying recommended troubleshooting. If stopped, your device will not get recommended troubleshooting for problems on your device. |
+| Edge | `MicrosoftEdgeElevationService` | - |
+| | `edgeupdate` | - |
+| | `edgeupdatem` | - |
+| File/Printer Sharing | `LanmanServer` | Supports file, print, and named-pipe sharing over the network for this computer. If this service is stopped, these functions will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `LanmanWorkstation` | Creates and maintains client network connections to remote servers using the SMB protocol. If this service is stopped, these connections will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| GameInput | `GameInputSvc` | Enables keyboards, mice, gamepads, and other input devices to be used with the GameInput API. |
+| HyperV | `bttflt` | - |
+| | `gencounter` | - |
+| | `hvcrash` | - |
+| | `HvHost` | Provides an interface for the Hyper-V hypervisor to provide per-partition performance counters to the host operating system. |
+| | `hvservice` | - |
+| | `hyperkbd` | - |
+| | `HyperVideo` | - |
+| | `storflt` | - |
+| | `Vid` | - |
+| | `vmbus` | - |
+| | `vmgid` | - |
+| | `vmicguestinterface` | Provides an interface for the Hyper-V host to interact with specific services running inside the virtual machine. |
+| | `vmicheartbeat` | Monitors the state of this virtual machine by reporting a heartbeat at regular intervals. This service helps you identify running virtual machines that have stopped responding. |
+| | `vmickvpexchange` | Provides a mechanism to exchange data between the virtual machine and the operating system running on the physical computer. |
+| | `vmicrdv` | Provides a platform for communication between the virtual machine and the operating system running on the physical computer. |
+| | `vmicshutdown` | Provides a mechanism to shut down the operating system of this virtual machine from the management interfaces on the physical computer. |
+| | `vmictimesync` | Synchronizes the system time of this virtual machine with the system time of the physical computer. |
+| | `vmicvmsession` | Provides a mechanism to manage virtual machine with PowerShell via VM session without a virtual network. |
+| | `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
+| | `vpci` | - |
+| IPv6 | `Tcpip6` | @todo.dll,-100;Microsoft IPv6 Protocol Driver |
+| Location | `lfsvc` | This service monitors the current location of the system and manages geofences (a geographical location with associated events).  If you turn off this service, applications will be unable to use or receive notifications for geolocation or geofences. |
+| Maps Manager | `MapsBroker` | Windows service for application access to downloaded maps. This service is started on-demand by application accessing downloaded maps. Disabling this service will prevent apps from accessing maps. |
+| Network Discovery | `fdPHost` | The FDPHOST service hosts the Function Discovery (FD) network discovery providers. These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services  Discovery (WS-D) protocol. Stopping or disabling the FDPHOST service will disable network discovery for these protocols when using FD. When this service is unavailable, network services using FD and relying on these discovery protocols will be unable to find network devices or resources. |
+| | `FDResPub` | Publishes this computer and resources attached to this computer so they can be discovered over the network.  If this service is stopped, network resources will no longer be published and they will not be discovered by other computers on the network. |
+| | `SSDPSRV` | Discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices. Also announces SSDP devices and services running on the local computer. If this service is stopped, SSDP-based devices will not be discovered. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `upnphost` | Allows UPnP devices to be hosted on this computer. If this service is stopped, any hosted UPnP devices will stop functioning and no additional hosted devices can be added. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `MsLldp` | Microsoft Link-Layer Discovery Protocol Driver |
+| | `rspndr` | Link-Layer Topology Discovery Responder |
+| Office | `ClickToRunSvc` | - |
+| Phone | `PhoneSvc` | Manages the telephony state on the device |
+| Printer | `McpManagementService` | Universal Print Management Service |
+| | `PrintDeviceConfigurationService` | The Print Device Configuration Service manages the installation of IPP and UP printers. If this service is stopped, any printer installations that are in-progress may be canceled. |
+| | `PrintNotify` | This service opens custom printer dialog boxes and handles notifications from a remote print server or a printer. If you turn off this service, you wont be able to see printer extensions or notifications. |
+| | `PrintScanBrokerService` | Provides support for secure privileged operations needed by low priv spooler. |
+| | `PrintWorkflowUserSvc` | - |
+| | `Spooler` | This service spools print jobs and handles interaction with the printer.  If you turn off this service, you won't be able to print or see your printers. |
+| | `usbprint` | - |
+| Recovery / Backup | `CloudBackupRestoreSvc` | - |
+| | `SDRSVC` | Provides Windows Backup and Restore capabilities. |
+| | `swprv` | Manages software-based volume shadow copies taken by the Volume Shadow Copy service. If this service is stopped, software-based volume shadow copies cannot be managed. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `VSS` | Manages and implements Volume Shadow Copies used for backup and other purposes. If this service is stopped, shadow copies will be unavailable for backup and the backup may fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `wbengine` | The WBENGINE service is used by Windows Backup to perform backup and recovery operations. If this service is stopped by a user, it may cause the currently running backup or recovery operation to fail. Disabling this service may disable backup and recovery operations using Windows Backup on this computer. |
+| Remote Desktop | `RemoteAccess` | Offers routing services to businesses in local area and wide area network environments. |
+| | `RemoteRegistry` | Enables remote users to modify registry settings on this computer. If this service is stopped, the registry can be modified only by users on this computer. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
+| | `TermService` | Allows users to connect interactively to a remote computer. Remote Desktop and Remote Desktop Session Host Server depend on this service.  To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item. |
+| | `UmRdpService` | Allows the redirection of Printers/Drives/Ports for RDP connections |
+| Sensor | `SensorDataService` | Delivers data from a variety of sensors |
+| | `SensrSvc` | Monitors various sensors in order to expose data and adapt to system and user state.  If this service is stopped or disabled, the display brightness will not adapt to lighting conditions. Stopping this service may affect other system functionality and features as well. |
+| | `SensorService` | A service for sensors that manages different sensors' functionality. Manages Simple Device Orientation (SDO) and History for sensors. Loads the SDO sensor that reports device orientation changes.  If this service is stopped or disabled, the SDO sensor will not be loaded and so auto-rotation will not occur. History collection from Sensors will also be stopped. |
+| Smart Card | `CertPropSvc` | Copies user certificates and root certificates from smart cards into the current user's certificate store, detects when a smart card is inserted into a smart card reader, and, if needed, installs the smart card Plug and Play minidriver. |
+| | `SCardSvr` | Manages access to smart cards read by this computer. If this service is stopped, this computer will be unable to read smart cards. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
+| | `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
+| | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
+| Microsoft Store | `AppXSvc` | Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
+| | `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
+| | `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
+| | `InstallService` | Provides infrastructure support for the Microsoft Store.  This service is started on demand and if disabled then installations will not function properly. |
+| | `LicenseManager` | Provides infrastructure support for the Microsoft Store.  This service is started on demand and if disabled then content acquired through the Microsoft Store will not function properly. |
+| | `PushToInstall` | Provides infrastructure support for the Microsoft Store.  This service is started automatically and if disabled then remote installations will not function properly. |
+| TCP/IP NetBIOS Helper | `lmhosts` | Provides support for the NetBIOS over TCP/IP (NetBT) service and NetBIOS name resolution for clients on the network, therefore enabling users to share files, print, and log on to the network. If this service is stopped, these functions might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| Telemetry | `diagsvc` | Executes diagnostic actions for troubleshooting support |
+| | `DiagTrack` | The Connected User Experiences and Telemetry service enables features that support in-application and connected user experiences. Additionally, this service manages the event driven collection and transmission of diagnostic and usage information (used to improve the experience and quality of the Windows Platform) when the diagnostics and usage privacy option settings are enabled under Feedback and Diagnostics. |
+| | `dmwappushservice` | Routes Wireless Application Protocol (WAP) Push messages received by the device and synchronizes Device Management sessions |
+| | `InventorySvc` | This service performs background system inventory, compatibility appraisal, and maintenance used by numerous system components. |
+| | `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA).  PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
+| | `wuqisvc` | - |
+| Themes | `Themes` | Provides user experience theme management. |
+| Time | `W32Time` | Maintains date and time synchronization on all clients and servers in the network. If this service is stopped, date and time synchronization will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| | `autotimesvc` | This service sets time based on NITZ messages from a Mobile Network |
+| | `tzautoupdate` | Automatically sets the system time zone. |
+| UAC | `luafv` | Virtualizes file write failures to per-user locations. |
+| WER | `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. |
+| | `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
+| Wi-Fi | `WlanSvc` | The WLANSVC service provides the logic required to configure, discover, connect to, and disconnect from a wireless local area network (WLAN) as defined by IEEE 802.11 standards. It also contains the logic to turn your computer into a software access point so that other devices or computers can connect to your computer wirelessly using a WLAN adapter that can support this. Stopping or disabling the WLANSVC service will make all WLAN adapters on your computer inaccessible from the Windows networking UI. It is strongly recommended that you have the WLANSVC service running if your computer has a WLAN adapter. |
+|| `vwififlt` | Virtual WiFi Filter Driver |
+| Windows Insider | `wisvc` | Provides infrastructure support for the Windows Insider Program. This service must remain enabled for the Windows Insider Program to work. |
+| Windows Search | `WSearch` | Provides content indexing, property caching, and search results for files, e-mail, and other content. |
+| Windows Update | `WaaSMedicSvc` | - |
+| | `UsoSvc` | Manages Windows Updates. If stopped, your devices will not be able to download and install the latest updates. |
+| | `wuauserv` | Enables the detection, download, and installation of updates for Windows and other programs. If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature, and programs will not be able to use the Windows Update Agent (WUA) API. |
+| Xbox | `XboxGipSvc` | This service manages connected Xbox Accessories. |
+| | `xboxgip` | Xbox Game Input Protocol Driver |
+| | `XblAuthManager` | Provides authentication and authorization services for interacting with Xbox Live. If this service is stopped, some applications may not operate correctly. |
+| | `XblGameSave` | This service syncs save data for Xbox Live save enabled games.  If this service is stopped, game save data will not upload to or download from Xbox Live. |
+| | `XboxNetApiSvc` | This service supports the Windows.Networking.XboxLive application programming interface. |
+
+```c
+// CDROM
+//cdfs
+
+// Store
+//wlidsvc
+```
+
+
 # Enable Game Mode
 
 Game Mode should: "Prevents Windows Update from performing driver installations and sending restart notifications" Does it work? Not really, in my experience it tends to lower the priority and prevent driver updates (correct me if you've experienced otherwise) - It may also mess with process/thread priorities. Not all games support it, generally leave it enabled or benchmark the differences in equal scenarios.
@@ -1702,7 +1835,7 @@ Disable/enable FSO for a specific application via `Properties > Compatibility > 
 // User
 HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
 
-// Local
+// Machine
 HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
 ```
 

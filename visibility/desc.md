@@ -1141,8 +1141,8 @@ else
 Type: `String`  
 Min: `0`  
 Max: `65534`? - It uses `StrToIntW` to read the value  
-Fallback = Depends on `GetDoubleClickTime()` (`Control Panel > Mouse > Double-click speed`), which would change the `DoubleClickSpeed` value (has a default of `500`, which is why the default of `MenuShowDelay` is `400`.))  
-Default = `400`
+Fallback: Depends on `GetDoubleClickTime()` (`Control Panel > Mouse > Double-click speed`), which would change the `DoubleClickSpeed` value (has a default of `500`, which is why the default of `MenuShowDelay` is `400`)  
+Default: `400`
 
 ```c
 if ( (_DWORD)v2 == 32771 )
