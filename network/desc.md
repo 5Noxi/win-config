@@ -467,6 +467,8 @@ Active probing sends HTTP requests from the client to a predefined web probe ser
 
 Passive probing doesn't send its own traffic, it inspects received packets and uses their hop count to infer connectivity. If the measured hop count for an interface meets or exceeds a system minimum (default 8, often changed to 3 in enterprises), NCSI upgrades the interface to "internet" and suppresses further active probes until conditions change, if the hop count is too low, missing, or there's no route to the internet, and no successful active probe has occurred, connectivity is treated as local-only. Passive probes run periodically (every 15 seconds by default) when allowed by Group Policy and when a user has recently logged on, and they serve to keep connectivity status accurate, especially with intermittent network issues.
 
+Disabling passive probing will break the network icon, causing for example spotify to be in offline mode.
+
 See links below for a detailed documentation.
 
 |Icon|Description|

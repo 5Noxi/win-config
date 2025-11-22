@@ -449,6 +449,20 @@ HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: R
 HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
+---
+
+Miscellaneous notes:
+
+```c
+// Apps > Video playback
+
+// Save network bandwidth by playing video at lower resolution
+"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
+
+// Process video automatically to enhance it (depends ony our device hardware)
+"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
+```
+
 # Disable Xbox Game Bar
 
 GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, with optional background recording.

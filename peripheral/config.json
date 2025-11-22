@@ -11,7 +11,6 @@
         "Beep": { "Type": "REG_SZ", "Data": "No" },
         "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" },
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
-        "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" },
         "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
         "MouseSpeed": { "Type": "REG_SZ", "Data": "0" },
         "MouseThreshold1": { "Type": "REG_SZ", "Data": "0" },
@@ -34,11 +33,6 @@
             "MouseThreshold2": { "Type": "REG_SZ", "Data": "0" }
           }
         },
-        "Decrease Hover Time": {
-          "HKCU\\Control Panel\\Mouse": {
-            "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" }
-          }
-        },
         "Faster Double-Click Speed": {
           "HKCU\\Control Panel\\Mouse": {
             "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "340" }
@@ -59,7 +53,6 @@
         "Beep": { "Type": "REG_SZ", "Data": "No" },
         "DoubleClickSpeed": { "Type": "REG_SZ", "Data": "500" },
         "ExtendedSounds": { "Type": "REG_SZ", "Data": "No" },
-        "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" },
         "MouseSensitivity": { "Type": "REG_SZ", "Data": "10" },
         "MouseSpeed": { "Type": "REG_SZ", "Data": "1" },
         "MouseThreshold1": { "Type": "REG_SZ", "Data": "6" },
@@ -80,11 +73,6 @@
             "MouseSpeed": { "Type": "REG_SZ", "Data": "1" },
             "MouseThreshold1": { "Type": "REG_SZ", "Data": "6" },
             "MouseThreshold2": { "Type": "REG_SZ", "Data": "10" }
-          }
-        },
-        "Decrease Hover Time": {
-          "HKCU\\Control Panel\\Mouse": {
-            "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" }
           }
         },
         "Faster Double-Click Speed": {

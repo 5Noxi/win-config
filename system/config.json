@@ -2185,5 +2185,23 @@
         "Command": "$dst = \"$env:TEMP\\Autoruns.exe\"; Invoke-WebRequest -Uri 'https://live.sysinternals.com/Autoruns.exe' -OutFile $dst -UseBasicParsing; Start-Process $dst"
       }
     }
+  },
+  "Enable FSO": {
+    "apply": {
+      "HKCU\\System\\GameConfigStore": {
+        "GameDVR_DXGIHonorFSEWindowsCompatible": { "Type": "REG_DWORD", "Data": 0 },
+        "GameDVR_FSEBehavior": { "Type": "REG_DWORD", "Data": 0 },
+        "GameDVR_FSEBehaviorMode": { "Type": "REG_DWORD", "Data": 0 },
+        "GameDVR_HonorUserFSEBehaviorMode": { "Type": "REG_DWORD", "Data": 0 }
+      }
+    },
+    "revert": {
+      "HKCU\\System\\GameConfigStore": {
+        "GameDVR_DXGIHonorFSEWindowsCompatible": { "Type": "REG_DWORD", "Data": 1 },
+        "GameDVR_FSEBehavior": { "Type": "REG_DWORD", "Data": 2 },
+        "GameDVR_FSEBehaviorMode": { "Type": "REG_DWORD", "Data": 2 },
+        "GameDVR_HonorUserFSEBehaviorMode": { "Type": "REG_DWORD", "Data": 1 }
+      }
+    }
   }
 }

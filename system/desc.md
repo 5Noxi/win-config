@@ -1445,13 +1445,6 @@ Enabling the options includes setting `AutoReboot` to `0` ("The option specifies
 > https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options
 
----
-
-Disable BSoD smiley:
-```bat
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\CrashContro" /v DisableEmoticon /t REG_DWORD /d 1 /f
-```
-
 # Display Scaling
 
 Changes the size of text, apps, and other items. You can set a custom scaling size via `System > Display > Custom scaling`:
@@ -1673,3 +1666,55 @@ HKLM\Software\Microsoft\Windows\CurrentVersion\Run
 
 > https://live.sysinternals.com/  
 > https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns
+
+# Enable FSO
+
+Caution: Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
+
+All values I found that are `GameDVR` related in `ResourcePolicyServer.dll`:
+```c
+GameDVR_DXGIHonorFSEWindowsCompatible
+// 0 = FSO on
+// 1 = FSO off
+
+GameDVR_EFSEFeatureFlags
+// 1 = EFSE on
+// 0 = EFSE off
+
+GameDVR_FSEBehavior
+// 0 = FSO on
+// 2 = FSO off
+
+GameDVR_FSEBehaviorMode
+// 0 = FSO on
+// 2 = FSO off
+
+GameDVR_HonorUserFSEBehaviorMode
+// 0 = FSO on
+// 1 = FSO off
+```
+
+`GameDVR_DSEBehavior` doesn't exist on my current system.
+
+Disable/enable FSO for a specific application via `Properties > Compatibility > Change settings for all users` - `Disable fullscreen optimizations` or do it per user one step before.
+
+```c
+// User
+HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
+
+// Local
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
+```
+
+---
+
+Miscellaneous values:
+```c
+GameDVR_Enabled
+GameDVR_GameGUID
+// Seems to be located in HKCU\System\GameConfigStore\Children\*
+
+Win32_AutoGameModeDefaultProfile
+Win32_GameModeRelatedProcesses
+Win32_GameModeUserRelatedProcesses
+```

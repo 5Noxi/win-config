@@ -2183,6 +2183,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "10" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "10" }
               }
             }
           },
@@ -2191,6 +2194,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "100" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "100" }
               }
             }
           },
@@ -2199,6 +2205,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "200" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "200" }
               }
             }
           },
@@ -2207,6 +2216,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "300" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "300" }
               }
             }
           },
@@ -2215,6 +2227,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" }
               }
             }
           },
@@ -2223,6 +2238,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "500" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "500" }
               }
             }
           },
@@ -2231,6 +2249,9 @@
             "config": {
               "HKCU\\Control Panel\\Desktop": {
                 "MenuShowDelay": { "Type": "REG_SZ", "Data": "1000" }
+              },
+              "HKCU\\Control Panel\\Mouse": {
+                "MouseHoverTime": { "Type": "REG_SZ", "Data": "1000" }
               }
             }
           }
@@ -2240,6 +2261,9 @@
     "revert": {
       "HKCU\\Control Panel\\Desktop": {
         "MenuShowDelay": { "Type": "REG_SZ", "Data": "400" }
+      },
+      "HKCU\\Control Panel\\Mouse": {
+        "MouseHoverTime": { "Type": "REG_SZ", "Data": "400" }
       }
     }
   }

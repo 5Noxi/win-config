@@ -7,17 +7,6 @@ Disables the scroll functionality in inactive windows.
 `0` - Off
 `2` - On
 
-`MouseHoverTime` gets set to `100` (0.1 seconds), the default is `400`. It changes the time how long you have to be on a folder, to see related information. You may want to increase it.
-```c
-g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // 400
-```
-Type: `String`
-Min: `0`
-Max: `65534`? - It uses `StrToIntW` to read the value
-
-> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw  
-> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime
-
 `RawMouseThrottleDuration` controls the throttle interval (in ms) for delivering raw mouse input to background windows. "We set out to reduce the amount of processing time it took to handle input requests by throttling and coalescing background raw mouse listeners and capping their message rate." 
 
 Validate the changes with [MouseTester](https://github.com/valleyofdoom/MouseTester), move `MouseTester.exe` to the background after starting it by opening a different window.
@@ -273,16 +262,23 @@ Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch scre
 
 ---
 
-Miscellaneous notes:
+Everything listed below is based on personal research. Mistakes may exist, some parts are speculations. See links below for reference.
+
 ```c
 "HKCU\\Software\\Microsoft\\Wisp\\Touch";
-    "TouchGate"; = 1; // 0 = touch disabled, 1 = enabled
-    "PanningDisabled"; = 0; // 0 = panning enabled , 1 = panning disabled.
-    // "PanningDisabled", "Inertia", "Bouncing", "Friction",
-    // "TouchModeN_DtapDist", "TouchModeN_DtapTime",
-    // "TouchGate", "TouchModeN_HoldTime_Animation",
-    // "TouchModeN_HoldTime_BeforeAnimation", "TouchMode_hold",
-    // "Mobile_Inertia_Enabled", "Minimum_Velocity", "Thumb_Flick_Enabled"
+    "PanningDisabled" = 0;
+    "Inertia" = 1;
+    "Bouncing" = 1;
+    "Friction" = 50;
+    "TouchModeN_DtapDist" = 50;
+    "TouchModeN_DtapTime" = 50;
+    "TouchGate" = 1;
+    "TouchModeN_HoldTime_Animation" = 50;
+    "TouchModeN_HoldTime_BeforeAnimation" = 50;
+    "TouchMode_hold" = 1;
+    "Mobile_Inertia_Enabled" = 0;
+    "Minimum_Velocity" = 0;
+    "Thumb_Flick_Enabled" = 1;
 
 "HKCU\\Software\\Microsoft\\Wisp\\MultiTouch";
     "MultiTouchEnabled"; = 1;
@@ -302,10 +298,29 @@ Miscellaneous notes:
     "ScrollDirection"; = 0; // 0 = natural, 1 = reversed
     "ZoomEnabled"; = 1;
     "HonorMouseAccelSetting" = 0; // 0 = always apply acceleration, 1 = honor SPI mouse accel?
+    "RightClickZoneWidth" = 0;
+    "RightClickZoneHeight" = 0;
 
 "HKCU\\Software\\Microsoft\\Wisp\\Pen\\SysEventParameters";
-    // "Splash", "DblDist", "DblTime", "TapTime", "WaitTime", "HoldTime", "FlickMode", "FlickTolerance", 
-    // "Left", "UpLeft", "Up", "UpRight", "Right", "DownRight", "Down", "DownLeft"
+    "Splash" = 50;
+    "DblDist" = 50;
+    "DblTime" = 300;
+    "TapTime" = 100;
+    "WaitTime" = 300;
+    "HoldTime" = 2300;
+    "FlickMode" = 1;
+    "FlickTolerance" = 50;
+    "Latency" = 8;
+    "SampleTime" = 8;
+    "UseHWTimeStamp" = 1;
+    "SguiMode" = 0;
+    "HoldMode" = 1;
+    "MouseInputResolutionX" = 0;
+    "MouseInputResolutionY" = 0;
+    "MouseInputFrequency" = 0;
+    "EraseEnable" = 1;
+    "RightMaskEnable" = 1;
+    "Color" = 0xC0000000C0000000; // ?
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TabletMode";
     "STCDefaultMigrationCompleted"; = 0; // SHRegValueExists
@@ -322,6 +337,16 @@ Miscellaneous notes:
     "SmallScreen"; = 83; // ?
     "VerySmallScreen"; = 71; // ?
     "TabletSmallScreen"; = 83; // ?
+
+"HKCU\\Software\\Microsoft\\Wisp\\Pen\\SysEventParameters\\FlickCommands";
+    "Left" = { 0x4846455758C33841, 0x9F7145B888BB26B8 };
+    "UpLeft" = { 0x47F38E42CEFA51BC, 0xEBDFECA56A8CB1AC };
+    "Up"= { 0x450285124653D974, 0x8090833CF6D41AA0 };
+    "UpRight" = { 0x47F38E42CEFA51BC, 0x6A8CB1ACEBDFECA5 };
+    "Right" = { 0xC267B8DE4FA8068E, 0x4E301EF93B324FAB };
+    "DownRight" = { 0x47F38E42CEFA51BC, 0x6A8CB1ACEBDFECA5 };
+    "Down" = { 0x441A7051435776E6, 0xF7C82D37F0853D9B };
+    "DownLeft" = { 0x47F38E42CEFA51BC, 0xEBDFECA56A8CB1AC };
 ```
 > [peripheral/assets | touch-twinui.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-twinui.c)  
 > [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)
