@@ -348,6 +348,7 @@ Everything listed below is based on personal research. Mistakes may exist, some 
     "Down" = { 0x441A7051435776E6, 0xF7C82D37F0853D9B };
     "DownLeft" = { 0x47F38E42CEFA51BC, 0xEBDFECA56A8CB1AC };
 ```
+
 > [peripheral/assets | touch-twinui.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-twinui.c)  
 > [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/5Noxi/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)
 
