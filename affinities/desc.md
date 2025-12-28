@@ -6,6 +6,20 @@ Note that everything written below is based on:
 > [drivers/kernel | interrupt-affinity-and-priority](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/interrupt-affinity-and-priority)  
 > [drivers/kernel | introduction-to-message-signaled-interrupts](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-message-signaled-interrupts)
 
+## Validating Changes
+
+You can either analyze the record via WPA or MXA, I personally prefer MXA here.
+
+```c
+// Example for analyzing GPU record
+wpr -start CPU.light -start GPU.light
+wpr -stop "%USERPROFILE%\Desktop\gpu_trace.etl"
+```
+
+Open the `.etl` in MXA, expand `CPU > ISRs and DPCs > Drivers` and drag the corresponding driver into the panel (e.g. `nvlddmkm.sys`), if selecting core 8/9 for the GPU:
+
+![](https://github.com/nohuto/win-config/blob/main/affinities/images/mxa.png?raw=true)
+
 ## Line-Based vs. Message-Signaled Interrupts
 
 Shared line-based interrupts cause high latency and can even create stability problems because multiple device drivers must share the limited physical interrupt lines that exist on a computer. A single 7-in-1 media reader, for example, connects each of its controllers to one interrupt line, forcing the operating system to invoke each driver in sequence to discover which controller actually raised the interrupt. Giving each controller its own line would lower latency, but it would also exhaust the traditional IRQ lines very quickly, and PCI devices are physically wired to a single IRQ line, so they cannot consume more than one line even if drivers wanted to.
