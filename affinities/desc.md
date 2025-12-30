@@ -18,7 +18,8 @@ wpr -stop "%USERPROFILE%\Desktop\gpu_trace.etl"
 
 Open the `.etl` in MXA, expand `CPU > ISRs and DPCs > Drivers` and drag the corresponding driver into the panel (e.g. `nvlddmkm.sys`), if selecting core 8/9 for the GPU:
 
-![](https://github.com/nohuto/win-config/blob/main/affinities/images/mxa.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/affinities/images/mxanvlddmkm.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/affinities/images/mxadxgkrnl.png?raw=true)
 
 ## Line-Based vs. Message-Signaled Interrupts
 
