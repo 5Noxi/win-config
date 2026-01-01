@@ -1067,6 +1067,7 @@ Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .
 
 Level `5` gets applied.
 
+> https://browserleaks.com/tls  
 > https://learn.microsoft.com/en-us/dotnet/framework/network-programming/tls#schusestrongcrypto  
 > https://dirteam.com/sander/2019/07/30/howto-disable-weak-protocols-cipher-suites-and-hashing-algorithms-on-web-application-proxies-ad-fs-servers-and-windows-servers-running-azure-ad-connect/  
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-security-lan-manager-authentication-level

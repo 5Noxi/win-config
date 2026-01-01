@@ -1408,7 +1408,7 @@ Enabled = (DWORD)
 0 : Disable Segment Heap
 (Not 0): Enable Segment Heap
 ```
-Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors.
+Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`).
 
 > https://blog.s-schoener.com/2024-11-05-segment-heap/  
 > https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf  
@@ -1974,6 +1974,14 @@ Decrease timeout of dual-boot selection window (default of `10`).
 `bcdedit /set bootmenupolicy Legacy`
 "Defines the type of boot menu the system will use. For Windows 10, Windows 8.1, Windows 8 and Windows RT the default is Standard. For Windows Server 2012 R2, Windows Server 2012, the default is Legacy. When Legacy is selected, the Advanced options menu (F8) is available. When Standard is selected, the boot menu appears but only under certain conditions: for example, if there is a startup failure, if you are booting up from a repair disk or installation media, if you have configured multiple boot entries, or if you manually configured the computer to use Advanced startup. When Standard is selected, the F8 key is ignored during boot."
 
+`bcdedit /set custom:16000067 true` disables the Windows logo while booting:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/logo.png?raw=true)
+
+`bcdedit /set custom:16000069 true` disables the loading circle while booting:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/load.png?raw=true)
+
 ---
 
 Personal notes on several features, used pseudocode:
@@ -2164,7 +2172,7 @@ Windows feature that makes borderless/windowed behave like fullscreen.
 
 DX12 games don't support FSE.
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/swapchain.jpg?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/swapchain.jpg?raw=true)
 
 ---
 
