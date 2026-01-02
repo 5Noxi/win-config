@@ -408,6 +408,36 @@ Disables Wi-Fi services/drivers, scheduled tasks.
 "\\Microsoft\\Windows\\WwanSvc\\NotificationTask" // %WINDIR%\System32\WiFiTask.exe wwan
 ```
 
+# Static IP
+
+Reads the active adapter's IPv4 settings from `netsh int ip show config` and applies them directly via registry.
+
+`IP Address` is the device's local IPv4 on your LAN.  
+`Default Gateway` is your router IP used to reach other networks (internet).  
+`Subnet Mask` defines which IPs are local (same subnet) vs routed via the gateway.
+`DHCP` (Dynamic Host Configuration Protocol) registers and updates IP address, subnet mask, gateway, and DNS.
+
+**Static IP requires a DNS server**. Use the `Encrypted DNS` option above to set `NameServer` for the same adapter.
+
+A static IP is useful for devices that must keep the same address (NAS, game servers, port forwarding, monitoring agents) so clients and firewall rules always target a stable IP.
+
+```c
+"HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{5a488261-8df1-45a8-b993-34696d32773e}";
+  "EnableDHCP"; // dynamic=1, static=0
+  "DhcpIPAddress" = 0.0.0.0; // dynamic=present, static=absent
+  "DhcpSubnetMask" = 255.0.0.0; // dynamic=present, static=absent
+  "IPAddress"; // dynamic="", static="192.168.178.135"
+  "SubnetMask"; // dynamic="", static="255.255.255.0"
+  "DefaultGateway"; // dynamic="", static="192.168.178.1"
+  "DefaultGatewayMetric"; // dynamic="", static="0"
+
+"HKLM\\System\\CurrentControlSet\\Services\\{5A488261-8DF1-45A8-B993-34696D32773E}\\Parameters\\Tcpip";
+  "EnableDHCP"; // dynamic=1, static=0
+  "IPAddress"; // dynamic="192.168.178.135", static=""
+  "SubnetMask"; // dynamic="255.255.255.0", static=""
+  "DefaultGateway"; // dynamic="192.168.178.1", static=""
+```
+
 # Disable Active Probing
 
 Active probing sends HTTP requests from the client to a predefined web probe server (by default `www.msftconnecttest.com/connecttest.txt`), using both IPv4 and IPv6 in parallel. If it gets an HTTP 200 response with the expected payload, NCSI marks the interface as having internet connectivity, if the probe fails or returns errors (for example, blocked by a proxy or DNS issues), NCSI treats connectivity as limited.
@@ -1006,13 +1036,14 @@ Some NICs expose multiple interrupt-moderation levels. Use interrupt moderation 
 > https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation  
 > https://enterprise-support.nvidia.com/s/article/understanding-interrupt-moderation
 
-```
+The correct data might be the comment data, if so edit it manually.
+```c
 Off: ITR = 0 (no limit)
-Minimal: ITR = 200
-Low: ITR = 400
-Medium: ITR = 950
-High: ITR = 2000
-Extreme: ITR = 3600
+Minimal: ITR = 200 // 32
+Low: ITR = 400 // 64
+Medium: ITR = 950 // 125
+High: ITR = 2000 // 250
+Extreme: ITR = 3600 // 500
 Adaptive: ITR = 65535
 ```
 ITR = Interrupt Throttle Rate.

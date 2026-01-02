@@ -824,6 +824,8 @@ This list was created using my small [`ScheduledTasksLists.ps1`](https://github.
 
 # Disable Services/Drivers
 
+**Only configure suboptions if you are able to troubleshoot issues yourself, as disabling several drivers/services will cause failures.**
+
 The main option doesn't apply all suboptions. For further custumization use [serviwin](https://www.nirsoft.net/utils/serviwin.html).
 
 The suboptions probably overlap the documentation. If so, you can open the markdown file on my GitHub instead:
@@ -838,7 +840,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | Activity Moderation | `bam` | Controls activity of background applications |
 |  | `dam` | Controls activity of desktop applications |
 | Autoplay | `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
-| Beep | `Beep` | - |
+| Beep | `Beep` | Legacy PC speaker/tone driver. It provides simple beeps for apps that call the Windows Beep API. |
 | Biometrics | `WbioSrvc` | The Windows biometric service gives client applications the ability to capture, compare, manipulate, and store biometric data without gaining direct access to any biometric hardware or samples. The service is hosted in a privileged SVCHOST process. |
 | Bluetooth | `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
 |  | `BluetoothUserService_*` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
@@ -857,8 +859,10 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `Microsoft_Bluetooth_AvrcpTransport` | Microsoft Bluetooth Avrcp Transport Driver |
 |  | `RFCOMM` | Bluetooth Device (RFCOMM Protocol TDI) |
 | Broadcasts | `BcastDVRUserService` | This user service is used for Game Recordings and Live Broadcasts |
+|  | `CaptureService_*` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
 | Camera | `FrameServer` | Enables multiple clients to access video frames from camera devices. |
 |  | `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
+|  | `StiSvc` | Provides image acquisition services for scanners and cameras |
 | CDROM | `cdrom` | CD-ROM Driver |
 | Clipboard | `cbdhsvc` | This user service is used for Clipboard scenarios |
 | Cloud Filter | `CldFlt` | Cloud Files Mini Filter Driver |
@@ -873,9 +877,9 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `Ndu` | This service provides network data usage monitoring functionality |
 | Domain/RPC | `Netlogon` | Maintains a secure channel between this computer and the domain controller for authenticating users and services. If this service is stopped, the computer may not authenticate users and services and the domain controller cannot register DNS records. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `MsRPC` | - |
-| Edge | `MicrosoftEdgeElevationService` | - |
-|  | `edgeupdate` | - |
-|  | `edgeupdatem` | - |
+| Edge | `MicrosoftEdgeElevationService` | Provides elevated privileges for Microsoft Edge. |
+|  | `edgeupdate` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
+|  | `edgeupdatem` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
 | File/Printer Sharing | `LanmanServer` | Supports file, print, and named-pipe sharing over the network for this computer. If this service is stopped, these functions will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `LanmanWorkstation` | Creates and maintains client network connections to remote servers using the SMB protocol. If this service is stopped, these connections will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
 | GameInput | `GameInputSvc` | Enables keyboards, mice, gamepads, and other input devices to be used with the GameInput API. |
@@ -935,6 +939,14 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
 |  | `TermService` | Allows users to connect interactively to a remote computer. Remote Desktop and Remote Desktop Session Host Server depend on this service. To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item. |
 |  | `UmRdpService` | Allows the redirection of Printers/Drives/Ports for RDP connections |
+|  | `rdpbus` | Remote Desktop Device Redirector Bus Driver |
+|  | `RDPDR` | Remote Desktop Device Redirector Driver |
+|  | `wanarp` | Remote Access IP ARP Driver |
+|  | `wanarpv6` | Remote Access IPv6 ARP Driver |
+|  | `terminpt` | Microsoft Remote Desktop Input Driver |
+|  | `TsUsbFlt` | Remote Desktop USB Hub Class Filter Driver |
+|  | `TsUsbGD` | Remote Desktop Generic USB Device |
+|  | `tsusbhub` | Remote Desktop USB Hub |
 | Sensor | `SensorDataService` | Delivers data from a variety of sensors |
 |  | `SensrSvc` | Monitors various sensors in order to expose data and adapt to system and user state. If this service is stopped or disabled, the display brightness will not adapt to lighting conditions. Stopping this service may affect other system functionality and features as well. |
 |  | `SensorService` | A service for sensors that manages different sensors' functionality. Manages Simple Device Orientation (SDO) and History for sensors. Loads the SDO sensor that reports device orientation changes. If this service is stopped or disabled, the SDO sensor will not be loaded and so auto-rotation will not occur. History collection from Sensors will also be stopped. |
@@ -944,7 +956,8 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
 |  | `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
 |  | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
-| SysMain | `SysMain` | Maintains and improves system performance over time. |
+| SysMain/ReadyBoost | `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases)) |
+|  | `rdyboost` | ReadyBoost (rdyboost.sys) is a cache layer between memory and disk that uses flash media for random-read caching, creates ReadyBoost.sfcache on the device, validates the device via read/write tests, and encrypts cache data; device test results and state live under `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{71a27cdd-812a-11d0-bec7-08002be2092f}\\Emdmgmt`. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases)) |
 | Microsoft Store | `AppXSvc` | Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
 |  | `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
 |  | `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
@@ -956,7 +969,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `dmwappushservice` | Routes Wireless Application Protocol (WAP) Push messages received by the device and synchronizes Device Management sessions |
 |  | `InventorySvc` | This service performs background system inventory, compatibility appraisal, and maintenance used by numerous system components. |
 |  | `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA). PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
-|  | `wuqisvc` | - |
+|  | `wuqisvc` | A Microsoft service producing summary facts and insights related to usage and quality of experience. Facts are used to automate on-device self-healing and other optional workflows, such as Personalized offers. |
 | Themes | `Themes` | Provides user experience theme management. |
 | Time | `W32Time` | Maintains date and time synchronization on all clients and servers in the network. If this service is stopped, date and time synchronization will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `autotimesvc` | This service sets time based on NITZ messages from a Mobile Network |
@@ -975,6 +988,10 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
 | Wi-Fi | `WlanSvc` | The WLANSVC service provides the logic required to configure, discover, connect to, and disconnect from a wireless local area network (WLAN) as defined by IEEE 802.11 standards. It also contains the logic to turn your computer into a software access point so that other devices or computers can connect to your computer wirelessly using a WLAN adapter that can support this. Stopping or disabling the WLANSVC service will make all WLAN adapters on your computer inaccessible from the Windows networking UI. It is strongly recommended that you have the WLANSVC service running if your computer has a WLAN adapter. |
 |  | `vwififlt` | Virtual WiFi Filter Driver |
+|  | `wcncsvc` | WCNCSVC hosts the Windows Connect Now Configuration which is Microsoft's Implementation of Wireless Protected Setup (WPS) protocol. This is used to configure Wireless LAN settings for an Access Point (AP) or a Wireless Device. The service is started programmatically as needed. |
+|  | `WFDSConMgrSvc` | Manages connections to wireless services, including wireless display and docking. |
+|  | `NativeWifiP` | NativeWiFi Filter |
+|  | `Wificx` | Wifi Network Adapter Class Extension |
 | Windows Defender | `WinDefend` | Helps protect users from malware and other potentially unwanted software |
 |  | `MsSecCore` | Microsoft Security Core Boot Driver |
 |  | `wscsvc` | The WSCSVC (Windows Security Center) service monitors and reports security health settings on the computer.  The health settings include firewall (on/off), antivirus (on/off/out of date), antispyware (on/off/out of date), Windows Update (automatically/manually download and install updates), User Account Control (on/off), and Internet settings (recommended/not recommended). The service provides COM APIs for independent software vendors to register and record the state of their products to the Security Center service.  The Security and Maintenance UI uses the service to provide systray alerts and a graphical view of the security health states in the Security and Maintenance control panel.  Network Access Protection (NAP) uses the service to report the security health states of clients to the NAP Network Policy Server to make network quarantine decisions.  The service also has a public API that allows external consumers to programmatically retrieve the aggregated security health state of the system. |
@@ -1000,6 +1017,44 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `VBoxSup` | VirtualBox Support Driver |
 |  | `VBoxUSBMon` | VirtualBox USB Monitor Driver |
 |  | `VBoxSDS` | Used as a COM server for VirtualBox API. VirtualBox Global Interface. |
+| VPN/RAS Services | `RasMan` | Manages dial-up and virtual private network (VPN) connections from this computer to the Internet or other remote networks. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `RasAuto` | Creates a connection to a remote network whenever a program references a remote DNS or NetBIOS name or address. |
+|  | `PptpMiniport` | WAN Miniport (PPTP) |
+|  | `RasAgileVpn` | WAN Miniport (IKEv2) |
+|  | `Rasl2tp` | WAN Miniport (L2TP) |
+|  | `RasSstp` | WAN Miniport (SSTP) |
+|  | `RasAcd` | Remote Access Auto Connection Driver |
+| Push Notifications Services | `WpnService` | This service runs in session 0 and hosts the notification platform and connection provider which handles the connection between the device and WNS server. |
+|  | `SmsRouter` | Routes messages based on rules to appropriate clients. |
+| NPSM Service | `NPSMSvc_*` | This service hosts the Now Playing Session Manager used for Media Scenarios |
+| Media Sharing / Portable Devices | `WMPNetworkSvc` | Shares Windows Media Player libraries to other networked players and media devices using Universal Plug and Play |
+|  | `WPDBusEnum` | Enforces group policy for removable mass-storage devices. Enables applications such as Windows Media Player and Image Import Wizard to transfer and synchronize content using removable mass-storage devices. |
+| BranchCache | `PeerDistSvc` | This service caches network content from peers on the local subnet. |
+| QoS/AV Streaming (qWave) | `QWAVE` | Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV) streaming applications on IP home networks. qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS) for AV applications. It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization. |
+|  | `QWAVEdrv` | Quality Windows Audio/Video Experience component driver |
+| NFC/Payments | `SEMgrSvc` | Manages payments and Near Field Communication (NFC) based secure elements. |
+| Embedded Mode | `embeddedmode` | The Embedded Mode service enables scenarios related to Background Applications. Disabling this service will prevent Background Applications from being activated. |
+| Optimize Drives | `defragsvc` | Helps the computer run more efficiently by optimizing files on storage drives. |
+| Mobile Hotspot / ICS Service | `icssvc` | Provides the ability to share a cellular data connection with another device. |
+| Network Capture Driver | `NdisCap` | Microsoft NDIS Capture |
+| Container File System Drivers | `CimFS` | - |
+|  | `wcifs` | Provides a virtual filesystem view for processes running within Windows Containers |
+| Consumer IR Driver | `circlass` | Consumer IR Class Driver for eHome |
+| iSCSI Driver | `msisadrv` | - |
+| NetBIOS Driver | `NetBIOS` | NetBIOS Interface |
+|  | `NetBT` | This service implements NetBios over TCP/IP. |
+| Epic Games Services | `EpicGamesUpdater` | - |
+|  | `EpicOnlineServices` | - |
+| Logitech Services | `LGHUBUpdaterService` | LGHUB Updater Service |
+|  | `logi_joy_bus_enum` | Logitech G HUB Virtual Bus Enumerator Driver |
+|  | `logi_joy_vir_hid` | Logitech G HUB Virtual HID Device Driver |
+|  | `logi_lamparray_service` | Provides HID LampArray Lighting support to Logitech devices. |
+| SteelSeries Services | `SteelSeries_Sonar_VAD` | SteelSeries Sonar Driver |
+|  | `SteelSeriesGGUpdateServiceProxy` | Launches the SteelSeries Update Service. |
+|  | `ssdevfactory` | SteelSeries Device Factory Service |
+| NVIDIA Container Service | `NVDisplay.ContainerLocalSystem` | Container service for NVIDIA root features, required for NVCPL to work. |
+| Everything Service | `Everything (1.5a)` | Provides NTFS indexing, ReFS indexing and USN Journal services to the Everything search client. |
+|  | `Everything` | ^ |
 | Miscellaneous | `WalletService` | Hosts objects used by clients of the wallet |
 |  | `PenService` | Part of Windows Ink Services Platform Tablet Input Subsystem and is used to implement Microsoft Tablet PC functionality.  |
 |  | `buttonconverter` | Service for Portable Device Control devices |
@@ -2156,6 +2211,8 @@ HKLM\Software\Microsoft\Windows\CurrentVersion\Run
 
 # Enable FSO
 
+This may not be accurate yet, it's preferable to disable FSO per application via the compability section.
+
 ### FSE (Fullscreen Exclusive)
 
 Game takes exclusive control of the display.
@@ -2166,7 +2223,7 @@ Game takes exclusive control of the display.
 ### FSO (Fullscreen Optimizations)
 
 Windows feature that makes borderless/windowed behave like fullscreen.
-- Runs as a flip-model, borderless window through DWM
+- Runs as a flip-model, borderless window may be composed by DWM?
 - Still allows overlays, Game Bar, better Alt-Tab
 - Tries to give fullscreen-like latency and performance without true exclusive control
 
