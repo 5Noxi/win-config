@@ -1191,14 +1191,14 @@ Enables strict argument validation for upper layer testing. Set along with the R
 Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_msclient`.
 
 ```powershell
-PS C:\Users\Nohuxi> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
+PS C:\Users\Nohuto> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
 
 DisplayGroup                                                                      Group
 ------------                                                                      -----
 File and Printer Sharing                                                          @FirewallAPI.dll,-28502
 File and Printer Sharing (Restrictive)                                            @FirewallAPI.dll,-28672
 
-PS C:\Users\Nohuxi> Get-NetAdapterBinding -Name *
+PS C:\Users\Nohuto> Get-NetAdapterBinding -Name *
 
 Name                           DisplayName                                        ComponentID          Enabled
 ----                           -----------                                        -----------          -------

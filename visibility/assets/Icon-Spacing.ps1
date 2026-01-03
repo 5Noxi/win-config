@@ -4,7 +4,7 @@ if (!(Test-Path "$env:temp\Noverse.ico")) {iwr -uri "https://github.com/nohuto/n
 $gray = [Drawing.Color]::FromArgb(28, 28, 28)
 $white = [Drawing.Color]::White
 
-# Authored by Nohuxi
+# Authored by Nohuto
 function nvreglog {
     param ([string]$title,[string]$message,[string]$type = "info")
     $form = [Windows.Forms.Form]@{

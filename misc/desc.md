@@ -717,10 +717,10 @@ The purpose of hash values is to provide a cryptographically-secure way to verif
 The computed hash depends on the file content, e.g. empty files have the same hash (which means that every change affects the hash - [Avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)):
 ```c
 // Scenario 1 (no content)
-PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse0.txt' -Raw
-PS C:\Users\Nohuxi> // No output, since empty
+PS C:\Users\Nohuto> Get-Content -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse0.txt' -Raw
+PS C:\Users\Nohuto> // No output, since empty
 
-PS C:\Users\Nohuxi> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse0.txt' -Algorithm $_).Hash }
+PS C:\Users\Nohuto> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse0.txt' -Algorithm $_).Hash }
 MD5: D41D8CD98F00B204E9800998ECF8427E
 SHA1: DA39A3EE5E6B4B0D3255BFEF95601890AFD80709
 SHA256: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
@@ -728,11 +728,11 @@ SHA384: 38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBF
 SHA512: CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E
 
 // Scenario 2 (added content)
-PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse1.txt' -Raw
+PS C:\Users\Nohuto> Get-Content -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse1.txt' -Raw
 1 // Content
-PS C:\Users\Nohuxi>
+PS C:\Users\Nohuto>
 
-PS C:\Users\Nohuxi> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse1.txt' -Algorithm $_).Hash }
+PS C:\Users\Nohuto> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse1.txt' -Algorithm $_).Hash }
 MD5: C4CA4238A0B923820DCC509A6F75849B
 SHA1: 356A192B7913B04C54574D18C28D46E6395428AB
 SHA256: 6B86B273FF34FCE19D6B804EFF5A3F5747ADA4EAA22F1D49C01E52DDB7875B4B

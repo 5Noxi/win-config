@@ -6,7 +6,7 @@ Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
 ```
 The output could look like:
 ```
-C:\Users\Nohuxi>Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
+C:\Users\Nohuto>Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
 
 Component Store (WinSxS) information:
 

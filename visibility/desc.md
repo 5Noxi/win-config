@@ -1295,7 +1295,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
 Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
 
-PS C:\Users\Nohuxi>
+PS C:\Users\Nohuto>
 ```
 ```powershell
 for %%L in ("%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\*.lnk") do powershell -c "$s=New-Object -ComObject WScript.Shell; $lnk=$s.CreateShortcut('%%~fL'); $lnk.TargetPath='%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe'; $lnk.Arguments='-NoLogo'; $lnk.Save()"
@@ -1445,7 +1445,7 @@ But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels,
 Edit registered owner/orga (visible in `winver`) via:
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion": {
-  "RegisteredOwner": { "Type": "REG_SZ", "Data": "Nohuxi" },
+  "RegisteredOwner": { "Type": "REG_SZ", "Data": "Nohuto" },
   "RegisteredOrganization": { "Type": "REG_SZ", "Data": "Noverse" }
 }
 ```
