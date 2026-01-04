@@ -285,9 +285,30 @@ Paths removed:
 
 > https://learn.microsoft.com/en-us/windows-server/get-started/activation-slmgr-vbs-options#advanced-options
 
-Command used:
-```cmd
-slmgr /cpky
+Implementation details (from `slmgr.vbs` and `sppwmi.mof`):
+```vbscript
+ElseIf strOption = GetResource("L_optClearPKeyFromRegistry") Then
+    ClearPKeyFromRegistry
+
+Private Sub ClearPKeyFromRegistry()
+    set objService = GetServiceObject("Version")
+    objService.ClearProductKeyFromRegistry()
+End Sub
+```
+```mof
+// %SystemRoot%\System32\wbem\sppwmi.mof (root\cimv2)
+[dynamic,provider("SppProvider")]
+class SoftwareLicensingService
+{
+  [implemented] uint32 ClearProductKeyFromRegistry();
+};
+```
+So `/cpky` is a thin wrapper over the `SoftwareLicensingService.ClearProductKeyFromRegistry` WMI method. It clears the stored product key from the registry to reduce disclosure risk, but it does not uninstall the key or change activation state.
+
+PowerShell equivalent?
+```powershell
+$svc = Get-CimInstance -Namespace root\cimv2 -ClassName SoftwareLicensingService
+Invoke-CimMethod -InputObject $svc -MethodName ClearProductKeyFromRegistry
 ```
 
 # Downloaded Program Files
