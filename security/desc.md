@@ -1136,11 +1136,11 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 
 | Registry key       | Value name           | Default value                | Description                                                                                               |
 | ------------------ | -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
-| TdrLevel           | `TdrLevel`           | `3` (TdrLevelRecover)        | Controls the GPU timeout behavior. `0` = disabled, `1` = bugcheck, `3` = reset/recover (Windows default). |
-| TdrDelay           | `TdrDelay`           | `2` seconds                  | Timeout threshold before Windows starts TDR handling. Longer value = GPU gets more time.                  |
-| TdrDdiDelay        | `TdrDdiDelay`        | `5` seconds                  | Extra time for driver/user-mode threads to exit after a timeout before VIDEO_TDR_FAILURE (0x116).         |
+| TdrLevel           | `TdrLevel`           | `3` (TdrLevelRecover)        | Controls the GPU timeout behavior. `0` = disabled, `1` = bugcheck, `2` = recover to VGA (not implemented) `3` = reset/recover (Windows default). |
+| TdrDelay           | `TdrDelay`           | `2` seconds                  | Timeout threshold before Windows starts TDR handling. Longer value = GPU gets more time. |
+| TdrDdiDelay        | `TdrDdiDelay`        | `5` seconds                  | Extra time for driver/user-mode threads to exit after a timeout before VIDEO_TDR_FAILURE (0x116). |
 | TdrDebugMode       | `TdrDebugMode`       | `2`                          | TDR debug control: `0` break, `1` ignore, `2` recover (default), `3` always recover.                      |
-| TdrLimitTime       | `TdrLimitTime`       | `60` seconds                 | Time window to count repeated TDRs before forcing a crash. Works with `TdrLimitCount`.                    |
+| TdrLimitTime       | `TdrLimitTime`       | `60` seconds (doc) / `5` driver?                 | Time window to count repeated TDRs before forcing a crash. Works with `TdrLimitCount`.                    |
 | TdrLimitCount      | `TdrLimitCount`      | `5`                          | Max number of TDRs allowed within `TdrLimitTime` before Windows stops recovering and bugchecks.           |
 | TdrTestMode        | `TdrTestMode`        | -                            | Reserved/test entry, not for normal use.                                                                  |
 | TdrDodPresentDelay | `TdrDodPresentDelay` | `2` seconds (min 1, max 900) | Extra time for display-only drivers to report an async present before a TDR is triggered.                 |
@@ -1148,14 +1148,6 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md  
 > https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm
-
-Default values:  
-`TdrLimitTime` - `60` (doc) / `5` driver?  
-`TdrLimitCount` - `5`  
-`TdrLevel` - `3` (`TdrLevelRecover`)  
-`TdrDelay` - `2`  
-`TdrDdiDelay` - `5`  
-`TdrDebugMode` `2` (`TDR_DEBUG_MODE_RECOVER_NO_PROMPT`)
 
 Driver code snippets:
 ```c
@@ -1193,6 +1185,17 @@ if (dword_1C015B874 != v15) {
 ```
 > https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt  
 > [security/assets | TdrInit.c](https://github.com/nohuto/win-config/blob/main/security/assets/TdrInit.c)
+
+Notes to the values located in:
+```
+\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrDdiDelay
+\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrDelay
+\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrLevel
+```
+
+`TdrDdiDelay` used alongside TdrDelay to determine the WDDM timeout. RM reads `TdrDdiDelay`, subtracts 1, and caps `TdrDelay` to that override. If `TdrDdiDelay` is absent, `tdrDdiOverride = 4`. `TdrDelay` shows the WDDM timeout duration (seconds). RM clamps to >= 2 and <= (TdrDdiDelay - 1), then converts to microseconds. Default when missing is `1.8` seconds. `TdrLevel` = WDDM TDR behavior (documented in CUDA WDDM code).
+
+Note that this information is based on a 4 year old documentation and may not be accurate anymore.
 
 # Password Age
 
