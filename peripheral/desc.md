@@ -246,7 +246,8 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserCho
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\AutorunINFLegacyArrival\(Default)	Type: REG_SZ, Length: 30, Data: MSTakeNoAction
 ```
 
-# Disk Write Cache Policy 
+# Disk Write Cache Policy
+
 Enables write cache & turns off write cache buffer flushing on all connected disks.
 
 ```

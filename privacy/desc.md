@@ -1709,6 +1709,17 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 },
 ```
 
+# Disable Text Input Hosts
+
+Renames `ctfmon.exe` and `TextInputHost.exe` to block the classic CTF loader and the modern text input host. This disables IME, emoji/clipboard panels, and touch keyboard input in most cases.
+
+`TextInputManagementService` is the Windows service backing text input, expressive input, touch keyboard, handwriting, and IMEs. `ctfmon.exe` loads the Text Services Framework (IME/language bar), while `TextInputHost.exe` hosts the modern input UI (touch keyboard, emoji, clipboard). Renaming them can break language switching, IME input, and UWP input surfaces.
+
+```powershell
+Get-CimInstance Win32_Service -Filter "Name='TextInputManagementService'" |
+  Select-Object Name, DisplayName, StartMode, State, Description
+```
+
 # Disable Online Speech Recognition
 
 `HasAccepted` disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. `AllowSpeechModelUpdate` blocks automatic updates of speech recognition and synthesis models. I found`DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
@@ -2613,9 +2624,16 @@ mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy 
 },
 ```
 
+`Disable Background Task Host`:  
+Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
+
+Windows Internals (E7-P1, Modern Standby): when the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
+
 # Disable WER
 
 WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
+
+Windows Internals (E7-P2, WER): WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting pipeline.
 
 `\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
 

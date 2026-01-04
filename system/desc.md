@@ -1430,6 +1430,8 @@ Disables the `Low Disk Space` notification.
 
 Allows modern apps to use a more efficient memory allocator.
 
+Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
     "HeapDeCommitFreeBlockThreshold"; = 4096; // qword_140FC3210 dq 1000
@@ -1735,6 +1737,8 @@ Only this path gets read, `TimeStampEnabled` doesn't get read?
 
 Disables prefetcher (includes disabling `ApplicationLaunchPrefetching` & `ApplicationPreLaunch`) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
 
+Windows Internals (E7-P1, Prefetcher): the prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
+
 "`EnablePrefetcher` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded."
 
 "`EnableSuperfetch` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory."
@@ -1906,6 +1910,8 @@ Additional value, which get's read:
 
 Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
 
+Windows Internals (E7-P1, Memory compression): compressed pages are stored in a dedicated "Memory Compression" process managed by the Store Manager. The memory manager compresses modified list pages into that store and later decompresses them on demand, this is enabled by default on client SKUs.
+
 Example:  
 1. System looks for cold/rarely used data in RAM
 2. It compresses that data, e.g. 24 MB -> 7 MB
@@ -1936,6 +1942,18 @@ PSComputerName               :
 # Disable Page Combining
 
 Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
+
+Windows Internals (E7-P1, Memory combining): the memory manager can be instructed to combine identical pages across the system, and Superfetch can trigger combining when the system is idle. The feature can be disabled via `DisablePageCombining` in the memory manager settings.
+
+`Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
+
+```c
+INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
+INIT:0000000140B9C348                 dq offset aDisablepagecom ; "DisablePageCombining"
+INIT:0000000140B9C350                 dq offset dword_140D1D1C8
+
+ALMOSTRO:0000000140D1D1C8 dword_140D1D1C8 dd 0                    ; DATA XREF: MiCombineIdenticalPages:loc_1407F7E3A↑r
+```
 
 See the current page combining state on your system via:
 ```powershell

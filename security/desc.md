@@ -2,6 +2,8 @@
 
 Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation. Save `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System` before running it.
 
+Windows Internals (E7-P1, UAC): UAC runs most apps with standard user rights and uses a filtered admin token for administrators, elevating only when needed. Disabling UAC removes this filtered-token model and disables UAC file/registry virtualization (Luafv.sys).
+
 Remove the `Run as Administrator` context menu option (`.bat`, `.cmd` files) with:
 ```bat
 reg delete "HKCR\batfile\shell\runas" /f

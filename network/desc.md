@@ -58,6 +58,8 @@ Some additional info about HTTP request methods you may want to know:
 
 # SMB Configuration
 
+Windows Internals (E7-P2, Remote FSDs): SMB uses a client-side remote file system driver (LANMan Redirector) and a server-side remote FSD (`Srv2.sys`). Client settings under `LanmanWorkstation` and server settings under `LanmanServer` govern how those components negotiate and handle SMB traffic.
+
 SMB Client -> Outbound connections:  
 > https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbclientconfiguration?view=windowsserver2025-ps
 
@@ -1048,8 +1050,9 @@ Adaptive: ITR = 65535
 ```
 ITR = Interrupt Throttle Rate.
 
+Data/default is driver specific.
 ```inf
-,  Interrupt Throttle Rate
+;  Interrupt Throttle Rate
 HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
 HKR, Ndi\Params\ITR,                                    default,                0, "65535"
 HKR, Ndi\Params\ITR\Enum,                               "65535",                0, %Adaptive%
@@ -1061,7 +1064,18 @@ HKR, Ndi\Params\ITR\Enum,                               "200",                  
 HKR, Ndi\Params\ITR\Enum,                               "0",                    0, %Off%
 HKR, Ndi\Params\ITR,                                    type,                   0, "enum"
 
-, *InterruptModeration
+;  Interrupt Throttle Rate
+HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
+HKR, Ndi\Params\ITR,                                    default,                0, "64"
+HKR, Ndi\Params\ITR\Enum,                               "500",                  0, %Extreme%
+HKR, Ndi\Params\ITR\Enum,                               "250",                  0, %High%
+HKR, Ndi\Params\ITR\Enum,                               "125",                  0, %Medium%
+HKR, Ndi\Params\ITR\Enum,                               "64",                   0, %Low%
+HKR, Ndi\Params\ITR\Enum,                               "32",                   0, %Minimal%
+HKR, Ndi\Params\ITR\Enum,                               "0",                    0, %Off%
+HKR, Ndi\Params\ITR,                                    type,                   0, "enum"
+
+; *InterruptModeration
 HKR, Ndi\Params\*InterruptModeration,                   ParamDesc,              0, %InterruptModeration%
 HKR, Ndi\Params\*InterruptModeration,                   default,                0, "1"
 HKR, Ndi\Params\*InterruptModeration\Enum,              "0",                    0, %Disabled%
@@ -1188,7 +1202,7 @@ Enables strict argument validation for upper layer testing. Set along with the R
 
 # Disable File/Printer Sharing
 
-Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_msclient`.
+Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_server`.
 
 ```powershell
 PS C:\Users\Nohuto> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
@@ -1227,6 +1241,67 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
   ]
 },
 ```
+
+# Disable Microsoft Client/Multiplexor
+
+Disables the Client for Microsoft Networks (`ms_msclient`) and the Microsoft Network Adapter Multiplexor Protocol (`ms_implat`) bindings on all adapters. This blocks SMB client access and disables NIC teaming.
+
+Windows Internals (E7-P2, Remote FSDs): SMB client I/O is handled by the LANMan Redirector (client-side remote FSD) which translates file I/O into SMB commands, while the server side uses `Srv2.sys`. Disabling `ms_msclient` prevents the redirector from binding to the adapter, so SMB client access is effectively disabled regardless of SMB version. This is broader than the SMBv1 toggle (which only removes the legacy protocol).
+
+```powershell
+Get-NetAdapterBinding -Name * -ComponentID ms_msclient, ms_implat
+Get-Service LanmanWorkstation | Select-Object Name, Status, StartType
+# If available on the SKU:
+Get-SmbClientConfiguration | Select-Object EnableSMB1Protocol, EnableSMB2Protocol
+```
+
+# Speed & Duplex
+
+Speed = rate at which data is transmitted.
+Duplex = nature of the communication:
+- Half-duplex: data can either be sent or received, but not both at the same time
+- Full-duplex: data transmission occurs in both directions at once
+
+![](https://github.com/nohuto/win-config/blob/main/network/images/duplex.jpg?raw=true)
+
+You should always use `Full-duplex`, `Half-duplex` was used in older networks with hubs. In auto negotiation, both devices announce their capabilities for speed and duplex.
+
+For example:
+- A computer's network interface can operate at 10 or 100 Mbps and supports both half-duplex and full-duplex
+- A network switch's interface can operate at 10, 100, or 1000 Mbps and supports both duplex modes
+
+Once these capabilities are shared, they agree on the highest common speed and prioritize full-duplex over half-duplex.
+
+Windows Internals (E7-P1, I/O system): NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
+
+Intel driver example:
+```inf
+HKR, Ndi\params\*SpeedDuplex,                           ParamDesc,              0, %SpeedDuplex%
+HKR, Ndi\params\*SpeedDuplex,                           default,                0, "0"
+HKR, Ndi\params\*SpeedDuplex,                           type,                   0, "enum"
+HKR, Ndi\params\*SpeedDuplex\enum,                      "0",                    0, %AutoNegotiation%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "1",                    0, %10Mb_Half_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "2",                    0, %10Mb_Full_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "3",                    0, %100Mb_Half_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "4",                    0, %100Mb_Full_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "6",                    0, %1000Mb_Full_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "2500",                 0, %2500Mb_Full_Duplex%
+
+; Localizable Strings
+SpeedDuplex                     = "Speed & Duplex"
+10Mb_Half_Duplex                = "10 Mbps Half Duplex"
+10Mb_Full_Duplex                = "10 Mbps Full Duplex"
+100Mb_Half_Duplex               = "100 Mbps Half Duplex"
+100Mb_Full_Duplex               = "100 Mbps Full Duplex"
+1000Mb_Full_Duplex              = "1.0 Gbps Full Duplex"
+2500Mb_Full_Duplex              = "2.5 Gbps Full Duplex"
+```
+
+Note: 2.5 Gbps Full Duplex may be driver specific. The 10/100/1000 enums are typically consistent across drivers. You can get all valid data from:
+```c
+HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX\Ndi\Params\*SpeedDuplex
+```
+`00XX` depends on the used adapter.
 
 # Disable LLSE
 

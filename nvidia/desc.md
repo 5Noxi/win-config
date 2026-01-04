@@ -808,6 +808,18 @@ You can find it in `nvsvc64.dll`.
 #endif // DEBUG
 ```
 
+# Disable HDAudio D3Cold
+
+Disables the NVIDIA HD audio function entering D3Cold (deepest device power state). This can reduce HDMI/DP audio dropouts or device re-enumeration at idle, but increases idle power.
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : EnableHDAudioD3Cold
+```
+
+```powershell
+Get-ItemProperty -Path "HKLM:\\SYSTEM\\CurrentControlSet\\Services\\nvlddmkm\\Parameters" -Name EnableHDAudioD3Cold -ErrorAction SilentlyContinue
+```
+
 # RMPowerFeature
 
 `ELPG` - Engine-Level Power Gating  
