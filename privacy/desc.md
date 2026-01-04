@@ -1715,11 +1715,6 @@ Renames `ctfmon.exe` and `TextInputHost.exe` to block the classic CTF loader and
 
 `TextInputManagementService` is the Windows service backing text input, expressive input, touch keyboard, handwriting, and IMEs. `ctfmon.exe` loads the Text Services Framework (IME/language bar), while `TextInputHost.exe` hosts the modern input UI (touch keyboard, emoji, clipboard). Renaming them can break language switching, IME input, and UWP input surfaces.
 
-```powershell
-Get-CimInstance Win32_Service -Filter "Name='TextInputManagementService'" |
-  Select-Object Name, DisplayName, StartMode, State, Description
-```
-
 # Disable Online Speech Recognition
 
 `HasAccepted` disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. `AllowSpeechModelUpdate` blocks automatic updates of speech recognition and synthesis models. I found`DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
