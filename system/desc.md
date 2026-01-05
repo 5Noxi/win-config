@@ -957,7 +957,6 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
 |  | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
 | SysMain/ReadyBoost | `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases)) |
-|  | `rdyboost` | ReadyBoost (rdyboost.sys) is a cache layer between memory and disk that uses flash media for random-read caching, creates ReadyBoost.sfcache on the device, validates the device via read/write tests, and encrypts cache data; device test results and state live under `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{71a27cdd-812a-11d0-bec7-08002be2092f}\\Emdmgmt`. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases)) |
 | Microsoft Store | `AppXSvc` | Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
 |  | `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
 |  | `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
@@ -1059,7 +1058,8 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `PenService` | Part of Windows Ink Services Platform Tablet Input Subsystem and is used to implement Microsoft Tablet PC functionality.  |
 |  | `buttonconverter` | Service for Portable Device Control devices |
 
-Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) = `INACCESSIBLE_BOOT_DEVICE` BSoD.
+Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) / `rdyboost` (ReadyBoost (rdyboost.sys) is a cache layer between memory and disk that uses flash media for random-read caching, creates ReadyBoost.sfcache on the device, validates the device via read/write tests, and encrypts cache data. Device test results and state live under `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{71a27cdd-812a-11d0-bec7-08002be2092f}\\Emdmgmt`. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases))) = `INACCESSIBLE_BOOT_DEVICE` BSoD.
+
 
 # SCM Autostart Delay
 
