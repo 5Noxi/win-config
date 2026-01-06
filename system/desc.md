@@ -1373,6 +1373,16 @@ Storage Sense deletes temporary files automatically - revert it by changing it b
 ![](https://github.com/nohuto/win-config/blob/main/system/images/storagesen1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/storagesen2.png?raw=true)
 
+`ConfigStorageSenseCloudContentDehydrationThreshold` should also exist in the key, but since I'm not sure yet I didn't add it.
+```c
+v30 = 0;
+if ( (int)CLowDiskSpaceUI_GetIsMDMConfigured(
+            (CLowDiskSpaceUI )a1,
+            LConfigStorageSenseCloudContentDehydrationThreshold,
+            &v30)  0
+    !v30 )
+```
+
 ```json
 {
   "File": "StorageSense.admx",
@@ -1515,14 +1525,6 @@ Default value is `85` -> `85%` (gets used if value isn't present), clamp range i
 
 > [system/assets | jpeg-TranscodeImage.c](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
 
-# Disable Low Disk Space Checks
-
-Disables the `Low Disk Space` notification.
-
-> https://github.com/nohuto/win-registry/blob/main/records/CV-Explorer.txt
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true)
-
 # Enable Segment Heap
 
 "With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications."
@@ -1613,6 +1615,51 @@ HKCU\Control Panel\TimeDate\DstNotification	Type: REG_DWORD, Length: 4, Data: 1
 // Disabled
 HKCU\Control Panel\TimeDate\DstNotification	Type: REG_DWORD, Length: 4, Data: 0
 ```
+
+---
+
+Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
+```c
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy";
+    "StoragePoliciesNotified"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks cases 5/12 when 1
+    "StoragePoliciesChanged"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks case 12 when 1
+    "OptinToastFired"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 5 allowed only if 0
+    "FirstLaunchToastFired"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 12 allowed only if 0
+    "CloudfilePolicyConsent"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 8 requires 0, set to 1 on Enable
+    "CloudConsentToastCount"; = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 8 requires < 3, set to 3 on Enable
+    "OptOutButtonClicked"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, set to 1 on ReminderToast
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DiskSpaceChecking";
+    "LastInstallTimeLowStorageNotify"; = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: OneDay
+    "NumWinOldLowStorageNotify"; = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 7 allows if < 3
+
+"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion";
+    "InstallTime"; = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoHours
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
+    "TestBackupReminderToast"; = 0; // REG_DWORD, default: 0 if missing, range: 0..2? case 9 requires nonzero and reminder enabled
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
+    "FirstProfileSeenTime"; = 0; // REG_QWORD FILETIME, default: set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
+    "BackupReminderToastCount"; = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 9 requires < 3
+    "LastTimeBackupReminderNotify"; = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoMinutes
+
+// FILETIME THRESHOLDS
+"OneDay"; = 0xC92A69C000; // Seconds: 86400, 1 day, LastInstallTimeLowStorageNotify
+"TwoHours"; = 0x10C388D000; // Seconds: 7200, 2 hours, InstallTime
+"FourMinutes"; = 0x8F0D1800; // Seconds: 240, 4 minutes, FirstProfileSeenTime
+"TwoMinutes"; = 0x47868C00; // Seconds: 120, 2 minutes, LastTimeBackupReminderNotify
+```
+
+See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://github.com/nohuto/win-config/blob/main/system/assets/noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c) for used pseudocode. Note that I added my chosen values to the `Disable Low Disk Space Checks` suboption for safety reasons.
+
+---
+
+`Disable Low Disk Space Checks`: Disables the `Low Disk Space` notification.
+
+> https://github.com/nohuto/win-registry/blob/main/records/CV-Explorer.txt
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true)
 
 ---
 
