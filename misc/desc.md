@@ -450,9 +450,36 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 > https://learn.microsoft.com/en-us/office/compatibility/data-that-the-telemetry-agent-collects-in-office  
 > https://learn.microsoft.com/en-us/office/compatibility/manage-the-privacy-of-data-monitored-by-telemetry-in-office
 
-# Disable OneDrive
+# OneDrive
 
-`DisableLibrariesDefaultSaveToOneDrive` sets local storage as the default save location, `DisableFileSync` disables OneDrive on Windows 8.1 including app and picker access removal and stops sync and hides the Explorer entry, `DisableFileSyncNGSC` disables OneDrive via the Next-Gen Sync Client with the same effect, `DisableMeteredNetworkFileSync` set to `0` blocks syncing on all metered connections, `PreventNetworkTrafficPreUserSignIn` stops the OneDrive client from generating network traffic until the user signs in, `System.IsPinnedToNameSpaceTree` set to `0` hides OneDrive from File Explorer's navigation pane in both CLSID locations.
+`DisableLibrariesDefaultSaveToOneDrive` sets local storage as the default save location, `DisableFileSync` disables OneDrive on Windows 8.1 including app and picker access removal and stops sync and hides the Explorer entry, `DisableFileSyncNGSC` disables OneDrive via the Next-Gen Sync Client with the same effect, `DisableMeteredNetworkFileSync` set to `0` blocks syncing on all metered connections, `PreventNetworkTrafficPreUserSignIn` stops the OneDrive client from generating network traffic until the user signs in, `System.IsPinnedToNameSpaceTree` set to `0` hides OneDrive from File Explorer's navigation pane.
+
+See `json` block below for more details.
+
+
+Uninstall runs `OneDriveSetup.exe /uninstall` and removes leftovers:
+```c
+// paths
+%LOCALAPPDATA%\Microsoft\OneDrive
+%LOCALAPPDATA%\OneDrive
+%PROGRAMDATA%\Microsoft OneDrive
+%SYSTEMDRIVE%\OneDriveTemp
+%APPDATA%\Microsoft\Windows\Start Menu\Programs\OneDrive.lnk
+// if empty
+%USERPROFILE%\OneDrive
+
+// registry keys/values
+HKCU\Environment : OneDrive
+HKCU\Software\RegisteredApplications : OneDrive
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run\AutorunsDisabled : OneDrive
+HKCU\Software\Microsoft\OneDrive
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\StorageProvider\OneDrive
+HKLM\SOFTWARE\Microsoft\OneDrive
+HKLM\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\OneDrive
+
+// scheduled tasks
+\\OneDrive*
+```
 
 ```json
 {
