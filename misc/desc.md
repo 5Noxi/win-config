@@ -456,7 +456,6 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 
 See `json` block below for more details.
 
-
 Uninstall runs `OneDriveSetup.exe /uninstall` and removes leftovers:
 ```c
 // paths

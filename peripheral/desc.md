@@ -520,6 +520,10 @@ UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
 
 ---
 
+Values named `ButtonsAsVKeys` & `HardwareButtonsAsVKeys` may exist in `SYSTEM\\INPUT\\BUTTONS`, but I haven't looked further into it.
+
+---
+
 ```c
 .rdata:00000001C00606B8 g_WakeOnConnectUI db  1Eh               ; DATA XREF: HUBREG_QueryGlobalHubValues+2DC↓o
 .rdata:00000001C00606C0                 dq offset aWakeonconnectu ; "WakeOnConnectUI"

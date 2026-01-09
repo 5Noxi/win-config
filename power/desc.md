@@ -718,19 +718,8 @@ dword_4C140 = -1;
 ```
 
 > [power/assets | hddpark-amdsbs.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-amdsbs.c)  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-power-states
-
----
-
-Miscellaneous notes:
-
-```json
-"HKLM\\SYSTEM\\CurrentControlSet\\Services\\stornvme\\Parameters\\Device": {
-  "IdlePowerMode": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
-
-> https://github.com/nohuto/win-registry#wpr--procmon-registry-activity-records  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-power-states  
+> https://github.com/nohuto/win-registry
 
 Needs more research (`ClassGetServiceParameter.c` - default `0`?):
 ```

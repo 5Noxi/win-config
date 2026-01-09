@@ -516,6 +516,14 @@ $home\Desktop\Nvcpl.lnk
 
 # Performance State (P0)
 
+"P-States are GPU active/executing performance capability and power consumption states. Each P-State, if available, maps to a performance level. Not all P-States are available on a given system."
+
+- P0/P1 - Maximum 3D performance
+- P2/P3 - Balanced 3D performance-power
+- P8 - Basic HD video playback
+- P10 - DVD playback
+- P12 - Minimum idle power consumption
+
 Disable dynamic P-State/adaptive clocking and locks it at `P0`.
 
 ```json
