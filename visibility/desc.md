@@ -1137,7 +1137,7 @@ Disabling it via policies etc. is enough, therefore I won't add them as there's 
 
 `EnabledState` gets read.
 ```
-\Registry\User\S-1-5-21-856774322-1631548302-290811248-1000\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
+\Registry\User\S-<ID>\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
 ```
 
 ---
