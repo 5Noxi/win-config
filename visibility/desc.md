@@ -1120,6 +1120,28 @@ Spotlight is used to provide new pictures on your lock screen.
 > https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11#policy-settings  
 > https://www.dev2qa.com/how-to-show-or-hide-the-windows-spotlight-learn-about-this-picture-icon-on-windows-11-desktop/
 
+---
+
+These exist by default on 25H2:
+```json
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DesktopSpotlight\\Settings": {
+  "IsDisabledByCommercialControl": { "Type": "REG_DWORD", "Data": 0 },
+  "IsRestoreLogon": { "Type": "REG_DWORD", "Data": 0 },
+  "OneTimeUpgrade": { "Type": "REG_DWORD", "Data": 0 },
+  "PeriodicUpgrade": { "Type": "REG_QWORD", "Data": 134118152903943918 },
+  "SpotlightDisabledReason": { "Type": "REG_DWORD", "Data": 100 },
+  "SpotlightNotOnboardedReason": { "Type": "REG_DWORD", "Data": 4 }
+}
+```
+Disabling it via policies etc. is enough, therefore I won't add them as there's no documentation on them either.
+
+`EnabledState` gets read.
+```
+\Registry\User\S-1-5-21-856774322-1631548302-290811248-1000\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
+```
+
+---
+
 ```json
 {
   "File": "CloudContent.admx",
