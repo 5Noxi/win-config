@@ -253,9 +253,67 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "PowerThrottlingOff"; = 0; // PpmPerfQosGroupPolicyDisable 
 ```
 
+---
+
+## Power Throttling
+
+```
+Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
+```
+You can see processes, which use power throttling by enabling the column (`Details` > `Select Column`) or add it to the active columns in system informer via the `Choose columns...` window (picture).
+> https://systeminformer.io/
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
+    "PowerThrottlingOff"; = 0; // PpmPerfQosGroupPolicyDisable 
+```
+
+![](https://github.com/nohuto/win-config/blob/main/power/images/powerth.png?raw=true)
+
 # Disable Device Powersavings
 
 Disables USB selective suspend, idle power management, and related LP features if supported.
+
+My findings while looking through USBHUB3.sys, this lists is therefore not complete.
+```c
+"<device hardware key>";
+    "DeviceSelectiveSuspended"; = ?; // REG_DWORD (bool), any nonzero sets internal flag 0x400
+    "FriendlyName"; = ?; // REG_SZ, device instance friendly name string
+    "AllowIdleIrpInD3"; = ?; // REG_DWORD (bool), any nonzero sets flag 0x4000
+    "D3ColdReconnectTimeout"; = 1000; // REG_DWORD, overwritten if value present
+    "EndpointPriorities"; = ?; // read into WDF memory and validated by HUBREG_ValidateAndPopulateEndpointPriorities?
+    "DeviceInterfaceGUID"; = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults
+    "DeviceIdleEnabled"; = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
+    "DefaultIdleState"; = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
+    "DeviceIdleIgnoreWakeEnable"; = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
+    "ExtPropDescSemaphore"; = 1; // REG_DWORD, written by HUBMISC_SetExtPropDescSemaphoreInRegistry - Presence indicates MS OS Extended Property Descriptor already handled, value is written on first use
+    "RevisionId"; = ; // REG_DWORD, written from device revision by HUBMISC_SetExtPropDescSemaphoreInRegistry
+    "VendorRevision"; = ; // REG_DWORD, written from vendor revision if available, otherwise 0
+
+"<device hardware key>\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7"; // g_PciKey
+    "D3ColdSupported"; = ?; // REG_DWORD (bool), any nonzero sets flag 0x1000
+
+"<device hardware key>\\Ceip"; // g_DeviceCeipKey
+    "DeviceInformation"; = 0; // REG_DWORD, missing treated as 0 before updating SQM flags
+    "PortInterconnectType"; = ?;
+    "DescriptorValidationInfo0"; = ?; // REG_DWORD
+    "DescriptorValidationInfo1"; = ?; // REG_DWORD
+    "DescriptorValidationInfo2"; = ?; // REG_DWORD
+    "DescriptorValidationInfo3"; = ?; // REG_DWORD
+    "DescriptorValidationInfo4"; = ?; // REG_DWORD
+    "DescriptorValidationInfo5"; = ?; // REG_DWORD
+    "DescriptorValidationInfo6"; = ?; // REG_DWORD
+
+// miscellaneous findings
+"<hub hardware key>";
+    "WakeSystemOnConnect"; = ?; // REG_DWORD (bool), any nonzero sets flag 0x100
+    "HardResetCount"; = ?; // REG_DWORD, stored to hub context
+    "OvercurrentDetected"; = ?; // REG_DWORD, nonzero sets bit 0x20000000, zero clears it
+    "HubFWUpdateProtocol"; = ?; // REG_DWORD, stored to hub context
+```
+
+> https://github.com/nohuto/win-registry/blob/main/records/Enum-USB.txt  
+> https://github.com/nohuto/win-registry/blob/main/records/pci.txt
 
 Note that the known `MSPower_DeviceEnable` command does nothing more than recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`.
 ```c
@@ -284,30 +342,25 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\0000\PnPCapabilities	Type: REG_DWORD, Length: 4, Data: 24
 ```
 
----
-
-I added some comments to `QueryUsbflagsValuesForDevice.c`, since it renamed the values.
-
 > https://github.com/nohuto/win-config/blob/main/power/desc.md#disable-usb-battery-saver  
 > https://github.com/nohuto/win-config/blob/main/power/desc.md#usb-flags  
 > https://github.com/nohuto/win-registry/blob/main/records/pci.txt  
 > https://github.com/nohuto/win-registry/blob/main/records/Enum-USB.txt  
 > [power/assets | devicepower-HidpFdoConfigureIdleSettings.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HidpFdoConfigureIdleSettings.c)  
 > [power/assets | devicepower-UsbhGetD3Policy.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-UsbhGetD3Policy.c)  
-> [power/assets | devicepower-QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-QueryUsbflagsValuesForDevice.c)
+> [power/assets | devicepower-OptInOptOutPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-OptInOptOutPolicy.c)  
+> [power/assets | devicepower-HUBMISC_SetExtPropDescSemaphoreInRegistry.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBMISC_SetExtPropDescSemaphoreInRegistry.c)  
+> [power/assets | devicepower-HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c)  
+> [power/assets | devicepower-HUBREG_QueryValuesInDeviceHardwareKey.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_QueryValuesInDeviceHardwareKey.c)  
+> [power/assets | devicepower-HUBREG_QueryValuesInHubHardwareKey.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_QueryValuesInHubHardwareKey.c)  
+> [power/assets | devicepower-HUBREG_SetWinUsbIdleDefaults.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_SetWinUsbIdleDefaults.c)  
+> [power/assets | devicepower-HUBREG_UpdateSqmFlags.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_UpdateSqmFlags.c)
 
 ---
 
 Miscellaneous notes:
 ```c
 // Not used in the option
-"HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\hubg": {
-  "DisableSelectiveSuspendUI": { "Type": "REG_DWORD", "Data": 1 },
-  "DisableUxdSupport": { "Type": "REG_DWORD", "Data": 1 }
-}
-// HcDisableAllSelectiveSuspend
-// WinUsbPowerPolicyOwnershipDisabled
-// UsbDebugModeEnable
 "UsbDeviceParameters": {
   "Action": "registry_pattern",
   "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
@@ -320,6 +373,8 @@ Miscellaneous notes:
     { "Value": "SystemInputSuppressionEnabled", "Type": "REG_DWORD", "Data": 0 },
     { "Value": "WriteReportExSupported", "Type": "REG_DWORD", "Data": 0 },
     //{ "Value": "SelSuspCancelBehavior", "Type": "REG_DWORD", "Data": },
+    //{ "Value": "WinUsbPowerPolicyOwnershipDisabled", "Type": "REG_DWORD", "Data": },
+
   ]
 },
 "UsbDevSub": {
@@ -336,30 +391,6 @@ Miscellaneous notes:
 }
 // DisableSelectiveSuspend might be a legacy value
 ```
-
-```c
-// Opt-out of ASPM.
-[PciASPMOptOut]
-Needs=PciASPMOptOut.HW
-
-[PciASPMOptOut.HW]
-AddReg=PciASPMOptOut.RegHW
-
-[PciASPMOptOut.RegHW]
-HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,ASPMOptOut,0x10001,1
-
-// Opt-in to ASPM.
-[PciASPMOptIn]
-Needs=PciASPMOptIn.HW
-
-[PciASPMOptIn.HW]
-AddReg=PciASPMOptIn.RegHW
-
-[PciASPMOptIn.RegHW]
-HKR,e5b3b5ac-9725-4f78-963f-03dfb1d828c7,ASPMOptIn,0x10001,1
-```
-
-> [power/assets | devicepower-OptInOptOutPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-OptInOptOutPolicy.c)
 
 ---
 
@@ -629,23 +660,6 @@ if ( result >= 0 )
 
 > [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
 
-# Disable Power Throttling
-
-```
-Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
-```
-You can see processes, which use power throttling by enabling the column (`Details` > `Select Column`) or add it to the active columns in system informer via the `Choose columns...` window (picture).
-> https://systeminformer.io/
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
-    "PowerThrottlingOff"; = 0; // PpmPerfQosGroupPolicyDisable 
-```
-
-> https://github.com/nohuto/win-registry#power-values
-
-![](https://github.com/nohuto/win-config/blob/main/power/images/powerth.png?raw=true)
-
 # Disable Energy Estimation
 
 Not needed, if you disable energy estimation:
@@ -709,7 +723,7 @@ Shows the current available sleep states on your system.
 
 # Disable HDD Parking
 
-`EnableHDDParking` is set to `1` by default, `EnableDIPM`/`EnableHIPM` are set to `0` by default.
+`EnableHDDParking` is set to `1` by default, `EnableDIPM`/`EnableHIPM` are set to `0` by default. I haven't looked further into it and therefore can't say if changing `EnableHDDParking` has any affect at all, since it seems to not be read. I might add more details soon.
 
 ---
 
@@ -835,83 +849,6 @@ The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepI
 > https://github.com/nohuto/win-registry/blob/main/records/Winows-NT.txt
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)
-
-# Disable USB Battery Saver 
-
-Used to stop USB devices when your screen is off - Obviously only for laptop users.
-
-```
-Stop USB devices when my screen is off to help battery.
-```
-`Bluetooth & devices` > `USB` > `USB battery saver`
-
-> [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/power/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
-
-# USB Flags
-
-In `USBXHCI.SYS`. Disables S0 idle on the host controller - remains in the working state (S0)?
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags : Allow64KLowOrFullSpeedControlTransfers
-\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags : DisableHCS0Idle
-```
-
-I didn't do proper research for them, either test them or leave it:
-```c
-"COMMANDS": {
-  "usbflags": {
-    "Action": "registry_pattern",
-    "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags\\*",
-    "Operations": [
-      { "Value": "DisableOnSoftRemove", "Type": "REG_DWORD", "Data": 1 },
-      { "Value": "DisableRecoveryFromPowerDrain", "Type": "REG_DWORD", "Data": 0 },
-      { "Value": "DisableLPM", "Type": "REG_DWORD", "Data": 1 },
-      { "Value": "EnableExtendedValidation", "Type": "REG_DWORD", "Data": 0 },
-      { "Value": "EnableDiagnosticMode", "Type": "REG_DWORD", "Data": 0 }
-    ]
-  }
-}
-
-// EnableExtendedValidation - used in usbflagsdevicekey and
-// \Registry\Machine\SYSTEM\ControlSet001\Services\usbhub\hubg : EnableExtendedValidation
-
-// EnableDiagnosticMode - used in usbflagsdevicekey and
-// \Registry\Machine\SYSTEM\ControlSet001\Services\usbhub\hubg : EnableDiagnosticMode
-```
-```c
-v25 = 0;
-if ( v26 )
-{
-  UsbflagsDeviceKey = (*(__int64 (__fastcall **)(PWDF_DRIVER_GLOBALS, __int64, const wchar_t *, __int64, int *, _QWORD, _QWORD))(WdfFunctions_01015 + 1880))(
-                        WdfDriverGlobals,
-                        v26,
-                        L"02", // g_EnableExtendedValidation ; "02"
-                        4LL,
-                        &v25,
-                        0LL,
-                        0LL);
-v25 = 0;
-UsbflagsDeviceKey = (*(__int64 (__fastcall **)(PWDF_DRIVER_GLOBALS, __int64, const wchar_t *, __int64, int *, _QWORD, _QWORD))(WdfFunctions_01015 + 1880))(
-                      WdfDriverGlobals,
-                      v28,
-                      L"(*", // g_EnableDiagnosticMode ; "(*"
-                      4LL,
-                      &v25,
-                      0LL,
-                      0LL);
-```
-> [power/assets | devicepower-QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-QueryUsbflagsValuesForDevice.c)  
-> https://github.com/nohuto/win-registry/blob/main/records/USB-Flags.txt
-
-| Power state | ACPI state | Description | 
-|-------------|------------|-------------|
-| Working | *S0* | The system is fully usable. Hardware components that aren't in use can save power by entering a lower power state. | 
-| Sleep (Modern Standby) | *S0* low-power idle | Some SoC systems support a low-power idle state known as [Modern Standby](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby). In this state, the system can very quickly switch from a low-power state to high-power state in response to hardware and network events. **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
-| Sleep | *S1*<br> *S2*<br> *S3* | The system appears to be off. The amount of power consumed in states *S1-S3* is less than *S0* and more than *S4*. *S3* consumes less power than *S2*, and *S2* consumes less power than *S1*. Systems typically support one of these three states, not all three.<br><br> In states *S1-S3*, volatile memory is kept refreshed to maintain the system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device.<br><br> *Hybrid sleep*, used on desktops, is where a system uses a hibernation file with *S1-S3*. The hibernation file saves the system state in case the system loses power while in sleep.<br><br> **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
-| Hibernate | *S4* | The system appears to be off. Power consumption is reduced to the lowest level. The system saves the contents of volatile memory to a hibernation file to preserve system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device. The working context can be restored if it's stored on nonvolatile media.<br><br> *Fast startup* is where the user is logged off before the hibernation file is created. This allows for a smaller hibernation file, more appropriate for systems with less storage capabilities. | 
-| Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
-| Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
-
-> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
 
 # Disable Audio Idle
 
