@@ -6,28 +6,28 @@ Value names in `usbflags-HUBREG_QueryUsbflagsValuesForDevice.c` are mostly UNICO
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags";
-    "IgnoreHWSerNum<vvvvpppp>"; = ?; // REG_DWORD, dynamic name, seems to use vvvvpppp (vendor, product) see documentation below
+    "IgnoreHWSerNum<vvvvpppp>" = ?; // REG_DWORD, dynamic name, seems to use vvvvpppp (vendor, product) see documentation below
     "Allow64KLowOrFullSpeedControlTransfers"; ? = // REG_DWORD (bool), if 1 sets g_Allow64KLowOrFullSpeedControlTransfersFlag true, other values leave it false, missing/read failure leaves the global unchanged - "When enabled, low/full-speed control endpoints use 64KB max transfer size, otherwise table defaults apply. Query failures are non-fatal."
-    "DisableHCS0Idle"; = 0; // REG_DWORD (bool), any nonzero disables S0 idle, missing/read failure treated as 0 - probably means "Disable Host Controller S0 Idle" (S = System)
-    "GenericCompositeUSBDeviceString"; = // haven't looked into it yet
-    "SetMultiTTBitDuringConfigureEndpoint"; = ? // REG_DWORD, if 1 sets flag 0x2000000000000000 at a1+336? if 0 clears it, missing/read failure leaves flags unchanged
-    "TestRunEsmInWorkItem"; = 0; // REG_DWORD, if 1 sets bit 0 at a1+876? if 0 clears it, missing/read failure leaves bit cleared
+    "DisableHCS0Idle" = 0; // REG_DWORD (bool), any nonzero disables S0 idle, missing/read failure treated as 0 - probably means "Disable Host Controller S0 Idle" (S = System)
+    "GenericCompositeUSBDeviceString" = // haven't looked into it yet
+    "SetMultiTTBitDuringConfigureEndpoint" = ? // REG_DWORD, if 1 sets flag 0x2000000000000000 at a1+336? if 0 clears it, missing/read failure leaves flags unchanged
+    "TestRunEsmInWorkItem" = 0; // REG_DWORD, if 1 sets bit 0 at a1+876? if 0 clears it, missing/read failure leaves bit cleared
 
 // these are built by HUBREG_OpenCreateUsbflagsDeviceKey
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags\\<vvvvpppprrrr";
-    "IgnoreHWSerNum"; = ?; // REG_DWORD, any nonzero value sets flag 0x1
-    "UseWin8DescriptorValidation"; = ?; // REG_DWORD, any nonzero value sets flag 0x200000
-    "ResetOnResume"; = ?; // REG_DWORD, any nonzero value sets flag 0x4
-    "DisableOnSoftRemove"; = ?; // REG_DWORD, if zero clears flag 0x8, any nonzero leaves it set, many inf files set it to 1 so I guess that the default is 1
-    "RequestConfigDescOnReset"; = ?; // REG_DWORD, any nonzero value sets flag 0x10. When set, device hack flag causes config descriptor request after reset
-    "DisableRecoveryFromPowerDrain"; = ?; // REG_DWORD, any nonzero value sets flag 0x800000
-    "SkipContainerIdQuery"; = ?; // REG_BINARY, any nonzero value sets flag 0x20 (1 means skip container ID query)
-    "DisableLPM"; = ?; // REG_DWORD (bool), any nonzero value sets flag 0x80 - When set, disables low power link states for the device = the driver skips enabling U2 and forces U1/U2 timeouts to 0 so link power management stays off. Also disabled when a parent hub indicates LPM should be off for all downstream devices. (this is how I understood it while reading through the W10 source code)
+    "IgnoreHWSerNum" = ?; // REG_DWORD, any nonzero value sets flag 0x1
+    "UseWin8DescriptorValidation" = ?; // REG_DWORD, any nonzero value sets flag 0x200000
+    "ResetOnResume" = ?; // REG_DWORD, any nonzero value sets flag 0x4
+    "DisableOnSoftRemove" = ?; // REG_DWORD, if zero clears flag 0x8, any nonzero leaves it set, many inf files set it to 1 so I guess that the default is 1
+    "RequestConfigDescOnReset" = ?; // REG_DWORD, any nonzero value sets flag 0x10. When set, device hack flag causes config descriptor request after reset
+    "DisableRecoveryFromPowerDrain" = ?; // REG_DWORD, any nonzero value sets flag 0x800000
+    "SkipContainerIdQuery" = ?; // REG_BINARY, any nonzero value sets flag 0x20 (1 means skip container ID query)
+    "DisableLPM" = ?; // REG_DWORD (bool), any nonzero value sets flag 0x80 - When set, disables low power link states for the device = the driver skips enabling U2 and forces U1/U2 timeouts to 0 so link power management stays off. Also disabled when a parent hub indicates LPM should be off for all downstream devices. (this is how I understood it while reading through the W10 source code)
                       // "A link enters a low power state (consuming less power than the working state) only when the downstream device enters the suspended state through the selective suspend mechanism", "After remaining idle for a certain period of time, link partners progressively enter U1 (standby with fast exit) and then U2 (standby with slower exit)"
                       // https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-3-0-lpm-mechanism- https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/u1-and-u2-transitions
-    "SkipBOSDescriptorQuery"; = ?; // REG_DWORD, any nonzero value sets flag 0x8000
-    "MsOs20DescriptorSetInfo"; = ?; // REG_BINARY/REG_QWORD (8 bytes)??, on success stores QWORD and sets internal flag 0x4 for the descriptor info
-    "osvc"; = ?; // REG_BINARY, see documentation below (written by HUBMISC_StoreDeviceMSOSVendorCodeInRegsitry)
+    "SkipBOSDescriptorQuery" = ?; // REG_DWORD, any nonzero value sets flag 0x8000
+    "MsOs20DescriptorSetInfo" = ?; // REG_BINARY/REG_QWORD (8 bytes)??, on success stores QWORD and sets internal flag 0x4 for the descriptor info
+    "osvc" = ?; // REG_BINARY, see documentation below (written by HUBMISC_StoreDeviceMSOSVendorCodeInRegsitry)
 
     "AlternateSettingFilter"; // ?
 ```
@@ -93,44 +93,44 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 ```c
 // HUBREG_QueryGlobalUsb20HardwareLpmSettings
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\Usb20HardwareLpm"; // g_Usb20HardwareLpmKeyName (aRegistryMachin_8)
-    "Usb20HardwareLpmOverride"; = ?; // REG_DWORD, any nonzero keeps global flag 0x8000 set, zero clears it
-    "Usb20HardwareLpmTimeout"; = 2; // REG_DWORD, if value == 0xFF, byte a1+72 set to 0xFF, didn't find other handles
+    "Usb20HardwareLpmOverride" = ?; // REG_DWORD, any nonzero keeps global flag 0x8000 set, zero clears it
+    "Usb20HardwareLpmTimeout" = 2; // REG_DWORD, if value == 0xFF, byte a1+72 set to 0xFF, didn't find other handles
 
 // HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\AutomaticSurpriseRemoval"; // g_UsbAutomaticSurpriseRemovalKeyName (aRegistryMachin_6)
-    "AttemptRecoveryFromUsbPowerDrain"; = ?; // REG_DWORD, queried directly and via persisted state fallback under Control\usb
+    "AttemptRecoveryFromUsbPowerDrain" = ?; // REG_DWORD, queried directly and via persisted state fallback under Control\usb
 
 // HUBREG_QueryUsbHardwareVerifierValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\HardwareVerifier"; // g_HwVerifierKeyName (aRegistryMachin_7)
-    "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device"; = ?; // REG_DWORD, subkey chosen from bcdUSB, value name is g_HwVerifierDeviceName
-    "<VID><PID>\\usbUpto20|usb2X|usb30\\device"; = ?; // REG_DWORD, fallback if VID/PID/REV key missing
-    "global\\usbUpto20|usb2X|usb30\\device"; = ?; // REG_DWORD, final fallback if no device specific key
+    "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, subkey chosen from bcdUSB, value name is g_HwVerifierDeviceName
+    "<VID><PID>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, fallback if VID/PID/REV key missing
+    "global\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, final fallback if no device specific key
 
 // HUBREG_QueryGlobalUsbLtmSettings
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\UsbLtm"; // g_UsbLtmKeyName (aRegistryMachin_4)
-    "UsbLtmEnable"; = 0; // REG_DWORD, any nonzero value sets global flag 0x40000, zero clears it
+    "UsbLtmEnable" = 0; // REG_DWORD, any nonzero value sets global flag 0x40000, zero clears it
 
 // these are taken from the W10 source, they seem to exist on latest builds (they do exist in usbport.sys on 23H2)
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usb";
-    "debuglevel"; = 0; // REG_DWORD, default to 1/2 when DEBUG1/DEBUG2 builds. Trace verbosity, higher numbers enable more logs
-    "debuglogmask"; = 0xFFFFFFFE; // REG_DWORD, Bitmask for log categories
-    "debuglogenable"; = 1; // REG_DWORD (bool), enables debug log output
-    "debugcatc"; = 0; // REG_DWORD (bool), enables CATC analyzer trigger
-    "DisableSelectiveSuspend"; = 0; // REG_DWORD (bool), global disable for selective suspend
-    "DisableCcDetect"; = 0; // REG_DWORD (bool), global disable for CC detection
-    "EnPMDebug"; = 0; // REG_DWORD (bool), for debugging power management
-    "ForceHcD3NoWakeArm"; = 0; // REG_DWORD (bool), prevents wake-arming when forcing HC to D3
-    "EnableDCA"; = 0 // REG_DWORD (bool), enables direct controller access (HCT diagnostics)
-    "ForcePortsHighSpeed"; = 0; // REG_DWORD (bool), forces ports to remain under EHCI (HCT compatibility)
+    "debuglevel" = 0; // REG_DWORD, default to 1/2 when DEBUG1/DEBUG2 builds. Trace verbosity, higher numbers enable more logs
+    "debuglogmask" = 0xFFFFFFFE; // REG_DWORD, Bitmask for log categories
+    "debuglogenable" = 1; // REG_DWORD (bool), enables debug log output
+    "debugcatc" = 0; // REG_DWORD (bool), enables CATC analyzer trigger
+    "DisableSelectiveSuspend" = 0; // REG_DWORD (bool), global disable for selective suspend
+    "DisableCcDetect" = 0; // REG_DWORD (bool), global disable for CC detection
+    "EnPMDebug" = 0; // REG_DWORD (bool), for debugging power management
+    "ForceHcD3NoWakeArm" = 0; // REG_DWORD (bool), prevents wake-arming when forcing HC to D3
+    "EnableDCA" = 0 // REG_DWORD (bool), enables direct controller access (HCT diagnostics)
+    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI (HCT compatibility)
 
 // "This class is reserved for USB host controllers and USB hubs", I'll add them here as they're also in usbport.sys and also taken from the W10 source
-"HKLM\\System\\CurrentControlSet\\Control\\Class\\{36FC9E60-C465-11CF-8056-444553540000}\\<instance>"
-    "HcFlavor"; = // REG_DWORD, auto detect. Values are USB_CONTROLLER_FLAVOR enum (definition external)
-    "TotalBusBandwidth"; = // REG_DWORD, computed from miniport registration (bits/ms). Overrides bus bandwidth accounting
-    "HcDisableAllSelectiveSuspend"; = 0 (non-IA64), 1 (IA64); // REG_DWORD, non-zero disables selective suspend
-    "CommonBuffer2GBLimit"; = 0; // REG_DWORD, when non-zero, forces common buffers below 2GB ("Limit common buffer allocations for the miniport to the physical address range below 2GB.  Only bits 0 through 30 of the physical address can be set.  Bit 31 of the physical address cannot be set.")
-    "ForceHCResetOnResume"; = 0; // REG_DWORD, forces controller reset on resume
-    "FastResumeEnable"; = 0; // REG_DWORD, enables fast S0 resume
+"HKLM\\System\\CurrentControlSet\\Control\\Class\\{36FC9E60-C465-11CF-8056-444553540000}\\<instance>";
+    "HcFlavor" = // REG_DWORD, auto detect. Values are USB_CONTROLLER_FLAVOR enum (definition external)
+    "TotalBusBandwidth" = // REG_DWORD, computed from miniport registration (bits/ms). Overrides bus bandwidth accounting
+    "HcDisableAllSelectiveSuspend" = 0 (non-IA64), 1 (IA64); // REG_DWORD, non-zero disables selective suspend
+    "CommonBuffer2GBLimit" = 0; // REG_DWORD, when non-zero, forces common buffers below 2GB ("Limit common buffer allocations for the miniport to the physical address range below 2GB.  Only bits 0 through 30 of the physical address can be set.  Bit 31 of the physical address cannot be set.")
+    "ForceHCResetOnResume" = 0; // REG_DWORD, forces controller reset on resume
+    "FastResumeEnable" = 0; // REG_DWORD, enables fast S0 resume
 ```
 
 > [peripheral/assets | usb-GetPersistedKeyPath.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usb-GetPersistedKeyPath.c)  
@@ -172,29 +172,29 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 ```c
 // HUBREG_QueryGlobalHubValues
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName (aRegistryMachin_10)
-    "DisableSelectiveSuspendUI"; = ?; // REG_DWORD, any nonzero value sets global flag 0x2
-    "MsOsDescriptorMode"; = ?; // REG_DWORD, stored to a1+8 when 0..3, out of range values are logged, MsOsDescriptorMode == 1 will force a MS OS descriptor query for all devices, regardless of USB version number. MsOsDescriptorMode == 2 will disable all MS OS descriptor queries. (there may exist a value named "DontSkipMsOsDescriptor" in this key)
-    "EnableDiagnosticMode"; = ?; // REG_DWORD, any nonzero value sets global flag 0x8
-    "DisableOnSoftRemove"; = ?; // REG_DWORD, if zero clears global flag 0x80 (default on) any nonzero leaves it set
-    "DisableUxdSupport"; = ?; // REG_DWORD, any nonzero value sets global flag 0x10
-    "EnableExtendedValidation"; = ?; // REG_DWORD bitmask, any nonzero value sets global flag 0x20, bit 0x8 sets 0x2000, bit 0x4 sets 0x4000
-    "WakeOnConnectUI"; = ?; // REG_DWORD, any nonzero value sets global flag 0x40 - This controls the UI check box 'Allow this device to wake the system'.  Essentially this is control for the wake on connect feature.
-    "PreventDebounceTimeForSuperSpeedDevices"; = ?; // REG_DWORD, any nonzero value sets global flag 0x10000 - Checks if we need to give extra time to SuperSpeed devices before talking to them
+    "DisableSelectiveSuspendUI" = ?; // REG_DWORD, any nonzero value sets global flag 0x2
+    "MsOsDescriptorMode" = ?; // REG_DWORD, stored to a1+8 when 0..3, out of range values are logged, MsOsDescriptorMode == 1 will force a MS OS descriptor query for all devices, regardless of USB version number. MsOsDescriptorMode == 2 will disable all MS OS descriptor queries. (there may exist a value named "DontSkipMsOsDescriptor" in this key)
+    "EnableDiagnosticMode" = ?; // REG_DWORD, any nonzero value sets global flag 0x8
+    "DisableOnSoftRemove" = ?; // REG_DWORD, if zero clears global flag 0x80 (default on) any nonzero leaves it set
+    "DisableUxdSupport" = ?; // REG_DWORD, any nonzero value sets global flag 0x10
+    "EnableExtendedValidation" = ?; // REG_DWORD bitmask, any nonzero value sets global flag 0x20, bit 0x8 sets 0x2000, bit 0x4 sets 0x4000
+    "WakeOnConnectUI" = ?; // REG_DWORD, any nonzero value sets global flag 0x40 - This controls the UI check box 'Allow this device to wake the system'.  Essentially this is control for the wake on connect feature.
+    "PreventDebounceTimeForSuperSpeedDevices" = ?; // REG_DWORD, any nonzero value sets global flag 0x10000 - Checks if we need to give extra time to SuperSpeed devices before talking to them
 
 // HUBREG_QueryGlobalUxdSettings (the defaults were taken from the W10 source)
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\policy"; // g_UxdGlobalSettingsKey (aRegistryMachin_12)
-    "UxdGlobalDeleteOnShutdown"; = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x100, global delete-on-shutdown policy
-    "UxdGlobalDeleteOnReload"; = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x200, global policy to delete UXD keys on disable/reload events
-    "UxdGlobalDeleteOnDisconnect"; = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x400, global policy to delete UXD keys on device disconnect
-    "UxdGlobalEnable"; = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x800, "main" enable = if 0, UXD settings are ignored
+    "UxdGlobalDeleteOnShutdown" = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x100, global delete-on-shutdown policy
+    "UxdGlobalDeleteOnReload" = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x200, global policy to delete UXD keys on disable/reload events
+    "UxdGlobalDeleteOnDisconnect" = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x400, global policy to delete UXD keys on device disconnect
+    "UxdGlobalEnable" = 0; // REG_DWORD (bool), any nonzero value sets global flag 0x800, "main" enable = if 0, UXD settings are ignored
 
 // HUBREG_QueryUxdDeviceKey / HUBREG_DeleteUxdDeviceKey
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\devices"; // g_UxdDeviceSettingsKey (aRegistryMachin_5)
-    "%04X%04X%04X"; = ?; // value name from VID/PID/REV
+    "%04X%04X%04X" = ?; // value name from VID/PID/REV
 
 // HUBREG_GetUxdPnpValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\pnp"; // g_UxdGuidSettingsKey (aRegistryMachin_3)
-    "{GUID}"; = ?; // value name from RtlStringFromGUID, data queried via WDF
+    "{GUID}" = ?; // value name from RtlStringFromGUID, data queried via WDF
 ```
 
 > [peripheral/assets | usbhub-HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbhub-HUBREG_QueryUxdDeviceKey.c)  
@@ -598,22 +598,22 @@ Everything listed below is based on personal research. Mistakes may exist, some 
     "Thumb_Flick_Enabled" = 1;
 
 "HKCU\\Software\\Microsoft\\Wisp\\MultiTouch";
-    "MultiTouchEnabled"; = 1;
+    "MultiTouchEnabled" = 1;
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad";
-    "AAPThreshold"; = 2; // range 0–4, touchpad sensitivity
-    "CursorSpeed"; = 10; // range 1–20, pointer speed
-    "FeedbackIntensity"; = 50; // range 0–100 (%), haptic feedback strength
-    "ClickForceSensitivity"; = 50; // range 0–100 (%), relative click-force sensitivity
-    "LeaveOnWithMouse"; = 1; // 0 = disable touchpad when mouse present, 1 = leave enabled
-    "FeedbackEnabled"; = 1; // 0 = no haptics, 1 = haptics on
-    "TapsEnabled"; = 1; // 0/1, single-finger tap-to-click
-    "TapAndDrag"; = 1; // 0/1, double-tap-and-drag
-    "TwoFingerTapEnabled"; = 1; // 0/1
-    "RightClickZoneEnabled"; = 1; // 0/1
-    "PanEnabled"; = 1; // 0/1, two-finger scrolling
-    "ScrollDirection"; = 0; // 0 = natural, 1 = reversed
-    "ZoomEnabled"; = 1;
+    "AAPThreshold" = 2; // range 0–4, touchpad sensitivity
+    "CursorSpeed" = 10; // range 1–20, pointer speed
+    "FeedbackIntensity" = 50; // range 0–100 (%), haptic feedback strength
+    "ClickForceSensitivity" = 50; // range 0–100 (%), relative click-force sensitivity
+    "LeaveOnWithMouse" = 1; // 0 = disable touchpad when mouse present, 1 = leave enabled
+    "FeedbackEnabled" = 1; // 0 = no haptics, 1 = haptics on
+    "TapsEnabled" = 1; // 0/1, single-finger tap-to-click
+    "TapAndDrag" = 1; // 0/1, double-tap-and-drag
+    "TwoFingerTapEnabled" = 1; // 0/1
+    "RightClickZoneEnabled" = 1; // 0/1
+    "PanEnabled" = 1; // 0/1, two-finger scrolling
+    "ScrollDirection" = 0; // 0 = natural, 1 = reversed
+    "ZoomEnabled" = 1;
     "HonorMouseAccelSetting" = 0; // 0 = always apply acceleration, 1 = honor SPI mouse accel?
     "RightClickZoneWidth" = 0;
     "RightClickZoneHeight" = 0;
@@ -640,20 +640,20 @@ Everything listed below is based on personal research. Mistakes may exist, some 
     "Color" = 0xC0000000C0000000; // ?
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\TabletMode";
-    "STCDefaultMigrationCompleted"; = 0; // SHRegValueExists
+    "STCDefaultMigrationCompleted" = 0; // SHRegValueExists
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell";
-    "TabletMode"; = 0; // 0 = desktop mode, 1 = tablet mode?
-    "ExitedTabletModeWhileCSMActive"; = 0; // set to 1 when a3 == 4, HasConvertibleSlateModeChanged() is true
-    "TabletModeActivated"; = 0; // set to 1 when SetModeInternal() switches into tablet mode
+    "TabletMode" = 0; // 0 = desktop mode, 1 = tablet mode?
+    "ExitedTabletModeWhileCSMActive" = 0; // set to 1 when a3 == 4, HasConvertibleSlateModeChanged() is true
+    "TabletModeActivated" = 0; // set to 1 when SetModeInternal() switches into tablet mode
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell";
-    "AllowPPITabletModeExit"; = 0; // SHRegGetBOOLWithREGSAM, non-zero allows the mode switch
+    "AllowPPITabletModeExit" = 0; // SHRegGetBOOLWithREGSAM, non-zero allows the mode switch
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell\\OverrideScaling";
-    "SmallScreen"; = 83; // ?
-    "VerySmallScreen"; = 71; // ?
-    "TabletSmallScreen"; = 83; // ?
+    "SmallScreen" = 83; // ?
+    "VerySmallScreen" = 71; // ?
+    "TabletSmallScreen" = 83; // ?
 
 "HKCU\\Software\\Microsoft\\Wisp\\Pen\\SysEventParameters\\FlickCommands";
     "Left" = { 0x4846455758C33841, 0x9F7145B888BB26B8 };

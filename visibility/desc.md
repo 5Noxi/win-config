@@ -663,7 +663,7 @@ I created a small tool for fun, since it's a lot easier to quickly change and te
 Desktop icon size notes:
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\Shell\\Bags\\1\\Desktop";
-  "IconSize"; = 32 // 32 = Small, 48 = Medium, 96 = Large
+  "IconSize" = 32 // 32 = Small, 48 = Medium, 96 = Large
 ```
 
 # Detailed File Transfer

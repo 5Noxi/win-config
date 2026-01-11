@@ -64,115 +64,115 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
-    "AdjustDpcThreshold"; = 20; // KiAdjustDpcThreshold
-    "AlwaysTrackIoBoosting"; = 0; // PspAlwaysTrackIoBoosting
-    "AmdTprLowerInterruptDelayConfig"; = 0; // KiAmdTprLowerInterruptDelayConfig
-    "BoostingPeriodMultiplier"; = 3; // KiNormalPriorityBoostingPeriodMultiplier
-    "BugCheckUnexpectedInterrupts"; = 0; // KiBugCheckUnexpectedInterrupts
-    "CacheAwareScheduling"; = 47; // KiCacheAwareScheduling
-    "CacheErrataOverride"; = 0; // KiTLBCOverride
-    "CacheIsoBitmap"; = 0; // KiCacheIsoBitmap
-    "DebuggerIsStallOwner"; = 0; // KiDebuggerIsStallOwner
-    "DebugPollInterval"; = 2000; // KiDebugPollInterval
-    "DefaultDynamicHeteroCpuPolicy"; = 3; // (policy enum only)
+    "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold
+    "AlwaysTrackIoBoosting" = 0; // PspAlwaysTrackIoBoosting
+    "AmdTprLowerInterruptDelayConfig" = 0; // KiAmdTprLowerInterruptDelayConfig
+    "BoostingPeriodMultiplier" = 3; // KiNormalPriorityBoostingPeriodMultiplier
+    "BugCheckUnexpectedInterrupts" = 0; // KiBugCheckUnexpectedInterrupts
+    "CacheAwareScheduling" = 47; // KiCacheAwareScheduling
+    "CacheErrataOverride" = 0; // KiTLBCOverride
+    "CacheIsoBitmap" = 0; // KiCacheIsoBitmap
+    "DebuggerIsStallOwner" = 0; // KiDebuggerIsStallOwner
+    "DebugPollInterval" = 2000; // KiDebugPollInterval
+    "DefaultDynamicHeteroCpuPolicy" = 3; // (policy enum only)
     // Behavior of Dynamic hetero policy All (0) (all available) Large (1) LargeOrIdle (2) Small (3) SmallOrIdle (4) Dynamic (5) (use priority and other metrics to decide) BiasedSmall (6) (use priority and other metrics, but prefer small) BiasedLarge (7).
-    "DefaultHeteroCpuPolicy"; = 5; // KiDefaultHeteroCpuPolicy
-    "DeviceOwnerProtectionDowngradeAllowed"; = 0; // SeDeviceOwnerProtectionDowngradeAllowed
-    "DisableControlFlowGuardExportSuppression"; = 0; // PspDisableControlFlowGuardExportSuppression
-    "DisableExceptionChainValidation"; = 2; // PspSehValidationPolicy
-    "DisableLightWeightSuspend"; = 0; // KiDisableLightWeightSuspend
-    "DisableLowQosTimerResolution"; = 1; // KeDisableLowQosTimerResolution
-    "DisablePointerParameterAlignmentValidation"; = 0; // KiDisablePointerParameterAlignmentValidation
-    "DisableTsx"; = 0; // KiDisableTsx
-    "DpcCumulativeSoftTimeout"; = 120000; // KeDpcCumulativeSoftTimeoutMs
-    "DpcQueueDepth"; = 4; // KiMaximumDpcQueueDepth
-    "DpcSoftTimeout"; = 20000; // KeDpcSoftTimeoutMs
-    "DPCTimeout"; = 20000; // KeDpcTimeoutMs
-    "DpcWatchdogPeriod"; = 120000; // KeDpcWatchdogPeriodMs
-    "DpcWatchdogProfileBufferSizeBytes"; = 266240; // KeDpcWatchdogProfileBufferSizeBytes
-    "DpcWatchdogProfileCumulativeDpcThreshold"; = 110000; // KeDpcWatchdogProfileCumulativeDpcThresholdMs
-    "DpcWatchdogProfileOffset"; = 10000; // KeDpcWatchdogProfileOffsetMs
-    "DpcWatchdogProfileSingleDpcThreshold"; = 18333; // KeDpcWatchdogProfileSingleDpcThresholdMs
-    "DriveRemappingMitigation"; = 1; // ObpDriveRemappingMitigation
-    "DynamicHeteroCpuPolicyExpectedRuntime"; = 5200; // KiDynamicHeteroCpuPolicyExpectedRuntime
-    "DynamicHeteroCpuPolicyImportant"; = 2; // (LargeOrIdle)
+    "DefaultHeteroCpuPolicy" = 5; // KiDefaultHeteroCpuPolicy
+    "DeviceOwnerProtectionDowngradeAllowed" = 0; // SeDeviceOwnerProtectionDowngradeAllowed
+    "DisableControlFlowGuardExportSuppression" = 0; // PspDisableControlFlowGuardExportSuppression
+    "DisableExceptionChainValidation" = 2; // PspSehValidationPolicy
+    "DisableLightWeightSuspend" = 0; // KiDisableLightWeightSuspend
+    "DisableLowQosTimerResolution" = 1; // KeDisableLowQosTimerResolution
+    "DisablePointerParameterAlignmentValidation" = 0; // KiDisablePointerParameterAlignmentValidation
+    "DisableTsx" = 0; // KiDisableTsx
+    "DpcCumulativeSoftTimeout" = 120000; // KeDpcCumulativeSoftTimeoutMs
+    "DpcQueueDepth" = 4; // KiMaximumDpcQueueDepth
+    "DpcSoftTimeout" = 20000; // KeDpcSoftTimeoutMs
+    "DPCTimeout" = 20000; // KeDpcTimeoutMs
+    "DpcWatchdogPeriod" = 120000; // KeDpcWatchdogPeriodMs
+    "DpcWatchdogProfileBufferSizeBytes" = 266240; // KeDpcWatchdogProfileBufferSizeBytes
+    "DpcWatchdogProfileCumulativeDpcThreshold" = 110000; // KeDpcWatchdogProfileCumulativeDpcThresholdMs
+    "DpcWatchdogProfileOffset" = 10000; // KeDpcWatchdogProfileOffsetMs
+    "DpcWatchdogProfileSingleDpcThreshold" = 18333; // KeDpcWatchdogProfileSingleDpcThresholdMs
+    "DriveRemappingMitigation" = 1; // ObpDriveRemappingMitigation
+    "DynamicHeteroCpuPolicyExpectedRuntime" = 5200; // KiDynamicHeteroCpuPolicyExpectedRuntime
+    "DynamicHeteroCpuPolicyImportant" = 2; // (LargeOrIdle)
     // Policy for a dynamic thread that is deemed important.
-    "DynamicHeteroCpuPolicyImportantPriority"; = 8; // KiDynamicHeteroCpuPolicyImportantPriority
+    "DynamicHeteroCpuPolicyImportantPriority" = 8; // KiDynamicHeteroCpuPolicyImportantPriority
     // Priority above which threads are considered important if prioritybased dynamic policy is chosen.
-    "DynamicHeteroCpuPolicyImportantShort"; = 3; // (Small)
+    "DynamicHeteroCpuPolicyImportantShort" = 3; // (Small)
     // Policy for dynamic thread that is deemed important but run a short amount of time.
-    "DynamicHeteroCpuPolicyMask"; = 7; //  (foreground status = 1, priority = 2, expected run time = 4)
+    "DynamicHeteroCpuPolicyMask" = 7; //  (foreground status = 1, priority = 2, expected run time = 4)
     // Determine what is considered in assessing whether a thread is important.
-    "EnablePerCpuClockTickScheduling"; = 0; // KiEnableClockTimerPerCpuTickScheduling
-    "EnableTickAccumulationFromAccountingPeriods"; = 0; // KiEnableTickAccumulationFromAccountingPeriods
-    "EnableWerUserReporting"; = 1; // DbgkEnableWerUserReporting
-    "ForceBugcheckForDpcWatchdog"; = 0; // KiForceBugcheckForDpcWatchdog
-    "ForceForegroundBoostDecay"; = 0; // KiSchedulerForegroundBoostDecayPolicy
-    "ForceIdleGracePeriod"; = 5; // KiForceIdleGracePeriodInSec
-    "ForceParkingRequested"; = 1; // KiForceParkingConfiguration
-    "GlobalTimerResolutionRequests"; = 0; // KiGlobalTimerResolutionRequests
-    "HeteroFavoredCoreFallback"; = 0; // PpmHeteroFavoredCoreFallback
-    "HeteroSchedulerOptions"; = 0; // KiHeteroSchedulerOptions
-    "HeteroSchedulerOptionsMask"; = 0; // KiHeteroSchedulerOptionsMask
-    "HgsPlusFeedbackUpdateThresholdNetRuntime"; = 20; // dword_140FC33C0
-    "HgsPlusFeedbackUpdateThresholdRuntime"; = 20; // dword_140FC33B4
-    "HgsPlusHigherPerfClassFeedbackThreshold"; = 1; // dword_140FC33E0
-    "HgsPlusInvalidFeedbackDefaultClass"; = 0; // dword_140FC33D4
-    "HgsPlusInvalidFeedbackDefaultClassSet"; = 0; // dword_140FC33D8
-    "HgsPlusInvalidFeedbackLimit"; = 50; // dword_140FC33D0
-    "HgsPlusLowerPerfClassFeedbackThreshold"; = 4; // dword_140FC33DC
-    "HgsPlusMinimumScoreDifferenceForSwap"; = 25; // dword_140FC33E8
-    "HgsPlusThreadCreationDefaultClass"; = 0; // dword_140FC33E4
-    "HotpatchTestMode"; = 0; // KeHotpatchTestMode
-    "HyperStartDisabled"; = 0; // HvlVpStartDisabled
-    "IdealDpcRate"; = 20; // KiIdealDpcRate
-    "IdealNodeRandomized"; = 1; // PspIdealNodeRandomized
-    "InterruptSteeringFlags"; = 0; // KiInterruptSteeringFlags
-    "LongDpcQueueThreshold"; = 3; // KiLongDpcQueueThreshold
-    "LongDpcRuntimeThreshold"; = 100; // KiLongDpcRuntimeThreshold
-    "MaxDynamicTickDuration"; = 8; // KiMaxDynamicTickDurationSize
-    "MaximumCooperativeIdleSearchWidth"; = 16; // KiMaximumCooperativeIdleSearchWidth
-    "MaximumSharedReadyQueueSize"; = 260; // KiMaximumSharedReadyQueueSize
-    "MinimumDpcRate"; = 3; // KiMinimumDpcRate
-    "MitigationAuditOptions"; = 0; // PspSystemMitigationAuditOptions
-    "MitigationOptions"; = 0; // PspSystemMitigationOptions
-    "ObCaseInsensitive"; = 1; // ObpCaseInsensitive
-    "ObObjectSecurityInheritance"; = 0; // ObpObjectSecurityInheritance
-    "ObTracePermanent"; = 0; // ObpTracePermanent
-    "ObTracePoolTags"; = 0; // ObpTracePoolTagsBuffer / ObpTracePoolTagsLength
-    "ObTraceProcessName"; = 0; // ObpTraceProcessNameBuffer / ObpTraceProcessNameLength
-    "ObUnsecureGlobalNames"; = 6619246; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength
-    "PassiveWatchdogTimeout"; = 300; // KiPassiveWatchdogTimeout
-    "PerfIsoEnabled"; = 0; // KiPerfIsoEnabled
-    "PoCleanShutdownFlags"; = 0; // PopShutdownCleanly
-    "PowerOffFrozenProcessors"; = 1; // KiPowerOffFrozenProcessors
-    "ReadyTimeTicks"; = 6; // KiNormalPriorityBoostReadyTimeTicks
-    "RebalanceMinPriority"; = 1; // KiRebalanceMinPriority
-    "ReservedCpuSets"; = 0; // KiReservedCpuSets
-    "ScanLatencyTicks"; = 7; // KiNormalPriorityBoostScanLatencyTicks
-    "SchedulerAssistThreadFlagOverride"; = 0; // KiSchedulerAssistThreadFlagOverride
-    "SeAllowAllApplicationAceRemoval"; = 0; // SepAllowAllApplicationAceRemoval
-    "SeAllowSessionImpersonationCapability"; = 0; // SepAllowSessionImpersonationCap
-    "SeCompatFlags"; = 0; // SeCompatFlags
-    "SeLpacEnableWatsonReporting"; = 0; // SeLpacEnableWatsonReporting
-    "SeLpacEnableWatsonThrottling"; = 1; // SeLpacEnableWatsonThrottling
-    "SerializeTimerExpiration"; = 1; // KiSerializeTimerExpiration
+    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling
+    "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods
+    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting
+    "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
+    "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
+    "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
+    "ForceParkingRequested" = 1; // KiForceParkingConfiguration
+    "GlobalTimerResolutionRequests" = 0; // KiGlobalTimerResolutionRequests
+    "HeteroFavoredCoreFallback" = 0; // PpmHeteroFavoredCoreFallback
+    "HeteroSchedulerOptions" = 0; // KiHeteroSchedulerOptions
+    "HeteroSchedulerOptionsMask" = 0; // KiHeteroSchedulerOptionsMask
+    "HgsPlusFeedbackUpdateThresholdNetRuntime" = 20; // dword_140FC33C0
+    "HgsPlusFeedbackUpdateThresholdRuntime" = 20; // dword_140FC33B4
+    "HgsPlusHigherPerfClassFeedbackThreshold" = 1; // dword_140FC33E0
+    "HgsPlusInvalidFeedbackDefaultClass" = 0; // dword_140FC33D4
+    "HgsPlusInvalidFeedbackDefaultClassSet" = 0; // dword_140FC33D8
+    "HgsPlusInvalidFeedbackLimit" = 50; // dword_140FC33D0
+    "HgsPlusLowerPerfClassFeedbackThreshold" = 4; // dword_140FC33DC
+    "HgsPlusMinimumScoreDifferenceForSwap" = 25; // dword_140FC33E8
+    "HgsPlusThreadCreationDefaultClass" = 0; // dword_140FC33E4
+    "HotpatchTestMode" = 0; // KeHotpatchTestMode
+    "HyperStartDisabled" = 0; // HvlVpStartDisabled
+    "IdealDpcRate" = 20; // KiIdealDpcRate
+    "IdealNodeRandomized" = 1; // PspIdealNodeRandomized
+    "InterruptSteeringFlags" = 0; // KiInterruptSteeringFlags
+    "LongDpcQueueThreshold" = 3; // KiLongDpcQueueThreshold
+    "LongDpcRuntimeThreshold" = 100; // KiLongDpcRuntimeThreshold
+    "MaxDynamicTickDuration" = 8; // KiMaxDynamicTickDurationSize
+    "MaximumCooperativeIdleSearchWidth" = 16; // KiMaximumCooperativeIdleSearchWidth
+    "MaximumSharedReadyQueueSize" = 260; // KiMaximumSharedReadyQueueSize
+    "MinimumDpcRate" = 3; // KiMinimumDpcRate
+    "MitigationAuditOptions" = 0; // PspSystemMitigationAuditOptions
+    "MitigationOptions" = 0; // PspSystemMitigationOptions
+    "ObCaseInsensitive" = 1; // ObpCaseInsensitive
+    "ObObjectSecurityInheritance" = 0; // ObpObjectSecurityInheritance
+    "ObTracePermanent" = 0; // ObpTracePermanent
+    "ObTracePoolTags" = 0; // ObpTracePoolTagsBuffer / ObpTracePoolTagsLength
+    "ObTraceProcessName" = 0; // ObpTraceProcessNameBuffer / ObpTraceProcessNameLength
+    "ObUnsecureGlobalNames" = 6619246; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength
+    "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
+    "PerfIsoEnabled" = 0; // KiPerfIsoEnabled
+    "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
+    "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors
+    "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
+    "RebalanceMinPriority" = 1; // KiRebalanceMinPriority
+    "ReservedCpuSets" = 0; // KiReservedCpuSets
+    "ScanLatencyTicks" = 7; // KiNormalPriorityBoostScanLatencyTicks
+    "SchedulerAssistThreadFlagOverride" = 0; // KiSchedulerAssistThreadFlagOverride
+    "SeAllowAllApplicationAceRemoval" = 0; // SepAllowAllApplicationAceRemoval
+    "SeAllowSessionImpersonationCapability" = 0; // SepAllowSessionImpersonationCap
+    "SeCompatFlags" = 0; // SeCompatFlags
+    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting
+    "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
+    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration
     // This behavior is controlled by the kernel variable KiSerializeTimerExpiration, which is initialized based on a registry setting whose value is different between a server and client installation. By modifying or creating the value SerializeTimerExpiration under HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel other than 0 or 1, serialization can be disabled, enabling timers to be distributed among processors. Deleting the value, or keeping it as 0, allows the kernel to make the decision based on Modern Standby availability, and setting it to 1 permanently enables serialization even on non-Modern Standby systems.
-    "SeTokenDoesNotTrackSessionObject"; = 0; // SeTokenDoesNotTrackSessionObject
-    "SeTokenLeakDiag"; = 0; // SeTokenLeakTracking
-    "SeTokenSingletonAttributesConfig"; = 3; // SepTokenSingletonAttributesConfig
-    "SplitLargeCaches"; = 0; // KiSplitLargeCaches
-    "ThreadDpcEnable"; = 1; // KeThreadDpcEnable
-    "ThreadReadyCount"; = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
-    "TimerCheckFlags"; = 1; // KeTimerCheckFlags
-    "VerifierDpcScalingFactor"; = 1; // KeVerifierDpcScalingFactor
-    "VirtualHeteroHysteresis"; = 4294967295; // PpmPerfQosTransitionHysteresisOverride
-    "VpThreadSystemWorkPriority"; = 30; // KiVpThreadSystemWorkPriority
-    "WpsSimulationOverride"; = 0; // PpmWpsSimulationOverride / PpmWpsSimulationOverrideSize
-    "XStateContextLookasidePerProcMaxDepth"; = 0; // KiXStateContextLookasidePerProcMaxDepth
+    "SeTokenDoesNotTrackSessionObject" = 0; // SeTokenDoesNotTrackSessionObject
+    "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
+    "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
+    "SplitLargeCaches" = 0; // KiSplitLargeCaches
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
+    "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
+    "TimerCheckFlags" = 1; // KeTimerCheckFlags
+    "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
+    "VirtualHeteroHysteresis" = 4294967295; // PpmPerfQosTransitionHysteresisOverride
+    "VpThreadSystemWorkPriority" = 30; // KiVpThreadSystemWorkPriority
+    "WpsSimulationOverride" = 0; // PpmWpsSimulationOverride / PpmWpsSimulationOverrideSize
+    "XStateContextLookasidePerProcMaxDepth" = 0; // KiXStateContextLookasidePerProcMaxDepth
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel\\RNG";
-    "RNGAuxiliarySeed"; = ; // ExpRNGAuxiliarySeed = 742978275?
+    "RNGAuxiliarySeed" = ; // ExpRNGAuxiliarySeed = 742978275?
 ```
 
 > https://github.com/nohuto/win-registry?tab=readme-ov-file#session-manager-values
@@ -449,110 +449,110 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm";
-    "BlackOutAllReadback"; = 0;
-    "ConfigureInput"; = 1;
-    "CpuClipAASinkEnableIntermediates"; = 1;
-    "CpuClipAASinkEnableOcclusion"; = 1;
-    "CpuClipAASinkEnableRender"; = 1;
-    "CpuClipAreaThreshold"; = 20000;
-    "CpuClipWarpPartitionThreshold"; = 1024;
-    "DisableDrawListCaching"; = 0;
-    "DisableProjectedShadows"; = 0;
-    "DisplayChangeTimeoutMs"; = 1000;
-    "EnableBackdropBlurCaching"; = 1;
-    "EnableCommonSuperSets"; = 1;
-    "EnableCpuClipping"; = 1;
-    "EnableDDisplayScanoutCaching"; = 1;
-    "EnableEffectCaching"; = 1;
-    "EnableFrontBufferRenderChecks"; = 1;
-    "EnableMegaRects"; = 1;
-    "EnablePrimitiveReordering"; = 1;
-    "ForceFullDirtyRendering"; = 0;
-    "GammaBlendPencil"; = 1;
-    "GammaBlendWithFP16"; = 1;
-    "InkGPUAccelOverrideVendorWhitelist"; = 0;
-    "LayerClippingMode"; = 2;
-    "LogExpressionPerfStats"; = 0;
-    "MajorityScreenTest_MinArea"; = 80;
-    "MajorityScreenTest_MinLength"; = 80;
-    "MaxD3DFeatureLevel"; = 0;
-    "MegaRectSearchCount"; = 100;
-    "MegaRectSize"; = 100000;
-    "MousewheelAnimationDurationMs"; = 250;
-    "MousewheelScrollingMode"; = 0;
-    "OptimizeForDirtyExpressions"; = 1;
-    "OverlayMinFPS"; = 15; // If this value is present and set to zero, the Desktop Window Manager disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
-    "RenderThreadTimeoutMilliseconds"; = 5000;
-    "SuperWetExtensionTimeMicroseconds"; = 1000;
-    "TelemetryFramesReportPeriodMilliseconds"; = 300000;
-    "TelemetryFramesSequenceIdleIntervalMilliseconds"; = 1000;
-    "TelemetryFramesSequenceMaximumPeriodMilliseconds"; = 1000;
-    "UniformSpaceDpiMode"; = 1;
-    "UseFastestMonitorAsPrimary"; = 0;
-    "vBlankWaitTimeoutMonitorOffMs"; = 250;
-    "WarpEnableDebugColor"; = 0;
+    "BlackOutAllReadback" = 0;
+    "ConfigureInput" = 1;
+    "CpuClipAASinkEnableIntermediates" = 1;
+    "CpuClipAASinkEnableOcclusion" = 1;
+    "CpuClipAASinkEnableRender" = 1;
+    "CpuClipAreaThreshold" = 20000;
+    "CpuClipWarpPartitionThreshold" = 1024;
+    "DisableDrawListCaching" = 0;
+    "DisableProjectedShadows" = 0;
+    "DisplayChangeTimeoutMs" = 1000;
+    "EnableBackdropBlurCaching" = 1;
+    "EnableCommonSuperSets" = 1;
+    "EnableCpuClipping" = 1;
+    "EnableDDisplayScanoutCaching" = 1;
+    "EnableEffectCaching" = 1;
+    "EnableFrontBufferRenderChecks" = 1;
+    "EnableMegaRects" = 1;
+    "EnablePrimitiveReordering" = 1;
+    "ForceFullDirtyRendering" = 0;
+    "GammaBlendPencil" = 1;
+    "GammaBlendWithFP16" = 1;
+    "InkGPUAccelOverrideVendorWhitelist" = 0;
+    "LayerClippingMode" = 2;
+    "LogExpressionPerfStats" = 0;
+    "MajorityScreenTest_MinArea" = 80;
+    "MajorityScreenTest_MinLength" = 80;
+    "MaxD3DFeatureLevel" = 0;
+    "MegaRectSearchCount" = 100;
+    "MegaRectSize" = 100000;
+    "MousewheelAnimationDurationMs" = 250;
+    "MousewheelScrollingMode" = 0;
+    "OptimizeForDirtyExpressions" = 1;
+    "OverlayMinFPS" = 15; // If this value is present and set to zero, the Desktop Window Manager disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
+    "RenderThreadTimeoutMilliseconds" = 5000;
+    "SuperWetExtensionTimeMicroseconds" = 1000;
+    "TelemetryFramesReportPeriodMilliseconds" = 300000;
+    "TelemetryFramesSequenceIdleIntervalMilliseconds" = 1000;
+    "TelemetryFramesSequenceMaximumPeriodMilliseconds" = 1000;
+    "UniformSpaceDpiMode" = 1;
+    "UseFastestMonitorAsPrimary" = 0;
+    "vBlankWaitTimeoutMonitorOffMs" = 250;
+    "WarpEnableDebugColor" = 0;
 
-    "BackdropBlurCachingThrottleMs"; = 25; // 25ms if missing, clamped to <=1000ms when present?
-    "CompositorClockPolicy"; = 1; // range: 0-1
-    "CpuClipFlatteningTolerance"; = 0; // scaled /1000
-    "CustomRefreshRateMode"; = 0; // range: 0-2
-    "DisableAdvancedDirectFlip"; = 0;
-    "DisableIndependentFlip"; = 0;
-    "DisableProjectedShadowsRendering"; = 0;
-    "FlattenVirtualSurfaceEffectInput"; = 0;
-    "ForceEffectMode"; = 0; // range: 0-2
-    "FrameCounterPosition"; = 0;
-    "InteractionOutputPredictionDisabled"; = 0;
-    "OverlayTestMode"; = 0; // 5 = MPO disabled
-    "ParallelModePolicy"; = 1; // >=3 coerced to 1
-    "ParallelModeRateThreshold"; = 119; // divisor for g_qpcFrequency, missing key defaults to 119 Hz (units: Hz)? 0 disables
-    "ResampleInLinearSpace"; = 0;
-    "ResampleModeOverride"; = 0;
-    "SDRBoostPercentOverride"; = 0; // scaled /100
-    "ShowDirtyRegions"; = 0;
+    "BackdropBlurCachingThrottleMs" = 25; // 25ms if missing, clamped to <=1000ms when present?
+    "CompositorClockPolicy" = 1; // range: 0-1
+    "CpuClipFlatteningTolerance" = 0; // scaled /1000
+    "CustomRefreshRateMode" = 0; // range: 0-2
+    "DisableAdvancedDirectFlip" = 0;
+    "DisableIndependentFlip" = 0;
+    "DisableProjectedShadowsRendering" = 0;
+    "FlattenVirtualSurfaceEffectInput" = 0;
+    "ForceEffectMode" = 0; // range: 0-2
+    "FrameCounterPosition" = 0;
+    "InteractionOutputPredictionDisabled" = 0;
+    "OverlayTestMode" = 0; // 5 = MPO disabled
+    "ParallelModePolicy" = 1; // >=3 coerced to 1
+    "ParallelModeRateThreshold" = 119; // divisor for g_qpcFrequency, missing key defaults to 119 Hz (units: Hz)? 0 disables
+    "ResampleInLinearSpace" = 0;
+    "ResampleModeOverride" = 0;
+    "SDRBoostPercentOverride" = 0; // scaled /100
+    "ShowDirtyRegions" = 0;
 
-    "AnimationsShiftKey"; = 0;
-    "DisableLockingMemory"; = 0;
-    "ModeChangeCurtainUseDebugColor"; = 0;
-    "UseDPIScaling"; = 1;
+    "AnimationsShiftKey" = 0;
+    "DisableLockingMemory" = 0;
+    "ModeChangeCurtainUseDebugColor" = 0;
+    "UseDPIScaling" = 1;
 
-    "ChildWindowDpiIsolation"; = 1; // range: 0-1
-    "DisableDeviceBitmaps"; = 0; // range: 0-1
-    "EnableResizeOptimization"; = 0; // range: 0-1
-    "ResizeTimeoutGdi"; = 0; // range: 0-0xFFFFFFFF (ms)
-    "ResizeTimeoutModern"; = 0; // range: 0-0xFFFFFFFF (ms)
+    "ChildWindowDpiIsolation" = 1; // range: 0-1
+    "DisableDeviceBitmaps" = 0; // range: 0-1
+    "EnableResizeOptimization" = 0; // range: 0-1
+    "ResizeTimeoutGdi" = 0; // range: 0-0xFFFFFFFF (ms)
+    "ResizeTimeoutModern" = 0; // range: 0-0xFFFFFFFF (ms)
 
-    "DefaultColorizationColorState"; = 0;
-    "DisallowAnimations"; = 0;
-    "DisallowColorizationColorChanges"; = 0;
+    "DefaultColorizationColorState" = 0;
+    "DisallowAnimations" = 0;
+    "DisallowColorizationColorChanges" = 0;
 
-    "DisableSessionTermination"; = 0; // range: 0–1
-    "ForceBasicDisplayAdapterOnDWMRestart"; = 0; // range: 0–1
-    "OneCoreNoBootDWM"; = 0; // range: 0–1
+    "DisableSessionTermination" = 0; // range: 0–1
+    "ForceBasicDisplayAdapterOnDWMRestart" = 0; // range: 0–1
+    "OneCoreNoBootDWM" = 0; // range: 0–1
 
-    "DisableHologramCompositor"; = 0; // range: 0–1
+    "DisableHologramCompositor" = 0; // range: 0–1
 
     // Haven't looked into them yet
-    "ForceUDwmSoftwareDevice"; = ?
-    "ForceDisableModeChangeAnimation"; = ?
+    "ForceUDwmSoftwareDevice" = ?
+    "ForceDisableModeChangeAnimation" = ?
 
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene";
-    "EnableBloom"; = 0;
-    "EnableDrawToBackbuffer"; = 1;
-    "EnableImageProcessing"; = 1;
-    "ImageProcessingResizeGrowth"; = 200;
-    "MsaaQualityMode"; = 2;
-    "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed"; = 5;
-    "SceneVisualCutoffThresholdInMS"; = 1000;
+    "EnableBloom" = 0;
+    "EnableDrawToBackbuffer" = 1;
+    "EnableImageProcessing" = 1;
+    "ImageProcessingResizeGrowth" = 200;
+    "MsaaQualityMode" = 2;
+    "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed" = 5;
+    "SceneVisualCutoffThresholdInMS" = 1000;
 
-    "ForceNonPrimaryDisplayAdapter"; = 0;
-    "ImageProcessingResizeThreshold"; = 0; // scaled /100
+    "ForceNonPrimaryDisplayAdapter" = 0;
+    "ImageProcessingResizeThreshold" = 0; // scaled /100
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
-    "ExtensionTimeMicroseconds"; = 1000;
-    "PeriodicFenceMinDifferenceMicroseconds"; = 500;
-    "RefreshRatePercentage"; = 10;
+    "ExtensionTimeMicroseconds" = 1000;
+    "PeriodicFenceMinDifferenceMicroseconds" = 500;
+    "RefreshRatePercentage" = 10;
 ```
 
 > https://github.com/nohuto/win-registry#dwm-values
@@ -1535,13 +1535,13 @@ Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, whil
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
-    "HeapDeCommitFreeBlockThreshold"; = 4096; // qword_140FC3210 dq 1000
-    "HeapDeCommitTotalFreeThreshold"; = 65536; // qword_140FC3218 dq 10000
-    "HeapSegmentCommit"; = 8192; // qword_140FC3220 dq 2000
-    "HeapSegmentReserve"; = 1048576; // qword_140FC3228 dq 100000
+    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
+    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
+    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
+    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
-    "Enabled"; = 0; // if present with DataLength==4 and nonzero type:
+    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
                     //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
                     //    if (value & 0x2)                      // low byte, bit 1
                     //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
@@ -1621,34 +1621,34 @@ HKCU\Control Panel\TimeDate\DstNotification	Type: REG_DWORD, Length: 4, Data: 0
 Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy";
-    "StoragePoliciesNotified"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks cases 5/12 when 1
-    "StoragePoliciesChanged"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks case 12 when 1
-    "OptinToastFired"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 5 allowed only if 0
-    "FirstLaunchToastFired"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 12 allowed only if 0
-    "CloudfilePolicyConsent"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 8 requires 0, set to 1 on Enable
-    "CloudConsentToastCount"; = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 8 requires < 3, set to 3 on Enable
-    "OptOutButtonClicked"; = 0; // REG_DWORD, default: 0 if missing, range: 0..1, set to 1 on ReminderToast
+    "StoragePoliciesNotified" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks cases 5/12 when 1
+    "StoragePoliciesChanged" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks case 12 when 1
+    "OptinToastFired" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 5 allowed only if 0
+    "FirstLaunchToastFired" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 12 allowed only if 0
+    "CloudfilePolicyConsent" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 8 requires 0, set to 1 on Enable
+    "CloudConsentToastCount" = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 8 requires < 3, set to 3 on Enable
+    "OptOutButtonClicked" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, set to 1 on ReminderToast
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DiskSpaceChecking";
-    "LastInstallTimeLowStorageNotify"; = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: OneDay
-    "NumWinOldLowStorageNotify"; = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 7 allows if < 3
+    "LastInstallTimeLowStorageNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: OneDay
+    "NumWinOldLowStorageNotify" = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 7 allows if < 3
 
 "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion";
-    "InstallTime"; = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoHours
+    "InstallTime" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoHours
 
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
-    "TestBackupReminderToast"; = 0; // REG_DWORD, default: 0 if missing, range: 0..2? case 9 requires nonzero and reminder enabled
+    "TestBackupReminderToast" = 0; // REG_DWORD, default: 0 if missing, range: 0..2? case 9 requires nonzero and reminder enabled
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
-    "FirstProfileSeenTime"; = 0; // REG_QWORD FILETIME, default: set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
-    "BackupReminderToastCount"; = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 9 requires < 3
-    "LastTimeBackupReminderNotify"; = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoMinutes
+    "FirstProfileSeenTime" = 0; // REG_QWORD FILETIME, default: set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
+    "BackupReminderToastCount" = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 9 requires < 3
+    "LastTimeBackupReminderNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoMinutes
 
 // FILETIME THRESHOLDS
-"OneDay"; = 0xC92A69C000; // Seconds: 86400, 1 day, LastInstallTimeLowStorageNotify
-"TwoHours"; = 0x10C388D000; // Seconds: 7200, 2 hours, InstallTime
-"FourMinutes"; = 0x8F0D1800; // Seconds: 240, 4 minutes, FirstProfileSeenTime
-"TwoMinutes"; = 0x47868C00; // Seconds: 120, 2 minutes, LastTimeBackupReminderNotify
+"OneDay" = 0xC92A69C000; // Seconds: 86400, 1 day, LastInstallTimeLowStorageNotify
+"TwoHours" = 0x10C388D000; // Seconds: 7200, 2 hours, InstallTime
+"FourMinutes" = 0x8F0D1800; // Seconds: 240, 4 minutes, FirstProfileSeenTime
+"TwoMinutes" = 0x47868C00; // Seconds: 120, 2 minutes, LastTimeBackupReminderNotify
 ```
 
 See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://github.com/nohuto/win-config/blob/main/system/assets/noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c) for used pseudocode. Note that I added my chosen values to the `Disable Low Disk Space Checks` suboption for safety reasons.

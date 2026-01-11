@@ -1473,7 +1473,7 @@ It depends on your adapter/driver if VMQ is enabled/disabled by default:
     "*VMQVlanFiltering" = 1; // range 0-1
     "VMQSupported" = 0; // range 0-1
 
-    "MaxNumVmqs"; = ?; // found it in the "Mellanox ConnectX based IPoIB Adapter (NDIS 6.4)" driver
+    "MaxNumVmqs" = ?; // found it in the "Mellanox ConnectX based IPoIB Adapter (NDIS 6.4)" driver
 ```
 
 > https://github.com/nohuto/win-registry#intel-nic-values
@@ -1672,7 +1672,7 @@ This feature allows packet burst handling, while avoiding packet drops that may 
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
-    "ThreadDpcEnable"; = 1; // KeThreadDpcEnable
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
 ```
 
 > https://github.com/nohuto/win-registry?tab=readme-ov-file#session-manager-values  

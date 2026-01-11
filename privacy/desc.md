@@ -3072,13 +3072,13 @@ Miscellaenous notes:
 ```c
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "SleepstudyAccountingEnabled"; = 1; // SleepstudyHelperAccountingEnabled 
-    "SleepstudyGlobalBlockerLimit"; = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
-    "SleepstudyLibraryBlockerLimit"; = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
+    "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
+    "SleepstudyGlobalBlockerLimit" = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
+    "SleepstudyLibraryBlockerLimit" = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
-    "SleepStudyDeviceAccountingLevel"; = 4; // PopSleepStudyDeviceAccountingLevel 
-    "SleepStudyDisabled"; = 0; // PopSleepStudyDisabled 
+    "SleepStudyDeviceAccountingLevel" = 4; // PopSleepStudyDeviceAccountingLevel 
+    "SleepStudyDisabled" = 0; // PopSleepStudyDisabled 
 ```
 > https://github.com/nohuto/win-registry#power-values
 ```
