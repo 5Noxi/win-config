@@ -14,7 +14,7 @@ Value names in `usbflags-HUBREG_QueryUsbflagsValuesForDevice.c` are mostly UNICO
     "TestRunEsmInWorkItem" = 0; // REG_DWORD, if 1 sets bit 0 at a1+876? if 0 clears it, missing/read failure leaves bit cleared
 
 // these are built by HUBREG_OpenCreateUsbflagsDeviceKey
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags\\<vvvvpppprrrr";
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags\\<vvvvpppprrrr>";
     "IgnoreHWSerNum" = ?; // REG_DWORD, any nonzero value sets flag 0x1
     "UseWin8DescriptorValidation" = ?; // REG_DWORD, any nonzero value sets flag 0x200000
     "ResetOnResume" = ?; // REG_DWORD, any nonzero value sets flag 0x4
