@@ -119,7 +119,7 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "DisableSelectiveSuspend"; = 0; // REG_DWORD (bool), global disable for selective suspend
     "DisableCcDetect"; = 0; // REG_DWORD (bool), global disable for CC detection
     "EnPMDebug"; = 0; // REG_DWORD (bool), for debugging power management
-    "ForceHcD3NoWakeArm"; = 0 // REG_DWORD (bool), prevents wake-arming when forcing HC to D3
+    "ForceHcD3NoWakeArm"; = 0; // REG_DWORD (bool), prevents wake-arming when forcing HC to D3
     "EnableDCA"; = 0 // REG_DWORD (bool), enables direct controller access (HCT diagnostics)
     "ForcePortsHighSpeed"; = 0; // REG_DWORD (bool), forces ports to remain under EHCI (HCT compatibility)
 
