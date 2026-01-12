@@ -1123,6 +1123,32 @@ DTLS 1.2 & TLS 1.3:
 }
 ```
 
+# Enhanced Domain NTLM Logs
+
+Controls the Netlogon policy that enables or disables enhanced domain wide NTLM logs on domain controllers (includes NTLMv1 usage). Applies to domain controllers only (Windows 11 24H2+). If not configured, domain controllers default to logging these on supported builds.
+
+> https://aka.ms/ntlmlogandblock
+
+```json
+{
+  "File": "Netlogon.admx",
+  "CategoryName": "Netlogon",
+  "PolicyName": "Netlogon_EnhancedDomainNtlmLogs",
+  "NameSpace": "Microsoft.Policies.NetLogon",
+  "Supported": "Windows_11_0_24H2 - At least Windows 11 Version 24H2",
+  "DisplayName": "Log Enhanced Domain-wide NTLM Logs",
+  "ExplainText": "This policy setting configures whether the domain controllers to which this setting is applied will log the new, enhanced domain-wide NTLM logs. These logs contain more information about NTLM authentication on a domain-wide level, including NTLMv1 usage. If enabled, domain controllers will log the new domain-wide NTLM logs. If disabled, domain controllers will not log the new domain-wide NTLM logs. If not configured, domain controllers will default to logging the new domain-wide NTLM logs. More information is available at aka.ms/ntlmlogandblock.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Netlogon\\Parameters"
+  ],
+  "ValueName": "EnableEnhancedDomainNtlmLogs",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+```
+
 # Enable USB Write Protection
 Restricts write access to USB devices (read only). You can also change it with `diskpart`, by selecting the disk with `select disk` and chaning it to read only with `attributes disk set readonly` (revert it with `attributes disk clear readonly`).
 
