@@ -1329,3 +1329,72 @@ Note that sudo uses administrator previledges and doesn't include `TrustedInstal
 ```
 \Registry\Machine\SOFTWARE\Microsoft\OEM\Device\Capture : NoPhysicalCameraLED
 ```
+
+# Administrator Account
+
+This security setting determines whether the local Administrator account is enabled or disabled. The following conditions prevent disabling the Administrator account, even if this security setting is disabled.
+
+- he Administrator account is currently in use
+- The Administrators group has no other members
+- All other members of the Administrators group are:
+  - Disabled
+  - Listed in the [Deny log on locally](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/deny-log-on-locally) User Rights Assignment
+  
+If the Administrator account is disabled, you can't enable it if the password doesn't meet requirements. In this case, another member of the Administrators group must reset the password.
+
+## Best practices
+
+Disabling the administrator account can become a maintenance issue under certain circumstances. For example, in a domain environment, if the secure channel that constitutes your connection fails for any reason, and there's no other local administrator account, you must restart the computer in safe mode to fix the problem that broke your connection status.
+
+## Vulnerability
+
+The built-in administrator account can't be locked out no matter how many failed logons it accrues, which makes it a prime target for brute-force attacks that attempt to guess passwords. Also, this account has a well-known security identifier (SID), and there are non-Microsoft tools that allow authentication by using the SID rather than the account name. Therefore, even if you rename the Administrator account, an attacker could launch a brute-force attack by using the SID to sign in. All other accounts that are members of the Administrator's group have the safeguard of locking out the account if the number of failed logons exceeds its configured maximum.
+
+> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-administrator-account-status
+
+# Guest Account
+
+Guest account status policy setting determines whether the Guest account is enabled or disabled. This account allows unauthenticated network users to gain access to the system by signing in as a Guest with no password. Unauthorized users can access any resources that are accessible to the Guest account over the network. This privilege means that any network shared folders with permissions that allow access to the Guest account, the Guests group, or the Everyone group will be accessible over the network. This accessibility can lead to the exposure or corruption of data.
+
+## Best practices
+
+Set Guest account status to Disabled so that the built-in Guest account is no longer usable. All network users will have to authenticate before they can access shared resources on the system. If the Guest account is disabled and Network access: Sharing and security model for local accounts is set to Guest only, network logons, such as those logons performed by the SMB Service will fail.
+
+## Vulnerability
+
+The default Guest account allows unauthenticated network users to sign in as a Guest with no password. These unauthorized users could access any resources that are accessible to the Guest account over the network. This capability means that any shared folders with permissions that allow access to the Guest account, the Guests group, or the Everyone group are accessible over the network, which could lead to the exposure or corruption of data.
+
+> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-guest-account-status
+
+# defaultuser0 Account
+
+defaultuser0 is a temporary Windows setup account.
+
+---
+
+### Miscellaneous Notes
+
+If extracting the whole System32 folder recursively using [strings2](https://github.com/nohuto/strings2-tui) you'll see that the string `defaultuser0` only exists in `DeviceEnroller.exe` (at least for me). The notes below are based on several decompiled functions from `DeviceEnroller.exe` (`MakeActiveUserLocalAdmin`).
+
+`defaultuser0` is only used as a "do not elevate" sentinel in the admin promotion path.
+
+```c
+// WinMainCommon
+if (!HasActiveLocalAdminAccount()) {
+    MakeActiveUserLocalAdmin();
+}
+```
+```c
+// MakeActiveUserLocalAdmin
+DmGetActiveUserSid(&StringSid);
+LookupAccountSidW(..., &name, &domain, ...);
+if (_wcsicmp(name, L"defaultuser0")) {
+    MakeAUserLocalAdmin(name, domain);
+    DmDeleteTask(L"\\Microsoft\\Windows\\EnterpriseMgmt", 0,
+                L"Login Schedule created by enrollment client");
+} else {
+    // defaultuser0: skip elevation
+}
+```
+
+DeviceEnroller.exe = MDM/Enterprise enrollment client that runs enrollment and renewal sessions (e.g., `EnrollEngineInitialize`, `InitiateSessionAsync`, `WaitForEnrollment`) here.

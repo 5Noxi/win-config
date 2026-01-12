@@ -1039,7 +1039,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | Container File System Drivers | `CimFS` | - |
 |  | `wcifs` | Provides a virtual filesystem view for processes running within Windows Containers |
 | Consumer IR Driver | `circlass` | Consumer IR Class Driver for eHome |
-| iSCSI Driver | `msisadrv` | - |
+| iSCSI Driver | `msisadrv` | Disabling breaks laptop keyboards. |
 | NetBIOS Driver | `NetBIOS` | NetBIOS Interface |
 |  | `NetBT` | This service implements NetBios over TCP/IP. |
 | Epic Games Services | `EpicGamesUpdater` | - |

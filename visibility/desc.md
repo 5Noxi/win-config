@@ -1265,9 +1265,9 @@ Disabling it via policies etc. is enough, therefore I won't add them as there's 
 },
 ```
 
-# Black PS Background
+# PowerShell Colors
 
-Since `powershell.exe` has default color of white (foreground) and blue (background), some may want to change it.
+Since `powershell.exe` has default color of white (foreground) and blue (background), some may want to change it. If you use Windows Terminal, this option will have no effect.
 
 `ScreenColors` value, located in `HKCU\Console\%WINDIR%_System32_WindowsPowerShell_v1.0_powershell.exe`  
 `0-3` bit = `Foreground color`  
@@ -1308,7 +1308,7 @@ Write-Host "Noverse" -ForegroundColor Blue
 ```
 -> If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
 
-`System-Color.bat` uses `Black` (background) and `Gray` (foreground), since it is personal preference change it to whatever you want using the information above.
+The option uses `Black` (background) and `Gray` (foreground), since it is personal preference change it to whatever you want using the information above.
 
 Add the `-NoLogo` parameter to the powershell shortcut in the start menu with the command below. It hides the startup banner:
 ```
