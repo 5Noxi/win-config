@@ -276,24 +276,71 @@ Disables USB selective suspend, idle power management, and related LP features i
 
 My findings while looking through USBHUB3.sys, this lists is therefore not complete.
 ```c
-"<device hardware key>";
-    "DeviceSelectiveSuspended" = ?; // REG_DWORD (bool), any nonzero sets internal flag 0x400
-    "FriendlyName" = ?; // REG_SZ, device instance friendly name string
+"<hardware key>\\Device Parameters";
     "AllowIdleIrpInD3" = ?; // REG_DWORD (bool), any nonzero sets flag 0x4000
     "D3ColdReconnectTimeout" = 1000; // REG_DWORD, overwritten if value present
-    "EndpointPriorities" = ?; // read into WDF memory and validated by HUBREG_ValidateAndPopulateEndpointPriorities?
-    "DeviceInterfaceGUID" = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults
-    "DeviceIdleEnabled" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
     "DefaultIdleState" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
+    "DeviceIdleEnabled" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
     "DeviceIdleIgnoreWakeEnable" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
+    "DeviceInterfaceGUID" = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults
+    "DeviceSelectiveSuspended" = ?; // REG_DWORD (bool), any nonzero sets internal flag 0x400
+    "EndpointPriorities" = ?; // read into WDF memory and validated by HUBREG_ValidateAndPopulateEndpointPriorities?
     "ExtPropDescSemaphore" = 1; // REG_DWORD, written by HUBMISC_SetExtPropDescSemaphoreInRegistry - Presence indicates MS OS Extended Property Descriptor already handled, value is written on first use
+    "FriendlyName" = ?; // REG_SZ, device instance friendly name string
     "RevisionId" = ; // REG_DWORD, written from device revision by HUBMISC_SetExtPropDescSemaphoreInRegistry
     "VendorRevision" = ; // REG_DWORD, written from vendor revision if available, otherwise 0
 
-"<device hardware key>\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7"; // g_PciKey
+    // haven't looked into them yet
+    "CyclePortEnabled" = ;
+    "DefaultIdleTimeout" = ;
+    "DeviceInterfaceGUIDs" = ;
+    "ResetPortEnabled" = ;
+    "SelSuspCancelBehavior" = ;
+    "SuppressInputInCS" = ;
+    "SystemInputSuppressionEnabled" = ;
+    "TestIdleMonitorDim" = ;
+    "TestIdleTimeoutNoHandles" = ;
+    "TestIdleTimeoutNoHandlesInitial" = ;
+    "WakeScreenOnInputSupport" = ;
+    "WriteReportExSupported" = ;
+
+"<hardware key>\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7"; // g_PciKey
     "D3ColdSupported" = ?; // REG_DWORD (bool), any nonzero sets flag 0x1000
 
-"<device hardware key>\\Ceip"; // g_DeviceCeipKey
+    // haven't looked into them yet
+    "DeviceD0DelayTime" = ;
+    "DeviceDpcCleanUpActionOverride" = ;
+    "DeviceDpcResetActionOverride" = ;
+    "DevicePowerResetDelayTime" = ;
+    "ForceSBR" = ;
+    "IgnoreErrorsDuringPLDR" = ;
+    "IoNotRequired" = ;
+    "RecoveryDisabled" = ;
+    "RecoveryEnabled" = ;
+    "SettleTimeRequired" = ;
+
+    // xrefs of PciIsDeviceFeatureEnabled (which opens key e5b3b5ac-9725-4f78-963f-03dfb1d828c7)
+
+    // ExpressDownstreamSwitchPortProcessAspmPolicy / ExpressPortFindOptInOptOutPolicy
+    "ASPMOptOut" = ;
+    "ASPMOptIn" = ;
+
+    // PciDeviceQueryAtomics
+    "AtomicsOptIn" = ;
+
+    // PciAddDevice
+    "BridgeUseNativeWakeInfo" = ;
+
+    // PciBridgeInterface_Constructor
+    "EnableAllBridgeInterrupts" = ;
+
+    // ExpressProcessExtendedPortCapabilities
+    "DoNotUseAcs" = ;
+
+    // ExpressProcessNewPort
+    "AcsNotRequired" = ;
+
+"<hardware key>\\Device Parameters\\Ceip"; // g_DeviceCeipKey
     "DeviceInformation" = 0; // REG_DWORD, missing treated as 0 before updating SQM flags
     "PortInterconnectType" = ?;
     "DescriptorValidationInfo0" = ?; // REG_DWORD
@@ -304,12 +351,36 @@ My findings while looking through USBHUB3.sys, this lists is therefore not compl
     "DescriptorValidationInfo5" = ?; // REG_DWORD
     "DescriptorValidationInfo6" = ?; // REG_DWORD
 
+"<hardware key>\\Device Parameters\\Wdf";
+    // haven't looked into them yet
+    "IdleInWorkingState" = ;
+    "WdfDefaultIdleInWorkingState" = ;
+    "WdfDirectedPowerTransitionChildrenOptional" = ;
+    "WdfDirectedPowerTransitionEnable" = ;
+    "WdfUseWdfTimerForPofx" = ;
+
 // miscellaneous findings
-"<hub hardware key>";
-    "WakeSystemOnConnect" = ?; // REG_DWORD (bool), any nonzero sets flag 0x100
+"<hardware key>\\Device Parameters";
     "HardResetCount" = ?; // REG_DWORD, stored to hub context
-    "OvercurrentDetected" = ?; // REG_DWORD, nonzero sets bit 0x20000000, zero clears it
     "HubFWUpdateProtocol" = ?; // REG_DWORD, stored to hub context
+    "OvercurrentDetected" = ?; // REG_DWORD, nonzero sets bit 0x20000000, zero clears it
+    "WakeSystemOnConnect" = ?; // REG_DWORD (bool), any nonzero sets flag 0x100
+
+"<hardware key>\\Interrupt Management\\MessageSignaledInterruptProperties";
+    "MessageNumberLimit" = ;
+    "MSISupported" = ;
+
+"<hardware key>\\Interrupt Management\\Affinity Policy";
+    "AssignmentSetOverride" = ;
+    "DevicePolicy" = ;
+    "DevicePriority" = ;
+    "GroupOverride" = ;
+    "GroupPolicy" = ;
+
+    // ?
+    "StartingMessage" = ;
+    "EndingMessage" = ;
+    "MessagesPerProcessor" = ;
 ```
 
 > https://github.com/nohuto/win-registry/blob/main/records/Enum-USB.txt  
@@ -361,30 +432,11 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 Miscellaneous notes:
 ```c
 // Not used in the option
-"UsbDeviceParameters": {
-  "Action": "registry_pattern",
-  "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters",
-  "Operations": [
-    { "Value": "D3ColdReconnectTimeout", "Type": "REG_DWORD", "Data": 0 }
-    { "Value": "DefaultIdleState", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "EnableSelectiveSuspend", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "FullPowerDownOnTransientDx", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "SuppressInputInCS", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "SystemInputSuppressionEnabled", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "WriteReportExSupported", "Type": "REG_DWORD", "Data": 0 },
-    //{ "Value": "SelSuspCancelBehavior", "Type": "REG_DWORD", "Data": },
-    //{ "Value": "WinUsbPowerPolicyOwnershipDisabled", "Type": "REG_DWORD", "Data": },
-
-  ]
-},
 "UsbDevSub": {
   "Action": "registry_pattern",
   "Pattern": "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\USB\\**\\Device Parameters\\*",
   "Exclude": [ "wdf" ],
   "Operations": [
-    { "Value": "DeviceD0DelayTime", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "DevicePowerResetDelayTime", "Type": "REG_DWORD", "Data": 0 },
-    { "Value": "ASPMOptOut", "Type": "REG_DWORD", "Data": 1 },
     { "Value": "ASPMOptIn", "Type": "REG_DWORD", "Data": 0 }
     
   ]
