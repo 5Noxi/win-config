@@ -723,7 +723,7 @@ Disables the device (replace '*Device*' with the device name) from waking the sy
 
 > https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a
 
-`WakeOnInputDeviceTypes.bat` probably disables wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
+`WakeOnInputDeviceTypes` probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
 ```
 \Registry\Machine\SYSTEM\INPUT : UnDimOnInputDeviceTypes
 \Registry\Machine\SYSTEM\INPUT : WakeOnInputDeviceTypes
