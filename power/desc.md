@@ -99,7 +99,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ActiveIdleThreshold" = 5000000; // PopFxActiveIdleThreshold (0x004C4B40) 
     "ActiveIdleTimeout" = 1000; // PopFxActiveIdleTimeout (0x000003E8) 
     "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
-    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (0xFFFFFFFF) 
+    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (0xFFFFFFFF) - REG_DWORD
     "AllowSystemRequiredPowerRequests" = 1; // PopPowerRequestConvertSystemToExecution 
     "AlwaysComputeQosHints" = 0; // PpmPerfAlwaysComputeQosEnabled 
     "BootHeteroPolicyOverride" = 0; // PpmPerfBootHeteroPolicyOverrideEnabled 
@@ -151,12 +151,12 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "HeteroWpsContainmentEnumOverride" = 0; // PpmHeteroWpsContainmentEnumOverride 
     "HeteroWpsWorkloadProminenceCutoff" = 35; // PpmHeteroWpsWorkloadProminenceCutoff (0x23) 
     "HiberbootEnabled" = 0; // PopHiberbootEnabledReg 
-    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default
+    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default - REG_DWORD
     "HiberFileType" = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF)
     "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF)
     "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
-    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg 
+    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg - REG_DWORD
     "HighPerfDurationBoot" = 90000; // PpmHighPerfDuration (0x00015F90) 
     "HighPerfDurationCSExit" = ?; // unk_140FC337C
     "HighPerfDurationSxExit" = ?; // unk_140FC3380

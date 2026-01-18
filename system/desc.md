@@ -63,6 +63,7 @@ See [session-manager-symbols](https://github.com/nohuto/win-registry/blob/main/s
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
 ```c
+```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
     "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold
     "AlwaysTrackIoBoosting" = 0; // PspAlwaysTrackIoBoosting
@@ -172,7 +173,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "XStateContextLookasidePerProcMaxDepth" = 0; // KiXStateContextLookasidePerProcMaxDepth
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel\\RNG";
-    "RNGAuxiliarySeed" = ; // ExpRNGAuxiliarySeed = 742978275?
+    "RNGAuxiliarySeed" = ; // ExpRNGAuxiliarySeed - REG_DWORD, default of 1807947291? ("HKLM\System\CurrentControlSet\Control\Session Manager\kernel\RNG\RNGAuxiliarySeed","Type: REG_DWORD, Length: 4, Data: 1807947291", procmon boot trace)
 ```
 
 > https://github.com/nohuto/win-registry?tab=readme-ov-file#session-manager-values
@@ -209,10 +210,10 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DeadlockPulse"; v54 = 5000
     "DeadlockPulseTolerance"; v55 = 500
     "DeadlockTimeout"; v53 = 30000
-    "DisableBadDriverCheckForHwProtection"; v70 = 0
-    "DisableBoostedVSyncVirtualization"; v59 = 0
+    "DisableBadDriverCheckForHwProtection"; v70 = 0 // DWORD
+    "DisableBoostedVSyncVirtualization"; v59 = 0 // DWORD
     "DisableGdiContextGpuVa"; v41 = 0
-    "DisableIndependentVidPnVSync"; v56 = 0
+    "DisableIndependentVidPnVSync"; v56 = 0 // DWORD
     "DisableMonitoredFenceGpuVa"; v43 = 0
     "DisableMultiSourceMPOCheck"; v76 = 0
     "DisableOverlays"; v67 = 0
@@ -231,7 +232,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "Force32BitFences"; v68 = 0
     "ForceDirectFlip"; v66 = 0
     "ForceEnableDxgMms2"; v39 = 0
-    "ForceExplicitResidencyNotification"; v44 = 0
+    "ForceExplicitResidencyNotification"; v44 = 0 // DWORD
     "ForceInitPagingProcessVaSpace"; v40 = 0
     "ForceReplicateGdiContent"; v47 = 0
     "ForceSecondaryIFlipSupport"; v72 = 0
@@ -399,10 +400,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "HDREnabled"; v2 = 0;
     "MicrosoftApprovedAcmSupport"; v5 = 0;
 
-"<PnPDeviceKey>\\DxgkSettings";
-    "UseSelfRefreshVRAMInS3"; v166 = 1;
-
-"<PnPDeviceKey>";
+"AdapterPnpKey";
     "EnableVirtualTopologySupport"; v84 = 0;
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicDisplay : EnableVirtualTopologySupport
     "NeedToSuspendVidSchBeforeSetGammaRamp"; v83 = (AdapterBuild < 8704 ? 1 : 0)
@@ -413,7 +411,6 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicDisplay : DisableNonPOSTDevice
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicRender : DisableNonPOSTDevice
 
-    "Device PnP";
     "ACGSupported"; v165 = 0
     // Registry\Machine\SYSTEM\ControlSet001\Services\BasicDisplay : ACGSupported
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicRender : ACGSupported
@@ -435,6 +432,9 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ForceDualViewBehavior"; v21 = 0;
     // \Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000 : ForceDualViewBehavior
     // \Registry\Machine\SYSTEM\ControlSet001\Services\BasicDisplay : ForceDualViewBehavior
+
+"<AdapterPnpKey>\\DxgkSettings";
+    "UseSelfRefreshVRAMInS3"; v166 = 1;
 ```
 
 # DWM Values
@@ -456,14 +456,14 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "CpuClipAASinkEnableRender" = 1;
     "CpuClipAreaThreshold" = 20000;
     "CpuClipWarpPartitionThreshold" = 1024;
-    "DisableDrawListCaching" = 0;
+    "DisableDrawListCaching" = 0; // REG_DWORD
     "DisableProjectedShadows" = 0;
     "DisplayChangeTimeoutMs" = 1000;
-    "EnableBackdropBlurCaching" = 1;
+    "EnableBackdropBlurCaching" = 1; // REG_DWORD
     "EnableCommonSuperSets" = 1;
     "EnableCpuClipping" = 1;
     "EnableDDisplayScanoutCaching" = 1;
-    "EnableEffectCaching" = 1;
+    "EnableEffectCaching" = 1; // REG_DWORD
     "EnableFrontBufferRenderChecks" = 1;
     "EnableMegaRects" = 1;
     "EnablePrimitiveReordering" = 1;
@@ -472,15 +472,15 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "GammaBlendWithFP16" = 1;
     "InkGPUAccelOverrideVendorWhitelist" = 0;
     "LayerClippingMode" = 2;
-    "LogExpressionPerfStats" = 0;
+    "LogExpressionPerfStats" = 0; // REG_DWORD
     "MajorityScreenTest_MinArea" = 80;
     "MajorityScreenTest_MinLength" = 80;
     "MaxD3DFeatureLevel" = 0;
     "MegaRectSearchCount" = 100;
     "MegaRectSize" = 100000;
     "MousewheelAnimationDurationMs" = 250;
-    "MousewheelScrollingMode" = 0;
-    "OptimizeForDirtyExpressions" = 1;
+    "MousewheelScrollingMode" = 0; // REG_DWORD
+    "OptimizeForDirtyExpressions" = 1; // REG_DWORD
     "OverlayMinFPS" = 15; // If this value is present and set to zero, the Desktop Window Manager disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
     "RenderThreadTimeoutMilliseconds" = 5000;
     "SuperWetExtensionTimeMicroseconds" = 1000;
@@ -496,14 +496,14 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "CompositorClockPolicy" = 1; // range: 0-1
     "CpuClipFlatteningTolerance" = 0; // scaled /1000
     "CustomRefreshRateMode" = 0; // range: 0-2
-    "DisableAdvancedDirectFlip" = 0;
+    "DisableAdvancedDirectFlip" = 0; // REG_DWORD
     "DisableIndependentFlip" = 0;
     "DisableProjectedShadowsRendering" = 0;
     "FlattenVirtualSurfaceEffectInput" = 0;
-    "ForceEffectMode" = 0; // range: 0-2
+    "ForceEffectMode" = 0; // range: 0-2, REG_DWORD
     "FrameCounterPosition" = 0;
     "InteractionOutputPredictionDisabled" = 0;
-    "OverlayTestMode" = 0; // 5 = MPO disabled
+    "OverlayTestMode" = 0; // 5 = MPO disabled, REG_DWORD
     "ParallelModePolicy" = 1; // >=3 coerced to 1
     "ParallelModeRateThreshold" = 119; // divisor for g_qpcFrequency, missing key defaults to 119 Hz (units: Hz)? 0 disables
     "ResampleInLinearSpace" = 0;
@@ -518,7 +518,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
     "ChildWindowDpiIsolation" = 1; // range: 0-1
     "DisableDeviceBitmaps" = 0; // range: 0-1
-    "EnableResizeOptimization" = 0; // range: 0-1
+    "EnableResizeOptimization" = 0; // range: 0-1, REG_DWORD
     "ResizeTimeoutGdi" = 0; // range: 0-0xFFFFFFFF (ms)
     "ResizeTimeoutModern" = 0; // range: 0-0xFFFFFFFF (ms)
 
@@ -528,25 +528,46 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
     "DisableSessionTermination" = 0; // range: 0–1
     "ForceBasicDisplayAdapterOnDWMRestart" = 0; // range: 0–1
-    "OneCoreNoBootDWM" = 0; // range: 0–1
+    "OneCoreNoBootDWM" = 0; // range: 0–1, REG_DWORD
+    "OneCoreNoDWMRawGameController" = ? // didn't look into it yet, but it's related to OneCoreNoBootDWM
 
     "DisableHologramCompositor" = 0; // range: 0–1
 
     // Haven't looked into them yet
-    "ForceUDwmSoftwareDevice" = ?
-    "ForceDisableModeChangeAnimation" = ?
+    "ForceUDwmSoftwareDevice" = ?;
+    "ForceDisableModeChangeAnimation" = ?; // REG_DWORD
+
+    // procmon boot trace
+    "DwmInitSessionActivityId_00000001" = ?; // a ID, REG_SZ
+    "DebugFailFast" = ?;
+    "ForceDesktopTreeFullDirty" = ?;
+    "UseHWDrawListEntriesOnWARP" = ?;
+    "CpuClipAASinkForceEnable" = ?;
+    "CpuClipAASinkEnableDebugColors" = ?;
+    "SuperWetEnabled" = ?;
+    "MajorityScreenTest_MaxCoverage" = ?;
+    "EnableRenderPathTestMode" = ?;
+    "MarshalAllDebugInfo" = ?;
+    "AnimationAttributionEnabled" = 1; // REG_DWORD
+    "AnimationAttributionHashingEnabled" = 1; // REG_DWORD
+    "MPCInputRouterWaitForDebugger" = ?;
+    "DisableDeviceBitmapsForMultiAdapter" = ?;
+    "EnableDesktopOverlays" = ?;
+    "ColorPrevalence" = ?;
+    "ShaderLinkingGPUBlacklist" = ?; // REG_SZ
+    "EnableMPCPerfCounter" = ?;
 
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene";
-    "EnableBloom" = 0;
-    "EnableDrawToBackbuffer" = 1;
-    "EnableImageProcessing" = 1;
+    "EnableBloom" = 0; // REG_DWORD
+    "EnableDrawToBackbuffer" = 1; // REG_DWORD
+    "EnableImageProcessing" = 1; // REG_DWORD
     "ImageProcessingResizeGrowth" = 200;
     "MsaaQualityMode" = 2;
     "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed" = 5;
     "SceneVisualCutoffThresholdInMS" = 1000;
 
-    "ForceNonPrimaryDisplayAdapter" = 0;
+    "ForceNonPrimaryDisplayAdapter" = 0; // REG_DWORD
     "ImageProcessingResizeThreshold" = 0; // scaled /100
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
@@ -566,30 +587,10 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 Read trough the `.pdf` file, if you want to get more information about the bitmask. Calculate it yourself with [`bitmask-calc`](https://github.com/nohuto/bitmask-calc).
 
-`0x00000018` = Long, Fixed, no boost. (`24,0x18,Longer,Fixed,36,36`)
-`0x00000024` = Short, Variable, no boost. (`36,0x24,Short,Variable,6,6`)
+`0x18` = Long, Fixed, no boost.
+`0x24` = Short, Variable, no boost.
 
-Using a boost (bit `1-2`) would set the threads of foreground processes `2-3` times higher than from background processes, which can cause issues. `26` decimal would use a boost of `3x`. The options currently uses `36` decimal.
-
-As you can see in this [table](https://github.com/djdallmann/GamingPCSetup/blob/d865b755a9b6af65a470b8840af54729c75a6ae7/CONTENT/RESEARCH/FINDINGS/win32prisep0to271.csv), the values repeat. Using a extremely high number therefore won't do anything else. `Win32PrioritySeparation.ps1` can be used to get the info, increase `for ($i=0; $i -le 271; $i++) {` (`271`), if you want to see more. It's a lighter version of [win32prisepcalc](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/SCRIPTS/win32prisepcalc.ps1).
-
-Paste it into a terminal to see a table with all values:
-```powershell
-for ($i=0; $i -le 271; $i++) {
-    $bin = [Convert]::ToString($i,2).PadLeft(6,'0')[-6..-1]
-    $interval = if (('00','10','11' -contains ($bin[0,1] -join''))) {'Short'} else {'Long'}
-    $time = if (('00','01','11' -contains ($bin[2,3] -join''))) {'Variable'} else {'Fixed'}
-    $boost = switch ($bin[4,5] -join'') {'00' {'Equal and Fixed'} '01' {'2:1'} default {'3:1'}}
-    if ($time -eq 'Fixed') {$qrvforeground = $qrvbackground = if ($interval -eq 'Long') {36} else {18}} else {
-        $values = @{ 
-            'Short' = @{ '3:1' = @(18,6); '2:1' = @(12,6); 'Equal and Fixed' = @(6,6) }
-            'Long'  = @{ '3:1' = @(36,12); '2:1' = @(24,12); 'Equal and Fixed' = @(12,12) }
-        }
-        if ($values[$interval].ContainsKey($boost)) {$qrvforeground, $qrvbackground = $values[$interval][$boost]} else {$qrvforeground, $qrvbackground = $values[$interval]['Equal and Fixed']}
-    }
-	Write-Output "$i,0x$($i.ToString('X')),$interval,$time,$qrvforeground,$qrvbackground"
-}
-```
+Using a boost (bit `1-2`) would set the threads of foreground processes `2-3` times higher than from background processes, which can cause issues. `26` decimal would use a boost of `3x`.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/w32ps.png?raw=true)
 
