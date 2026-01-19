@@ -225,6 +225,13 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "PowerWatchdogPowerOnGdiTimeoutMsec" = 30000;
     "PowerWatchdogRequestQueueTimeoutMsec" = 30000;
 
+    // from procmon boot trace
+    "DisableHotKeyWhenConsoleOff" = ?;
+    "EmiPollingInterval" = ?;
+    "EmiTelemetryActivePollingInterval" = ?;
+    "EmiTelemetryCsPollingInterval" = ?;
+    "LidNotifyReliable" = ?;
+
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
     "GuardedHost" = ?; // unk_140FC5234
     "Policy" = 0; // PopHiberForceDisabledReg 

@@ -395,10 +395,18 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MonitorDataStore\\MONITOR-ID"
     "AdvancedColorEnabled"; v3 = 0;
     "AutoColorManagementEnabled"; v8 = 0;
+    "AutoColorManagementSupported"; = ? // REG_DWORD, bool?
     "EnableIntegratedPanelAcmByDefault"; v6 = 0;
     "EnableIntegratedPanelHdrByDefault"; v4 = 0;
     "HDREnabled"; v2 = 0;
     "MicrosoftApprovedAcmSupport"; v5 = 0;
+    "DockedOrientation" = ?;
+    "EnableBoostRefreshRateByDefault" = ?;
+    "MonitorOrientation" = ?;
+    "OverrideWCGCapabilities" = ?;
+    "PreferredScaleFactor" = ?;
+    "SDRWhiteLevel" = ?;
+    "VMSDisabled" = ?;
 
 "AdapterPnpKey";
     "EnableVirtualTopologySupport"; v84 = 0;
@@ -595,6 +603,18 @@ Using a boost (bit `1-2`) would set the threads of foreground processes `2-3` ti
 ![](https://github.com/nohuto/win-config/blob/main/system/images/w32ps.png?raw=true)
 
 > [system/assets | Win32PrioritySeparation.pdf](https://github.com/nohuto/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
+
+---
+
+Miscellaneous notes:
+```c
+// from procmon boot trace
+"HKLM\\System\\CurrentControlSet\\Control\\PriorityControl";
+    "ConvertibilityEnabled" = ?;
+    "ConvertibleSlateMode" = 0; // REG_DWORD
+    "SystemDockMode" = ?;
+    "Win32PrioritySeparation" = 2;
+```
 
 # MMCSS Values
 
@@ -1266,6 +1286,9 @@ The value doesn't exist by default (not existing = `1`). Ignore `GameBar.txt`, i
 Miscellaneous notes:
 ```powershell
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadDoublePressIntervalMs
+\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadLongPressRumbleDurationMs
+\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadNexusChordCombo
+\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadNexusChordEnabled
 \Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadShortPressIntervalMs
 ```
 
