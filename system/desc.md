@@ -1685,6 +1685,21 @@ See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://gi
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true)
 
+
+---
+
+Miscellaneous notes:
+
+```c
+"HKCU\\Control Panel\\Accessibility";
+  // Dismiss notifications after this amount of time
+  "MessageDuration" = 5; // REG_DWORD, range 5-300(s) - According to pseudocode, it has a range from `0` to `0xFFFFFFFF`. Fallback of `5`, SystemSettings supports ranges from `5` (5 seconds) to `300` (5 minutes). Anything above/below will likely be limited (haven't tested it yet).
+
+"HKCU\\Software\\Microsoft\\Windows\\MiracastDiscovery"
+  "DisableNotification" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\DisableNotification","Type: REG_DWORD, Length: 4, Data: 0"
+  "NotificationCount" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\NotificationCount","Type: REG_DWORD, Length: 4, Data: 0"
+```
+
 ---
 
 ```json
@@ -1843,16 +1858,6 @@ See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://gi
   ]
 },
 ```
-
----
-
-```c
-"HKCU\\Control Panel\\Accessibility";
-  // Dismiss notifications after this amount of time
-  "MessageDuration" = 5; // REG_DWORD, range 5-300(s)
-```
-
-According to pseudocode, it has a range from `0` to `0xFFFFFFFF`. Fallback of `5`, SystemSettings supports ranges from `5` (5 seconds) to `300` (5 minutes). Anything above/below will likely be limited (haven't tested it yet).
 
 # Export Explorer/Taskbar Pins
 

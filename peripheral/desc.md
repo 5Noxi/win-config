@@ -265,6 +265,13 @@ HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseSensitivity	Type: REG_SZ, Length: 6, Data: 10
 ```
 
+---
+
+Miscellaneous notes:
+```c
+"HKCU\Control Panel\Cursors\CursorBaseSize","Type: REG_DWORD, Length: 4, Data: 32"
+```
+
 # Keyboard Values
 
 | **Setting**           | **Description**                                                                                          | **Default** | **Changed To** |

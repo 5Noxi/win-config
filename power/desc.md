@@ -854,6 +854,10 @@ Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled
 `TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`).
 
 ```c
+"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\TimerCoalescing","Length: 96" // 0x60u
+```
+
+```c
 if (v18 == 3 && v19 == 80 && !v20[0]) // type REG_BINARY, length 80 bytes, leading dword zero
 {
   for (i = 0; i < 3; ++i)
