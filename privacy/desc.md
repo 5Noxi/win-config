@@ -2043,6 +2043,60 @@ Disable edge related suggestions with (search suggestions in address bar):
 }
 ```
 
+All `Microsoft\INPUT\Settings` values which get read on boot:
+```
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAP
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTFIRSTWORD
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollBottomZone
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollThreshold
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollTopZone
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : BluebirdDTWMultiplier
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DisablePersonalizationGTKM
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DynamicAutocorrectionAllowed
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EMOJISUGGESTION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbAutocorrection2
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbTextPrediction
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : FLIPDebugOptions
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HASTRAILER
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbNavigationOverrideMode
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbTextPredictionDelay
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : INPUTHISTORYGUID
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Insights
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : InsightsEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : KEYBOARDMODE
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : LMDataLoggerEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MAXCORRECTIONS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MultilingualEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : NotActiveLanguagePenalty
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PERIODSHORTCUT
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabledCleared
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PRIVATE
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : RULEBASEDCONVERSION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_1
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_10
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_3
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeDataSources
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_10
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_4
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_5
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SHAPEWRITINGPREDICTION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShortenMultilingualTraversal
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShowAllSuggestions
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SPELLCHECK
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SUPPRESSCONVERSION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Transliteration
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONONTHEFLY
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONSYMBOLS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : USEDANDA
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : UserStatsEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementLimit
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementUpLimit
+```
+
 # Disable Synchronization
 
 Disables all kind of synchronization.
