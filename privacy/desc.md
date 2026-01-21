@@ -1741,9 +1741,15 @@ v16 = L"FailedToGetReason"; // if value is missing
 
 ```json
 "HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot": {
-  "CopilotDisabledReason": { "Type": "REG_SZ", "Data": "" }
+  "CopilotDisabledReason": { "Type": "REG_SZ", "Data": "FeatureIsDisabled" }
 }
 ```
+`FeatureIsDisabled` seems to be used by default here (`IsRequiredEdgeBrowserInstalledFailed` exists too):
+```c
+// procmon boot trace (value unset)
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotDisabledReason","SUCCESS","Type: REG_SZ, Length: 36, Data: FeatureIsDisabled"
+```
+
 ```json
 {
   "File": "WindowsCopilot.admx",
@@ -1763,6 +1769,16 @@ v16 = L"FailedToGetReason"; // if value is missing
   ]
 },
 ```
+
+---
+
+Miscellaneous notes:
+```c
+"OneDrive.exe","HKCU\Software\Microsoft\OneDrive\Accounts\Personal\CopilotEducationalExperienceInfoIconDismissed","NAME NOT FOUND","Length: 16"
+"MicrosoftEdgeUpdate.exe","HKLM\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\CopilotUpgradeCheck","NAME NOT FOUND","Length: 16"
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotHWKeyChoiceSet","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+
 
 # Disable Recall
 
@@ -1892,6 +1908,25 @@ Disables all kind of suggestions: in start, text suggestions (multilingual...), 
 "SubscribedContent-338393Enabled": { "Type": "REG_DWORD", "Data": 0 },
 "SubscribedContent-353694Enabled": { "Type": "REG_DWORD", "Data": 0 },
 "SubscribedContent-353696Enabled": { "Type": "REG_DWORD", "Data": 0 }
+
+// these get read on boot
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-202914Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280810Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280811Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280815Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310091Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310093Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338387Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338389Enabled","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353694Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353696Enabled","NAME NOT FOUND","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353698Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000045Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000161Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000163Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000165Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000325Enabled","NAME NOT FOUND","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000326Enabled","NAME NOT FOUND","Length: 16"
 ```
 
 ```json
