@@ -874,21 +874,6 @@ As you may know a bit can be `0` or `1`, means (bit depth * `6` = dB):
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/samplerate.png?raw=true)
 
-# Mouse DPI
-
-Use `800` or `1600`. Going too low will end in worse results, as shown in the pictures ([1](https://www.youtube.com/watch?v=mwf_F2VboFQ&t=458s), [2](https://www.youtube.com/watch?v=imYBTj2RXFs&t=274s)).
-
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/dpi1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/dpi2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/dpi3.png?raw=true)
-
-# Polling Rate
-
-Higher sampling rates reduce jitter and latency and ensure more accurate cursor positioning (first image), but may affect performance depending on the hardware (CPU cycles) - [*](https://www.youtube.com/watch?v=jtATbpMqbL4). Using `4 kHz` on a mid-tier PC should not be a problem. Run benchmarks on your system to check whether your PC can handle this rate. It should always be `1 kHz+`. You can use [MouseTester](https://github.com/valleyofdoom/MouseTester/releases) to check if your current polling rate is stable.
-
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/polling1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/polling2.png?raw=true)
-
 # Monitor Settings
 
 Before starting the configuration, load your default settings, as many settings are already correctly configured by default.
