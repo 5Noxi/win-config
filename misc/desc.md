@@ -279,6 +279,8 @@ winget install M2Team.NanaZip
 
 # Disable VSC Telemetry
 
+I personally use [VSCodium](https://github.com/VSCodium/vscodium) instead of VSC, as VSC contains telemetry/tracker - [VSC developer comment](https://github.com/Microsoft/vscode/issues/60#issuecomment-161792005).
+
 Stops VSC to send telemetry, crash reports, disable online experiments, turn off automatic updates (manual updates), prevent fetching release notes, stop automatic extension and git repository updates, limit extension recommendations to on demand requests, and block fetching package information from online sources like NPM or Bower.
 
 ```c
