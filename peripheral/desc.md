@@ -131,6 +131,11 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "CommonBuffer2GBLimit" = 0; // REG_DWORD, when non-zero, forces common buffers below 2GB ("Limit common buffer allocations for the miniport to the physical address range below 2GB.  Only bits 0 through 30 of the physical address can be set.  Bit 31 of the physical address cannot be set.")
     "ForceHCResetOnResume" = 0; // REG_DWORD, forces controller reset on resume
     "FastResumeEnable" = 0; // REG_DWORD, enables fast S0 resume
+
+
+// miscellaneous note for future reference
+"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Usb\\Ceip" // UsbhUpdateRegSurpriseRemovalCount
+    "BootPathSurpriseRemovalCount" = ?;
 ```
 
 > [peripheral/assets | usb-GetPersistedKeyPath.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usb-GetPersistedKeyPath.c)  
@@ -264,6 +269,11 @@ HKCU\Control Panel\Mouse\MouseThreshold2	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseSensitivity	Type: REG_SZ, Length: 6, Data: 10
 ```
+
+---
+
+`Ease Cursor Movement between Displays`:  
+Controls whether the pointer jumps over the non-overlapping seam between misaligned monitors so that it doesn't get stuck on edges/corners when switching between screens. If this option is disabled, the cursor will stop at these seams instead of crossing them.
 
 ---
 
@@ -739,7 +749,7 @@ Disables the device (replace '*Device*' with the device name) from waking the sy
 
 Default values:
 ```c
-WakeOnInputDeviceTypes = 6
+WakeOnInputDeviceTypes = 46
 UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
 ```
 > https://github.com/nohuto/win-registry/blob/main/records/Input.txt  
