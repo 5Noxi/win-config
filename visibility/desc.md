@@ -100,7 +100,7 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 `Witcher Landscape`:
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscap.png?raw=true)
 
 `World`:
 
@@ -108,7 +108,7 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 `Workplace`:
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
 
 `Zelda`:
 
