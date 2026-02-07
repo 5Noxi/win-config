@@ -30,6 +30,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true)
 
+`City`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
+
 `Dark Sunset`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
@@ -53,6 +57,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 `Mac`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true)
+
+`Man Landscape`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
 
 `Moon`:
 
