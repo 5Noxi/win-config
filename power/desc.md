@@ -283,7 +283,7 @@ Disables USB selective suspend, idle power management, and related LP features i
 
 My findings while looking through USBHUB3.sys, this lists is therefore not complete.
 ```c
-"<hardware key>\\Device Parameters";
+"<AdapterPnpKey>\\Device Parameters";
     "AllowIdleIrpInD3" = ?; // REG_DWORD (bool), any nonzero sets flag 0x4000
     "D3ColdReconnectTimeout" = 1000; // REG_DWORD, overwritten if value present
     "DefaultIdleState" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
@@ -311,7 +311,19 @@ My findings while looking through USBHUB3.sys, this lists is therefore not compl
     "WakeScreenOnInputSupport" = ;
     "WriteReportExSupported" = ;
 
-"<hardware key>\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7"; // g_PciKey
+    // from dxgmms2.sys
+    "HwQueuedRenderPacketGroupLimitPerNode" = ; // REG_BINARY, DWORD array, big-endian
+
+// from dxgmms2.sys, see https://github.com/nohuto/win-registry#dxg-kernel-values
+"<AdapterPnpKey>\\MemoryManager";
+    "MaxLocalSegmentSize" = 0; // REG_DWORD, MB (<< 20), 0 allowed, 1..256 -> 256
+    "MaxNonLocalSegmentSize" = 0; // REG_DWORD, MB (<< 20), 0 allowed, 1..512 -> 512
+    "SelfRefreshVramForceEvictionTimerDC" = 900; // REG_DWORD, found in 25H2 (not in 23H2)
+    "SelfRefreshVramForceEvictionTimerAC" = 900; // REG_DWORD, found in 25H2 (not in 23H2)
+    "Supports64KBPages" = 0; // REG_DWORD, bit0 used
+    "EnablePromotion" = 1; // REG_DWORD, found in 25H2 (not in 23H2)
+
+"<AdapterPnpKey>\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7"; // g_PciKey
     "D3ColdSupported" = ?; // REG_DWORD (bool), any nonzero sets flag 0x1000
 
     // haven't looked into them yet
@@ -347,7 +359,7 @@ My findings while looking through USBHUB3.sys, this lists is therefore not compl
     // ExpressProcessNewPort
     "AcsNotRequired" = ;
 
-"<hardware key>\\Device Parameters\\Ceip"; // g_DeviceCeipKey
+"<AdapterPnpKey>\\Device Parameters\\Ceip"; // g_DeviceCeipKey
     "DeviceInformation" = 0; // REG_DWORD, missing treated as 0 before updating SQM flags
     "PortInterconnectType" = ?;
     "DescriptorValidationInfo0" = ?; // REG_DWORD
@@ -358,7 +370,7 @@ My findings while looking through USBHUB3.sys, this lists is therefore not compl
     "DescriptorValidationInfo5" = ?; // REG_DWORD
     "DescriptorValidationInfo6" = ?; // REG_DWORD
 
-"<hardware key>\\Device Parameters\\Wdf";
+"<AdapterPnpKey>\\Device Parameters\\Wdf";
     // haven't looked into them yet
     "IdleInWorkingState" = ;
     "WdfDefaultIdleInWorkingState" = ;
@@ -367,17 +379,17 @@ My findings while looking through USBHUB3.sys, this lists is therefore not compl
     "WdfUseWdfTimerForPofx" = ;
 
 // miscellaneous findings
-"<hardware key>\\Device Parameters";
+"<AdapterPnpKey>\\Device Parameters";
     "HardResetCount" = ?; // REG_DWORD, stored to hub context
     "HubFWUpdateProtocol" = ?; // REG_DWORD, stored to hub context
     "OvercurrentDetected" = ?; // REG_DWORD, nonzero sets bit 0x20000000, zero clears it
     "WakeSystemOnConnect" = ?; // REG_DWORD (bool), any nonzero sets flag 0x100
 
-"<hardware key>\\Interrupt Management\\MessageSignaledInterruptProperties";
+"<AdapterPnpKey>\\Interrupt Management\\MessageSignaledInterruptProperties";
     "MessageNumberLimit" = ;
     "MSISupported" = ;
 
-"<hardware key>\\Interrupt Management\\Affinity Policy";
+"<AdapterPnpKey>\\Interrupt Management\\Affinity Policy";
     "AssignmentSetOverride" = ;
     "DevicePolicy" = ;
     "DevicePriority" = ;
