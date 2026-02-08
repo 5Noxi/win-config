@@ -62,6 +62,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
 
+`Meadow Sunset`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true)
+
 `Moon`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true)
