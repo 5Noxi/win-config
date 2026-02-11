@@ -1748,6 +1748,9 @@ v16 = L"FailedToGetReason"; // if value is missing
 ```c
 // procmon boot trace (value unset)
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotDisabledReason","SUCCESS","Type: REG_SZ, Length: 36, Data: FeatureIsDisabled"
+
+// ?
+"HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotLogonTelemetryTime","Type: REG_BINARY, Length: 8, Data: 7A 84 DA 49 6B 89 DC 01"
 ```
 
 ```json
@@ -1910,23 +1913,23 @@ Disables all kind of suggestions: in start, text suggestions (multilingual...), 
 "SubscribedContent-353696Enabled": { "Type": "REG_DWORD", "Data": 0 }
 
 // these get read on boot
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-202914Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280810Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280811Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280815Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310091Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310093Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338387Enabled","NAME NOT FOUND","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-202914Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280810Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280811Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280815Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310091Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310093Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338387Enabled","Length: 12"
 "HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338389Enabled","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353694Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353696Enabled","NAME NOT FOUND","Length: 16"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353698Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000045Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000161Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000163Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000165Enabled","NAME NOT FOUND","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000325Enabled","NAME NOT FOUND","Length: 16"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000326Enabled","NAME NOT FOUND","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353694Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353696Enabled","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353698Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000045Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000161Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000163Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000165Enabled","Length: 12"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000325Enabled","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000326Enabled","Length: 16"
 ```
 
 ```json
@@ -2384,6 +2387,9 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Typ
 HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
 HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
 HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
+
+// Miscellaneous note
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\EnableRemoteLaunchToast  Type: REG_DWORD, Length: 4, Data: 1
 ```
 
 `RomeSdkChannelUserAuthzPolicy` (`CDP\SettingsPage`) is only used for "My device only"/"Everyone nearby" (it's still getting changed to `0` in this option).
@@ -2624,6 +2630,14 @@ Voluntary program that collects usage data to help improve the quality and perfo
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search  
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-abovelock  
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-experience#allowcortana
+
+---
+
+Miscellaneous notes:
+```c
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Cortana\DevOverrideOneSettings","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Cortana\IsAvailable","Type: REG_DWORD, Length: 4, Data: 1"
+```
 
 # Hide Last Logged-In User
 

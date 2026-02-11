@@ -1986,6 +1986,13 @@ Miscellaneous notes:
 "HKCU\\Software\\Microsoft\\Windows\\MiracastDiscovery"
   "DisableNotification" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\DisableNotification","Type: REG_DWORD, Length: 4, Data: 0"
   "NotificationCount" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\NotificationCount","Type: REG_DWORD, Length: 4, Data: 0"
+
+// miscellaneous procmon boot trace values
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\IsDebugEnabled","Length: 16"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\SmartOptOut\InitialTimerCooldown","Length: 20"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\SmartOptOut\PeriodicTimerCooldown","Length: 20"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\SmartOptOut\SmartOptOutRevision","Type: REG_QWORD, Length: 8, Data: "
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\TimestampWhenSeen","Length: 20"
 ```
 
 ---
@@ -2272,9 +2279,21 @@ Symlink: `C:\Users\YourName\Desktop\logo.png`
 
 If you copy or cut something it gets stored to your clipboard.
 
-Additional value, which get's read:
-```
-\Registry\Machine\SOFTWARE\Microsoft\Clipboard : IsCloudAndHistoryFeatureAvailable
+Miscellaneous notes:
+```c 
+"HKLM\SOFTWARE\Microsoft\Clipboard\ClipboardSvcDebugWaitInSec","Length: 16"
+"HKLM\SOFTWARE\Microsoft\Clipboard\IsClipboardSignalProducingFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
+"HKLM\SOFTWARE\Microsoft\Clipboard\IsCloudAndHistoryFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
+
+"HKCU\Software\Microsoft\Clipboard\ClipboardTipRequired","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudClipRDPOverride","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudClipboardAutomaticUpload","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudContentRemoteOverrideValueWindowInSec","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudContentValueWindowInSec","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\DoubleCopyGestureEnabled","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\EnableClipboardHistory","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\PastedFromClipboardUI","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\ShellHotKeyUsed","Length: 16"
 ```
 
 ```json
@@ -3281,6 +3300,16 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+```
+
+---
+
+Miscellaneous notes:
+
+```c
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\LastResumeOnPCInteractionTime","Length: 20"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\LastResumeOnPCTime","Length: 20"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\OptedIn","Length: 16"
 ```
 
 # Disable Hyper-V

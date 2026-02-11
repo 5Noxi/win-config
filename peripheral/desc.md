@@ -703,6 +703,9 @@ Everything listed below is based on personal research. Mistakes may exist, some 
     "DownRight" = { 0x47F38E42CEFA51BC, 0x6A8CB1ACEBDFECA5 };
     "Down" = { 0x441A7051435776E6, 0xF7C82D37F0853D9B };
     "DownLeft" = { 0x47F38E42CEFA51BC, 0xEBDFECA56A8CB1AC };
+
+// ?
+"HKCU\Software\Microsoft\Touchpad\TouchpadDesiredVisibility","Length: 16"
 ```
 
 > [peripheral/assets | touch-twinui.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-twinui.c)  
