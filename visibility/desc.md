@@ -14,13 +14,13 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true)
 
-`Bones`:
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
-
 `Blue Flowers`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true)
+
+`Bones`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
 
 `Castle`:
 
@@ -45,6 +45,15 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 `Flowers`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
+
+`Flowers Sunset`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
+
+`Golden Hour`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
+
 
 `Heaven`:
 
@@ -106,13 +115,13 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
 
-`World`:
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
-
 `Workplace`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
+
+`World`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
 
 `Zelda`:
 
