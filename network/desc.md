@@ -1,8 +1,5 @@
 # Encrypted DNS
 
-Unencrypted = DNS queries and responses are sent in plaintext.
-DoH = DNS queries and responses are encrypted, yet they are sent via HTTP or HTTP/2 protocols instead of directly via UDP. DoH ensures that attackers cannot spoof or modify DNS traffic. From a network administrator's perspective, DoH traffic looks like any other HTTPS traffic.
-
 The DNS server get's applied via registry (tracked while applying it via the settings):
 ```csv
 HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{NetID}\NameServer  Type: REG_SZ, Length: 24, Data: 194.242.2.5
@@ -24,6 +21,20 @@ HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{Net
 
 > https://www.cloudflare.com/learning/dns/dns-over-tls/  
 > https://www.privacyguides.org/en/advanced/dns-overview/
+
+## Providers Compared
+
+| Provider (IPs) | Encryption | DNSSEC | ECS | QNAME | Logging Policy | Filtering | Jurisdiction / Owner |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [Quad9](https://quad9.net/) | DoH, DoT | Yes | Off (disabled) | Yes | No logs ([no IP stored](https://quad9.net/privacy/policy)) | Malware/phishing | Switzerland (nonprofit) |
+| [Mullvad DNS](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls) | DoH, DoT | Yes | Off | [Yes](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls) | [No logs](https://mullvad.net/en/blog/clarifying-our-no-logging-policy) | Ads/trackers (optional) | Sweden (Mullvad AB) |
+| [NextDNS](https://nextdns.io/) | DoH, DoT, DoQ | Yes | Off | [Yes](https://nextdns.io/privacy) | Opt-in ([default no-logs](https://nextdns.io/privacy)) | Ads/trackers/malware | US (NextDNS Inc.) |
+| [Cloudflare 1.1.1.1](https://developers.cloudflare.com/1.1.1.1/) | DoH, DoT, DoQ | Yes | Off | ? | [Minimal logs](https://developers.cloudflare.com/1.1.1.1/privacy/public-dns-resolver/) (IP truncated, deleted <25h) | Malware/family (optional) | US (Cloudflare) |
+| [AdGuard DNS](https://adguard-dns.io/) | DoH, DoT, DoQ, DNSCrypt | Yes | Unspecified | Unspecified | No personal data on public DNS | Ads/malware blocking | EU (AdGuard team) |
+
+`Quad9/Mullvad > NextDNS > AdGuard > Cloudflare` in my option based on my findings. I wouldn't recommend to use DNS resolvers like 'Google Public DNS', just read trough their privacy policies and see if they support DNSSEC/QNAME minimalisation/encrypted DNS, disable ECS (EDNS Client Subnet), and don't collect identifiable query logs (that's how I created the table above, including some other facts like Mullvad supporting anycast).
+
+Obviously self-host a DNS resolver for the best privacy, so queries stay local using for example pi-hole.
 
 ## DNS Explained
 
