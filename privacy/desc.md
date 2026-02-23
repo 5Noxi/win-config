@@ -3555,13 +3555,16 @@ Disables Windows Application Experience telemetry and compatibility components, 
 `DisableAPISamping`, `DisableApplicationFootprint`, `DisableInstallTracing`, `DisableWin32AppBackup` will only work on 24H2 and above.
 
 Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Experience\\` (LTSC IoT Enterprise 2024):
-```powershell
+```c
 "\\Microsoft\\Windows\\Application Experience\\MareBackup",
 "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser",
 "\\Microsoft\\Windows\\Application Experience\\Microsoft Compatibility Appraiser Exp",
 "\\Microsoft\\Windows\\Application Experience\\PcaPatchDbTask",
 "\\Microsoft\\Windows\\Application Experience\\SdbinstMergeDbTask",
 "\\Microsoft\\Windows\\Application Experience\\StartupAppTask"
+
+//"\\Microsoft\\Windows\\Application Experience\\AitAgent",
+//"\\Microsoft\\Windows\\Application Experience\\PcaWallpaperAppDetect",
 ```
 ```json
 {
