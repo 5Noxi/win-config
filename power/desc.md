@@ -281,125 +281,8 @@ You can see processes, which use power throttling by enabling the column (`Detai
 Disables USB selective suspend, idle power management, and related LP features if supported.
 
 My findings while looking through USBHUB3.sys, this lists is therefore not complete.
-```c
-"<AdapterPnpKey>\\Device Parameters";
-    "AllowIdleIrpInD3" = ?; // REG_DWORD (bool), any nonzero sets flag 0x4000
-    "D3ColdReconnectTimeout" = 1000; // REG_DWORD, overwritten if value present
-    "DefaultIdleState" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
-    "DeviceIdleEnabled" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
-    "DeviceIdleIgnoreWakeEnable" = 1; // REG_DWORD, written only if DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable are all missing
-    "DeviceInterfaceGUID" = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults
-    "DeviceSelectiveSuspended" = ?; // REG_DWORD (bool), any nonzero sets internal flag 0x400
-    "EndpointPriorities" = ?; // read into WDF memory and validated by HUBREG_ValidateAndPopulateEndpointPriorities?
-    "ExtPropDescSemaphore" = 1; // REG_DWORD, written by HUBMISC_SetExtPropDescSemaphoreInRegistry - Presence indicates MS OS Extended Property Descriptor already handled, value is written on first use
-    "FriendlyName" = ?; // REG_SZ, device instance friendly name string
-    "RevisionId" = ; // REG_DWORD, written from device revision by HUBMISC_SetExtPropDescSemaphoreInRegistry
-    "VendorRevision" = ; // REG_DWORD, written from vendor revision if available, otherwise 0
 
-    // haven't looked into them yet
-    "CyclePortEnabled" = ;
-    "DefaultIdleTimeout" = ;
-    "DeviceInterfaceGUIDs" = ;
-    "ResetPortEnabled" = ;
-    "SelSuspCancelBehavior" = ;
-    "SuppressInputInCS" = ;
-    "SystemInputSuppressionEnabled" = ;
-    "TestIdleMonitorDim" = ;
-    "TestIdleTimeoutNoHandles" = ;
-    "TestIdleTimeoutNoHandlesInitial" = ;
-    "WakeScreenOnInputSupport" = ;
-    "WriteReportExSupported" = ;
-
-    // from dxgmms2.sys
-    "HwQueuedRenderPacketGroupLimitPerNode" = ; // REG_BINARY, DWORD array, big-endian
-
-// from dxgmms2.sys, see https://github.com/nohuto/win-registry#dxg-kernel-values
-"<AdapterPnpKey>\\MemoryManager";
-    "MaxLocalSegmentSize" = 0; // REG_DWORD, MB (<< 20), 0 allowed, 1..256 -> 256
-    "MaxNonLocalSegmentSize" = 0; // REG_DWORD, MB (<< 20), 0 allowed, 1..512 -> 512
-    "SelfRefreshVramForceEvictionTimerDC" = 900; // REG_DWORD, found in 25H2 (not in 23H2)
-    "SelfRefreshVramForceEvictionTimerAC" = 900; // REG_DWORD, found in 25H2 (not in 23H2)
-    "Supports64KBPages" = 0; // REG_DWORD, bit0 used
-    "EnablePromotion" = 1; // REG_DWORD, found in 25H2 (not in 23H2)
-
-"<AdapterPnpKey>\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7"; // g_PciKey
-    "D3ColdSupported" = ?; // REG_DWORD (bool), any nonzero sets flag 0x1000
-
-    // haven't looked into them yet
-    "DeviceD0DelayTime" = ;
-    "DeviceDpcCleanUpActionOverride" = ;
-    "DeviceDpcResetActionOverride" = ;
-    "DevicePowerResetDelayTime" = ;
-    "ForceSBR" = ;
-    "IgnoreErrorsDuringPLDR" = ;
-    "IoNotRequired" = ;
-    "RecoveryDisabled" = ;
-    "RecoveryEnabled" = ;
-    "SettleTimeRequired" = ;
-
-    // xrefs of PciIsDeviceFeatureEnabled (which opens key e5b3b5ac-9725-4f78-963f-03dfb1d828c7)
-
-    // ExpressDownstreamSwitchPortProcessAspmPolicy / ExpressPortFindOptInOptOutPolicy
-    "ASPMOptOut" = ;
-    "ASPMOptIn" = ;
-
-    // PciDeviceQueryAtomics
-    "AtomicsOptIn" = ;
-
-    // PciAddDevice
-    "BridgeUseNativeWakeInfo" = ;
-
-    // PciBridgeInterface_Constructor
-    "EnableAllBridgeInterrupts" = ;
-
-    // ExpressProcessExtendedPortCapabilities
-    "DoNotUseAcs" = ;
-
-    // ExpressProcessNewPort
-    "AcsNotRequired" = ;
-
-"<AdapterPnpKey>\\Device Parameters\\Ceip"; // g_DeviceCeipKey
-    "DeviceInformation" = 0; // REG_DWORD, missing treated as 0 before updating SQM flags
-    "PortInterconnectType" = ?;
-    "DescriptorValidationInfo0" = ?; // REG_DWORD
-    "DescriptorValidationInfo1" = ?; // REG_DWORD
-    "DescriptorValidationInfo2" = ?; // REG_DWORD
-    "DescriptorValidationInfo3" = ?; // REG_DWORD
-    "DescriptorValidationInfo4" = ?; // REG_DWORD
-    "DescriptorValidationInfo5" = ?; // REG_DWORD
-    "DescriptorValidationInfo6" = ?; // REG_DWORD
-
-"<AdapterPnpKey>\\Device Parameters\\Wdf";
-    // haven't looked into them yet
-    "IdleInWorkingState" = ;
-    "WdfDefaultIdleInWorkingState" = ;
-    "WdfDirectedPowerTransitionChildrenOptional" = ;
-    "WdfDirectedPowerTransitionEnable" = ;
-    "WdfUseWdfTimerForPofx" = ;
-
-// miscellaneous findings
-"<AdapterPnpKey>\\Device Parameters";
-    "HardResetCount" = ?; // REG_DWORD, stored to hub context
-    "HubFWUpdateProtocol" = ?; // REG_DWORD, stored to hub context
-    "OvercurrentDetected" = ?; // REG_DWORD, nonzero sets bit 0x20000000, zero clears it
-    "WakeSystemOnConnect" = ?; // REG_DWORD (bool), any nonzero sets flag 0x100
-
-"<AdapterPnpKey>\\Interrupt Management\\MessageSignaledInterruptProperties";
-    "MessageNumberLimit" = ;
-    "MSISupported" = ;
-
-"<AdapterPnpKey>\\Interrupt Management\\Affinity Policy";
-    "AssignmentSetOverride" = ;
-    "DevicePolicy" = ;
-    "DevicePriority" = ;
-    "GroupOverride" = ;
-    "GroupPolicy" = ;
-
-    // ?
-    "StartingMessage" = ;
-    "EndingMessage" = ;
-    "MessagesPerProcessor" = ;
-```
+-- placeholder for pnp values --
 
 > https://github.com/nohuto/win-registry/blob/main/records/Enum-USB.txt  
 > https://github.com/nohuto/win-registry/blob/main/records/pci.txt
@@ -435,16 +318,6 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 > https://github.com/nohuto/win-config/blob/main/power/desc.md#usb-flags  
 > https://github.com/nohuto/win-registry/blob/main/records/pci.txt  
 > https://github.com/nohuto/win-registry/blob/main/records/Enum-USB.txt  
-> [power/assets | devicepower-HidpFdoConfigureIdleSettings.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HidpFdoConfigureIdleSettings.c)  
-> [power/assets | devicepower-UsbhGetD3Policy.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-UsbhGetD3Policy.c)  
-> [power/assets | devicepower-OptInOptOutPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-OptInOptOutPolicy.c)  
-> [power/assets | devicepower-HUBMISC_SetExtPropDescSemaphoreInRegistry.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBMISC_SetExtPropDescSemaphoreInRegistry.c)  
-> [power/assets | devicepower-HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c)  
-> [power/assets | devicepower-HUBREG_QueryValuesInDeviceHardwareKey.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_QueryValuesInDeviceHardwareKey.c)  
-> [power/assets | devicepower-HUBREG_QueryValuesInHubHardwareKey.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_QueryValuesInHubHardwareKey.c)  
-> [power/assets | devicepower-HUBREG_SetWinUsbIdleDefaults.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_SetWinUsbIdleDefaults.c)  
-> [power/assets | devicepower-HUBREG_UpdateSqmFlags.c](https://github.com/nohuto/win-config/blob/main/power/assets/devicepower-HUBREG_UpdateSqmFlags.c)
-
 ---
 
 Miscellaneous notes:

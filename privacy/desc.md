@@ -583,6 +583,11 @@ ren %WINDIR%\System32\psr.exe psr.exe.nv
 },
 ```
 
+```c
+// SR = Steps Recorder?
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
+```
+
 # Disable App Launch Tracking
 
 `Privacy & security > General : Let Windows improve Start and search results by tracking app launches`
