@@ -54,7 +54,6 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
 
-
 `Heaven`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true)
@@ -98,6 +97,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 `Sea`:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
+
+`Shop`:
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true)
 
 `Stars`:
 
