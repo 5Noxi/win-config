@@ -1105,6 +1105,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | Biometrics | `WbioSrvc` | The Windows biometric service gives client applications the ability to capture, compare, manipulate, and store biometric data without gaining direct access to any biometric hardware or samples. The service is hosted in a privileged SVCHOST process. |
 | Bluetooth | `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
 |  | `BluetoothUserService_*` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
+|  | `BluetoothUserService` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
 |  | `BthA2dp` | Microsoft Bluetooth A2dp driver |
 |  | `BthAvctpSvc` | This is Audio Video Control Transport Protocol service |
 |  | `BthEnum` | Bluetooth Enumerator Service |
@@ -1121,6 +1122,18 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `RFCOMM` | Bluetooth Device (RFCOMM Protocol TDI) |
 | Broadcasts | `BcastDVRUserService` | This user service is used for Game Recordings and Live Broadcasts |
 |  | `CaptureService_*` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
+|  | `AJRouter` | Routes AllJoyn messages for the local AllJoyn clients. If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run. |
+|  | `CaptureService` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
+|  | `CDPSvc` | This service is used for Connected Devices Platform scenarios |
+|  | `CDPUserSvc` | This user service is used for Connected Devices Platform scenarios |
+|  | `DevicePickerUserSvc` | This user service is used for managing the Miracast, DLNA, and DIAL UI |
+|  | `DevicesFlowUserSvc` | Allows ConnectUX and PC Settings to Connect and Pair with WiFi displays and Bluetooth devices. |
+|  | `NcbService` | Brokers connections that allow packaged Microsoft Store apps to receive notifications from the internet. |
+|  | `NcdAutoSetup` | Network Connected Devices Auto-Setup service monitors and installs qualified devices that connect to a qualified network. Stopping or disabling this service will prevent Windows from discovering and installing qualified network connected devices automatically. Users can still manually add network connected devices to a PC through the user interface. |
+|  | `p2pimsvc` | Provides identity services for the Peer Name Resolution Protocol (PNRP) and Peer-to-Peer Grouping services. If disabled, the Peer Name Resolution Protocol (PNRP) and Peer-to-Peer Grouping services may not function, and some applications, such as HomeGroup and Remote Assistance, may not function correctly. |
+|  | `p2psvc` | Enables multi-party communication using Peer-to-Peer Grouping. If disabled, some applications, such as HomeGroup, may not function. |
+|  | `PNRPAutoReg` | This service publishes a machine name using the Peer Name Resolution Protocol. Configuration is managed via the netsh context `p2p pnrp peer`. |
+|  | `PNRPsvc` | Enables serverless peer name resolution over the Internet using the Peer Name Resolution Protocol (PNRP). If disabled, some peer-to-peer and collaborative applications, such as Remote Assistance, may not function. |
 | Camera | `FrameServer` | Enables multiple clients to access video frames from camera devices. |
 |  | `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
 |  | `StiSvc` | Provides image acquisition services for scanners and cameras |
@@ -1135,14 +1148,25 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `WdiServiceHost` | The Diagnostic Service Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local Service context. If this service is stopped, any diagnostics that depend on it will no longer function. |
 |  | `WdiSystemHost` | The Diagnostic System Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local System context. If this service is stopped, any diagnostics that depend on it will no longer function. |
 |  | `TroubleshootingSvc` | Enables automatic mitigation for known problems by applying recommended troubleshooting. If stopped, your device will not get recommended troubleshooting for problems on your device. |
-|  | `Ndu` | This service provides network data usage monitoring functionality |
 | Domain/RPC | `Netlogon` | Maintains a secure channel between this computer and the domain controller for authenticating users and services. If this service is stopped, the computer may not authenticate users and services and the domain controller cannot register DNS records. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `MsRPC` | - |
+|  | `MsRPC` | MsRPC |
+|  | `RpcLocator` | In Windows 2003 and earlier versions of Windows, the Remote Procedure Call (RPC) Locator service manages the RPC name service database. In Windows Vista and later versions of Windows, this service does not provide any functionality and is present for application compatibility. |
 | Edge | `MicrosoftEdgeElevationService` | Provides elevated privileges for Microsoft Edge. |
 |  | `edgeupdate` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
 |  | `edgeupdatem` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
 | File/Printer Sharing | `LanmanServer` | Supports file, print, and named-pipe sharing over the network for this computer. If this service is stopped, these functions will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `LanmanWorkstation` | Creates and maintains client network connections to remote servers using the SMB protocol. If this service is stopped, these connections will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `CSC` | Allows network files to be used while the local computer is offline. |
+|  | `CscService` | The Offline Files service performs maintenance activities on the Offline Files cache, responds to user logon and logoff events, implements the internals of the public API, and dispatches interesting events to those interested in Offline Files activities and changes in cache state. |
+|  | `Dfsc` | Client driver for access to DFS Namespaces |
+|  | `MRxDAV` | Network Redirector that provides WebDAV file access for the WebClient service |
+|  | `mrxsmb` | Implements the framework for the SMB filesystem redirector |
+|  | `mrxsmb20` | Implements the SMB 2.0 protocol, which provides connectivity to network resources on Windows Vista and later servers |
+|  | `P9Rdr` | Plan 9 Redirector Driver |
+|  | `P9RdrService` | Enables trigger-starting plan9 file servers. |
+|  | `rdbss` | Provides the framework for network mini-redirectors |
+|  | `TrkWks` | Maintains links between NTFS files within a computer or across computers in a network. |
+|  | `WebClient` | Enables Windows-based programs to create, access, and modify Internet-based files. If this service is stopped, these functions will not be available. If this service is disabled, any services that explicitly depend on it will fail to start. |
 | GameInput | `GameInputSvc` | Enables keyboards, mice, gamepads, and other input devices to be used with the GameInput API. |
 | HyperV | `bttflt` | Microsoft Hyper-V VHDPMEM BTT Filter |
 |  | `gencounter` | Microsoft Hyper-V Generation Counter |
@@ -1195,15 +1219,12 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `swprv` | Manages software-based volume shadow copies taken by the Volume Shadow Copy service. If this service is stopped, software-based volume shadow copies cannot be managed. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `VSS` | Manages and implements Volume Shadow Copies used for backup and other purposes. If this service is stopped, shadow copies will be unavailable for backup and the backup may fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `wbengine` | The WBENGINE service is used by Windows Backup to perform backup and recovery operations. If this service is stopped by a user, it may cause the currently running backup or recovery operation to fail. Disabling this service may disable backup and recovery operations using Windows Backup on this computer. |
-| Remote Desktop | `RemoteAccess` | Offers routing services to businesses in local area and wide area network environments. |
-|  | `RemoteRegistry` | Enables remote users to modify registry settings on this computer. If this service is stopped, the registry can be modified only by users on this computer. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| Remote Desktop | `RemoteRegistry` | Enables remote users to modify registry settings on this computer. If this service is stopped, the registry can be modified only by users on this computer. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
 |  | `TermService` | Allows users to connect interactively to a remote computer. Remote Desktop and Remote Desktop Session Host Server depend on this service. To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item. |
 |  | `UmRdpService` | Allows the redirection of Printers/Drives/Ports for RDP connections |
 |  | `rdpbus` | Remote Desktop Device Redirector Bus Driver |
 |  | `RDPDR` | Remote Desktop Device Redirector Driver |
-|  | `wanarp` | Remote Access IP ARP Driver |
-|  | `wanarpv6` | Remote Access IPv6 ARP Driver |
 |  | `terminpt` | Microsoft Remote Desktop Input Driver |
 |  | `TsUsbFlt` | Remote Desktop USB Hub Class Filter Driver |
 |  | `TsUsbGD` | Remote Desktop Generic USB Device |
@@ -1211,7 +1232,13 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | Sensor | `SensorDataService` | Delivers data from a variety of sensors |
 |  | `SensrSvc` | Monitors various sensors in order to expose data and adapt to system and user state. If this service is stopped or disabled, the display brightness will not adapt to lighting conditions. Stopping this service may affect other system functionality and features as well. |
 |  | `SensorService` | A service for sensors that manages different sensors' functionality. Manages Simple Device Orientation (SDO) and History for sensors. Loads the SDO sensor that reports device orientation changes. If this service is stopped or disabled, the SDO sensor will not be loaded and so auto-rotation will not occur. History collection from Sensors will also be stopped. |
+|  | `perceptionsimulation` | Enables spatial perception simulation, virtual camera management and spatial input simulation. |
+|  | `spectrum` | Enables spatial perception, spatial input, and holographic rendering. |
+|  | `VacSvc` | Hosts spatial analysis for Mixed Reality audio simulation. |
 | Sign-In Assistant | `wlidsvc` | Enables user sign-in through Microsoft account identity services. If this service is stopped, users will not be able to logon to the computer with their Microsoft account. |
+|  | `NaturalAuthentication` | Signal aggregator service, that evaluates signals based on time, network, geolocation, bluetooth and cdf factors. Supported features are Device Unlock, Dynamic Lock and Dynamo MDM policies |
+|  | `NgcCtnrSvc` | Manages local user identity keys used to authenticate user to identity providers as well as TPM virtual smart cards. If this service is disabled, local user identity keys and TPM virtual smart cards will not be accessible. It is recommended that you do not reconfigure this service. |
+|  | `NgcSvc` | Provides process isolation for cryptographic keys used to authenticate to a user's associated identity providers. If this service is disabled, all uses and management of these keys will not be available, which includes machine logon and single-sign on for apps and websites. This service starts and stops automatically. It is recommended that you do not reconfigure this service. |
 | Smart Card | `CertPropSvc` | Copies user certificates and root certificates from smart cards into the current user's certificate store, detects when a smart card is inserted into a smart card reader, and, if needed, installs the smart card Plug and Play minidriver. |
 |  | `SCardSvr` | Manages access to smart cards read by this computer. If this service is stopped, this computer will be unable to read smart cards. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
@@ -1227,6 +1254,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | TCP/IP NetBIOS Helper | `lmhosts` | Provides support for the NetBIOS over TCP/IP (NetBT) service and NetBIOS name resolution for clients on the network, therefore enabling users to share files, print, and log on to the network. If this service is stopped, these functions might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
 | Telemetry | `DiagTrack` | The Connected User Experiences and Telemetry service enables features that support in-application and connected user experiences. Additionally, this service manages the event driven collection and transmission of diagnostic and usage information (used to improve the experience and quality of the Windows Platform) when the diagnostics and usage privacy option settings are enabled under Feedback and Diagnostics. |
 |  | `dmwappushservice` | Routes Wireless Application Protocol (WAP) Push messages received by the device and synchronizes Device Management sessions |
+|  | `Ndu` | This service provides network data usage monitoring functionality |
 |  | `InventorySvc` | This service performs background system inventory, compatibility appraisal, and maintenance used by numerous system components. |
 |  | `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA). PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
 |  | `wuqisvc` | A Microsoft service producing summary facts and insights related to usage and quality of experience. Facts are used to automate on-device self-healing and other optional workflows, such as Personalized offers. |
@@ -1240,6 +1268,9 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | UAC | `luafv` | Virtualizes file write failures to per-user locations. |
 | User Data & Sync Platform | `UnistoreSvc` | Handles storage of structured user data, including contact info, calendars, messages, and other content. If you stop or disable this service, apps that use this data might not work correctly. |
 |  | `UserDataSvc` | Provides apps access to structured user data, including contact info, calendars, messages, and other content. If you stop or disable this service, apps that use this data might not work correctly. |
+|  | `ConsentUxUserSvc` | Allows the system to request user consent to allow apps to access sensitive resources and information such as the device's location |
+|  | `MessagingService` | Service supporting text messaging and related functionality. |
+|  | `PimIndexMaintenanceSvc` | Indexes contact data for fast contact searching. If you stop or disable this service, contacts might be missing from your search results. |
 | Virtual Bus | `CompositeBus` | Multi-Transport Composite Bus Enumerator |
 |  | `umbus` | User-Mode Bus Enumerator |
 |  | `vdrvroot` | Virtual Drive Root Enumerator |
@@ -1277,12 +1308,16 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `VBoxSup` | VirtualBox Support Driver |
 |  | `VBoxUSBMon` | VirtualBox USB Monitor Driver |
 |  | `VBoxSDS` | Used as a COM server for VirtualBox API. VirtualBox Global Interface. |
-| VPN/RAS Services | `RasMan` | Manages dial-up and virtual private network (VPN) connections from this computer to the Internet or other remote networks. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| VPN/RAS Services | `RemoteAccess` | Offers routing services to businesses in local area and wide area network environments. |
+|  | `wanarp` | Remote Access IP ARP Driver |
+|  | `wanarpv6` | Remote Access IPv6 ARP Driver |
+|  | `RasMan` | Manages dial-up and virtual private network (VPN) connections from this computer to the Internet or other remote networks. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `RasAuto` | Creates a connection to a remote network whenever a program references a remote DNS or NetBIOS name or address. |
 |  | `PptpMiniport` | WAN Miniport (PPTP) |
 |  | `RasAgileVpn` | WAN Miniport (IKEv2) |
 |  | `Rasl2tp` | WAN Miniport (L2TP) |
 |  | `RasSstp` | WAN Miniport (SSTP) |
+|  | `SstpSvc` | Provides support for the Secure Socket Tunneling Protocol (SSTP) to connect to remote computers using VPN. If this service is disabled, users will not be able to use SSTP to access remote servers. |
 |  | `RasAcd` | Remote Access Auto Connection Driver |
 | Push Notifications Services | `WpnService` | This service runs in session 0 and hosts the notification platform and connection provider which handles the connection between the device and WNS server. |
 |  | `SmsRouter` | Routes messages based on rules to appropriate clients. |
@@ -1296,6 +1331,8 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | Embedded Mode | `embeddedmode` | The Embedded Mode service enables scenarios related to Background Applications. Disabling this service will prevent Background Applications from being activated. |
 | Optimize Drives | `defragsvc` | Helps the computer run more efficiently by optimizing files on storage drives. |
 | Mobile Hotspot / ICS Service | `icssvc` | Provides the ability to share a cellular data connection with another device. |
+|  | `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing |
+|  | `SharedAccess` | Provides network address translation, addressing, name resolution and/or intrusion prevention services for a home or small office network. |
 | Network Capture Driver | `NdisCap` | Microsoft NDIS Capture |
 | Container File System Drivers | `CimFS` | - |
 |  | `wcifs` | Provides a virtual filesystem view for processes running within Windows Containers |
@@ -1315,6 +1352,25 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | NVIDIA Container Service | `NVDisplay.ContainerLocalSystem` | Container service for NVIDIA root features, required for NVCPL to work. |
 | Everything Service | `Everything (1.5a)` | Provides NTFS indexing, ReFS indexing and USN Journal services to the Everything search client. |
 |  | `Everything` | ^ |
+| App Deployment Services | `AppMgmt` | Processes installation, removal, and enumeration requests for software deployed through Group Policy. If the service is disabled, users will be unable to install, remove, or enumerate software deployed through Group Policy. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `AxInstSV` | Provides User Account Control validation for the installation of ActiveX controls from the Internet and enables management of ActiveX control installation based on Group Policy settings. This service is started on demand and if disabled the installation of ActiveX controls will behave according to default browser settings. |
+|  | `BITS` | Transfers files in the background using idle network bandwidth. If the service is disabled, then any applications that depend on BITS, such as Windows Update or MSN Explorer, will be unable to automatically download programs and other information. |
+|  | `EntAppSvc` | Enables enterprise application management. |
+| Network Authentication Services | `dot3svc` | The Wired AutoConfig (DOT3SVC) service is responsible for performing IEEE 802.1X authentication on Ethernet interfaces. If your current wired network deployment enforces 802.1X authentication, the DOT3SVC service should be configured to run for establishing Layer 2 connectivity and/or providing access to network resources. Wired networks that do not enforce 802.1X authentication are unaffected by the DOT3SVC service. |
+|  | `EapHost` | The Extensible Authentication Protocol (EAP) service provides network authentication in such scenarios as 802.1x wired and wireless, VPN, and Network Access Protection (NAP). EAP also provides application programming interfaces (APIs) that are used by network access clients, including wireless and VPN clients, during the authentication process. If you disable this service, this computer is prevented from accessing networks that require EAP authentication. |
+| Network Profile & Connectivity UX Services | `NcaSvc` | Provides DirectAccess status notification for UI components |
+|  | `NlaSvc` | Collects and stores configuration information for the network and notifies programs when this information is modified. If this service is stopped, configuration information might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `Wcmsvc` | Makes automatic connect and disconnect decisions based on the network connectivity options currently available to the PC and enables management of network connectivity based on Group Policy settings. |
+| Enterprise Transaction & Storage Services | `MSDTC` | Coordinates transactions that span multiple resource managers, such as databases, message queues, and file systems. If this service is stopped, these transactions will fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `MSiSCSI` | Manages Internet SCSI (iSCSI) sessions from this computer to remote iSCSI target devices. If this service is stopped, this computer will not be able to login or access iSCSI targets. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `smphost` | Host service for the Microsoft Storage Spaces management provider. If this service is stopped or disabled, Storage Spaces cannot be managed. |
+| Management / Encryption Broker Services | `SNMPTRAP` | Receives trap messages generated by local or remote Simple Network Management Protocol (SNMP) agents and forwards the messages to SNMP management programs running on this computer. If this service is stopped, SNMP-based programs on this computer will not receive SNMP trap messages. If this service is disabled, any services that explicitly depend on it will fail to start. |
+|  | `WEPHOSTSVC` | Windows Encryption Provider Host Service brokers encryption related functionalities from 3rd Party Encryption Providers to processes that need to evaluate and apply EAS policies. Stopping this will compromise EAS compliancy checks that have been established by the connected Mail Accounts |
+| Demo / Shared Device Services | `RetailDemo` | The Retail Demo service controls device activity while the device is in retail demo mode. |
+|  | `shpamsvc` | Manages profiles and accounts on a SharedPC configured device |
+| Graphics Compatibility Service | `WarpJITSvc` | Enables JIT compilation support in d3d10warp.dll for processes in which code generation is disabled. |
+| Mobile Broadband Services | `wlpasvc` | This service provides profile management for subscriber identity modules |
+|  | `WwanSvc` | This service manages mobile broadband (GSM & CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices. |
 | Miscellaneous | `WalletService` | Hosts objects used by clients of the wallet |
 |  | `PenService` | Part of Windows Ink Services Platform Tablet Input Subsystem and is used to implement Microsoft Tablet PC functionality.  |
 |  | `buttonconverter` | Service for Portable Device Control devices |
