@@ -1085,22 +1085,28 @@ This list was created using my small [`ScheduledTasksLists.ps1`](https://github.
 
 # Disable Services/Drivers
 
-**Only configure suboptions if you are able to troubleshoot issues yourself, as disabling several drivers/services will cause failures.**
+**I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features will not start automatically anyway. You can use the SUBOPTIONs if you want to disable specific services/drivers for a specific reason (note that this may cause broken functionalities).**
 
-The main option doesn't apply all suboptions. For further custumization use [serviwin](https://www.nirsoft.net/utils/serviwin.html).
+## Internals 'Windows services'
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/services1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/services2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/services3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/services4.png?raw=true)
+
+Read more about it in [Windows Internals E7, P2](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) 'Windows services (P.426-474) section.
+
+## Service/Driver Table Overview
 
 The suboptions probably overlap the documentation. If so, you can open the markdown file on my GitHub instead:
 > https://github.com/nohuto/win-config/blob/main/system/desc.md#disable-servicesdrivers
-
-Note: Disabling `AppXSvc` (`Microsoft Store Services` option) breaks CmdPal and other store applications, disabling `ShellHWDetection` (`Autoplay` option) causes CmdPal to not start directly after boot for whatever reason.
 
 See [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) for reference, these files were generated on a stock `W11 IoT Enterprise LTSC` installation via [serviwin](https://www.nirsoft.net/utils/serviwin.html).
 
 | Option Name | Service/Driver | Description |
 | --- | --- | --- |
 | Activity Moderation | `bam` | Controls activity of background applications |
-|  | `dam` | Controls activity of desktop applications |
-| Autoplay | `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
+| Autoplay | `ShellHWDetection` | *Disabling causes CmdPal to not start directly after boot for whatever reason.* -Provides notifications for AutoPlay hardware events. |
 | Beep | `Beep` | Legacy PC speaker/tone driver. It provides simple beeps for apps that call the Windows Beep API. |
 | Biometrics | `WbioSrvc` | The Windows biometric service gives client applications the ability to capture, compare, manipulate, and store biometric data without gaining direct access to any biometric hardware or samples. The service is hosted in a privileged SVCHOST process. |
 | Bluetooth | `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
@@ -1140,7 +1146,6 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | CDROM | `cdrom` | CD-ROM Driver |
 | Clipboard | `cbdhsvc` | This user service is used for Clipboard scenarios |
 | Cloud Filter | `CldFlt` | Cloud Files Mini Filter Driver |
-| Device Setup Manager | `DsmSvc` | Enables the detection, download and installation of device-related software. If this service is disabled, devices may be configured with outdated software, and may not work correctly. |
 | DHCP | `Dhcp` | Registers and updates IP addresses and DNS records for this computer. If this service is stopped, this computer will not receive dynamic IP addresses and DNS updates. If this service is disabled, any services that explicitly depend on it will fail to start. |
 | Diagnostics | `DusmSvc` | Network data usage, data limit, restrict background data, metered networks. |
 |  | `DPS` | The Diagnostic Policy Service enables problem detection, troubleshooting and resolution for Windows components. If this service is stopped, diagnostics will no longer function. |
@@ -1219,8 +1224,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `swprv` | Manages software-based volume shadow copies taken by the Volume Shadow Copy service. If this service is stopped, software-based volume shadow copies cannot be managed. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `VSS` | Manages and implements Volume Shadow Copies used for backup and other purposes. If this service is stopped, shadow copies will be unavailable for backup and the backup may fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `wbengine` | The WBENGINE service is used by Windows Backup to perform backup and recovery operations. If this service is stopped by a user, it may cause the currently running backup or recovery operation to fail. Disabling this service may disable backup and recovery operations using Windows Backup on this computer. |
-| Remote Desktop | `RemoteRegistry` | Enables remote users to modify registry settings on this computer. If this service is stopped, the registry can be modified only by users on this computer. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
+| Remote Desktop | `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
 |  | `TermService` | Allows users to connect interactively to a remote computer. Remote Desktop and Remote Desktop Session Host Server depend on this service. To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item. |
 |  | `UmRdpService` | Allows the redirection of Printers/Drives/Ports for RDP connections |
 |  | `rdpbus` | Remote Desktop Device Redirector Bus Driver |
@@ -1239,13 +1243,12 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `NaturalAuthentication` | Signal aggregator service, that evaluates signals based on time, network, geolocation, bluetooth and cdf factors. Supported features are Device Unlock, Dynamic Lock and Dynamo MDM policies |
 |  | `NgcCtnrSvc` | Manages local user identity keys used to authenticate user to identity providers as well as TPM virtual smart cards. If this service is disabled, local user identity keys and TPM virtual smart cards will not be accessible. It is recommended that you do not reconfigure this service. |
 |  | `NgcSvc` | Provides process isolation for cryptographic keys used to authenticate to a user's associated identity providers. If this service is disabled, all uses and management of these keys will not be available, which includes machine logon and single-sign on for apps and websites. This service starts and stops automatically. It is recommended that you do not reconfigure this service. |
-| Smart Card | `CertPropSvc` | Copies user certificates and root certificates from smart cards into the current user's certificate store, detects when a smart card is inserted into a smart card reader, and, if needed, installs the smart card Plug and Play minidriver. |
-|  | `SCardSvr` | Manages access to smart cards read by this computer. If this service is stopped, this computer will be unable to read smart cards. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| Smart Card | `SCardSvr` | Manages access to smart cards read by this computer. If this service is stopped, this computer will be unable to read smart cards. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
 |  | `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
 |  | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
 | SysMain/ReadyBoost | `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases)) |
-| Microsoft Store | `AppXSvc` | Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
+| Microsoft Store | `AppXSvc` | *Disabling breaks CmdPal and other store applications.* - Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
 |  | `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
 |  | `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
 |  | `InstallService` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled then installations will not function properly. |
@@ -1259,8 +1262,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA). PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
 |  | `wuqisvc` | A Microsoft service producing summary facts and insights related to usage and quality of experience. Facts are used to automate on-device self-healing and other optional workflows, such as Personalized offers. |
 | Themes | `Themes` | Provides user experience theme management. |
-| Time | `W32Time` | Maintains date and time synchronization on all clients and servers in the network. If this service is stopped, date and time synchronization will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `autotimesvc` | This service sets time based on NITZ messages from a Mobile Network |
+| Time | `autotimesvc` | This service sets time based on NITZ messages from a Mobile Network |
 |  | `tzautoupdate` | Automatically sets the system time zone. |
 | Trusted Runtime | `WindowsTrustedRT` | Windows Trusted Runtime Interface Driver |
 |  | `WindowsTrustedRTProxy` | Windows Trusted Runtime Service Proxy Driver |
@@ -1319,16 +1321,12 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `RasSstp` | WAN Miniport (SSTP) |
 |  | `SstpSvc` | Provides support for the Secure Socket Tunneling Protocol (SSTP) to connect to remote computers using VPN. If this service is disabled, users will not be able to use SSTP to access remote servers. |
 |  | `RasAcd` | Remote Access Auto Connection Driver |
-| Push Notifications Services | `WpnService` | This service runs in session 0 and hosts the notification platform and connection provider which handles the connection between the device and WNS server. |
-|  | `SmsRouter` | Routes messages based on rules to appropriate clients. |
-| NPSM Service | `NPSMSvc_*` | This service hosts the Now Playing Session Manager used for Media Scenarios |
 | Media Sharing / Portable Devices | `WMPNetworkSvc` | Shares Windows Media Player libraries to other networked players and media devices using Universal Plug and Play |
 |  | `WPDBusEnum` | Enforces group policy for removable mass-storage devices. Enables applications such as Windows Media Player and Image Import Wizard to transfer and synchronize content using removable mass-storage devices. |
 | BranchCache | `PeerDistSvc` | This service caches network content from peers on the local subnet. |
 | QoS/AV Streaming (qWave) | `QWAVE` | Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV) streaming applications on IP home networks. qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS) for AV applications. It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization. |
 |  | `QWAVEdrv` | Quality Windows Audio/Video Experience component driver |
 | NFC/Payments | `SEMgrSvc` | Manages payments and Near Field Communication (NFC) based secure elements. |
-| Embedded Mode | `embeddedmode` | The Embedded Mode service enables scenarios related to Background Applications. Disabling this service will prevent Background Applications from being activated. |
 | Optimize Drives | `defragsvc` | Helps the computer run more efficiently by optimizing files on storage drives. |
 | Mobile Hotspot / ICS Service | `icssvc` | Provides the ability to share a cellular data connection with another device. |
 |  | `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing |
@@ -1340,40 +1338,41 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | iSCSI Driver | `msisadrv` | Disabling breaks laptop keyboards. |
 | NetBIOS Driver | `NetBIOS` | NetBIOS Interface |
 |  | `NetBT` | This service implements NetBios over TCP/IP. |
-| Epic Games Services | `EpicGamesUpdater` | - |
+| Epic Games | `EpicGamesUpdater` | - |
 |  | `EpicOnlineServices` | - |
-| Logitech Services | `LGHUBUpdaterService` | LGHUB Updater Service |
+| Logitech | `LGHUBUpdaterService` | LGHUB Updater Service |
 |  | `logi_joy_bus_enum` | Logitech G HUB Virtual Bus Enumerator Driver |
 |  | `logi_joy_vir_hid` | Logitech G HUB Virtual HID Device Driver |
 |  | `logi_lamparray_service` | Provides HID LampArray Lighting support to Logitech devices. |
-| SteelSeries Services | `SteelSeries_Sonar_VAD` | SteelSeries Sonar Driver |
+| SteelSeries | `SteelSeries_Sonar_VAD` | SteelSeries Sonar Driver |
 |  | `SteelSeriesGGUpdateServiceProxy` | Launches the SteelSeries Update Service. |
 |  | `ssdevfactory` | SteelSeries Device Factory Service |
-| NVIDIA Container Service | `NVDisplay.ContainerLocalSystem` | Container service for NVIDIA root features, required for NVCPL to work. |
-| Everything Service | `Everything (1.5a)` | Provides NTFS indexing, ReFS indexing and USN Journal services to the Everything search client. |
+| NVIDIA Container | `NVDisplay.ContainerLocalSystem` | Container service for NVIDIA root features, required for NVCPL to work. |
+| Everything | `Everything (1.5a)` | Provides NTFS indexing, ReFS indexing and USN Journal services to the Everything search client. |
 |  | `Everything` | ^ |
-| App Deployment Services | `AppMgmt` | Processes installation, removal, and enumeration requests for software deployed through Group Policy. If the service is disabled, users will be unable to install, remove, or enumerate software deployed through Group Policy. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| App Deployment | `AppMgmt` | Processes installation, removal, and enumeration requests for software deployed through Group Policy. If the service is disabled, users will be unable to install, remove, or enumerate software deployed through Group Policy. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `AxInstSV` | Provides User Account Control validation for the installation of ActiveX controls from the Internet and enables management of ActiveX control installation based on Group Policy settings. This service is started on demand and if disabled the installation of ActiveX controls will behave according to default browser settings. |
 |  | `BITS` | Transfers files in the background using idle network bandwidth. If the service is disabled, then any applications that depend on BITS, such as Windows Update or MSN Explorer, will be unable to automatically download programs and other information. |
 |  | `EntAppSvc` | Enables enterprise application management. |
-| Network Authentication Services | `dot3svc` | The Wired AutoConfig (DOT3SVC) service is responsible for performing IEEE 802.1X authentication on Ethernet interfaces. If your current wired network deployment enforces 802.1X authentication, the DOT3SVC service should be configured to run for establishing Layer 2 connectivity and/or providing access to network resources. Wired networks that do not enforce 802.1X authentication are unaffected by the DOT3SVC service. |
+| Network Authentication | `dot3svc` | The Wired AutoConfig (DOT3SVC) service is responsible for performing IEEE 802.1X authentication on Ethernet interfaces. If your current wired network deployment enforces 802.1X authentication, the DOT3SVC service should be configured to run for establishing Layer 2 connectivity and/or providing access to network resources. Wired networks that do not enforce 802.1X authentication are unaffected by the DOT3SVC service. |
 |  | `EapHost` | The Extensible Authentication Protocol (EAP) service provides network authentication in such scenarios as 802.1x wired and wireless, VPN, and Network Access Protection (NAP). EAP also provides application programming interfaces (APIs) that are used by network access clients, including wireless and VPN clients, during the authentication process. If you disable this service, this computer is prevented from accessing networks that require EAP authentication. |
-| Network Profile & Connectivity UX Services | `NcaSvc` | Provides DirectAccess status notification for UI components |
+| Network Profile & Connectivity UX | `NcaSvc` | Provides DirectAccess status notification for UI components |
 |  | `NlaSvc` | Collects and stores configuration information for the network and notifies programs when this information is modified. If this service is stopped, configuration information might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `Wcmsvc` | Makes automatic connect and disconnect decisions based on the network connectivity options currently available to the PC and enables management of network connectivity based on Group Policy settings. |
-| Enterprise Transaction & Storage Services | `MSDTC` | Coordinates transactions that span multiple resource managers, such as databases, message queues, and file systems. If this service is stopped, these transactions will fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| Enterprise Transaction & Storage | `MSDTC` | Coordinates transactions that span multiple resource managers, such as databases, message queues, and file systems. If this service is stopped, these transactions will fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `MSiSCSI` | Manages Internet SCSI (iSCSI) sessions from this computer to remote iSCSI target devices. If this service is stopped, this computer will not be able to login or access iSCSI targets. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `smphost` | Host service for the Microsoft Storage Spaces management provider. If this service is stopped or disabled, Storage Spaces cannot be managed. |
-| Management / Encryption Broker Services | `SNMPTRAP` | Receives trap messages generated by local or remote Simple Network Management Protocol (SNMP) agents and forwards the messages to SNMP management programs running on this computer. If this service is stopped, SNMP-based programs on this computer will not receive SNMP trap messages. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| Management / Encryption Broker | `SNMPTRAP` | Receives trap messages generated by local or remote Simple Network Management Protocol (SNMP) agents and forwards the messages to SNMP management programs running on this computer. If this service is stopped, SNMP-based programs on this computer will not receive SNMP trap messages. If this service is disabled, any services that explicitly depend on it will fail to start. |
 |  | `WEPHOSTSVC` | Windows Encryption Provider Host Service brokers encryption related functionalities from 3rd Party Encryption Providers to processes that need to evaluate and apply EAS policies. Stopping this will compromise EAS compliancy checks that have been established by the connected Mail Accounts |
-| Demo / Shared Device Services | `RetailDemo` | The Retail Demo service controls device activity while the device is in retail demo mode. |
+| Demo / Shared Device | `RetailDemo` | The Retail Demo service controls device activity while the device is in retail demo mode. |
 |  | `shpamsvc` | Manages profiles and accounts on a SharedPC configured device |
-| Graphics Compatibility Service | `WarpJITSvc` | Enables JIT compilation support in d3d10warp.dll for processes in which code generation is disabled. |
-| Mobile Broadband Services | `wlpasvc` | This service provides profile management for subscriber identity modules |
+| Graphics Compatibility | `WarpJITSvc` | Enables JIT compilation support in d3d10warp.dll for processes in which code generation is disabled. |
+| Mobile Broadband | `wlpasvc` | This service provides profile management for subscriber identity modules |
 |  | `WwanSvc` | This service manages mobile broadband (GSM & CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices. |
 | Miscellaneous | `WalletService` | Hosts objects used by clients of the wallet |
 |  | `PenService` | Part of Windows Ink Services Platform Tablet Input Subsystem and is used to implement Microsoft Tablet PC functionality.  |
 |  | `buttonconverter` | Service for Portable Device Control devices |
+|  | `SmsRouter` | Routes messages based on rules to appropriate clients. |
 
 Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) / `rdyboost` (ReadyBoost (rdyboost.sys) is a cache layer between memory and disk that uses flash media for random-read caching, creates ReadyBoost.sfcache on the device, validates the device via read/write tests, and encrypts cache data. Device test results and state live under `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{71a27cdd-812a-11d0-bec7-08002be2092f}\\Emdmgmt`. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases))) = `INACCESSIBLE_BOOT_DEVICE` BSoD.
 
