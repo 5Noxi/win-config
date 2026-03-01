@@ -1085,7 +1085,7 @@ This list was created using my small [`ScheduledTasksLists.ps1`](https://github.
 
 # Disable Services/Drivers
 
-**I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features will not start automatically anyway. You can use the SUBOPTIONs if you want to disable specific services/drivers for a specific reason (note that this may cause broken functionalities).**
+**I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features will not start automatically anyway. You can use the SUBOPTIONs if you want to disable specific services/drivers (e.g. *"Autoplay Service, Bluetooth Services, Camera Services, File/Printer Sharing Services, Printer Services, Store Services"*) for a specific reason (note that this may cause broken functionalities).**
 
 ## Internals 'Windows services'
 
