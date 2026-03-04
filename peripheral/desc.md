@@ -38,13 +38,18 @@ Value names in `usbflags-HUBREG_QueryUsbflagsValuesForDevice.c` are mostly UNICO
 
 Enabling `DisableLPM` won't get you anywhere since the devices are in D0 (working state) anyway while using them. The same can be said for the whole `Power` section too.
 
-> [peripheral/assets | usbflags-HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-HUBDSM_QueryingRegistryValuesForDevice.c)  
-> [peripheral/assets | usbflags-HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-HUBMISC_QueryAndCacheRegistryValuesForDevice.c)  
-> [peripheral/assets | usbflags-HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-HUBREG_OpenCreateUsbflagsDeviceKey.c)  
-> [peripheral/assets | usbflags-HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-HUBREG_QueryUsbflagsValuesForDevice.c)  
-> [peripheral/assets | usbflags-Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-Controller_IsRegKeySetToDisableS0Idle.c)  
-> [peripheral/assets | usbflags-Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)  
-> [peripheral/assets | usbflags-Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags-Controller_PopulateTestRegistrySettings.c)
+> [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)  
+> [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)  
+> [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)  
+> [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)  
+> [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_QueryHubErrataFlags.c)  
+> [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)  
+> [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)  
+> [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/GetConfigValue.c)  
+> [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)  
+> [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)  
+> [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Controller_PopulateTestRegistrySettings.c)  
+> [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
 
 The subkeys in `usbflags` always have a length of 12, build in such a structure `vvvvpppprrrr`:
 - **vvvv** is a 4-digit hexadecimal number that identifies the vendor
@@ -91,7 +96,7 @@ aRegistryMachin_13 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb";
 
 # USB Values
 
-For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Base path is `HKLM\SYSTEM\CurrentControlSet\Control\usb` (from `LRegistryMachineSYSTEMCurrentControlSetControlUSB`). Default data is unknown for most values as the driver code only reads the registry and handles fallbacks, note that this is currently based on USBHUB3.sys only, means it's not complete.
+For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks, note that this is currently based on USBHUB3.sys only, means it's not complete (USBXHCI.sys was used for DisableHCS0Idle & TestRunEsmInWorkItem, Ucx01000.sys for Allow64KLowOrFullSpeedControlTransfers, usbccgp.sys for GenericCompositeUSBDeviceString).
 
 ```c
 // HUBREG_QueryGlobalUsb20HardwareLpmSettings
@@ -141,17 +146,20 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "ForceHCResetOnResume" = 0; // REG_DWORD, forces controller reset on resume
     "FastResumeEnable" = 0; // REG_DWORD, enables fast S0 resume
 
+    //HcDisableSelectiveSuspend
+
 // miscellaneous note for future reference
 "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Usb\\Ceip" // UsbhUpdateRegSurpriseRemovalCount
     "BootPathSurpriseRemovalCount" = ?;
 ```
 
-> [peripheral/assets | usb-GetPersistedKeyPath.c](https://github.com/nohuto/win-registry/blob/main/assets/usb-GetPersistedKeyPath.c)  
-> [peripheral/assets | usb-HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usb-HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)  
-> [peripheral/assets | usb-HUBREG_QueryGlobalUsb20HardwareLpmSettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usb-HUBREG_QueryGlobalUsb20HardwareLpmSettings.c)  
-> [peripheral/assets | usb-HUBREG_QueryGlobalUsbLtmSettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usb-HUBREG_QueryGlobalUsbLtmSettings.c)  
-> [peripheral/assets | usb-HUBREG_QueryUsbHardwareVerifierValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usb-HUBREG_QueryUsbHardwareVerifierValue.c)  
-> [peripheral/assets | usb-ReadManifestAssignedValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usb-ReadManifestAssignedValue.c)
+> [peripheral/assets | GetPersistedKeyPath.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/GetPersistedKeyPath.c)  
+> [peripheral/assets | HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)  
+> [peripheral/assets | HUBREG_QueryGlobalUsb20HardwareLpmSettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/HUBREG_QueryGlobalUsb20HardwareLpmSettings.c)  
+> [peripheral/assets | HUBREG_QueryGlobalUsbLtmSettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/HUBREG_QueryGlobalUsbLtmSettings.c)  
+> [peripheral/assets | HUBREG_QueryUsbHardwareVerifierValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/HUBREG_QueryUsbHardwareVerifierValue.c)  
+> [peripheral/assets | ReadManifestAssignedValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/ReadManifestAssignedValue.c)  
+> [peripheral/assets | UsbDualRoleFeaturesQueryLocalMachine.c](https://github.com/nohuto/win-registry/blob/main/assets/usb/UsbDualRoleFeaturesQueryLocalMachine.c)
 
 `AttemptRecoveryFromUsbPowerDrain` is used to stop USB devices when your screen is off, obviously only for laptop users.
 
@@ -225,11 +233,11 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "{GUID}" = ?; // value name from RtlStringFromGUID
 ```
 
-> [peripheral/assets | usbhub-HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub-HUBREG_QueryUxdDeviceKey.c)  
-> [peripheral/assets | usbhub-HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub-HUBREG_DeleteUxdDeviceKey.c)  
-> [peripheral/assets | usbhub-HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub-HUBREG_QueryGlobalUxdSettings.c)  
-> [peripheral/assets | usbhub-HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub-HUBREG_QueryGlobalHubValues.c)  
-> [peripheral/assets | usbhub-HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub-HUBREG_GetUxdPnpValue.c)
+> [peripheral/assets | HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub/HUBREG_QueryUxdDeviceKey.c)  
+> [peripheral/assets | HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub/HUBREG_DeleteUxdDeviceKey.c)  
+> [peripheral/assets | HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub/HUBREG_QueryGlobalUxdSettings.c)  
+> [peripheral/assets | HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub/HUBREG_QueryGlobalHubValues.c)  
+> [peripheral/assets | HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usbhub/HUBREG_GetUxdPnpValue.c)
 
 ```c
 aRegistryMachin_1 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USBFN";

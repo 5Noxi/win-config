@@ -58,7 +58,10 @@ Since many people don't yet know which values exist and what default value they 
 
 ---
 
-See [session-manager-symbols](https://github.com/nohuto/win-registry/blob/main/session-manager-values.txt) for reference.
+See [session-manager-symbols](https://github.com/nohuto/win-registry/blob/main/assets/session-manager/session-manager-symbols.txt) for reference.
+> [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-registry/blob/main/assets/session-manager/ProcLibGlobalInit.c)  
+> [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-registry/blob/main/assets/session-manager/GetRegistryQwordValue.c)  
+> [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-registry/blob/main/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
@@ -175,7 +178,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "RNGAuxiliarySeed" = ; // ExpRNGAuxiliarySeed - REG_DWORD, default of 1807947291? ("HKLM\System\CurrentControlSet\Control\Session Manager\kernel\RNG\RNGAuxiliarySeed","Type: REG_DWORD, Data: 1807947291", procmon boot trace)
 ```
 
-> https://github.com/nohuto/win-registry?tab=readme-ov-file#session-manager-values
+> https://github.com/nohuto/win-registry#session-manager-values
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
@@ -191,11 +194,9 @@ Many applied values are defaults, some not. See documentation below for details.
 
 ---
 
-These are default values I found in `dxgkrnl.sys`, see [dxgkrnl.c](https://github.com/nohuto/win-registry/blob/main/assets/dxgkrnl.c) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
+These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-registry/tree/main/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
 
-The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-registry/blob/main/assets/dxgmms2) for all used files.
-
-> https://github.com/nohuto/win-registry#kernel--dxg-kernel-values
+The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-registry/tree/main/assets/dxg-values/dxgmms2) for all used files.
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
@@ -683,13 +684,15 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "Stride" = ?; // REG_DWORD
 ```
 
+> https://github.com/nohuto/win-registry#dxg-kernel-values
+
 # DWM Values
 
 This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
 
 ---
 
-See [dwm.c](https://github.com/nohuto/win-registry/blob/main/assets/dwm.c) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
+See [assets/dwm](https://github.com/nohuto/win-registry/tree/main/assets/dwm) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
@@ -858,9 +861,9 @@ Miscellaneous notes:
 
 # MMCSS Values
 
-All values are read via `CiConfigReadDWORD()`, so the type is DWORD for all listed ones. CiConfigInitializeFromRegistry probably handles the `\Tasks\` values.
+All values are read via `CiConfigReadDWORD()`, so the type is `REG_DWORD` for all listed ones. If `\Tasks` opens successfully, `CiConfigInitializeFromRegistry()` handles that part?
 
-See [system/assets | mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss-CiConfigInitialize.c) for notes.
+See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-registry/blob/main/assets/mmcss/mmcss-CiConfigInitialize.c) for notes.
 
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile";
@@ -874,8 +877,6 @@ See [system/assets | mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-c
     "MaxThreadsPerProcess" = 32; // valid range is 8-128, otherwise 32 is used
     "MaxThreadsTotal" = 256; // valid range is 64-65535, otherwise 256 is used
 ```
-
-> https://github.com/nohuto/win-registry/blob/main/records/MultiMedia.txt
 
 ## SystemResponsiveness Details
 
@@ -2548,6 +2549,7 @@ HKLM\BCD00000000\Objects\{GUID}\Elements\XXXXXXXX : Element // (REG_BINARY/REG_M
 See all object identifiers via `bcdedit /enum all /v` (`identifier`). Note that the list below uses `{bootmgr}`, `{current}` etc. which must be replaced by the actual GUID (see block above).
 
 Here are elements which I tracked via Procmon (taken from default store and the MS documentation), note that this doesn't show default states (see block at the buttom), instead it shows several options and their possible states:
+
 ```c
 "HKLM\\BCD00000000\\Objects\\{current}\\Elements";
     "\\26000141"; "Element" = 01; // REG_BINARY, event = true, false = 00
@@ -2615,7 +2617,7 @@ Here are elements which I tracked via Procmon (taken from default store and the 
     "\\25000071"; "Element" = 0100000000000000; // REG_BINARY, msi = 1 (forcedisable), Default = 0000000000000000, ForceEnable only via loadoptions FORCEMSI - The PCI Message Signaled Interrupt (MSI) policy. Zero (0) indicates default, and one (1) indicates that MSI interrupts are disabled.
     "\\25000066"; "Element" = 4000000000000000; // REG_BINARY, groupsize = 64 - Specifies the size of all processor groups. Must be set to a power of 2 (max of 64, see pseudocode below).
     "\\25000063"; "Element" = 0100000000000000; // REG_BINARY, configflags = 1 - Indicates whether processor specific configuration flags are to be used.
-    "\\25000061"; "Element" = 0200000000000000; // REG_BINARY, numproc = 2 - The maximum number of processors that can be utilized by the system; all other processors are ignored.
+    "\\25000061"; "Element" = 0200000000000000; // REG_BINARY, numproc = 2 - The maximum number of processors that can be utilized by the system, all other processors are ignored.
     "\\25000055"; "Element" = 0200000000000000; // REG_BINARY, x2apicpolicy = 2 (enable), Default = 0000000000000000, Disable = 0100000000000000 - Enables the use of extended APIC mode, if supported. Zero (0) indicates default behavior, one (1) indicates that extended APIC mode is disabled, and two (2) indicates that extended APIC mode is enabled. The system defaults to using extended APIC mode if available.
     "\\25000050"; "Element" = 0100000000000000; // REG_BINARY, clustermodeaddressing = 1 - Indicates that cluster-mode APIC addressing should be utilized, and the value is the maximum number of processors per cluster.
     "\\25000052"; "Element" = 0000000000000000; // REG_BINARY, restrictapicluster = 0 - The maximum number of APIC clusters that should be used by cluster-mode addressing.
@@ -2702,7 +2704,7 @@ Here are elements which I tracked via Procmon (taken from default store and the 
     "\\26000021"; "Element" = 01; // REG_BINARY, noerrordisplay = true, false = 00 - Indicates whether the display of errors should be suppressed. If this setting is enabled, the boot manager exits to the multi-OS menu on OS launch error.
     "\\26000020"; "Element" = 01; // REG_BINARY, displaybootmenu = true, false = 00 - Forces the display of the legacy boot menu, regardless of the number of OS entries in the BCD store and their BcdOSLoaderInteger_BootMenuPolicy.
     "\\26000005"; "Element" = 01; // REG_BINARY, attemptresume = true, false = 00 - Indicates that a resume operation should be attempted during a system restart.
-    "\\25000004"; "Element" = 0300000000000000; // REG_BINARY, timeout = 3 - The boot menu time-out determines how long the boot menu is displayed before the default boot entry is loaded. It is calibrated in seconds. If you want extra time to choose the operating system that loads on your computer, you can extend the time-out value. Or, you can shorten the time-out value so that the default operating system starts faster. If this value is not specified, the boot manager waits for the user to make a selection (seems to use a 30sec default). The maximum number of seconds a boot selection menu is to be displayed to the user. The menu is displayed until the user selects an option or the time-out expires.
+    "\\25000004"; "Element" = 0300000000000000; // REG_BINARY, timeout = 3 - The boot menu time-out determines how long the boot menu is displayed before the default boot entry is loaded. It is calibrated in seconds. If you want extra time to choose the operating system that loads on your computer, you can extend the time-out value. Or, you can shorten the time-out value so that the default operating system starts faster. - If this value is not specified, the boot manager waits for the user to make a selection. - The maximum number of seconds a boot selection menu is to be displayed to the user. The menu is displayed until the user selects an option or the time-out expires.
     "\\24000010"; "Element" = {memdiag}; // REG_MULTI_SZ, toolsdisplayorder = {memdiag} - The boot manager tools display order list.
     "\\24000002"; "Element" = {current}; // REG_MULTI_SZ, bootsequence = {current} - If the firmware boot manager does not support loading multiple applications, this list cannot contain more than one entry. - List of boot environment applications the boot manager should execute. The applications are executed in the order they appear in this list.
     "\\24000001"; "Element" = {current}; // REG_MULTI_SZ, displayorder = {current} - The order in which BCD objects should be displayed. Objects are displayed using the string specified by the BcdLibraryString_Description element.
