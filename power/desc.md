@@ -278,7 +278,9 @@ You can see processes, which use power throttling by enabling the column (`Detai
 
 # PnP Device Values
 
-Disables USB selective suspend, idle power management, and related LP features if supported.
+This currently applies the values for the `USB` enumerator only, since most values were found in USB related drivers and kind of all of them (which I use in the option) only get read in the USB enumerator.
+
+Disables USB selective suspend, idle states, and related LP features if supported.
 
 Note that the known `MSPower_DeviceEnable` command does nothing more than recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`.
 ```c
