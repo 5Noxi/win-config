@@ -311,6 +311,22 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 ---
 
+## Storport Idle (`Device Parameters\\StorPort`)
+
+"Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.
+
+Storport IPM allows the classpnp and disk class drivers to send the SCSI Stop Unit command to the storage device when it's idle for some period of time. The idle period is configurable by the system administrator. The Storport miniport driver is responsible for how the command is used by the Storport miniport driver to conserve power.
+
+Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled in the registry by setting the "EnableIdlePowerManagement" value in the "StorPort" subkey of the device's hardware key to any nonzero value. To do so, use the device INF file or manually edit the registry using the registry editor."
+
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
+> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
+> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
+> https://github.com/nohuto/win-registry/blob/main/records/pci.txt  
+> [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
+
+---
+
 Windows Plug and Play (PnP) creates a device node (devnode) for each detected device instance ("The PnP manager is the primary component involved in supporting the ability of Windows to recognize and adapt to changing hardware configurations."). In WinDbg (`!devnode`), `InstancePath` assigns to the device instance key under:
 ```c
 HKLM\SYSTEM\CurrentControlSet\Enum\<enumerator>\<deviceID>\<instanceID>
@@ -396,6 +412,58 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "HubFWUpdateProtocol" = ?; // REG_DWORD
     "OvercurrentDetected" = ?; // REG_DWORD (bool)
     "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
+    "AOCID" = ?;
+    "AutoplayOnSpecialInterface" = ?;
+    "CustomWake" = ?;
+    "DefaultSimulatedTarget" = ?;
+    "DeviceGroup" = ?;
+    "DeviceGroups" = ?;
+    "DeviceHandlers" = ?;
+    "FailReasonID" = ?;
+    "FirmwareCapsuleFilename" = ?;
+    "FirmwareFilename" = ?;
+    "FirmwareId" = ?;
+    "FirmwareIntegrityFilename" = ?;
+    "FirmwareMeasurementsFilename" = ?;
+    "FirmwareStatus" = ?;
+    "FirmwareVersion" = ?;
+    "FirmwareVersionFormat" = ?;
+    "FlipFlopHScroll" = ?;
+    "FlipFlopWheel" = ?;
+    "ForceVirtualDesktop" = ?;
+    "FullPowerDownOnTransientDx" = ?;
+    "FunctionDriverOptIn" = ?;
+    "HackFlags" = ?;
+    "HasPhysicalKeys" = ?;
+    "HScrollHighResolutionDisable" = ?;
+    "HScrollPageOverride" = ?;
+    "HScrollScalingFactor" = ?;
+    "HScrollUsageOverride" = ?;
+    "Icons" = ?;
+    "IdleSupported" = ?;
+    "IdleTimeoutPeriodInMilliSec" = ?;
+    "KeyboardNumberFunctionKeysOverride" = ?;
+    "KeyboardNumberIndicatorsOverride" = ?;
+    "KeyboardNumberTotalKeysOverride" = ?;
+    "KeyboardSubtypeOverride" = ?;
+    "KeyboardTypeOverride" = ?;
+    "Label" = ?;
+    "NoMediaIcons" = ?;
+    "NoSoftEject" = ?;
+    "NumberOfPairingSlots" = ?;
+    "OriginalConfigurationValue" = ?;
+    "RootBus" = ?;
+    "TargetForcePriorityList" = ?;
+    "TargetPriorityList" = ?;
+    "Usb4HostName" = ?;
+    "UsbccgpCapabilities" = ?;
+    "UseStrictBiosHandoff" = ?;
+    "VhfMode" = ?;
+    "VideoID" = ?;
+    "VScrollHighResolutionDisable" = ?;
+    "VScrollPageOverride" = ?;
+    "VScrollUsageOverride" = ?;
+    "WheelScalingFactor" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7";
     "BusDataLinkSettleTime" = ?; // REG_DWORD, accepted if <= 150, larger values are ignored
@@ -471,7 +539,114 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "Flags" = ?; // REG_DWORD, data size 1
     "LinkNode" = ?; // REG_BINARY, ACPIAmliBuildObjectPathname
     "StaticVector" = ?; // REG_DWORD, PcisuppSetRoutingInfo writes this when no LinkNode is present
+
+// miscellaneous values from boot trace, haven't looked into them yet
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>";
+    "Address" = ?;
+    "Capabilities" = ?;
+    "CompatibleIDs" = ?;
+    "ConfigFlags" = ?;
+    "ContainerID" = ?;
+    "DeviceCharacteristics" = ?;
+    "DeviceDesc" = ?;
+    "DeviceReported" = ?;
+    "DeviceType" = ?;
+    "Driver" = ?;
+    "Exclusive" = ?;
+    "HardwareID" = ?;
+    "InstallFlags" = ?;
+    "LocationInformation" = ?;
+    "LowerFilters" = ?;
+    "Mfg" = ?;
+    "ParentIdPrefix" = ?;
+    "Phantom" = ?;
+    "RemovalPolicy" = ?;
+    "SECURITY" = ?;
+    "Service" = ?;
+    "UINumber" = ?;
+    "UINumberDescFormat" = ?;
+    "UniqueParentID" = ?;
+    "UpperFilters" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Control";
+    "AllocConfig" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\LogConf";
+    "AllocConfig" = ?;
+    "BootConfig" = ?;
+    "ForcedConfig" = ?;
+    "OverrideConfigVector" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\BiosConfig";
+    "DEV_00&FUN_00" = ?;
+    "DEV_00&FUN_01" = ?;
+    "DEV_00&FUN_02" = ?;
+    "DEV_00&FUN_03" = ?;
+    "DEV_01&FUN_00" = ?;
+    "DEV_01&FUN_01" = ?;
+    "DEV_01&FUN_02" = ?;
+    "DEV_02&FUN_00" = ?;
+    "DEV_03&FUN_00" = ?;
+    "DEV_03&FUN_01" = ?;
+    "DEV_04&FUN_00" = ?;
+    "DEV_05&FUN_00" = ?;
+    "DEV_07&FUN_00" = ?;
+    "DEV_07&FUN_01" = ?;
+    "DEV_08&FUN_00" = ?;
+    "DEV_08&FUN_01" = ?;
+    "DEV_09&FUN_00" = ?;
+    "DEV_14&FUN_00" = ?;
+    "DEV_14&FUN_03" = ?;
+    "DEV_18&FUN_00" = ?;
+    "DEV_18&FUN_01" = ?;
+    "DEV_18&FUN_02" = ?;
+    "DEV_18&FUN_03" = ?;
+    "DEV_18&FUN_04" = ?;
+    "DEV_18&FUN_05" = ?;
+    "DEV_18&FUN_06" = ?;
+    "DEV_18&FUN_07" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\StorPort";
+    "AdapterGuid" = ?;
+    "BusSpecificResetTimeout" = ?;
+    "BusyPauseTime" = ?;
+    "BusyRetryCount" = ?;
+    "DisableD3Cold" = ?;
+    "DisableIdlePowerManagement" = ?;
+    "DisableNVMeActiveNamespaceIDListCheck" = ?;
+    "DisableRuntimePowerManagement" = ?;
+    "DlrmDisable" = ?;
+    "EnableIdlePowerManagement" = ?;
+    "EnableLogoETW" = ?;
+    "EnableNVMeInterface" = ?;
+    "FwActivateTimeoutForController" = ?;
+    "IdleTimeoutInMS" = ?;
+    "InitialTimestamp" = ?;
+    "Is1667Device" = ?;
+    "MinimumIdleTimeoutInMS" = ?;
+    "PLDRTimeout" = ?;
+    "PowerCycleCount" = ?;
+    "PowerCycleCountOverride" = ?;
+    "PowerSrbTimeout" = ?;
+    "QueueFullWaitIoPercentage" = ?;
+    "TotalSenseDataBytes" = ?;
+    "UseDMAv3" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\DMA Management";
+    "RemappingFlags" = ?;
+    "RemappingSupported" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\partmgr";
+    "Attributes" = ?;
+    "DiskId" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\WUDF";
+    "SoftwareDeviceTag" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\WUDF\\CompanionConfigurations\\USBXHCI";
+    "CompanionServiceList" = ?;
 ```
+
 
 # Disable Hibernation
 
@@ -847,20 +1022,6 @@ Additional notes: `EnableALPEDisableHotplug` (`0`), `AhciDisablePxHotplug` - `am
 > https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm  
 > [power/assets | hddpark-ClassGetServiceParameter.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-ClassGetServiceParameter.c)  
 > [power/assets | hddpark-DllInitialize.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-DllInitialize.c)
-
-# Disable Storport Idle
-
-"Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.
-
-Storport IPM allows the classpnp and disk class drivers to send the SCSI Stop Unit command to the storage device when it's idle for some period of time. The idle period is configurable by the system administrator. The Storport miniport driver is responsible for how the command is used by the Storport miniport driver to conserve power.
-
-Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled in the registry by setting the "EnableIdlePowerManagement" value in the "StorPort" subkey of the device's hardware key to any nonzero value. To do so, use the device INF file or manually edit the registry using the registry editor."
-
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
-> https://github.com/nohuto/win-registry/blob/main/records/pci.txt  
-> [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
 
 # Disable Timer Coalescing
 
