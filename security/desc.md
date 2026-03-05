@@ -192,6 +192,8 @@ Miscellaneous notes:
 }
 ```
 
+> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#29-windows-update
+
 # Disable System Mitigations
 
 Security features that protect against memory based attacks like buffer overflows and code injection. Enabling this option will reduce system security.
