@@ -81,7 +81,7 @@ When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification i
 
 # Power Values
 
-This option serves as a general values overview for the `Power` key (similar to `DXG Kernel Values`/`Kernel Values`/`DWM Values`). Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation. 
+This option serves as a general values overview for the `Power` key (similar to `DXG Kernel Values`/`Kernel Values`/`DWM Values`). Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation.
 
 No values are applied that apply to other options in this section.
 
