@@ -1942,27 +1942,27 @@ HKCU\Control Panel\TimeDate\DstNotification	Type: REG_DWORD, Length: 4, Data: 0
 Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy";
-    "StoragePoliciesNotified" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks cases 5/12 when 1
-    "StoragePoliciesChanged" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, blocks case 12 when 1
-    "OptinToastFired" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 5 allowed only if 0
-    "FirstLaunchToastFired" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 12 allowed only if 0
-    "CloudfilePolicyConsent" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, case 8 requires 0, set to 1 on Enable
-    "CloudConsentToastCount" = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 8 requires < 3, set to 3 on Enable
-    "OptOutButtonClicked" = 0; // REG_DWORD, default: 0 if missing, range: 0..1, set to 1 on ReminderToast
+    "StoragePoliciesNotified" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "StoragePoliciesChanged" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "OptinToastFired" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "FirstLaunchToastFired" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "CloudfilePolicyConsent" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "CloudConsentToastCount" = 0; // REG_DWORD, default 0 if missing, range: 0-3
+    "OptOutButtonClicked" = 0; // REG_DWORD, default 0 if missing, range: 0-1
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DiskSpaceChecking";
     "LastInstallTimeLowStorageNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: OneDay
-    "NumWinOldLowStorageNotify" = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 7 allows if < 3
+    "NumWinOldLowStorageNotify" = 0; // REG_DWORD, default 0 if missing, range: 0-3
 
 "HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion";
     "InstallTime" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoHours
 
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
-    "TestBackupReminderToast" = 0; // REG_DWORD, default: 0 if missing, range: 0..2? case 9 requires nonzero and reminder enabled
+    "TestBackupReminderToast" = 0; // REG_DWORD, default 0 if missing, range: 0-2?
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
-    "FirstProfileSeenTime" = 0; // REG_QWORD FILETIME, default: set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
-    "BackupReminderToastCount" = 0; // REG_DWORD, default: 0 if missing, range: 0..3, case 9 requires < 3
+    "FirstProfileSeenTime" = 0; // REG_QWORD FILETIME, default set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
+    "BackupReminderToastCount" = 0; // REG_DWORD, default 0 if missing, range: 0-3
     "LastTimeBackupReminderNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoMinutes
 
 // FILETIME THRESHOLDS
@@ -1997,11 +1997,11 @@ Miscellaneous notes:
   "NotificationCount" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\NotificationCount","Type: REG_DWORD, Length: 4, Data: 0"
 
 // miscellaneous procmon boot trace values
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\IsDebugEnabled","Length: 16"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\SmartOptOut\InitialTimerCooldown","Length: 20"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\SmartOptOut\PeriodicTimerCooldown","Length: 20"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\SmartOptOut\SmartOptOutRevision","Type: REG_QWORD, Length: 8, Data: "
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\TimestampWhenSeen","Length: 20"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\IsDebugEnabled","Length: 16"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\InitialTimerCooldown","Length: 20"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\PeriodicTimerCooldown","Length: 20"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\SmartOptOutRevision","Type: REG_QWORD, Length: 8, Data: "
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\TimestampWhenSeen","Length: 20"
 ```
 
 ---
