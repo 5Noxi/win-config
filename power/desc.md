@@ -845,6 +845,27 @@ In Windows, fast startup is the default transition when a system shutdown is req
 
 ---
 
+Notes on `Disable Idle States At Boot` SUBOPTION (`DisableIdleStatesAtBoot`):
+
+The data `-1` (`PpmIdleDisableStatesAtBoot dd 0FFFFFFFFh`) gets handled as `0`
+```cpp
+if ( PpmIdleDisableStatesAtBoot == -1 )
+  PpmIdleDisableStatesAtBoot = 0;
+```
+`0` = skips all PpmInstall*IdleStates disable writes
+`1` = would write disable in `PpmInstallCoordinatedIdleStates`/`PpmInstallPlatformIdleStates`
+```cpp
+if ( PpmIdleDisableStatesAtBoot )
+  *(_DWORD *)(v20 + 80) = 0x80000000;
+```
+`2` = would do the same as `1` including disable write in `PpmInstallNewIdleStates`
+```cpp
+if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
+  *(_DWORD *)(v23 + 32) = 0x80000000;
+```
+
+---
+
 All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
 
 > https://github.com/nohuto/win-registry#power-values
