@@ -829,23 +829,119 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 > https://github.com/nohuto/win-registry#dwm-values
 
-# Win32PrioritySeparation
+# Quantum/Priority Separation
 
-"The value of this entry determines, in part, how much processor time the threads of a process receive each time they are scheduled, and how much the allotted time can vary. It also affects the relative priority of the threads of foreground and background processes. The value of this entry is a 6-bit bitmask consisting of three sets of two bits (AABBCC). Each set of two bits determines a different characteristic of the optimizing strategy.
-- The highest two bits (AABBCC) determine whether each processor interval is relatively long or short.
-- The middle two bits (AABBCC) determine whether the length of the interval varies or is fixed.
-- The lowest two bits (AABBCC) determine whether the threads of foreground processes get more processor time than the threads of background processes each time they run."
+A quantum is the amount of time a thread is permitted to run before Windows checks to see whether another thread at the same priority is waiting to run. If a thread completes its quantum and there are no other threads at its priority, Windows permits the thread to run for another quantum.
 
-Read trough the `.pdf` file, if you want to get more information about the bitmask. Calculate it yourself with [`bitmask-calc`](https://github.com/nohuto/bitmask-calc).
+You can calculate the clock cycles per quantum by dumping the value of `KiCyclesPerClockQuantum` (`dd nt!KiCyclesPerClockQuantum L1`), or follow the 'EXPERIMENT: Determining the clock cycles per quantum' in Windows Internals E7, P1.
 
-`0x18` = Long, Fixed, no boost.
-`0x24` = Short, Variable, no boost.
+Gets applied with:
+```c
+PsChangeQuantumTable(0, PsRawPrioritySeparation);
+```
 
-Using a boost (bit `1-2`) would set the threads of foreground processes `2-3` times higher than from background processes, which can cause issues. `26` decimal would use a boost of `3x`.
+Only the first 6 bits are used (`PsChangeQuantumTable` = `a2 & 3` (bit 0/1), `a2 & 0xC` (bit 2/3), `a2 & 0x30` (bit 4/5)).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/w32ps.png?raw=true)
+Client defaults are short + variable. Server defaults are long + fixed.
 
-> [system/assets | Win32PrioritySeparation.pdf](https://github.com/nohuto/win-config/blob/main/system/assets/Win32PrioritySeparation.pdf)
+## Bits 0/1
+
+"*For each extra priority level (up to 2), another quantum is given to the thread. For example, if the thread receives a boost of one priority level, it receives an extra quantum as well. By default, Windows sets the maximum possible priority boost to foreground threads, meaning that the priority separation will be 2, which means quantum index 2 is selected in the variable quantum table. This leads to the thread receiving two extra quantums, for a total of three quantums.*"
+
+Clamped to `2`:
+```c
+v3 = a2 & 3;
+if ( v3 >= 2 )
+  v3 = 2;
+PsPrioritySeparation = v3;
+```
+
+`00` = `0`: no foreground quantum advantage, foreground priority adds `+0` in boost part ("*The threads of foreground processes get the same amount of processor time as the threads of background processes and as the threads of processes with a priority class of Idle.*")
+`01` = `1`: foreground priority adds `+1` ("*2:1. The threads of foreground processes get twice the processor time as the threads of background processes each time they are scheduled for the processor.*")
+`10` = `2`: foreground priority adds `+2` ("*3:1. The threads of foreground processes get three times the processor time as the threads of background processes each time they are scheduled for the processor.*")
+`11` = `2`: same behavior as `10` because of the clamp.
+
+## Bits 2/3
+
+"*Determine whether the length of processor time varies or is fixed. It also determines whether the threads of foreground processes have longer processor intervals than those of background processes. If the processor interval is fixed, that interval applies equally to the threads of foreground and background processes. If the processor interval varies, the length of time each thread runs varies, but the ratio of processor time of foreground threads to background threads is fixed.*
+
+*If a variable interval is specified, the ratio of foreground thread processor time to background thread processor time is determined by the value of the lowest set of bits.*"
+
+```c
+v5 = a2 & 0xC;
+if ( (a2 & 0xC) != 0 )
+{
+  if ( v5 == 4 ) // 01
+  {
+    v8 = (char *)&PspVariableQuantums;
+    goto LABEL_7;
+  }
+  if ( v5 == 8 ) // 10
+  {
+    v8 = PspFixedQuantums;
+    goto LABEL_7;
+  }
+}
+IsThisAnNtAsSystem = MmIsThisAnNtAsSystem();
+v7 = (__int64 *)PspFixedQuantums;
+if ( !IsThisAnNtAsSystem )
+  v7 = &PspVariableQuantums;
+v8 = (char *)v7;
+```
+
+`00` (`0x0`): server selects fixed table, client selects variable table.
+`01` (`0x4`): forces PspVariableQuantums.
+`10` (`0x8`): forces PspFixedQuantums.
+`11` (`0xC`): same as `00`.
+
+## Bits 4/5
+
+"*Determine how long the threads of processes are permitted to run each time they are scheduled. This interval is specified as a range because threads can be preempted and processor time is not precisely determined.*"
+
+```c
+LABEL_7:
+  v9 = a2 & 0x30;
+  if ( !v9 )
+  {
+LABEL_8:
+    if ( !MmIsThisAnNtAsSystem() )
+      goto LABEL_9;
+    goto LABEL_22;
+  }
+  if ( v9 != 16 )
+  {
+    if ( v9 == 32 )
+      goto LABEL_9;
+    goto LABEL_8;
+  }
+LABEL_22:
+  v8 += 3;
+LABEL_9:
+  PspForegroundQuantum = *(_WORD *)v8;
+  result = v8[2];
+```
+
+`00` (`0x0`): server `goto LABEL_22` (longer intervals), client `goto LABEL_9` (shorter intervals).
+`01` (`0x10`): longer intervals.
+`10` (`0x20`): goes directly to `LABEL_9` = shorter intervals.
+`11` (`0x30`): falls to `LABEL_8`, so same behavior as `00`.
+
+Note that everything above is based on 23H2 and is not complete yet.
+
+I won't add much more details here since [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) contains details, see 'Quantum / Priority Boosts' (Chapter 3).
+
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PsChangeQuantumTable.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspComputeQuantum.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspInitPhase0.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/MmIsThisAnNtAsSystem.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeSetQuantumProcess.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeStartThread.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiSetQuantumTargetThread.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiInitializeForegroundBoostThread.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiComputeEffectivePriority.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/NtSetSystemInformation.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmInitSystem0.c
+> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmpGetSystemControlValues.c
 
 ---
 
