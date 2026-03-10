@@ -963,7 +963,7 @@ See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-registry/blob/mai
 
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile";
-    "SystemResponsiveness" = 100; // see documentation below
+    "SystemResponsiveness" = 20; // see documentation below
     "NetworkThrottlingIndex" = 10; // 0 becomes 1, 1-70 stay unchanged, 71-4294967294 become 70, 4294967295 stays unchanged
     "NoLazyMode" = 0; // any nonzero value = enabled
     "IdleDetectionCycles" = 2; // valid range is 1-31, otherwise 2 is used
@@ -978,23 +978,44 @@ See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-registry/blob/mai
 
 By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent.
 
+Note that when `SystemResponsiveness == 100` it would end up with skipping the part after `if ( CiSystemResponsiveness == 100 )`, the task init (`CiConfigInitializeFromRegistry`), thread priorities (didn't look futher into it yet, see [CiThreadUpdatePriorities](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiThreadUpdatePriorities.c)/[CiSchedulerSetPriority](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerSetPriority.c)), but seems like that it would use a specific priority for the MMCSS thread instead of switching levels? It would also block CiNdisThrottleWorkItem (see below) and cause the [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) starvation threshold down to 0, so any busy-time increase can mark CPUs as starved (see [CiSchedulerWait](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) at line 118 and the bracket block of it).
+
+Basically means MMCSS initialization fails if `SystemResponsiveness == 100`.
+
 "Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`)." (`mmcss.sys`)
 
 > https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings
 
 ```c
-DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL);
+// CiConfigInitialize
+{
+  DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL); // SystemResponsiveness, missing = 100
+  if ( DWORD - 10 > 0x5A ) // data - 10 > 90 = 20
+    v2 = 20LL;
+  else
+    v2 = 10 * (DWORD / 0xA); // 10 step
+  CiSystemResponsiveness = v2;
+  if ( (HIDWORD(WPP_GLOBAL_Control->Timer) & 1) != 0 && BYTE1(WPP_GLOBAL_Control->Timer) >= 4u )
+    WPP_SF_d(WPP_GLOBAL_Control->AttachedDevice, 18LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids, v2);
+  if ( CiSystemResponsiveness == 100 )
+  {
+    if ( (HIDWORD(WPP_GLOBAL_Control->Timer) & 1) != 0 && BYTE1(WPP_GLOBAL_Control->Timer) >= 2u )
+      WPP_SF_(WPP_GLOBAL_Control->AttachedDevice, 19LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids);
+    v0 = -1073741696; // STATUS_SERVER_DISABLED
+  }
+  else // only if CiSystemResponsiveness =! 100
+  {
+  // all other values
+  }
+  ZwClose(KeyHandle);
+}
 
-if ( DWORD - 10 > 0x5A )          // if DWORD < 10 or DWORD > 100
-    v2 = 20LL;                    // fallback
-else
-    v2 = 10 * (DWORD / 0xA);      // round down to nearest multiple of 10
-
-CiSystemResponsiveness = v2;
-
-if ( CiSystemResponsiveness == 100 ) {
-    WPP_SF_(WPP_GLOBAL_Control->AttachedDevice, 19LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids);
-    v0 = -1073741696;             // STATUS_SERVER_DISABLED
+// CsIntialize (blocking CiNdisThrottleWorkItem if 100)
+if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
+{
+  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
+  if ( CiNdisThrottleWorkItem )
+    CiNdisOpenDevice();
 }
 ```
 ```c
@@ -1056,7 +1077,6 @@ Existing tasks (OEMs can add additional tasks):
 
 `NoLazyMode` = `0` (default)
 `LazyModeTimeout` = `1000000` (default)
-
 
 It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely a placeholder for future documentation. Instead of using `NoLazyMode`, change `LazyModeTimeout`.
 ```
