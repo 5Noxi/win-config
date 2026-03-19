@@ -69,7 +69,7 @@ Some additional info about HTTP request methods you may want to know:
 
 ## Note for iOS users
 
-I personally use AdGuard, since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while NextDNS only supports the main ones), while NextDNS only provides a specific set of blocklists and doesn't allow custom rules. Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
+I personally use AdGuard, since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while NextDNS only supports the main ones), while NextDNS only provides a specific set of blocklists and doesn't allow custom rules (there're also several other reasons why I wouldn't use their private DNS at the moment, e.g.: their TIF isn’t public ([and many other ones](https://github.com/nextdns/metadata)), they didn’t solve issues which got reported months ago (), they use lists that aren’t actively maintained by default (they also don't update [obselete links](https://github.com/nextdns/blocklists/tree/main/blocklists), causing 10 empty blocklists), they don’t look into their GitHub issues (e.g. nextdns/blocklists). Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
 
 > https://adguard-dns.io/  
 > https://my.nextdns.io/  
