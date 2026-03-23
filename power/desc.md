@@ -99,7 +99,9 @@ Power throttling, introduced in W10 and present in W11, limits CPU usage for bac
 When looking into the pseudocode (PopInitializeHeteroProcessors) it shows that if the value is set to nonzero it would:
 - force QoS allow variable `v5` to `0` and stores it in `PpmPerfQosSupportedAndAllowed` at the end
 - passes `v5` (`0`) value into `KeConfigureHeteroProcessors`
-- skips `PpmIdleEnableIdleDurationExpirationTimeout` (`PpmIdleDurationExpirationTimeout = (unsigned int)(10000 * PpmIdleDurationExpirationTimeoutMs);`), causing the idle expiration to be off by exiting PoExecuteIdleCheck instantly (otherwise periodic checks would run, see `PoExecuteIdleCheck`)
+- skips `PpmIdleEnableIdleDurationExpirationTimeout` (`PpmIdleDurationExpirationTimeout = (unsigned int)(10000 * PpmIdleDurationExpirationTimeoutMs);`, `PpmInstallNewIdleStates` can also set `PpmIdleDurationExpirationTimeout`), causing the idle expiration to be off by exiting PoExecuteIdleCheck instantly (otherwise periodic checks would run, see `PoExecuteIdleCheck`)
+
+All of this seems to depend on whenever either
 ```c
 v4 = 0;
 if ( (PpmBackgroundProfile || PpmEntryLevelPerfProfile || PpmMultimediaQosProfile || PpmPerfAlwaysComputeQosEnabled)
@@ -123,7 +125,7 @@ LABEL_13:
 v5 = 0; // forced 0 if v4 not true
 LABEL_15:
 ```
-or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresent) is true. If both aren't true, then v5 is already 0 means changing PowerThrottlingOff would have no impact?
+or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresent) are true. If both aren't true, then v5 is already 0 means changing PowerThrottlingOff would have no impact?
 
 On my system both aren't true means that changing the value has no impact as v5 can't be `1` (this is my current interpretation).
 
