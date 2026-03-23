@@ -90,20 +90,49 @@ See win-registry repo for a list of `CCS\\Control\\Power\\...` values/defaults/n
 
 ---
 
-## Power Throttling
+## PowerThrottlingOff Details
 
 ```
 Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
 ```
-You can see processes, which use power throttling by enabling the column (`Details` > `Select Column`) or add it to the active columns in system informer via the `Choose columns...` window (picture).
-> https://systeminformer.io/
+
+When looking into the pseudocode (PopInitializeHeteroProcessors) it shows that if the value is set to nonzero it would:
+- force QoS allow variable `v5` to `0` and stores it in `PpmPerfQosSupportedAndAllowed` at the end
+- passes `v5` (`0`) value into `KeConfigureHeteroProcessors`
+- skips `PpmIdleEnableIdleDurationExpirationTimeout` (`PpmIdleDurationExpirationTimeout = (unsigned int)(10000 * PpmIdleDurationExpirationTimeoutMs);`), causing the idle expiration to be off by exiting PoExecuteIdleCheck instantly (otherwise periodic checks would run, see `PoExecuteIdleCheck`)
+```c
+v4 = 0;
+if ( (PpmBackgroundProfile || PpmEntryLevelPerfProfile || PpmMultimediaQosProfile || PpmPerfAlwaysComputeQosEnabled)
+  && PpmPerfSchedulerDirectedPerfStatesSupported
+  && KeQueryActiveProcessorCountEx(0) >= 2 )
+{
+  v4 = 1;
+}
+if ( PpmPerfVmQosSupported )
+{
+  v4 = 1;
+  goto LABEL_13;
+}
+if ( v4 )
+{
+LABEL_13:
+  v5 = 1;
+  if ( !PpmPerfQosGroupPolicyDisable ) // if PowerThrottlingOff = 1, then v5 = 0
+    goto LABEL_15;
+}
+v5 = 0; // forced 0 if v4 not true
+LABEL_15:
+```
+or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresent) is true. If both aren't true, then v5 is already 0 means changing PowerThrottlingOff would have no impact?
+
+On my system both aren't true means that changing the value has no impact as v5 can't be `1` (this is my current interpretation).
+
+Note that this is based on binary build version 22631 (23H2) and isn't complete. I might add more/get better structure into whenever I've time.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
-
-![](https://github.com/nohuto/win-config/blob/main/power/images/powerth.png?raw=true)
 
 # PnP Device Values
 
