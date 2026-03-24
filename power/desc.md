@@ -129,7 +129,7 @@ or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresen
 
 On my system both aren't true means that changing the value has no impact as v5 can't be `1` (this is my current interpretation).
 
-Note that this is based on binary build version 22631 (23H2) and isn't complete. I might add more/get better structure into whenever I've time.
+Note that this is based on [binary build version 22631 (23H2)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) and isn't complete. I might add more/get better structure into whenever I've time.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
