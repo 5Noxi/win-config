@@ -1,11 +1,18 @@
 # Encrypted DNS
 
 The DNS server get's applied via registry (tracked while applying it via the settings):
-```csv
+```c
 HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{NetID}\NameServer  Type: REG_SZ, Length: 24, Data: 194.242.2.5
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohTemplate  Type: ad.net/dns-query
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohFlags  Type: REG_QWORD, Length: 8, Data: 2
 ```
+
+`DohFlags` data meaning:
+- `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO (0x0001)`: If this option is present, then the DNS server that's referenced by this property will load its URI template from the system DNS-over-HTTPS system list. When this option is present, the Template field must be set to NULL. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE option.
+- `DNS_DOH_SERVER_SETTINGS_ENABLE (0x0002)`: If this option is present, then the Template field must point to a valid DNS-over-HTTPS URI template. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO option.
+- `DNS_DOH_SERVER_SETTINGS_FALLBACK_TO_UDP (0x0004)`: This option indicates that the referenced server may fallback to unsecure name resolution (UDP/TCP) if the DNS-over-HTTPS query failed. This option can be used only in addition to DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO or DNS_DOH_SERVER_SETTINGS_ENABLE.
+- `DNS_DOH_AUTO_UPGRADE_SERVER (0x0008)`: This option allows a DNS server present in an NRPT rule to use the DNS-over-HTTPS template if it has the same IP address as the server referenced by this property. This option can't be used by itself; it must be in addition to DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO or DNS_DOH_SERVER_SETTINGS_ENABLE.
+
 `NetID` is saved in your network adapter GUID key (`{4d36e972-e325-11ce-bfc1-08002be10318}`) named `NetCfgInstanceId`.
 
 ---
@@ -34,7 +41,7 @@ HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{Net
 
 `Quad9/Mullvad > AdGuard > NextDNS > Cloudflare` in my option based on my findings. I wouldn't recommend to use DNS resolvers like 'Google Public DNS', just read trough their privacy policies and see if they support DNSSEC/QNAME minimalisation/encrypted DNS, disable ECS (EDNS Client Subnet), and don't collect identifiable query logs (that's how I created the table above, including some other facts like Mullvad supporting anycast).
 
-Obviously self-host a DNS resolver for the best privacy, so queries stay local using for example pi-hole.
+Obviously self-host a DNS resolver for the best privacy, so queries stay local.
 
 ## DNS Explained
 
@@ -69,7 +76,7 @@ Some additional info about HTTP request methods you may want to know:
 
 ## Note for iOS users
 
-I personally use AdGuard, since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while NextDNS only supports the main ones), while NextDNS only provides a specific set of blocklists and doesn't allow custom rules (there're also several other reasons why I wouldn't use their private DNS at the moment, e.g.: their TIF isn’t public ([and many other ones](https://github.com/nextdns/metadata)), they didn’t solve issues which got reported months ago (), they use lists that aren’t actively maintained by default (they also don't update [obselete links](https://github.com/nextdns/blocklists/tree/main/blocklists), causing 10 empty blocklists), they don’t look into their GitHub issues (e.g. nextdns/blocklists). Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
+I personally use AdGuard, since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while NextDNS only supports the main ones), while NextDNS only provides a specific set of blocklists and doesn't allow custom rules (there're also several other reasons why I wouldn't use their private DNS at the moment, e.g.: their TIF isn’t public ([and many other ones](https://github.com/nextdns/metadata))), they didn’t solve issues which got reported months ago (), they use lists that aren’t actively maintained by default (they also don't update [obselete links](https://github.com/nextdns/blocklists/tree/main/blocklists), causing 10 empty blocklists), they don’t look into their GitHub issues (e.g. nextdns/blocklists). Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
 
 > https://adguard-dns.io/  
 > https://my.nextdns.io/  
