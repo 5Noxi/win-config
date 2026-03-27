@@ -3209,7 +3209,6 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 
 Miscellaenous notes:
 ```c
-```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
     "SleepstudyGlobalBlockerLimit" = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
