@@ -890,8 +890,6 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 
 I decided to add it since MPO can cause issues like screen flickering, if not having such issues, leave it enabled.
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/swapchain.jpg?raw=true)  
-
 Takes a default value of `0`, which shouldn't get changed (removing the value = using `0`):
 ```c
 v5 = 0;
