@@ -542,110 +542,6 @@ Shortcut location:
 $home\Desktop\Nvcpl.lnk
 ```
 
-# Performance State (P0)
-
-"P-States are GPU active/executing performance capability and power consumption states. Each P-State, if available, maps to a performance level. Not all P-States are available on a given system."
-
-- P0/P1 - Maximum 3D performance
-- P2/P3 - Balanced 3D performance-power
-- P8 - Basic HD video playback
-- P10 - DVD playback
-- P12 - Minimum idle power consumption
-
-Disable dynamic P-State/adaptive clocking and locks it at `P0`.
-
-```json
-{
-"Name":  "DisableDynamicPstate",
-"Comment":  [
-         "Type Dword",
-         "1 = Disable dynamic P-State/adaptive clocking",
-         "0 = Do not disable dynamic P-State/adaptive clocking (default)"
-     ],
-"Elements":  [
-          {"Name":  "DISABLE","Value":  "0"},
-          {"Name":  "ENABLE","Value":  "1"}
-      ]
-},
-```
-Other value:
-```json
-{
-"Name":  "DisableAsyncPstates",
-"Comment":  [
-         "Type Dword",
-         "Encoding Numeric Value",
-         "Determines whether or not asynchronous p-states should be disabled",
-         "1 - Disables asynchronous p-state changes",
-         "0 - (default) Leaves asynchronous p-state changes enabled"
-     ],
-"Elements":  [
-          {"Name":  "DISABLE","Value":  "1"},
-          {"Name":  "ENABLE","Value":  "0"},
-          {"Name":  "DEFAULT","Value":  "0"}
-      ]
-},
-```
-See your current performance state with (`nvidia-smi.exe` has to be in `Windows\System32`):
-```powershell
-nvidia-smi --query-gpu=name,pstate --format=noheader
-```
-It shows the current performance state. States range from P0 (maximum performance) to P12 (minimum performance).
-> https://docs.nvidia.com/deploy/nvidia-smi/index.html
-
-Or use [NvApiSwak.exe](https://discord.com/channels/836870260715028511/1375059420970487838/1420721787678752818) and look at the `NvAPI_GPU_GetCurrentPstate` function.
-```h
-{
-    NVAPI_GPU_PERF_PSTATE_P0 = 0,
-    NVAPI_GPU_PERF_PSTATE_P1,
-    NVAPI_GPU_PERF_PSTATE_P2,
-    NVAPI_GPU_PERF_PSTATE_P3,
-    NVAPI_GPU_PERF_PSTATE_P4,
-    NVAPI_GPU_PERF_PSTATE_P5,
-    NVAPI_GPU_PERF_PSTATE_P6,
-    NVAPI_GPU_PERF_PSTATE_P7,
-    NVAPI_GPU_PERF_PSTATE_P8,
-    NVAPI_GPU_PERF_PSTATE_P9,
-    NVAPI_GPU_PERF_PSTATE_P10,
-    NVAPI_GPU_PERF_PSTATE_P11,
-    NVAPI_GPU_PERF_PSTATE_P12,
-    NVAPI_GPU_PERF_PSTATE_P13,
-    NVAPI_GPU_PERF_PSTATE_P14,
-    NVAPI_GPU_PERF_PSTATE_P15,
-    NVAPI_GPU_PERF_PSTATE_UNDEFINED = NVAPI_MAX_GPU_PERF_PSTATES,
-
-}
-```
-
-# Disable ECC
-
-Some GPUs don't support it, disabling is also not really needed. You can test it by disabling it via the control panel.
-
-> https://www.nvidia.com/content/control-panel-help/vlatest/en-us/mergedprojects/nv3d/To_turn_your_GPU_ECC_on_or_off.htm  
-> https://www.nvidia.com/content/control-panel-help/vlatest/en-us/mergedprojects/nv3d/Change_ECC_State.htm
-
-```
--e,   --ecc-config=         Toggle ECC support: 0/DISABLED, 1/ENABLED
--p,   --reset-ecc-errors=   Reset ECC error counts: 0/VOLATILE, 1/AGGREGATE
-```
-"Set the ECC mode for the target GPUs. See the (GPU ATTRIBUTES) section for a description of ECC mode. Requires root. Will impact all GPUs unless a single GPU is specified using the -i argument. This setting takes effect after the next reboot and is persistent.
-Reset the ECC error counters for the target GPUs. See the (GPU ATTRIBUTES) section for a description of ECC error counter types. Available arguments are 0\|VOLATILE or 1\|AGGREGATE. Requires root. Will impact all GPUs unless a single GPU is specified using the -i argument. The effect of this operation is immediate. Clearing aggregate counts is not supported on Ampere+"
-> https://docs.nvidia.com/deploy/nvidia-smi/index.html
-
-from `nvidia-smi.exe -h`:
-```c
-nvidia-smi.exe -e 0
-
-// Query current state
-nvidia-smi -q -d ecc
-```
-
-> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/3D%20Settings/Change_ECC_State.htm
-
-Other ECC related features can be found using [`bitmask-calc`](https://github.com/nohuto/bitmask-calc) - e.g. `RMNoECCFuseCheck`.
-
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/ecc.png?raw=true)
-
 # Hide Tray Icon
 
 ```
@@ -742,7 +638,6 @@ LOG_ERROR_SIZE      0x0200                  // 512 error entries (retail)  L"Log
 LOG_PAGING_SIZE     0x0200                  // 512 paging entries (retail) L"LogPagingEntries"
 #endif // DEBUG
 ```
-
 
 # Disable Scheduled Tasks
 
