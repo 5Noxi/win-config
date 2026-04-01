@@ -1420,7 +1420,6 @@ Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwid
 `"*UdpRsc": { "Type": "REG_SZ", "Data": 1 }` causes high usage of the system idle process for whatever reason, I'll leave it out for now.
 
 ```c
-```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
     "*RSCIPv4" = 0; // range 0-1
     "*RSCIPv6" = 0; // range 0-1
