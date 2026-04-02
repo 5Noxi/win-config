@@ -299,6 +299,326 @@ UserShadowStackStrictMode
 AuditUserShadowStack
 ```
 
+# Disable Windows Defender
+
+You'll have to boot into `safeboot` to apply some of the changes:
+```bat
+bcdedit /set safeboot minimal
+::bcdedit /deletevalue safeboot
+```
+
+Remove defender from a mounted image with the code below. Obviously, you need to change the `mount` path before running it. You can remove task leftovers after installation or in the `oobeSystem` phase with:
+```bat
+powershell -command "Get-ScheduledTask -TaskPath '\Microsoft\Windows\Windows Defender\' | Unregister-ScheduledTask -Confirm:$false"
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\Windows Defender" /f
+rmdir /s /q "%windir%\System32\Tasks\Microsoft\Windows\Windows Defender"
+```
+`smartscreen.exe` may still continue to run. Renaming it will block execution:
+```bat
+MinSudo -NoL -P -TI cmd /c ren "%windir%\System32\smartscreen.exe" "smartscreen.exe.nv"
+```
+
+```powershell
+@echo off
+setlocal
+
+set "mount=%userprofile%\Desktop\DISMT\mount"
+
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthSystray.exe"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthService.exe"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthAgent.dll"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthHost.exe"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthSSO.dll"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthSsoUdk.dll"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthCore.dll"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthProxyStub.dll"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthUdk.dll"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\drivers\WdNisDrv.sys"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Windows\System32\SecurityHealth"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Program Files\Windows Defender Advanced Threat Protection"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Program Files\Windows Defender"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Program Files (x86)\Windows Defender"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\ProgramData\Microsoft\Windows Defender"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\ProgramData\Microsoft\Windows Defender Advanced Threat Protection"
+MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\ProgramData\Microsoft\Windows Security Health"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\smartscreen.exe"
+MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\smartscreenps.dll"
+
+endlocal
+```
+
+> [security/assets | Windows-Defender.txt](https://github.com/nohuto/win-config/blob/main/security/assets/Windows-Defender.txt)
+
+# Disable Windows Firewall
+
+It disables the profiles, but leaves the services/driver running.
+
+Disabling the firewall service (`Disable Services/Driver` can break:
+- Microsoft Store & UWP apps
+- `winget` / app deployment
+- Windows Sandbox
+- Xbox networking
+- Start menu
+- Modern applications can fail to install or update
+- Activation of Windows via phone
+- Application or OS incompatibilities that depend on Windows Firewall
+
+"The proper method to disable the Windows Firewall is to disable the Windows Firewall Profiles and leave the service running."
+
+> https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/configure-with-command-line?tabs=powershell
+
+`netsh advfirewall set allprofiles state off`/`Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False`:
+```powershell
+HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+```json
+{
+  "File": "WindowsFirewall.admx",
+  "CategoryName": "WF_Profile_Domain",
+  "PolicyName": "WF_EnableFirewall_Name_1",
+  "NameSpace": "Microsoft.Policies.WindowsFirewall",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Windows Defender Firewall: Protect all network connections",
+  "ExplainText": "Turns on Windows Defender Firewall. If you enable this policy setting, Windows Defender Firewall runs and ignores the \"Computer Configuration\\Administrative Templates\\Network\\Network Connections\\Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting. If you disable this policy setting, Windows Defender Firewall does not run. This is the only way to ensure that Windows Defender Firewall does not run and administrators who log on locally cannot start it. If you do not configure this policy setting, administrators can use the Windows Defender Firewall component in Control Panel to turn Windows Defender Firewall on or off, unless the \"Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting overrides.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile"
+  ],
+  "ValueName": "EnableFirewall",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsFirewall.admx",
+  "CategoryName": "WF_Profile_Domain",
+  "PolicyName": "WF_Notifications_Name_1",
+  "NameSpace": "Microsoft.Policies.WindowsFirewall",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Windows Defender Firewall: Prohibit notifications",
+  "ExplainText": "Prevents Windows Defender Firewall from displaying notifications to the user when a program requests that Windows Defender Firewall add the program to the program exceptions list. If you enable this policy setting, Windows Defender Firewall prevents the display of these notifications. If you disable this policy setting, Windows Defender Firewall allows the display of these notifications. In the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected and administrators cannot clear it. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled, except that in the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected by default, and administrators can change it.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile"
+  ],
+  "ValueName": "DisableNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsFirewall.admx",
+  "CategoryName": "WF_Profile_Domain",
+  "PolicyName": "WF_Logging_Name_1",
+  "NameSpace": "Microsoft.Policies.WindowsFirewall",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Windows Defender Firewall: Allow logging",
+  "ExplainText": "Allows Windows Defender Firewall to record information about the unsolicited incoming messages that it receives. If you enable this policy setting, Windows Defender Firewall writes the information to a log file. You must provide the name, location, and maximum size of the log file. The location can contain environment variables. You must also specify whether to record information about incoming messages that the firewall blocks (drops) and information about successful incoming and outgoing connections. Windows Defender Firewall does not provide an option to log successful incoming messages. If you are configuring the log file name, ensure that the Windows Defender Firewall service account has write permissions to the folder containing the log file. Default path for the log file is %WINDIR%\\system32\\LogFiles\\Firewall\\pfirewall.log. If you disable this policy setting, Windows Defender Firewall does not record information in the log file. If you enable this policy setting, and Windows Defender Firewall creates the log file and adds information, then upon disabling this policy setting, Windows Defender Firewall leaves the log file intact. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile\\Logging"
+  ],
+  "Elements": [
+    { "Type": "Boolean", "ValueName": "LogDroppedPackets", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Boolean", "ValueName": "LogSuccessfulConnections", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Text", "ValueName": "LogFilePath" },
+    { "Type": "Decimal", "ValueName": "LogFileSize", "MinValue": "128", "MaxValue": "32767" }
+  ]
+},
+{
+  "File": "WindowsFirewall.admx",
+  "CategoryName": "WF_Profile_Standard",
+  "PolicyName": "WF_EnableFirewall_Name_2",
+  "NameSpace": "Microsoft.Policies.WindowsFirewall",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Windows Defender Firewall: Protect all network connections",
+  "ExplainText": "Turns on Windows Defender Firewall. If you enable this policy setting, Windows Defender Firewall runs and ignores the \"Computer Configuration\\Administrative Templates\\Network\\Network Connections\\Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting. If you disable this policy setting, Windows Defender Firewall does not run. This is the only way to ensure that Windows Defender Firewall does not run and administrators who log on locally cannot start it. If you do not configure this policy setting, administrators can use the Windows Defender Firewall component in Control Panel to turn Windows Defender Firewall on or off, unless the \"Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting overrides.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile"
+  ],
+  "ValueName": "EnableFirewall",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsFirewall.admx",
+  "CategoryName": "WF_Profile_Standard",
+  "PolicyName": "WF_Notifications_Name_2",
+  "NameSpace": "Microsoft.Policies.WindowsFirewall",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Windows Defender Firewall: Prohibit notifications",
+  "ExplainText": "Prevents Windows Defender Firewall from displaying notifications to the user when a program requests that Windows Defender Firewall add the program to the program exceptions list. If you enable this policy setting, Windows Defender Firewall prevents the display of these notifications. If you disable this policy setting, Windows Defender Firewall allows the display of these notifications. In the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected and administrators cannot clear it. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled, except that in the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected by default, and administrators can change it.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile"
+  ],
+  "ValueName": "DisableNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsFirewall.admx",
+  "CategoryName": "WF_Profile_Standard",
+  "PolicyName": "WF_Logging_Name_2",
+  "NameSpace": "Microsoft.Policies.WindowsFirewall",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Windows Defender Firewall: Allow logging",
+  "ExplainText": "Allows Windows Defender Firewall to record information about the unsolicited incoming messages that it receives. If you enable this policy setting, Windows Defender Firewall writes the information to a log file. You must provide the name, location, and maximum size of the log file. The location can contain environment variables. You must also specify whether to record information about incoming messages that the firewall blocks (drops) and information about successful incoming and outgoing connections. Windows Defender Firewall does not provide an option to log successful incoming messages. If you are configuring the log file name, ensure that the Windows Defender Firewall service account has write permissions to the folder containing the log file. Default path for the log file is %WINDIR%\\system32\\LogFiles\\Firewall\\pfirewall.log. If you disable this policy setting, Windows Defender Firewall does not record information in the log file. If you enable this policy setting, and Windows Defender Firewall creates the log file and adds information, then upon disabling this policy setting, Windows Defender Firewall leaves the log file intact. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile\\Logging"
+  ],
+  "Elements": [
+    { "Type": "Boolean", "ValueName": "LogDroppedPackets", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Boolean", "ValueName": "LogSuccessfulConnections", "TrueValue": "1", "FalseValue": "0" },
+    { "Type": "Text", "ValueName": "LogFilePath" },
+    { "Type": "Decimal", "ValueName": "LogFileSize", "MinValue": "128", "MaxValue": "32767" }
+  ]
+},
+```
+
+# Opt-Out DMA Remapping
+
+"To ensure compatibility with Kernel DMA Protection and DMAGuard Policy, PCIe device drivers can opt into Direct Memory Access (DMA) remapping. DMA remapping for device drivers protects against memory corruption and malicious DMA attacks, and provides a higher level of compatibility for devices. Also, devices with DMA remapping-compatible drivers can start and perform DMA regardless of lock screen status. On Kernel DMA Protection enabled systems, DMAGuard Policy might block devices, with DMA remapping-incompatible drivers, connected to external/exposed PCIe ports (for example, M.2, Thunderbolt), depending on the policy value set by the system administrator. DMA remapping isn't supported for graphics device drivers. `DmaRemappingCompatible` key is ignored if `RemappingSupported` is set."
+
+"Only use this per-driver method for Windows versions up to Windows 11 23H2. Use the [per-device method](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md#per-device-opt-in-mechanism)."
+
+`per-device` - recommended and preferred mechanism (`DmaRemappingCompatible`)
+`per-driver` - legacy mechanism (`RemappingSupported`)
+
+`DmaRemappingCompatible`:
+
+| Value | Meaning |
+|--|--|
+| 0 | Opt-out, indicates that your driver is incompatible with DMA remapping. |
+| 1 | Opt-in, indicates that your driver is fully compatible with DMA remapping. |
+| 2 | Opt-in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
+| 3 | Opt-in |
+| No registry key | Let the system determine the policy. |
+
+`RemappingFlags`:
+
+| Value | Meaning |
+|--|--|
+| 0 | If **RemappingSupported** is 1, opt in, unconditionally. |
+| 1 | If **RemappingSupported** is 1, opt in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
+| No registry key | Same as 0 value. |
+
+`RemappingSupported`:
+
+| Value | Meaning |
+|--|--|
+| 0 | Opt-out, indicates the device and driver are incompatible with DMA remapping. |
+| 1 | Opt-in, indicates the device and driver are fully compatible with DMA remapping. |
+| No registry key | Let the system determine the policy. |
+
+> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md
+
+Example paths:
+```powershell
+\Registry\Machine\SYSTEM\ControlSet001\Services\msisadrv\Parameters : DmaRemappingCompatible
+\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingFlags
+\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingSupported
+```
+
+---
+
+Since `EnableNVMeInterface` is included in the function, I'll add it here. Default value of `0`, range `0`-`1`? Located in:
+```
+\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\<dev>\<id>\Device Parameters\StorPort : EnableNVMeInterface
+```
+`DisableNativeNVMeStack`, range `0`-`1`?
+```c
+\Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : DisableNativeNVMeStack
+
+DisableNativeNVMeStack db 0 // default
+```
+> https://github.com/nohuto/win-registry/blob/main/records/StorPort.txt
+
+# Disable System Restore
+
+```powershell
+Disable-ComputerRestore -Drive "C:\"
+```
+Does:
+```powershell
+"wmiprvse.exe", "RegSetValue","HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\RPSessionInterval","Type: REG_DWORD, Length: 4, Data: 0"
+```
+
+> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/disable-computerrestore?view=powershell-5.1  
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-delete-shadows  
+> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-list-shadows  
+> https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service
+
+# Disable Downloads Blocking
+
+Windows adds a hidden tag called `Zone.Identifier` to files downloaded from the internet. This tag (also known as MotW) stores info about the file's origin and helps apply security warnings, see files including the tag with:
+```powershell
+gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
+```
+
+> https://www.cyberengage.org/post/unveiling-file-origins-the-role-of-alternate-data-streams-ads-zone-identifier-in-forensic-inve  
+> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN  
+> https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)?redirectedfrom=MSDN
+
+```powershell
+gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
+```
+
+**ZoneID** (`HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones`) - number indicating the security zone the file came from:
+`0` – Local machine
+`1` – Local intranet (internal network)
+`2` – Trusted sites
+`3` – Internet (mostly web downloads)
+`4` – Untrusted / Restricted sites (flagged as dangerous by smartscreen)
+
+Files downloaded from the internet still getting blocked? Unblock it/them with (one of them):
+```powershell
+Unblock-File -Path "C:\Path\Script.ps1" -> File
+
+dir C:\Path\*Files* | Unblock-File -> Multiple files 
+```
+
+```powershell
+{
+	"File":  "AttachmentManager.admx",
+	"NameSpace":  "Microsoft.Policies.AttachmentManager",
+	"Class":  "User",
+	"CategoryName":  "AM_AM",
+	"DisplayName":  "Do not preserve zone information in file attachments",
+	"ExplainText":  "This policy setting allows you to manage whether Windows marks file attachments with information about their zone of origin (such as restricted, Internet, intranet, local). This requires NTFS in order to function correctly, and will fail without notice on FAT32. By not preserving the zone information, Windows cannot make proper risk assessments.If you enable this policy setting, Windows does not mark file attachments with their zone information.If you disable this policy setting, Windows marks file attachments with their zone information.If you do not configure this policy setting, Windows marks file attachments with their zone information.",
+	"Supported":  "WindowsXPSP2",
+	"KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments",
+	"KeyName":  "SaveZoneInformation",
+	"Elements":  [
+						{
+							"Value":  "1",
+							"Type":  "EnabledValue"
+						},
+						{
+							"Value":  "2",
+							"Type":  "DisabledValue"
+						}
+					]
+},
+```
+
+![](https://github.com/nohuto/win-config/blob/main/security/images/downblocking.png?raw=true)
+
+# Disable WPBT
+
+WPBT allows hardware manufacturers to run programs during Windows startup that may introduce unwanted software.
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager : DisableWpbtExecution
+```
+
+> https://persistence-info.github.io/Data/wpbbin.html  
+> https://github.com/Jamesits/dropWPBT
+
 # Disable Bitlocker & EFS
 
 Disable bitlocker on all volumes:
