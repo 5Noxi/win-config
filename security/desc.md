@@ -1,44 +1,59 @@
-# Disable UAC
+﻿# Windows Update
 
-Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation. Save `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System` before running it.
+| Option | Description |
+| ---- | ---- |
+| `Disable WU` | Stops normal Windows Update scanning, download, install, and orchestrated update activity. |
+| `Enable WU` | Restores normal update behavior for the controls managed in this section. |
+| `Security Only` | Keeps monthly Windows quality and security servicing for the current release while blocking feature upgrades, WU driver updates, optional content, CFR rollouts, preview content, Microsoft product updates, and MRT through Windows Update. |
 
-Windows Internals (E7-P1, UAC): UAC runs most apps with standard user rights and uses a filtered admin token for administrators, elevating only when needed. Disabling UAC removes this filtered-token model and disables UAC file/registry virtualization (Luafv.sys).
+| Suboption | Description |
+| ---- | ---- |
+| `Disable Feature Updates` | Keeps the device on its current Windows release while quality updates continue. New Windows releases are not offered until removed. |
+| `Disable Quality Updates (35D)` | Temporarily pauses monthly cumulative updates, including security fixes. Security fixes stop until the pause is cleared or expires. |
+| `Disable WU Driver Updates` | Blocks Windows Update from installing driver-class updates. Hardware fixes and newer vendor drivers are not delivered through Windows Update. |
+| `Disable Microsoft Product Updates` | Stops updates for other Microsoft products through this channel. Office and other Microsoft apps stop receiving updates from Windows Update. |
+| `Disable Optional Updates` | Hides optional update content from normal servicing. Optional fixes and non-essential improvements are not offered. |
+| `Disable CFR Features` | Stops gradual rollout features delivered through servicing. New feature rollouts arrive later or only through full releases. |
+| `Disable Preview Builds` | Prevents preview and Insider-style update content. Pre-release Windows builds and preview tracks are unavailable. |
+| `Disable Delivery Optimization Peer/Cloud Traffic` | Restricts update transfer behavior to avoid peer sharing and Delivery Optimization cloud coordination. Download efficiency and shared-cache behavior are reduced. |
+| `Disable Store App Updates` | Stops automatic Microsoft Store app updates. Store apps stop receiving background fixes and feature updates. |
+| `Disable Device Metadata Retrieval` | Stops automatic retrieval of device metadata from Microsoft. Device names, icons, and related suggestions may be less complete. |
+| `Disable Automatic Root Certificate Updates` | Stops automatic refresh of trusted root certificates. Some secure sites, apps, or signed content can fail until trust is updated another way. |
+| `Disable Defender Definition Updates` | Stops Defender definition updates from this update path. Malware detection ages quickly unless another definition source is provided. |
+| `Block MRT via WU` | Stops the MRT (Malicious Software Removal Tool) from being offered through Windows Update. MRT scans and related reporting are unavailable from this channel. |
 
-Remove the `Run as Administrator` context menu option (`.bat`, `.cmd` files) with:
-```bat
-reg delete "HKCR\batfile\shell\runas" /f
-reg delete "HKCR\cmdfile\shell\runas" /f
-```
-Will cause issues like shows in the picture below, the two ones above might cause similar issues (if the app requests elevated permissions?). __Rather leave them alone.__
-```
-reg delete "HKCR\exefile\shell\runas" /f
-```
+> https://learn.microsoft.com/en-us/windows/deployment/update/waas-configure-wufb  
+> https://learn.microsoft.com/en-us/windows/deployment/update/waas-wu-settings  
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-update  
+> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services
 
-UAC Values (`HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System`) - `UserAccountControlSettings.exe`:
-`Always notify me when: ...`
-```powershell
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 2
-PromptOnSecureDesktop - Data: 1
-```
-`Notify me only when apps try to make changes to my computer (default)`
-```powershell
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 5
-PromptOnSecureDesktop - Data: 1
-```
-`Notify me only when apps try to make changes to my computer (do not dim my desktop)`
-```powershell
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 5
-PromptOnSecureDesktop - Data: 0
-```
-`Never notify me when: ...`
-```powershell
-EnableLUA - Data: 1
-ConsentPromptBehaviorAdmin - Data: 0
-PromptOnSecureDesktop - Data: 0
-```
+# UAC
+
+Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation.
+
+Windows Internals (E7-P1, UAC): "*User Account Control (UAC) is meant to enable users to run with standard user rights as opposed to administrative rights. Without administrative rights, users cannot accidentally (or deliberately) modify system settings, malware can’t normally alter system security settings or disable antivirus software, and users can’t compromise the sensitive information of other users on shared computers. Running with standard user rights can thus mitigate the impact of malware and protect sensitive data on shared computers.*
+
+*UAC runs most apps with standard user rights and uses a filtered admin token for administrators, elevating only when needed. Disabling UAC removes this filtered-token model and disables UAC file/registry virtualization (Luafv.sys).*"
+
+**Table 7-18** UAC options
+| Slider Position | Attempts to change Windows settings | Attempts to install software or run a program requiring elevation | Remarks |
+| --- | --- | --- | --- |
+| Highest position (`Always Notify`) | A UAC elevation prompt appears on the Secure Desktop. | A UAC elevation prompt appears on the Secure Desktop. | This was the Windows Vista behavior. |
+| Second position | UAC elevation occurs automatically with no prompt or notification. | A UAC elevation prompt appears on the Secure Desktop. | Windows default setting. |
+| Third position | UAC elevation occurs automatically with no prompt or notification. | A UAC elevation prompt appears on the user’s normal desktop. | Not recommended. |
+| Lowest position (`Never Notify`) | UAC is turned off for administrative users. | UAC is turned off for administrative users. | Not recommended. |
+
+**Table 7-19** UAC registry values
+| Slider Position | ConsentPromptBehaviorAdmin | ConsentPromptBehaviorUser | EnableLUA | PromptOnSecureDesktop |
+| --- | --- | --- | --- | --- |
+| Highest position (`Always Notify`) | `2` (display AAC UAC elevation prompt) | `3` (display OTS UAC elevation prompt) | `1` (enabled) | `1` (enabled) |
+| Second position | `5` (display AAC UAC elevation prompt, except for changes to Windows settings) | `3` | `1` | `1` |
+| Third position | `5` | `3` | `1` | `0` (disabled; UAC prompt appears on user’s normal desktop) |
+| Lowest position (`Never Notify`) | `0` | `3` | `0` (disabled; logins to administrative accounts do not create a restricted admin access token) | `0` |
+
+Read more about UAC/file virtualization/(auto-)elevation in [Windows Internals E7, P1 - P.722f. 'User Account Control and virtualization'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
+
+## Registry Values Details
 
 Value: `FilterAdministratorToken`
 
@@ -64,6 +79,7 @@ Value: `ConsentPromptBehaviorUser`
 | ------------ | ----------------------------------------------------------------------------- |
 | `0x00000000` | Any operation requiring elevation fails for standard users.                   |
 | `0x00000001` | Standard users are prompted for an admin's credentials to elevate privileges. |
+| `0x00000003` | Display OTS UAC elevation prompt |
 
 Value: `EnableInstallerDetection`
 
@@ -83,10 +99,17 @@ Value: `EnableLUA`
 
 | Value        | Meaning                                                                             |
 | ------------ | ----------------------------------------------------------------------------------- |
-| `0x00000000` | Disables the "Administrator in Admin Approval Mode" user type and all UAC policies. |
+| `0x00000000` | Disables the "Administrator in Admin Approval Mode" user type and all UAC policies ("*logins to administrative accounts do not create a restricted admin access token*"). |
 | `0x00000001` | Enables the "Administrator in Admin Approval Mode" and activates all UAC policies.  |
 
 Value: `PromptOnSecureDesktop`
+| Option | Description |
+| ---- | ---- |
+| `UAC: Disable completely` | Turns UAC off, disables LUA and virtualization, and removes consent prompts entirely. Highest compatibility risk and lowest protection. |
+| `UAC: Windows default (prompt, secure desktop)` | Restores the normal Windows UAC behavior with prompts on the secure desktop. |
+| `UAC: Always notify` | Prompts on every administrative change with the most protective prompt behavior. |
+| `UAC: Notify apps only (no desktop dimming)` | Keeps app elevation prompts but does not switch to the secure desktop. |
+| `UAC: Elevate without prompting (admins)` | Keeps LUA on for administrators but removes the admin consent prompt. Lower friction, weaker protection. |
 
 | Value        | Meaning                                                                        |
 | ------------ | ------------------------------------------------------------------------------ |
@@ -103,8 +126,6 @@ Value: `EnableVirtualization`
 > https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
 > https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/uac.png?raw=true)
-
 # PS Unrestricted Policy
 
 Used to make powershell (`.ps1`) scripts work on your PC without showing any warning.
@@ -117,7 +138,7 @@ Used to make powershell (`.ps1`) scripts work on your PC without showing any war
 | `EnableTranscripting` | Enables or disables transcription of PowerShell commands. If enabled, records the input and output of PowerShell commands into text-based transcripts stored by default in My Documents. |
 | `EnableScripts` | Controls which types of scripts are allowed to run on the system. Options include allowing only signed scripts, allowing local scripts and remote signed scripts, or allowing all scripts to run. |
 
-| **Scope**​ | **Description​** |
+| **Scope**â€‹ | **Descriptionâ€‹** |
 |---- | ---- |
 | `MachinePolicy` | Set by a Group Policy for all users of the computer |
 | `UserPolicy` | Set by a Group Policy for the current user of the computer |
@@ -152,47 +173,6 @@ powershell.exe    HKLM\SOFTWARE\Microsoft\PowerShell\1\ShellIds\Microsoft.PowerS
 > https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_config?view=powershell-7.5  
 > https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5  
 > https://learn.microsoft.com/en-us/previous-versions/troubleshoot/browsers/security-privacy/ie-security-zones-registry-entries#zones
-> https://gpsearch.azurewebsites.net/#4954
-
-# Disable Windows Update
-
-It works via pausing updates and disabling related services:
-```
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings
-```
-```
-PauseFeatureUpdatesEndTime
-PauseQualityUpdatesEndTime
-PauseUpdatesExpiryTime
-```
-`String Value`, e.g.: `2030-01-01T00:00:00Z`.
-
----
-
-Miscellaneous notes:
-```json
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate": {
-  "WUServer": { "Type": "REG_SZ", "Data": " " },
-  "WUStatusServer": { "Type": "REG_SZ", "Data": " " },
-  "UpdateServiceUrlAlternate": { "Type": "REG_SZ", "Data": " " },
-  "DisableWindowsUpdateAccess": { "Type": "REG_DWORD", "Data": 1 },
-  "DisableOSUpgrade": { "Type": "REG_DWORD", "Data": 1 },
-  "SetDisableUXWUAccess": { "Type": "REG_DWORD", "Data": 1 },
-  "DoNotConnectToWindowsUpdateInternetLocations": { "Type": "REG_DWORD", "Data": 1 }
-},
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsUpdate\\AU": {
-  "NoAutoUpdate": { "Type": "REG_DWORD", "Data": 1 },
-  "NoAutoRebootWithLoggedOnUsers": { "Type": "REG_DWORD", "Data": 1 },
-  "UseWUServer": { "Type": "REG_DWORD", "Data": 1 }
-},
-"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\Auto Update": {
-  "AUOptions": { "Type": "REG_DWORD", "Data": 1 },
-  "SetupWizardLaunchTime": { "Action": "deletevalue" },
-  "AcceleratedInstallRequired": { "Action": "deletevalue" }
-}
-```
-
-> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#29-windows-update
 
 # Disable System Mitigations
 
@@ -213,16 +193,55 @@ Editing process mitigations via LGPE (`Administrative Templates\System\Mitigatio
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/processmiti.png?raw=true)
 
-| Flag | Bit | Setting                                                                         | Details                                                                                                                                                                                                                                                                               |
-| ---- | ------------ | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A    | 0            | PROCESS_CREATION_MITIGATION_POLICY_DEP_ENABLE (0x00000001)                      | Turns on Data Execution Prevention (DEP) for child processes.                                                                                                                                                                                                                         |
-| B    | 1            | PROCESS_CREATION_MITIGATION_POLICY_DEP_ATL_THUNK_ENABLE (0x00000002)            | Turns on DEP-ATL thunk emulation for child processes. DEP-ATL thunk emulation lets the system intercept nonexecutable (NX) faults that originate from the Active Template Library (ATL) thunk layer, and then emulate and handle the instructions so the process can continue to run. |
-| C    | 2            | PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE (0x00000004)                    | Turns on Structured Exception Handler Overwrite Protection (SEHOP) for child processes. SEHOP helps to block exploits that use the Structured Exception Handler (SEH) overwrite technique.                                                                                            |
-| D    | 8            | PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON (0x00000100) | Uses the force ASLR setting to act as though an image base collision happened at load time, forcibly rebasing images that aren't dynamic base compatible. Images without the base relocation section aren't loaded if relocations are required.                                       |
-| E    | 15           | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON (0x00010000)        | Turns on the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address.                                                                                                                           |
-| F    | 16           | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_OFF (0x00020000)       | Turns off the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address.                                                                                                                          |
+| Flag | Bit | Setting | Details |
+| --- | --- | --- | --- |
+| A | 0 | PROCESS_CREATION_MITIGATION_POLICY_DEP_ENABLE (0x00000001) | Turns on Data Execution Prevention (DEP) for child processes. |
+| B | 1 | PROCESS_CREATION_MITIGATION_POLICY_DEP_ATL_THUNK_ENABLE (0x00000002) | Turns on DEP-ATL thunk emulation for child processes. DEP-ATL thunk emulation lets the system intercept nonexecutable (NX) faults that originate from the Active Template Library (ATL) thunk layer, and then emulate and handle the instructions so the process can continue to run. |
+| C | 2 | PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE (0x00000004) | Turns on Structured Exception Handler Overwrite Protection (SEHOP) for child processes. SEHOP helps to block exploits that use the Structured Exception Handler (SEH) overwrite technique. |
+| D | 8 | PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON (0x00000100) | Uses the force ASLR setting to act as though an image base collision happened at load time, forcibly rebasing images that aren't dynamic base compatible. Images without the base relocation section aren't loaded if relocations are required. |
+| E | 15 | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON (0x00010000) | Turns on the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address. |
+| F | 16 | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_OFF (0x00020000) | Turns off the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address. |
 
 > https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies
+
+---
+
+**Table 7-20** Process mitigation options
+
+| Mitigation Name | Use Case | Enabling Mechanism |
+| --- | --- | --- |
+| ASLR Bottom Up Randomization | Makes calls to `VirtualAlloc` subject to ASLR with 8-bit entropy, including stack-base randomization. | Set with the `PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON` process-creation attribute flag. |
+| ASLR Force Relocate Images | Forces ASLR even on binaries that do not have the `/DYNAMICBASE` linker flag. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON` process-creation flag. |
+| High Entropy ASLR (HEASLR) | Significantly increases entropy of ASLR on 64-bit images, increasing bottom-up randomization to up to 1 TB of variance. | Must be set through `/HIGHENTROPYVA` at link time or the `PROCESS_CREATION_MITIGATION_POLICY_HIGH_ENTROPY_ASLR_ALWAYS_ON` process-creation attribute flag. |
+| ASLR Disallow Stripped Images | Blocks the load of any library without relocations (linked with the `/FIXED` flag) when combined with ASLR Force Relocate Images. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON_REQ_RELOCS` process-creation flag. |
+| DEP: Permanent | Prevents the process from disabling DEP on itself. Only relevant on x86 and 32-bit applications, including WoW64. | Set with `SetProcessMitigationPolicy`, a process-creation attribute, or `SetProcessDEPPolicy`. |
+| DEP: Disable ATL Thunk Emulation | Prevents legacy ATL library code from executing ATL thunks in the heap, even if a known compatibility issue exists. Only relevant on x86 and 32-bit applications, including WoW64. | Set with `SetProcessMitigationPolicy`, a process-creation attribute, or `SetProcessDEPPolicy`. |
+| SEH Overwrite Protection (SEHOP) | Prevents structured exception handlers from being overwritten with incorrect ones, even if the image was not linked with `Safe SEH` (`/SAFESEH`). Only relevant on 32-bit applications, including WoW64. | Set with `SetProcessDEPPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE` process-creation flag. |
+| Raise Exception on Invalid Handle | Helps catch handle reuse attacks by crashing the process instead of returning a failure that the process might ignore. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_STRICT_HANDLE_CHECKS_ALWAYS_ON` process-creation attribute flag. |
+| Raise Exception on Invalid Handle Close | Helps catch double-handle-close attacks, limiting exploit reliability and effectiveness. | Undocumented and can only be set through an undocumented API. |
+| Disallow Win32k System Calls | Disables all access to the Win32 kernel-mode subsystem driver, including Window Manager, GDI, and DirectX system calls. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_WIN32K_SYSTEM_CALL_DISABLE_ALWAYS_ON` process-creation attribute flag. |
+| Filter Win32k System Calls | Filters access to the Win32k subsystem to certain APIs, allowing simple GUI and DirectX access while reducing attack surface. | Set through an internal process-creation attribute flag with one of three hard-coded Win32k filter sets; reserved for Microsoft internal usage. |
+| Disable Extension Points | Prevents a process from loading IMEs, Windows hook DLLs, AppInit DLLs, or Winsock layered service providers. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_EXTENSION_POINT_DISABLE_ALWAYS_ON` process-creation attribute flag. |
+| Arbitrary Code Guard (CFG) | Prevents a process from allocating executable code or changing existing executable code to writable-executable memory. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_PROHIBIT_DYNAMIC_CODE_ALWAYS_ON` and `PROCESS_CREATION_MITIGATION_POLICY_PROHIBIT_DYNAMIC_CODE_ALWAYS_ON_ALLOW_OPT_OUT` process-creation attribute flags. |
+| Control Flow Guard (CFG) | Helps prevent memory corruption from hijacking control flow by validating indirect `CALL` and `JMP` targets against valid functions. | The image must be compiled and linked with `/guard:cf`; it can also be set with the `PROCESS_CREATION_MITIGATION_POLICY_CONTROL_FLOW_GUARD_ALWAYS_ON` process-creation attribute flag for other images loading in the process. |
+| CFG Export Suppression | Strengthens CFG by suppressing indirect calls to the exported API table of the image. | The image must be compiled with `/guard: exportsuppress`, and can also be configured through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_CONTROL_FLOW_GUARD_EXPORT_SUPPRESSION` process-creation attribute flag. |
+| CFG Strict Mode | Prevents loading any image library in the current process that was not linked with `/guard:cf`. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY2_STRICT_CONTROL_FLOW_GUARD_ALWAYS_ON` process-creation attribute flag. |
+| Disable Non System Fonts | Prevents loading any font files that were not registered by Winlogon at user logon time after installation in `C:\Windows\Fonts`. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_FONT_DISABLE_ALWAYS_ON` process-creation attribute flag. |
+| Microsoft-Signed Binaries Only | Prevents loading any image library in the current process that was not signed by a Microsoft CA-issued certificate. | Set through the `PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALWAYS_ON` process-attribute flag at startup time. |
+| Store-Signed Binaries Only | Prevents loading any image library in the current process that was not signed by the Microsoft Store CA. | Set through the `PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALLOW_STORE` process attribute flag at startup time. |
+| No Remote Images | Prevents loading any image library in the current process that is present on a non-local UNC or WebDAV path. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_IMAGE_LOAD_NO_REMOTE_ALWAYS_ON` process-creation attribute flag. |
+| No Low IL Images | Prevents loading any image library in the current process that has a mandatory label below medium (`0x2000`). | Set through `SetProcessMitigationPolicy`, the `PROCESS_CREATION_MITIGATION_POLICY_IMAGE_LOAD_NO_LOW_LABEL_ALWAYS_ON` process-creation flag, or a resource claim ACE called `IMAGELOAD` on the process file. |
+| Prefer System32 Images | Modifies the loader search path to always look in `%SystemRoot%\\System32` for relatively named image libraries before other locations. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_IMAGE_LOAD_PREFER_SYSTEM32_ALWAYS_ON` process-creation attribute flag. |
+| Return Flow Guard (RFG) | Helps prevent additional control-flow attacks by validating `RET` instructions against expected call and stack behavior. | Not yet available; included in the table for completeness. |
+| Restrict Set Thread Context | Restricts modification of the current thread’s context. | Currently disabled pending the availability of RFG and may appear in a future version of Windows; included for completeness. |
+| Loader Continuity | Prohibits dynamic loading of DLLs that do not have the same integrity level as the process when signature-policy mitigations could not be enabled at startup. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY2_LOADER_INTEGRITY_CONTINUITY_ALWAYS_ON` process-creation attribute flag. |
+| Heap Terminate On Corruption | Disables the Fault Tolerant Heap and turns heap corruption into immediate process termination instead of a continuable exception. | Set through `HeapSetInformation` or the `PROCESS_CREATION_MITIGATION_POLICY_HEAP_TERMINATE_ALWAYS_ON` process-creation attribute flag. |
+| Disable Child Process Creation | Prohibits creation of child processes by marking the token with a special restriction. | Set through the `PROCESS_CREATION_CHILD_PROCESS_RESTRICTED` process-creation attribute flag; can be overridden for packaged desktop apps with `PROCESS_CREATION_DESKTOP_APPX_OVERRIDE`. |
+| All Application Packages Policy | Makes an AppContainer application unable to access resources that only have an `ALL APPLICATION PACKAGES` SID, requiring `ALL RESTRICTED APPLICATION PACKAGES` instead. | Set through the `PROC_THREAD_ATTRIBUTE_ALL_APPLICATION_PACKAGES_POLICY` process-creation attribute. |
+
+Read more about process-mitigation policies in [Windows Internals E7, P1 - P.735f. 'Process-mitigation policies'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
+
+---
 
 `(gcm set-processmitigation).Parameters.Disable.Attributes.ValidValues`:
 ```powershell
@@ -279,539 +298,6 @@ UserShadowStack
 UserShadowStackStrictMode
 AuditUserShadowStack
 ```
-
-> https://learn.microsoft.com/en-us/powershell/module/processmitigations/set-processmitigation?view=windowsserver2025-ps
-
----
-
-Miscellaneous notes:
-
-Editing DEP via bcdedit:
-```
-bcdedit /set nx OptIn
-```
-`OptIn` is preferred.
-
-|DEP Option | Description |
-|-----------|-------------|
-|**Optin**| Enables DEP only for operating system components, including the Windows kernel and drivers. Administrators can enable DEP on selected executable files by using the Application Compatibility Toolkit (ACT). |
-|**Optout** | Enables DEP for the operating system and all processes, including the Windows kernel and drivers. However, administrators can disable DEP on selected executable files by using **System** in **Control Panel**. |
-|**AlwaysOn** | Enables DEP for the operating system and all processes, including the Windows kernel and drivers. All attempts to disable DEP are ignored. |
-|**AlwaysOff** | Disables DEP. Attempts to enable DEP selectively are ignored. On Windows Vista, this parameter also disables Physical Address Extension (PAE). This parameter does not disable PAE on Windows Server 2008. |
-
-> https://learn.microsoft.com/en-us/windows/win32/memory/data-execution-prevention  
-> https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/devtest/bcdedit--set.md#verification-settings
-
-`MoveImages` value (`ASLR`) - it's recommended, to disable ASLR for a specific process instead:
-```c
-dq offset aSessionManager_10 ; "Session Manager\\Memory Management"
-dq offset aMoveimages   ; "MoveImages"
-dq offset dword_140FC41E0
-
-dword_140FC41E0 dd 1 // default - 0 = disabled
-```
-
-> https://en.wikipedia.org/wiki/Address_space_layout_randomization
-
-# Disable WU Driver Updates
-
-"Do not include drivers with Windows Updates", "Prevent device metadata retrieval from the Internet":
-
-```json
-{
-	"File":  "WindowsUpdate.admx",
-	"NameSpace":  "Microsoft.Policies.WindowsUpdate",
-	"Class":  "Machine",
-	"CategoryName":  "WindowsUpdateOffering",
-	"DisplayName":  "Do not include drivers with Windows Updates",
-	"ExplainText":  "Enable this policy to not include drivers with Windows quality updates.If you disable or do not configure this policy, Windows Update will include updates that have a Driver classification.",
-	"Supported":  "Windows_10_0_NOARM",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\WindowsUpdate",
-	"KeyName":  "ExcludeWUDriversInQualityUpdate",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
-},
-{
-	"File":  "DeviceSetup.admx",
-	"NameSpace":  "Microsoft.Policies.DeviceSoftwareSetup",
-	"Class":  "Machine",
-	"CategoryName":  "DeviceInstall_Category",
-	"DisplayName":  "Do not search Windows Update",
-	"ExplainText":  "This policy setting allows you to specify the order in which Windows searches source locations for device drivers. If you enable this policy setting, you can select whether Windows searches for drivers on Windows Update unconditionally, only if necessary, or not at all.Note that searching always implies that Windows will attempt to search Windows Update exactly one time. With this setting, Windows will not continually search for updates. This setting is used to ensure that the best software will be found for the device, even if the network is temporarily available.If the setting for searching only if needed is specified, then Windows will search for a driver only if a driver is not locally available on the system.If you disable or do not configure this policy setting, members of the Administrators group can determine the priority order in which Windows searches source locations for device drivers.",
-	"Supported":  "Windows7",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows",
-	"KeyName":  "DriverSearching",
-	"Elements":  [
-						{
-							"Type":  "Enum",
-							"ValueName":  "SearchOrderConfig",
-							"Items":  [
-										{
-											"DisplayName":  "Always search Windows Update",
-											"Value":  "1"
-										},
-										{
-											"DisplayName":  "Search Windows Update only if needed",
-											"Value":  "2"
-										},
-										{
-											"DisplayName":  "Do not search Windows Update",
-											"Value":  "0"
-										}
-									]
-						}
-					]
-},
-{
-	"File":  "ICM.admx",
-	"NameSpace":  "Microsoft.Policies.InternetCommunicationManagement",
-	"Class":  "Machine",
-	"CategoryName":  "InternetManagement_Settings",
-	"DisplayName":  "Turn off Windows Update device driver searching",
-	"ExplainText":  "This policy setting specifies whether Windows searches Windows Update for device drivers when no local drivers for a device are present.If you enable this policy setting, Windows Update is not searched when a new device is installed.If you disable this policy setting, Windows Update is always searched for drivers when no local drivers are present.If you do not configure this policy setting, searching Windows Update is optional when installing a device.Also see \"Turn off Windows Update device driver search prompt\" in \"Administrative Templates/System,\" which governs whether an administrator is prompted before searching Windows Update for device drivers if a driver is not found locally.Note: This policy setting is replaced by \"Specify Driver Source Search Order\" in \"Administrative Templates/System/Device Installation\" on newer versions of Windows.",
-	"Supported":  "WindowsVistaToXPSP2",
-	"KeyPath":  "Software\\Policies\\Microsoft\\Windows\\DriverSearching",
-	"KeyName":  "DontSearchWindowsUpdate",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
-},
-{
-	"File":  "DeviceSetup.admx",
-	"NameSpace":  "Microsoft.Policies.DeviceSoftwareSetup",
-	"Class":  "Machine",
-	"CategoryName":  "DeviceInstall_Category",
-	"DisplayName":  "Prevent device metadata retrieval from the Internet",
-	"ExplainText":  "This policy setting allows you to prevent Windows from retrieving device metadata from the Internet. If you enable this policy setting, Windows does not retrieve device metadata for installed devices from the Internet. This policy setting overrides the setting in the Device Installation Settings dialog box (Control Panel \u003e System and Security \u003e System \u003e Advanced System Settings \u003e Hardware tab).If you disable or do not configure this policy setting, the setting in the Device Installation Settings dialog box controls whether Windows retrieves device metadata from the Internet.",
-	"Supported":  "Windows7",
-	"KeyPath":  "SOFTWARE\\Policies\\Microsoft\\Windows\\Device Metadata",
-	"KeyName":  "PreventDeviceMetadataFromNetwork",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "0",
-							"Type":  "DisabledValue"
-						}
-					]
-},
-```
-```xml
-<?xml version='1.0' encoding='utf-8' standalone='yes'?>
-<assembly
-    xmlns="urn:schemas-microsoft-com:asm.v3"
-    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    manifestVersion="1.0"
-    >
-  <assemblyIdentity
-      language="neutral"
-      name="Microsoft-Windows-Update-MuseUxDocked"
-      processorArchitecture="*"
-      version="0.0.0.0"
-      />
-  <migration
-      replacementSettingsVersionRange="0"
-      replacementVersionRange="10.0.18267-10.0.18362"
-      settingsVersion="1"
-      >
-    <migXml xmlns="">
-      <rules context="System">
-        <include>
-          <objectSet>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [UxOption]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [ExcludeWUDriversInQualityUpdate]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [ActiveHoursStart]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [ActiveHoursEnd]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [SmartActiveHoursState]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [SmartActiveHoursSuggestionState]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [SmartActiveHoursStart]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [SmartActiveHoursEnd]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [UserChoiceActiveHoursStart]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [UserChoiceActiveHoursEnd]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [LastToastAction]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [RestartNotificationsAllowed2]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [FlightCommitted]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [AllowAutoWindowsUpdateDownloadOverMeteredNetwork]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [IsExpedited]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [RestartNoisyNotificationsAllowed]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [*]</pattern>
-          </objectSet>
-        </include>
-        <exclude>
-          <objectSet>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [RestartNotificationsAllowed]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [BranchReadinessLevel]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [DeferUpgrade]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [RebootRequired]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [ScheduledRebootTime]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [RebootScheduledByUser]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [RebootConfirmedByUser]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [RebootScheduledBySmartScheduler]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [AutoAcceptShownToUser]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [AutoScheduledRebootFailed]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [ScheduledRebootFailed]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [LastAttemptedRebootTime]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [FairWarningLastDismissTime]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [ForcedReminderDisplayed]</pattern>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\StateVariables [ForceRebootReminderNeeded]</pattern>
-          </objectSet>
-        </exclude>
-        <!-- Migrate RestartNotificationsAllowed to RestartNotificationsAllowed2 if it exists-->
-        <locationModify script="MigXmlHelper.ExactMove(&apos;HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [RestartNotificationsAllowed2]&apos;)">
-          <objectSet>
-            <pattern type="Registry">HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings [RestartNotificationsAllowed]</pattern>
-          </objectSet>
-        </locationModify>
-      </rules>
-    </migXml>
-  </migration>
-</assembly>
-```
-
-# Disable Windows Defender
-
-You'll have to boot into `safeboot` to apply some of the changes:
-```bat
-bcdedit /set safeboot minimal
-::bcdedit /deletevalue safeboot
-```
-
-Remove defender from a mounted image with the code below. Obviously, you need to change the `mount` path before running it. You can remove task leftovers after installation or in the `oobeSystem` phase with:
-```bat
-powershell -command "Get-ScheduledTask -TaskPath '\Microsoft\Windows\Windows Defender\' | Unregister-ScheduledTask -Confirm:$false"
-reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree\Microsoft\Windows\Windows Defender" /f
-rmdir /s /q "%windir%\System32\Tasks\Microsoft\Windows\Windows Defender"
-```
-`smartscreen.exe` may still continue to run. Renaming it will block execution:
-```bat
-MinSudo -NoL -P -TI cmd /c ren "%windir%\System32\smartscreen.exe" "smartscreen.exe.nv"
-```
-
-```powershell
-@echo off
-setlocal
-
-set "mount=%userprofile%\Desktop\DISMT\mount"
-
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthSystray.exe"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthService.exe"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthAgent.dll"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthHost.exe"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthSSO.dll"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthSsoUdk.dll"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthCore.dll"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthProxyStub.dll"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\SecurityHealthUdk.dll"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\drivers\WdNisDrv.sys"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Windows\System32\SecurityHealth"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Program Files\Windows Defender Advanced Threat Protection"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Program Files\Windows Defender"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\Program Files (x86)\Windows Defender"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\ProgramData\Microsoft\Windows Defender"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\ProgramData\Microsoft\Windows Defender Advanced Threat Protection"
-MinSudo -NoL -P -TI cmd /c rd /s /q "%mount%\ProgramData\Microsoft\Windows Security Health"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\smartscreen.exe"
-MinSudo -NoL -P -TI cmd /c del /f /q "%mount%\Windows\System32\smartscreenps.dll"
-
-endlocal
-```
-
-> [security/assets | Windows-Defender.txt](https://github.com/nohuto/win-config/blob/main/security/assets/Windows-Defender.txt)
-
-# Disable Windows Firewall
-
-It disables the profiles, but leaves the services/driver running.
-
-Disabling the firewall service (`Disable Services/Driver` can break:
-- Microsoft Store & UWP apps
-- `winget` / app deployment
-- Windows Sandbox
-- Xbox networking
-- Start menu
-- Modern applications can fail to install or update
-- Activation of Windows via phone
-- Application or OS incompatibilities that depend on Windows Firewall
-
-"The proper method to disable the Windows Firewall is to disable the Windows Firewall Profiles and leave the service running."
-
-> https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/configure-with-command-line?tabs=powershell
-
-`netsh advfirewall set allprofiles state off`/`Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False`:
-```powershell
-HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\DomainProfile\EnableFirewall	Type: REG_DWORD, Length: 4, Data: 0
-HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile\EnableFirewall	Type: REG_DWORD, Length: 4, Data: 0
-HKLM\System\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\PublicProfile\EnableFirewall	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-```json
-{
-  "File": "WindowsFirewall.admx",
-  "CategoryName": "WF_Profile_Domain",
-  "PolicyName": "WF_EnableFirewall_Name_1",
-  "NameSpace": "Microsoft.Policies.WindowsFirewall",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Windows Defender Firewall: Protect all network connections",
-  "ExplainText": "Turns on Windows Defender Firewall. If you enable this policy setting, Windows Defender Firewall runs and ignores the \"Computer Configuration\\Administrative Templates\\Network\\Network Connections\\Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting. If you disable this policy setting, Windows Defender Firewall does not run. This is the only way to ensure that Windows Defender Firewall does not run and administrators who log on locally cannot start it. If you do not configure this policy setting, administrators can use the Windows Defender Firewall component in Control Panel to turn Windows Defender Firewall on or off, unless the \"Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting overrides.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile"
-  ],
-  "ValueName": "EnableFirewall",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsFirewall.admx",
-  "CategoryName": "WF_Profile_Domain",
-  "PolicyName": "WF_Notifications_Name_1",
-  "NameSpace": "Microsoft.Policies.WindowsFirewall",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Windows Defender Firewall: Prohibit notifications",
-  "ExplainText": "Prevents Windows Defender Firewall from displaying notifications to the user when a program requests that Windows Defender Firewall add the program to the program exceptions list. If you enable this policy setting, Windows Defender Firewall prevents the display of these notifications. If you disable this policy setting, Windows Defender Firewall allows the display of these notifications. In the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected and administrators cannot clear it. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled, except that in the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected by default, and administrators can change it.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile"
-  ],
-  "ValueName": "DisableNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsFirewall.admx",
-  "CategoryName": "WF_Profile_Domain",
-  "PolicyName": "WF_Logging_Name_1",
-  "NameSpace": "Microsoft.Policies.WindowsFirewall",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Windows Defender Firewall: Allow logging",
-  "ExplainText": "Allows Windows Defender Firewall to record information about the unsolicited incoming messages that it receives. If you enable this policy setting, Windows Defender Firewall writes the information to a log file. You must provide the name, location, and maximum size of the log file. The location can contain environment variables. You must also specify whether to record information about incoming messages that the firewall blocks (drops) and information about successful incoming and outgoing connections. Windows Defender Firewall does not provide an option to log successful incoming messages. If you are configuring the log file name, ensure that the Windows Defender Firewall service account has write permissions to the folder containing the log file. Default path for the log file is %WINDIR%\\system32\\LogFiles\\Firewall\\pfirewall.log. If you disable this policy setting, Windows Defender Firewall does not record information in the log file. If you enable this policy setting, and Windows Defender Firewall creates the log file and adds information, then upon disabling this policy setting, Windows Defender Firewall leaves the log file intact. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\DomainProfile\\Logging"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "LogDroppedPackets", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Boolean", "ValueName": "LogSuccessfulConnections", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Text", "ValueName": "LogFilePath" },
-    { "Type": "Decimal", "ValueName": "LogFileSize", "MinValue": "128", "MaxValue": "32767" }
-  ]
-},
-{
-  "File": "WindowsFirewall.admx",
-  "CategoryName": "WF_Profile_Standard",
-  "PolicyName": "WF_EnableFirewall_Name_2",
-  "NameSpace": "Microsoft.Policies.WindowsFirewall",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Windows Defender Firewall: Protect all network connections",
-  "ExplainText": "Turns on Windows Defender Firewall. If you enable this policy setting, Windows Defender Firewall runs and ignores the \"Computer Configuration\\Administrative Templates\\Network\\Network Connections\\Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting. If you disable this policy setting, Windows Defender Firewall does not run. This is the only way to ensure that Windows Defender Firewall does not run and administrators who log on locally cannot start it. If you do not configure this policy setting, administrators can use the Windows Defender Firewall component in Control Panel to turn Windows Defender Firewall on or off, unless the \"Prohibit use of Internet Connection Firewall on your DNS domain network\" policy setting overrides.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile"
-  ],
-  "ValueName": "EnableFirewall",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsFirewall.admx",
-  "CategoryName": "WF_Profile_Standard",
-  "PolicyName": "WF_Notifications_Name_2",
-  "NameSpace": "Microsoft.Policies.WindowsFirewall",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Windows Defender Firewall: Prohibit notifications",
-  "ExplainText": "Prevents Windows Defender Firewall from displaying notifications to the user when a program requests that Windows Defender Firewall add the program to the program exceptions list. If you enable this policy setting, Windows Defender Firewall prevents the display of these notifications. If you disable this policy setting, Windows Defender Firewall allows the display of these notifications. In the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected and administrators cannot clear it. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled, except that in the Windows Defender Firewall component of Control Panel, the \"Notify me when Windows Defender Firewall blocks a new program\" check box is selected by default, and administrators can change it.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile"
-  ],
-  "ValueName": "DisableNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsFirewall.admx",
-  "CategoryName": "WF_Profile_Standard",
-  "PolicyName": "WF_Logging_Name_2",
-  "NameSpace": "Microsoft.Policies.WindowsFirewall",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Windows Defender Firewall: Allow logging",
-  "ExplainText": "Allows Windows Defender Firewall to record information about the unsolicited incoming messages that it receives. If you enable this policy setting, Windows Defender Firewall writes the information to a log file. You must provide the name, location, and maximum size of the log file. The location can contain environment variables. You must also specify whether to record information about incoming messages that the firewall blocks (drops) and information about successful incoming and outgoing connections. Windows Defender Firewall does not provide an option to log successful incoming messages. If you are configuring the log file name, ensure that the Windows Defender Firewall service account has write permissions to the folder containing the log file. Default path for the log file is %WINDIR%\\system32\\LogFiles\\Firewall\\pfirewall.log. If you disable this policy setting, Windows Defender Firewall does not record information in the log file. If you enable this policy setting, and Windows Defender Firewall creates the log file and adds information, then upon disabling this policy setting, Windows Defender Firewall leaves the log file intact. If you do not configure this policy setting, Windows Defender Firewall behaves as if the policy setting were disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\WindowsFirewall\\StandardProfile\\Logging"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "LogDroppedPackets", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Boolean", "ValueName": "LogSuccessfulConnections", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Text", "ValueName": "LogFilePath" },
-    { "Type": "Decimal", "ValueName": "LogFileSize", "MinValue": "128", "MaxValue": "32767" }
-  ]
-},
-```
-
-
-# Opt-Out DMA Remapping
-
-"To ensure compatibility with Kernel DMA Protection and DMAGuard Policy, PCIe device drivers can opt into Direct Memory Access (DMA) remapping. DMA remapping for device drivers protects against memory corruption and malicious DMA attacks, and provides a higher level of compatibility for devices. Also, devices with DMA remapping-compatible drivers can start and perform DMA regardless of lock screen status. On Kernel DMA Protection enabled systems, DMAGuard Policy might block devices, with DMA remapping-incompatible drivers, connected to external/exposed PCIe ports (for example, M.2, Thunderbolt), depending on the policy value set by the system administrator. DMA remapping isn't supported for graphics device drivers. `DmaRemappingCompatible` key is ignored if `RemappingSupported` is set."
-
-"Only use this per-driver method for Windows versions up to Windows 11 23H2. Use the [per-device method](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md#per-device-opt-in-mechanism)."
-
-`per-device` - recommended and preferred mechanism (`DmaRemappingCompatible`)
-`per-driver` - legacy mechanism (`RemappingSupported`)
-
-`DmaRemappingCompatible`:
-
-| Value | Meaning |
-|--|--|
-| 0 | Opt-out, indicates that your driver is incompatible with DMA remapping. |
-| 1 | Opt-in, indicates that your driver is fully compatible with DMA remapping. |
-| 2 | Opt-in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
-| 3 | Opt-in |
-| No registry key | Let the system determine the policy. |
-
-`RemappingFlags`:
-
-| Value | Meaning |
-|--|--|
-| 0 | If **RemappingSupported** is 1, opt in, unconditionally. |
-| 1 | If **RemappingSupported** is 1, opt in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
-| No registry key | Same as 0 value. |
-
-`RemappingSupported`:
-
-| Value | Meaning |
-|--|--|
-| 0 | Opt-out, indicates the device and driver are incompatible with DMA remapping. |
-| 1 | Opt-in, indicates the device and driver are fully compatible with DMA remapping. |
-| No registry key | Let the system determine the policy. |
-
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md
-
-Example paths:
-```powershell
-\Registry\Machine\SYSTEM\ControlSet001\Services\msisadrv\Parameters : DmaRemappingCompatible
-\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingFlags
-\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingSupported
-```
-
----
-
-Since `EnableNVMeInterface` is included in the function, I'll add it here. Default value of `0`, range `0`-`1`? Located in:
-```
-\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\<dev>\<id>\Device Parameters\StorPort : EnableNVMeInterface
-```
-`DisableNativeNVMeStack`, range `0`-`1`?
-```c
-\Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : DisableNativeNVMeStack
-
-DisableNativeNVMeStack db 0 // default
-```
-> https://github.com/nohuto/win-registry/blob/main/records/StorPort.txt
-
-# Disable System Restore
-
-```powershell
-Disable-ComputerRestore -Drive "C:\"
-```
-Does:
-```powershell
-"wmiprvse.exe", "RegSetValue","HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\RPSessionInterval","Type: REG_DWORD, Length: 4, Data: 0"
-```
-
-> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/disable-computerrestore?view=powershell-5.1  
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-delete-shadows  
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-list-shadows  
-> https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service
-
-# Disable Downloads Blocking
-
-Windows adds a hidden tag called `Zone.Identifier` to files downloaded from the internet. This tag (also known as MotW) stores info about the file's origin and helps apply security warnings, see files including the tag with:
-```powershell
-gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
-```
-
-> https://www.cyberengage.org/post/unveiling-file-origins-the-role-of-alternate-data-streams-ads-zone-identifier-in-forensic-inve  
-> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN  
-> https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)?redirectedfrom=MSDN
-
-```powershell
-gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
-```
-
-**ZoneID** (`HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones`) - number indicating the security zone the file came from:
-`0` – Local machine
-`1` – Local intranet (internal network)
-`2` – Trusted sites
-`3` – Internet (mostly web downloads)
-`4` – Untrusted / Restricted sites (flagged as dangerous by smartscreen)
-
-Files downloaded from the internet still getting blocked? Unblock it/them with (one of them):
-```powershell
-Unblock-File -Path "C:\Path\Script.ps1" -> File
-
-dir C:\Path\*Files* | Unblock-File -> Multiple files 
-```
-
-```powershell
-{
-	"File":  "AttachmentManager.admx",
-	"NameSpace":  "Microsoft.Policies.AttachmentManager",
-	"Class":  "User",
-	"CategoryName":  "AM_AM",
-	"DisplayName":  "Do not preserve zone information in file attachments",
-	"ExplainText":  "This policy setting allows you to manage whether Windows marks file attachments with information about their zone of origin (such as restricted, Internet, intranet, local). This requires NTFS in order to function correctly, and will fail without notice on FAT32. By not preserving the zone information, Windows cannot make proper risk assessments.If you enable this policy setting, Windows does not mark file attachments with their zone information.If you disable this policy setting, Windows marks file attachments with their zone information.If you do not configure this policy setting, Windows marks file attachments with their zone information.",
-	"Supported":  "WindowsXPSP2",
-	"KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments",
-	"KeyName":  "SaveZoneInformation",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "2",
-							"Type":  "DisabledValue"
-						}
-					]
-},
-```
-
-![](https://github.com/nohuto/win-config/blob/main/security/images/downblocking.png?raw=true)
-
-# Disable WPBT
-
-WPBT allows hardware manufacturers to run programs during Windows startup that may introduce unwanted software.
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager : DisableWpbtExecution
-```
-
-> https://persistence-info.github.io/Data/wpbbin.html  
-> https://github.com/Jamesits/dropWPBT
-
-# Block MRT via WU
-
-MRT takes a lot of time, there are better tools (e.g. MalwareBytes).
-
-![](https://github.com/nohuto/win-config/blob/main/security/images/mrt.png?raw=true)
 
 # Disable Bitlocker & EFS
 
@@ -876,7 +362,7 @@ One such example security solution is memory integrity, which protects and harde
 | IOMMUs or SMMUs (Intel VT-D, AMD-Vi, Arm64 SMMUs) | All I/O devices capable of DMA must be behind an IOMMU or SMMU. An IOMMU can be used to enhance system resiliency against memory attacks. |
 | Trusted Platform Module (TPM) 2.0 | For more information, see Trusted Platform Module (TPM) 2.0. |
 | Firmware support for SMM protection | System firmware must adhere to the recommendations for hardening SMM code described in the Windows SMM Security Mitigations Table (WSMT) specification. The WSMT specification contains details of an ACPI table that was created for use with Windows operating systems that support VBS features. Firmware must implement the protections described in the WSMT specification, and set the corresponding protection flags as described in the specification to report compliance with these requirements to the operating system. |
-| Unified Extensible Firmware Interface (UEFI)<br>Memory Reporting | UEFI firmware must adhere to the following memory map reporting format and memory allocation guidelines in order for firmware to ensure compatibility with VBS.<br><br>• UEFI v2.6 Memory Attributes Table (MAT) - To ensure compatibility with VBS, firmware must cleanly separate EFI runtime memory ranges for code and data, and report this to the operating system. Proper segregation and reporting of EFI runtime memory ranges allows VBS to apply the necessary page protections to EFI runtime services code pages within the VBS secure region.<br><br>Conveying this information to the OS is accomplished using the EFI_MEMORY_ATTRIBUTES_TABLE. To implement the UEFI MAT, follow these guidelines:<br><br>1. The entire EFI runtime must be described by this table.<br>2. All appropriate attributes for EfiRuntimeServicesData and EfiRuntimeServicesCode pages must be marked.<br>3. These ranges must be aligned on page boundaries (4KB), and can not overlap.<br><br>• EFI Page Protections - All entries must include attributes EFI_MEMORY_RO, EFI_MEMORY_XP, or both. All UEFI memory that is marked executable must be read only. Memory marked writable must not be executable. Entries may not be left with neither of the attributes set, indicating memory that is both executable and writable. |
+| Unified Extensible Firmware Interface (UEFI)<br>Memory Reporting | UEFI firmware must adhere to the following memory map reporting format and memory allocation guidelines in order for firmware to ensure compatibility with VBS.<br><br>â€¢ UEFI v2.6 Memory Attributes Table (MAT) - To ensure compatibility with VBS, firmware must cleanly separate EFI runtime memory ranges for code and data, and report this to the operating system. Proper segregation and reporting of EFI runtime memory ranges allows VBS to apply the necessary page protections to EFI runtime services code pages within the VBS secure region.<br><br>Conveying this information to the OS is accomplished using the EFI_MEMORY_ATTRIBUTES_TABLE. To implement the UEFI MAT, follow these guidelines:<br><br>1. The entire EFI runtime must be described by this table.<br>2. All appropriate attributes for EfiRuntimeServicesData and EfiRuntimeServicesCode pages must be marked.<br>3. These ranges must be aligned on page boundaries (4KB), and can not overlap.<br><br>â€¢ EFI Page Protections - All entries must include attributes EFI_MEMORY_RO, EFI_MEMORY_XP, or both. All UEFI memory that is marked executable must be read only. Memory marked writable must not be executable. Entries may not be left with neither of the attributes set, indicating memory that is both executable and writable. |
 | Secure Memory Overwrite Request (MOR)<br>revision 2 | Secure MOR v2 is enhanced to protect the MOR lock setting using a UEFI secure variable. This helps guard against advanced memory attacks. For details, see Secure MOR implementation. |
 | Memory integrity-compatible drivers | Ensure all system drivers have been tested and verified to be compatible with memory integrity. The Windows Driver Kit and Driver Verifier contain tests for driver compatibility with memory integrity. There are three steps to verify driver compatibility:<br><br>1. Use Driver Verifier with the Code Integrity compatibility checks enabled.<br>2. Run the Hypervisor Code Integrity Readiness Test in the Windows HLK.<br>3. Test the driver on a system with VBS and memory integrity enabled. This step is imperative to validate the driver's behavior with memory integrity, as static code analysis tools simply aren't capable of detecting all memory integrity violations possible at runtime. |
 | Secure Boot | Secure Boot must be enabled on devices leveraging VBS. For more information, see Secure Boot |
@@ -1032,7 +518,7 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 | Group | `2` | When group mode is set, the group is automatically selected based on the device's Active Directory Domain Services (AD DS) site (Windows 10, version 1607) or the domain the device is authenticated to (Windows 10, version 1511). In group mode, peering occurs across internal subnets, between devices that belong to the same group, including devices in remote offices. You can use GroupID option to create your own custom group independently of domains and AD DS sites. Starting with Windows 10, version 1803, you can use the GroupIDSource parameter to take advantage of other method to create groups dynamically. Group download mode is the recommended option for most organizations looking to achieve the best bandwidth optimization with Delivery Optimization. |
 | Internet | `3` | Enable Internet peer sources for Delivery Optimization. |
 | Simple | `99` | Simple mode disables the use of Delivery Optimization cloud services completely (for offline environments). Delivery Optimization switches to this mode automatically when the Delivery Optimization cloud services are unavailable, unreachable, or when the content file size is less than 50 MB, as the default. In this mode, Delivery Optimization provides a reliable download experience over HTTP from the download's original source or a Microsoft Connected Cache server, with no peer-to-peer caching. |
-| Bypass | `100` | Starting in Windows 11, this option is deprecated. Don't configure Download mode to ‘100' (Bypass), which can cause some content to fail to download. If you want to disable peer-to-peer functionality, configure DownloadMode to (0). If your device doesn't have internet access, configure Download Mode to (99). When you configure Bypass (100), the download bypasses Delivery Optimization and uses BITS instead. You don't need to configure this option if you're using Configuration Manager. |
+| Bypass | `100` | Starting in Windows 11, this option is deprecated. Don't configure Download mode to â€˜100' (Bypass), which can cause some content to fail to download. If you want to disable peer-to-peer functionality, configure DownloadMode to (0). If your device doesn't have internet access, configure Download Mode to (99). When you configure Bypass (100), the download bypasses Delivery Optimization and uses BITS instead. You don't need to configure this option if you're using Configuration Manager. |
 
 > https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference#download-mode
 
@@ -1063,7 +549,7 @@ Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .
 | Setting | Description | Registry security level |
 | ---- | ---- | ---- |
 | Send LM & NTLM responses | Client devices use LM and NTLM authentication, and they never use NTLMv2 session security. Domain controllers accept LM, NTLM, and NTLMv2 authentication. | 0 |
-| Send LM & NTLM – use NTLMv2 session security if negotiated | Client devices use LM and NTLM authentication, and they use NTLMv2 session security if the server supports it. Domain controllers accept LM, NTLM, and NTLMv2 authentication. | 1 |
+| Send LM & NTLM â€“ use NTLMv2 session security if negotiated | Client devices use LM and NTLM authentication, and they use NTLMv2 session security if the server supports it. Domain controllers accept LM, NTLM, and NTLMv2 authentication. | 1 |
 | Send NTLM response only | Client devices use NTLMv1 authentication, and they use NTLMv2 session security if the server supports it. Domain controllers accept LM, NTLM, and NTLMv2 authentication. | 2 |
 | Send NTLMv2 response only | Client devices use NTLMv2 authentication, and they use NTLMv2 session security if the server supports it. Domain controllers accept LM, NTLM, and NTLMv2 authentication. | 3 |
 | Send NTLMv2 response only. Refuse LM | Client devices use NTLMv2 authentication, and they use NTLMv2 session security if the server supports it. Domain controllers refuse to accept LM authentication, and they'll accept only NTLM and NTLMv2 authentication. | 4 |
@@ -1426,3 +912,4 @@ if (_wcsicmp(name, L"defaultuser0")) {
 ```
 
 DeviceEnroller.exe = MDM/Enterprise enrollment client that runs enrollment and renewal sessions (e.g., `EnrollEngineInitialize`, `InitiateSessionAsync`, `WaitForEnrollment`) here.
+
