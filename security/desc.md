@@ -42,7 +42,7 @@ Since the tool includes a seperate `Policies` section and most of the Defender s
 | `SpynetReporting` | Controls whether the device joins Microsoft MAPS and whether it sends basic or additional threat information to Microsoft. |
 | `LocalSettingOverrideSpynetReporting` | Controls whether a local MAPS reporting preference can override Group Policy. |
 | `SubmitSamplesConsent` | Controls how Defender submits file samples for further analysis when MAPS is in use. |
-| `DisableBlockAtFirstSeen` | Controls whether Defender checks suspicious content with MAPS before allowing it to run or be accessed. |
+| `DisableBlockAtFirstSeen` | Controls whether Defender checks suspicious content with MAPS before allowing it to run or be accessed. (*Defender marks it as `DisableBlockAtFirstSeen` and deletes the value*) |
 | `MpBafsExtendedTimeout` | Controls the extra time Defender can hold a suspicious file for an extended cloud check. |
 | `MpCloudBlockLevel` | Controls how aggressively Defender blocks and scans suspicious files using cloud protection. |
 | `SignatureDisableNotification` | Controls whether the antimalware service can receive MAPS notifications that disable security intelligence causing false positives. |
