@@ -2,7 +2,7 @@
 
 ## Privacy Preset (`Configured`)
 
-This is my preset which keeps Defender enabled but turning off privacy sensetive (cloud/reporting...) parts:
+This is my preset which keeps Defender enabled but turning off privacy sensitive (cloud/reporting...) parts:
 - Defender core AV enabled
 - Real-time / on-access / IOAV / behavior monitoring enabled
 - PUA set to `Block`
@@ -14,13 +14,14 @@ This is my preset which keeps Defender enabled but turning off privacy sensetive
 - Network Protection disabled
 - Controlled Folder Access disabled
 - SmartScreen disabled
+- Email scanning disabled
 - Enhanced Phishing Protection disabled
 - Defender core telemetry disabled
 - Defender core ECS integration disabled
 
 ## Windows Policies
 
-Since the tool includes a seperate `Policies` section and most of the Defender settings are controlled via them (not all SmartScreen parts are, which is why it's a suboption), I won't add them as suboptions to keep the UI clean. If you want to fine tune specific parts of Defender after applying the `Configured` preset, you can do so by copying the value name and pasting it into the search bar, it'll show the policy (or go into the Policies section and open WindowsDefender / WindowsDefenderSecurityCenter).
+Since the tool includes a seperate `Policies` section and most of the Defender settings are controlled via them (not all SmartScreen parts are, which is why it's a suboption), I won't add them as suboptions to keep the UI clean. If you want to fine tune specific parts of Defender after applying the `Configured` preset, you can do so by copying the value name and pasting it into the search bar, it'll show the policy (or go into the Policies section and open WindowsDefender / WindowsDefenderSecurityCenter / WebThreatDefense).
 
 ### Main AV Parts
 
@@ -29,6 +30,7 @@ Since the tool includes a seperate `Policies` section and most of the Defender s
 | `PUAProtection` | Controls whether potentially unwanted applications are allowed, audited, or blocked when they are downloaded or try to install. |
 | `DisableBehaviorMonitoring` | Controls whether Defender behavior monitoring stays enabled or is disabled. |
 | `DisableIOAVProtection` | Controls whether downloaded files and attachments are scanned. |
+| `DisableEmailScanning` | Controls whether Defender scans supported mailbox and mail-file formats for message bodies and attachments; modern email clients are not supported by this feature. |
 | `DisableOnAccessProtection` | Controls whether file and program activity is monitored. |
 | `DisableRealtimeMonitoring` | Controls whether Defender real-time protection is turned off or left on. |
 | `DisableScanOnRealtimeEnable` | Controls whether a process scan is started when real-time protection is turned on. |
@@ -57,7 +59,7 @@ Since the tool includes a seperate `Policies` section and most of the Defender s
 
 | Value name | Description |
 | --- | --- |
-| `ServiceEnabled` | Controls whether Enhanced Phishing Protection runs in audit mode or stays off; audit mode records unsafe password entry events and sends telemetry. |
+| `ServiceEnabled` | Controls whether Enhanced Phishing Protection runs in audit mode or stays off, audit mode records unsafe password entry events and sends telemetry. |
 | `NotifyMalicious` | Controls whether users are warned when they enter a work or school password into phishing or invalid Microsoft sign-in scenarios. |
 | `NotifyPasswordReuse` | Controls whether users are warned when they reuse their work or school password. |
 | `NotifyUnsafeApp` | Controls whether users are warned when they type their work or school password into unsafe apps such as text editors or Office apps. |
@@ -78,7 +80,8 @@ Since the tool includes a seperate `Policies` section and most of the Defender s
 | --- | --- |
 | `EnableSmartScreen` | Controls whether Windows Defender SmartScreen is turned on or off for app reputation warnings and related checks. |
 | `ShellSmartScreenLevel` | Controls whether SmartScreen warns users or warns and prevents bypass when the Windows Defender SmartScreen policy is enabled. |
-| `EnabledV9` | Controls whether Microsoft Edge SmartScreen is enforced, including phishing and malware checks against sites that are not on the allow list. |
+| `EnabledV9` | Controls whether legacy Microsoft Edge SmartScreen is enforced, including phishing and malware checks against sites that are not on the allow list. |
+| `SmartScreenEnabled` | Controls whether current Microsoft Edge SmartScreen is turned on or off in the browser. |
 
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-defender  
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-webthreatdefense  

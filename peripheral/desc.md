@@ -610,6 +610,85 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserCho
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\AutorunINFLegacyArrival\(Default)	Type: REG_SZ, Length: 30, Data: MSTakeNoAction
 ```
 
+```json
+{
+  "File": "AutoPlay.admx",
+  "CategoryName": "AutoPlay",
+  "PolicyName": "NoAutorun",
+  "NameSpace": "Microsoft.Policies.AutoPlay",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Set the default behavior for AutoRun",
+  "ExplainText": "This policy setting sets the default behavior for Autorun commands. Autorun commands are generally stored in autorun.inf files. They often launch the installation program or other routines. Prior to Windows Vista, when media containing an autorun command is inserted, the system will automatically execute the program without user intervention. This creates a major security concern as code may be executed without user's knowledge. The default behavior starting with Windows Vista is to prompt the user whether autorun command is to be run. The autorun command is represented as a handler in the Autoplay dialog. If you enable this policy setting, an Administrator can change the default Windows Vista or later behavior for autorun to: a) Completely disable autorun commands, or b) Revert back to pre-Windows Vista behavior of automatically executing the autorun command. If you disable or not configure this policy setting, Windows Vista or later will prompt the user whether autorun command is to be run.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "NoAutorun", "Items": [
+        { "DisplayName": "Do not execute any autorun commands", "Data": "1" },
+        { "DisplayName": "Automatically execute autorun commands", "Data": "2" }
+      ]
+    }
+  ]
+},
+{
+  "File": "AutoPlay.admx",
+  "CategoryName": "AutoPlay",
+  "PolicyName": "DontSetAutoplayCheckbox",
+  "NameSpace": "Microsoft.Policies.AutoPlay",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Prevent AutoPlay from remembering user choices.",
+  "ExplainText": "This policy setting allows you to prevent AutoPlay from remembering user's choice of what to do when a device is connected. If you enable this policy setting, AutoPlay prompts the user to choose what to do when a device is connected. If you disable or do not configure this policy setting, AutoPlay remembers user's choice of what to do when a device is connected.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "DontSetAutoplayCheckbox",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "AutoPlay.admx",
+  "CategoryName": "AutoPlay",
+  "PolicyName": "Autorun",
+  "NameSpace": "Microsoft.Policies.AutoPlay",
+  "Supported": "Win2k - At least Windows 2000",
+  "DisplayName": "Turn off Autoplay",
+  "ExplainText": "This policy setting allows you to turn off the Autoplay feature. Autoplay begins reading from a drive as soon as you insert media in the drive. As a result, the setup file of programs and the music on audio media start immediately. Prior to Windows XP SP2, Autoplay is disabled by default on removable drives, such as the floppy disk drive (but not the CD-ROM drive), and on network drives. Starting with Windows XP SP2, Autoplay is enabled for removable drives as well, including Zip drives and some USB mass storage devices. If you enable this policy setting, Autoplay is disabled on CD-ROM and removable media drives, or disabled on all drives. This policy setting disables Autoplay on additional types of drives. You cannot use this setting to enable Autoplay on drives on which it is disabled by default. If you disable or do not configure this policy setting, AutoPlay is enabled. Note: This policy setting appears in both the Computer Configuration and User Configuration folders. If the policy settings conflict, the policy setting in Computer Configuration takes precedence over the policy setting in User Configuration.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "NoDriveTypeAutoRun", "Items": [
+        { "DisplayName": "CD-ROM and removable media drives", "Data": "181" },
+        { "DisplayName": "All drives", "Data": "255" }
+      ]
+    }
+  ]
+},
+{
+  "File": "AutoPlay.admx",
+  "CategoryName": "AutoPlay",
+  "PolicyName": "NoAutoplayfornonVolume",
+  "NameSpace": "Microsoft.Policies.AutoPlay",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Disallow Autoplay for non-volume devices",
+  "ExplainText": "This policy setting disallows AutoPlay for MTP devices like cameras or phones. If you enable this policy setting, AutoPlay is not allowed for MTP devices like cameras or phones. If you disable or do not configure this policy setting, AutoPlay is enabled for non-volume devices.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "NoAutoplayfornonVolume",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+```
+
 # Disk Write Cache Policy
 
 Enables write cache & turns off write cache buffer flushing on all connected disks.
