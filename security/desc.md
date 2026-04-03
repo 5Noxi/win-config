@@ -578,7 +578,7 @@ On first use kind of everything get's blocked -> minimalfirewall asks you to blo
 
 - `Off`: firewall disabled
 - `Default`: inbound block, outbound allow
-- `Allowlist`: inbound block, outbound block unless allowed
+- `Allowlist`: inbound block, outbound block unless allowed (recommended, but requires time to set up)
 
 ## Firewall Records
 
