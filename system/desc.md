@@ -1279,12 +1279,26 @@ Enabling segment heap globally forces the system to use the newer segmented allo
 
 # Disable Notifications
 
-Disables lock screen, desktop, feature advertisement balloon notifications, notification area, notifications network usage and more.
+| Option | Description |
+| ---- | ---- |
+| Main | Disables all kind of notifications completely. |
+| Disable Low Disk Space Checks | Disables the `Low Disk Space` notification. ![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true) |
+| Hide all Windows Security notifications | Disables all notifications via the `DisableNotifications`  policy (this probably overrides all other security notifications below). |
+| Hide non-critical Windows Security notifications | Disables non-critical/enhanced notifications via the Windows Security and Microsoft Defender Antivirus `DisableEnhancedNotifications` policies. |
+| Disable Enhanced Phishing Protection warnings | Disables the Enhanced Phishing Protection warning prompts for malicious sites, password reuse, and unsafe apps. |
+| Disable Virus & threat protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Virus & threat protection notifications` |
+| Disable Account protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Account protection notifications` |
+| Disable Firewall & network protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Firewall & network protection notifications` |
+| Disable Security & Maintenance Notifications | Disables it via `SystemSettings > System > Notifications: Security and Maintenance` |
+| Disable Sync Provider Notifications | Disables it via `Explorer > View > Options > View: Show sync provider notifications` |
+| Disable account-related notifications | Disables it via `SystemSettings > Personalization > Start: Show account related notifications occasionally in Start` |
+| Disable Clock Change notifications | Disables it via `Control Panel > Clock and Region > Date and Time: Notify me when the clock chanes` |
+| Hide Notification Center | Works via `NoAutoTrayNotify`/`DisableNotificationCenter` policies and `SystemSettings > System > Notifications: Show notification bell icon` |
+| Disable Notification Sound | Disables it via `SystemSettings > System > Notifications > Allow notifications to play sound` |
+| Disable Lockscreen Notifications | Works via `DisableLockScreenAppNotifications` policy and `SystemSettings > System > Notifications: Show notifications on the lock screen + Show reminders and incoming VoIP calls on the lock screen` |
+| Turn off access to the Store | `NoUseStoreOpenWith` policy - "*This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the "Look for an app in the Store" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.*" |
+| Hide Time in Notification Center | Works via `SystemSettings > Time & language > Date & time: Show time and date in the System tray` |
 
-"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
-
-`Turn off access to the Store`:  
-This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the "Look for an app in the Store" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.
 
 All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
 ```c
@@ -1304,18 +1318,13 @@ All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
 ```
 The options I've commented on are included in the options under `System > Notifications`/right click menu of notification center.
 
-`DstNotification` disables notifications whenever the system clock changes.
-```c
-// Control Panel > Clock and Region > Date and Time - Notify me when the clock chanes
+## Miscellaneous Notes
 
-// Enablded (default)
-HKCU\Control Panel\TimeDate\DstNotification	Type: REG_DWORD, Length: 4, Data: 1
+### WnsEndpoint
 
-// Disabled
-HKCU\Control Panel\TimeDate\DstNotification	Type: REG_DWORD, Length: 4, Data: 0
-```
+"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
 
----
+### Registry Research
 
 Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
 ```c
@@ -1352,19 +1361,6 @@ Since `BackupReminderToastCount` isn't a well known value, I've done quick resea
 
 See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://github.com/nohuto/win-config/blob/main/system/assets/noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c) for used pseudocode. Note that I added my chosen values to the `Disable Low Disk Space Checks` suboption for safety reasons.
 
----
-
-`Disable Low Disk Space Checks`: Disables the `Low Disk Space` notification.
-
-> https://github.com/nohuto/win-registry/blob/main/records/CV-Explorer.txt
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true)
-
-
----
-
-Miscellaneous notes:
-
 ```c
 "HKCU\\Control Panel\\Accessibility";
   // Dismiss notifications after this amount of time
@@ -1382,7 +1378,7 @@ Miscellaneous notes:
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\TimestampWhenSeen","Length: 20"
 ```
 
----
+### Windows Policies
 
 ```json
 {
@@ -1431,23 +1427,6 @@ Miscellaneous notes:
     "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
   ],
   "ValueName": "DisableNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsDefenderSecurityCenter.admx",
-  "CategoryName": "EnterpriseCustomization",
-  "PolicyName": "EnterpriseCustomization_EnableCustomizedToasts",
-  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
-  "Supported": "Windows_10_0_RS3",
-  "DisplayName": "Configure customized notifications",
-  "ExplainText": "Display specified contact information to local users in Windows Security notifications. Enabled: Your company contact information will be displayed in notifications that come from Windows Security. After setting this to Enabled, you must configure the Specify contact company name GP setting and at least one of the following GP settings: -Specify contact phone number or Skype ID -Specify contact email number or email ID -Specify contact website Please note that in some cases we will be limiting the contact options that are displayed based on the notification space available. Disabled: No contact information will be shown on notifications. Not configured: Same as Disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Enterprise Customization"
-  ],
-  "ValueName": "EnableForToasts",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
@@ -1570,8 +1549,7 @@ xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinne
 ```
 > https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy
 
-__Automate the process:__
-Gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
+The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
 
 # Disable Timestamp Interval
 
