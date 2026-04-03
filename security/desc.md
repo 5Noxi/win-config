@@ -1,5 +1,15 @@
 # Windows Defender
 
+## [Current Defender Status](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-antivirus-windows.md#use-powershell-to-check-the-status-of-microsoft-defender-antivirus)
+
+1. Select the **Start** menu, and begin typing `PowerShell`. Then open Windows PowerShell in the results.
+2. Type `Get-MpComputerStatus`.
+3. In the list of results, look at the **AMRunningMode** row.
+   - **Normal** means Microsoft Defender Antivirus is running in active mode.
+   - **Passive mode** means Microsoft Defender Antivirus running, but isn't the primary antivirus/anti-malware product on your device. Passive mode is only available for devices that are onboarded to Microsoft Defender for Endpoint and that meet certain requirements. To learn more, see [Requirements for Microsoft Defender Antivirus to run in passive mode](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-antivirus-compatibility.md#requirements-for-microsoft-defender-antivirus-to-run-in-passive-mode).
+   - **EDR Block Mode** means Microsoft Defender Antivirus is running and [Endpoint detection and response (EDR) in block mode](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/edr-in-block-mode.md), a capability in Microsoft Defender for Endpoint, is enabled. Check the **ForceDefenderPassiveMode** registry key. If its value is 0, it's running in normal mode; otherwise, it's running in passive mode.
+   - **SxS Passive Mode** means Microsoft Defender Antivirus is running alongside another antivirus/anti-malware product, and [limited periodic scanning is used](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/limited-periodic-scanning-microsoft-defender-antivirus.md).
+
 ## Privacy Preset (`Configured`)
 
 This is my preset which keeps Defender enabled but turning off privacy sensitive (cloud/reporting...) parts:
@@ -16,8 +26,22 @@ This is my preset which keeps Defender enabled but turning off privacy sensitive
 - SmartScreen disabled
 - Email scanning disabled
 - Enhanced Phishing Protection disabled
-- Defender core telemetry disabled
-- Defender core ECS integration disabled
+- [Defender core telemetry](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-core-service-overview.md) disabled (`DisableCoreServiceTelemetry` = true: "*The Microsoft Defender Core service doesn't collect telemetry from Microsoft Defender Antivirus and other Defender software. Disabling this setting can impact Microsoft's ability to quickly recognize and address problems, such as slow performance and false positives*")
+- [Defender core ECS integration](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-core-service-overview.md) disabled (ECS = Experimentation and Configuration Service)
+
+If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/main/adblock/native.winoffice.txt) ECS won't function properly, since it [has to receive payload](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-core-service-configurations-and-experimentation.md) from:
+
+- Enterprise customers should allow the following URLs:
+ - `*.events.data.microsoft.com`
+ - `*.endpoint.security.microsoft.com`
+ - `*.ecs.office.com`
+
+- Enterprise U.S. Government customers should allow the following URLs:
+ - `*.events.data.microsoft.com`
+ - `*.endpoint.security.microsoft.us` (GCC-H & DoD)
+ - `*.gccmod.ecs.office.com` (GCC-M)
+ - `*.config.ecs.gov.teams.microsoft.us` (GCC-H)
+ - `*.config.ecs.dod.teams.microsoft.us` (DoD)
 
 ## Windows Policies
 
@@ -226,6 +250,16 @@ HKLM\System\CurrentControlSet\Control\Lsa\RunAsPPL	Type: REG_DWORD
 
 // Microsoft Vulnerable Driver Blocklist - 0 = Off, 1 = On
 HKLM\System\CurrentControlSet\Control\CI\Config\VulnerableDriverBlocklistEnable	Type: REG_DWORD
+
+//  --- Miscellaneous MpPreference Records ---
+
+// Set-MpPreference -DisableCoreServiceTelemetry $true
+HKLM\SOFTWARE\Microsoft\Windows Defender\Features\DisableCoreService1DSTelemetry	Type: REG_DWORD, Length: 4, Data: 1
+HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTelemetry	Type: REG_DWORD, Length: 4, Data: 1
+
+// Set-MpPreference -DisableCoreServiceTelemetry $false
+HKLM\SOFTWARE\Microsoft\Windows Defender\Features\DisableCoreService1DSTelemetry	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTelemetry	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
 # Windows Update
