@@ -32,16 +32,16 @@ This is my preset which keeps Defender enabled but turning off privacy sensitive
 If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/main/adblock/native.winoffice.txt) ECS won't function properly, since it [has to receive payload](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-core-service-configurations-and-experimentation.md) from:
 
 - Enterprise customers should allow the following URLs:
- - `*.events.data.microsoft.com`
- - `*.endpoint.security.microsoft.com`
- - `*.ecs.office.com`
+  - `*.events.data.microsoft.com`
+  - `*.endpoint.security.microsoft.com`
+  - `*.ecs.office.com`
 
 - Enterprise U.S. Government customers should allow the following URLs:
- - `*.events.data.microsoft.com`
- - `*.endpoint.security.microsoft.us` (GCC-H & DoD)
- - `*.gccmod.ecs.office.com` (GCC-M)
- - `*.config.ecs.gov.teams.microsoft.us` (GCC-H)
- - `*.config.ecs.dod.teams.microsoft.us` (DoD)
+  - `*.events.data.microsoft.com`
+  - `*.endpoint.security.microsoft.us` (GCC-H & DoD)
+  - `*.gccmod.ecs.office.com` (GCC-M)
+  - `*.config.ecs.gov.teams.microsoft.us` (GCC-H)
+  - `*.config.ecs.dod.teams.microsoft.us` (DoD)
 
 ## Windows Policies
 
