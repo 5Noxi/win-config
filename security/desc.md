@@ -300,7 +300,11 @@ HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTeleme
 
 ## Firewall Presets
 
-The option currently includes 4 different presets, note that `Allowlist Mode` will need rules that you've to add. It's recommended to allow outbound, look at the network section in system informer, afterwards adding rules for programs that require network outbound access.
+The option currently includes 4 different presets, note that `Allowlist Mode` will need rules that you've to add. 
+
+It's recommended to allow outbound, **look at the network section in system informer**, afterwards adding rules for programs that require network outbound access.
+
+Make sure that you're looking at your local IP address (`192.168.x.x`), not at loopback addresses (`127.0.0.1`), these don't access the network and are local traffic.
 
 On first use kind of everything get's blocked -> minimalfirewall asks you to block/allow it. This continues until every required rule is set.
 
