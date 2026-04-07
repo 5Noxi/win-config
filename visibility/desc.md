@@ -516,6 +516,49 @@ CMachine::RegQueryDWORD(
 },
 ```
 
+# Disable Rounded Corners
+
+This currently works via [Win11DisableRoundedCorners](https://github.com/valinet/Win11DisableRoundedCorners) which works fine on [latest version since the function exists/works the same on latest builds](https://www.noverse.dev/bin-diff.html).
+
+It works by overriding the first instruction with the function via:
+
+```c
+mov rax, 0
+ret
+```
+
+Means we never go trough `GetEffectiveCornerStyle`.
+
+```c
+__int64 __fastcall CTopLevelWindow::GetEffectiveCornerStyle(__int64 a1)
+{
+  __int64 result; // rax
+  int v2; // ebx
+
+  if ( *((_BYTE *)CDesktopManager::s_pDesktopManagerInstance + 27)
+    && !*((_BYTE *)CDesktopManager::s_pDesktopManagerInstance + 29)
+    || *((int *)CDesktopManager::s_pDesktopManagerInstance + 8) >= 2 )
+  {
+    return 1LL;
+  }
+  result = *(unsigned int *)(*(_QWORD *)(a1 + 752) + 184LL);
+  if ( !(_DWORD)result )
+  {
+    v2 = *(_DWORD *)(a1 + 624);
+    if ( (v2 & 2) != 0 )
+      return 3LL;
+    if ( !(unsigned __int8)IsOpenThemeDataPresent() )
+      return 1LL;
+    result = 2LL;
+    if ( (v2 & 6) == 0 )
+      return 1LL;
+  }
+  return result;
+}
+```
+
+Obviously, `GetEffectiveCornerStyle` only exists in W11 builds (as you can see in [decompiled-pseudocode](https://github.com/nohuto/decompiled-pseudocode)) .
+
 # Disable Automatic Folder Type Discovery
 
 "Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders."
