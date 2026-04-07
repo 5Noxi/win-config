@@ -527,7 +527,7 @@ mov rax, 0
 ret
 ```
 
-Means we never go trough `GetEffectiveCornerStyle`.
+Means we never go through `GetEffectiveCornerStyle`.
 
 ```c
 __int64 __fastcall CTopLevelWindow::GetEffectiveCornerStyle(__int64 a1)
