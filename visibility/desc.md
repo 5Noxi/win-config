@@ -523,11 +523,9 @@ This currently works via [Win11DisableRoundedCorners](https://github.com/valinet
 It works by overriding the first instruction with the function via:
 
 ```c
-mov rax, 0
+mov rax, 0 // result = 0
 ret
 ```
-
-Means we never go through `GetEffectiveCornerStyle`.
 
 ```c
 __int64 __fastcall CTopLevelWindow::GetEffectiveCornerStyle(__int64 a1)
