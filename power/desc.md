@@ -1,4 +1,4 @@
-# Disable xHCI IMOD
+# xHCI IMOD
 
 | Flag | Description |
 | --- | --- |
