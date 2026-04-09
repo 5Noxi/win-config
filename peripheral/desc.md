@@ -394,11 +394,23 @@ It's recommended to change the pointer speed via `Bluetooth & devices > Mouse`, 
 `Ease Cursor Movement between Displays`:  
 Controls whether the pointer jumps over the non-overlapping seam between misaligned monitors so that it doesn't get stuck on edges/corners when switching between screens. If this option is disabled, the cursor will stop at these seams instead of crossing them.
 
----
+## Scrolling Values
 
-Miscellaneous notes:
 ```c
-"HKCU\Control Panel\Cursors\CursorBaseSize","Type: REG_DWORD, Length: 4, Data: 32"
+// Roll the mouse whell to scroll (just a toggle to let users use 'Lines to scroll at a time')
+// One screen at a time (this data would gray out 'Lines to scroll at a time') = -1
+// Lines to scroll at a time =  1-100
+HKCU\Control Panel\Desktop\WheelScrollLines	Type: REG_SZ
+
+// Scroll inactive windows when hovering over them
+// On = 2
+// Off = 0
+HKCU\Control Panel\Desktop\MouseWheelRouting	Type: REG_DWORD
+
+// Scroll direction
+// Down motion scrolls down = 0
+// Down motion scrolls up = 1
+HKCU\Control Panel\Mouse\ReverseMouseWheelDirection	Type: REG_DWORD
 ```
 
 # Keyboard Values
@@ -1112,7 +1124,7 @@ This list was created on a stock `W11 LTSC IoT Enterprise 2024` installation via
 dir Registry::HKEY_CLASSES_ROOT -Recurse -ea SilentlyContinue | ? { $_.Name -like '*\shell\print' } | select -ExpandProperty Name
 ```
 
----
+## Printer Connections
 
 List all printer connections:
 ```powershell
