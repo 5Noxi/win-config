@@ -131,6 +131,26 @@ The personalization window keeps the last five wallpaper paths in `HKCU\Software
 }
 ```
 
+# Clear Quick Access Lists
+
+Quick access shows recent files and pinned folders in File Explorer. Clearing these files will reset your quick access pins to default state. Windows recreates these files as you use File Explorer and apps again.
+
+It clears both Quick Access Jump List folders:
+```c
+%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*
+%APPDATA%\Microsoft\Windows\Recent\CustomDestinations\*
+```
+
+> https://support.microsoft.com/en-us/windows/file-explorer-in-windows-ef370130-1cca-9dc5-e0df-2f7416fe1cb1
+
+# Clear Histories
+
+Microsoft says Windows Search "saves your search history locally on your device" and shows a clear button in `Settings > Privacy & security > Search permissions`. These histories are rebuilt over time as you keep using Search, Run, File Explorer, and file dialogs.
+
+The main button clears all parts mentioned in the suboptions.
+
+> https://support.microsoft.com/en-us/windows/windows-search-and-privacy-99fb8251-7260-1cd6-1bbb-15c2370eb168
+
 # MUI Cache
 
 Clears per user MUI cache entries that store resolved display names for executables, shortcuts, and shell items. Windows recreates these entries as programs are launched.
@@ -216,6 +236,10 @@ Paths removed:
 %LOCALAPPDATA%\Microsoft\Windows\WER\*
 ```
 
+# Windows Defender
+
+Clears several local Windows Defender parts. The main button removes all of the suboptions. These files are recreated by Defender as new scans, definition updates, and support logging occur.
+
 # Event Logs
 
 Only do this if you want to export the data elsewhere or purposely delete logs (security logs can't be recovered afterward).
@@ -271,12 +295,13 @@ Paths removed:
 
 Removes kernel crash dump data created after a system bugcheck. Useful if you want to reclaim disk space or you have already analyzed the crash.
 
-This option clears both LiveKernelReports and `MEMORY.DMP` when present.
+This option clears `LiveKernelReports`, `MEMORY.DMP`, and per-crash minidumps in `%WINDIR%\Minidump`.
 
 Paths removed:
 ```c
 %WINDIR%\LiveKernelReports
 %WINDIR%\MEMORY.DMP
+%WINDIR%\Minidump\*.dmp
 ```
 
 # Product Key
@@ -327,10 +352,16 @@ Cleans up a broad set of Windows log files (setup, component servicing, WMI, fir
 Paths removed:
 ```c
 "%WINDIR%\\*.log",
+"%ALLUSERSPROFILE%\\Application Data\\Microsoft\\Dr Watson\\*.log",
+"%ALLUSERSPROFILE%\\Application Data\\Microsoft\\Dr Watson\\user.dmp",
 "%WINDIR%\\debug\\*.log",
 "%WINDIR%\\debug\\PASSWD.LOG",
 "%WINDIR%\\debug\\Setup\\UpdSh.log",
 "%WINDIR%\\debug\\UserMode\\*.log",
+"%WINDIR%\\debug\\UserMode\\ChkAcc.bak",
+"%WINDIR%\\debug\\UserMode\\userenv.bak",
+"%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\brndlog.bak",
+"%LOCALAPPDATA%\\Microsoft\\Internet Explorer\\brndlog.txt",
 "%WINDIR%\\Logs\\CBS",
 "%WINDIR%\\Logs\\DISM",
 "%WINDIR%\\Logs\\NetSetup",
@@ -338,6 +369,8 @@ Paths removed:
 "%WINDIR%\\Logs\\waasmedic",
 "%WINDIR%\\Microsoft.NET\\Framework\\*\\*.log",
 "%WINDIR%\\ntbtlog.txt", // bcdedit /set bootlog Yes
+"%WINDIR%\\OEWABLog.txt",
+"%WINDIR%\\REGLOCS.OLD",
 "%WINDIR%\\SchedLgU.txt",
 "%WINDIR%\\security\\logs\\*.log",
 "%WINDIR%\\security\\logs\\*.old",
@@ -345,8 +378,17 @@ Paths removed:
 "%WINDIR%\\SoftwareDistribution\\*.log",
 "%WINDIR%\\SoftwareDistribution\\DataStore\\Logs\\*",
 "%WINDIR%\\System32\\*.log",
+"%WINDIR%\\System32\\TZLog.log",
+"%WINDIR%\\System32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.bak",
+"%WINDIR%\\System32\\config\\systemprofile\\Application Data\\Microsoft\\Internet Explorer\\brndlog.txt",
+"%WINDIR%\\System32\\LogFiles\\AIT\\AitEventLog.etl.???",
+"%WINDIR%\\System32\\LogFiles\\Firewall\\pfirewall.log*",
+"%WINDIR%\\System32\\LogFiles\\Scm\\SCM.EVM*",
 "%WINDIR%\\System32\\LogFiles\\setupcln",
 "%WINDIR%\\System32\\LogFiles\\WMI",
+"%WINDIR%\\System32\\LogFiles\\WMI\\Terminal*.etl",
+"%WINDIR%\\System32\\LogFiles\\WMI\\RTBackup\\EtwRT.*etl",
+"%WINDIR%\\System32\\wbem\\Logs\\*.lo_",
 "%WINDIR%\\System32\\wbem\\Logs\\*.log"
 ```
 
