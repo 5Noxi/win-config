@@ -142,6 +142,9 @@ This currently applies the values for the `USB` enumerator only, since most valu
 
 Disables USB selective suspend, idle states, and related LP features if supported.
 
+See win-registry repo for a list of `CCS\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\...` values/defaults/notes:
+> https://github.com/nohuto/win-registry#pnp-device-values
+
 Note that the known `MSPower_DeviceEnable` command does nothing more than recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`.
 ```c
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\ROOT_HUB30\5&2c35141&0&0\Device Parameters\WDF\IdleInWorkingState	Type: REG_DWORD, Length: 4, Data: 0
@@ -169,8 +172,6 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\0000\PnPCapabilities	Type: REG_DWORD, Length: 4, Data: 24
 ```
 
----
-
 ## Storport Idle (`Device Parameters\\StorPort`)
 
 "Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.
@@ -184,9 +185,6 @@ Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
 > https://github.com/nohuto/win-registry/blob/main/records/pci.txt  
 > [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
-
-See win-registry repo for a list of `CCS\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#pnp-device-values
 
 # Disable Hibernation
 

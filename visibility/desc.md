@@ -524,14 +524,24 @@ CMachine::RegQueryDWORD(
 
 This currently works via [Win11DisableRoundedCorners](https://github.com/valinet/Win11DisableRoundedCorners) which works fine on [latest version since the function exists/works the same on latest builds](https://www.noverse.dev/bin-diff.html). Note that the revert doesn't run `sfc /scannow` to restore proper file permissions to `uDWM.dll` since it does a lot more than restoring permissions. If you're aware if it, run the command after reverting the option.
 
-It works by overriding the first instruction with the function via:
+It works by overriding the first 8 bytes in the function with `48 C7 C0 00 00 00 00 C3`:
 
 ```c
-mov rax, 0 // result = 0
-ret
+mov rax, 0; ret // result = 0
 ```
 
+That function calculates the effective corner mode, its callers include border/shadow/radius.
 ```c
+/*
+ * XREFs of ?GetEffectiveCornerStyle@CTopLevelWindow@@AEAA?AW4CORNER_STYLE@@XZ @ 0x18003AB74
+ * Callers:
+ *     ?GetShadowStyle@CTopLevelWindow@@AEAA?AW4ShadowStyle@CWindowBorder@@XZ @ 0x18001AA04 (-GetShadowStyle@CTopLevelWindow@@AEAA-AW4ShadowStyle@CWindowBorder@@XZ.c)
+ *     ?UpdateWindowVisuals@CTopLevelWindow@@AEAAJXZ @ 0x18003D8E0 (-UpdateWindowVisuals@CTopLevelWindow@@AEAAJXZ.c)
+ *     ?GetRadiusFromCornerStyle@CTopLevelWindow@@AEAAMXZ @ 0x1800E5B98 (-GetRadiusFromCornerStyle@CTopLevelWindow@@AEAAMXZ.c)
+ * Callees:
+ *     IsOpenThemeDataPresent @ 0x18005DB28 (IsOpenThemeDataPresent.c)
+ */
+
 __int64 __fastcall CTopLevelWindow::GetEffectiveCornerStyle(__int64 a1)
 {
   __int64 result; // rax
