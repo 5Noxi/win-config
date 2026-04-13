@@ -1909,37 +1909,37 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 
 Disables all kind of suggestions: in start, text suggestions (multilingual...), in the timeline, content. `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
 
-```c
-// System > Notifications > Additional settings - Get tips and suggestions when using Windows
-"SubscribedContent-338389Enabled": { "Type": "REG_DWORD", "Data": 0 },
+## SubscribedContent IDs
 
-// System > Notifications > Additional settings - Show the Windows welcome experience after updates and when signed in to show what's new and suggested
-"SubscribedContent-310093Enabled": { "Type": "REG_DWORD", "Data": 0 },
+Since the `SubscribedContent-*` values aren't documented literally anywhere I've tried to get some information to see which exist and what they do. You can find information on them in `ContentDeliveryManager.Utilities.dll`, see [contentdelivery.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/contentdelivery.c) for machine code snippets that include these information.
 
-// Used in Privacy & security > Recommendations & offers - Recommendatins and offers in Settings
-"SubscribedContent-338393Enabled": { "Type": "REG_DWORD", "Data": 0 },
-"SubscribedContent-353694Enabled": { "Type": "REG_DWORD", "Data": 0 },
-"SubscribedContent-353696Enabled": { "Type": "REG_DWORD", "Data": 0 }
+| Feature | IDs | Practical meaning |
+|---|---|---|
+| `LockScreen` | `338380`, `338387` | Windows Spotlight / lock-screen creative content |
+| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for 'System > Notifications > Additional settings - Get tips and suggestions when using Windows' |
+| `StartSuggestions` | `338381`, `338388` | suggested/recommended content in Start |
+| `Settings` | `338386`, `338393` | promoted content inside Settings |
+| `SettingsHome` | `353697`, `353696` | Settings Home recommendations/cards |
+| `SettingsAccountsYourInfo` | `353695`, `353694` | promoted content in Settings > Accounts > Your info |
+| `SettingsValueBanner` | `88000106`, `88000105` | banner/value-promoting content in Settings |
+| `OobeOffers` | `314566`, `314567` | OOBE and post-setup offers |
+| `MinuteZeroOffers` | `310094`, `310093` | very-early setup / first-run offers - `310093` is used for 'System > Notifications > Additional settings - Show the Windows welcome experience after updates and when signed in to show what's new and suggested' |
+| `ApiTest` | `280812` | internal/test subscription used by CDM |
+| `ActionCenter` | `310092`, `310091` | Action Center / notification-surface content |
+| `ShareAppSuggestions` | `280814`, `280815` | app suggestions around sharing flows |
+| `SilentInstalledApps` | `202913`, `202914` | silent/preinstalled app delivery |
+| `PeopleAppSuggestions` | `314562`, `314563` | People-related app suggestions |
+| `DynamicLayouts` | `314558`, `314559` | dynamic layout-driven targeted content |
+| `DynamicLayoutsSV` | `88000531`, `88000530` | variant of dynamic layouts |
+| `Timeline` | `353699`, `353698` | Timeline-related suggested content |
+| `AppDefaultsEdgeEnlightenment` | `88000044`, `88000045` | Edge/default-app promotion |
+| `OneDriveLocal` | `280797`, `280811` | local OneDrive promotion/setup |
+| `OneDriveSync` | `280817`, `280810` | OneDrive sync promotion/setup |
+| `OneDriveDocuments` | `88000162`, `88000161` | OneDrive documents backup/setup |
+| `OneDriveDesktop` | `88000164`, `88000163` | OneDrive desktop backup/setup |
+| `OneDrivePictures` | `88000166`, `88000165` | OneDrive pictures backup/setup |
 
-// these get read on boot
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-202914Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280810Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280811Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-280815Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310091Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-310093Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338387Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338389Enabled","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353694Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353696Enabled","Length: 16"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-353698Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000045Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000161Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000163Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000165Enabled","Length: 12"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000325Enabled","Length: 16"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-88000326Enabled","Length: 16"
-```
+`SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are sed in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
 ```json
 {
