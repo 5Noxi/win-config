@@ -1939,7 +1939,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | `OneDriveDesktop` | `88000164`, `88000163` | OneDrive desktop backup/setup |
 | `OneDrivePictures` | `88000166`, `88000165` | OneDrive pictures backup/setup |
 
-`SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are sed in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
+`SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
 ```json
 {
