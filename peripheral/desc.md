@@ -473,8 +473,6 @@ The difference is minor (picture), preferable just disable them. Open `mmsys.cpl
 "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Capture\{6119fee4-d49c-474d-978c-0e5f9a67acb3}\FxProperties\{1da5d803-d492-4edd-8c23-e0c0ffee7f0e},5","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/audioenhance.png?raw=true)
-
 # Disable Spatial Audio
 
 Spatial audio positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
