@@ -1,0 +1,52 @@
+; Colloid Cursors Dark
+
+[Version]
+signature="$CHICAGO$"
+
+[DefaultInstall]
+CopyFiles = Scheme.Cur, Scheme.Txt
+AddReg    = Scheme.Reg
+
+[DestinationDirs]
+Scheme.Cur = 10,"%CUR_DIR%"
+Scheme.Txt = 10,"%CUR_DIR%"
+
+[Scheme.Reg]
+HKCU,"Control Panel\Cursors\Schemes","%SCHEME_NAME%",,"%10%\%CUR_DIR%\%pointer%,%10%\%CUR_DIR%\%help%,%10%\%CUR_DIR%\%work%,%10%\%CUR_DIR%\%busy%,%10%\%CUR_DIR%\%cross%,%10%\%CUR_DIR%\%Text%,%10%\%CUR_DIR%\%Hand%,%10%\%CUR_DIR%\%unavailiable%,%10%\%CUR_DIR%\%Vert%,%10%\%CUR_DIR%\%Horz%,%10%\%CUR_DIR%\%Dgn1%,%10%\%CUR_DIR%\%Dgn2%,%10%\%CUR_DIR%\%move%,%10%\%CUR_DIR%\%alternate%,%10%\%CUR_DIR%\%link%"
+
+; -- Common Information
+
+[Scheme.Cur]
+pointer.cur
+help.cur
+working.ani
+busy.ani
+beam.cur
+unavailable.cur
+vert.cur
+horz.cur
+dg1.cur
+dg2.cur
+move.cur
+link.cur
+precision.cur
+handwriting.cur
+alternate.cur
+[Strings]
+CUR_DIR       = "Cursors\Colloid cursors Dark"
+SCHEME_NAME   = "Colloid cursors Dark"
+pointer       = "pointer.cur"
+help          = "help.cur"
+work          = "working.ani"
+busy          = "busy.ani"
+text          = "beam.cur"
+unavailiable  = "unavailable.cur"
+vert          = "vert.cur"
+horz          = "horz.cur"
+dgn1          = "dg1.cur"
+dgn2          = "dg2.cur"
+move          = "move.cur"
+link          = "link.cur"
+cross         = "precision.cur"
+hand          = "handwriting.cur"
+alternate     = "alternate.cur"

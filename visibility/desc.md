@@ -167,6 +167,84 @@ It get's changed via the "Wallpaper" policy:
 },
 ```
 
+# Pointer Style
+
+Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`.
+
+The first three are controlled by `CursorType`, while custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string.
+
+Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
+
+## Installing Custom Cursors
+
+If you want a full custom cursor pack instead of Windows built in white, black, inverted, or recolored accessibility cursors, you can install one from diffrenrent sources such as [vsthemes.org](https://vsthemes.org/en/cursors/).
+
+1. Download and extract the pack
+2. If the pack includes an `.inf`, right click it and click `Install`
+3. Otherwise open `main.cpl`, go to the `Pointers` tab, select a cursor role, click `Browse`, and pick the downloaded `.cur` or `.ani` file
+
+I've added some custom packs: [colloid-dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html).
+
+## Pointer Style Records
+
+```c
+// Main style selector
+// 0 = White, 1 = Black, 2 = Inverted, 6 = Custom color
+HKCU\Software\Microsoft\Accessibility\CursorType	Type: REG_DWORD
+
+// Custom color only
+// COLORREF format: 0x00bbggrr
+HKCU\Software\Microsoft\Accessibility\CursorColor	Type: REG_DWORD
+
+// Standard styles use the built in system cursor sets
+HKCU\Control Panel\Cursors\(Default)		Type: REG_SZ
+HKCU\Control Panel\Cursors\Arrow		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Help		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\AppStarting	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Wait		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Crosshair	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\IBeam		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\NWPen		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\No		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeNS		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeWE		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeNWSE	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeNESW	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeAll		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\UpArrow	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Hand		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Scheme Source	Type: REG_DWORD
+
+// Custom colored styles use generated peruser cursor files
+HKCU\Control Panel\Cursors\Arrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\arrow_eoa.cur
+HKCU\Control Panel\Cursors\AppStarting // %LOCALAPPDATA%\Microsoft\Windows\Cursors\busy_eoa.cur
+HKCU\Control Panel\Cursors\Crosshair // %LOCALAPPDATA%\Microsoft\Windows\Cursors\cross_eoa.cur
+HKCU\Control Panel\Cursors\Hand // %LOCALAPPDATA%\Microsoft\Windows\Cursors\link_eoa.cur
+HKCU\Control Panel\Cursors\Help // %LOCALAPPDATA%\Microsoft\Windows\Cursors\helpsel_eoa.cur
+HKCU\Control Panel\Cursors\IBeam // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ibeam_eoa.cur
+HKCU\Control Panel\Cursors\No // %LOCALAPPDATA%\Microsoft\Windows\Cursors\unavail_eoa.cur
+HKCU\Control Panel\Cursors\NWPen // %LOCALAPPDATA%\Microsoft\Windows\Cursors\pen_eoa.cur
+HKCU\Control Panel\Cursors\Person // %LOCALAPPDATA%\Microsoft\Windows\Cursors\person_eoa.cur
+HKCU\Control Panel\Cursors\Pin // %LOCALAPPDATA%\Microsoft\Windows\Cursors\pin_eoa.cur
+HKCU\Control Panel\Cursors\SizeAll // %LOCALAPPDATA%\Microsoft\Windows\Cursors\move_eoa.cur
+HKCU\Control Panel\Cursors\SizeNESW // %LOCALAPPDATA%\Microsoft\Windows\Cursors\nesw_eoa.cur
+HKCU\Control Panel\Cursors\SizeNS // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ns_eoa.cur
+HKCU\Control Panel\Cursors\SizeNWSE // %LOCALAPPDATA%\Microsoft\Windows\Cursors\nwse_eoa.cur
+HKCU\Control Panel\Cursors\SizeWE // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ew_eoa.cur
+HKCU\Control Panel\Cursors\UpArrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\up_eoa.cur
+HKCU\Control Panel\Cursors\Wait // %LOCALAPPDATA%\Microsoft\Windows\Cursors\wait_eoa.cur
+HKCU\Control Panel\Cursors\CursorBaseSize	Type: REG_DWORD
+
+// Used custom color DWORDs
+HKCU\Software\Microsoft\Accessibility\CursorColor = 16711871	// Pink (0x00FF00BF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 65471		// Lime (0x0000FFBF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 64250		// Yellow (0x0000FAFA)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 49151		// Gold (0x0000BFFF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 12517631	// Pink (0x00BF00FF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 16760576	// Turquise (0x00FFBF00)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF00)
+```
+
 # Account Picture
 
 Changes the user account picture via:
