@@ -12,19 +12,6 @@ The option applies all kind of telemetry related values including all values tha
 Seems to be a fallback if `AllowTelemetry` isn't set.
 > https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106
 
-Miscellaneous notes:  
-
-```json
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Windows": {
-  "DCEInUseTelemetryDisabled": { "Type": "REG_DWORD", "Data": 1 }
-},
-"HKLM\\SOFTWARE\\Microsoft\\wbem\\Tracing": {
-  "enableWinmgmtTelemetry": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
-
-> https://github.com/nohuto/win-registry/blob/main/records/Winows-NT.txt
-
 
 ```json
 {
