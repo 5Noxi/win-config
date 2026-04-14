@@ -25,14 +25,9 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 ## Pointer Style Records
 
 ```c
-// Main style selector
+// Main style
 // 0 = White, 1 = Black, 2 = Inverted, 6 = Custom color
 HKCU\Software\Microsoft\Accessibility\CursorType	Type: REG_DWORD
-
-// Cursor reload after registry/files are in place
-// SystemParametersInfoW(SPI_SETCURSORS, 0, NULL, SPIF_SENDCHANGE)
-SPI_SETCURSORS = 0x0057
-SPIF_SENDCHANGE = 0x0002
 
 // Custom color only (COLORREF format: 0x00bbggrr)
 HKCU\Software\Microsoft\Accessibility\CursorColor	Type: REG_DWORD
