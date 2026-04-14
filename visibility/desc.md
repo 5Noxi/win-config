@@ -169,11 +169,7 @@ It get's changed via the "Wallpaper" policy:
 
 # Pointer Style
 
-Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`.
-
-The first three are controlled by `CursorType`, while custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string.
-
-Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
+Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`. The first three are controlled by `CursorType`, custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string. Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
 
 ## Installing Custom Cursors
 
@@ -183,7 +179,19 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 2. If the pack includes an `.inf`, right click it and click `Install`
 3. Otherwise open `main.cpl`, go to the `Pointers` tab, select a cursor role, click `Browse`, and pick the downloaded `.cur` or `.ani` file
 
-I've added some custom packs: [colloid-dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html).
+## Cursor Previews
+
+I've added some custom packs: [colloid-dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html), [colloid-light](https://vsthemes.org/en/cursors/white/68371-colloid-light.html), [capitaine-cursors](https://github.com/keeferrourke/capitaine-cursors), [monolith](https://github.com/ndom91/Monolith-Cursors) (dark/light), [simplify-dot](https://vsthemes.org/en/cursors/static/47356-simplify-dot-2.html) (dark/light), and [`skyrim`](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html).
+
+| Name | Preview |
+|--|--|
+| Custom colors + dark/light/invert | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/defaults.png?raw=true) |
+| Colloid Dark | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-dark.webp?raw=true) |
+| Colloid Light | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-light.webp?raw=true) |
+| Monolith (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/monolith.webp?raw=true) |
+| Capitaine (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
+| Simplify Dot (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/simplify-dot.webp?raw=true) |
+| Skyrim | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
 
 ## Pointer Style Records
 
@@ -192,8 +200,12 @@ I've added some custom packs: [colloid-dark](https://vsthemes.org/en/cursors/bla
 // 0 = White, 1 = Black, 2 = Inverted, 6 = Custom color
 HKCU\Software\Microsoft\Accessibility\CursorType	Type: REG_DWORD
 
-// Custom color only
-// COLORREF format: 0x00bbggrr
+// Cursor reload after registry/files are in place
+// SystemParametersInfoW(SPI_SETCURSORS, 0, NULL, SPIF_SENDCHANGE)
+SPI_SETCURSORS = 0x0057
+SPIF_SENDCHANGE = 0x0002
+
+// Custom color only (COLORREF format: 0x00bbggrr)
 HKCU\Software\Microsoft\Accessibility\CursorColor	Type: REG_DWORD
 
 // Standard styles use the built in system cursor sets
@@ -235,7 +247,7 @@ HKCU\Control Panel\Cursors\UpArrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\u
 HKCU\Control Panel\Cursors\Wait // %LOCALAPPDATA%\Microsoft\Windows\Cursors\wait_eoa.cur
 HKCU\Control Panel\Cursors\CursorBaseSize	Type: REG_DWORD
 
-// Used custom color DWORDs
+// Used custom color DWORDs (these are the predefined ones from SystemSettings)
 HKCU\Software\Microsoft\Accessibility\CursorColor = 16711871	// Pink (0x00FF00BF)
 HKCU\Software\Microsoft\Accessibility\CursorColor = 65471		// Lime (0x0000FFBF)
 HKCU\Software\Microsoft\Accessibility\CursorColor = 64250		// Yellow (0x0000FAFA)
@@ -244,6 +256,8 @@ HKCU\Software\Microsoft\Accessibility\CursorColor = 12517631	// Pink (0x00BF00FF
 HKCU\Software\Microsoft\Accessibility\CursorColor = 16760576	// Turquise (0x00FFBF00)
 HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF00)
 ```
+
+*Note: when applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).
 
 # Account Picture
 
