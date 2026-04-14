@@ -752,7 +752,8 @@ Value gets calculated with:
 
 -15*75 = -1125 // default
 ```
-I created a small tool for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly. (the images show vertical `75px` & `100px` difference)
+
+I created a small tool for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly (the images show vertical `75px` & `100px` difference). I personally use `110px Horizonzal - 60px Vertical` for a more vertical compact view and more space horizontally (see suboption).
 
 `75px`:
 
@@ -828,15 +829,15 @@ Select the amount of recent tabs from apps in the alt+tab menu.
 
 The option changes it via `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced`.
 
----
+## Classic Task Switcher
 
-`Classic Task Switcher` won't work on 24H2.
+Restarting the explorer is enough to apply the changes.
 
-New (delete `AltTabSettings`):
+New:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchnew.png?raw=true)
 
-Classic (`AltTabSettings` - `1`):
+Classic:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
 
