@@ -415,7 +415,7 @@ HKCU\Control Panel\Mouse\ReverseMouseWheelDirection	Type: REG_DWORD
 
 ## Miscellaneous Values
 
-These values are typically found under `HKCU\Control Panel\Mouse`:
+Located in `HKCU\Control Panel\Mouse`:
 
 | Value | Type | Description |
 |--|--|--|
