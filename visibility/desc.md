@@ -775,7 +775,7 @@ Disables all kind of animations, while leaving font smoothing + window content w
 
 ## UserPreferencesMask
 
-Anything written as "- *text*" behind the linked name equals the source where the option can be togled (and where I recoreded the bit differences), "(untested)" means that I didn't find the Windows UI toggle for the bit yet, means that the meaning is currently based on pseudocode, or on [SystemParametersInfo (`SPI_*`)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow) naming. All meanings have a link to the win32k pseudocode function where the bit is read.
+Anything written as "- *text*" behind the linked name equals the source where the option can be toggled (and where I recorded the bit differences), "(untested)" means that I didn't find the Windows UI toggle for the bit yet, means that the meaning is currently based on pseudocode, or on [SystemParametersInfo (`SPI_*`)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow) naming. All meanings have a link to the win32k pseudocode function where the bit is read.
 
 | Bit | Hex | Meaning |
 | --- | --- | --- |
