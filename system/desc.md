@@ -35,29 +35,19 @@ return v1;
 > https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
+
+## Windows Internals
+
 ![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
-
----
-
-Miscellaneous notes:
-```json
-// "If the total physical memory is above the threshold, it enables Svchost service splitting"
-"HKLM\\SYSTEM\\CurrentControlSet\\Control": {
-  "SvcHostSplitThresholdInKB": { "Type": "REG_DWORD", "Data": 4294967295 }
-}
-```
 
 # Kernel Values
 
 Since many people don't yet know which values exist and what default value they have, here's a list. I used IDA, WinDbg, WinObjEx, Windows Internals E7 P1 to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-> https://github.com/nohuto/windows-books/releases  
-> https://github.com/hfiref0x/WinObjEx64  
-> https://github.com/nohuto/sym-mem-dump  
-> https://github.com/nohuto/win-registry#kernel-values  
-
 See win-registry repo for a list of `CCS\\Control\\Session Manager\\...` values/defaults/notes:
 > https://github.com/nohuto/win-registry#session-manager-values
+
+## Windows Internals
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
@@ -357,6 +347,8 @@ It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely 
 
 This list was created using my small [`ScheduledTasksLists.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/ScheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given. See example output of a stock 25H2 installation: [scheduled-tasks.json](https://github.com/nohuto/win-config/blob/main/system/assets/scheduled-tasks.json).
 
+## Scheduled Tasks Table
+
 | Option Name | Task | Description | Action Command |
 | --- | --- | --- | --- |
 | CEIP | `\Microsoft\Windows\Autochk\Proxy` | This task collects and uploads autochk SQM data if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\rundll32.exe /d acproxy.dll,PerformAutochkOperations` |
@@ -475,7 +467,7 @@ I personally recommend using only the main option. This includes disabling telem
 
 Read more about it in [Windows Internals E7, P2](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) 'Windows services (P.426-474) section.
 
-## Service/Driver Table Overview
+## Service/Driver Table
 
 The suboptions probably overlap the documentation. If so, you can open the markdown file on my GitHub instead:
 > https://github.com/nohuto/win-config/blob/main/system/desc.md#disable-servicesdrivers
@@ -755,7 +747,6 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 
 Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) / `rdyboost` (ReadyBoost) (rdyboost.sys) = `INACCESSIBLE_BOOT_DEVICE` BSoD.
 
-
 # SCM Autostart Delay
 
 Windows marks some services as delayed autostart to reduce boot contention. The Service Control Manager (SCM) waits before starting those services, the default delay is 120 seconds as shown below.
@@ -803,7 +794,7 @@ __int64 __fastcall CDelayStartContext::GetAutostartDelay(CDelayStartContext *thi
 }
 ```
 
----
+## EnableAutostartEvents Notes
 
 Note on a different option which I didn't implement (this information is based on Windows Internals E7 P2, P448-449):
 
@@ -940,33 +931,26 @@ Get-TimeZone -ListAvailable
 
 Game Mode should: "Prevents Windows Update from performing driver installations and sending restart notifications" Does it work? Not really, in my experience it tends to lower the priority and prevent driver updates (correct me if you've experienced otherwise) - It may also mess with process/thread priorities. Not all games support it, generally leave it enabled or benchmark the differences in equal scenarios.
 
+Enabling/disabling it via the system settings only switches `AutoGameModeEnabled`:
+```powershell
+HKCU\Software\Microsoft\GameBar\AutoGameModeEnabled	Type: REG_DWORD, Length: 4, Data: 1
+```
+The value doesn't exist by default (not existing = `1`).
+
+## Pseudocode Interpretation
+
 It might set CPU affinites (`AffinitizeToExclusiveCpus`, `CpuExclusivityMaskHig`, `CpuExclusivityMaskLow`) for the game process and the maximum amount of cores the game uses (`MaxCpuCount`). The percentage of GPU memory (`PercentGpuMemoryAllocatedToGame`), GPU time (`PercentGpuTimeAllocatedToGame`) & system compositor (`PercentGpuMemoryAllocatedToSystemCompositor`) that will be dedicated to the game. It may also create a list of processes (`RelatedProcessNames`) that are gaming related, which means that they won't be affected from the game mode. These are just assumptions, I haven't looked into it in detail yet (`GamingHandlers.c`).
 
 Pavel Yosifovich says: "Game mode tries to kind of steer away the processors from your game so the system itself and all the kernel threads and stuff like that are not going to use some processors, so your game can use those processors exclusively."
 > https://youtu.be/h6BXMcRqYhA?t=3251
 
-Enabling/disabling it via the system settings only switches `AutoGameModeEnabled`:
-```powershell
-SystemSettings.exe  HKCU\Software\Microsoft\GameBar\AutoGameModeEnabled	Type: REG_DWORD, Length: 4, Data: 1
-```
-The value doesn't exist by default (not existing = `1`). Ignore `GameBar.txt`, it shows read values.
-
 > [system/assets | gamemode-GamingHandlers.c](https://github.com/nohuto/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)  
 > https://support.xbox.com/en-US/help/games-apps/game-setup-and-play/use-game-mode-gaming-on-pc  
 > https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-26100
 
----
-
-Miscellaneous notes:
-```powershell
-\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadDoublePressIntervalMs
-\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadLongPressRumbleDurationMs
-\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadNexusChordCombo
-\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadNexusChordEnabled
-\Registry\User\S-ID\SOFTWARE\Microsoft\GameBar : GamepadShortPressIntervalMs
-```
-
 # Disable Windows Search
+
+## Suboptions
 
 | **Suboption** | **Description** |
 | ---- | ---- |
@@ -988,6 +972,8 @@ Miscellaneous notes:
 | **Disable Search Highlights** | If enabled: "See content suggestions in the search boxi and in search home". |
 | **Disable Web Search** | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
 
+## Search Indexing
+
 Search indexing builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
 
 > https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview  
@@ -999,26 +985,7 @@ Instead of using the explorer to search for a file or folder, use [`Everything`]
 
 The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
----
-
-Exists in [Search Policies](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search), but isn't present anymore on 24H2 and probably versions above.
-
-```c
-// Disabling this setting turns off search highlights in the start menu search box and in search home. Enabling or not configuring this setting turns on search highlights in the start menu search box and in search home.
-"Disable Search Highlights": {
-  "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-    "EnableDynamicContentInWSB": { "Type": "REG_DWORD", "Data": 0 }
-  }
-}
-```
-
-It probably got replaced by:
-```c
-// Privacy & security > Search - Show search highlights
-SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
-```
-
----
+## Windows Policies
 
 ```json
 {
@@ -1043,6 +1010,25 @@ SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Se
 },
 ```
 
+## Miscellaneous Notes
+
+Exists in [Search Policies](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search), but isn't present anymore on 24H2 and probably versions above.
+
+```c
+// Disabling this setting turns off search highlights in the start menu search box and in search home. Enabling or not configuring this setting turns on search highlights in the start menu search box and in search home.
+"Disable Search Highlights": {
+  "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+    "EnableDynamicContentInWSB": { "Type": "REG_DWORD", "Data": 0 }
+  }
+}
+```
+
+It probably got replaced by:
+```c
+// Privacy & security > Search - Show search highlights
+SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
+```
+
 # Enable HAGS
 
 HAGS feature is introduced specifically for the WDDM. If disabled the CPU manages the GPU scheduling via a high-priority kernel thread, GPU context switches and task scheduling are handled by the CPU (CPU offloads graphics intensive tasks to the GPU for rendering). If enabled the GPU handles its own scheduling using a built in scheduler processor, context switching between GPU tasks is done directly on the GPU. It is especially beneficial, if you've a slow CPU, or if the CPU is heavily loaded with other tasks.
@@ -1054,7 +1040,7 @@ HAGS should be enabled.
 > https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/  
 > https://maxcloudon.com/hardware-accelerated-gpu-scheduling/
 
----
+## SystemSettings Records
 
 Enable HAGS:
 ```powershell
@@ -1081,6 +1067,8 @@ if ( (int)CLowDiskSpaceUI_GetIsMDMConfigured(
             &v30)  0
     !v30 )
 ```
+
+## Windows Policies
 
 ```json
 {
@@ -1146,11 +1134,15 @@ Used for preventing legacy or unstable applications from crashing, read through 
 > https://learn.microsoft.com/en-us/windows/win32/win7appqual/fault-tolerant-heap  
 > https://www.youtube.com/watch?v=4SvNNXAwoqE
 
+## Windows Internals
+
 ![](https://github.com/nohuto/win-config/blob/main/system/images/fth.png?raw=true)
 
 # Disable Accessibility Features
 
 Disables all kind of accessibility features such as `Voice Access`, `Live Captions`, `Narrator`, `Magnifier`, `OSK` (only via suboption) etc. (`SystemSettings > Accessibility`/`Control Panel > All Control Panel Items > Ease of Access Center`).
+
+## Suboptions
 
 | Suboption | Description |
 | --- | --- |
@@ -1178,6 +1170,8 @@ Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff 
 
 > https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages
 
+## Windows Policies
+
 ```json
 {
   "File": "Logon.admx",
@@ -1203,6 +1197,8 @@ Prevents windows from being minimized or restored when the active window is shak
 
 ![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
 
+## Windows Policies
+
 ```json
 {
   "File": "Desktop.admx",
@@ -1227,6 +1223,8 @@ Prevents windows from being minimized or restored when the active window is shak
 
 Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the option switch.
 
+### TranscodeImage
+
 ```c
 if ( JPEGImportQuality not present or error )
     v54 = 85.0f;
@@ -1246,6 +1244,8 @@ Default value is `85` -> `85%` (gets used if value isn't present), clamp range i
 Allows modern apps to use a more efficient memory allocator.
 
 Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
+
+### Default Values
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
@@ -1286,6 +1286,8 @@ Enabling segment heap globally forces the system to use the newer segmented allo
 > https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf  
 > https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (Page `334`f.)  
 
+## Windows Internals
+
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment3.png?raw=true)
@@ -1293,6 +1295,8 @@ Enabling segment heap globally forces the system to use the newer segmented allo
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment5.png?raw=true)
 
 # Disable Notifications
+
+## Option/Suboptions
 
 | Option | Description |
 | ---- | ---- |
@@ -1314,6 +1318,8 @@ Enabling segment heap globally forces the system to use the newer segmented allo
 | Turn off access to the Store | `NoUseStoreOpenWith` policy - "*This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the "Look for an app in the Store" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.*" |
 | Hide Time in Notification Center | Works via `SystemSettings > Time & language > Date & time: Show time and date in the System tray` |
 
+
+## All NOC_GLOBAL_SETTING Values
 
 All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
 ```c
@@ -1393,7 +1399,7 @@ See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://gi
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\TimestampWhenSeen","Length: 20"
 ```
 
-### Windows Policies
+## Windows Policies
 
 ```json
 {
@@ -1539,6 +1545,8 @@ See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://gi
 
 Can be useful when creating your own image and trying to automate the installation and configuration part.
 
+### Quick Access Pins
+
 Quick access pins are saved in a file named `f01b4d95cf55d32a.automaticDestinations-ms`, located at:
 ```bat
 %appdata%\Microsoft\Windows\Recent\AutomaticDestinations
@@ -1547,6 +1555,9 @@ You can either terminate `explorer` while copying it to the path, or just restar
 ```bat
 copy /y ".\f01b4d95cf55d32a.automaticDestinations-ms" "%appdata%\Microsoft\Windows\Recent\AutomaticDestinations"
 ```
+
+### Taskbar Pins
+
 Taskbar pins are saved in a folder and a key, the folder includes the shortcuts:
 ```bat
 %appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
@@ -1589,13 +1600,12 @@ Disables prefetcher (includes disabling `ApplicationLaunchPrefetching` & `Applic
 
 Windows Internals (E7-P1, Prefetcher): the prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
 
-"`EnablePrefetcher` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded."
+## Value Meanings
 
-"`EnableSuperfetch` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory."
-
-"`SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search."
-
-`EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
+- `EnablePrefetcher` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
+- `EnableSuperfetch` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
+- `SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search.
+- `EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
 
 ```
 0 - Disables Prefetch
@@ -1609,6 +1619,8 @@ The same applies to superfetch.
 > https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN  
 > https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
 
+## Windows Internals
+
 More detailed information about prefetch and superfetch on page `413`f & `472`f.
 > https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf
 
@@ -1620,6 +1632,8 @@ More detailed information about prefetch and superfetch on page `413`f & `472`f.
 # Optimize File System
 
 Small documentation on several values the option applies, see links below for more details.
+
+### Registry Values
 
 | Value | Description |
 | ----- | ------------ |
@@ -1675,6 +1689,8 @@ Miscellaneous notes:
 "HKCU\Software\Microsoft\Clipboard\PastedFromClipboardUI","Length: 16"
 "HKCU\Software\Microsoft\Clipboard\ShellHotKeyUsed","Length: 16"
 ```
+
+## Windows Policies
 
 ```json
 {
@@ -1773,6 +1789,8 @@ PageCombining                : True
 PSComputerName               :
 ```
 
+## Windows Internals
+
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
@@ -1810,6 +1828,8 @@ PageCombining                : True # Enabled
 PSComputerName               :
 ```
 
+## Windows Internals
+
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true)
@@ -1840,6 +1860,8 @@ Changes the size of text, apps, and other items. Note that on laptops the defaul
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/displayscaling.png?raw=true)
 
+## SystemSettings Captures
+
 ```c
 // 100%
 SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
@@ -1866,8 +1888,7 @@ SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDri
 SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
 ```
 
----
-
+## Suboption
 
 `Prevent Window Minimization on Monitor Disconnection` disables `Minimize windows then a monitor is diconnected` (`System > Display`).
 
@@ -1886,6 +1907,8 @@ BCDEdit is the CL editor for the Boot Configuration Database (BCD), a registry h
 BCDEdit is primarily used for boot troubleshooting, recovery, debugging, and security/boot behavior changes (Safe Mode, driver loading, hypervisor settings). Some may not be used on latest Windows versions anymore (e.g. HalpTscSyncPolicy, see pseudocode below).
 
 BitLocker validates a subset of BCD settings at boot to detect security sensitive changes. The validated set can be extended or reduced via policy, and the hex value of a triggering setting is logged (event ID 523). Friendly names can be listed with `bcdedit /enum all`, but some settings have no friendly name and must be configured by hex. BCD settings are also scoped to specific boot applications (for example, `winload`, `winresume`, `bootmgr`), policy entries can be prefixed with the target application (for example, `winload:nx` or `all:locale`). When secure boot is used for integrity validation, the enhanced BCD validation profile policy is ignored, and secure boot enforces its own BCD rules.
+
+## Key & Value Structure
 
 As kind of everything else, BCD edits are also stored in the registry:
 ```c
@@ -2062,7 +2085,7 @@ else
 HalpInterruptSetMsiOverride(v10);
 ```
 
----
+## Custom Edits
 
 `custom:16000067 true` disables the Windows logo while booting:
 
@@ -2071,6 +2094,8 @@ HalpInterruptSetMsiOverride(v10);
 `custom:16000069 true` disables the loading circle while booting:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/load.png?raw=true)
+
+## Default Entries
 
 Default entries (25H2, Build 26200.6584) including WinRE:
 ```powershell
@@ -2225,7 +2250,7 @@ HKLM\Software\Microsoft\Windows\CurrentVersion\Run
 
 # Enable FSO
 
-This may not be accurate yet, it's preferable to disable FSO per application via the compability section.
+This may not be accurate yet, it's preferable to disable FSO per application via the compability section. Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
 
 ### FSE (Fullscreen Exclusive)
 
@@ -2245,9 +2270,7 @@ DX12 games don't support FSE.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/swapchain.jpg?raw=true)
 
----
-
-Caution: Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
+## ResourcePolicyServer
 
 All values I found that are `GameDVR` related in `ResourcePolicyServer.dll`:
 ```c
@@ -2274,6 +2297,8 @@ GameDVR_HonorUserFSEBehaviorMode
 
 `GameDVR_DSEBehavior` doesn't exist on my current system.
 
+## Compability Captures
+
 Disable/enable FSO for a specific application via `Properties > Compatibility > Change settings for all users` - `Disable fullscreen optimizations` or do it per user one step before.
 
 ```c
@@ -2288,24 +2313,13 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Progr
 > https://wiki.special-k.info/en/SwapChain
 > https://wiki.special-k.info/Presentation_Model
 
----
-
-Miscellaneous values:
-```c
-GameDVR_Enabled
-GameDVR_GameGUID
-// Seems to be located in HKCU\System\GameConfigStore\Children\*
-
-Win32_AutoGameModeDefaultProfile
-Win32_GameModeRelatedProcesses
-Win32_GameModeUserRelatedProcesses
-```
-
 # App Archive
 
 "Automatically archive your infrequently used apps to save storage and internet bandwidth. Your files and data will still be saved, and the app's full version will be restored on your next use if it's still available."
 
 If enabled, the system will periodically check for such infrequently used apps. By default app archiving is turned on.
+
+## SystemSettings Records
 
 Toggling the option via `Apps > Advanced app settings`:
 ```c
@@ -2315,6 +2329,8 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{I
 // Off
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 0
 ```
+
+## Windows Policies
 
 ```json
 {
@@ -2371,6 +2387,8 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mobility-center.png?raw=true)
 
+## Windows Policies
+
 ```json
 {
   "File": "MobilePCMobilityCenter.admx",
@@ -2391,9 +2409,7 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 },
 ```
 
----
-
-Miscellaneous notes:
+### Miscellaneous Values
 
 ```c
 "HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\LastResumeOnPCInteractionTime","Length: 20"
@@ -2406,6 +2422,8 @@ Miscellaneous notes:
 "Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications."
 
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v
+
+## Service/Driver Table
 
 | Option Name | Service/Driver | Description |
 | --- | --- | --- |

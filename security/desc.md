@@ -160,7 +160,7 @@ reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache
 rmdir /s /q "%windir%\System32\Tasks\Microsoft\Windows\Windows Defender"
 ```
 
-## Windows Security Records
+## Windows Security Captures
 
 ```c
 // Real-time protection - 0 = On, 1 = Off
@@ -269,6 +269,8 @@ HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTeleme
 | `Enable WU` | Restores normal update behavior for the controls managed in this section. |
 | `Security Only` | Keeps monthly Windows quality and security servicing for the current release while blocking feature upgrades, WU driver updates, optional content, CFR rollouts, preview content, Microsoft product updates, and MRT through Windows Update. |
 
+## Suboptions
+
 | Suboption | Description |
 | ---- | ---- |
 | `Disable Feature Updates` | Keeps the device on its current Windows release while quality updates continue. New Windows releases are not offered until removed. |
@@ -312,7 +314,7 @@ On first use kind of everything get's blocked -> minimalfirewall asks you to blo
 - `Default`: inbound block, outbound allow
 - `Allowlist`: inbound block, outbound block unless allowed (recommended, but requires time to set up)
 
-## Firewall Records
+## Firewall Captures
 
 ```c
 // {profile} = always 'DomainProfile' + 'StandardProfile' + 'PublicProfile'
@@ -474,6 +476,8 @@ Value: `EnableVirtualization`
 
 *On non-Windows systems, the reported default is `Unrestricted` and cannot be changed, though the actual behavior is closer to `Bypass` because Windows security zones do not exist there.*"
 
+### Execution Policy
+
 | **Execution Policy**  | **Description** |
 | ---- | ---- |
 | `AllSigned` | All scripts must be signed by a trusted publisher. Prompts for untrusted publishers. |
@@ -484,6 +488,8 @@ Value: `EnableVirtualization`
 | `Undefined` | No policy in this scope. If all scopes are undefined, defaults to `Restricted` (clients) or `RemoteSigned` (servers). |
 | `Unrestricted` | Unsigned scripts can run. Prompts for scripts from outside the intranet zone. |
 
+### Scope
+
 | **Scope** | **Description** |
 |---- | ---- |
 | `MachinePolicy` | Set by a Group Policy for all users of the computer |
@@ -491,6 +497,8 @@ Value: `EnableVirtualization`
 | `Process` | Sets the execution policy only for the current session - stored in an environment variable & removed when the session ends |
 | `CurrentUser` | The execution policy affects only the current user - stored in the HKCU subkey |
 | `LocalMachine` | The execution policy affects all users on the current computer - stored in the HKLM subkey |
+
+### Registry Values
 
 | **Value Name** | **Description** |
 | ---- | ---- |
@@ -540,9 +548,7 @@ Editing process mitigations via LGPE (`Administrative Templates\System\Mitigatio
 
 > https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies
 
----
-
-**Table 7-20** Process mitigation options
+## Process Mitigation Options
 
 | Mitigation Name | Use Case | Enabling Mechanism |
 | --- | --- | --- |
@@ -577,7 +583,7 @@ Editing process mitigations via LGPE (`Administrative Templates\System\Mitigatio
 
 Read more about process-mitigation policies in [Windows Internals E7, P1 - P.735f. 'Process-mitigation policies'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
 
----
+## ProcessMitigation ValidValues
 
 `(gcm set-processmitigation).Parameters.Disable.Attributes.ValidValues`:
 ```powershell
@@ -644,7 +650,7 @@ AuditUserShadowStack
 `per-device` - recommended and preferred mechanism (`DmaRemappingCompatible`)
 `per-driver` - legacy mechanism (`RemappingSupported`)
 
-`DmaRemappingCompatible`:
+### `DmaRemappingCompatible`
 
 | Value | Meaning |
 |--|--|
@@ -654,7 +660,7 @@ AuditUserShadowStack
 | 3 | Opt-in |
 | No registry key | Let the system determine the policy. |
 
-`RemappingFlags`:
+### `RemappingFlags`
 
 | Value | Meaning |
 |--|--|
@@ -662,7 +668,7 @@ AuditUserShadowStack
 | 1 | If **RemappingSupported** is 1, opt in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
 | No registry key | Same as 0 value. |
 
-`RemappingSupported`:
+### `RemappingSupported`
 
 | Value | Meaning |
 |--|--|
@@ -679,7 +685,7 @@ Example paths:
 \Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingSupported
 ```
 
----
+## EnableNVMeInterface Notes
 
 Since `EnableNVMeInterface` is included in the function, I'll add it here. Default value of `0`, range `0`-`1`? Located in:
 ```
@@ -723,12 +729,16 @@ gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
 gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
 ```
 
+## ZoneID Data
+
 **ZoneID** (`HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones`) - number indicating the security zone the file came from:
 `0` – Local machine
 `1` – Local intranet (internal network)
 `2` – Trusted sites
 `3` – Internet (mostly web downloads)
 `4` – Untrusted / Restricted sites (flagged as dangerous by smartscreen)
+
+## Unblock-File
 
 Files downloaded from the internet still getting blocked? Unblock it/them with (one of them):
 ```powershell
@@ -737,27 +747,25 @@ Unblock-File -Path "C:\Path\Script.ps1" -> File
 dir C:\Path\*Files* | Unblock-File -> Multiple files 
 ```
 
-```powershell
+## Windows Policies
+
+```json
 {
-	"File":  "AttachmentManager.admx",
-	"NameSpace":  "Microsoft.Policies.AttachmentManager",
-	"Class":  "User",
-	"CategoryName":  "AM_AM",
-	"DisplayName":  "Do not preserve zone information in file attachments",
-	"ExplainText":  "This policy setting allows you to manage whether Windows marks file attachments with information about their zone of origin (such as restricted, Internet, intranet, local). This requires NTFS in order to function correctly, and will fail without notice on FAT32. By not preserving the zone information, Windows cannot make proper risk assessments.If you enable this policy setting, Windows does not mark file attachments with their zone information.If you disable this policy setting, Windows marks file attachments with their zone information.If you do not configure this policy setting, Windows marks file attachments with their zone information.",
-	"Supported":  "WindowsXPSP2",
-	"KeyPath":  "Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments",
-	"KeyName":  "SaveZoneInformation",
-	"Elements":  [
-						{
-							"Value":  "1",
-							"Type":  "EnabledValue"
-						},
-						{
-							"Value":  "2",
-							"Type":  "DisabledValue"
-						}
-					]
+  "File": "AttachmentManager.admx",
+  "CategoryName": "AM_AM",
+  "PolicyName": "AM_MarkZoneOnSavedAtttachments",
+  "NameSpace": "Microsoft.Policies.AttachmentManager",
+  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
+  "DisplayName": "Do not preserve zone information in file attachments",
+  "ExplainText": "This policy setting allows you to manage whether Windows marks file attachments with information about their zone of origin (such as restricted, Internet, intranet, local). This requires NTFS in order to function correctly, and will fail without notice on FAT32. By not preserving the zone information, Windows cannot make proper risk assessments. If you enable this policy setting, Windows does not mark file attachments with their zone information. If you disable this policy setting, Windows marks file attachments with their zone information. If you do not configure this policy setting, Windows marks file attachments with their zone information.",
+  "KeyPath": [
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Attachments"
+  ],
+  "ValueName": "SaveZoneInformation",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "2" }
+  ]
 },
 ```
 
@@ -784,6 +792,8 @@ Disable-BitLocker -MountPoint $nvbvol
 > https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior  
 > https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps
 
+## NtfsDisableEncryption Notes
+
 `fsutil behavior set disableencryption 1` sets:
 ```powershell
 fsutil.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\FileSystem\NtfsDisableEncryption	Type: REG_DWORD, Length: 4, Data: 1
@@ -792,6 +802,19 @@ fsutil.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\FileSystem\NtfsDisa
 \Registry\Machine\SYSTEM\ControlSet001\Policies : NtfsDisableEncryption
 \Registry\Machine\SYSTEM\ControlSet001\Control\FileSystem : NtfsDisableEncryption
 ```
+
+### 0x8007177E Error
+
+Enabling `NtfsDisableEncryption` (`1`) may cause Xbox games to fail to install (error code `0x8007177E` - "Allow encryption on selected disk volume to install this game"):
+
+```powershell
+ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
+```
+
+> [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
+
+## Windows Policies
+
 ```json
 {
   "File": "FileSys.admx",
@@ -811,11 +834,6 @@ fsutil.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\FileSystem\NtfsDisa
   ]
 },
 ```
-Enabling `NtfsDisableEncryption` (`1`) may cause Xbox games to fail to install (error code `0x8007177E` - "Allow encryption on selected disk volume to install this game"):
-```py
-ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
-```
-> [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
 
 # Disable VBS (HVCI)
 
@@ -850,12 +868,14 @@ You can disable VBS for a VM with:
 Set-VMSecurity -VMName <VMName> -VirtualizationBasedSecurityOptOut $true
 ```
 
-Details on device/credential guard:
+## Windows Internals
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards3.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards4.png?raw=true)
+
+## Windows Policies
 
 ```json
 {
@@ -938,8 +958,11 @@ Details on device/credential guard:
 
 "This policy setting allows you to configure the display of the password reveal button in password entry user experiences. If you enable this policy setting, the password reveal button won't be displayed after a user types a password in the password entry text box. If you disable or don't configure this policy setting, the password reveal button will be displayed after a user types a password in the password entry text box. By default, the password reveal button is displayed after a user types a password in the password entry text box."
 
-`Disable Picture Password Sign-In`:  
-"This policy setting allows you to control whether a domain user can sign in using a picture password. If you enable this policy setting, a domain user can't set up or sign in with a picture password. If you disable or don't configure this policy setting, a domain user can set up and use a picture password. Note that the user's domain password will be cached in the system vault when using this feature."
+## Suboption
+
+`Disable Picture Password Sign-In`: "This policy setting allows you to control whether a domain user can sign in using a picture password. If you enable this policy setting, a domain user can't set up or sign in with a picture password. If you disable or don't configure this policy setting, a domain user can set up and use a picture password. Note that the user's domain password will be cached in the system vault when using this feature."
+
+## Windows Policies
 
 ```json
 {
@@ -985,6 +1008,8 @@ Default is configured to LAN. The Group Download mode combined with Group ID, en
 
 The option applies `0` = disables peer-to-peer (P2P) caching but still allows Delivery Optimization to download content over HTTP from the download's original source or a Microsoft Connected Cache server.
 
+### DODownloadMode Data
+
 | Download mode option | Data  | Functionality when configured |
 | ---- | :----: | ---- |
 | HTTP Only | `0` | This setting disables peer-to-peer caching but still allows Delivery Optimization to download content over HTTP from the download's original source or a Microsoft Connected Cache server. This mode uses additional metadata provided by the Delivery Optimization cloud services for a peerless, reliable and efficient download experience. |
@@ -996,16 +1021,12 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 
 > https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference#download-mode
 
----
+### Set-DODownloadMode
 
 Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
 
 > https://learn.microsoft.com/en-us/powershell/module/deliveryoptimization/set-dodownloadmode?view=windowsserver2025-ps
 
-
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\DeliveryOptimization\DODownloadMode
-
-**WUDODownloadMode**  Retrieves whether DO is turned on and how to acquire/distribute updates Delivery Optimization (DO) allows users to deploy previously downloaded WU updates to other devices on the same network.
 
 # Increased DH & RSA Key
 
@@ -1019,6 +1040,8 @@ By default it uses a minimum size of `1024` bits (both) - hardens Windows TLS en
 # Disable Legacy TLS/Crypto
 
 Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .NET apps to use strong cryptography (Disables RC2 (40/56/128), RC4 (40/56/64/128), DES, 3DES, NULL, MD5/SHA-1, SSL 2.0/3.0, TLS 1.0/1.1, DTLS 1.0, insecure TLS renegotiation - Enables TLS SCSV, .NET StrongCrypto & SystemDefaultTlsVersions, NTLMv2 only). Windows may use insecure connections for e.g. older software (compatibility reasons), so disabling them can cause issues with old software.
+
+## LmCompatibilityLevel Data
 
 | Setting | Description | Registry security level |
 | ---- | ---- | ---- |
@@ -1038,7 +1061,8 @@ Level `5` gets applied.
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/insecureconn.png?raw=true)
 
-DTLS 1.2 & TLS 1.3:
+## DTLS 1.2 & TLS 1.3 Notes
+
 ```json
 {
   "HKLM\\SYSTEM\\CurrentControlSet\\Control\\SecurityProviders\\SCHANNEL\\Protocols\\DTLS 1.2\\Server": {
@@ -1091,6 +1115,8 @@ Controls the Netlogon policy that enables or disables enhanced domain wide NTLM 
 
 > https://aka.ms/ntlmlogandblock
 
+## Windows Policies
+
 ```json
 {
   "File": "Netlogon.admx",
@@ -1122,7 +1148,9 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 
 > Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.
 
-| Registry key       | Value name           | Default value                | Description                                                                                               |
+### Registry Values
+
+| Registry value     | Value name           | Default data                 | Description                                                                                               |
 | ------------------ | -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
 | TdrLevel           | `TdrLevel`           | `3` (TdrLevelRecover)        | Controls the GPU timeout behavior. `0` = disabled, `1` = bugcheck, `2` = recover to VGA (not implemented) `3` = reset/recover (Windows default). |
 | TdrDelay           | `TdrDelay`           | `2` seconds                  | Timeout threshold before Windows starts TDR handling. Longer value = GPU gets more time. |
@@ -1137,7 +1165,8 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md  
 > https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm
 
-Driver code snippets:
+## Pseudocode Snippets
+
 ```c
 if ( v0 < 0 )
 {
@@ -1174,6 +1203,8 @@ if (dword_1C015B874 != v15) {
 > https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt  
 > [security/assets | TdrInit.c](https://github.com/nohuto/win-config/blob/main/security/assets/TdrInit.c)
 
+## NVLDDMKM TDR
+
 Notes to the values located in:
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrDdiDelay
@@ -1207,6 +1238,8 @@ Congigure the policy yourself via `Computer Configuration > Windows Settings > S
 
 This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user's Windows credentials.
 
+## Windows Policies
+
 ```json
 {
   "File": "CredUI.admx",
@@ -1228,6 +1261,8 @@ This policy setting requires the user to enter Microsoft Windows credentials usi
 
 Automatically locks your device when you're away. It requires Bluetooth to be active. This option is disabled by default.
 
+### Accounts Captures
+
 Toggling it via `Accounts > Sign-in options`:
 ```c
 // Enabled
@@ -1237,9 +1272,7 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: R
 HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
----
-
-Miscellaneous notes:
+## Windows Policies
 
 ```json
 {
@@ -1268,11 +1301,15 @@ Miscellaneous notes:
 
 Note that sudo uses administrator previledges and doesn't include `TrustedInstaller`/`SYSTEM` previledges.
 
+### Modes
+
 | Mode | Description |
 | ---- | ---- |
 | `forceNewWindow` | Runs the command elevated in a new console window. |
 | `disableInput` | Runs elevated in the same window but blocks keyboard input while it runs. |
 | `normal` | Runs elevated in the same window with normal input and output behavior. |
+
+## Windows Policies
 
 ```json
 {
@@ -1386,4 +1423,3 @@ if (_wcsicmp(name, L"defaultuser0")) {
 ```
 
 DeviceEnroller.exe = MDM/Enterprise enrollment client that runs enrollment and renewal sessions (e.g., `EnrollEngineInitialize`, `InitiateSessionAsync`, `WaitForEnrollment`) here.
-

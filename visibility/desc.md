@@ -22,7 +22,7 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 | [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
 | [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
 
-## Pointer Style Records
+## Pointer Style Captures
 
 ```c
 // Main style
@@ -87,142 +87,143 @@ HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF0
 
 This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
 
-`Asia`:
+#### Asia
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Asia.png?raw=true)
 
-`Austria`:
+#### Austria
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Austria.png?raw=true)
 
-`Beach`:
+#### Beach
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true)
 
-`Blue Flowers`:
+#### Blue Flowers
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true)
 
-`Bones`:
+#### Bones
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
 
-`Castle`:
+#### Castle
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Castle.png?raw=true)
 
-`Cat`:
+#### Cat
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true)
 
-`City`:
+#### City
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
 
-`Dark Sunset`:
+#### Dark Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
 
-`Field Sunset`:
+#### Field Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
 
-`Flowers`:
+#### Flowers
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
 
-`Flowers Sunset`:
+#### Flowers Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
 
-`Golden Hour`:
+#### Golden Hour
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
 
-`Heaven`:
+#### Heaven
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true)
 
-`Lake`:
+#### Lake
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Lake.png?raw=true)
 
-`Mac`:
+#### Mac
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true)
 
-`Man Landscape`:
+#### Man Landscape
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
 
-`Meadow Sunset`:
+#### Meadow Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true)
 
-`Moon`:
+#### Moon
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true)
 
-`Moon Castle`:
+#### Moon Castle
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Castle.png?raw=true)
 
-`Mountains`:
+#### Mountains
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true)
 
-`Plants Room`:
+#### Plants Room
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true)
 
-`Pokemon`:
+#### Pokemon
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Pokemon.png?raw=true)
 
-`Rain`:
+#### Rain
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true)
 
-`Sea`:
+#### Sea
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
 
-`Sea Road`:
+#### Sea Road
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true)
 
-
-`Shop`:
+#### Shop
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true)
 
-`Stars`:
+#### Stars
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars.png?raw=true)
 
-`Sunset`:
+#### Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sunset.png?raw=true)
 
-`Village`:
+#### Village
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true)
 
-`Witcher Landscape`:
+#### Witcher Landscape
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
 
-`Workplace`:
+#### Workplace
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
 
-`World`:
+#### World
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
 
-`Zelda`:
+#### Zelda
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
+
+## Windows Policies
 
 It get's changed via the "Wallpaper" policy:
 ```json
@@ -259,11 +260,12 @@ Changes the user account picture via:
 C:\ProgramData\Microsoft\Default Account Pictures
 ```
 
----
+### Suboption
 
 `Global Account Picture`:  
 "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
 
+## Windows Policies
 
 ```json
 {
@@ -291,9 +293,9 @@ It changes every setting, which is shown in the `Folder Options` window. Some ar
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
 
----
 
-Miscellaneous notes:
+## Miscellaneous Notes
+
 ```json
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
   "ShellState": { "Type": "REG_BINARY", "Data": "240000003e20000000000000000000000001000000130000000000000042000000" }
@@ -302,6 +304,8 @@ Miscellaneous notes:
   "Settings": { "Type": "REG_BINARY", "Data": "0c0002000a01000060000000" }
 }
 ```
+
+## Windows Policies
 
 ```json
   {
@@ -346,6 +350,8 @@ Something I noticed while creating the option is that procmon doesn't show the a
 99EBFF004CC2FF000091F8000078D4000067C000003E9200001A6800F7630C00
 ```
 
+## SystemSettings Captures
+
 Changing the color via `Personalization > Colors` sets:
 ```c
 // Nord Theme (#2e3440)
@@ -369,81 +375,29 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\AccentColor	Type: REG_DWORD, Length: 4, Data: 4292114432
 ```
 
-Ignore it, this is the old "Nord Accent Color" json block.
-```json
-"SUBOPTION": {
-  "Nord Accent Color": {
-    "HKCU\\Software\\Microsoft\\Windows\\DWM": {
-      "ColorizationColor": { "Type": "REG_DWORD", "Data": 3291823178 },
-      "ColorizationAfterglow": { "Type": "REG_DWORD", "Data": 3291823178 },
-      "AccentColor": { "Type": "REG_DWORD", "Data": 4283055157 }
-    },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Accent": {
-      "AccentPalette": { "Type": "REG_BINARY", "Data": "59657CFF4A5468FF3F4859FF353C4AFF2A303BFF1F242CFF111317FF88179800" },
-      "StartColorMenu": { "Type": "REG_DWORD", "Data": 4282069034 },
-      "AccentColorMenu": { "Type": "REG_DWORD", "Data": 4283055157 }
-    },
-    "COMMANDS": {
-      "AccentColorsSystemProtected": {
-        "Action": "user_id",
-        "UserIDPath": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SystemProtectedUserData\\{userid}\\AnyoneRead\\Colors",
-        "Values": {
-          "StartColor": { "Type": "REG_DWORD", "Data": 4282069034, "Elevated": true },
-          "AccentColor": { "Type": "REG_DWORD", "Data": 4283055157, "Elevated": true }
-        }
-      }
-    }
-  }
-}
-
-"SUBOPTION": {
-  "Nord Accent Color": {
-    "HKCU\\Software\\Microsoft\\Windows\\DWM": {
-      "ColorizationColor": { "Type": "REG_DWORD", "Data": 3288365268 },
-      "ColorizationAfterglow": { "Type": "REG_DWORD", "Data": 3288365268 },
-      "AccentColor": { "Type": "REG_DWORD", "Data": 4292114432 }
-    },
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Accent": {
-      "AccentPalette": { "Type": "REG_BINARY", "Data": "99EBFF004CC2FF000091F8000078D4000067C000003E9200001A6800F7630C00" },
-      "StartColorMenu": { "Type": "REG_DWORD", "Data": 4290799360 },
-      "AccentColorMenu": { "Type": "REG_DWORD", "Data": 4292114432 }
-    },
-    "COMMANDS": {
-      "AccentColorsSystemProtected": {
-        "Action": "user_id",
-        "UserIDPath": "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SystemProtectedUserData\\{userid}\\AnyoneRead\\Colors",
-        "Values": {
-          "StartColor": { "Type": "REG_DWORD", "Data": 4290799360, "Elevated": true },
-          "AccentColor": { "Type": "REG_DWORD", "Data": 4292114432, "Elevated": true }
-        }
-      }
-    }
-  }
-}
-```
-
 # Enable Dark Theme
 
 `darktheme-GetThemeFromUnattendSetup.c` for information about the comments, otherwise ignore them.
 
 > [visibility/assets | darktheme-GetThemeFromUnattendSetup.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/darktheme-GetThemeFromUnattendSetup.c)
 
+#### Light Theme
+
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme1.png?raw=true)
+
+#### Dark Theme
+
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true)
 
 # Disable Transparency
 
-The pictures below show: `Transparency On`, `Transparency Off`.
+#### Transparency Enabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa1.png?raw=true)
+
+#### Transparency Disabled
+
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa2.png?raw=true)
-
----
-
-Miscellaneous notes:
-```c
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\SystemProtectedUserData\{userid}\AnyoneRead\Accessibility : Transparency
-```
 
 # Disable Audio / Video Preview
 
@@ -458,11 +412,11 @@ Disables the preview function for (extensions):
 > https://learn.microsoft.com/en-us/windows/win32/api/thumbcache/nn-thumbcache-ithumbnailprovider  
 > https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/nn-shobjidl_core-iextractimage
 
-Enabled:
+#### Enabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true)
 
-Disabled:
+#### Disabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true)
 
@@ -476,12 +430,16 @@ Hide preview pane:
 
 # Remove Home & Gallery
 
+#### Home / Galery
+
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/homegal.png?raw=true)
+
+#### Network Sharing Folder (Suboption)
+
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/homenet.png?raw=true)
 
----
+### Miscellaneous Notes
 
-Miscellaneous comments:
 ```c
 {018D5C66-4533-4307-9B53-224DE2ED1FE6} = OneDrive
 {F02C1A0D-BE21-4350-88B0-7367FC96EF3C} = Network Sharing Folder
@@ -503,11 +461,14 @@ Miscellaneous comments:
 
 # Classic Context Menu
 
-Use it on W11, unless you like the new menu - remove the key, to revert it.
+Use it on W11, unless you like the new menu.
 
-Before & after:
+#### Before
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true)
+
+#### After
+
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
 
 # Disable Animations
@@ -550,6 +511,8 @@ CMachine::RegQueryDWORD(
 `ForceDisableModeChangeAnimation` got added in 22621.3807/22631.3807 and is used for "When you set its value to 1 (or a non-zero number), it turns off the display mode change animation. If the value is 0 or the key does not exist, the animation is set to on."
 
 > https://blogs.windows.com/windows-insider/2024/06/13/releasing-windows-11-builds-22621-3807-and-22631-3807-to-the-release-preview-channel/
+
+## Windows Policies
 
 ```json
 {
@@ -615,6 +578,8 @@ It works by overriding the first 8 bytes in the function with `48 C7 C0 00 00 00
 mov rax, 0; ret // result = 0
 ```
 
+## GetEffectiveCornerStyle
+
 That function calculates the effective corner mode, its callers include border/shadow/radius.
 ```c
 /*
@@ -670,6 +635,8 @@ The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` k
 # Hide Language Bar
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
+
+## Text Services and Input Languages Captures
 
 `Time & language > Typing > Advanced keyboard settings > Language bar options`:
 ```c
@@ -734,6 +701,8 @@ I removed the value since you can't apply it even with `TrustedInstaller`/`SYSTE
 SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDa	Type: REG_DWORD, Length: 4, Data: 0
 ```
 Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0, but it grays out & disables the option.
+
+## Windows Policies
 
 ```json
 {
@@ -810,11 +779,11 @@ Anything written as "- *text*" behind the linked name equals the source where th
 
 Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by replacing the shortcut `.ico` with a [blank image](https://github.com/nohuto/Files/releases/download/miscellaneous/Blank.ico).
 
-Before:
+#### Before
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutbefore.png?raw=true)
 
-After:
+#### After
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutafter.png?raw=true)
 
@@ -850,11 +819,11 @@ Value gets calculated with:
 
 I created a small tool for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly (the images show vertical `75px` & `100px` difference). I personally use `110px Horizonzal - 60px Vertical` for a more vertical compact view and more space horizontally (see suboption).
 
-`75px`:
+#### `75px` Example
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing75.png?raw=true)
 
-`100px`:
+#### `100px`
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
 
@@ -870,11 +839,11 @@ Desktop icon size notes:
 
 When you copy, move, or delete a file or folder, a progress dialog appears. You can switch between `More details` and `Fewer details`. By default, the dialog opens in the same view you last used (if you didn't switch it yet, `0` is used).
 
-`EnthusiastMode` - `0` = fewer detailes:
+#### EnthusiastMode Disabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer0.png?raw=true)
 
-`EnthusiastMode` - `1` = more details:
+#### EnthusiastMode Enabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer1.png?raw=true)
 
@@ -882,21 +851,23 @@ When you copy, move, or delete a file or folder, a progress dialog appears. You 
 
 Select the amount of recent tabs from apps in the alt+tab menu.
 
-`Don't show tabs`:
+#### Don't show tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/0tabs.png?raw=true)
 
-`3 Tabs`:
+#### 3 Tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/3tabs.png?raw=true)
 
-`5 Tabs`:
+#### 5 Tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/5tabs.png?raw=true)
 
-`20 Tabs`:
+#### 20 Tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/20tabs.png?raw=true)
+
+## Windows Policies
 
 ```json
 {
@@ -928,11 +899,11 @@ The option changes it via `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\E
 
 Restarting the explorer is enough to apply the changes.
 
-New:
+#### New
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchnew.png?raw=true)
 
-Classic:
+#### Classic
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
 
@@ -969,7 +940,7 @@ Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/font1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/font2.png?raw=true)
 
----
+## Manually Adding Custom Fonts
 
 The option lists the default fonts, add your own custom font via:
 ```json
@@ -1080,7 +1051,7 @@ By adding them, you'll have to click `OK` every time you boot/log in:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true)
 
----
+## Windows Policies
 
 ```json
 {
@@ -1185,6 +1156,8 @@ By adding them, you'll have to click `OK` every time you boot/log in:
 },
 ```
 
+## Accounts Captures
+
 `Accounts > Sign-in options` - `Automatically save my restartable apps and restart them when I sign back in`:
 ```c
 // Off
@@ -1203,9 +1176,7 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-{ID}\An
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-{ID}\AnyoneRead\Logon\ShowEmail	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
----
-
-Miscellaneous notes:
+## Personalization Captures
 
 `Personalization > Lock screen` - `Personalize your lock screen`:
 ```c
@@ -1271,6 +1242,8 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscripti
 # Hide Most Used Apps
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/mostused.jpg?raw=true)
+
+## Windows Policies
 
 ```json
 {
@@ -1352,7 +1325,7 @@ Disabling it via policies etc. is enough, therefore I won't add them as there's 
 \Registry\User\S-<ID>\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
 ```
 
----
+## Windows Policies
 
 ```json
 {
@@ -1485,6 +1458,8 @@ Since `powershell.exe` has default color of white (foreground) and blue (backgro
 `0-3` bit = `Foreground color`  
 `4-7` bit = `Background color`
 
+### Color Table
+
 | Color | Binary | Decimal |
 | ----- | :----: | :-----: |
 | Black | `0000` | `0` |
@@ -1505,6 +1480,8 @@ Since `powershell.exe` has default color of white (foreground) and blue (backgro
 | White | `1111` | `15` |
 
 Calculate it on your own, by using [bitmask-calc](https://github.com/nohuto/bitmask-calc) - e.g. set bit `1-3` and `7`, to get `Yellow` (foreground) and `DarkGray` (background).
+
+## Miscellaneous Notes
 
 If you've set a custom foreground/background color, they won't override the colors changed within the code, e.g.:
 ```powershell
@@ -1549,6 +1526,8 @@ Hides disabled/disconnected devices in the `mmsys.cpl` window.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/hidedevices.png?raw=true)
 
+## Sound Captures
+
 ```c
 // Show disabled/disconnected devices
 rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowHiddenDevices	Type: REG_DWORD, Length: 4, Data: 1
@@ -1563,13 +1542,15 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 "This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view."
 
-Icon view:
+#### Icon View
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel0.png?raw=true)
 
-Category view:
+#### Category View
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel1.png?raw=true)
+
+## Windows Policies
 
 ```json
 {
@@ -1596,6 +1577,8 @@ Category view:
 `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
 
 `MenuShowDelay` controls how long Windows waits before opening a submenu when you hover over a menu entry.
+
+## Pseudocode Analysis
 
 ```c
 v2 = a2;
@@ -1688,9 +1671,7 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
 
 > https://www.angusj.com/resourcehacker/
 
----
-
-Example:
+### Example
 
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OEMInformation": {
@@ -1720,15 +1701,18 @@ HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer : SettingsPageV
 
 Page identifiers are the part after `ms-settings:` in a settings URI.
 
-Example:
+### Example:
+
 `showonly:bluetooth` only shows the `Bluetooth` page
 `hide:bluetooth;windowsdefender` hides the `Bluetooth` & `Windows Security` pages
 
 All categories of `ms-settings` URIs:
 > https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-settings-app#ms-settings-uri-scheme-reference
 
-Example value:
+### Example Value
+
 ```bat
 hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
 ```
+
 It depends on the user what he wants to see and what not, so I won't add a switch for it.
