@@ -775,7 +775,7 @@ Disables all kind of animations, while leaving font smoothing + window content w
 
 ## UserPreferencesMask
 
-Anything written as "- *text*" behind the linked name equals the source where the option can be togled (and where I recoreded the bit differences), "(untested)" means that I didn't find the Windows UI toggle for the bit yet, means that the meaning is currently based on pseudocode, or on SystemParametersInfo (`SPI_*`, see link above) naming. All meanings have a link to the win32k pseudocode function where the bit is read.
+Anything written as "- *text*" behind the linked name equals the source where the option can be togled (and where I recoreded the bit differences), "(untested)" means that I didn't find the Windows UI toggle for the bit yet, means that the meaning is currently based on pseudocode, or on [SystemParametersInfo (`SPI_*`)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow) naming. All meanings have a link to the win32k pseudocode function where the bit is read.
 
 | Bit | Hex | Meaning |
 | --- | --- | --- |
@@ -801,8 +801,6 @@ Anything written as "- *text*" behind the linked name equals the source where th
 | 33 | `0x00000002` in high dword | Animate controls and elements inside windows |
 | 39 | `0x00000080` in high dword | [Suppress/apply global input-settings updates on focus/delegation changes (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionKeyboardInputDelegationChanged.c) |
 | 41 | `0x00000200` in high dword | [Pen button yield / pen quick-launch hotkey (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-NotifyISMPenButtonYieldSettingChange@@YAXXZ.c) |
-
-> [win32/api/winuser/nf-winuser-systemparametersinfow](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow)
 
 ## Font Smoothing
 

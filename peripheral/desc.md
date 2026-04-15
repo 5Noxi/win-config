@@ -413,6 +413,22 @@ HKCU\Control Panel\Desktop\MouseWheelRouting	Type: REG_DWORD
 HKCU\Control Panel\Mouse\ReverseMouseWheelDirection	Type: REG_DWORD
 ```
 
+## Miscellaneous Values
+
+These values are typically found under `HKCU\Control Panel\Mouse`:
+
+| Value | Type | Description |
+|--|--|--|
+| `ActiveWindowTracking` | `REG_DWORD` | Lets hover focus bring a window to the top, similar to X Window style focus-follows-mouse behavior. |
+| `DoubleClickSpeed` | `REG_SZ` | Controls how much time may pass between two clicks before Windows no longer treats them as a double-click. |
+| `MouseSpeed` | `REG_SZ` | Controls mouse pointer scaling. Higher acceleration levels increase pointer speed. |
+| `MouseThreshold1` | `REG_SZ` | Adjusts the first acceleration threshold used for mouse movement scaling. |
+| `MouseThreshold2` | `REG_SZ` | Adjusts the second acceleration threshold used for mouse movement scaling. |
+| `SmoothMouseXCurve` | `REG_BINARY` | Defines the X-axis smoothing curve used for mouse movement interpolation. |
+| `SmoothMouseYCurve` | `REG_BINARY` | Defines the Y-axis smoothing curve used for mouse movement interpolation. |
+| `SnapToDefaultButton` | `REG_SZ` | Automatically moves the pointer to the default button when a new dialog or window appears. |
+| `SwapMouseButtons` | `REG_SZ` | Swaps the left and right mouse buttons, mainly for left-handed use. |
+
 # Keyboard Values
 
 | **Setting**           | **Description**                                                                                          | **Default** | **Changed To** |
