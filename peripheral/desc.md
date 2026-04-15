@@ -419,11 +419,14 @@ Located in `HKCU\Control Panel\Mouse`:
 
 | Value | Type | Description |
 |--|--|--|
-| `ActiveWindowTracking` | `REG_DWORD` | Lets hover focus bring a window to the top, similar to X Window style focus-follows-mouse behavior. |
+| `ActiveWindowTracking` | `REG_DWORD` | If enabled the active window is the one the mouse is positioned on. |
 | `DoubleClickSpeed` | `REG_SZ` | Controls how much time may pass between two clicks before Windows no longer treats them as a double-click. |
-| `MouseSpeed` | `REG_SZ` | Controls mouse pointer scaling. Higher acceleration levels increase pointer speed. |
-| `MouseThreshold1` | `REG_SZ` | Adjusts the first acceleration threshold used for mouse movement scaling. |
-| `MouseThreshold2` | `REG_SZ` | Adjusts the second acceleration threshold used for mouse movement scaling. |
+| `DoubleClickHeight` | `REG_SZ` | Sets the amount of movement allowed (vertical) for a double-click to be valid. |
+| `DoubleClickWidth` | `REG_SZ` | Sets the amount of movement allowed (horizontal) for a double-click to be valid. |
+| `MouseSpeed` | `REG_SZ` | Controls mouse pointer scaling (speed of the mouse pointer relative to the movement of the mouse). Higher acceleration levels increase pointer speed. |
+| `MouseThreshold1` | `REG_SZ` | Adjusts the first acceleration threshold used for mouse movement scaling (motion factor that, when factored with MouseSpeed, controls the motion of the mouse). |
+| `MouseThreshold2` | `REG_SZ` | Adjusts the second acceleration threshold used for mouse movement scaling (motion factor that, when factored with MouseSpeed, controls the motion of the mouse). |
+| `MouseTrails` | `REG_SZ` | If `0` there're no trails, if above `0` there're tails. The higher the number, the more trails there are.
 | `SmoothMouseXCurve` | `REG_BINARY` | Defines the X-axis smoothing curve used for mouse movement interpolation. |
 | `SmoothMouseYCurve` | `REG_BINARY` | Defines the Y-axis smoothing curve used for mouse movement interpolation. |
 | `SnapToDefaultButton` | `REG_SZ` | Automatically moves the pointer to the default button when a new dialog or window appears. |
