@@ -1572,7 +1572,7 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 },
 ```
 
-# Decrease Mouse Hover Time
+# Mouse Hover Time
 
 `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
 

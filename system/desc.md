@@ -1140,7 +1140,7 @@ Used for preventing legacy or unstable applications from crashing, read through 
 
 # Disable Accessibility Features
 
-Disables all kind of accessibility features such as `Voice Access`, `Live Captions`, `Narrator`, `Magnifier`, `OSK` (only via suboption) etc. (`SystemSettings > Accessibility`/`Control Panel > All Control Panel Items > Ease of Access Center`).
+Disables all kind of accessibility features such as `Voice Access`, `Live Captions`, `Narrator`, `Magnifier`, `OSK` etc. (`SystemSettings > Accessibility`/`Control Panel > All Control Panel Items > Ease of Access Center`). Specific features can be enabled via the suboptions.
 
 ## Suboptions
 
