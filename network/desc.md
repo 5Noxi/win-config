@@ -230,6 +230,9 @@ HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Remote IP Prefix Length   
 HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\DSCP Value    Type: REG_SZ, Length: 6, Data: 46 # High Priority, Expedited Forwarding (EF)
 HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Throttle Rate    Type: REG_SZ, Length: 6, Data: -1 # Unspecified throttle rate (none), 'Data' would specify rate in KBps
 ```
+
+## Live Capture
+
 Capturing the network activity after adding the policy:
 ```powershell
 + Versions: IPv4, Internet Protocol, Header Length = 20
@@ -260,6 +263,8 @@ Capturing the network activity after adding the policy:
 > https://gpsearch.azurewebsites.net/#1829  
 > https://gpsearch.azurewebsites.net/#1830
 
+## Set-NetFirewallRule & Capture
+
 Disable network discovery (includes LLTDIO, Rspndr, LLTD), by pasting the desired command into `powershell`:
 ```powershell
 Set-NetFirewallRule -DisplayGroup "Network Discovery" -Enabled False -Profile Any​ # Domain​, Private, Public​
@@ -280,6 +285,8 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowRspnd
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\AllowRspndrOnPublicNet	Type: REG_DWORD, Length: 4, Data: 0
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\ProhibitRspndrOnPrivateNet	Type: REG_DWORD, Length: 4, Data: 0
 ```
+
+## Default Entries
 
 Defaults on W11 LTSC IoT Enterprise:
 ```
@@ -352,72 +359,59 @@ RegistryKey<unsigned char>::Initialize(
     0
 )
 ```
-> > [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
+> [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
 
----
+## Windows Policies
 
 ```json
 {
-"File": "LinkLayerTopologyDiscovery.admx",
-"CategoryName": "LLTD_Category",
-"PolicyName": "LLTD_EnableLLTDIO",
-"NameSpace": "Microsoft.Policies.LinkLayerTopology",
-"Supported": "WindowsVista",
-"DisplayName": "Turn on Mapper I/O (LLTDIO) driver",
-"ExplainText": "This policy setting changes the operational behavior of the Mapper I/O network protocol driver. LLTDIO allows a computer to discover the topology of a network it's connected to. It also allows a computer to initiate Quality-of-Service requests such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow LLTDIO to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior of LLTDIO will apply.",
-"KeyPath": [
+  "File": "LinkLayerTopologyDiscovery.admx",
+  "CategoryName": "LLTD_Category",
+  "PolicyName": "LLTD_EnableLLTDIO",
+  "NameSpace": "Microsoft.Policies.LinkLayerTopology",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Turn on Mapper I/O (LLTDIO) driver",
+  "ExplainText": "This policy setting changes the operational behavior of the Mapper I/O network protocol driver. LLTDIO allows a computer to discover the topology of a network it's connected to. It also allows a computer to initiate Quality-of-Service requests such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow LLTDIO to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior of LLTDIO will apply.",
+  "KeyPath": [
     "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD"
-],
-"ValueName": "EnableLLTDIO",
-"Elements": [
+  ],
+  "ValueName": "EnableLLTDIO",
+  "Elements": [
     { "Type": "Boolean", "ValueName": "AllowLLTDIOOnDomain", "TrueValue": "1", "FalseValue": "0" },
     { "Type": "Boolean", "ValueName": "AllowLLTDIOOnPublicNet", "TrueValue": "1", "FalseValue": "0" },
     { "Type": "Boolean", "ValueName": "ProhibitLLTDIOOnPrivateNet", "TrueValue": "1", "FalseValue": "0" },
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
-]
+  ]
 },
 {
-"File": "LinkLayerTopologyDiscovery.admx",
-"CategoryName": "LLTD_Category",
-"PolicyName": "LLTD_EnableRspndr",
-"NameSpace": "Microsoft.Policies.LinkLayerTopology",
-"Supported": "WindowsVista",
-"DisplayName": "Turn on Responder (RSPNDR) driver",
-"ExplainText": "This policy setting changes the operational behavior of the Responder network protocol driver. The Responder allows a computer to participate in Link Layer Topology Discovery requests so that it can be discovered and located on the network. It also allows a computer to participate in Quality-of-Service activities such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow the Responder to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior for the Responder will apply.",
-"KeyPath": [
+  "File": "LinkLayerTopologyDiscovery.admx",
+  "CategoryName": "LLTD_Category",
+  "PolicyName": "LLTD_EnableRspndr",
+  "NameSpace": "Microsoft.Policies.LinkLayerTopology",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Turn on Responder (RSPNDR) driver",
+  "ExplainText": "This policy setting changes the operational behavior of the Responder network protocol driver. The Responder allows a computer to participate in Link Layer Topology Discovery requests so that it can be discovered and located on the network. It also allows a computer to participate in Quality-of-Service activities such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow the Responder to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior for the Responder will apply.",
+  "KeyPath": [
     "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD"
-],
-"ValueName": "EnableRspndr",
-"Elements": [
+  ],
+  "ValueName": "EnableRspndr",
+  "Elements": [
     { "Type": "Boolean", "ValueName": "AllowRspndrOnDomain", "TrueValue": "1", "FalseValue": "0" },
     { "Type": "Boolean", "ValueName": "AllowRspndrOnPublicNet", "TrueValue": "1", "FalseValue": "0" },
     { "Type": "Boolean", "ValueName": "ProhibitRspndrOnPrivateNet", "TrueValue": "1", "FalseValue": "0" },
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
-]
+  ]
 },
 ```
 
 # Congestion Provider
 
-Placeholder.
-
-> https://www3.cs.stonybrook.edu/~anshul/comsnets24_bbrbbrv2.pdf  
-> https://github.com/google/bbr  
-> https://www.rfc-editor.org/rfc/rfc6582  
-> https://internet2.edu/wp-content/uploads/2022/12/techex22-AdvancedNetworking-ExploringtheBBRv2CongestionControlAlgorithm-Tierney.pdf  
-> https://datatracker.ietf.org/meeting/104/materials/slides-104-iccrg-an-update-on-bbr-00  
-> https://www.speedguide.net/articles/tcp-congestion-control-algorithms-comparison-7423  
-> https://datatracker.ietf.org/meeting/105/materials/slides-105-iccrg-bbr-v2-a-model-based-congestion-control-00
-
 Get your current congestion provider, by pasting the following into powershell:
 ```
 Get-NetTCPSetting | Select SettingName, CongestionProvider
 ```
-
-![](https://github.com/nohuto/win-config/blob/main/network/images/congnet.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/network/images/congnet2.png?raw=true)
 
 # Disable Wi-Fi
 
@@ -438,43 +432,30 @@ Disables Wi-Fi services/drivers, scheduled tasks.
 
 # Static IP
 
-Reads the active adapter's IPv4 settings from `netsh int ip show config` and applies them directly via registry.
+Reads the active adapter's IPv4 settings from `netsh int ip show config` and applies them directly via registry. A static IP is useful for devices that must keep the same address (NAS, game servers, port forwarding, monitoring agents) so clients and firewall rules always target a stable IP. **Static IP requires a manual DNS server**. Use the `Encrypted DNS` option above to set `NameServer` for the same adapter.
+
+### Terms Meaning
 
 `IP Address` is the device's local IPv4 on your LAN.  
 `Default Gateway` is your router IP used to reach other networks (internet).  
 `Subnet Mask` defines which IPs are local (same subnet) vs routed via the gateway.
 `DHCP` (Dynamic Host Configuration Protocol) registers and updates IP address, subnet mask, gateway, and DNS.
 
-**Static IP requires a DNS server**. Use the `Encrypted DNS` option above to set `NameServer` for the same adapter.
-
-A static IP is useful for devices that must keep the same address (NAS, game servers, port forwarding, monitoring agents) so clients and firewall rules always target a stable IP.
-
-```c
-"HKLM\\System\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\{5a488261-8df1-45a8-b993-34696d32773e}";
-  "EnableDHCP"; // dynamic=1, static=0
-  "DhcpIPAddress" = 0.0.0.0; // dynamic=present, static=absent
-  "DhcpSubnetMask" = 255.0.0.0; // dynamic=present, static=absent
-  "IPAddress"; // dynamic="", static="192.168.178.135"
-  "SubnetMask"; // dynamic="", static="255.255.255.0"
-  "DefaultGateway"; // dynamic="", static="192.168.178.1"
-  "DefaultGatewayMetric"; // dynamic="", static="0"
-
-"HKLM\\System\\CurrentControlSet\\Services\\{5A488261-8DF1-45A8-B993-34696D32773E}\\Parameters\\Tcpip";
-  "EnableDHCP"; // dynamic=1, static=0
-  "IPAddress"; // dynamic="192.168.178.135", static=""
-  "SubnetMask"; // dynamic="255.255.255.0", static=""
-  "DefaultGateway"; // dynamic="192.168.178.1", static=""
-```
-
 # Disable Active Probing
 
+### Active Probing
+
 Active probing sends HTTP requests from the client to a predefined web probe server (by default `www.msftconnecttest.com/connecttest.txt`), using both IPv4 and IPv6 in parallel. If it gets an HTTP 200 response with the expected payload, NCSI marks the interface as having internet connectivity, if the probe fails or returns errors (for example, blocked by a proxy or DNS issues), NCSI treats connectivity as limited.
+
+### Passive Probing
 
 Passive probing doesn't send its own traffic, it inspects received packets and uses their hop count to infer connectivity. If the measured hop count for an interface meets or exceeds a system minimum (default 8, often changed to 3 in enterprises), NCSI upgrades the interface to "internet" and suppresses further active probes until conditions change, if the hop count is too low, missing, or there's no route to the internet, and no successful active probe has occurred, connectivity is treated as local-only. Passive probes run periodically (every 15 seconds by default) when allowed by Group Policy and when a user has recently logged on, and they serve to keep connectivity status accurate, especially with intermittent network issues.
 
 Disabling passive probing will break the network icon, causing for example spotify to be in offline mode.
 
 See links below for a detailed documentation.
+
+## Network Icon Meaning
 
 |Icon|Description|
 |--|--|
@@ -489,31 +470,8 @@ See links below for a detailed documentation.
 > https://github.com/nohuto/win-registry/blob/main/records/NlaSvc.txt  
 > [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
----
+## Windows Policies
 
-Miscellaneous notes:
-
-```json
-"HKLM\\System\\CurrentControlSet\\services\\NlaSvc\\Parameters\\Internet": {
-  "EnableUserActiveProbing": { "Type": "REG_DWORD", "Data": 0 },
-  "MaxActiveProbes": { "Type": "REG_DWORD", "Data": 1 }
-}
-```
-```c
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveDnsProbeContent
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveDnsProbeContentV6
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveDnsProbeHost
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveDnsProbeHostV6
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbeContent
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbeContentV6
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbeHost
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbeHostV6
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbePath
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ActiveWebProbePathV6
-\Registry\Machine\SYSTEM\ControlSet001\Services\NlaSvc\Parameters\Internet : ReprobeThreshold
-
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Connectivity\DisallowNetworkConnectivityActiveTests: value (DWord 1)
-```
 ```json
 {
   "File": "ICM.admx",
@@ -583,7 +541,8 @@ or `WIN + I` > Network & Internet > VPN > Remove
 > https://learn.microsoft.com/en-us/powershell/module/vpnclient/remove-vpnconnection?view=windowsserver2025-ps  
 > https://learn.microsoft.com/en-us/powershell/module/vpnclient/?view=windowsserver2025-ps
 
-`Allow VPN over metered networks`:
+### `Allow VPN over metered networks`
+
 ```c
 OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters_1 = 
     L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings",
@@ -598,7 +557,9 @@ VpnRegQueryDWord(
 if ( !v17[0] )
     g_donotUseCosted = 0, // default
 ```
-`Allow VPN while Roaming`:
+
+### `Allow VPN while Roaming`
+
 ```c
 OSDATA__SYSTEM__CurrentControlSet__Services__RasMan__Parameters = 
     L"SYSTEM\\CurrentControlSet\\Services\\RasMan\\Parameters\\Config\\VpnCostedNetworkSettings",
@@ -639,6 +600,8 @@ Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
 "wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2","Type: REG_DWORD, Length: 4, Data: 0"
 "wmiprvse.exe","RegSetValue","HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB1","Type: REG_DWORD, Length: 4, Data: 0"
 ```
+
+## Effects of Disabling
 
 | Functionality                                      | Disabled when SMBv3 is off       | Disabled when SMBv2 is off       |
 |----------------------------------------------------|----------------------------------|----------------------------------|
@@ -687,6 +650,8 @@ Disabling `NetbiosOptions` via network center:
 RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
 ```
 
+## Protocols Notes
+
 | Protocol | Purpose | How it works | Notes |
 | -------- | ------- | ------------ | ----- |
 | LLMNR (Link-Local Multicast Name Resolution) | Local name resolution when DNS isn't available | Sends multicast queries on the local link (IPv4 224.0.0.252, UDP 5355) asking "who has this name?", hosts that own the name reply | Windows-specific legacy fallback, vulnerable to spoofing/poisoning |
@@ -696,6 +661,8 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
 > https://en.wikipedia.org/wiki/Link-Local_Multicast_Name_Resolution  
 > https://en.wikipedia.org/wiki/Multicast_DNS  
 > https://en.wikipedia.org/wiki/NetBIOS  
+
+## Windows Policies
 
 ```json
 {
@@ -834,6 +801,8 @@ Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft ac
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/configure-wifi-sense-and-paid-wifi-service  
 > https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#23-wi-fi-sense
 
+## Windows Policies
+
 ```json
 {
   "File": "wlansvc.admx",
@@ -864,6 +833,8 @@ Excludes (deprecated, chimney too):
 ```json
 "SaOffloadCapacityEnabled" = 0
 ```
+
+## Registry Values Overview
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -924,6 +895,8 @@ powercfg /devicequery wake_armed
 `powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state  
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
 
+## Registry Values Overview
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
   "*WakeOnMagicPacket" = 1; // range 0-1
@@ -935,6 +908,8 @@ powercfg /devicequery wake_armed
 
 > https://github.com/nohuto/win-registry#intel-nic-values
 
+### Setup Information
+
 `Disable Wait for Link`:
 ```inf
 , Wait for Link
@@ -945,8 +920,6 @@ HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "1",                    0, %On%
 HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "2",                    0, %AutoDetect%
 HKR, Ndi\Params\WaitAutoNegComplete,            type,                   0, "enum"
 ```
-
----
 
 ```inf
 HKR, Ndi\Params\*WakeOnMagicPacket,		ParamDesc,	0, 	%MagicPacket%
@@ -1005,7 +978,6 @@ HKR, Ndi\Params\WakeUpModeCap\enum,  "1",        0 , %WakeUpMode_Magic%
 HKR, Ndi\Params\WakeUpModeCap\enum,  "2",        0 , %WakeUpMode_Pattern%
 ```
 
-
 # Increase Buffers
 
 The maximum data differs for users, e.g. if applying `4096` it may get rejected, see `inf` blocks below.
@@ -1018,6 +990,8 @@ Receive Buffers:
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/29.3.1/receive-buffers/  
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/transmit-buffers/
+
+## Setup Information
 
 ```inf
 , *TransmitBuffers
@@ -1067,6 +1041,8 @@ Some NICs expose multiple interrupt-moderation levels. Use interrupt moderation 
 > https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation  
 > https://enterprise-support.nvidia.com/s/article/understanding-interrupt-moderation
 
+### Data Range
+
 The correct data might be the comment data, if so edit it manually.
 ```c
 Off: ITR = 0 (no limit)
@@ -1078,6 +1054,8 @@ Extreme: ITR = 3600 // 500
 Adaptive: ITR = 65535
 ```
 ITR = Interrupt Throttle Rate.
+
+## Setup Information
 
 Data/default is driver specific.
 ```inf
@@ -1137,6 +1115,8 @@ Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
 
 I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below) - disabling the option therefore won't "disable" RSS, it only removes the created values.
 
+## RssReadRegistryParameters
+
 `RSS::RssReadRegistryParameters` shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-registry/blob/main/assets/intelnet6x.c) for reference:
 ```c
 void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
@@ -1154,7 +1134,8 @@ void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT
   REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
 }
 ```
---- 
+
+## Registry Values Overview
 
 `*MaxRssProcessors`:  
 The maximum number of RSS processors.
@@ -1251,6 +1232,8 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
 > https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/networking-mpssvc-svc-firewallgroups-firewallgroup-group  
 > https://learn.microsoft.com/en-us/powershell/module/netadapter/get-netadapterbinding?view=windowsserver2025-ps
 
+## Windows Policies
+
 ```json
 {
   "File": "WindowsSandbox.admx",
@@ -1296,6 +1279,8 @@ Once these capabilities are shared, they agree on the highest common speed and p
 
 Windows Internals (E7-P1, I/O system): NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
 
+## Setup Information
+
 Intel driver example:
 ```inf
 HKR, Ndi\params\*SpeedDuplex,                           ParamDesc,              0, %SpeedDuplex%
@@ -1335,6 +1320,8 @@ The following events are logged:
 - Mismatch in duplex. (`LINK_DUPLEX_MISMATCH`)
 - Spanning Tree Protocol detected.
 
+## Setup Information
+
 ```inf
 ,Log Link State Event
 HKR,Ndi\Params\LogLinkStateEvent,                       ParamDesc,              0, %LogLinkState%
@@ -1368,6 +1355,8 @@ A sending station (computer or network switch) may be transmitting data faster t
 
 > https://github.com/nohuto/win-registry#intel-nic-values
 
+## Setup Information
+
 ```inf
 , *FlowControl
 HKR, Ndi\Params\*FlowControl,                   ParamDesc,              0, %FlowControl%
@@ -1396,6 +1385,8 @@ The Jumbo Frames feature enables or disables Jumbo Packet capability. The standa
 > https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html  
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/30.5/jumbo-frames/
 
+## Setup Information
+
 ```inf
 HKR, Ndi\params\*JumboPacket,	ParamDesc,	0, %JumboPacket%
 HKR, Ndi\params\*JumboPacket,	Type,		0, "enum"
@@ -1416,6 +1407,8 @@ Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwid
 
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing
+
+## Registry Value Ranges
 
 `"*UdpRsc": { "Type": "REG_SZ", "Data": 1 }` causes high usage of the system idle process for whatever reason, I'll leave it out for now.
 
@@ -1492,6 +1485,8 @@ VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the n
 
 It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
+## Registry Values Overview
+
 ```c
 // Intel
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1506,6 +1501,17 @@ It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
 > https://github.com/nohuto/win-registry#intel-nic-values
 
+| Value | Description | Allowed Values | Default | Notes |
+| ----  | ---- | ---- | ---- | ---- |
+| `*VMQ`| Enable/disable the VMQ feature. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
+| `*VMQLookaheadSplit` | Enable/disable splitting RX buffers into lookahead and post-lookahead buffers. | `0` Disabled - `1` Enabled | `1` | Starting with NDIS 6.30 / Windows Server 2012, this keyword is no longer supported. |
+| `*VMQVlanFiltering` | Enable/disable filtering packets by VLAN ID in the MAC header. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
+| `*RssOrVmqPreference` | Define whether VMQ capabilities should be enabled instead of RSS. | `0` Report RSS capabilities - `1` Report VMQ capabilities | `0`     | - |
+| `*TenGigVmqEnabled` | Enable/disable VMQ on all 10 Gbps adapters. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
+| `*BelowTenGigVmqEnabled` | Enable/disable VMQ on all adapters <10 Gbps. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
+
+### Setup Information
+
 ```inf
 ; Mellanox
 ; mlx4eth NT specific
@@ -1518,20 +1524,10 @@ HKR, Ndi\Params\*VMQ\enum,  "1",  0, "%Enabled%"
 HKR, "", *VMQ, %REG_SZ%, "1"
 ```
 
-| Value | Description | Allowed Values | Default | Notes |
-| ----  | ---- | ---- | ---- | ---- |
-| `*VMQ`| Enable/disable the VMQ feature. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
-| `*VMQLookaheadSplit` | Enable/disable splitting RX buffers into lookahead and post-lookahead buffers. | `0` Disabled - `1` Enabled | `1` | Starting with NDIS 6.30 / Windows Server 2012, this keyword is no longer supported. |
-| `*VMQVlanFiltering` | Enable/disable filtering packets by VLAN ID in the MAC header. | `0` Disabled - `1` Enabled | `1` | Enumeration keyword. |
-| `*RssOrVmqPreference` | Define whether VMQ capabilities should be enabled instead of RSS. | `0` Report RSS capabilities - `1` Report VMQ capabilities | `0`     | - |
-| `*TenGigVmqEnabled` | Enable/disable VMQ on all 10 Gbps adapters. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
-| `*BelowTenGigVmqEnabled` | Enable/disable VMQ on all adapters <10 Gbps. | `0` System default (disabled for Windows Server 2008 R2) - `1` Enabled - `2` Explicitly disabled | - | Miniport that supports VMQ must not read this subkey. |
-
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md  
 > https://docs.nvidia.com/networking/display/winofv55053000/ethernet+registry+keys#src-25134589_EthernetRegistryKeys-FlowControlOptions  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/virtual-machine-queue-architecture.md  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/introduction-to-ndis-virtual-machine-queue--vmq-.md
-
 
 # Disable SR-IOV
 
@@ -1540,6 +1536,8 @@ Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-  
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
+
+## Registry Values Overview
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1557,6 +1555,8 @@ It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 |                       | 1           | Report SR-IOV capabilities |
 
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov
+
+### Setup Information
 
 ```inf
 , SRIOV Default switch registry keys.
@@ -1602,6 +1602,7 @@ FEC (forwarded error correction) improves link stability, but increases latency.
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/
 
+## Registry Values Overview
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1622,6 +1623,9 @@ RegistryKey<enum HdSplitLocation>::Initialize(
     0,
     1),
 ```
+
+### Setup Information
+
 ```inf
 HKR, Ndi\Params\FecMode,                         ParamDesc,              0, %FecMode%
 HKR, Ndi\Params\FecMode,                         default,                0, "0"
@@ -1642,6 +1646,8 @@ This should only be enabled, if needed. The text above is just a personal assump
 
 `2` = Enabled  
 `1` = Disabled
+
+## Setup Information
 
 ```inf
 ; Legacy Switch Compatibility Mode
@@ -1680,6 +1686,8 @@ For a detailed documentation, see:
 | ---- | ---- | ---- |
 | RecvCompletionMethod | Set to 4 to register and use Ndis Poll Mode | Default is 1 (Adaptive) |
 | SendCompletionMethod | Set to 2 to register and use Ndis Poll Mode | Default is 1 (Interrupt) |
+
+### Setup Information
 
 ```inf
 HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
@@ -1720,6 +1728,8 @@ Sets the completion methods of the receive packets, and it affects network throu
 
 - Polling - increases the CPU utilization, because the system polls the received rings for incoming packets; however, it may increase the network bandwidth since the incoming packet is handled faster.
 - Adaptive - combines the interrupt and polling methods dynamically, depending on traffic type and network usage.
+
+### Setup Information
 
 ```inf
 HKR, NDI\Params\RecvCompletionMethod,  ParamDesc, 0, "%RecvCompletionMethod%"

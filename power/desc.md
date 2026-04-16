@@ -145,6 +145,8 @@ Disables USB selective suspend, idle states, and related LP features if supporte
 See win-registry repo for a list of `CCS\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\...` values/defaults/notes:
 > https://github.com/nohuto/win-registry#pnp-device-values
 
+## MSPower_DeviceEnable
+
 Note that the known `MSPower_DeviceEnable` command does nothing more than recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`.
 ```c
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\ROOT_HUB30\5&2c35141&0&0\Device Parameters\WDF\IdleInWorkingState	Type: REG_DWORD, Length: 4, Data: 0
@@ -194,6 +196,8 @@ Windows Internals (E7-P1, Power manager): the system saves a full memory image t
 
 During a full shutdown and boot (S5), the entire user session is torn down and restarted on the next boot. In contrast, during a hibernation (S4), the user session is closed and the user state is saved.
 
+## Power State Table
+
 | Power state | ACPI state | Description | 
 |-------------|------------|-------------|
 | Working | *S0* | The system is fully usable. Hardware components that aren't in use can save power by entering a lower power state. | 
@@ -204,6 +208,8 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
 | Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
 
 > https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
+
+## Registry Value Defaults
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -231,7 +237,6 @@ RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HibernateEnabled	Type: R
 > https://github.com/nohuto/win-registry#power-values  
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation  
 > https://github.com/nohuto/win-registry/blob/main/records/Power.txt
-
 
 # Reduced HiberFile
 
@@ -261,6 +266,8 @@ Hibernation files are used for hybrid sleep, fast startup, and [standard hiberna
     "PercentUnlimitedFull" = ?; // unk_140FC3700 - 28Hex/40Dec
     "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec
 ```
+
+## PowerCFG Captures & Commands
 
 `powercfg /h /size 0`:
 ```c
@@ -300,6 +307,8 @@ If hiding `Lock` for example via `Control Panel > All Control Panel Items > Powe
 ```c
 DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
 ```
+
+## Windows Policies
 
 LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer`:
 ```json
@@ -381,28 +390,7 @@ To programmatically initiate a fast startup-style shutdown, call the [InitiateSh
 
 In Windows, fast startup is the default transition when a system shutdown is requested. A full shutdown (S5) occurs when a system restart is requested or when an application calls a shutdown API.
 
----
-
-Notes on `Disable Idle States At Boot` SUBOPTION (`DisableIdleStatesAtBoot`):
-
-The data `-1` (`PpmIdleDisableStatesAtBoot dd 0FFFFFFFFh`) gets handled as `0`
-```cpp
-if ( PpmIdleDisableStatesAtBoot == -1 )
-  PpmIdleDisableStatesAtBoot = 0;
-```
-`0` = skips all PpmInstall*IdleStates disable writes
-`1` = would write disable in `PpmInstallCoordinatedIdleStates`/`PpmInstallPlatformIdleStates`
-```cpp
-if ( PpmIdleDisableStatesAtBoot )
-  *(_DWORD *)(v20 + 80) = 0x80000000;
-```
-`2` = would do the same as `1` including disable write in `PpmInstallNewIdleStates`
-```cpp
-if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
-  *(_DWORD *)(v23 + 32) = 0x80000000;
-```
-
----
+## Registry Values Defaults
 
 All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
 
@@ -424,6 +412,7 @@ All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registr
 ```
 > https://github.com/nohuto/win-registry?tab=readme-ov-file#power-values  
 > https://github.com/marcosd4h/memhunter/blob/f68bca7efe31f49c0dc9ad988fb17bec443a1ca7/libs/boost/interprocess/detail/win32_api.hpp#L2373
+
 ```c
 // PopOpenPowerKey
 {
@@ -446,6 +435,32 @@ if ( result >= 0 )
   result = ZwClose(KeyHandle);
 }
 ```
+
+> [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
+
+## DisableIdleStatesAtBoot Notes
+
+Notes on `Disable Idle States At Boot` SUBOPTION (`DisableIdleStatesAtBoot`):
+
+The data `-1` (`PpmIdleDisableStatesAtBoot dd 0FFFFFFFFh`) gets handled as `0`
+```cpp
+if ( PpmIdleDisableStatesAtBoot == -1 )
+  PpmIdleDisableStatesAtBoot = 0;
+```
+`0` = skips all PpmInstall*IdleStates disable writes
+`1` = would write disable in `PpmInstallCoordinatedIdleStates`/`PpmInstallPlatformIdleStates`
+```cpp
+if ( PpmIdleDisableStatesAtBoot )
+  *(_DWORD *)(v20 + 80) = 0x80000000;
+```
+`2` = would do the same as `1` including disable write in `PpmInstallNewIdleStates`
+```cpp
+if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
+  *(_DWORD *)(v23 + 32) = 0x80000000;
+```
+
+## Windows Policies
+
 ```json
 {
   "File": "WinInit.admx",
@@ -465,8 +480,6 @@ if ( result >= 0 )
   ]
 },
 ```
-
-> [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
 
 # Disable Energy Estimation
 
@@ -491,7 +504,7 @@ Not needed, if you disable energy estimation:
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
 
----
+## Suboption
 
 `Disable Battery Capacity Section` = Disables the battery capacity section on the battery saver page of the system settings app.
 
@@ -533,9 +546,8 @@ Shows the current available sleep states on your system.
 
 `EnableHDDParking` is set to `1` by default, `EnableDIPM`/`EnableHIPM` are set to `0` by default. I haven't looked further into it and therefore can't say if changing `EnableHDDParking` has any affect at all, since it seems to not be read. I might add more details soon.
 
----
+## Miscellaneous Information
 
-Miscellaneous information:
 ```
 HIPM = Host Initiated Link Power Management
 DIPM = Device Initiated Link Power Management
@@ -586,6 +598,8 @@ Additional notes: `EnableALPEDisableHotplug` (`0`), `AhciDisablePxHotplug` - `am
 
 "CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
 
+## TimerCoalescing Data
+
 `TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`).
 
 ```c
@@ -623,6 +637,8 @@ As the pseudocode shows eight values have data, all other ones are forced to `0`
 }
 ```
 Using the highest clamp as shown above will end up with a BSoD (same goes for `0x7FFFFFF4`/`0` and probably any other data).
+
+## Miscellaneous Values
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -673,35 +689,6 @@ I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings  
 
-# Disable NVMe Perf Throttling
-
-It get intialized, unsure what exactly it does. Might be related to thermal throttling (controller cuts IOPS and bandwidth to lower heat and protect the drive)?
-
-The default data is `0` if the value is missing, but for new installations it's present with the value `1`. Il'll still leave it in here for documentation reasons.
-
-```c
-ResultLength = 0;
-DestinationString = 0LL;
-RtlInitUnicodeString(&DestinationString, L"NVMeDisablePerfThrottling");
-if (ZwQueryValueKey(
-        KeyHandle,
-        &DestinationString,
-        KeyValuePartialInformation,
-        KeyValueInformation,
-        0x110u,
-        &ResultLength) < 0)           // query failed
-{
-    ClassNVMeDisablePerfThrottling = 0; // default if missing
-}
-else if (v6 == 4 && ResultLength >= 4)  // REG_DWORD
-{
-    ClassNVMeDisablePerfThrottling = (v7 != 0); // non zero = disable throttling
-}
-```
-
-> https://github.com/nohuto/win-registry/blob/main/records/Classpnp.txt  
-> [power/assets | nvmeperf-ClassUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
-
 # Disable Storage Idle States
 
 Disables idle states for NVMe, SSD, SD, HDD. This is currently more of a possible idea. 
@@ -719,6 +706,8 @@ This policy setting specifies that power management is disabled when the machine
 - If this policy setting is enabled, Windows Connection Manager doesn't manage adapter radios to reduce power consumption when the machine enters connected standby mode.
 - If this policy setting isn't configured or is disabled, power management is enabled when the machine enters connected standby mode.
 
+## Suboption
+
 `Disable Modern Standby`:
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power"; 
@@ -730,16 +719,7 @@ This policy setting specifies that power management is disabled when the machine
 ```
 > https://github.com/nohuto/win-registry?tab=readme-ov-file#power-values
 
-| Power state | ACPI state | Description | 
-|-------------|------------|-------------|
-| Working | *S0* | The system is fully usable. Hardware components that aren't in use can save power by entering a lower power state. | 
-| Sleep (Modern Standby) | *S0* low-power idle | Some SoC systems support a low-power idle state known as [Modern Standby](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby). In this state, the system can very quickly switch from a low-power state to high-power state in response to hardware and network events. **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
-| Sleep | *S1*<br> *S2*<br> *S3* | The system appears to be off. The amount of power consumed in states *S1-S3* is less than *S0* and more than *S4*. *S3* consumes less power than *S2*, and *S2* consumes less power than *S1*. Systems typically support one of these three states, not all three.<br><br> In states *S1-S3*, volatile memory is kept refreshed to maintain the system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device.<br><br> *Hybrid sleep*, used on desktops, is where a system uses a hibernation file with *S1-S3*. The hibernation file saves the system state in case the system loses power while in sleep.<br><br> **Note:** SoC systems that support Modern Standby don't use *S1-S3*. | 
-| Hibernate | *S4* | The system appears to be off. Power consumption is reduced to the lowest level. The system saves the contents of volatile memory to a hibernation file to preserve system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device. The working context can be restored if it's stored on nonvolatile media.<br><br> *Fast startup* is where the user is logged off before the hibernation file is created. This allows for a smaller hibernation file, more appropriate for systems with less storage capabilities. | 
-| Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
-| Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
-
-> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
+## Windows Policies
 
 ```json
 {
@@ -782,6 +762,8 @@ You can get a lot of information about data ranges and more from `.inf` files, s
 > https://github.com/nohuto/win-registry/blob/main/records/NIC-Intel.txt  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md
+
+## Registry Value Overview
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
@@ -826,6 +808,8 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 For more detail on each value, see GitHub links above.
 
 > https://github.com/nohuto/win-registry#intel-nic-values
+
+### Setup Information
 
 ```inf
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
@@ -915,9 +899,7 @@ HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "2",             0, %NotSpeedDown
 
 Reminder: Each adapter uses it's own default values, means that the `default`/`min`/`max` may be different for you. E.g. `SSIdleTimeout` minimum value was `1` in the first setup information file (`.inf`), but `5` in the second.
 
----
-
-Miscellaneous notes:
+### Miscellaneous Values
 
 ```c
 "DynamicLTR": { "Type": "REG_SZ", "Data": 0 },

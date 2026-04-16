@@ -12,6 +12,7 @@ The option applies all kind of telemetry related values including all values tha
 Seems to be a fallback if `AllowTelemetry` isn't set.
 > https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106
 
+## Windows Policies
 
 ```json
 {
@@ -250,7 +251,7 @@ Seems to be a fallback if `AllowTelemetry` isn't set.
 },
 ```
 
----
+### Deprecated Policies
 
 These [policies](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-system) are deprecated and will only work on Windows 10 version 1809. Setting this policy will have no effect for other supported versions of Windows.
 ```json
@@ -273,6 +274,11 @@ Disables automatic network traffic on the settings page and prevents automatic d
 | `0`	Disabled | Force disable auto-update over metered connection. |
 | `1`	Enabled | Force enable auto-update over metered connection. |
 | `65535` (Default)	Not configured | User's choice. |
+
+> [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)  
+> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-maps
+
+## moshostcore (Downloaded Maps Manager Core) Snippets
 
 ```c
 v8 = 1; // Default
@@ -304,14 +310,53 @@ return (unsigned int)ZTraceReportPropagation(
 					   this);
 return v5;
 ```
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-maps  
-> [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)
+```c
+v6 = sub_180022E1C(L"System\\Maps\\Configuration", L"OfflineMaps");
+if ( v6 < 0 )
+{
+  v7 = 3888LL;
+  goto LABEL_4;
+}
+```
 
+## Windows Policies
 
-`AutoDownloadAndUpdateMapData` & `AllowUntriggeredNetworkTrafficOnSettingsPage`:
-> https://gpsearch.azurewebsites.net/#13439  
-> https://gpsearch.azurewebsites.net/#13350  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-maps
+```json
+  {
+    "File": "WinMaps.admx",
+    "CategoryName": "Maps",
+    "PolicyName": "TurnOffAutoUpdate",
+    "NameSpace": "Microsoft.Policies.WinMaps",
+    "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+    "DisplayName": "Turn off Automatic Download and Update of Map Data",
+    "ExplainText": "Enables or disables the automatic download and update of map data. If you enable this setting the automatic download and update of map data is turned off. If you disable this setting the automatic download and update of map data is turned on. If you don't configure this setting the automatic download and update of map data is determined by a registry setting that the user can change using Windows Settings.",
+    "KeyPath": [
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps"
+    ],
+    "ValueName": "AutoDownloadAndUpdateMapData",
+    "Elements": [
+      { "Type": "EnabledValue", "Data": "0" },
+      { "Type": "DisabledValue", "Data": "1" }
+    ]
+  },
+  {
+    "File": "WinMaps.admx",
+    "CategoryName": "Maps",
+    "PolicyName": "DisallowUntriggeredNetworkOnSettingsPage",
+    "NameSpace": "Microsoft.Policies.WinMaps",
+    "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+    "DisplayName": "Turn off unsolicited network traffic on the Offline Maps settings page",
+    "ExplainText": "This policy setting allows you to turn on or turn off unsolicited network traffic on the Offline Maps page in Settings > System > Offline Maps. If you enable this policy setting, features that generate network traffic on the Offline Maps settings page are turned off. Note: This may turn off the entire settings page. If you disable or do not configure this policy setting, the Offline Maps setting page may generate network traffic.",
+    "KeyPath": [
+      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps"
+    ],
+    "ValueName": "AllowUntriggeredNetworkTrafficOnSettingsPage",
+    "Elements": [
+      { "Type": "EnabledValue", "Data": "0" },
+      { "Type": "DisabledValue", "Data": "1" }
+    ]
+  },
+```
 
 # Disable Website Access to Language List
 
@@ -373,6 +418,8 @@ WMPlayer (Windows Media Player) sends player usage data by default, if using the
 
 Note: I gathered all registry values via the legacy WMPlayer.
 
+## Suboptions
+
 | Option | Description |
 | ---- | ---- |
 | `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
@@ -387,7 +434,7 @@ Note: I gathered all registry values via the legacy WMPlayer.
 | `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
 | `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
 
----
+## setup_wm Capture
 
 Registry values `setup_wm.exe` creates on first start, if unticking all options:
 ```powershell
@@ -569,16 +616,14 @@ It is a deprecated feature, as the banner shows:
 
 `PSR` = Problem Steps Recorder
 
----
+> https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f
 
-Miscellaneous notes:
-```bat
-takeown /f %WINDIR%\System32\psr.exe
-icacls %WINDIR%\System32\psr.exe /grant administrators:F
-ren %WINDIR%\System32\psr.exe psr.exe.nv
+```c
+// SR = Steps Recorder?
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
 ```
 
-> https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f
+## Windows Policies
 
 ```json
 {
@@ -598,11 +643,6 @@ ren %WINDIR%\System32\psr.exe psr.exe.nv
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
-```
-
-```c
-// SR = Steps Recorder?
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
 ```
 
 # Disable App Launch Tracking
@@ -627,7 +667,9 @@ Disables app access to your location, locating your system will be disabled, geo
 "svchost.exe","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\location\ShowGlobalPrompts","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
----
+> [privacy/assets | locationaccess-LocationApi.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
+
+## Windows Policies
 
 ```json
 {
@@ -683,8 +725,6 @@ Disables app access to your location, locating your system will be disabled, geo
 },
 ```
 
-> [privacy/assets | locationaccess-LocationApi.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
-
 # Disable Sensors
 
 Blocks apps/system from using hardware sensors such as ambient light, orientation, and other motion/position sensors (features like adaptive brightness, auto rotation and sensor based behaviors will no longer work).
@@ -699,7 +739,7 @@ Blocks apps/system from using hardware sensors such as ambient light, orientatio
 
 No other [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) depend on these three services.
 
----
+## Windows Policies
 
 ```json
 {
@@ -721,21 +761,6 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 },
 ```
 
----
-
-Miscellaneous notes (ignore):
-```
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\WinBio : RequireSecureSensors
-\Registry\Machine\SYSTEM\ResourcePolicyStore\ResourceSets\PolicySets\LongRunningSensor : CPU
-\Registry\Machine\SYSTEM\ResourcePolicyStore\ResourceSets\PolicySets\LongRunningSensor : ExternalResources
-\Registry\Machine\SYSTEM\ResourcePolicyStore\ResourceSets\PolicySets\LongRunningSensor : Flags
-\Registry\Machine\SYSTEM\ResourcePolicyStore\ResourceSets\PolicySets\LongRunningSensor : Importance
-\Registry\Machine\SYSTEM\ResourcePolicyStore\ResourceSets\PolicySets\LongRunningSensor : IO
-\Registry\Machine\SYSTEM\ResourcePolicyStore\ResourceSets\PolicySets\LongRunningSensor : Memory
-\Registry\Machine\SOFTWARE\Microsoft\Windows Defender\NIS\Consumers\IPS : DisableBmNetworkSensor
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\AutoRotation : SensorPresent
-```
-
 # Disable Windows Insider
 
 "The Windows Insider Preview program lets you help shape the future of Windows, be part of the community, and get early access to releases of Windows 10 and Windows 11. Windows Insider Preview builds only apply to Windows 10 and Windows 11 and aren't available for Windows Server 2016."
@@ -746,12 +771,16 @@ Miscellaneous notes (ignore):
 
 # Disable PowerShell & .NET Telemetry
 
+### POWERSHELL_TELEMETRY_OPTOUT
+
 PowerShell Telemetry:
 "At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session."
 ```bat
 setx POWERSHELL_TELEMETRY_OPTOUT 1
 ```
 > https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2
+
+### DOTNET_CLI_TELEMETRY_OPTOUT
 
 Disable NET Core CLI Telemetry:
 "To opt out after you started the installer: close the installer, set the environment variable, and then run the installer again with that value set."
@@ -774,12 +803,8 @@ dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveM
 
 Biometric is used for fingerprint, facial recognition, and other biometric authentication methods in Windows Hello and related security features.
 
+## Windows Policies
 
-```json
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{C1B650B7-6E19-4DF2-B4AE-00E5893C0487}Machine\Software\Policies\Microsoft\Biometrics\Enabled	Type: REG_DWORD, Length: 4, Data: 0
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{C1B650B7-6E19-4DF2-B4AE-00E5893C0487}Machine\Software\Policies\Microsoft\Biometrics\Credential Provider\Enabled	Type: REG_DWORD, Length: 4, Data: 0
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{C1B650B7-6E19-4DF2-B4AE-00E5893C0487}Machine\Software\Policies\Microsoft\Biometrics\Credential Provider\Domain Accounts	Type: REG_DWORD, Length: 4, Data: 0
-```
 ```json
 {
   "File": "Biometrics.admx",
@@ -867,6 +892,8 @@ Disables remote desktop, remote assistance, RPC traffic, and device redirection.
 
 `TerminalServer.admx`:  
 `fDisableCdm`: Do not allow drive redirection
+
+## Windows Policies
 
 ```json
 {
@@ -1030,9 +1057,8 @@ Disables remote desktop, remote assistance, RPC traffic, and device redirection.
 },
 ```
 
----
+## Miscellaneous Notes
 
-Miscellaneous notes:
 ```json
 "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services": {
   "fEncryptRPCTraffic": { "Type": "REG_DWORD", "Data": 1 }
@@ -1105,6 +1131,8 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/appaccess.png?raw=true)
+
+## Windows Policies
 
 ```json
 {
@@ -1644,6 +1672,8 @@ C:\WINDOWS\system32\Logfiles\WMI
 
 Removing all autologgers will cause issues, therefore it's not recommended to remove all of them.
 
+## Autologger Value Table
+
 | Value | Type | Description | 
 |-------|------|-------------|
 | **BufferSize** | **REG_DWORD** | The size of each buffer, in kilobytes. Should be less than one megabyte. ETW uses the size of physical memory to calculate this value.|
@@ -1675,6 +1705,8 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/inking.png?raw=true)
+
+## Windows Policies
 
 ```json
 {
@@ -1777,6 +1809,18 @@ v16 = L"FailedToGetReason"; // if value is missing
 "HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotLogonTelemetryTime","Type: REG_BINARY, Length: 8, Data: 7A 84 DA 49 6B 89 DC 01"
 ```
 
+---
+
+Miscellaneous notes:
+```c
+"OneDrive.exe","HKCU\Software\Microsoft\OneDrive\Accounts\Personal\CopilotEducationalExperienceInfoIconDismissed","NAME NOT FOUND","Length: 16"
+"MicrosoftEdgeUpdate.exe","HKLM\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\CopilotUpgradeCheck","NAME NOT FOUND","Length: 16"
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotHWKeyChoiceSet","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+```
+
+## Windows Policies
+
 ```json
 {
   "File": "WindowsCopilot.admx",
@@ -1797,22 +1841,16 @@ v16 = L"FailedToGetReason"; // if value is missing
 },
 ```
 
----
-
-Miscellaneous notes:
-```c
-"OneDrive.exe","HKCU\Software\Microsoft\OneDrive\Accounts\Personal\CopilotEducationalExperienceInfoIconDismissed","NAME NOT FOUND","Length: 16"
-"MicrosoftEdgeUpdate.exe","HKLM\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\CopilotUpgradeCheck","NAME NOT FOUND","Length: 16"
-"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotHWKeyChoiceSet","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
-"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
-```
-
 # Disable Recall
 
 "Allows you to control whether Windows saves snapshots of the screen and analyzes the user's activity on their device. If you enable this policy setting, Windows will not be able to save snapshots and users won't be able to search for or browse through their historical device activity using Recall. If you disable or do not configure this policy setting, Windows will save snapshots of the screen and users will be able to search for or browse through a timeline of their past activities using Recall." (`WindowsCopilot.admx`)
 
+## Suboption
+
 `Disable ClickToDo`:  
 "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
+
+## Windows Policies
 
 ```json
 {
@@ -1865,6 +1903,8 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
 
 > https://support.microsoft.com/en-us/windows/manage-cameras-with-camera-settings-in-windows-11-97997ed5-bb98-47b6-a13d-964106997757
+
+## Windows Policies
 
 ```json
 {
@@ -1955,6 +1995,8 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | `OneDrivePictures` | `88000166`, `88000165` | OneDrive pictures backup/setup |
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
+
+## Windows Policies
 
 ```json
 {
@@ -2055,9 +2097,8 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 },
 ```
 
----
 
-### Miscellaneous Notes
+## Miscellaneous Notes
 
 Disable edge related suggestions with (search suggestions in address bar):
 ```json
@@ -2131,6 +2172,8 @@ Disables all kind of synchronization.
 `DisableSyncOnPaidNetwork`: "Do not sync on metered connections"
 > https://support.microsoft.com/en-us/windows/windows-backup-settings-catalog-deebcba2-5bc0-4e63-279a-329926955708#id0ebd=windows_11
 > https://gpsearch.azurewebsites.net/#7999
+
+## Windows Policies
 
 ```json
 {
@@ -2394,7 +2437,7 @@ Disables all kind of synchronization.
 
 Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).
 
----
+## SystemSettings Captures
 
 Changing "Share across devices" option via `SystemSettings`:
 ```c
@@ -2428,6 +2471,8 @@ L"WifiLastDisabledNearShare",
 
 > [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
 
+## Windows Policies
+
 ```json
 {
   "File": "GroupPolicy.admx",
@@ -2452,6 +2497,8 @@ L"WifiLastDisabledNearShare",
 
 "This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC.If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences.If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences.If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot."
 
+## SystemSettings Captures
+
 This option will also disable resume ("Start something on one device and continue on this PC") - `System Settings > Apps > Resume`.
 
 ```c
@@ -2463,6 +2510,8 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\I
 ```
 
 By default resume is enabled, OneDrive is the only app which exists under the "Control which apps can use Resume" on a stock 25H2 installation and can be toggled via `IsOneDriveResumeAllowed` (same key as `IsResumeAllowed`). Disabling resume will disallow all apps to use Resume (doesn't set `IsXResumeAllowed` to `0`).
+
+## Windows Policies
 
 ```json
 {
@@ -2487,6 +2536,8 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 # Disable File History
 
 "File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."
+
+## Windows Policies
 
 ```json
 {
@@ -2515,6 +2566,8 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 
 `AutoEnrollMDM`:  
 "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled."
+
+## Windows Policies
 
 ```json
 {
@@ -2565,6 +2618,8 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 
 Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
 
+## Windows Policies
+
 ```json
 {
   "File": "FeedbackNotifications.admx",
@@ -2591,6 +2646,8 @@ Voluntary program that collects usage data to help improve the quality and perfo
 
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-icm  
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-internetexplorer#disablecustomerexperienceimprovementprogramparticipation
+
+## Windows Policies
 
 ```json
 {
@@ -2690,7 +2747,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name
 
----
+## Windows Policies
 
 ```json
 {
@@ -2744,6 +2801,15 @@ mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy 
 mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceDenyTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
 ```
 
+## Suboption
+
+`Disable Background Task Host`:  
+Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
+
+Windows Internals (E7-P1, Modern Standby): when the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
+
+## Windows Policies
+
 ```json
 {
   "File": "AppPrivacy.admx",
@@ -2766,11 +2832,6 @@ mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy 
   ]
 },
 ```
-
-`Disable Background Task Host`:  
-Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
-
-Windows Internals (E7-P1, Modern Standby): when the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
 
 # Disable WER
 
@@ -2799,62 +2860,12 @@ Windows Internals (E7-P2, WER): WER is implemented by the WerSvc service and Wer
 > https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings  
 > [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
 
+## Suboption
+
 `Disable DHA Report`:  
 "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows."
 
-```powershell
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ArchiveFolderCountLimit
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : AutoApproveOSDumps
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassDataThrottling
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassNetworkCostThrottling
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : BypassPowerThrottling
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CabArchiveCreate
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CabArchiveFolder
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CabArchiveSeparate
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ChangeDumpTypeByTelemetryLevel
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ConfigureArchive
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerPortNumber
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerServer
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerUploadOnFreeNetworksOnly
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerUseAuthentication
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : CorporateWerUseSSL
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DeferCabUpload
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DisableArchive
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : Disabled
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DisableEnterpriseAuthProxy
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DisableWerUpload
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DontSendAdditionalData
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : DontShowUI
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceEtw
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceHeapDump
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceMetadata
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceQueue
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : ForceUserModeCabCollection
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : LiveReportFlushInterval
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : LocalCompression
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : LoggingDisabled
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MaxArchiveCount
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MaxQueueCount
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MaxRetriesForSasRenewal
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MinFreeDiskSpace
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : MinQueueSize
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : NoHeapDumpOnQueue
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : OobeCompleted
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : QueueNoPesterInterval
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : QueuePesterInterval
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : QueueSizeMaxPercentFreeDisk
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : source
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : StorePath
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : UploadOnFreeNetworksOnly
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting : User
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting\Consent : DefaultConsent
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting\Consent : DefaultOverrideBehavior
-\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting\Consent : NewUserDefaultConsent
-```
-
----
-
-Miscellaneous notes:  
+## Miscellaneous Notes  
 
 ```c
 `EnableWerUserReporting`  
@@ -2874,6 +2885,8 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 \Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
 ```
+
+## Windows Policies
 
 ```json
 {
@@ -3094,6 +3107,8 @@ It's set to `Ask me before running` by default.
 
 These get disabled in the `Don't run any` option.
 
+## SystemSettings Captures
+
 `System > Troubleshoot` - `Recommended troubleshooter preferences`:
 ```c
 // Don't run any
@@ -3110,6 +3125,8 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 ```
 
 > https://support.microsoft.com/en-us/topic/keep-your-device-running-smoothly-with-recommended-troubleshooting-ec76fe10-4ac8-ce9d-49c6-757770fe68f1
+
+## Windows Policies
 
 ```json
 {
@@ -3137,9 +3154,7 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 },
 ```
 
----
-
-Miscellaneous notes:
+Miscellaneous policies:
 ```json
 {
   "File": "sdiageng.admx",
@@ -3181,6 +3196,8 @@ Miscellaneous notes:
 
 Disables the crash dump, logging. Not all values may be read on your system.
 
+### Data Meaning
+
 ```c
 CrashDumpEnabled REG_DWORD 0x0 = None
 CrashDumpEnabled REG_DWORD 0x1 = Complete memory dump
@@ -3220,9 +3237,8 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 > [privacy/assets | sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/sleepstudy-FxLibraryGlobalsQueryRegistrySettings.c)  
 > [privacy/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/sleepstudy-PoFxInitPowerManagement.c)
 
----
+## Miscellaenous Notes
 
-Miscellaenous notes:
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
@@ -3317,6 +3333,8 @@ __int64 IsDesktopHeapLoggingOn(void)
 
 > https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-messaging
 
+## Windows Policies
+
 ```json
 {
   "File": "messaging.admx",
@@ -3345,6 +3363,7 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 > https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/deploy-folder-redirection
 
+## Windows Policies
 
 ```json
 {
@@ -3502,6 +3521,8 @@ If you disable or don't configure this policy setting, KMS client activation dat
 
 > https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)
 
+## Windows Policies
+
 ```json
 {
   "File": "AVSValidationGP.admx",
@@ -3541,6 +3562,8 @@ If you enable this policy setting, Windows periodically queries an online font p
 
 If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts."
 
+## Windows Policies
+
 ```json
 {
   "File": "GroupPolicy.admx",
@@ -3565,6 +3588,8 @@ If you disable this policy setting, Windows does not connect to an online font p
 
 Prevent the use of security questions for local accounts.
 
+## Windows Policies
+
 ```json
 {
   "File": "CredUI.admx",
@@ -3587,6 +3612,8 @@ Prevent the use of security questions for local accounts.
 Disables persistent File Explorer thumbnail caching so previews are less likely to remain stored after browsing folders. Windows normally rebuilds thumbnail caches automatically (use `Thumbnail Cache` option in 'Cleanup' section to clear it).
 
 This improves privacy mainly by reducing leftover preview artifacts for images, videos, documents, and other shell items. Microsoft explicitly notes that the thumbnail cache can be read by everyone on shared or security sensitive systems, and the related network folder thumbnail policies note that allowing thumbnail use on network folders can expose computers to security risks.
+
+## Windows Policies
 
 ```json
 {
@@ -3640,6 +3667,9 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 //"\\Microsoft\\Windows\\Application Experience\\AitAgent",
 //"\\Microsoft\\Windows\\Application Experience\\PcaWallpaperAppDetect",
 ```
+
+## Windows Policies
+
 ```json
 {
   "File": "AppDeviceInventory.admx",
@@ -3784,6 +3814,8 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 > https://www.partitionwizard.com/partitionmanager/devicecensus-exe.html
 
+## Scheduled Task Actions
+
 `\Microsoft\Windows\Device Information` runs:
 ```powershell
 %windir%\system32\devicecensus.exe SystemCxt
@@ -3801,6 +3833,8 @@ Services Configuration is used by Windows components and apps, such as the telem
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
 
 > https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#31-services-configuration
+
+## Windows Policies
 
 ```json
 {
@@ -3855,6 +3889,8 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 - This setting works for any Windows device, such as a PC, laptop, Surface, or Surface Pen. It needs to be turned on before you can use it. 
 
 - You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles."
+
+## Windows Policies
 
 ```json
 {
