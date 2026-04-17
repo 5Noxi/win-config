@@ -87,139 +87,139 @@ HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF0
 
 This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
 
-#### Asia
+### Asia
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Asia.png?raw=true)
 
-#### Austria
+### Austria
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Austria.png?raw=true)
 
-#### Beach
+### Beach
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true)
 
-#### Blue Flowers
+### Blue Flowers
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true)
 
-#### Bones
+### Bones
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
 
-#### Castle
+### Castle
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Castle.png?raw=true)
 
-#### Cat
+### Cat
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true)
 
-#### City
+### City
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
 
-#### Dark Sunset
+### Dark Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
 
-#### Field Sunset
+### Field Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
 
-#### Flowers
+### Flowers
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
 
-#### Flowers Sunset
+### Flowers Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
 
-#### Golden Hour
+### Golden Hour
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
 
-#### Heaven
+### Heaven
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true)
 
-#### Lake
+### Lake
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Lake.png?raw=true)
 
-#### Mac
+### Mac
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true)
 
-#### Man Landscape
+### Man Landscape
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
 
-#### Meadow Sunset
+### Meadow Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true)
 
-#### Moon
+### Moon
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true)
 
-#### Moon Castle
+### Moon Castle
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Castle.png?raw=true)
 
-#### Mountains
+### Mountains
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true)
 
-#### Plants Room
+### Plants Room
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true)
 
-#### Pokemon
+### Pokemon
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Pokemon.png?raw=true)
 
-#### Rain
+### Rain
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true)
 
-#### Sea
+### Sea
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
 
-#### Sea Road
+### Sea Road
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true)
 
-#### Shop
+### Shop
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true)
 
-#### Stars
+### Stars
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars.png?raw=true)
 
-#### Sunset
+### Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sunset.png?raw=true)
 
-#### Village
+### Village
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true)
 
-#### Witcher Landscape
+### Witcher Landscape
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
 
-#### Workplace
+### Workplace
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
 
-#### World
+### World
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
 
-#### Zelda
+### Zelda
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
 
@@ -381,21 +381,21 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-
 
 > [visibility/assets | darktheme-GetThemeFromUnattendSetup.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/darktheme-GetThemeFromUnattendSetup.c)
 
-#### Light Theme
+### Light Theme
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme1.png?raw=true)
 
-#### Dark Theme
+### Dark Theme
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true)
 
 # Disable Transparency
 
-#### Transparency Enabled
+### Transparency Enabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa1.png?raw=true)
 
-#### Transparency Disabled
+### Transparency Disabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa2.png?raw=true)
 
@@ -412,11 +412,11 @@ Disables the preview function for (extensions):
 > https://learn.microsoft.com/en-us/windows/win32/api/thumbcache/nn-thumbcache-ithumbnailprovider  
 > https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/nn-shobjidl_core-iextractimage
 
-#### Enabled
+### Enabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true)
 
-#### Disabled
+### Disabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true)
 
@@ -430,11 +430,11 @@ Hide preview pane:
 
 # Remove Home & Gallery
 
-#### Home / Galery
+### Home / Galery
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/homegal.png?raw=true)
 
-#### Network Sharing Folder (Suboption)
+### Network Sharing Folder (Suboption)
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/homenet.png?raw=true)
 
@@ -463,11 +463,11 @@ Hide preview pane:
 
 Use it on W11, unless you like the new menu.
 
-#### Before
+### Before
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true)
 
-#### After
+### After
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
 
@@ -779,11 +779,11 @@ Anything written as "- *text*" behind the linked name equals the source where th
 
 Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by replacing the shortcut `.ico` with a [blank image](https://github.com/nohuto/Files/releases/download/miscellaneous/Blank.ico).
 
-#### Before
+### Before
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutbefore.png?raw=true)
 
-#### After
+### After
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutafter.png?raw=true)
 
@@ -819,11 +819,11 @@ Value gets calculated with:
 
 I created a small tool for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly (the images show vertical `75px` & `100px` difference). I personally use `110px Horizonzal - 60px Vertical` for a more vertical compact view and more space horizontally (see suboption).
 
-#### `75px` Example
+### `75px` Example
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing75.png?raw=true)
 
-#### `100px`
+### `100px`
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/iconspacing100.png?raw=true)
 
@@ -839,11 +839,11 @@ Desktop icon size notes:
 
 When you copy, move, or delete a file or folder, a progress dialog appears. You can switch between `More details` and `Fewer details`. By default, the dialog opens in the same view you last used (if you didn't switch it yet, `0` is used).
 
-#### EnthusiastMode Disabled
+### EnthusiastMode Disabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer0.png?raw=true)
 
-#### EnthusiastMode Enabled
+### EnthusiastMode Enabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/filetransfer1.png?raw=true)
 
@@ -851,19 +851,19 @@ When you copy, move, or delete a file or folder, a progress dialog appears. You 
 
 Select the amount of recent tabs from apps in the alt+tab menu.
 
-#### Don't show tabs
+### Don't show tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/0tabs.png?raw=true)
 
-#### 3 Tabs
+### 3 Tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/3tabs.png?raw=true)
 
-#### 5 Tabs
+### 5 Tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/5tabs.png?raw=true)
 
-#### 20 Tabs
+### 20 Tabs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/20tabs.png?raw=true)
 
@@ -899,11 +899,11 @@ The option changes it via `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\E
 
 Restarting the explorer is enough to apply the changes.
 
-#### New
+### New
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchnew.png?raw=true)
 
-#### Classic
+### Classic
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
 
@@ -1542,11 +1542,11 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 "This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view."
 
-#### Icon View
+### Icon View
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel0.png?raw=true)
 
-#### Category View
+### Category View
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel1.png?raw=true)
 
