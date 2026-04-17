@@ -440,7 +440,7 @@ Note that CongestionProvider (as the cmdlet `Get-NetTCPSetting` tells) controls 
 ## CongestionProvider Table
 
 | Provider | Description / algorithm |
-|---|---|---|
+|---|---|
 | `Default` | System default provider ([CUBIC](https://www.ietf.org/rfc/rfc9438.html)) |
 | `CTCP` | Microsoft hybrid loss + delay control. It adds a delay based window to standard TCP behavior and uses RTT/queue growth as an early signal.|
 | `DCTCP` | ECN-based datacenter control. It estimates the fraction of marked packets and reduces the window proportionally, keeping queues small. |
