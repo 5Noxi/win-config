@@ -1,100 +1,3 @@
-# Disable Service Splitting
-
-Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
-
-`Windows Internals 7th Edition, Part 2` handpicked snippets (shortened):
-If system physical memory, obtained via `GlobalMemoryStatusEx`, exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
-
-Service splitting is allowed only if:  
-- Splitting is globally enabled
-- The service is not marked as critical (i.e., it doesn't reboot the machine on failure)
-- The service is hosted in `svchost.exe`
-- `SvcHostSplitDisable` is not set to `1` in the service registry key
-
-Setting `SvcHostSplitDisable` to `0` for a critical service forces it to be split, but this can lead to issues.
-
-Get the current amount of `svchost` process instances with:
-```cmd
-(get-process -Name "svchost" | measure).Count
-```
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostDebug
-\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostSplitThresholdInKB
-```
-`SvcHostDebug` is set to `0` by default:
-```c
-v1 = 0;
-if ( !RegistryValueWithFallbackW && Type == 4 )
-    LOBYTE(v1) = Data != 0;
-return v1;
-```
-
-> [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)  
-> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf (page `467`f)  
-> https://learn.microsoft.com/en-us/windows/application-management/svchost-service-refactoring  
-> https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
-
-## Windows Internals
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
-
-# Kernel Values
-
-Since many people don't yet know which values exist and what default value they have, here's a list. I used IDA, WinDbg, WinObjEx, Windows Internals E7 P1 to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
-
-See win-registry repo for a list of `CCS\\Control\\Session Manager\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#session-manager-values
-
-## Windows Internals
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel2.png?raw=true)
-
-## Notes on SerializeTimerExpiration
-
-`0` = depends on `HalpAcpiAoacCapable`, can end up with `0`/`1`. `HalpSetPlatformFlags` checks if bit 21
-```c
-if ( (*(_DWORD *)(a1 + 112) & 0x200000) != 0 )
-  HalpPlatformFlags |= 8u;
-```
-is set or not, if set it's `1`, if not `0`.
-```
-LOW_POWER_S0_IDLE_CAPABLE Bit offset 21. Indicates that the platform supports low-power idle states within the ACPI S0 system power state that are more energy efficient than any Sx sleep state. If this flag is set, Windows won't try to sleep and resume, but will instead use platform idle states and connected standby.
-```
-Means for desktops/servers it's usually `0`, since "S0 Low‑Power Idle/Modern Standby" is more of a laptop/tablet thing.
-
-You can check if the bit is true or false using [iasl & acpidump](https://github.com/acpica/acpica).
-
-`1` = forced on (uses CPU 0 `KiProcessorBlock[0]`)
-`>=2` = forced `0`
-
-This isn't completey, it's currently only for the data ranges.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel-ste.png?raw=true)
-
-Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
-
-# DXG Kernel Values
-
-`dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
-
-> https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt
-
-Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
-
-See win-registry repo for a list of `CCS\\Control\\GraphicsDrivers\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#dxg-kernel-values
-
-# DWM Values
-
-This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
-
-See win-registry repo for a list of `SOFTWARE\\Microsoft\\Windows\\Dwm\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#dwm-values
-
 # Quantum/Priority Separation
 
 A quantum is the amount of time a thread is permitted to run before Windows checks to see whether another thread at the same priority is waiting to run. If a thread completes its quantum and there are no other threads at its priority, Windows permits the thread to run for another quantum.
@@ -221,6 +124,61 @@ Miscellaneous notes:
     "Win32PrioritySeparation" = 2;
 ```
 
+# Kernel Values
+
+Since many people don't yet know which values exist and what default value they have, here's a list. I used IDA, WinDbg, WinObjEx, Windows Internals E7 P1 to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
+
+See win-registry repo for a list of `CCS\\Control\\Session Manager\\...` values/defaults/notes:
+> https://github.com/nohuto/win-registry#session-manager-values
+
+## Windows Internals
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel2.png?raw=true)
+
+## Notes on SerializeTimerExpiration
+
+`0` = depends on `HalpAcpiAoacCapable`, can end up with `0`/`1`. `HalpSetPlatformFlags` checks if bit 21
+```c
+if ( (*(_DWORD *)(a1 + 112) & 0x200000) != 0 )
+  HalpPlatformFlags |= 8u;
+```
+is set or not, if set it's `1`, if not `0`.
+```
+LOW_POWER_S0_IDLE_CAPABLE Bit offset 21. Indicates that the platform supports low-power idle states within the ACPI S0 system power state that are more energy efficient than any Sx sleep state. If this flag is set, Windows won't try to sleep and resume, but will instead use platform idle states and connected standby.
+```
+Means for desktops/servers it's usually `0`, since "S0 Low‑Power Idle/Modern Standby" is more of a laptop/tablet thing.
+
+You can check if the bit is true or false using [iasl & acpidump](https://github.com/acpica/acpica).
+
+`1` = forced on (uses CPU 0 `KiProcessorBlock[0]`)
+`>=2` = forced `0`
+
+This isn't completey, it's currently only for the data ranges.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel-ste.png?raw=true)
+
+Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
+
+# DXG Kernel Values
+
+`dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
+
+> https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt
+
+Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
+
+See win-registry repo for a list of `CCS\\Control\\GraphicsDrivers\\...` values/defaults/notes:
+> https://github.com/nohuto/win-registry#dxg-kernel-values
+
+# DWM Values
+
+This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
+
+See win-registry repo for a list of `SOFTWARE\\Microsoft\\Windows\\Dwm\\...` values/defaults/notes:
+> https://github.com/nohuto/win-registry#dwm-values
+
 # MMCSS Values
 
 See win-registry repo for a list of `SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile\\...` values/defaults/notes:
@@ -342,6 +300,48 @@ It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely 
 > https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-does-the-mmcss-alwayson-registry-setting-exist
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/nolazymode.png?raw=true)
+
+# Disable Service Splitting
+
+Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
+
+`Windows Internals 7th Edition, Part 2` handpicked snippets (shortened):
+If system physical memory, obtained via `GlobalMemoryStatusEx`, exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
+
+Service splitting is allowed only if:  
+- Splitting is globally enabled
+- The service is not marked as critical (i.e., it doesn't reboot the machine on failure)
+- The service is hosted in `svchost.exe`
+- `SvcHostSplitDisable` is not set to `1` in the service registry key
+
+Setting `SvcHostSplitDisable` to `0` for a critical service forces it to be split, but this can lead to issues.
+
+Get the current amount of `svchost` process instances with:
+```cmd
+(get-process -Name "svchost" | measure).Count
+```
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostDebug
+\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostSplitThresholdInKB
+```
+`SvcHostDebug` is set to `0` by default:
+```c
+v1 = 0;
+if ( !RegistryValueWithFallbackW && Type == 4 )
+    LOBYTE(v1) = Data != 0;
+return v1;
+```
+
+> [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)  
+> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf (page `467`f)  
+> https://learn.microsoft.com/en-us/windows/application-management/svchost-service-refactoring  
+> https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
+
+## Windows Internals
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
 
 # Disable Scheduled Tasks
 
