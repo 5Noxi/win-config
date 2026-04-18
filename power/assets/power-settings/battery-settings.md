@@ -1,0 +1,28 @@
+---
+title: Battery settings overview | Microsoft Learn
+canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/battery-settings
+description: Settings in this subgroup control the customization of battery actions and thresholds.
+---
+
+# Battery settings overview | Microsoft Learn
+
+Settings in this subgroup control the customization of battery actions and thresholds.
+
+Windows will execute the  [Critical Battery Action](battery-settings-critical-battery-action) | when the battery is in the critical battery power state. The critical battery power state is determined when the battery percentage reaches the higher of:
+
+1. The [DefaultAlert1 Threshold](/en-us/windows/win32/power/battery-information-str), for systems which use the ACPI control method battery interface, is provided by default capacity of low
+2. The battery charge level configured via provisioning or powercfg (the  [Critical Battery Threshold](battery-settings-critical-battery-threshold) |)
+
+For example, if a device with one battery has the first value as 10% and the second value as 5%, the battery would enter the critical battery power state at 10%.
+
+To view these two values, run **pwrtest.exe /info:battery** from a repro system.
+
+In the case of a device with multiple batteries, the Critical Battery Action will execute if any of the batteries are in a critical battery power state.
+
+## Subgroup, GUID, aliases, and setting visibility
+
+- **Subgroup:** Battery settings
+- **GUID:** e73a048d-bf27-4f12-9731-8b2076e8891f
+- **Windows provisioning path:**`Common\Power\Policy\Settings\Battery`
+- **PowerCfg alias:**`SUB_BATTERY`
+- **Hidden setting:** Yes
