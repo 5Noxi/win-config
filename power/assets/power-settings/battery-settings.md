@@ -2,6 +2,7 @@
 title: Battery settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/battery-settings
 description: Settings in this subgroup control the customization of battery actions and thresholds.
+note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
 ---
 
 # Battery settings overview | Microsoft Learn
@@ -26,3 +27,26 @@ In the case of a device with multiple batteries, the Critical Battery Action wil
 - **Windows provisioning path:**`Common\Power\Policy\Settings\Battery`
 - **PowerCfg alias:**`SUB_BATTERY`
 - **Hidden setting:** Yes
+
+## Critical battery notification
+
+- **GUID:** 5dbb7c9f-38e9-40d2-9749-4f8a0e9f640f
+- **PowerCfg alias:**`BATFLAGSCRIT`
+- **Description:** Specify whether a notification is shown when the battery capacity reaches the critical level.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Off | 0 | The critical battery notification is disabled. |
+| 001 | On | 1 | The critical battery notification is enabled. |
+
+## Low battery notification
+
+- **GUID:** bcded951-187b-4d05-bccc-f7e51960c258
+- **PowerCfg alias:**`BATFLAGSLOW`
+- **Description:** Specify whether a notification is shown when the battery capacity reaches the low level.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Off | 0 | The low battery notification is disabled. |
+| 001 | On | 1 | The low battery notification is enabled. |
+

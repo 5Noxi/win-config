@@ -13,7 +13,7 @@ For example, in a NUMA node with 16 logical processors, configuring the value of
 ## Aliases and setting visibility
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\CPMinCores`, `Common\Power\Policy\Settings\Processor\CPMinCores1`
-- **PowerCfg:**`CPMINCORES`, `CPMINCORES1`
+- **PowerCfg:**`CPMINCORES`, `CPMINCORES1`
 - **Hidden setting:** Yes
 
 ## Values

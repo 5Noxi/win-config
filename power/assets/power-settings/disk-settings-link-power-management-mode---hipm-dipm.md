@@ -2,6 +2,7 @@
 title: Link power management mode - HIPM/DIPM | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm
 description: Configures the link power management mode for disk and storage devices that are attached to the system through an AHCI interface.
+note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
 ---
 
 # Link power management mode - HIPM/DIPM | Microsoft Learn
@@ -17,11 +18,13 @@ Configures the link power management mode for disk and storage devices that are 
 
 ## Values
 
-| Index | Name | Description |
-| --- | --- | --- |
-| 0 | Active | Link power management is not used. |
-| 1 | HIPM | Host-Initiated Power Management (HIPM) is used. |
-| 2 | HIPM and DIPM | HIPM and Device-Initiated Power Management (DIPM) are used. |
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Active | 0 | Neither Host or Device initiated allowed |
+| 001 | HIPM | 1 | Host initiated allowed only |
+| 002 | HIPM+DIPM | 3 | Both Host and Device initiated allowed |
+| 003 | DIPM | 2 | Device initiated allowed only |
+| 004 | Lowest | 7 | HIPM+DIPM+DEVSLP |
 
 ## Applies to
 
