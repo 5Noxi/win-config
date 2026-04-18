@@ -36,8 +36,8 @@ In the case of a device with multiple batteries, the Critical Battery Action wil
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Off | 0 | The critical battery notification is disabled. |
-| 001 | On | 1 | The critical battery notification is enabled. |
+| 000 | Off | 0 | Off |
+| 001 | On | 1 | On |
 
 ## Low battery notification
 
@@ -47,6 +47,6 @@ In the case of a device with multiple batteries, the Critical Battery Action wil
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Off | 0 | The low battery notification is disabled. |
-| 001 | On | 1 | The low battery notification is enabled. |
+| 000 | Off | 0 | Off |
+| 001 | On | 1 | On |
 

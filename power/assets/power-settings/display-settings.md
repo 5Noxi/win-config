@@ -38,6 +38,6 @@ Settings in this subgroup control the power management of the display.
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Off | 0 | Adaptive brightness is disabled. |
-| 001 | On | 1 | Adaptive brightness is enabled. |
+| 000 | Off | 0 | Off |
+| 001 | On | 1 | On |
 

@@ -25,9 +25,9 @@ Settings in this subgroup do not belong to any other subgroup.
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Power saver | a1841308-3541-4fab-bc81-f71556f20b4a | Uses the Power saver plan personality. |
-| 001 | High performance | 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c | Uses the High performance plan personality. |
-| 002 | Balanced | 381b4222-f694-41f0-9685-ff5bb260df2e | Uses the Balanced plan personality. |
+| 000 | Power saver | a1841308-3541-4fab-bc81-f71556f20b4a | Saves energy by reducing your computer's performance where possible. |
+| 001 | High performance | 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c | Favors performance, but may use more energy. |
+| 002 | Balanced | 381b4222-f694-41f0-9685-ff5bb260df2e | Automatically balances performance with energy consumption on capable hardware. |
 
 ## Disconnected Standby Mode
 
@@ -37,6 +37,6 @@ Settings in this subgroup do not belong to any other subgroup.
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Normal | 0 | Uses the normal disconnected standby behavior. |
-| 001 | Aggressive | 1 | Uses a more aggressive disconnected standby behavior. |
+| 000 | Normal | 0 | Normal |
+| 001 | Aggressive | 1 | Aggressive |
 

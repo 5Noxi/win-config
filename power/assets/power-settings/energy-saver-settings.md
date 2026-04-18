@@ -38,8 +38,8 @@ Settings in this subgroup control the battery threshold and brightness when Ener
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | User | 0 | Uses the user-configured Energy Saver behavior. |
-| 001 | Aggressive | 1 | Uses a more aggressive Energy Saver policy. |
+| 000 | User | 0 | Engage Energy Saver based on user settings. |
+| 001 | Aggressive | 1 | Allow Windows to engage Energy Saver aggressively. |
 
 ## Charge level
 

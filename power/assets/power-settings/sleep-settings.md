@@ -25,6 +25,6 @@ Settings in this subgroup control sleep, resume, and other related functionality
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Disable | 0 | Legacy RTC mitigations are disabled. |
-| 001 | Enable | 1 | Legacy RTC mitigations are enabled. |
+| 000 | Disable | 0 | Disable legacy RTC mitigations |
+| 001 | Enable | 1 | Enable legacy RTC mitigations |
 

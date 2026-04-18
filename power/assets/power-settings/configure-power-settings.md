@@ -102,8 +102,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Available | 0 | The desktop background slide show remains available. |
-| 001 | Paused | 1 | The desktop background slide show is paused. |
+| 000 | Available | 0 | Available |
+| 001 | Paused | 1 | The slide show is paused to save power. |
 
 ## Power Saving Mode
 
@@ -113,10 +113,10 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Maximum Performance | c1ab164f-834f-463d-8544-a40e93ab5472 | Keeps the wireless adapter in its maximum performance mode. |
-| 001 | Low Power Saving | 787cbccb-cd4b-4776-8be5-5f8ae4726f2b | Applies a low power-saving policy to the wireless adapter. |
-| 002 | Medium Power Saving | 6728e412-40d1-4ab0-8d15-f3c56f303eb5 | Applies a medium power-saving policy to the wireless adapter. |
-| 003 | Maximum Power Saving | e012dc0f-8397-46b5-a060-0de84f96388e | Applies the strongest power-saving policy to the wireless adapter. |
+| 000 | Maximum Performance | c1ab164f-834f-463d-8544-a40e93ab5472 | Achieve maximum wireless performance with no power savings. |
+| 001 | Low Power Saving | 787cbccb-cd4b-4776-8be5-5f8ae4726f2b | Achieve minimum power savings. |
+| 002 | Medium Power Saving | 6728e412-40d1-4ab0-8d15-f3c56f303eb5 | Balance between performance and power savings based on network traffic. |
+| 003 | Maximum Power Saving | e012dc0f-8397-46b5-a060-0de84f96388e | Achieve maximum power savings. |
 
 ## Hub Selective Suspend Timeout
 
@@ -139,8 +139,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Disabled | 0 | USB selective suspend is disabled. |
-| 001 | Enabled | 1 | USB selective suspend is enabled. |
+| 000 | Disabled | 0 | Do not enable USB selective suspend |
+| 001 | Enabled | 1 | Enable USB selective suspend |
 
 ## Setting IOC on all TDs
 
@@ -150,8 +150,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Disabled | 0 | IOC is not set on all transfer descriptors. |
-| 001 | Enabled | 1 | IOC is set on all transfer descriptors. |
+| 000 | Disabled | 0 | Set IOC only for the last TD in a transfer |
+| 001 | Enabled | 1 | Set IOC for for all TDs |
 
 ## USB 3 Link Power Mangement
 
@@ -161,10 +161,10 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Off | 0 | Disables USB 3 link power management. |
-| 001 | Minimum power savings | 1 | Applies the minimum USB 3 link power-saving policy. |
-| 002 | Moderate power savings | 2 | Applies the moderate USB 3 link power-saving policy. |
-| 003 | Maximum power savings | 3 | Applies the maximum USB 3 link power-saving policy. |
+| 000 | Off | 0 | Do not enable the U1 U2 states |
+| 001 | Minimum power savings | 1 | Enable the U1 U2 states but choose conservative timeout values to optimize for peformance |
+| 002 | Moderate power savings | 2 | Enable the U1 U2 states and choose optimal timeout values to balance power and peformance |
+| 003 | Maximum power savings | 3 | Enable the U1 U2 states and choose aggressive timeout values to optimize for power |
 
 ## Execution Required power request timeout
 
@@ -213,8 +213,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Deep Sleep Disabled | 0 | Deep Sleep is disabled. |
-| 001 | Deep Sleep Enabled | 1 | Deep Sleep is enabled. |
+| 000 | Deep Sleep Disabled | 0 | Deep Sleep Disabled |
+| 001 | Deep Sleep Enabled | 1 | Deep Sleep Enabled |
 
 ## Interrupt Steering Mode
 
@@ -224,13 +224,13 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Default | 0 | Uses the default interrupt steering policy. |
-| 001 | Any processor | 1 | Allows interrupts to be steered to any processor. |
-| 002 | Any unparked processor with time delay | 2 | Allows steering to any unparked processor after a delay. |
-| 003 | Any unparked processor | 3 | Allows steering to any unparked processor immediately. |
-| 004 | Lock Interrupt Routing | 4 | Locks interrupt routing in place. |
-| 005 | Processor 0 | 5 | Routes interrupts to processor 0. |
-| 006 | Processor 1 | 6 | Routes interrupts to processor 1. |
+| 000 | Default | 0 | Default |
+| 001 | Any processor | 1 | Route interrupts to any processor |
+| 002 | Any unparked processor with time delay | 2 | Route interrupts to any unparked processor with time delay |
+| 003 | Any unparked processor | 3 | Route interrupts to any unparked processor |
+| 004 | Lock Interrupt Routing | 4 | Lock Interrupt Routing |
+| 005 | Processor 0 | 5 | Route interrupts to Processor 0 |
+| 006 | Processor 1 | 6 | Route interrupts to Processor 1 |
 
 ## Target Load
 
@@ -266,8 +266,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | None | 0 | No explicit GPU preference policy is applied. |
-| 001 | Low Power | 1 | Prefers the low-power GPU. |
+| 000 | None | 0 | No preference |
+| 001 | Low Power | 1 | Prefer low-power GPU |
 
 ## Standby Reserve Time
 
@@ -329,8 +329,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Disabled | 0 | User presence prediction is disabled. |
-| 001 | Enabled | 1 | User presence prediction is enabled. |
+| 000 | Disabled | 0 | Disable User Presence Prediction mode. |
+| 001 | Enabled | 1 | Enable User Presence Prediction mode. |
 
 ## Standby Budget Percent
 
@@ -366,8 +366,8 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Video playback power-saving bias | 0 | Biases playback toward lower power use. |
-| 001 | Video playback performance bias | 1 | Biases playback toward higher playback quality and performance. |
+| 000 | Video playback power-saving bias | 0 | Video playback quality would be biased towards battery life. |
+| 001 | Video playback performance bias | 1 | Video playback quality would be biased towards performance. |
 
 ## When playing video
 
@@ -377,6 +377,6 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Optimize video quality | 5c67a112-a4c9-483f-b4a7-1d473becafdc | Optimizes for video quality. |
-| 001 | Balanced | 651288e5-a7ed-4076-a96b-6cc62d848fe1 | Uses a balanced video playback policy. |
-| 002 | Optimize power savings | 16260968-c914-4aa1-8736-b7a6f3c5ae9b | Optimizes for power savings. |
+| 000 | Optimize video quality | 5c67a112-a4c9-483f-b4a7-1d473becafdc | Gives the optimum video quality during playback |
+| 001 | Balanced | 651288e5-a7ed-4076-a96b-6cc62d848fe1 | A balance of video quality and power savings |
+| 002 | Optimize power savings | 16260968-c914-4aa1-8736-b7a6f3c5ae9b | Gives optimum power savings during playback |

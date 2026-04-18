@@ -25,7 +25,7 @@ Settings in this subgroup control the customization of system button actions.
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 000 | Sleep | 2 | Sets the Start menu power button action to Sleep. |
-| 001 | Hibernate | 3 | Sets the Start menu power button action to Hibernate. |
-| 002 | Shut down | 6 | Sets the Start menu power button action to Shut down. |
+| 000 | Sleep | 2 | Sleep |
+| 001 | Hibernate | 3 | Hibernate |
+| 002 | Shut down | 6 | Shut down |
 
