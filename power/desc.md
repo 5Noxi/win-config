@@ -36,18 +36,16 @@ Note that everything written below is based on the [`eXtensible Host Controller 
 
 When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification is throttled according to the Interrupter's Moderation (`IMOD`) register. `IMOD` combines the Interrupt Moderation Interval (`IMODI`) and the Interrupt Moderation Counter (`IMODC`). Software programs `IMODI` in 250 ns units, the hardware copies it into `IMODC`, counts down, and only raises the interrupt once the counter reaches zero and the *Event Handler Busy* (`EHB`) flag has been cleared. `interrupts/sec = 1 / (250 ns * IMODI)` and `inter-interrupt interval = 250 ns * (interrupts/sec)^-1`. "Recommended tuning values" are 0x28B-0x15CC with a default of 0x4000 (~1ms). For example, `IMODI = 512` guarantees at least 128 us between interrupts, so the maximum rate stays under 8kHz. Writing `IMODI = 0` disables throttling and interrupts are delivered immediately once `EHB` is clear and the *Event Ring* is non empty. Blocking Event handling ensures `IPE` (an internal flag) and `EHB` cooperate with `IMODC`. A new interrupt is prevented until `IMODC` reaches zero, `IPE` is asserted, and `EHB` is cleared, when those conditions hold, the counter reloads from `IMODI` so the pacing cycle repeats.
 
-## Bit Descriptions (taken from document)
+## Bit Descriptions
 
-**Interrupter Moderation Register (IMOD):**
+### Interrupter Moderation Register (IMOD)
 
 | Bit   | Description|
 | :---: | --- |
 | 15:0 | **Interrupt Moderation Interval (IMODI) – RW.** Default = '4000' (~1ms). Minimum inter-interrupt interval. The interval is specified in 250ns increments. A value of '0' disables interrupt throttling logic and interrupts shall be generated immediately if IP = '0', EHB = '0', and the *Event Ring* is not empty. |
 | 31:16 | **Interrupt Moderation Counter (IMODC) – RW.** Default = undefined. Down counter. Loaded with the IMODI value whenever IP is cleared to '0', counts down to '0', and stops. The associated interrupt shall be signaled whenever this counter is '0', the *Event Ring* is not empty, the IE and IP flags = '1', and EHB = '0'. This counter may be directly written by software at any time to alter the interrupt rate. |
 
----
-
-**Host Controller Structural Parameters 2 (HCSPARAMS2):**
+### Host Controller Structural Parameters 2 (HCSPARAMS2)
 
 | Bit  | Description |
 | :---: | --- |
@@ -57,9 +55,7 @@ When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification i
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/HCSPARAMS2-structure.png?raw=true)
 
----
-
-**Runtime Register Space Offset Register (RTSOFF):**
+### Runtime Register Space Offset Register (RTSOFF)
 
 | Bit  | Description |
 | :---: | --- |
@@ -69,9 +65,7 @@ When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification i
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/RTSOFF-structure.png?raw=true)
 
----
-
-**Interrupter Management Register Bit Definitions (IMAN):**
+### Interrupter Management Register Bit Definitions (IMAN)
 
 | Bit  | Description |
 | :---: | --- |
@@ -98,35 +92,35 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 ### Settings belonging to no subgroup
 
 - [Require a password on wakeup](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings-prompt-for-password-on-resume.md) (`CONSOLELOCK`, `0e796bdb-100d-47d6-a2d5-f7d2daa51f51`)
-- [Power plan type](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md) (`PERSONALITY`, `245d8541-3943-4422-b025-13a784f679b7`)
+- [Power plan type](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md#power-plan-type) (`PERSONALITY`, `245d8541-3943-4422-b025-13a784f679b7`)
 - [Device idle policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings-device-idle-policy.md) (`DEVICEIDLE`, `4faab71a-92e5-4726-b531-224559672d19`)
-- [Disconnected Standby Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md) (`DISCONNECTEDSTANDBYMODE`, `68afb2d9-ee95-47a8-8f50-4115088073b1`)
+- [Disconnected Standby Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md#disconnected-standby-mode) (`DISCONNECTEDSTANDBYMODE`, `68afb2d9-ee95-47a8-8f50-4115088073b1`)
 - [Networking connectivity in Standby](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings-allow-networking-during-standby.md) (`CONNECTIVITYINSTANDBY`, `f15576e8-98b7-4186-b944-eafa664402d9`)
 
 ### Hard disk
 
 - [AHCI Link Power Management - HIPM/DIPM](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings-link-power-management-mode---hipm-dipm.md) (`0b2d69d7-a2a1-449c-9680-f91c70521c60`)
-- [Maximum Power Level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md) (`DISKMAXPOWER`, `51dea550-bb38-4bc4-991b-eacf37be5ec8`)
+- [Maximum Power Level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#maximum-power-level) (`DISKMAXPOWER`, `51dea550-bb38-4bc4-991b-eacf37be5ec8`)
 - [Turn off hard disk after](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings-disk-idle-timeout.md) (`DISKIDLE`, `6738e2c4-e8a5-4a42-b16a-e040e769756e`)
 - [Hard disk burst ignore time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings-disk-burst-ignore-time.md) (`DISKBURSTIGNORE`, `80e3c60e-bb94-4ad8-bbe0-0d3195efc663`)
-- [Secondary NVMe Idle Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md) (`d3d55efd-c1ff-424e-9dc3-441be7833010`)
-- [Primary NVMe Idle Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md) (`NVMEPRIMARYIDLETIMEOUT`, `d639518a-e56d-4345-8af2-b9f32fb26109`)
+- [Secondary NVMe Idle Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#secondary-nvme-idle-timeout) (`d3d55efd-c1ff-424e-9dc3-441be7833010`)
+- [Primary NVMe Idle Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#primary-nvme-idle-timeout) (`NVMEPRIMARYIDLETIMEOUT`, `d639518a-e56d-4345-8af2-b9f32fb26109`)
 - [AHCI Link Power Management - Adaptive](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings-link-power-management-mode---adaptive.md) (`dab60367-53fe-4fbc-825e-521d069d2456`)
-- [Secondary NVMe Power State Transition Latency Tolerance](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md) (`dbc9e238-6de9-49e3-92cd-8c2b4946b472`)
-- [NVMe NOPPME](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md) (`DISKNVMENOPPME`, `fc7372b6-ab2d-43ee-8797-15e9841f2cca`)
-- [Primary NVMe Power State Transition Latency Tolerance](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md) (`fc95af4d-40e7-4b6d-835a-56d131dbc80e`)
+- [Secondary NVMe Power State Transition Latency Tolerance](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#secondary-nvme-power-state-transition-latency-tolerance) (`dbc9e238-6de9-49e3-92cd-8c2b4946b472`)
+- [NVMe NOPPME](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#nvme-noppme) (`DISKNVMENOPPME`, `fc7372b6-ab2d-43ee-8797-15e9841f2cca`)
+- [Primary NVMe Power State Transition Latency Tolerance](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#primary-nvme-power-state-transition-latency-tolerance) (`fc95af4d-40e7-4b6d-835a-56d131dbc80e`)
 
 ### Desktop background settings
 
-- [Slide show](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`309dce9b-bef4-4119-9921-a851fb12f0f4`)
+- [Slide show](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#slide-show) (`309dce9b-bef4-4119-9921-a851fb12f0f4`)
 
 ### Wireless Adapter Settings
 
-- [Power Saving Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`12bbebe6-58d6-4636-95bb-3217ef867c1a`)
+- [Power Saving Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#power-saving-mode) (`12bbebe6-58d6-4636-95bb-3217ef867c1a`)
 
 ### Sleep
 
-- [Legacy RTC mitigations](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings.md) (`LEGACYRTCMITIGATION`, `1a34bdc3-7e6b-442e-a9d0-64b6ef378e84`)
+- [Legacy RTC mitigations](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings.md#legacy-rtc-mitigations) (`LEGACYRTCMITIGATION`, `1a34bdc3-7e6b-442e-a9d0-64b6ef378e84`)
 - [Allow Away Mode Policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings-allow-away-mode.md) (`AWAYMODE`, `25dfa149-5dd1-4736-b5ab-e8a37b5b8187`)
 - [Sleep after](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings-sleep-idle-timeout.md) (`STANDBYIDLE`, `29f6c1db-86da-48c5-9fdb-f2b67b1f44da`)
 - [System unattended sleep timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings-sleep-unattended-idle-timeout.md) (`UNATTENDSLEEP`, `7bc4a2f9-d8fc-4469-b07b-33eb785aaca0`)
@@ -139,23 +133,23 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 
 ### USB settings
 
-- [Hub Selective Suspend Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`0853a681-27c8-4100-a2fd-82013e970683`)
-- [USB selective suspend setting](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`48e6b7a6-50f5-4782-a5d4-53bb8f07e226`)
-- [Setting IOC on all TDs](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`498c044a-201b-4631-a522-5c744ed4e678`)
-- [USB 3 Link Power Mangement](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`d4e98f31-5ffe-4ce1-be31-1b38b384c009`)
+- [Hub Selective Suspend Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#hub-selective-suspend-timeout) (`0853a681-27c8-4100-a2fd-82013e970683`)
+- [USB selective suspend setting](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#usb-selective-suspend-setting) (`48e6b7a6-50f5-4782-a5d4-53bb8f07e226`)
+- [Setting IOC on all TDs](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#setting-ioc-on-all-tds) (`498c044a-201b-4631-a522-5c744ed4e678`)
+- [USB 3 Link Power Mangement](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#usb-3-link-power-mangement) (`d4e98f31-5ffe-4ce1-be31-1b38b384c009`)
 
 ### Idle Resiliency
 
-- [Execution Required power request timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`EXECTIME`, `3166bc41-7e98-4e03-b34e-ec0f5f2b218e`)
-- [IO coalescing timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`COALTIME`, `c36f0eb4-2988-4a70-8eee-0884fc2c2433`)
-- [Processor Idle Resiliency Timer Resolution](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`PROCIR`, `c42b79aa-aa3a-484b-a98f-2cf32aa90a28`)
-- [Deep Sleep Enabled/Disabled](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`DEEPSLEEP`, `d502f7ee-1dc7-4efd-a55d-f04b6f5c0545`)
+- [Execution Required power request timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#execution-required-power-request-timeout) (`EXECTIME`, `3166bc41-7e98-4e03-b34e-ec0f5f2b218e`)
+- [IO coalescing timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#io-coalescing-timeout) (`COALTIME`, `c36f0eb4-2988-4a70-8eee-0884fc2c2433`)
+- [Processor Idle Resiliency Timer Resolution](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#processor-idle-resiliency-timer-resolution) (`PROCIR`, `c42b79aa-aa3a-484b-a98f-2cf32aa90a28`)
+- [Deep Sleep Enabled/Disabled](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#deep-sleep-enableddisabled) (`DEEPSLEEP`, `d502f7ee-1dc7-4efd-a55d-f04b6f5c0545`)
 
 ### Interrupt Steering Settings
 
-- [Interrupt Steering Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`MODE`, `2bfc24f9-5ea2-4801-8213-3dbae01aa39d`)
-- [Target Load](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`PERPROCLOAD`, `73cde64d-d720-4bb2-a860-c755afe77ef2`)
-- [Unparked time trigger](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`UNPARKTIME`, `d6ba4903-386f-4c2c-8adb-5c21b3328d25`)
+- [Interrupt Steering Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#interrupt-steering-mode) (`MODE`, `2bfc24f9-5ea2-4801-8213-3dbae01aa39d`)
+- [Target Load](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#target-load) (`PERPROCLOAD`, `73cde64d-d720-4bb2-a860-c755afe77ef2`)
+- [Unparked time trigger](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#unparked-time-trigger) (`UNPARKTIME`, `d6ba4903-386f-4c2c-8adb-5c21b3328d25`)
 
 ### Power buttons and lid
 
@@ -164,7 +158,7 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Enable forced button/lid shutdown](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings-power-button-forced-shutdown.md) (`SHUTDOWN`, `833a6b62-dfa4-46d1-82f8-e09e34d029d6`)
 - [Sleep button action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings-sleep-button-action.md) (`SBUTTONACTION`, `96996bc0-ad50-47ec-923b-6f41874dd9eb`)
 - [Lid open action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/lid-open-wake-action.md) (`LIDOPENWAKE`, `99ff10e7-23b1-4c07-a9d1-5c3206d741b4`)
-- [Start menu power button](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings.md) (`UIBUTTON_ACTION`, `a7066653-8d6c-40a8-910e-a1f54b84c7e5`)
+- [Start menu power button](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings.md#start-menu-power-button) (`UIBUTTON_ACTION`, `a7066653-8d6c-40a8-910e-a1f54b84c7e5`)
 
 ### PCI Express
 
@@ -252,52 +246,52 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 
 ### Graphics settings
 
-- [GPU preference policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`GPUPREFERENCEPOLICY`, `dd848b2a-8a5d-4451-9ae2-39cd41658f6c`)
+- [GPU preference policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#gpu-preference-policy) (`GPUPREFERENCEPOLICY`, `dd848b2a-8a5d-4451-9ae2-39cd41658f6c`)
 
 ### Display
 
 - [Dim display after](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-dim-annoyance-timeout.md) (`VIDEODIM`, `17aaa29b-8b43-4b94-aafe-35f64daaf1ee`)
 - [Turn off display after](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-display-idle-timeout.md) (`VIDEOIDLE`, `3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e`)
 - [Advanced Color quality bias](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-advanced-color-quality-bias.md) (`ADVANCEDCOLORQUALITYBIAS`, `684c3e69-a4f7-4014-8754-d45179a56167`)
-- [Console lock display off timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings.md) (`VIDEOCONLOCK`, `8ec4b3a5-6868-48c2-be75-4f3044be88a7`)
+- [Console lock display off timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings.md#console-lock-display-off-timeout) (`VIDEOCONLOCK`, `8ec4b3a5-6868-48c2-be75-4f3044be88a7`)
 - [Adaptive display](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-adaptive-display-idle-timeout.md) (`VIDEOADAPT`, `90959d22-d6a1-49b9-af93-bce885ad335b`)
 - [Allow display required policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-allow-display-required-policy.md) (`ALLOWDISPLAY`, `a9ceb8da-cd46-44fb-a98b-02af69de4623`)
 - [Display brightness](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-display-brightness-level.md) (`VIDEONORMALLEVEL`, `aded5e82-b909-4619-9949-f5d71dac0bcb`)
 - [Dimmed display brightness](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-dim-display-brightness.md) (`f1fbfde2-a960-4165-9f88-50667911ce96`)
-- [Enable adaptive brightness](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings.md) (`ADAPTBRIGHT`, `fbd9aa66-9553-4097-ba44-ed6e9d65eab8`)
+- [Enable adaptive brightness](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings.md#enable-adaptive-brightness) (`ADAPTBRIGHT`, `fbd9aa66-9553-4097-ba44-ed6e9d65eab8`)
 
 ### Presence Aware Power Behavior
 
 - [Human Presence Sensor Adaptive Away Display Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-away-display-timeout.md) (`HUPRVIDEOIDLE`, `0a7d6ab6-ac83-4ad1-8282-eca5b58308f3`)
-- [Standby Reserve Time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`STANDBYRESERVETIME`, `468fe7e5-1158-46ec-88bc-5b96c9e44fd0`)
-- [Standby Reset Percentage](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`STANDBYRESETPERCENT`, `49cb11a5-56e2-4afb-9d38-3df47872e21b`)
-- [Non-sensor Input Presence Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`NSENINPUTPRETIME`, `5adbbfbc-074e-4da1-ba38-db8b36b2c8f3`)
-- [Standby Budget Grace Period](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`STANDBYBUDGETGRACEPERIOD`, `60c07fe1-0556-45cf-9903-d56e32210242`)
-- [User Presence Prediction mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`USERPRESENCEPREDICTION`, `82011705-fb95-4d46-8d35-4042b1d20def`)
-- [Standby Budget Percent](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`STANDBYBUDGETPERCENT`, `9fe527be-1b70-48da-930d-7bcf17b44990`)
+- [Standby Reserve Time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#standby-reserve-time) (`STANDBYRESERVETIME`, `468fe7e5-1158-46ec-88bc-5b96c9e44fd0`)
+- [Standby Reset Percentage](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#standby-reset-percentage) (`STANDBYRESETPERCENT`, `49cb11a5-56e2-4afb-9d38-3df47872e21b`)
+- [Non-sensor Input Presence Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#non-sensor-input-presence-timeout) (`NSENINPUTPRETIME`, `5adbbfbc-074e-4da1-ba38-db8b36b2c8f3`)
+- [Standby Budget Grace Period](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#standby-budget-grace-period) (`STANDBYBUDGETGRACEPERIOD`, `60c07fe1-0556-45cf-9903-d56e32210242`)
+- [User Presence Prediction mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#user-presence-prediction-mode) (`USERPRESENCEPREDICTION`, `82011705-fb95-4d46-8d35-4042b1d20def`)
+- [Standby Budget Percent](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#standby-budget-percent) (`STANDBYBUDGETPERCENT`, `9fe527be-1b70-48da-930d-7bcf17b44990`)
 - [Human Presence Sensor Adaptive Away Dim Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-away-dim-timeout.md) (`HUPRVIDEODIMAWAY`, `a79c8e0e-f271-482d-8f8a-5db9a18312de`)
-- [Standby Reserve Grace Period](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`STANDBYRESERVEGRACEPERIOD`, `c763ee92-71e8-4127-84eb-f6ed043a3e3d`)
+- [Standby Reserve Grace Period](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#standby-reserve-grace-period) (`STANDBYRESERVEGRACEPERIOD`, `c763ee92-71e8-4127-84eb-f6ed043a3e3d`)
 - [Human Presence Sensor Adaptive Inattentive Dim Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-inattentive-dim-timeout.md) (`HUPRVIDEODIM`, `cf8c6097-12b8-4279-bbdd-44601ee5209d`)
 - [Human Presence Sensor Adaptive Inattentive Display Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-inattentive-display-timeout.md) (`HUPRVIDEOIDLEINATTENTIVE`, `ee16691e-6ab3-4619-bb48-1c77c9357e5a`)
 
 ### Video playback quality
 
-- [Video playback quality bias](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`10778347-1370-4ee0-8bbd-33bdacaade49`)
-- [When playing video](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md) (`34c7b99f-9a6d-4b3c-8dc7-b6693b78cef4`)
+- [Video playback quality bias](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#video-playback-quality-bias) (`10778347-1370-4ee0-8bbd-33bdacaade49`)
+- [When playing video](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#when-playing-video) (`34c7b99f-9a6d-4b3c-8dc7-b6693b78cef4`)
 
 ### Energy Saver settings
 
-- [Display brightness weight](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md) (`ESBRIGHTNESS`, `13d09884-f74e-474a-a852-b6bde8ad03a8`)
-- [Energy Saver Policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md) (`ESPOLICY`, `5c5bb349-ad29-4ee2-9d0b-2b25270f7a81`)
-- [Charge level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md) (`ESBATTTHRESHOLD`, `e69653ca-cf7f-4f05-aa73-cb833fa90ad4`)
+- [Display brightness weight](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md#display-brightness-weight) (`ESBRIGHTNESS`, `13d09884-f74e-474a-a852-b6bde8ad03a8`)
+- [Energy Saver Policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md#energy-saver-policy) (`ESPOLICY`, `5c5bb349-ad29-4ee2-9d0b-2b25270f7a81`)
+- [Charge level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md#charge-level) (`ESBATTTHRESHOLD`, `e69653ca-cf7f-4f05-aa73-cb833fa90ad4`)
 
 ### Battery
 
-- [Critical battery notification](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings.md) (`BATFLAGSCRIT`, `5dbb7c9f-38e9-40d2-9749-4f8a0e9f640f`)
+- [Critical battery notification](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings.md#critical-battery-notification) (`BATFLAGSCRIT`, `5dbb7c9f-38e9-40d2-9749-4f8a0e9f640f`)
 - [Critical battery action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings-critical-battery-action.md) (`BATACTIONCRIT`, `637ea02f-bbcb-4015-8e2c-a1c7b9c0b546`)
 - [Low battery level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings-low-battery-threshold.md) (`BATLEVELLOW`, `8183ba9a-e910-48da-8769-14ae6dc1170a`)
 - [Critical battery level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings-critical-battery-threshold.md) (`BATLEVELCRIT`, `9a66d8d7-4ff7-4ef9-b5a2-5a326ca2a469`)
-- [Low battery notification](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings.md) (`BATFLAGSLOW`, `bcded951-187b-4d05-bccc-f7e51960c258`)
+- [Low battery notification](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings.md#low-battery-notification) (`BATFLAGSLOW`, `bcded951-187b-4d05-bccc-f7e51960c258`)
 - [Low battery action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings-low-battery-action.md) (`BATACTIONLOW`, `d8742dcb-3e6a-4b3c-b3fe-374623cdcf06`)
 - [Reserve battery level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings-reserve-battery-level.md) (`f3c5027d-cd16-4930-aa6b-90db844a8f00`)
 
