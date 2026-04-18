@@ -12,4 +12,4 @@ The processor power settings documented in this section are no longer supported 
 
 You can use the following options to configure the performance state engine:
 
-- [PERFBOOSTPOL](legacy-config-options-perfboostpol)
+- [PERFBOOSTPOL](legacy-config-options-perfboostpol.md)

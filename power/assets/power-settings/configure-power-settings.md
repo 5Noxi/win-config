@@ -15,7 +15,7 @@ The primary audience for these topics is Original Equipment Manufacturers (OEMs)
 
 ## Use Windows Configuration Designer to configure power settings
 
-To configure the power settings, you will first create a provisioning package using [Windows Configuration Designer](/en-us/windows/configuration/provisioning-packages/provisioning-install-icd). You will then edit the customizations.xml file contained in the package to include your power settings. Use the XML file as one of the inputs to the Windows Configuration Designer command-line to generate either a provisioning package or a Windows image that contains the power settings. For information on how to use the Windows Configuration Designer CLI, see [Use the Windows Configuration Designer command-line interface](/en-us/windows/configuration/provisioning-packages/provisioning-command-line).
+To configure the power settings, you will first create a provisioning package using [Windows Configuration Designer](https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-install-icd). You will then edit the customizations.xml file contained in the package to include your power settings. Use the XML file as one of the inputs to the Windows Configuration Designer command-line to generate either a provisioning package or a Windows image that contains the power settings. For information on how to use the Windows Configuration Designer CLI, see [Use the Windows Configuration Designer command-line interface](https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-command-line).
 
 The power settings are not visible in the Windows Configuration Designer UI but appear under the main `Common\Power` namespace. This namespace is further divided into various groups including:
 
@@ -92,7 +92,7 @@ The following example shows what your Windows provisioning answer file might loo
 
 ## Use Powercfg.exe to control power schemes
 
-You can use the powercfg.exe tool to control power schemes by providing the GUID or alias for the setting. For more information on how to use this tool, see [Powercfg command-line options](/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options).
+You can use the powercfg.exe tool to control power schemes by providing the GUID or alias for the setting. For more information on how to use this tool, see [Powercfg command-line options](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options).
 
 ## Slide show
 

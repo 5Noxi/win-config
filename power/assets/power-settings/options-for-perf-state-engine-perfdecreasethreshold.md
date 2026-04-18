@@ -8,7 +8,7 @@ description: PerfDecreaseThreshold specifies the percentage of processor utiliza
 
 `PerfDecreaseThreshold` specifies the percentage of processor utilization, in terms of the maximum processor utilization, that is required to reduce the processor to a lower performance state.
 
-Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
 ## Aliases and setting visibility
 

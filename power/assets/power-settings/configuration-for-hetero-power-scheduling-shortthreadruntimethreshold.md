@@ -6,7 +6,7 @@ description: ShortThreadRuntimeThreshold specifies the runtime threshold for dis
 
 # ShortThreadRuntimeThreshold | Microsoft Learn
 
-`ShortThreadRuntimeThreshold` specifies the runtime threshold for distinguishing a short versus long running thread. Threads with an expected runtime less than this value are considered short running and have scheduling configured by [ShortSchedulingPolicy](configuration-for-hetero-power-scheduling-shortschedulingpolicy) on systems with processors with heterogeneous architecture.
+`ShortThreadRuntimeThreshold` specifies the runtime threshold for distinguishing a short versus long running thread. Threads with an expected runtime less than this value are considered short running and have scheduling configured by [ShortSchedulingPolicy](configuration-for-hetero-power-scheduling-shortschedulingpolicy.md) on systems with processors with heterogeneous architecture.
 
 ## Aliases and setting visibility
 

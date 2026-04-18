@@ -10,7 +10,7 @@ description: CPMaxCores specifies the maximum percentage of logical processors (
 
 For example, in a NUMA node with 16 logical processors, configuring the value of this setting to 50% ensures that no more than 8 logical processors are ever in the un-parked state at the same time.
 
-If the value of `CPMaxCores` is less than the value of [CPMinCores](options-for-core-parking-cpmincores), it will be rounded up internally to the latter setting's value.
+If the value of `CPMaxCores` is less than the value of [CPMinCores](options-for-core-parking-cpmincores.md), it will be rounded up internally to the latter setting's value.
 
 ## Aliases and setting visibility
 

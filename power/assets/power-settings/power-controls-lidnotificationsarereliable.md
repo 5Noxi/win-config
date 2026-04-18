@@ -22,7 +22,7 @@ Use to notify the OS whether the platform guarantees that lid notifications are 
 
 ## Remarks
 
-Depending on your platform scenarios, you may also want to set the `LidOpenWake` setting ([Lid open wake action](lid-open-wake-action)). For example:
+Depending on your platform scenarios, you may also want to set the `LidOpenWake` setting ([Lid open wake action](lid-open-wake-action.md)). For example:
 
 - If you want to implement a platform that does nothing when the lid is opened, but you want to suppress Windows Hello when the lid is closed, you'll want to set `LidOpenWake`=0 and `LidNotificationsAreReliable`=True.
 - If you have a device that has a rigid keyboard and the risk of the lid opening and causing the device to turn on is low, you may want to implement a platform that turns on the display when the lid is opened, but you want to suppress Windows Hello when the lid is closed, you'll want to set `LidOpenWake`=1 and `LidNotificationsAreReliable`=True.

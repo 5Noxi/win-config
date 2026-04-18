@@ -6,7 +6,7 @@ description: Specifies the dim timeout after a Human Presence sensor has signale
 
 # Human Presence Sensor Adaptive Inattentive Dim Timeout | Microsoft Learn
 
-Specifies the dim timeout after a Human Presence sensor has signaled the user is inattentive. For more details see [Presence sensing](/en-us/windows-hardware/design/device-experiences/sensors-presence-sensing).
+Specifies the dim timeout after a Human Presence sensor has signaled the user is inattentive. For more details see [Presence sensing](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/sensors-presence-sensing).
 
 ## Aliases and setting visibility
 

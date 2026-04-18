@@ -8,7 +8,7 @@ description: PerfIncreasePolicy specifies the algorithm used to select a new per
 
 `PerfIncreasePolicy` specifies the algorithm used to select a new performance state when the ideal performance state is higher than the current performance state. The ideal state is such that the utilization would be between the decrease and increase thresholds. When optimized for responsiveness, the policy can select a higher state such that the utilization would be closer to the decrease threshold.
 
-Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
 ## Aliases and setting visibility
 

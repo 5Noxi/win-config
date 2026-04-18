@@ -30,4 +30,4 @@ Note
 
 Deprecated starting in Windows 10, version 2004.
 
-For more information about network connectivity in Modern Standby, refer to [Network connectivity](/en-us/windows-hardware/design/device-experiences/modern-standby-network-connectivity).
+For more information about network connectivity in Modern Standby, refer to [Network connectivity](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-network-connectivity).

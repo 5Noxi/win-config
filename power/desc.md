@@ -89,7 +89,7 @@ Most markdown files below are backed up from [windows-hardware/customize/power-s
 
 Structure is heading level 3 = subgroup name, linked text = setting name, the brackets include `PowerCfg` naming & setting GUID.
 
-### Settings belonging to no subgroup
+### [Settings belonging to no subgroup](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md)
 
 - [Require a password on wakeup](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings-prompt-for-password-on-resume.md) (`CONSOLELOCK`, `0e796bdb-100d-47d6-a2d5-f7d2daa51f51`)
 - [Power plan type](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md#power-plan-type) (`PERSONALITY`, `245d8541-3943-4422-b025-13a784f679b7`)
@@ -97,7 +97,7 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Disconnected Standby Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings.md#disconnected-standby-mode) (`DISCONNECTEDSTANDBYMODE`, `68afb2d9-ee95-47a8-8f50-4115088073b1`)
 - [Networking connectivity in Standby](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/no-subgroup-settings-allow-networking-during-standby.md) (`CONNECTIVITYINSTANDBY`, `f15576e8-98b7-4186-b944-eafa664402d9`)
 
-### Hard disk
+### [Hard disk](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md)
 
 - [AHCI Link Power Management - HIPM/DIPM](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings-link-power-management-mode---hipm-dipm.md) (`0b2d69d7-a2a1-449c-9680-f91c70521c60`)
 - [Maximum Power Level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#maximum-power-level) (`DISKMAXPOWER`, `51dea550-bb38-4bc4-991b-eacf37be5ec8`)
@@ -110,15 +110,15 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [NVMe NOPPME](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#nvme-noppme) (`DISKNVMENOPPME`, `fc7372b6-ab2d-43ee-8797-15e9841f2cca`)
 - [Primary NVMe Power State Transition Latency Tolerance](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings.md#primary-nvme-power-state-transition-latency-tolerance) (`fc95af4d-40e7-4b6d-835a-56d131dbc80e`)
 
-### Desktop background settings
+### [Desktop background settings](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [Slide show](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#slide-show) (`309dce9b-bef4-4119-9921-a851fb12f0f4`)
 
-### Wireless Adapter Settings
+### [Wireless Adapter Settings](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [Power Saving Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#power-saving-mode) (`12bbebe6-58d6-4636-95bb-3217ef867c1a`)
 
-### Sleep
+### [Sleep](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings.md)
 
 - [Legacy RTC mitigations](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings.md#legacy-rtc-mitigations) (`LEGACYRTCMITIGATION`, `1a34bdc3-7e6b-442e-a9d0-64b6ef378e84`)
 - [Allow Away Mode Policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings-allow-away-mode.md) (`AWAYMODE`, `25dfa149-5dd1-4736-b5ab-e8a37b5b8187`)
@@ -131,27 +131,27 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Allow wake timers](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings-automatically-wake-for-tasks.md) (`RTCWAKE`, `bd3b718a-0680-4d9d-8ab2-e1d2b4ac806d`)
 - [Allow sleep with remote opens](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/sleep-settings-allow-sleep-with-open-remote-files.md) (`REMOTEFILESLEEP`, `d4c1d4c8-d5cc-43d3-b83e-fc51215cb04d`)
 
-### USB settings
+### [USB settings](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [Hub Selective Suspend Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#hub-selective-suspend-timeout) (`0853a681-27c8-4100-a2fd-82013e970683`)
 - [USB selective suspend setting](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#usb-selective-suspend-setting) (`48e6b7a6-50f5-4782-a5d4-53bb8f07e226`)
 - [Setting IOC on all TDs](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#setting-ioc-on-all-tds) (`498c044a-201b-4631-a522-5c744ed4e678`)
 - [USB 3 Link Power Mangement](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#usb-3-link-power-mangement) (`d4e98f31-5ffe-4ce1-be31-1b38b384c009`)
 
-### Idle Resiliency
+### [Idle Resiliency](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [Execution Required power request timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#execution-required-power-request-timeout) (`EXECTIME`, `3166bc41-7e98-4e03-b34e-ec0f5f2b218e`)
 - [IO coalescing timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#io-coalescing-timeout) (`COALTIME`, `c36f0eb4-2988-4a70-8eee-0884fc2c2433`)
 - [Processor Idle Resiliency Timer Resolution](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#processor-idle-resiliency-timer-resolution) (`PROCIR`, `c42b79aa-aa3a-484b-a98f-2cf32aa90a28`)
 - [Deep Sleep Enabled/Disabled](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#deep-sleep-enableddisabled) (`DEEPSLEEP`, `d502f7ee-1dc7-4efd-a55d-f04b6f5c0545`)
 
-### Interrupt Steering Settings
+### [Interrupt Steering Settings](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [Interrupt Steering Mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#interrupt-steering-mode) (`MODE`, `2bfc24f9-5ea2-4801-8213-3dbae01aa39d`)
 - [Target Load](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#target-load) (`PERPROCLOAD`, `73cde64d-d720-4bb2-a860-c755afe77ef2`)
 - [Unparked time trigger](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#unparked-time-trigger) (`UNPARKTIME`, `d6ba4903-386f-4c2c-8adb-5c21b3328d25`)
 
-### Power buttons and lid
+### [Power buttons and lid](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings.md)
 
 - [Lid close action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings-lid-switch-close-action.md) (`LIDACTION`, `5ca83367-6e45-459f-a27b-476b1d01c936`)
 - [Power button action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings-power-button-action.md) (`PBUTTONACTION`, `7648efa3-dd9c-4e3e-b566-50f929386280`)
@@ -160,11 +160,11 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Lid open action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/lid-open-wake-action.md) (`LIDOPENWAKE`, `99ff10e7-23b1-4c07-a9d1-5c3206d741b4`)
 - [Start menu power button](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/power-button-and-lid-settings.md#start-menu-power-button) (`UIBUTTON_ACTION`, `a7066653-8d6c-40a8-910e-a1f54b84c7e5`)
 
-### PCI Express
+### [PCI Express](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/pci-express-settings.md)
 
 - [Link State Power Management](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/pci-express-settings-link-state-power-management.md) (`ASPM`, `ee12f906-d277-404b-b6da-e5fa1a576df5`)
 
-### Processor power management
+### [Processor power management](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md)
 
 - [Processor performance increase threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfincreasethreshold.md) (`PERFINCTHRESHOLD`, `06cadf0e-64ed-448a-8927-ce7bf90eb35d`)
 - [Processor performance increase threshold for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfincreasethreshold.md) (`PERFINCTHRESHOLD1`, `06cadf0e-64ed-448a-8927-ce7bf90eb35e`)
@@ -178,10 +178,10 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Processor energy performance preference policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfenergypreference.md) (`PERFEPP`, `36687f9e-e3a5-4dbf-b1dc-15eb381c6863`)
 - [Processor energy performance preference policy for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfenergypreference.md) (`PERFEPP1`, `36687f9e-e3a5-4dbf-b1dc-15eb381c6864`)
 - [Allow Throttle States](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`THROTTLING`, `3b04d4fd-1cc7-4f23-ab1c-d1337819c4bb`)
-- [Processor performance increase time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETEROINCREASETIME`, `4009efa7-e72d-4cba-9edf-91084ea8cbc3`)
+- [Processor performance increase time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heteroincreasetime.md) (`HETEROINCREASETIME`, `4009efa7-e72d-4cba-9edf-91084ea8cbc3`)
 - [Processor performance decrease policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfdecreasepolicy.md) (`PERFDECPOL`, `40fbefc7-2e9d-4d25-a185-0cfd8574bac6`)
 - [Processor performance decrease policy for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfdecreasepolicy.md) (`PERFDECPOL1`, `40fbefc7-2e9d-4d25-a185-0cfd8574bac7`)
-- [Long running threads' processor architecture lower limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`LONGTHREADARCHCLASSLOWERTHRESHOLD`, `43f278bc-0f8a-46d0-8b31-9a23e615d713`)
+- [Long running threads' processor architecture lower limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-longthreadarchclasslowerthreshold.md) (`LONGTHREADARCHCLASSLOWERTHRESHOLD`, `43f278bc-0f8a-46d0-8b31-9a23e615d713`)
 - [Processor performance core parking parked performance state](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`CPPERF`, `447235c7-6a8d-4cc0-8e24-9eaf70b96e2b`)
 - [Processor performance core parking parked performance state for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`CPPERF1`, `447235c7-6a8d-4cc0-8e24-9eaf70b96e2c`)
 - [Processor performance boost policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/legacy-config-options-perfboostpol.md) (`PERFBOOSTPOL`, `45bcc044-d885-43e2-8605-ee0ec6e96b59`)
@@ -189,26 +189,26 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Processor performance increase policy for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfincreasepolicy.md) (`PERFINCPOL1`, `465e1f50-b610-473a-ab58-00d1077dc419`)
 - [Latency sensitivity hint processor energy performance preference](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-latencyhintepp.md) (`LATENCYHINTEPP`, `4b70f900-cdd9-4e66-aa26-ae8417f98173`)
 - [Latency sensitivity hint processor energy performance preference for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-latencyhintepp.md) (`LATENCYHINTEPP1`, `4b70f900-cdd9-4e66-aa26-ae8417f98174`)
-- [Processor idle demote threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`IDLEDEMOTE`, `4b92d758-5a24-4851-a470-815d78aee119`)
+- [Processor idle demote threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-idledemotethreshold.md) (`IDLEDEMOTE`, `4b92d758-5a24-4851-a470-815d78aee119`)
 - [Processor performance core parking distribution threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cpdistribution.md) (`CPDISTRIBUTION`, `4bdaf4e9-d103-46d7-a5f0-6280121616ef`)
 - [Processor performance time check interval](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFCHECK`, `4d2b0152-7d5c-498b-88e2-34345392a2c5`)
 - [Processor duty cycling](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-dutycycling.md) (`PERFDUTYCYCLING`, `4e4450b3-6179-4e91-b8f1-5bb9938f81a1`)
-- [Short running threads' processor architecture lower limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`SHORTTHREADARCHCLASSLOWERTHRESHOLD`, `53824d46-87bd-4739-aa1b-aa793fac36d6`)
+- [Short running threads' processor architecture lower limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-shortthreadarchclasslowerthreshold.md) (`SHORTTHREADARCHCLASSLOWERTHRESHOLD`, `53824d46-87bd-4739-aa1b-aa793fac36d6`)
 - [Processor idle disable](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`IDLEDISABLE`, `5d76a2ca-e8c0-402f-a133-2158492d58ad`)
-- [Latency sensitivity hint min unparked cores/packages](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`LATENCYHINTUNPARK`, `616cdaa5-695e-4545-97ad-97dc2d1bdd88`)
-- [Latency sensitivity hint min unparked cores/packages for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`LATENCYHINTUNPARK1`, `616cdaa5-695e-4545-97ad-97dc2d1bdd89`)
+- [Latency sensitivity hint min unparked cores/packages](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cplatencyhintunpark.md) (`LATENCYHINTUNPARK`, `616cdaa5-695e-4545-97ad-97dc2d1bdd88`)
+- [Latency sensitivity hint min unparked cores/packages for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cplatencyhintunpark.md) (`LATENCYHINTUNPARK1`, `616cdaa5-695e-4545-97ad-97dc2d1bdd89`)
 - [Latency sensitivity hint processor performance](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perflatencyhint.md) (`LATENCYHINTPERF`, `619b7505-003b-4e82-b7a6-4dd29c300971`)
 - [Latency sensitivity hint processor performance for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perflatencyhint.md) (`LATENCYHINTPERF1`, `619b7505-003b-4e82-b7a6-4dd29c300972`)
 - [Processor idle threshold scaling](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`IDLESCALING`, `6c2993b0-8f48-481f-bcc6-00dd2742aa06`)
 - [Processor performance core parking decrease policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`CPDECREASEPOL`, `71021b41-c749-4d21-be74-a00f335d582b`)
-- [Maximum processor frequency](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PROCFREQMAX`, `75b0ae3f-bce0-45a7-8c89-c9611c25e100`)
-- [Maximum processor frequency for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PROCFREQMAX1`, `75b0ae3f-bce0-45a7-8c89-c9611c25e101`)
-- [Processor idle promote threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`IDLEPROMOTE`, `7b224883-b3cc-4d79-819f-8374152cbe7c`)
+- [Maximum processor frequency](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-maxfrequency.md) (`PROCFREQMAX`, `75b0ae3f-bce0-45a7-8c89-c9611c25e100`)
+- [Maximum processor frequency for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-maxfrequency.md) (`PROCFREQMAX1`, `75b0ae3f-bce0-45a7-8c89-c9611c25e101`)
+- [Processor idle promote threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-idlepromotethreshold.md) (`IDLEPROMOTE`, `7b224883-b3cc-4d79-819f-8374152cbe7c`)
 - [Processor performance history count](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFHISTORY`, `7d24baa7-0b84-480f-840c-1b0743c00f5f`)
 - [Processor performance history count for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFHISTORY1`, `7d24baa7-0b84-480f-840c-1b0743c00f60`)
-- [Processor performance decrease time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETERODECREASETIME`, `7f2492b6-60b1-45e5-ae55-773f8cd5caec`)
+- [Processor performance decrease time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heterodecreasetime.md) (`HETERODECREASETIME`, `7f2492b6-60b1-45e5-ae55-773f8cd5caec`)
 - [Heterogeneous policy in effect](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETEROPOLICY`, `7f2f5cfa-f10c-4823-b5e1-e93ae85f46b5`)
-- [Short running threads' processor architecture upper limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`SHORTTHREADARCHCLASSUPPERTHRESHOLD`, `828423eb-8662-4344-90f7-52bf15870f5a`)
+- [Short running threads' processor architecture upper limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-shortthreadarchclassupperthreshold.md) (`SHORTTHREADARCHCLASSUPPERTHRESHOLD`, `828423eb-8662-4344-90f7-52bf15870f5a`)
 - [Minimum processor state](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-minperformance.md) (`PROCTHROTTLEMIN`, `893dee8e-2bef-41e0-89c6-b55d0929964c`)
 - [Minimum processor state for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-minperformance.md) (`PROCTHROTTLEMIN1`, `893dee8e-2bef-41e0-89c6-b55d0929964d`)
 - [Processor performance autonomous mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfautonomousmode.md) (`PERFAUTONOMOUS`, `8baa4a8a-14c6-4451-8e8b-14bdbd197537`)
@@ -216,39 +216,39 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Processor performance core parking overutilization threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`CPOVERUTIL`, `943c8cb6-6f93-4227-ad87-e9a3feec08d1`)
 - [System cooling policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`SYSCOOLPOL`, `94d3a615-a899-4ac5-ae2b-e4d8f634367f`)
 - [Processor performance core parking soft park latency](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-softparklatency.md) (`SOFTPARKLATENCY`, `97cfac41-2217-47eb-992d-618b1977c907`)
-- [Processor performance increase time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFINCTIME`, `984cf492-3bed-4488-a8f9-4286c97bf5aa`)
-- [Processor performance increase time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFINCTIME1`, `984cf492-3bed-4488-a8f9-4286c97bf5ab`)
+- [Processor performance increase time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfincreasetime.md) (`PERFINCTIME`, `984cf492-3bed-4488-a8f9-4286c97bf5aa`)
+- [Processor performance increase time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfincreasetime.md) (`PERFINCTIME1`, `984cf492-3bed-4488-a8f9-4286c97bf5ab`)
 - [Processor idle state maximum](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`IDLESTATEMAX`, `9943e905-9a30-4ec1-9b99-44dd3b76f7a2`)
-- [Processor performance level increase threshold for Processor Power Efficiency Class 1 processor count increase](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETEROINCREASETHRESHOLD`, `b000397d-9b0b-483d-98c9-692a6060cfbf`)
-- [Processor performance level increase threshold for Processor Power Efficiency Class 2 processor count increase](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETEROINCREASETHRESHOLD1`, `b000397d-9b0b-483d-98c9-692a6060cfc0`)
-- [Module unpark policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`MODULEUNPARKPOLICY`, `b0deaf6b-59c0-4523-8a45-ca7f40244114`)
-- [Smt threads unpark policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`SMTUNPARKPOLICY`, `b28a6829-c5f7-444e-8f61-10e24e85c532`)
-- [Complex unpark policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`COMPLEXUNPARKPOLICY`, `b669a5e9-7b1d-4132-baaa-49190abcfeb6`)
+- [Processor performance level increase threshold for Processor Power Efficiency Class 1 processor count increase](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heteroincreasethreshold.md) (`HETEROINCREASETHRESHOLD`, `b000397d-9b0b-483d-98c9-692a6060cfbf`)
+- [Processor performance level increase threshold for Processor Power Efficiency Class 2 processor count increase](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heteroincreasethreshold1.md) (`HETEROINCREASETHRESHOLD1`, `b000397d-9b0b-483d-98c9-692a6060cfc0`)
+- [Module unpark policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-moduleunparkpolicy.md) (`MODULEUNPARKPOLICY`, `b0deaf6b-59c0-4523-8a45-ca7f40244114`)
+- [Smt threads unpark policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-smtunparkpolicy.md) (`SMTUNPARKPOLICY`, `b28a6829-c5f7-444e-8f61-10e24e85c532`)
+- [Complex unpark policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-complexunparkpolicy.md) (`COMPLEXUNPARKPOLICY`, `b669a5e9-7b1d-4132-baaa-49190abcfeb6`)
 - [Heterogeneous short running thread scheduling policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-shortschedulingpolicy.md) (`SHORTSCHEDPOLICY`, `bae08b81-2d5e-4688-ad6a-13243356654b`)
 - [Maximum processor state](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-maxperformance.md) (`PROCTHROTTLEMAX`, `bc5038f7-23e0-4960-96da-33abaf5935ec`)
 - [Maximum processor state for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-maxperformance.md) (`PROCTHROTTLEMAX1`, `bc5038f7-23e0-4960-96da-33abaf5935ed`)
 - [Processor performance boost mode](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfboostmode.md) (`PERFBOOSTMODE`, `be337238-0d82-4146-a960-4f3749d470c7`)
-- [Long running threads' processor architecture upper limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`LONGTHREADARCHCLASSUPPERTHRESHOLD`, `bf903d33-9d24-49d3-a468-e65e0325046a`)
+- [Long running threads' processor architecture upper limit](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-longthreadarchclassupperthreshold.md) (`LONGTHREADARCHCLASSUPPERTHRESHOLD`, `bf903d33-9d24-49d3-a468-e65e0325046a`)
 - [Processor idle time check](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`IDLECHECK`, `c4581c31-89ab-4597-8e2b-9c9cab440e6b`)
 - [Processor performance core parking increase policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`CPINCREASEPOL`, `c7be0679-2817-4d69-9d02-519a537ed0c6`)
 - [Processor autonomous activity window](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfautonomouswindow.md) (`PERFAUTONOMOUSWINDOW`, `cfeda3d0-7697-4566-a922-a9086cd49dfa`)
-- [Processor performance decrease time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFDECTIME`, `d8edeb9b-95cf-4f95-a73c-b061973693c8`)
-- [Processor performance decrease time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`PERFDECTIME1`, `d8edeb9b-95cf-4f95-a73c-b061973693c9`)
-- [Short vs. long running thread threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`SHORTTHREADRUNTIMETHRESHOLD`, `d92998c2-6a48-49ca-85d4-8cceec294570`)
+- [Processor performance decrease time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfdecreasetime.md) (`PERFDECTIME`, `d8edeb9b-95cf-4f95-a73c-b061973693c8`)
+- [Processor performance decrease time for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-perf-state-engine-perfdecreasetime.md) (`PERFDECTIME1`, `d8edeb9b-95cf-4f95-a73c-b061973693c9`)
+- [Short vs. long running thread threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) (`SHORTTHREADRUNTIMETHRESHOLD`, `d92998c2-6a48-49ca-85d4-8cceec294570`)
 - [Processor performance core parking decrease time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cpdecreasetime.md) (`CPDECREASETIME`, `dfd10d17-d5eb-45dd-877a-9a34ddd15c82`)
 - [Processor performance core parking utility distribution](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`DISTRIBUTEUTIL`, `e0007330-f589-42ed-a401-5ddb10e785d3`)
 - [Processor performance core parking max cores](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cpmaxcores.md) (`CPMAXCORES`, `ea062031-0e34-4ff1-9b6d-eb1059334028`)
 - [Processor performance core parking max cores for Processor Power Efficiency Class 1](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cpmaxcores.md) (`CPMAXCORES1`, `ea062031-0e34-4ff1-9b6d-eb1059334029`)
 - [Processor performance core parking concurrency headroom threshold](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/options-for-core-parking-cpheadroom.md) (`CPHEADROOM`, `f735a673-2066-4f80-a0c5-ddee0cf1bf5d`)
-- [Processor performance level decrease threshold for Processor Power Efficiency Class 1 processor count decrease](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETERODECREASETHRESHOLD`, `f8861c27-95e7-475c-865b-13c0cb3f9d6b`)
-- [Processor performance level decrease threshold for Processor Power Efficiency Class 2 processor count decrease](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-processor-power-management-options.md) (`HETERODECREASETHRESHOLD1`, `f8861c27-95e7-475c-865b-13c0cb3f9d6c`)
+- [Processor performance level decrease threshold for Processor Power Efficiency Class 1 processor count decrease](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heterodecreasethreshold.md) (`HETERODECREASETHRESHOLD`, `f8861c27-95e7-475c-865b-13c0cb3f9d6b`)
+- [Processor performance level decrease threshold for Processor Power Efficiency Class 2 processor count decrease](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heterodecreasethreshold1.md) (`HETERODECREASETHRESHOLD1`, `f8861c27-95e7-475c-865b-13c0cb3f9d6c`)
 - [A floor performance for Processor Power Efficiency Class 0 when there are Processor Power Efficiency Class 1 processors unparked](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configuration-for-hetero-power-scheduling-heteroclass0floorperf.md) (`HETEROCLASS0FLOORPERF`, `fddc842b-8364-4edc-94cf-c17f60de1c80`)
 
-### Graphics settings
+### [Graphics settings](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [GPU preference policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#gpu-preference-policy) (`GPUPREFERENCEPOLICY`, `dd848b2a-8a5d-4451-9ae2-39cd41658f6c`)
 
-### Display
+### [Display](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings.md)
 
 - [Dim display after](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-dim-annoyance-timeout.md) (`VIDEODIM`, `17aaa29b-8b43-4b94-aafe-35f64daaf1ee`)
 - [Turn off display after](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-display-idle-timeout.md) (`VIDEOIDLE`, `3c0bc021-c8a8-4e07-a973-6b14cbcb2b7e`)
@@ -260,7 +260,7 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Dimmed display brightness](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings-dim-display-brightness.md) (`f1fbfde2-a960-4165-9f88-50667911ce96`)
 - [Enable adaptive brightness](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/display-settings.md#enable-adaptive-brightness) (`ADAPTBRIGHT`, `fbd9aa66-9553-4097-ba44-ed6e9d65eab8`)
 
-### Presence Aware Power Behavior
+### [Presence Aware Power Behavior](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive.md)
 
 - [Human Presence Sensor Adaptive Away Display Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-away-display-timeout.md) (`HUPRVIDEOIDLE`, `0a7d6ab6-ac83-4ad1-8282-eca5b58308f3`)
 - [Standby Reserve Time](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#standby-reserve-time) (`STANDBYRESERVETIME`, `468fe7e5-1158-46ec-88bc-5b96c9e44fd0`)
@@ -274,18 +274,18 @@ Structure is heading level 3 = subgroup name, linked text = setting name, the br
 - [Human Presence Sensor Adaptive Inattentive Dim Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-inattentive-dim-timeout.md) (`HUPRVIDEODIM`, `cf8c6097-12b8-4279-bbdd-44601ee5209d`)
 - [Human Presence Sensor Adaptive Inattentive Display Timeout](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/presence-adaptive-inattentive-display-timeout.md) (`HUPRVIDEOIDLEINATTENTIVE`, `ee16691e-6ab3-4619-bb48-1c77c9357e5a`)
 
-### Video playback quality
+### [Video playback quality](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md)
 
 - [Video playback quality bias](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#video-playback-quality-bias) (`10778347-1370-4ee0-8bbd-33bdacaade49`)
 - [When playing video](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/configure-power-settings.md#when-playing-video) (`34c7b99f-9a6d-4b3c-8dc7-b6693b78cef4`)
 
-### Energy Saver settings
+### [Energy Saver settings](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md)
 
 - [Display brightness weight](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md#display-brightness-weight) (`ESBRIGHTNESS`, `13d09884-f74e-474a-a852-b6bde8ad03a8`)
 - [Energy Saver Policy](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md#energy-saver-policy) (`ESPOLICY`, `5c5bb349-ad29-4ee2-9d0b-2b25270f7a81`)
 - [Charge level](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/energy-saver-settings.md#charge-level) (`ESBATTTHRESHOLD`, `e69653ca-cf7f-4f05-aa73-cb833fa90ad4`)
 
-### Battery
+### [Battery](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings.md)
 
 - [Critical battery notification](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings.md#critical-battery-notification) (`BATFLAGSCRIT`, `5dbb7c9f-38e9-40d2-9749-4f8a0e9f640f`)
 - [Critical battery action](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/battery-settings-critical-battery-action.md) (`BATACTIONCRIT`, `637ea02f-bbcb-4015-8e2c-a1c7b9c0b546`)

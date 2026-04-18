@@ -6,7 +6,7 @@ description: Specifies the display timeout after a Human Presence sensor has sig
 
 # Human Presence Sensor Adaptive Away Display Timeout | Microsoft Learn
 
-Specifies the display timeout after a Human Presence sensor has signaled the user as not present. For more details see [Presence sensing](/en-us/windows-hardware/design/device-experiences/sensors-presence-sensing).
+Specifies the display timeout after a Human Presence sensor has signaled the user as not present. For more details see [Presence sensing](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/sensors-presence-sensing).
 
 ## Aliases and setting visibility
 

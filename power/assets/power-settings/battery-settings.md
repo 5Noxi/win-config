@@ -9,10 +9,10 @@ note: This was modified by Nohuto using PowrProf API
 
 Settings in this subgroup control the customization of battery actions and thresholds.
 
-Windows will execute the  [Critical Battery Action](battery-settings-critical-battery-action) | when the battery is in the critical battery power state. The critical battery power state is determined when the battery percentage reaches the higher of:
+Windows will execute the [Critical Battery Action](battery-settings-critical-battery-action.md) when the battery is in the critical battery power state. The critical battery power state is determined when the battery percentage reaches the higher of:
 
-1. The [DefaultAlert1 Threshold](/en-us/windows/win32/power/battery-information-str), for systems which use the ACPI control method battery interface, is provided by default capacity of low
-2. The battery charge level configured via provisioning or powercfg (the  [Critical Battery Threshold](battery-settings-critical-battery-threshold) |)
+1. The [DefaultAlert1 Threshold](https://learn.microsoft.com/en-us/windows/win32/power/battery-information-str), for systems which use the ACPI control method battery interface, is provided by default capacity of low
+2. The battery charge level configured via provisioning or powercfg (the [Critical Battery Threshold](battery-settings-critical-battery-threshold.md))
 
 For example, if a device with one battery has the first value as 10% and the second value as 5%, the battery would enter the critical battery power state at 10%.
 

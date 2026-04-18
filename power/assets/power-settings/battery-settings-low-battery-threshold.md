@@ -6,7 +6,7 @@ description: Specifies a percentage of capacity when the low battery action is t
 
 # Low battery threshold | Microsoft Learn
 
-Specifies a percentage of capacity when the low battery action is taken and the [low battery warning](battery-settings-low-battery-warning), if enabled, appears.
+Specifies a percentage of capacity when the low battery action is taken and the [low battery warning](battery-settings-low-battery-warning.md), if enabled, appears.
 
 ## Aliases and setting visibility
 

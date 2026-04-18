@@ -36,7 +36,7 @@ If an external display is connected while the lid is closed, input suppression d
 
 Note
 
-Input suppression does not engage when the lid is closed and the lid close action (for the current power source) is set to **Do nothing**. If the system enters standby for any other reason, input suppression remains disengaged even if all other conditions are met (for example, the lid stays closed and no external display is connected). For more information, see [Lid switch close action](power-button-and-lid-settings-lid-switch-close-action).
+Input suppression does not engage when the lid is closed and the lid close action (for the current power source) is set to **Do nothing**. If the system enters standby for any other reason, input suppression remains disengaged even if all other conditions are met (for example, the lid stays closed and no external display is connected). For more information, see [Lid switch close action](power-button-and-lid-settings-lid-switch-close-action.md).
 
 ## Lid close action **Do nothing** behavior and examples
 

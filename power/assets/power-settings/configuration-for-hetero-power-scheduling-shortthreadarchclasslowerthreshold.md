@@ -6,7 +6,7 @@ description: ShortThreadArchClassLowerThreshold specify the lower limit of proce
 
 # ShortThreadArchClassLowerThreshold | Microsoft Learn
 
-`ShortThreadArchClassLowerThreshold` specify the lower limit of processor architecture class for short running threads on systems with processors with heterogeneous architecture.See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold) for configuring the threshold for determination of short versus long running. Short running threads cannot be run on cores whose normalized architectural class is lower than this limit.
+`ShortThreadArchClassLowerThreshold` specify the lower limit of processor architecture class for short running threads on systems with processors with heterogeneous architecture.See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) for configuring the threshold for determination of short versus long running. Short running threads cannot be run on cores whose normalized architectural class is lower than this limit.
 
 ## Aliases and setting visibility
 

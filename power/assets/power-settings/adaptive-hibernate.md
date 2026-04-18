@@ -13,7 +13,7 @@ OEMs or users can also configure a fixed doze to hibernate timer. However, the t
 Adaptive hibernate provides triggers which allow the system to hibernate intelligently. These triggers provide the following benefits:
 
 - Eliminate resuming to a dead battery.
-- Provide a great [Modern Standby](/en-us/windows-hardware/design/device-experiences/modern-standby) experience by ensuring that the system remains in Modern Standby for as long as possible.
+- Provide a great [Modern Standby](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby) experience by ensuring that the system remains in Modern Standby for as long as possible.
 
 To support the adaptive hibernate triggers, the system is enabled with default values. However, OEMs can program these triggers to ensure that machines hibernate to provide the best possible experience to users.
 
@@ -39,11 +39,11 @@ The following table lists the settings you can use to set the standby budget, wh
 
 | Budget Setting | Definition | Exposed As | Powercfg Command |
 | --- | --- | --- | --- |
-| [StandbyBudgetPercent](standbybudgetpercent) | Defines the battery drain % that the user is allowed in a refresh interval. Default is 5%. | Power setting | `powercfg /setdcvalueindex scheme_current sub_presence standbybudgetpercent` |
-| [StandbyBudgetRefreshInterval](standbybudgetrefreshinterval) | Defines the length of time before the StandbyBudgetPercent is refreshed. If the StandbyBudgetPercent is reached before this time, the device will hibernate, otherwise it will stay in Standby. Default is 12 hours. | Power setting | `powercfg /setdcvalueindex SCHEME_CURRENT SUB_PRESENCE STANDBYBUDGETREFRESHINTERVAL` |
-| [StandbyBudgetRefreshCount](standbybudgetrefreshcount) | Defines the number of times the budget will refresh if the StandbyBudgetPercent is not reached within the StandbyBudgetRefreshInterval. Default is 4 refreshes. | Power setting | `powercfg /setdcvalueindex SCHEME_CURRENT SUB_PRESENCE STANDBYBUDGETREFRESHCOUNT` |
+| [StandbyBudgetPercent](standbybudgetpercent.md) | Defines the battery drain % that the user is allowed in a refresh interval. Default is 5%. | Power setting | `powercfg /setdcvalueindex scheme_current sub_presence standbybudgetpercent` |
+| [StandbyBudgetRefreshInterval](#standby-budget-settings) | Defines the length of time before the StandbyBudgetPercent is refreshed. If the StandbyBudgetPercent is reached before this time, the device will hibernate, otherwise it will stay in Standby. Default is 12 hours. | Power setting | `powercfg /setdcvalueindex SCHEME_CURRENT SUB_PRESENCE STANDBYBUDGETREFRESHINTERVAL` |
+| [StandbyBudgetRefreshCount](#standby-budget-settings) | Defines the number of times the budget will refresh if the StandbyBudgetPercent is not reached within the StandbyBudgetRefreshInterval. Default is 4 refreshes. | Power setting | `powercfg /setdcvalueindex SCHEME_CURRENT SUB_PRESENCE STANDBYBUDGETREFRESHCOUNT` |
 
-You can also configure these settings using a custom provisioning package file for OEM images. For more information about powercfg, see [Powercfg command-line options](/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options).
+You can also configure these settings using a custom provisioning package file for OEM images. For more information about powercfg, see [Powercfg command-line options](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options).
 
 ### Standby Reserve Time Setting
 
@@ -51,13 +51,13 @@ Reserve time is the amount of time the user is guaranteed to have the screen on 
 
 | Budget Setting | Definition | Exposed As | Powercfg Command |
 | --- | --- | --- | --- |
-| [StandbyReserveTime](standbyreservetime) | Defines the screen on time, in seconds, that will be available to the user after standby exits and the screen turns on. Default is 1200 seconds. | Power setting | `powercfg /setdcvalueindex scheme_current sub_presence standbyreservetime` |
+| [StandbyReserveTime](standbyreservetime.md) | Defines the screen on time, in seconds, that will be available to the user after standby exits and the screen turns on. Default is 1200 seconds. | Power setting | `powercfg /setdcvalueindex scheme_current sub_presence standbyreservetime` |
 
-You can also configure these settings using a custom provisioning package file for OEM images. For more information about powercfg, see [Powercfg command-line options](/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options).
+You can also configure these settings using a custom provisioning package file for OEM images. For more information about powercfg, see [Powercfg command-line options](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options).
 
 ## Windows Provisioning Package Sample
 
-You can use the Windows Provisioning framework to configure the adaptive hibernate settings described in this section. First, create a provisioning package using [Windows Configuration Designer](/en-us/windows/configuration/provisioning-packages/provisioning-install-icd). You will then edit the customizations.xml file contained in the package to include your power settings, which appear under the `Common\Power\Policy\Settings\AdaptivePowerBehavior` namespace. Use the XML file as one of the inputs to the Windows Configuration Designer command-line interface to generate either a provisioning package that contains the power settings. You can then apply the provisioning package to the image. For information on how to use the Windows Configuration Designer CLI, see [Use the Windows Configuration Designer command-line interface](/en-us/windows/configuration/provisioning-packages/provisioning-command-line).
+You can use the Windows Provisioning framework to configure the adaptive hibernate settings described in this section. First, create a provisioning package using [Windows Configuration Designer](https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-install-icd). You will then edit the customizations.xml file contained in the package to include your power settings, which appear under the `Common\Power\Policy\Settings\AdaptivePowerBehavior` namespace. Use the XML file as one of the inputs to the Windows Configuration Designer command-line interface to generate either a provisioning package that contains the power settings. You can then apply the provisioning package to the image. For information on how to use the Windows Configuration Designer CLI, see [Use the Windows Configuration Designer command-line interface](https://learn.microsoft.com/en-us/windows/configuration/provisioning-packages/provisioning-command-line).
 
 The following example shows what your Windows provisioning answer file might look like after you've written it to configure adaptive hibernate settings.
 

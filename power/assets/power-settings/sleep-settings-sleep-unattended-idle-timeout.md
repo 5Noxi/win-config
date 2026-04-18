@@ -8,7 +8,7 @@ description: Specifies the duration of inactivity before the system automaticall
 
 Specifies the duration of inactivity before the system automatically enters sleep after waking from sleep in an unattended state.
 
-For example, if the system wakes from sleep because of a timed event or a wake on LAN (WoL) event, the sleep unattended idle timeout value will be used instead of the [sleep idle timeout](sleep-settings-sleep-idle-timeout) value.
+For example, if the system wakes from sleep because of a timed event or a wake on LAN (WoL) event, the sleep unattended idle timeout value will be used instead of the [sleep idle timeout](sleep-settings-sleep-idle-timeout.md) value.
 
 ## Aliases and setting visibility
 

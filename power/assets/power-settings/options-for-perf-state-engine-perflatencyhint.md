@@ -8,7 +8,7 @@ description: PerfLatencyHint specifies the processor performance in response to 
 
 `PerfLatencyHint` specifies the processor performance in response to latency sensitivity hints. Such hints are generated when an event preceding an expected latency-sensitive operation is detected. Examples include mouse button up events (for all mouse buttons), touch gesture start and gesture stop (finger down and finger up), and keyboard enter key down.
 
-It is also used for Deadline [Quality of Service](/en-us/windows/win32/procthread/quality-of-service) performance. The value could be changed by setting `PerfLatencyHint` in Media QoS profile.
+It is also used for Deadline [Quality of Service](https://learn.microsoft.com/en-us/windows/win32/procthread/quality-of-service) performance. The value could be changed by setting `PerfLatencyHint` in Media QoS profile.
 
 When set to 0, the processor performance engine does not take latency sensitivity hints to account when selecting a performance state. Otherwise, the performance is raised system-wide to the specified performance level.
 

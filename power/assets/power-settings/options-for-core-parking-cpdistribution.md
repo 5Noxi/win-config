@@ -8,7 +8,7 @@ description: CPDistribution specifies the utilization, in percentage, to use in 
 
 `CPDistribution` specifies the utilization, in percentage, to use in the concurrency distribution to select the number of logical processors to distribute utility to. This may be fewer, but never greater, than the number of logical processors that are selected to be unparked. This affects performance selection.
 
-Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
 ## Aliases and setting visibility
 

@@ -6,7 +6,7 @@ description: ShortThreadArchClassUpperThreshold specify the upper limit of proce
 
 # ShortThreadArchClassUpperThreshold | Microsoft Learn
 
-`ShortThreadArchClassUpperThreshold` specify the upper limit of processor architecture class for short running threads on systems with processors with heterogeneous architecture. See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold) for configuring the threshold for determination of short versus long running. Short running threads cannot be run on cores whose normalized architectural class is higher than this limit.
+`ShortThreadArchClassUpperThreshold` specify the upper limit of processor architecture class for short running threads on systems with processors with heterogeneous architecture. See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) for configuring the threshold for determination of short versus long running. Short running threads cannot be run on cores whose normalized architectural class is higher than this limit.
 
 ## Aliases and setting visibility
 

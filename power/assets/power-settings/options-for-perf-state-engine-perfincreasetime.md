@@ -8,7 +8,7 @@ description: PerfIncreaseTime specifies minimum amount of time that must elapse 
 
 `PerfIncreaseTime` specifies minimum amount of time that must elapse between subsequent increases in the processor performance state. The time is specified in units of the number of processor performance time check intervals.
 
-Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
 ## Aliases and setting visibility
 

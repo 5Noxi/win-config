@@ -8,7 +8,7 @@ description: PerfIncreaseThreshold specifies the percentage of processor utiliza
 
 `PerfIncreaseThreshold` specifies the percentage of processor utilization, in terms of the maximum processor utilization, that is required to increase the processor to a higher performance state.
 
-Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
 ## Aliases and setting visibility
 

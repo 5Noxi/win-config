@@ -6,7 +6,7 @@ description: Specifies the type of system shutdown that occurs when the system p
 
 # Power button forced shutdown | Microsoft Learn
 
-Specifies the type of system shutdown that occurs when the system power button is pressed if the [power button action](power-button-and-lid-settings-power-button-action) is set to Shut Down.
+Specifies the type of system shutdown that occurs when the system power button is pressed if the [power button action](power-button-and-lid-settings-power-button-action.md) is set to Shut Down.
 
 **Warning** If you enable this setting and a user presses the power button to shut down the system, any open documents might not be saved and data loss could occur.
 

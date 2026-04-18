@@ -17,7 +17,7 @@ description: HeteroDecreaseThreshold1 specifies the threshold to cross below, wh
 
 ## Values
 
-`HeteroDecreaseThreshold1` is a four-byte unsigned integer where each byte represents a threshold in percentage. See [HeteroIncreaseThreshold](configuration-for-hetero-power-scheduling-heteroincreasethreshold) for configuring the thresholds.
+`HeteroDecreaseThreshold1` is a four-byte unsigned integer where each byte represents a threshold in percentage. See [HeteroIncreaseThreshold](configuration-for-hetero-power-scheduling-heteroincreasethreshold.md) for configuring the thresholds.
 
 ## Applies to
 

@@ -6,9 +6,9 @@ description: LatencyHintEpp specifies the processor energy performance preferenc
 
 # LatencyHintEpp | Microsoft Learn
 
-`LatencyHintEpp` specifies the processor energy performance preference in response to latency sensitivity hints. Such hints are generated when an event preceding an expected latency-sensitive operation is detected. Examples include mouse button up events (for all mouse buttons), touch gesture start and gesture stop (finger down and finger up), and keyboard enter key down. This setting is only applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+`LatencyHintEpp` specifies the processor energy performance preference in response to latency sensitivity hints. Such hints are generated when an event preceding an expected latency-sensitive operation is detected. Examples include mouse button up events (for all mouse buttons), touch gesture start and gesture stop (finger down and finger up), and keyboard enter key down. This setting is only applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
-It is also used for Deadline [Quality of Service](/en-us/windows/win32/procthread/quality-of-service) performance. The value could be changed by setting `LatencyHintEpp` in Media QoS profile.
+It is also used for Deadline [Quality of Service](https://learn.microsoft.com/en-us/windows/win32/procthread/quality-of-service) performance. The value could be changed by setting `LatencyHintEpp` in Media QoS profile.
 
 ## Aliases and setting visibility
 

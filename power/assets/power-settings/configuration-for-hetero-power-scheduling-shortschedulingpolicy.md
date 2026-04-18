@@ -6,7 +6,7 @@ description: ShortSchedulingPolicy specifies the preference (or constraint) in p
 
 # ShortSchedulingPolicy | Microsoft Learn
 
-`ShortSchedulingPolicy` specifies the preference (or constraint) in processor scheduling for short running threads on systems with processors with heterogeneous architecture. See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold) for configuring the threshold for determination of short versus long running.
+`ShortSchedulingPolicy` specifies the preference (or constraint) in processor scheduling for short running threads on systems with processors with heterogeneous architecture. See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) for configuring the threshold for determination of short versus long running.
 
 Value of Automatic lets the OS determines the policy based on system configuration and QoS type.
 

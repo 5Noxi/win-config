@@ -8,7 +8,7 @@ description: HeteroClass1InitialPerf specifies the initial performance percentag
 
 `HeteroClass1InitialPerf` specifies the initial performance percentage of the efficiency class 1 core when this core is unparked.
 
-Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode) autonomous performance states systems.
+Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md) autonomous performance states systems.
 
 ## Aliases and setting visibility
 

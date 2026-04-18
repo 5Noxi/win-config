@@ -8,7 +8,7 @@ description: HeteroClass0FloorPerf specifies the performance level floor, in per
 
 `HeteroClass0FloorPerf` specifies the performance level floor, in percentage, to use for efficiency class 0 processors if there is at least one unparked efficiency class 1 processor.
 
-Not applicable with [Quality of Service](/en-us/windows/win32/procthread/quality-of-service).
+Not applicable with [Quality of Service](https://learn.microsoft.com/en-us/windows/win32/procthread/quality-of-service).
 
 ## Aliases and setting visibility
 

@@ -8,7 +8,7 @@ description: This section contains information about how you can update the powe
 
 Before including your Power Configuration provisioning package in your device image, please consider a mechanism to update the OEM-generated Power provisioning package after the device is in market. Here are additional notes on image configuration and updates.
 
-1. The OEM-generated Power provisioning package needs to be excluded from the PBR migration to avoid duplicate entries, see [Exclude Files and Settings](/en-us/windows/deployment/usmt/usmt-exclude-files-and-settings).
+1. The OEM-generated Power provisioning package needs to be excluded from the PBR migration to avoid duplicate entries, see [Exclude Files and Settings](https://learn.microsoft.com/en-us/windows/deployment/usmt/usmt-exclude-files-and-settings).
 
     - To test that the exclusion file was successful, you will need to have a factory image with PBR implemented. There should also only be one OEM-generated Power provisioning package in the %WINDIR%\Provisioning\Packages folder.
 
@@ -34,7 +34,7 @@ Before including your Power Configuration provisioning package in your device im
 
     - Update of the package is handled by a driver package and Windows Update
     - You will need to ensure you have an existing device driver on the device for the power component and the INF file is set to copy the PPKG
-    - Follow the instructions in [this document](/en-us/windows-hardware/drivers/install/inf-copyfiles-directive) to author the INF file
+    - Follow the instructions in [this document](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/inf-copyfiles-directive) to author the INF file
 
         Example:
 

@@ -6,7 +6,7 @@ description: LongThreadArchClassUpperThreshold specify the upper limit of proces
 
 # LongThreadArchClassUpperThreshold | Microsoft Learn
 
-`LongThreadArchClassUpperThreshold` specify the upper limit of processor architecture class for long running threads on systems with processors with heterogeneous architecture. See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold) for configuring the threshold for determination of short versus long running. Long running threads cannot be run on cores whose normalized architectural class is higher than this limit.
+`LongThreadArchClassUpperThreshold` specify the upper limit of processor architecture class for long running threads on systems with processors with heterogeneous architecture. See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) for configuring the threshold for determination of short versus long running. Long running threads cannot be run on cores whose normalized architectural class is higher than this limit.
 
 ## Aliases and setting visibility
 
