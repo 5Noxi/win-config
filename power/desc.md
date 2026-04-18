@@ -307,7 +307,7 @@ I've added some specific settings to toggle some features if wanted, note that t
 
 ### Default Schemes
 
-`Delete` = deletes the default schemes:
+`Delete` = deletes the default schemes (select one of the `Noverse x` schemes before deleting them, otherwise a scheme named `Noverse Temporary Scheme` gets created which is a clone of `SCHEME_BALANCED`):
 
 ```c
 381b4222-f694-41f0-9685-ff5bb260df2e // SCHEME_BALANCED (Balanced)
