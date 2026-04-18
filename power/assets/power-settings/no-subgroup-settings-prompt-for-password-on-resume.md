@@ -1,7 +1,7 @@
 ---
 title: Prompt for password on resume | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/no-subgroup-settings-prompt-for-password-on-resume
-description: Specifies whether the user must enter a password at the secure desktop when the system resumes from sleep.NoteÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â All Windows desktop editions have this setting enabled by default.
+description: Specifies whether the user must enter a password at the secure desktop when the system resumes from sleep. All Windows desktop editions have this setting enabled by default.
 note: This was modified by Nohuto using PowrProf API
 ---
 

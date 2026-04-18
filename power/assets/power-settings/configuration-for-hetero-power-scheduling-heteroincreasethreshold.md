@@ -22,7 +22,7 @@ note: This was modified by Nohuto using PowrProf API
 
 - **Windows provisioning method**
 
-`HeteroIncreaseThreshold` needs to setup in two steps. First a definition needs to be setup for the threshold values. This is a four-byte unsigned integer where each byte represents a threshold in percentage. The lowest byte is the first threshold. For example, to set four thresholdsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂA, B, C, and DÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Âthe value of the parameter will be **A + B\*256 + C\*65536 + D\*16777216**. This formula is applicable for provisioning package index values.
+`HeteroIncreaseThreshold` needs to setup in two steps. First a definition needs to be setup for the threshold values. This is a four-byte unsigned integer where each byte represents a threshold in percentage. The lowest byte is the first threshold. For example, to set four thresholds A, B, C, and D, the value of the parameter will be **A + B\*256 + C\*65536 + D\*16777216**. This formula is applicable for provisioning package index values.
 
 
 Step 1: These index values should be put in: **Windows provisioning:**`Common\Power\Policy\Definitions\Processor\HeteroIncreaseThreshold`
@@ -85,7 +85,7 @@ This means that for **AC index id = 1** is selected. That entry id corresponds t
 - Third class 1 core C threshold = 70%
 - Fourth class 1 core D threshold = 80%
 
-To set four thresholdsÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂA, B, C, and DÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Âthe value of the parameter will be **D + C\*256 + B\*65536 + A\*16777216**. Note this formula is differnt than provisioning value. In this example the value that runtime can be override with powercfg for Index 0 = 80 + 70\*256 + 20\*65536 + 20\*16777216 = 336,873,040. In hex this value is 0x14144650
+To set four thresholds A, B, C, and D, the value of the parameter will be **D + C\*256 + B\*65536 + A\*16777216**. Note this formula is differnt than provisioning value. In this example the value that runtime can be override with powercfg for Index 0 = 80 + 70\*256 + 20\*65536 + 20\*16777216 = 336,873,040. In hex this value is 0x14144650
 
 These are the commands to override the index 0 with new thresholds via powercfg method
 

@@ -1,7 +1,7 @@
 ---
 title: Processor power management options | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-processor-power-management-options
-description: The WindowsÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â 10 processor power management (PPM) algorithms implement OS-level functionality that allows the OS to efficiently use the available processing resources on a platform by balancing the user's expectations of performance and energy efficiency.
+description: The Windows 10 processor power management (PPM) algorithms implement OS-level functionality that allows the OS to efficiently use the available processing resources on a platform by balancing the user's expectations of performance and energy efficiency.
 note: This was modified by Nohuto using PowrProf API
 ---
 
