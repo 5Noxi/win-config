@@ -2,7 +2,7 @@
 title: Other power settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/no-subgroup-settings
 description: Settings in this subgroup do not belong to any other subgroup.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Other power settings overview | Microsoft Learn

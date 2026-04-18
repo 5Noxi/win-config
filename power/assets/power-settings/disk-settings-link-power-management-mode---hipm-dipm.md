@@ -2,7 +2,7 @@
 title: Link power management mode - HIPM/DIPM | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm
 description: Configures the link power management mode for disk and storage devices that are attached to the system through an AHCI interface.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Link power management mode - HIPM/DIPM | Microsoft Learn

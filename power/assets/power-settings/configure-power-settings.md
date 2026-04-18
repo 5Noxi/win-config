@@ -2,7 +2,7 @@
 title: Configure power settings | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-power-settings
 description: This section contains information about the power settings that you can configure using the Windows provisioning framework. Each power setting topic includes the allowed values, meaning, and common usage scenarios for the setting.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Configure power settings | Microsoft Learn

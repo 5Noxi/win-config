@@ -2,7 +2,7 @@
 title: Power button and lid settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/power-button-and-lid-settings
 description: Settings in this subgroup control the customization of system button actions.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Power button and lid settings overview | Microsoft Learn

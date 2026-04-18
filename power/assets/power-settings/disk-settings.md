@@ -2,7 +2,7 @@
 title: Disk settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings
 description: Settings in this subgroup control the power management of disk devices.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Disk settings overview | Microsoft Learn

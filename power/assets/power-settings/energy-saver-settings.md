@@ -2,7 +2,7 @@
 title: Energy Saver settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/energy-saver-settings
 description: Settings in this subgroup control the battery threshold and brightness when Energy Saver is turned on.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Energy Saver settings overview | Microsoft Learn

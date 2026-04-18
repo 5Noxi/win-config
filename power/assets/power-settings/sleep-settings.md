@@ -2,7 +2,7 @@
 title: Sleep settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/sleep-settings
 description: Settings in this subgroup control sleep, resume, and other related functionality.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Sleep settings overview | Microsoft Learn

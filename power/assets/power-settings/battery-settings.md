@@ -2,7 +2,7 @@
 title: Battery settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/battery-settings
 description: Settings in this subgroup control the customization of battery actions and thresholds.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Battery settings overview | Microsoft Learn

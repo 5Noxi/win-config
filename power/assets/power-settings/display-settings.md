@@ -2,7 +2,7 @@
 title: Display settings overview | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/display-settings
 description: Settings in this subgroup control the power management of the display.
-note: This was modified by Nohuto using PowrProf API PowerReadPossibleDescription
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Display settings overview | Microsoft Learn
