@@ -91,7 +91,7 @@ This power plan should be used by laptop users, it's a clone of `SCHEME_BALANCED
 
 ## Power Settings Documentation
 
-Most markdown files below are from [windows-hardware/customize/power-settings](https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-power-settings), but since this isn't available on GitHub I decided back them up.
+Most markdown files below are backed up from [windows-hardware/customize/power-settings](https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-power-settings), many missing or incomplete parts were also added manually by me (mentioned on the top if so), with the additional setting/value data gathered via the PowrProf API (`PowerReadPossibleDescription`, `PowerReadFriendlyName`, `PowerReadPossibleFriendlyName`, `PowerReadValueMin`, `PowerReadValueMax`, `PowerReadValueIncrement`, `PowerReadValueUnits`).
 
 Structure is heading level 3 = subgroup name, linked text = setting name, the brackets include `PowerCfg` naming & setting GUID.
 
