@@ -2,6 +2,7 @@
 title: HeteroClass0FloorPerf | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-heteroclass0floorperf
 description: HeteroClass0FloorPerf specifies the performance level floor, in percentage, to use for efficiency class 0 processors if there is at least one unparked efficiency class 1 processor.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # HeteroClass0FloorPerf | Microsoft Learn
@@ -14,15 +15,20 @@ Not applicable with [Quality of Service](https://learn.microsoft.com/en-us/windo
 
 - **Windows Provisioning:**`Common\Power\Policy\Settings\Processor\HeteroClass0FloorPerf`
 - **PowerCfg:**`HETEROCLASS0FLOORPERF`
+- **GUID:** fddc842b-8364-4edc-94cf-c17f60de1c80
+- **Description:** Performance state floor for Processor Power Efficiency Class 0 when Processor Power Efficiency Class 1 is woken from a parked state.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

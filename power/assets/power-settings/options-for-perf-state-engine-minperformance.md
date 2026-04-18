@@ -2,6 +2,7 @@
 title: MinPerformance | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-minperformance
 description: MinPerformance specifies the minimum processor performance state, which is specified as a percentage of maximum processor performance.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # MinPerformance | Microsoft Learn
@@ -12,15 +13,20 @@ description: MinPerformance specifies the minimum processor performance state, w
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\MinPerformance`, `Common\Power\Policy\Settings\Processor\MinPerformance1`
 - **PowerCfg:**`PROCTHROTTLEMIN`, `PROCTHROTTLEMIN1`
+- **GUID:** 893dee8e-2bef-41e0-89c6-b55d0929964c, 893dee8e-2bef-41e0-89c6-b55d0929964d
+- **Description:** Specify the minimum performance state of your processor (in percentage). / Specify the minimum performance state of your Processor Power Efficiency Class 1 processor (in percentage).
 - **Hidden setting:** No
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

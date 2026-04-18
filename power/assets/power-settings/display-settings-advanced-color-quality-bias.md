@@ -2,6 +2,7 @@
 title: Advanced Color display quality | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/display-settings-advanced-color-quality-bias
 description: Specifies the policy to decide visual quality of Advanced Color capable displays.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Advanced Color display quality | Microsoft Learn
@@ -12,15 +13,16 @@ Specifies the policy to decide visual quality of Advanced Color capable displays
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Display\AdvancedColorQualityBias`
 - **PowerCfg:**`ADVANCEDCOLORQUALITYBIAS`
-- **GUID:** 684C3E69-A4F7-4014-8754-D45179A56167
+- **GUID:** 684c3e69-a4f7-4014-8754-d45179a56167
+- **Description:** Specify the policy to decide visual quality of Advanced Color capable displays.
 - **Hidden setting:** Yes
 
 ## Values
 
-| Index | Name | Description |
-| --- | --- | --- |
-| 0 | Battery Life | Advanced Color display mode would be biased towards battery life. |
-| 1 | Visual Quality | Advanced Color display mode would be biased towards visual quality. |
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Advanced Color power saving bias | 0 | Advanced Color display mode would be biased towards battery life. |
+| 001 | Advanced Color visual quality bias | 1 | Advanced Color display mode would be biased towards visual quality. |
 
 ## Applies to
 

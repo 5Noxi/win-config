@@ -1,7 +1,8 @@
 ---
 title: Processor power management options | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configure-processor-power-management-options
-description: The Windows 10 processor power management (PPM) algorithms implement OS-level functionality that allows the OS to efficiently use the available processing resources on a platform by balancing the user's expectations of performance and energy efficiency.
+description: The WindowsÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â 10 processor power management (PPM) algorithms implement OS-level functionality that allows the OS to efficiently use the available processing resources on a platform by balancing the user's expectations of performance and energy efficiency.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Processor power management options | Microsoft Learn
@@ -202,3 +203,203 @@ QoS levels are tuned by Silicon vendors to optimize power and performance of pro
 | Eco | "Eco" |
 | Media | "Multimedia" |
 | Deadline | Uses only [PerfLatencyHint](options-for-perf-state-engine-perflatencyhint.md) and [LatencyHintEpp](options-for-perf-state-engine-latencyhintepp.md) from "Multimedia" profile |
+
+## Power Setting Reference
+
+## Allow Throttle States
+
+- **GUID:** 3b04d4fd-1cc7-4f23-ab1c-d1337819c4bb
+- **PowerCfg alias:**`THROTTLING`
+- **Description:** Allow processors to use throttle states in addition to performance states.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Off | 0 | Off |
+| 001 | On | 1 | On |
+| 002 | Automatic | 2 | Automatically use throttle states when they are power efficient. |
+
+## Processor performance core parking parked performance state
+
+- **GUID:** 447235c7-6a8d-4cc0-8e24-9eaf70b96e2b
+- **PowerCfg alias:**`CPPERF`
+- **Description:** Specify what performance state a processor enters when parked.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | No Preference | 0 | No Preference |
+| 001 | Deepest Performance State | 1 | Deepest Performance State |
+| 002 | Lightest Performance State | 2 | Lightest Performance State |
+
+## Processor performance core parking parked performance state for Processor Power Efficiency Class 1
+
+- **GUID:** 447235c7-6a8d-4cc0-8e24-9eaf70b96e2c
+- **PowerCfg alias:**`CPPERF1`
+- **Description:** Specify what performance state a Processor Power Efficiency Class 1 processor enters when parked.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | No Preference | 0 | No Preference |
+| 001 | Deepest Performance State | 1 | Deepest Performance State |
+| 002 | Lightest Performance State | 2 | Lightest Performance State |
+
+## Processor performance time check interval
+
+- **GUID:** 4d2b0152-7d5c-498b-88e2-34345392a2c5
+- **PowerCfg alias:**`PERFCHECK`
+- **Description:** Specify the amount that must expire before processor performance states and parked cores may be reevaluated (in milliseconds).
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 1 |
+| Maximum value | 5,000 |
+| Increment | 1 |
+| Units | Milliseconds |
+
+## Processor idle disable
+
+- **GUID:** 5d76a2ca-e8c0-402f-a133-2158492d58ad
+- **PowerCfg alias:**`IDLEDISABLE`
+- **Description:** Specify if idle states should be disabled.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Enable idle | 0 | Enable idle states. |
+| 001 | Disable idle | 1 | Disable idle states. |
+
+## Processor idle threshold scaling
+
+- **GUID:** 6c2993b0-8f48-481f-bcc6-00dd2742aa06
+- **PowerCfg alias:**`IDLESCALING`
+- **Description:** Specify if idle state promotion and demotion values should be scaled based on the current performance state.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Disable scaling | 0 | Disable scaling of idle state promotion and demotion values based on the current performance state. |
+| 001 | Enable scaling | 1 | Enable scaling of idle state promotion and demotion values based on the current performance state. |
+
+## Processor performance core parking decrease policy
+
+- **GUID:** 71021b41-c749-4d21-be74-a00f335d582b
+- **PowerCfg alias:**`CPDECREASEPOL`
+- **Description:** Specify the number of cores/packages to park when fewer cores are required.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Ideal number of cores | 0 | Ideal number of cores |
+| 001 | Single core | 1 | Single core |
+| 002 | All possible cores | 2 | All possible cores |
+| 003 | One eighth cores | 3 | One eighth cores |
+
+## Processor performance history count
+
+- **GUID:** 7d24baa7-0b84-480f-840c-1b0743c00f5f
+- **PowerCfg alias:**`PERFHISTORY`
+- **Description:** Specify the number of processor performance time check intervals to use when calculating the average utility.
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 1 |
+| Maximum value | 128 |
+| Increment | 1 |
+| Units | Time check intervals |
+
+## Processor performance history count for Processor Power Efficiency Class 1
+
+- **GUID:** 7d24baa7-0b84-480f-840c-1b0743c00f60
+- **PowerCfg alias:**`PERFHISTORY1`
+- **Description:** Specify the number of processor performance time check intervals to use when calculating the average utility for Processor Power Efficiency Class 1.
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 1 |
+| Maximum value | 128 |
+| Increment | 1 |
+| Units | Time check intervals |
+
+## Heterogeneous policy in effect
+
+- **GUID:** 7f2f5cfa-f10c-4823-b5e1-e93ae85f46b5
+- **PowerCfg alias:**`HETEROPOLICY`
+- **Description:** Specify what policy to be used on systems with at least two different Processor Power Efficiency Classes.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Use heterogeneous policy 0 | 0 | Heterogeneous policy 0. |
+| 001 | Use heterogeneous policy 1 | 1 | Heterogeneous policy 1. |
+| 002 | Use heterogeneous policy 2 | 2 | Heterogeneous policy 2. |
+| 003 | Use heterogeneous policy 3 | 3 | Heterogeneous policy 3. |
+| 004 | Use heterogeneous policy 4 | 4 | Heterogeneous policy 4. |
+
+## Processor performance core parking overutilization threshold
+
+- **GUID:** 943c8cb6-6f93-4227-ad87-e9a3feec08d1
+- **PowerCfg alias:**`CPOVERUTIL`
+- **Description:** Specify the busy threshold that must be met before a parked core is considered overutilized (in percentage).
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 5 |
+| Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
+
+## System cooling policy
+
+- **GUID:** 94d3a615-a899-4ac5-ae2b-e4d8f634367f
+- **PowerCfg alias:**`SYSCOOLPOL`
+- **Description:** Specify the cooling mode for your system
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Passive | 1 | Slow the processor before increasing fan speed |
+| 001 | Active | 0 | Increase fan speed before slowing the processor |
+
+## Processor idle state maximum
+
+- **GUID:** 9943e905-9a30-4ec1-9b99-44dd3b76f7a2
+- **PowerCfg alias:**`IDLESTATEMAX`
+- **Description:** Specify the deepest idle state that should be used.
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 0 |
+| Maximum value | 20 |
+| Increment | 1 |
+| Units | State Type |
+
+## Processor idle time check
+
+- **GUID:** c4581c31-89ab-4597-8e2b-9c9cab440e6b
+- **PowerCfg alias:**`IDLECHECK`
+- **Description:** Specify the time that elapsed since the last idle state promotion or demotion before idle states may be promoted or demoted again (in microseconds).
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 1 |
+| Maximum value | 200,000 |
+| Increment | 1 |
+| Units | Microseconds |
+
+## Processor performance core parking increase policy
+
+- **GUID:** c7be0679-2817-4d69-9d02-519a537ed0c6
+- **PowerCfg alias:**`CPINCREASEPOL`
+- **Description:** Specify the number of cores/packages to unpark when more cores are required.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Ideal number of cores | 0 | Ideal number of cores |
+| 001 | Single core | 1 | Single core |
+| 002 | All possible cores | 2 | All possible cores |
+| 003 | One eighth cores | 3 | One eighth cores |
+
+## Processor performance core parking utility distribution
+
+- **GUID:** e0007330-f589-42ed-a401-5ddb10e785d3
+- **PowerCfg alias:**`DISTRIBUTEUTIL`
+- **Description:** Specify whether the core parking engine should distribute utility across processors.
+
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Disabled | 0 | Disabled |
+| 001 | Enabled | 1 | Enabled |

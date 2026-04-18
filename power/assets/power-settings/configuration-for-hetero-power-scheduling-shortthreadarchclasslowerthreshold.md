@@ -2,6 +2,7 @@
 title: ShortThreadArchClassLowerThreshold | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-shortthreadarchclasslowerthreshold
 description: ShortThreadArchClassLowerThreshold specify the lower limit of processor architecture class for short running threads on systems with processors with heterogeneous architecture.See [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) for configuring the threshold for determination of short versus long running. Short running threads cannot be run on cores whose normalized architectural class is lower than this limit.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # ShortThreadArchClassLowerThreshold | Microsoft Learn
@@ -12,13 +13,20 @@ description: ShortThreadArchClassLowerThreshold specify the lower limit of proce
 
 - **Windows Provisioning:**`Common\Power\Policy\Settings\Processor\ShortThreadArchClassLowerThreshold`
 - **PowerCfg:**`ShortThreadArchClassLowerThreshold`
+- **GUID:** 53824d46-87bd-4739-aa1b-aa793fac36d6
+- **Description:** Specify the lower limit of processor architecture class for short running threads
 - **Hidden setting:** Yes
 
 ## Values
 
-| Index | Description |
+The value denotes processor architecture class.
+
+| Property | Value |
 | --- | --- |
-| 0 | Minimum value can be 0 and Maximum value can be 255. This value indicates processor architecture class. For example for Dual core system Maximum value can be 2 and for tri-core system maximum value can be 3. |
+| Minimum value | 0 |
+| Maximum value | 255 |
+| Increment | 1 |
+| Units | Processor Architecture Class |
 
 ## Applies to
 

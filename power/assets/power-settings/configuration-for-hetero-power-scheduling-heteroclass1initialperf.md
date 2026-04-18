@@ -2,6 +2,7 @@
 title: HeteroClass1InitialPerf | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-heteroclass1initialperf
 description: HeteroClass1InitialPerf specifies the initial performance percentage of the efficiency class 1 core when this core is unparked.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # HeteroClass1InitialPerf | Microsoft Learn
@@ -14,15 +15,20 @@ Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md)
 
 - **Windows Provisioning:**`Common\Power\Policy\Settings\Processor\HeteroClass1InitialPerf`
 - **PowerCfg:**`HETEROCLASS1INITIALPERF`
+- **GUID:** 1facfc65-a930-4bc5-9f38-504ec097bbc0
+- **Description:** Initial performance state for Processor Power Efficiency Class 1 when woken from a parked state.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

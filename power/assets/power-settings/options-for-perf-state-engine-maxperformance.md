@@ -2,6 +2,7 @@
 title: MaxPerformance | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-maxperformance
 description: MaxPerformance specifies the maximum processor performance state, which is specified as a percentage of maximum processor performance.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # MaxPerformance | Microsoft Learn
@@ -12,15 +13,20 @@ description: MaxPerformance specifies the maximum processor performance state, w
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\MaxPerformance`, `Common\Power\Policy\Settings\Processor\MaxPerformance1`
 - **PowerCfg:**`PROCTHROTTLEMAX`, `PROCTHROTTLEMAX1`
+- **GUID:** bc5038f7-23e0-4960-96da-33abaf5935ec, bc5038f7-23e0-4960-96da-33abaf5935ed
+- **Description:** Specify the maximum performance state of your processor (in percentage). / Specify the maximum performance state of your Processor Power Efficiency Class 1 processor (in percentage).
 - **Hidden setting:** No
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

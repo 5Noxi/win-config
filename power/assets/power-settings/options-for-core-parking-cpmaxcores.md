@@ -2,6 +2,7 @@
 title: CPMaxCores | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-core-parking-cpmaxcores
 description: CPMaxCores specifies the maximum percentage of logical processors (in terms of logical processors within each NUMA node) that can be in the un-parked state at any given time.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # CPMaxCores | Microsoft Learn
@@ -16,15 +17,20 @@ If the value of `CPMaxCores` is less than the value of [CPMinCores](options-for-
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\CPMaxCores`, `Common\Power\Policy\Settings\Processor\CPMaxCores1`
 - **PowerCfg:**`CPMAXCORES`, `CPMAXCORES1`
+- **GUID:** ea062031-0e34-4ff1-9b6d-eb1059334028, ea062031-0e34-4ff1-9b6d-eb1059334029
+- **Description:** Specify the maximum number of unparked cores/packages allowed (in percentage). / Specify the maximum number of unparked cores/packages allowed for Processor Power Efficiency Class 1 (in percentage).
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

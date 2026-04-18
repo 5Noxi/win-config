@@ -2,6 +2,7 @@
 title: Dim display brightness | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/display-settings-dim-display-brightness
 description: Denotes the reduced display brightness level after the dim idle timeout has been reached.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Dim display brightness | Microsoft Learn
@@ -15,15 +16,19 @@ This setting applies only to portable computers that support Windows control of 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Display\DimLevel`
 - **PowerCfg:**`VIDEODIMLEVEL         `
 - **GUID:** f1fbfde2-a960-4165-9f88-50667911ce96
+- **Description:** Specify the dim brightness level of your display.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes the percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | % |
 
 ## Applies to
 

@@ -2,6 +2,7 @@
 title: PerfAutonomousWindow | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-perfautonomouswindow
 description: PerfAutonomousWindow specifies the value to program in the autonomous activity window register on systems that implement version 2 of the CPPC interface and have autonomous mode enabled.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # PerfAutonomousWindow | Microsoft Learn
@@ -12,15 +13,20 @@ description: PerfAutonomousWindow specifies the value to program in the autonomo
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\PerfAutonomousWindow`
 - **PowerCfg:**`PERFAUTONOMOUSWINDOW`
+- **GUID:** cfeda3d0-7697-4566-a922-a9086cd49dfa
+- **Description:** Specify the time period over which to observe processor utilization when operating in autonomous mode.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes microseconds.
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 1,270,000,000 |
+| Increment | 1 |
+| Units | Microseconds |
 
 ## Applies to
 

@@ -2,6 +2,7 @@
 title: Allow display required policy | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/display-settings-allow-display-required-policy
 description: Specifies whether Windows allows applications to temporarily prevent the display from automatically reducing brightness or turning off to save power.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Allow display required policy | Microsoft Learn
@@ -13,14 +14,15 @@ Specifies whether Windows allows applications to temporarily prevent the display
 - **Windows provisioning:**`Common\Power\Policy\Settings\Display\AllowDisplayRequired`
 - **PowerCfg:**`ALLOWDISPLAY`
 - **GUID:** a9ceb8da-cd46-44fb-a98b-02af69de4623
+- **Description:** Allow programs to prevent display from turning off automatically
 - **Hidden setting:** Yes
 
 ## Values
 
-| Index | Name | Description |
-| --- | --- | --- |
-| 0 | No | Applications are not allowed to temporarily prevent display power management. |
-| 1 | Yes | Applications are allowed to temporarily prevent display power management. |
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | No | 0 | Don't allow programs to prevent display from turning off automatically |
+| 001 | Yes | 1 | Allow programs to prevent display from turning off automatically |
 
 ## Applies to
 

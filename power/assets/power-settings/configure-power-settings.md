@@ -157,7 +157,7 @@ You can use the powercfg.exe tool to control power schemes by providing the GUID
 
 - **GUID:** d4e98f31-5ffe-4ce1-be31-1b38b384c009
 - **PowerCfg alias:**`N/A`
-- **Description:** Specifies the power management policy to use for USB 3 links when they are idle.
+- **Description:** Specifies the power management policy to use for USB 3 links when they are idle
 
 | Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |

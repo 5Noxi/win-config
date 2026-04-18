@@ -2,6 +2,7 @@
 title: Human Presence Sensor Adaptive Away Display Timeout | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/presence-adaptive-away-display-timeout
 description: Specifies the display timeout after a Human Presence sensor has signaled the user as not present
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Human Presence Sensor Adaptive Away Display Timeout | Microsoft Learn
@@ -12,12 +13,20 @@ Specifies the display timeout after a Human Presence sensor has signaled the use
 
 - **Windows provisioning path:**`Common\Power\Policy\Settings\AdaptivePowerBehavior\HuprVideoIdle`
 - **PowerCfg:**`HUPRVIDEOIDLE`
-- **GUID:** 0A7D6AB6-AC83-4AD1-8282-ECA5B58308F3
+- **GUID:** 0a7d6ab6-ac83-4ad1-8282-eca5b58308f3
+- **Description:** Specifies the display timeout after a Human Presence sensor has signaled the user as not present
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes the time, in seconds.
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 0 |
+| Maximum value | 4,294,967,295 |
+| Increment | 1 |
+| Units | Seconds |
 
 ## Applies to
 

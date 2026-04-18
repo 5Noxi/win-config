@@ -2,6 +2,7 @@
 title: PerfIncreaseThreshold | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-perfincreasethreshold
 description: PerfIncreaseThreshold specifies the percentage of processor utilization, in terms of the maximum processor utilization, that is required to increase the processor to a higher performance state.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # PerfIncreaseThreshold | Microsoft Learn
@@ -14,15 +15,20 @@ Not applicable to [Enabled](options-for-perf-state-engine-perfautonomousmode.md)
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\PerfIncreaseThreshold`, `Common\Power\Policy\Settings\Processor\PerfIncreaseThreshold1`
 - **PowerCfg:**`PERFINCTHRESHOLD`, `PERFINCTHRESHOLD1`
+- **GUID:** 06cadf0e-64ed-448a-8927-ce7bf90eb35d, 06cadf0e-64ed-448a-8927-ce7bf90eb35e
+- **Description:** Specify the upper busy threshold that must be met before increasing the processor's performance state (in percentage). / Specify the upper busy threshold that must be met before increasing the processor's performance state (in percentage) for Processor Power Efficiency Class 1.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

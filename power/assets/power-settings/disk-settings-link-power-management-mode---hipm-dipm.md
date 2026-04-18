@@ -14,6 +14,7 @@ Configures the link power management mode for disk and storage devices that are 
 - **Windows provisioning:**`N/A`
 - **PowerCfg:**`N/A         `
 - **GUID:** 0b2d69d7-a2a1-449c-9680-f91c70521c60
+- **Description:** Configures the LPM state.
 - **Hidden setting:** Yes
 
 ## Values

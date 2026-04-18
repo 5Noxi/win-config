@@ -2,6 +2,7 @@
 title: Allow networking during standby | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/no-subgroup-settings-allow-networking-during-standby
 description: Specifies whether to allow networking during standby.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Allow networking during standby | Microsoft Learn
@@ -16,11 +17,11 @@ Specifies whether to allow networking during standby.
 
 ## Values
 
-| Index | Name | Description |
-| --- | --- | --- |
-| 0 | Disabled | The system will disconnect from the network during standby. |
-| 1 | Enabled | The system will stay connected to the network during standby. |
-| 2 | Managed by Windows | Windows will manage network connectivity during standby. |
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 0 | Disable | 0 | Disable networking in Standby. |
+| 1 | Enable | 1 | Enable networking in Standby. |
+| 2 | Managed by Windows | 2 | Network connection state in Standby is managed by Windows. |
 
 ## Applies to
 

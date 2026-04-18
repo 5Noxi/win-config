@@ -2,6 +2,7 @@
 title: Human Presence Sensor Adaptive Inattentive Dim Timeout | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/presence-adaptive-inattentive-dim-timeout
 description: Specifies the dim timeout after a Human Presence sensor has signaled the user is inattentive.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Human Presence Sensor Adaptive Inattentive Dim Timeout | Microsoft Learn
@@ -12,12 +13,20 @@ Specifies the dim timeout after a Human Presence sensor has signaled the user is
 
 - **Windows provisioning path:**`Common\Power\Policy\Settings\AdaptivePowerBehavior\HuprVideoDim`
 - **PowerCfg:**`HUPRVIDEODIM`
-- **GUID:** CF8C6097-12B8-4279-BBDD-44601EE5209D
+- **GUID:** cf8c6097-12b8-4279-bbdd-44601ee5209d
+- **Description:** Specifies the dim timeout after a Human Presence sensor has signaled the user is inattentive
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes the time, in seconds.
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 0 |
+| Maximum value | 4,294,967,295 |
+| Increment | 1 |
+| Units | Seconds |
 
 ## Applies to
 

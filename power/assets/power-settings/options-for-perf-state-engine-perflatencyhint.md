@@ -2,6 +2,7 @@
 title: PerfLatencyHint | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-perflatencyhint
 description: PerfLatencyHint specifies the processor performance in response to latency sensitivity hints.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # PerfLatencyHint | Microsoft Learn
@@ -16,15 +17,20 @@ When set to 0, the processor performance engine does not take latency sensitivit
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\PerfLatencyHint`, `Common\Power\Policy\Settings\Processor\PerfLatencyHint1`
 - **PowerCfg:**`LATENCYHINTPERF`, `LATENCYHINTPERF1`
+- **GUID:** 619b7505-003b-4e82-b7a6-4dd29c300971, 619b7505-003b-4e82-b7a6-4dd29c300972
+- **Description:** Specify the processor performance in response to latency sensitivity hints. / Specify the processor performance in response to latency sensitivity hints for Processor Power Efficiency Class 1.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

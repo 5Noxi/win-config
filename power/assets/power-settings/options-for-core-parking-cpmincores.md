@@ -2,6 +2,7 @@
 title: CPMinCores | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-core-parking-cpmincores
 description: CPMinCores specifies the minimum percentage of logical processors (in terms of all logical processors that are enabled on the system within each NUMA node) that can be placed in the un-parked state at any given time.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # CPMinCores | Microsoft Learn
@@ -13,16 +14,22 @@ For example, in a NUMA node with 16 logical processors, configuring the value of
 ## Aliases and setting visibility
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\CPMinCores`, `Common\Power\Policy\Settings\Processor\CPMinCores1`
-- **PowerCfg:**`CPMINCORES`, `CPMINCORES1`
+- **PowerCfg:**`CPMINCORES`, `CPMINCORES1`
+
+- **GUID:** 0cc5b647-c1df-4637-891a-dec35c318583, 0cc5b647-c1df-4637-891a-dec35c318584
+- **Description:** Specify the minimum number of unparked cores/packages allowed (in percentage). / Specify the minimum number of unparked cores/packages allowed for Processor Power Efficiency Class 1 (in percentage).
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

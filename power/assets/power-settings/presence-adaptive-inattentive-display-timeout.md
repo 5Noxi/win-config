@@ -2,6 +2,7 @@
 title: Human Presence Sensor Adaptive Inattentive Display Timeout | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/presence-adaptive-inattentive-display-timeout
 description: Specifies the display timeout after a Human Presence sensor has signaled the user is inattentive
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Human Presence Sensor Adaptive Inattentive Display Timeout | Microsoft Learn
@@ -12,12 +13,20 @@ Specifies the display timeout after a Human Presence sensor has signaled the use
 
 - **Windows provisioning path:**`Common\Power\Policy\Settings\AdaptivePowerBehavior\HuprVideoIdleInattentive`
 - **PowerCfg:**`HUPRVIDEOIDLEINATTENTIVE`
-- **GUID:** EE16691E-6AB3-4619-BB48-1C77C9357E5A
+- **GUID:** ee16691e-6ab3-4619-bb48-1c77c9357e5a
+- **Description:** Specifies the display timeout after a Human Presence sensor has signaled the user is inattentive
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes the time, in seconds.
+
+| Property | Value |
+| --- | --- |
+| Minimum value | 0 |
+| Maximum value | 4,294,967,295 |
+| Increment | 1 |
+| Units | Seconds |
 
 ## Applies to
 

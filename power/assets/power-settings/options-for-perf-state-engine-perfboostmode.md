@@ -2,6 +2,7 @@
 title: PERFBOOSTMODE | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-perfboostmode
 description: PERFBOOSTMODE determines how processors select a performance level when current operating conditions allow for boosting performance above the nominal level.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # PERFBOOSTMODE | Microsoft Learn
@@ -14,17 +15,20 @@ For non-autonomous CPPC/PEP, the OS selects a target boost performance when Enab
 
 - **GUID:** be337238-0d82-4146-a960-4f3749d470c7
 - **PowerCfg alias:**`PERFBOOSTMODE`
+- **Description:** Specify the performance boost mode.
 - **Hidden setting:** Yes
 
 ## Values
 
-| Index | ACPI P-State | CPPC/PEP | Autonomous CPPC/PEP |
+| Index | Friendly Name | Raw Value | Description |
 | --- | --- | --- | --- |
-| 0 | Disabled | Disabled | Disabled |
-| 1 | Enabled | Enabled | Enabled |
-| 2 | Enabled | Aggressive | Enabled |
-| 3 | Same as 1 | Same as 1 | Same as 1 |
-| 4 | Same as 2 | Same as 2 | Same as 2 |
+| 0 | Disabled | 0 | Don't select target frequencies above maximum frequency. |
+| 1 | Enabled | 1 | Select target frequencies above maximum frequency. |
+| 2 | Aggressive | 2 | Always select the highest possible target frequency above nominal frequency. |
+| 3 | Efficient Enabled | 3 | Select target frequencies above maximum frequency if hardware supports doing so efficiently. |
+| 4 | Efficient Aggressive | 4 | Always select the highest possible target frequency above nominal frequency if hardware supports doing so efficiently. |
+| 5 | Aggressive At Guaranteed | 5 | Always select the highest possible target frequency above guaranteed frequency. |
+| 6 | Efficient Aggressive At Guaranteed | 6 | Always select the highest possible target frequency above guaranteed frequency if hardware supports doing so efficiently. |
 
 ## Applies to
 

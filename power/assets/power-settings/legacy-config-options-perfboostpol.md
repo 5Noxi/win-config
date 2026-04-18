@@ -2,6 +2,7 @@
 title: PERFBOOSTPOL | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/legacy-config-options-perfboostpol
 description: PERFBOOSTPOL configures the processor performance boost policy.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # PERFBOOSTPOL | Microsoft Learn
@@ -12,15 +13,19 @@ description: PERFBOOSTPOL configures the processor performance boost policy.
 
 - **GUID:** 45bcc044-d885-43e2-8605-ee0ec6e96b59
 - **PowerCfg alias:**`PERFBOOSTPOL`
+- **Description:** Configures processor performance boost policy.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | % |
 
 ## Applies to
 

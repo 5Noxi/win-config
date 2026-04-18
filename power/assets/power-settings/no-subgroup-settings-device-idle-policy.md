@@ -2,6 +2,7 @@
 title: Device idle policy | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/no-subgroup-settings-device-idle-policy
 description: Determines whether conservation idle timeouts or performance idle timeouts are used for devices that are integrated with Windows kernel power manager device idle detection.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Device idle policy | Microsoft Learn
@@ -17,10 +18,10 @@ Determines whether conservation idle timeouts or performance idle timeouts are u
 
 ## Values
 
-| Index | Name | Description |
-| --- | --- | --- |
-| 0 | Performance | Power idle timeouts are used. |
-| 1 | Power Savings | Conservation idle timeouts are used. |
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 0 | Performance | 0 | Favor performance over power savings. |
+| 1 | Power savings | 1 | Favor power savings over performance. |
 
 ## Applies to
 

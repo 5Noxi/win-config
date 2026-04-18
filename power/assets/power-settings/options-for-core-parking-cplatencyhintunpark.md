@@ -2,6 +2,7 @@
 title: CpLatencyHintUnpark | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-core-parking-cplatencyhintunpark
 description: CPLatencyHintUnpark specifies the minimum number of unparked cores when a system low latency hint is detected.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # CpLatencyHintUnpark | Microsoft Learn
@@ -12,15 +13,20 @@ description: CPLatencyHintUnpark specifies the minimum number of unparked cores 
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\CpLatencyHintUnpark`, `Common\Power\Policy\Settings\Processor\CpLatencyHintUnpark1`
 - **PowerCfg:**`LATENCYHINTUNPARK`, `LATENCYHINTUNPARK1`
+- **GUID:** 616cdaa5-695e-4545-97ad-97dc2d1bdd88, 616cdaa5-695e-4545-97ad-97dc2d1bdd89
+- **Description:** Specify the minimum number of unparked cores/packages when a latency hint is active (in percentage). / Specify the minimum number of unparked cores/packages when a latency hint is active for Processor Power Efficiency Class 1 (in percentage).
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

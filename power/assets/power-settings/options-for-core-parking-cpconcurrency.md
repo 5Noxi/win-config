@@ -2,6 +2,7 @@
 title: CPConcurrency | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-core-parking-cpconcurrency
 description: CPConcurrency specifies the threshold for determining concurrency of the node.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # CPConcurrency | Microsoft Learn
@@ -12,15 +13,20 @@ description: CPConcurrency specifies the threshold for determining concurrency o
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\CPConcurrency`
 - **PowerCfg:**`CPCONCURRENCY`
+- **GUID:** 2430ab6f-a520-44a2-9601-f7f23b5134b1
+- **Description:** Specify the busy threshold that must be met when calculating the concurrency of a node.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

@@ -2,6 +2,7 @@
 title: LongThreadArchClassUpperThreshold | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-longthreadarchclassupperthreshold
 description: LongThreadArchClassUpperThreshold specify the upper limit of processor architecture class for long running threads on systems with processors with heterogeneous architecture. See  [ShortThreadRuntimeThreshold](configuration-for-hetero-power-scheduling-shortthreadruntimethreshold.md) for configuring the threshold for determination of short versus long running. Long running threads cannot be run on cores whose normalized architectural class is higher than this limit.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # LongThreadArchClassUpperThreshold | Microsoft Learn
@@ -12,13 +13,20 @@ description: LongThreadArchClassUpperThreshold specify the upper limit of proces
 
 - **Windows Provisioning:**`Common\Power\Policy\Settings\Processor\LongThreadArchClassUpperThreshold`
 - **PowerCfg:**`LongThreadArchClassUpperThreshold`
+- **GUID:** bf903d33-9d24-49d3-a468-e65e0325046a
+- **Description:** Specify the upper limit of processor architecture class for long running threads
 - **Hidden setting:** Yes
 
 ## Values
 
-| Index | Description |
+The value denotes processor architecture class.
+
+| Property | Value |
 | --- | --- |
-| 0 | Minimum value can be 0 and Maximum value can be 255. This value indicates processor architecture class. For example for dual core system Maximum value can be 2 and for tri-core system maximum value can be 3. |
+| Minimum value | 0 |
+| Maximum value | 255 |
+| Increment | 1 |
+| Units | Processor Architecture Class |
 
 ## Applies to
 

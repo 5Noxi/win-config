@@ -2,6 +2,7 @@
 title: LatencyHintEpp | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-latencyhintepp
 description: LatencyHintEpp specifies the processor energy performance preference in response to latency sensitivity hints.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # LatencyHintEpp | Microsoft Learn
@@ -14,15 +15,20 @@ It is also used for Deadline [Quality of Service](https://learn.microsoft.com/en
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\LatencyHintEpp`, `Common\Power\Policy\Settings\Processor\LatencyHintEpp1`
 - **PowerCfg:**`LATENCYHINTEPP`, `LATENCYHINTEPP1`
+- **GUID:** 4b70f900-cdd9-4e66-aa26-ae8417f98173, 4b70f900-cdd9-4e66-aa26-ae8417f98174
+- **Description:** Specify the processor energy performance preference in response to latency sensitivity hints. / Specify the Processor Power Efficiency Class 1 processor energy performance preference in response to latency sensitivity hints.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes percentage (%).
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 0 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | percent |
 
 ## Applies to
 

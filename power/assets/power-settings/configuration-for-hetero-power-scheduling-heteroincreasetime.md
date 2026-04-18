@@ -2,6 +2,7 @@
 title: HeteroIncreaseTime | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/configuration-for-hetero-power-scheduling-heteroincreasetime
 description: HeteroIncreaseTime specifies the minimum amount of time that must elapse before additional efficiency class 1 logical processors can be transitioned form the parked state to the unparked state.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # HeteroIncreaseTime | Microsoft Learn
@@ -12,15 +13,20 @@ description: HeteroIncreaseTime specifies the minimum amount of time that must e
 
 - **Windows Provisioning:**`Common\Power\Policy\Settings\Processor\HeteroIncreaseTime`
 - **PowerCfg:**`HETEROINCREASETIME`
+- **GUID:** 4009efa7-e72d-4cba-9edf-91084ea8cbc3
+- **Description:** Specify the minimum number of perf check intervals since the last performance state change before the performance state may be increased for Processor Power Efficiency Class 1.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes time check intervals.
 
-| Minimum value | 0 |
+| Property | Value |
 | --- | --- |
+| Minimum value | 1 |
 | Maximum value | 100 |
+| Increment | 1 |
+| Units | Time check intervals |
 
 ## Applies to
 

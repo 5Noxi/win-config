@@ -2,6 +2,7 @@
 title: Dim annoyance timeout | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/display-settings-dim-annoyance-timeout
 description: This setting denotes the user annoyance detection threshold. It specifies the duration between automatic display brightness level reduction and user input to consider the automatic display brightness level reduction as an annoyance to the user.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # Dim annoyance timeout | Microsoft Learn
@@ -14,16 +15,20 @@ This setting applies only to portable computers that support Windows control of 
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Display\AdapativeIncrease`
 - **PowerCfg:**`VIDEOADAPTINC       `
-- **GUID:** 82dbcf2d-cd67-40c5-bfdc-9f1a5ccd4663
+- **GUID:** 17aaa29b-8b43-4b94-aafe-35f64daaf1ee
+- **Description:** Specify how long your computer is inactive before your display dims.
 - **Hidden setting:** Yes
 
 ## Values
 
 The value denotes the number of seconds.
 
-| Minimum value | 0 (Do not detect user annoyance.) |
+| Property | Value |
 | --- | --- |
-| Maximum value | Maximum integer |
+| Minimum value | 0 |
+| Maximum value | 4,294,967,295 |
+| Increment | 1 |
+| Units | Seconds |
 
 ## Applies to
 

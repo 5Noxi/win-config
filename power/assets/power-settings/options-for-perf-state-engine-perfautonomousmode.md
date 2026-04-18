@@ -2,6 +2,7 @@
 title: PerfAutonomousMode | Microsoft Learn
 canonicalUrl: https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/options-for-perf-state-engine-perfautonomousmode
 description: PerfAutonomousMode controls whether autonomous mode is enabled on systems that implement version 2 of the CPPC interface, and determines whether desired performance requests should be provided to the platform.
+note: This was modified by Nohuto using PowrProf API
 ---
 
 # PerfAutonomousMode | Microsoft Learn
@@ -14,14 +15,16 @@ description: PerfAutonomousMode controls whether autonomous mode is enabled on s
 
 - **Windows provisioning:**`Common\Power\Policy\Settings\Processor\PerfAutonomousMode`
 - **PowerCfg:**`PERFAUTONOMOUS`
+- **GUID:** 8baa4a8a-14c6-4451-8e8b-14bdbd197537
+- **Description:** Specify whether processors should autonomously determine their target performance state.
 - **Hidden setting:** Yes
 
 ## Values
 
-| Index | Name | Description |
-| --- | --- | --- |
-| 0 | Disabled | The performance state engine disables autonomous mode, determines desired performance levels, and conveys those performance levels to the platform. |
-| 1 | Enabled | The performance state engine enables autonomous mode and stops providing desired performance levels to the platform. |
+| Index | Friendly Name | Raw Value | Description |
+| --- | --- | --- | --- |
+| 000 | Disabled | 0 | Determine target performance state using operating system algorithms. |
+| 001 | Enabled | 1 | Determine target performance state using autonomous selection. |
 
 ## Applies to
 
