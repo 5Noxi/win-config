@@ -128,8 +128,413 @@ Miscellaneous notes:
 
 Since many people don't yet know which values exist and what default value they have, here's a list. I used IDA, WinDbg, WinObjEx, Windows Internals E7 P1 to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-See win-registry repo for a list of `CCS\\Control\\Session Manager\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#session-manager-values
+## Registry Values Details
+
+This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
+
+See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/session-manager-symbols.txt) for reference.
+> [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/ProcLibGlobalInit.c)  
+> [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)  
+> [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
+
+The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl).
+
+> [!WARNING]
+> Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
+    "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold, per CPU countdown value. When it reaches 1, it's reloaded and current DPC queue depth is incremented up to DpcQueueDepth ("number of clock ticks before DpcQueueDepth is incremented if DPCs are not pending") (KeAccumulateTicks, KiInitPrcb)
+    "AlwaysTrackIoBoosting" = 0; // PspAlwaysTrackIoBoosting enabling forces IO-boost tracking part in PsBoostThreadIoEx
+    "AmdTprLowerInterruptDelayConfig" = 0; // KiAmdTprLowerInterruptDelayConfig
+    "BoostingPeriodMultiplier" = 3; // KiNormalPriorityBoostingPeriodMultiplier clamped to 1-20 and used as multiplier in 'NormalPriority AntiStarvation' scheduling paths (KiInitializeNormalPriorityAntiStarvationPolicies, KiPrepareReadyThreadForRescheduling, KiNormalPriorityReadyScan)
+    "BugCheckUnexpectedInterrupts" = 0; // KiBugCheckUnexpectedInterrupts
+    "CacheAwareScheduling" = 47; // KiCacheAwareScheduling
+    "CacheErrataOverride" = 0; // KiTLBCOverride, value 1 and other nonzero values set MSR 0xC0011023 differently (KiInitializeCacheErrataSupport, KiInitMachineDependent, KiDisableCacheErrataSource, KeRestoreProcessorSpecificFeatures)
+    "CacheIsoBitmap" = 0; // KiCacheIsoBitmap, if nonzero and "if ( _bittest64(&KeFeatureBits, 0x2Cu) )", value is written to MSR 0xC91 (KeInitializeCatRegisters)
+    "DebuggerIsStallOwner" = 0; // KiDebuggerIsStallOwner (KiSetDebuggerOwner)
+    "DebugPollInterval" = 2000; // KiDebugPollInterval, debugger enabled (KdDebuggerEnabled) timer path uses 10000 * value (KiGetNextTimerExpirationDueTime)
+    "DefaultDynamicHeteroCpuPolicy" = 3; // KiDefaultDynamicHeteroCpuPolicy, behavior of Dynamic hetero policy All (0) (all available) Large (1) LargeOrIdle (2) Small (3) SmallOrIdle (4) Dynamic (5) (use priority and other metrics to decide) BiasedSmall (6) (use priority and other metrics, but prefer small) BiasedLarge (7).
+    "DefaultHeteroCpuPolicy" = 5; // KiDefaultHeteroCpuPolicy
+    "DeviceOwnerProtectionDowngradeAllowed" = 0; // SeDeviceOwnerProtectionDowngradeAllowed
+    "DisableControlFlowGuardExportSuppression" = 0; // PspDisableControlFlowGuardExportSuppression
+    "DisableExceptionChainValidation" = 2; // PspSehValidationPolicy
+    "DisableLightWeightSuspend" = 0; // KiDisableLightWeightSuspend, nonzero blocks lightweight suspend part in KiSuspendThread and uses the APC path (KiSuspendThread)
+    "DisableLowQosTimerResolution" = 1; // KeDisableLowQosTimerResolution, uses ExpUpdateTimerResolution for specific processes etc? (PspSetProcessTimerResolutionPolicy)
+    "DisablePointerParameterAlignmentValidation" = 0; // KiDisablePointerParameterAlignmentValidation
+    "DisableTsx" = 0; // KiDisableTsx
+    "DpcCumulativeSoftTimeout" = 120000; // KeDpcCumulativeSoftTimeoutMs, range 2000-DpcWatchdogPeriod, gets multiplied by KeVerifierDpcScalingFactor (KiInitDpcThresholds, KiApplyDpcVerificationScaleSettings)
+    "DpcQueueDepth" = 4; // KiMaximumDpcQueueDepth, "Number of DPCs queued before an interrupt will be sent even for Medium or below DPCs"
+    "DpcSoftTimeout" = 20000; // KeDpcSoftTimeoutMs, range 20-DPCTimeout, gets multiplied by KeVerifierDpcScalingFactor (KiInitDpcThresholds, KiApplyDpcVerificationScaleSettings)
+    "DPCTimeout" = 20000; // KeDpcTimeoutMs, data 1-19 = 20, "specific DPC execution time limit control" (KiInitDpcThresholds)
+    "DpcWatchdogPeriod" = 120000; // KeDpcWatchdogPeriodMs
+    "DpcWatchdogProfileBufferSizeBytes" = 266240; // KeDpcWatchdogProfileBufferSizeBytes
+    "DpcWatchdogProfileCumulativeDpcThreshold" = 110000; // KeDpcWatchdogProfileCumulativeDpcThresholdMs
+    "DpcWatchdogProfileOffset" = 10000; // KeDpcWatchdogProfileOffsetMs
+    "DpcWatchdogProfileSingleDpcThreshold" = 18333; // KeDpcWatchdogProfileSingleDpcThresholdMs
+    "DriveRemappingMitigation" = 1; // ObpDriveRemappingMitigation
+    "DynamicHeteroCpuPolicyExpectedRuntime" = 5200; // KiDynamicHeteroCpuPolicyExpectedRuntime
+    "DynamicHeteroCpuPolicyImportant" = 2; // (LargeOrIdle)
+    // Policy for a dynamic thread that is deemed important.
+    "DynamicHeteroCpuPolicyImportantPriority" = 8; // KiDynamicHeteroCpuPolicyImportantPriority
+    // Priority above which threads are considered important if prioritybased dynamic policy is chosen.
+    "DynamicHeteroCpuPolicyImportantShort" = 3; // (Small)
+    // Policy for dynamic thread that is deemed important but run a short amount of time.
+    "DynamicHeteroCpuPolicyMask" = 7; //  (foreground status = 1, priority = 2, expected run time = 4)
+    // Determine what is considered in assessing whether a thread is important.
+    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling
+    "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods
+    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting
+    "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
+    "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
+    "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
+    "ForceParkingRequested" = 1; // KiForceParkingConfiguration
+    "GlobalTimerResolutionRequests" = 0; // KiGlobalTimerResolutionRequests
+    "HeteroFavoredCoreFallback" = 0; // PpmHeteroFavoredCoreFallback
+    "HeteroSchedulerOptions" = 0; // KiHeteroSchedulerOptions
+    "HeteroSchedulerOptionsMask" = 0; // KiHeteroSchedulerOptionsMask
+    "HgsPlusFeedbackUpdateThresholdNetRuntime" = 20; // dword_140FC33C0
+    "HgsPlusFeedbackUpdateThresholdRuntime" = 20; // dword_140FC33B4
+    "HgsPlusHigherPerfClassFeedbackThreshold" = 1; // dword_140FC33E0
+    "HgsPlusInvalidFeedbackDefaultClass" = 0; // dword_140FC33D4
+    "HgsPlusInvalidFeedbackDefaultClassSet" = 0; // dword_140FC33D8
+    "HgsPlusInvalidFeedbackLimit" = 50; // dword_140FC33D0
+    "HgsPlusLowerPerfClassFeedbackThreshold" = 4; // dword_140FC33DC
+    "HgsPlusMinimumScoreDifferenceForSwap" = 25; // dword_140FC33E8
+    "HgsPlusThreadCreationDefaultClass" = 0; // dword_140FC33E4
+    "HotpatchTestMode" = 0; // KeHotpatchTestMode
+    "HyperStartDisabled" = 0; // HvlVpStartDisabled
+    "IdealDpcRate" = 20; // KiIdealDpcRate
+    "IdealNodeRandomized" = 1; // PspIdealNodeRandomized
+    "InterruptSteeringFlags" = 0; // KiInterruptSteeringFlags
+    "LongDpcQueueThreshold" = 3; // KiLongDpcQueueThreshold
+    "LongDpcRuntimeThreshold" = 100; // KiLongDpcRuntimeThreshold
+    "MaxDynamicTickDuration" = 8; // KiMaxDynamicTickDurationSize
+    "MaximumCooperativeIdleSearchWidth" = 16; // KiMaximumCooperativeIdleSearchWidth
+    "MaximumSharedReadyQueueSize" = 260; // KiMaximumSharedReadyQueueSize
+    "MinimumDpcRate" = 3; // KiMinimumDpcRate
+    "MitigationAuditOptions" = 0; // PspSystemMitigationAuditOptions
+    "MitigationOptions" = 0; // PspSystemMitigationOptions
+    "ObCaseInsensitive" = 1; // ObpCaseInsensitive
+    "ObObjectSecurityInheritance" = 0; // ObpObjectSecurityInheritance
+    "ObTracePermanent" = 0; // ObpTracePermanent
+    "ObTracePoolTags" = 0; // ObpTracePoolTagsBuffer / ObpTracePoolTagsLength
+    "ObTraceProcessName" = 0; // ObpTraceProcessNameBuffer / ObpTraceProcessNameLength
+    "ObUnsecureGlobalNames" = 6619246; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength
+    "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
+    "PerfIsoEnabled" = 0; // KiPerfIsoEnabled
+    "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
+    "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors
+    "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
+    "RebalanceMinPriority" = 1; // KiRebalanceMinPriority
+    "ReservedCpuSets" = 0; // KiReservedCpuSets
+    "ScanLatencyTicks" = 7; // KiNormalPriorityBoostScanLatencyTicks
+    "SchedulerAssistThreadFlagOverride" = 0; // KiSchedulerAssistThreadFlagOverride
+    "SeAllowAllApplicationAceRemoval" = 0; // SepAllowAllApplicationAceRemoval
+    "SeAllowSessionImpersonationCapability" = 0; // SepAllowSessionImpersonationCap
+    "SeCompatFlags" = 0; // SeCompatFlags
+    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting
+    "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
+    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration
+    // This behavior is controlled by the kernel variable KiSerializeTimerExpiration, which is initialized based on a registry setting whose value is different between a server and client installation. By modifying or creating the value SerializeTimerExpiration under HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel other than 0 or 1, serialization can be disabled, enabling timers to be distributed among processors. Deleting the value, or keeping it as 0, allows the kernel to make the decision based on Modern Standby availability, and setting it to 1 permanently enables serialization even on non-Modern Standby systems.
+    "SeTokenDoesNotTrackSessionObject" = 0; // SeTokenDoesNotTrackSessionObject
+    "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
+    "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
+    "SplitLargeCaches" = 0; // KiSplitLargeCaches
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
+    "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
+    "TimerCheckFlags" = 1; // KeTimerCheckFlags
+    "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
+    "VirtualHeteroHysteresis" = 4294967295; // PpmPerfQosTransitionHysteresisOverride
+    "VpThreadSystemWorkPriority" = 30; // KiVpThreadSystemWorkPriority
+    "WpsSimulationOverride" = 0; // PpmWpsSimulationOverride / PpmWpsSimulationOverrideSize
+    "XStateContextLookasidePerProcMaxDepth" = 0; // KiXStateContextLookasidePerProcMaxDepth
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel\\RNG";
+    "RNGAuxiliarySeed" = ; // ExpRNGAuxiliarySeed - REG_DWORD, default of 1807947291? ("HKLM\System\CurrentControlSet\Control\Session Manager\kernel\RNG\RNGAuxiliarySeed","Type: REG_DWORD, Data: 1807947291", procmon boot trace)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
+    "AlpcMessageLog" = 0; // AlpcpMessageLogEnabled 
+    "AlpcWakePolicy" = 1; // AlpcpWakePolicyDefault 
+    "CriticalSectionTimeout" = 2592000; // dword_140FC3204 dd 278D00
+    "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls 
+    "Debugger Retries" = 20; // KdpContext (0x14) 
+    "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching 
+    "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ?
+    "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
+    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
+    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
+    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
+    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
+    "ImageExecutionOptions" = 0; // ViImageExecutionOptions 
+    "InitConsoleFlags" = 0; // InitConsoleFlags 
+    "MultiUsersInSessionSupported" = 0; // RtlpMultiUsersInSessionSupported 
+    "ObjectSecurityMode" = 1; // ObpObjectSecurityMode 
+    "PowerPolicySimulate" = 0; // PopSimulate 
+    "ProtectionMode" = 1; // ObpProtectionMode , DWORD
+    "ResourceCheckFlags" = 3; // ExResourceCheckFlags 
+    "ResourceEnforceOwnerTransfer" = 0; // ExpResourceEnforceOwnerTransfer 
+    "ResourceTimeoutCount" = 45; // ExResourceTimeoutCount (0x2d) 
+    "SkipRegistryInit" = 0; // CmNtSkipRegistryInit 
+
+    // procmon boot trace
+    "ObjectDirectories" = \Windows, \RPC Control; // ? - REG_MULTI_SZ
+    "BootExecute" = ?; // REG_SZ
+    "BootExecuteNoPnpSync" = ?;
+    "PlatformExecute" = ?;
+    "SetupExecute" = ?;
+    "SetupExecuteNoPnpSync" = ?;
+    "S0InitialCommand" = ?;
+    "NumberOfInitialSessions" = 2; // ? - REG_DWORD
+    "PendingFileRenameOperations" = ?;
+    "PendingFileRenameOperations2" = ?;
+    "AllowProtectedRenames" = ?;
+    "ClearTempFiles" = ?;
+    "TempFileDirectory" = ?;
+    "ExcludeFromKnownDlls" = ?; // REG_MULTI_SZ
+    "BackgroundLoadKnownDlls" = ?;
+    "DisableWpbtExecution" = ?; // REG_DWORD
+    "RaiseExceptionOnPossibleDeadlock" = ?;
+    "ResourcePolicies" = ?;
+    "SafeDllSearchMode" = ?;
+    "SafeProcessSearchMode" = ?;
+    "SmtDelayBaseYield" = ?;
+    "SmtDelayMaxYield" = ?;
+    "SmtDelaySleepLoopWindowSize" = ?;
+    "SmtDelaySpinCountThreshold" = ?;
+    "SmtFactorYield" = ?;
+    "SystemUpdateOnBoot" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Quota System";
+    "ApplicationBlockedMessageLimit" = 50; // PspJobNoWakeChargeLimit (0x32) 
+    "JobTimeLimitsPeriodSeconds" = 7; // PspJobTimeLimitsPeriodSeconds 
+    "SystemBlockedMessageLimit" = 200; // PspSystemNoWakeChargeLimit (0xC8) 
+
+    "DfssGenerationLengthMS" = 600; // PsDfssGenerationLengthMS dd 258
+    "DfssLongTermFraction1024" = 512; // sDfssLongTermFraction1024 dd 200
+    "DfssLongTermSharingMS" = 15; // PsDfssLongTermSharingMS dd 0F
+    "DfssResolutionMS" = 4294967295; // PsDfssDesiredTimerResolutionMs dd 0FFFFFFFF
+    "DfssShortTermSharingMS" = 30; // PsDfssShortTermSharingMS dd 1E
+    "EnableCpuQuota" = 0;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management";
+    "AllocationPreference" = 0; // dword_140FC3200 dd 0
+    "AllowUserHotPatchWithoutVbs" = 0; // dword_140FC3250 dd 0
+    "CacheUnmapBehindLengthInMB" = 8388608; // CcUnmapBehindLength (0x00800000) 
+    "CustomDTPDenominator" = 8; // CcClientDTPDenominator (0x8) 
+    "DeadlockRecursionDepthLimit" = 0; // ViRecursionDepthLimitFromRegistry 
+    "DeadlockSearchNodesLimit" = 0; // ViSearchedNodesLimitFromRegistry 
+    "DifPluginConfigData" = 635710207; // DifPluginConfigData (0x25e8007f) 
+    "DifPluginConfigDataLength" = 1276097421; // DifPluginConfigDataLength (0x4c084b8d) 
+    "DisableCacheTelemetry" = 2; // CcDisableTelemetryRegKeyAtInit 
+    "DisablePageCombining" = 0; // dword_140FC31E8 dd 0
+    "DisablePagingExecutive" = 0; // dword_140FC31E4 dd 0
+    "EnableAsyncLazywrite" = 2; // CcEnableAsyncLazywriteOverride 
+    "EnableAsyncLazywriteMulti" = 2; // CcEnableAsyncLazywriteMultiOverride 
+    "EnableCooling" = 0; // dword_140FC31F8 dd 0
+    "EnablePerVolumeLazyWriter" = 2; // CcEnablePerVolumeLazyWriterOverride 
+    "ForceValidateIo" = 0; // dword_140FC31F0 dd 0
+    "HighMemoryThreshold" = 0; // qword_140FC3238 dq 0
+    "KernelPadSectionsOverride" = 0; // dword_140FC3248 dd 0
+    "LargeWriteSize" = 0; // CcAzure_LargeWriteSize 
+    "LazyWriterPercentageOfNumProcs" = 0; // CcAzure_LazyWriterPercentageOfNumProcs 
+    "LowMemoryThreshold" = 0; // qword_140FC3230 dq 0
+    "MaxLazyWritePages" = 0; // CcMaxLazyWritePagesOverride 
+    "MinimumStackCommitInBytes" = 0; // dword_140FC3208 dd 0
+    "Mirroring" = 0; // dword_140FC31F4 dd 0
+    "ModifiedWriteMaximum" = ?; // dword_140FC31FC
+    "MoveImages" = 1; // MmRegistryState 
+    "NonPagedPoolQuota" = 4294967295; // PspDefaultResourceLimits (4294967295) 
+    "PagedPoolQuota" = ?; // unk_140FD7DE4
+    "PageValidationAction" = 0; // MmPageValidationAction 
+    "PageValidationFrequency" = 0; // MmPageValidationFrequency 
+    "PagingFileQuota" = ?; // unk_140FD7DE8
+    "PhysicalMemoryMapperEnforcementMode" = 0; // dword_140FC324C dd 0
+    "PoolForceFullDecommit" = 0; // PoolForceFullDecommit 
+    "PoolTag" = 0; // MmSpecialPoolTag 
+    "PoolTagOverruns" = 1; // MmSpecialPoolCatchOverruns 
+    "PoolTagSmallTableSize" = 4097; // PoolTrackTableSize (0x1001) 
+    "ProtectNonPagedPool" = 0; // MmProtectFreedNonPagedPool 
+    "RemoteFileDirtyPageThreshold" = 1310720; // CcRemoteFileDPInlineFlushThreshold (0x00140000) 
+    "SimulateCommitSavings" = 0; // dword_140FC3240 dd 0
+    "SoftThrottleDelayInMs" = 0; // CcAzure_SoftThrottleDelayInMs 
+    "SoftThrottleLargeWriteAtPct" = 0; // CcAzure_SoftThrottleLargeWriteAtPct 
+    "SpecialPurposeMemoryPages" = 0; // MmSpecialPurposeMemoryPages 
+    "SpecialPurposeMemoryStartPage" = 0; // MmSpecialPurposeMemoryStartPage 
+    "SpecialPurposeMemoryStartPageValueSize" = 4294967295; // MmSpecialPurposeMemoryStartPageValueSize (4294967295) 
+    "TopBottomDPTEqual" = 0; // CcAzure_TopBottomDPTEqual 
+    "TrackLockedPages" = 0; // MmTrackLockedPages 
+    "TrackPtes" = 0; // dword_140FC31EC dd 0
+    "VerifierDifPoolTags" = 0; // DifpPoolTags 
+    "VerifierDifPoolTagsSizeBytes" = 4294967295; // DifpPoolTagsSizeBytes (4294967295) 
+    "VerifierFaultApplications" = 0; // VerifierFaultApplicationsBuffer 
+    "VerifierFaultApplicationsSize" = 4294967295; // VerifierFaultApplicationsBufferSize (4294967295) 
+    "VerifierFaultBootMinutes" = 8; // VfFaultInjectionBootMinutes 
+    "VerifierFaultProbability" = 600; // VfFaultInjectionProbability (0x258) 
+    "VerifierFaultTags" = 0; // VerifierFaultTagsBuffer 
+    "VerifierFaultTagsSize" = 4294967295; // VerifierFaultTagsBufferSize (4294967295) 
+    "VerifierHandleTraces" = 16384; // VfHandleTracingEntries (0x4000) 
+    "VerifierIrpStackTraces" = 16384; // IovIrpTracesLength (0x4000) 
+    "VerifierIrpTimeout" = 0; // VfWdIrpTimeoutMsec 
+    "VerifierNewRuleWorkaround" = 0; // VerifierNewRuleWorkaround 
+    "VerifierOptions" = 0; // VfOptionFlags 
+    "VerifierRandomTargets" = 0; // VfRandomVerifiedDrivers 
+    "VerifierSettingState" = 0; // VfRuleClasses 
+    "VerifierSettingStateSize" = 4294967295; // VfRuleClassesSize (4294967295) 
+    "VerifierTipDisable" = 0; // VerifierTipDisable 
+    "VerifierTipLimitDenominator" = 0; // DifiPluginControlDenominator 
+    "VerifierTipLimitNumerator" = 0; // DifiPluginControlNumerator 
+    "VerifierTipSparseness" = 0; // DifiPluginControlSparseness 
+    "VerifierTriageContext" = 0; // VfTriageContext 
+    "VerifyBTSBufferSize" = 0; // ViVerifyBTSBufferSize 
+    "VerifyDriverLevel" = 4294967295; // MmVerifyDriverLevel (4294967295) 
+    "VerifyDrivers" = 3905129288; // MmVerifyDriverBuffer (0xE8C38B48) 
+    "VerifyDriversLength" = 1207968387; // MmVerifyDriverBufferLength (0x48002283) 
+    "VerifyDriversSuppress" = 276138824; // VfXdvSuppressDriversBuffer (0x10758b48) 
+    "VerifyDriversSuppressLength" = 3482011648; // VfXdvSuppressDriversBufferLength (0xCF8B4800) 
+    "VerifyMode" = 4; // VfVerifyMode 
+    "VerifyTriage" = 4294967295; // ViVerifyTriage (4294967295) 
+    "VerifyTriageRules" = 0; // ViVerifyTriageRules 
+    "VerifyTriageRulesSize" = 4294967295; // ViVerifyTriageRulesSize (4294967295) 
+    "VmPauseOutswapSizeCapMB" = 512; // VmPauseOutswapSizeCapMB (0x200) 
+    "WorkingSetPagesQuota" = ?; // unk_140FD7DEC
+    "WorkingSetSwapSharedPages" = 0; // PspOutSwapSharedPages 
+    "XdvTipTag" = 0; // CarTipTag 
+    "XdvVerifierOptions" = 0; // CarXdvOptions 
+    "XdvVerifierOptions" = 0; // VfFlightOptions
+
+    // procmon boot trace
+    "PagingFiles" = C:\pagefile.sys <int> <int> // REG_MULTI_SZ
+    "PagefileOnOsVolume" = ?; // 4,094
+    "WaitForPagingFiles" = ?; // 4,094
+    "ExistingPageFiles" = \??\C:\pagefile.sys; // REG_MULTI_SZ
+    "DisableDedicatedMemoryCaching" = ?;
+    "DedicatedMemoryPagefileSizeMB" = ?
+    "PagefileHybridPriority" = ?;
+    "SwapfileControl" = ?;
+    "SwapFile" = ?;
+    "TempPageFile" = ?;
+    "FeatureSettings" = ? // DWORD
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive";
+    "AdditionalCriticalWorkerThreads" = 0; // ExpAdditionalCriticalWorkerThreads 
+    "AdditionalDelayedWorkerThreads" = 0; // ExpAdditionalDelayedWorkerThreads 
+    "ForceEnableMutantAutoboost" = 0; // ExpForceEnableMutantAutoboost 
+    "KernelWorkerTestFlags" = 0; // ExpWorkerQueueTestFlags 
+    "MaximumKernelWorkerThreads" = 4096; // ExpMaximumKernelWorkerThreads (0x1000) 
+    "MaxTimeSeparationBeforeCorrect" = 60; // ExpMaxTimeSeperationBeforeCorrect (0x3C) 
+    "WorkerFactoryThreadCreationTimeout" = 10; // ExpWorkerFactoryThreadCreationTimeoutInSeconds (0x0A) 
+    "WorkerFactoryThreadIdleTimeout" = 67; // ExpWorkerFactoryThreadIdleTimeoutInSeconds (0x43) 
+    "WorkerThreadTimeoutInSeconds" = 600; // ExpWorkerThreadTimeoutInSeconds (0x258)
+    "TickcountRolloverDelay" = 0; // ? (InitTickRolloverDelay dd 0) - InitTickRolloverDelay <> 24848b00, InitTickRolloverDelayLength <> 5e4130c4, InitTickRolloverDelayType <> e2894460
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
+    "FlushPolicy" = 0; // PopFlushPolicy 
+    "IdleScanInterval" = 30; // PopIdleScanInterval (0x1E) 
+    "SkipTickOverride" = 1; // PopSkipTickPolicy
+    "SleepStudyDeviceAccountingLevel" = 4; // PopSleepStudyDeviceAccountingLevel 
+    "SleepStudyDisabled" = 0; // PopSleepStudyDisabled 
+    "WatchdogResumeTimeout" = 120; // PopWatchdogResumeTimeout (0x78) 
+    "WatchdogSleepTimeout" = 300; // PopWatchdogSleepTimeout (0x12C) 
+    "Win32CalloutWatchdogBugcheckEnabled" = 0; // PopWin32CalloutWatchdogBugcheckEnabled 
+
+    // PopOpenPowerKey
+    "AwayModeEnabled" = 0; // REG_DWORD, range 0-1
+    "HiberbootEnabled" = 0; // REG_DWORD, range 0-1, PopHiberbootEnabledReg
+    "KernelResumeIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
+    "MaxHuffRatio" = 1; // REG_DWORD, range 1-98
+    "MultiPhaseResumeDisabled" = 0; // REG_DWORD, range 0-1
+    "SystemPowerPolicy" = "<STRUCT 232 BYTES>"; // REG_BINARY, Size=232
+
+    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and chaning their data won't affect the boot.
+    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
+    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range 0-4294967295
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range 0-4294967295FFFFFFFF
+
+    // PpmInitIllegalThrottleLogging
+    "ProcessorThrottleLogInterval" = 10000; // REG_DWORD, milliseconds, range 0-10000 (values >10000 are clamped to 10000)
+
+    // procmon boot trace
+    "SleepStudyBufferSizeInMB" = ?;
+    "SleepStudyHistoryDays" = ?;
+    "SleepStudyPerfTrackDripsThresholdPercentage" = ?;
+    "SleepStudyTraceDirectory" = ?;
+
+"HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Throttle";
+    "PerfEnablePackageIdle" = 0;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
+    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
+                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
+                    //    if (value & 0x2)                      // low byte, bit 1
+                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
+                    // if the value exists but is stored as REG_NONE (type==0):
+                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global "disable/override"
+
+// Miscellaneous values
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\LSA";
+    "AuditBaseDirectories" = 0; // ObpAuditBaseDirectories 
+    "AuditBaseObjects" = 0; // ObpAuditBaseObjects 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\LSA\\audit";
+    "ProcessAccessesToAudit" = 0; // SepProcessAccessesToAudit 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\TimeZoneInformation";
+    "ActiveTimeBias" = ?; // dword_140FCE974
+    "Bias" = 480; // ExpAltTimeZoneBias (0x000001e0) 
+    "RealTimeIsUniversal" = 0; // ExpRealTimeIsUniversal 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\I/O System";
+    "DisableDiskCounters" = 0; // PsDisableDiskCounters 
+    "IoAllowLoadCrashDumpDriver" = 0; // IopAllowLoadCrashDumpDriver 
+    "IoBlockLegacyFsFilters" = 0; // IopBlockLegacyFsFilters 
+    "IoCaseInsensitive" = 1; // IopCaseInsensitive 
+    "IoEnableSessionZeroAccessCheck" = 0; // IopSessionZeroAccessCheckEnabled 
+    "IoFailZeroAccessCreate" = 1; // IopFailZeroAccessCreate 
+    "IoIrpCompletionTimeoutInSeconds" = 300; // IopIrpCompletionTimeoutInSeconds (0x12C) 
+    "IoKeepAliveTimeMs" = 5000; // IopKeepAliveTimeMs (0x1388) 
+    "LargeIrpStackLocations" = 14; // IopLargeIrpStackLocations (0x0E) 
+    "MediumIrpStackLocations" = 2; // IopMediumIrpStackLocations 
+    "RequireDeviceAccessCheck" = 1; // IopRequireDeviceAccessCheck 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Configuration Manager";
+    "BugcheckRecoveryEnabled" = 0; // CmBugcheckRecoveryEnabled 
+    "CallbackMemoryFromPerProcLookaside" = 1; // CmpAllocateCallbackMemoryFromPerProcLookaside 
+    "CallbackMemoryFromPool" = 0; // CmpAllocateCallbackMemoryFromPool 
+    "DelayCloseSize" = 2048; // CmpDelayedCloseSize (0x800) 
+    "Enabled" = 0; // CmpLKGEnabled 
+    "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing 
+    "FastBoot" = 1; // CmFastBoot 
+    "FreezeThawTimeoutInSeconds" = 60; // CmFreezeThawTimeoutInSeconds (0x3C) 
+    "RegistryFlushGlobalFlags" = 0; // CmpGlobalFlushControlFlags 
+    "RegistryLazyFlushBootDelay" = 60; // CmpEnableLazyFlushBootDelayInterval (0x3C) 
+    "RegistryLazyFlushInterval" = 60; // CmpLazyFlushIntervalInSeconds (0x3C) 
+    "RegistryLazyLocalizeInterval" = 60; // CmpLazyLocalizeIntervalInSeconds (0x3C) 
+    "RegistryLazyReconcileInterval" = 3600; // CmpLazyReconcileIntervalInSeconds (0x0E10) 
+    "RegistryLogFileSizeCap" = 0; // CmpLogFileSizeCap 
+    "RegistryReorganizationLimit" = 1048576; // CmpReorganizeLimit (0x00100000) 
+    "RegistryReorganizationLimitDays" = 7; // CmpReorganizeDelayDays 
+    "SelfHealingEnabled" = 1; // CmSelfHeal 
+    "SystemHiveLimitSize" = 1610612736; // CmSystemHiveLimitSize (0x60000000) 
+    "VirtualizationEnabled" = 1; // CmVEEnabled 
+    "VolatileBoot" = 0; // CmpVolatileBoot 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\Policy";
+    "AllHivesVolatile" = 0; // CmStateSeparationAllHivesVolatile 
+    "DevelopmentMode" = 0; // CmStateSeparationDevMode 
+    "Enabled" = 0; // CmStateSeparationEnabled 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\ValidationRunlevels";
+    "Global" = 1210938368; // CmGlobalValidationRunlevel (0x482d7400) 
+
+"HKLM\\System\\CurrentControlSet\\Control\\Processor";
+    "AllowGuestPerfStates" = 0;
+    "AllowPepPerfStates" = 0;
+    "Capabilities" = 4294967288; // Fallback of 0 ?
+    "DisableAsserts" = 0;
+    "Overrides" = 0;
+```
 
 ## Windows Internals
 
@@ -169,20 +574,662 @@ Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://g
 
 Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-See win-registry repo for a list of `CCS\\Control\\GraphicsDrivers\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#dxg-kernel-values
+## Registry Values Details
+
+These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
+
+The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values/dxgmms2) for all used files.
+
+> [!WARNING]
+> Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
+    "MiracastForceDisable" = 2;
+    "MiracastUseIhvDriver" = 2;
+
+    "ContextNoPatchMode" = 0;
+    "CreateGdiPrimaryOnSlaveGpu" = 0;
+    "CrtcPhaseFrames" = 2;
+    "DeadlockPulse" = 5000;
+    "DeadlockPulseTolerance" = 500;
+    "DeadlockTimeout" = 30000;
+    "DisableBadDriverCheckForHwProtection" = 0; // REG_DWORD
+    "DisableBoostedVSyncVirtualization" = 0; // REG_DWORD
+    "DisableGdiContextGpuVa" = 0;
+    "DisableIndependentVidPnVSync" = 0; // REG_DWORD
+    "DisableMonitoredFenceGpuVa" = 0;
+    "DisableMultiSourceMPOCheck" = 0;
+    "DisableOverlays" = 0;
+    "DisablePagingContextGpuVa" = 0;
+    "DisableSecondaryIFlipSupport" = 0;
+    "DriverManagesResidencyOverride" = 1;
+    "DriverStoreCopyMode" = 1;
+    "EnableBasicRenderGpuPv" = 0;
+    "EnableDecodeMPO" = 1;
+    "EnableFbrValidation" = 1;
+    "EnableMultiPlaneOverlay3DDIs" = 0;
+    "EnableOfferReclaimOnDriver" = 1;
+    "EnablePanelFitterSupport" = 0;
+    "EnableTimedCalls" = 0;
+    "EnableWDDM23Synchronization" = 0;
+    "Force32BitFences" = 0;
+    "ForceDirectFlip" = 0;
+    "ForceEnableDxgMms2" = 0;
+    "ForceExplicitResidencyNotification" = 0; // REG_DWORD
+    "ForceInitPagingProcessVaSpace" = 0;
+    "ForceReplicateGdiContent" = 0;
+    "ForceSecondaryIFlipSupport" = 0;
+    "ForceSecondaryMPOSupport" = 0;
+    "ForceSurpriseRemovalSupport" = 0;
+    "ForceVariableRefresh" = 0;
+    "GdiPhysicalAdapterIndex" = 0;
+    "GpuPriorityChangeMode" = 1;
+    "HighPriorityCompletionMode" = 1;
+    "InitialPagingQueueFenceValue" = 7000;
+    "IoMmuFlags" = 0;
+    "KnownProcessBoostMode" = 1;
+    "LeanMemoryLimit" = ?; // REG_QWORD
+    "NumVirtualFunctions" = 0;
+    "SmallQuantumMode" = 1;
+
+    "DefaultActiveIdleThreshold" = 2000;
+    "DefaultD3TransitionIdleLongTimeThreshold" = 60000;
+    "DefaultD3TransitionIdleShortTimeThreshold" = 10000;
+    "DefaultD3TransitionIdleVeryLongTimeThreshold" = 60000;
+    "DefaultD3TransitionLatencyActivelyUsed" = 80;
+    "DefaultD3TransitionLatencyIdleLongTime" = 140000;
+    "DefaultD3TransitionLatencyIdleMonitorOff" = 250000;
+    "DefaultD3TransitionLatencyIdleNoContext" = 250000;
+    "DefaultD3TransitionLatencyIdleShortTime" = 80000;
+    "DefaultD3TransitionLatencyIdleVeryLongTime" = 200000;
+    "DefaultExpectedResidency" = 2000;
+    "DefaultIdleThresholdIdle0" = 200;
+    "DefaultIdleThresholdIdle0MonitorOff" = 100;
+    "DefaultLatencyToleranceIdle0" = 80;
+    "DefaultLatencyToleranceIdle0MonitorOff" = 2000;
+    "DefaultLatencyToleranceIdle1" = 15000;
+    "DefaultLatencyToleranceIdle1MonitorOff" = 50000;
+    "DefaultLatencyToleranceMemory" = 15000;
+    "DefaultLatencyToleranceMemoryNoContext" = 30000;
+    "DefaultLatencyToleranceNoContext" = 35000;
+    "DefaultLatencyToleranceNoContextMonitorOff" = 100000;
+    "DefaultLatencyToleranceOther" = -1;
+    "DefaultLatencyToleranceTimerPeriod" = 200;
+    "DefaultMemoryRefreshLatencyToleranceActivelyUsed" = 80;
+    "DefaultMemoryRefreshLatencyToleranceIdleShortTime" = 15000;
+    "DefaultMemoryRefreshLatencyToleranceMonitorOff" = 80000;
+    "DefaultMemoryRefreshLatencyToleranceNoContext" = 30000;
+    "DefaultPowerNotRequiredTimeout" = 25000;
+    "DisableDevicePowerRequired" = 0;
+    "DisablePStateManagement" = 0;
+    "EnablePODebounce" = 0;
+    "EnableRuntimePowerManagement" = 1;
+    "lowdebounce" = 3;
+    "MonitorLatencyTolerance" = 300000;
+    "MonitorRefreshLatencyTolerance" = 17000;
+    "uglitch" = 900;
+    "uhigh" = 700;
+    "uideal" = 500;
+    "ulow" = 300;
+
+    "AllowAdvancedEtwLogging" = 0;
+    "DiagnosticsBufferExpansionTime" = 300;
+    "EnableFuzzing" = 0;
+    "EnableHMDTestMode" = 0;
+    "EnableIgnoreWin32ProcessStatus" = 0;
+    "ExternalDiagnosticsBufferMultiplier" = 1;
+    "ExternalDiagnosticsBufferSize" = 16384;
+    "ForceUsb4MonitorSupport" = 0;
+    "InternalDiagnosticsBufferMultiplier" = 2;
+    "InternalDiagnosticsBufferSize" = 65536;
+    "InvestigationDebugParameter" = 0;
+    "MaximumAdapterCount" = 32;
+    "NodeUsageTelemetryTimerInterval" = ?; // REG_DWORD
+    "PreserveFirmwareMode" = 0;
+    "PreventFullscreenWireFormatChange" = 0;
+    "RapidHpdMaxChainInMilliseconds" = 0;
+    "RapidHpdTimeoutInMilliseconds" = 0;
+    "TerminationListSizeLimit" = 67108864;
+    "TreatUsb4MonitorAsNormal" = 0;
+    "Usb4MonitorDpcdDP_IN_Adapter_Number" = 0;
+    "Usb4MonitorDpcdUSB4_Driver_ID" = 0;
+    "Usb4MonitorPowerOnDelayInSeconds" = 0;
+    "Usb4MonitorTargetId" = 0;
+    "ValidateWDDMCaps" = 0;
+    "WDDM2LockManagement" = 1;
+
+    "DisableVaBackedVm" = 0;
+    "DisableVersionMismatchCheck" = 0;
+    "GpuVirtualizationFlags" = ?; // REG_DWORD
+    "LimitNumberOfVfs" = 0;
+    "VirtualGpuOnly" = 0;
+
+    "ForceBddFallbackOnly" = ?;
+    "HwSchMode" = ?;
+    "HwSchOverrideBlockList" = ?;
+    "HwSchTreatExperimentalAsStable" = ?;
+    "MiracastDefaultRtspPort" = ?;
+    "PlatformSupportMiracast" = ?;
+    "SupportMultipleIntegratedDisplays" = ?;
+    "SuspendAdapterTimerPeriod" = ?;
+
+    "EnableExperimentalRefreshRates" = 0;
+    "RapidHPDThresholdCount" = 5;
+    "RapidHPDTime" = 1000;
+
+    "TdrDdiDelay" = 5;
+    "TdrDebugMode" = 2;
+    "TdrDelay" = 2;
+    "TdrDodPresentDelay" = 2;
+    "TdrDodVSyncDelay" = 2;
+    "TdrLevel" = 3;
+    "TdrLimitCount" = 5;
+    "TdrLimitTime" = 60;
+
+    "DRTTestEnable" = 0; // 1484026436 = Enabled ?
+    "EnableAcmSupportDeveloperPreview" = 0;
+    "ForceEnableDWMClone" = ?; // REG_DWORD, default is adapter capability flag
+    "HybridInternalPanelOverrideEnable" = 0;
+    "IsInternalRelease" = 0;
+    "MultiMonSupport" = 1;
+    "OutputDuplicationSessionApplicationLimit" = 4;
+    "TdrTestMode" = 0;
+    "UnsupportedMonitorModesAllowed" = ?;
+
+    "PageFaultDebugMode" = 1; // REG_DWORD, missing/invalid or >1 -> 1
+
+    // from procmon boot trace
+    "DisableCABC" = ?;
+    "ForceAccessedPhysically" = ?;
+    "ForceToMapGpuVa" = ?;
+    "WarpOverrideWDDMVersion" = ?;
+    "WarpSupportHybridDiscrete" = ?;
+    "WarpSupportsResourceResidency" = ?;
+
+    // miscellaneous
+    "CddBootImageMode" = ?;
+    "CddBootScreenMode" = ?;
+    "DisableLddmSpriteTearDown" = ?;
+    "DisplayBrokerShouldNotBeActive" = ?;
+    "DODPreferredPresentMoveRegeionsOverride" = ?;
+    "DxgKrnlVersion" = ?;
+    "MinDxgKrnlVersion" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler";
+    "AdjustWorkerThreadPriority" = 1; // REG_DWORD
+    "AudioDgAutoBoostPriority" = 24; // REG_DWORD, found in 25H2 (not in 23H2)
+    "AutoSyncToCPUPriority" = 0; // REG_DWORD
+    "BackgroundProcessMaximumAllowedPreemptionDelay" = 8; // REG_DWORD
+    "CarryOverUsedQuantum" = 0; // REG_DWORD
+    "ContextSchedulingPenaltyDelay" = 1000; // REG_DWORD
+    "CountFlipTowardHwLimit" = 0; // REG_DWORD
+    "CountPresentTowardHwLimit" = 0; // REG_DWORD
+    "DdiSuspendMode" = 0; // REG_DWORD, values 0-2, found in 23H2 (not in 25H2)
+    "DebugLargeSmoothenedDuration" = 1; // REG_DWORD, found in 25H2 (not in 23H2)
+    "EnableContextDelay" = 1; // REG_DWORD, found in 23H2 (not in 25H2)
+    "EnableDirectSubmission" = ?; // REG_DWORD, found in 25H2 (not in 23H2), default from adapter cap
+    "EnableFlipImmediateSwFlipQueue" = 1; // REG_DWORD, found in 23H2 (not in 25H2)
+    "EnablePreemption" = 1; // REG_DWORD
+    "FlipDoNotFlipMode" = 0; // REG_DWORD, values 0-2
+    "FlipOverrideMode" = 0; // REG_DWORD, 1 or 2 override device mode
+    "ForceEnableFlipFenceModel" = 0; // REG_DWORD
+    "ForceFlipTrueImmediateMode" = 0; // REG_DWORD, values 0-2
+    "ForegroundPriorityBoost" = 1; // REG_DWORD
+    "FrameServerAutoBoostPriority" = 17; // REG_DWORD, found in 25H2 (not in 23H2)
+    "HistoryLogSize" = 64; // REG_DWORD, clamped 16-0x10000, must be 16, 32, 64, 128, ... (doubling sequence)
+    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD
+    "HwQueuePacketCap" = ?; // REG_DWORD, default from adapter cap, clamped 1-14
+    "HwSchThreadOffloadMode" = 2; // REG_DWORD, found in 25H2 (not in 23H2)
+    "InitDriverFenceId" = 0; // REG_DWORD
+    "LogDriverVSyncCallback" = 0; // REG_DWORD, found in 23H2 (not in 25H2)
+    "MaxFocusGpuQuantumWithoutPresent" = 100; // REG_DWORD, 25H2 default 10 when flag set
+    "MaximumAllowedPreemptionDelay" = 900; // REG_DWORD
+    "MaxYieldInterval" = 16; // REG_DWORD
+    "MinYieldInterval" = 8000; // REG_DWORD, found in 25H2 (not in 23H2)
+    "NpuContextSwitchQuantum" = 30000; // REG_DWORD, found in 25H2 (not in 23H2)
+    "NpuPreemptionQuantum" = 60000; // REG_DWORD, found in 25H2 (not in 23H2)
+    "NumberOfDmaPacketPool" = 20; // REG_DWORD
+    "PerSourceCustomDuration" = ?; // REG_DWORD, default 1 when adapter version >= 2000
+    "PfnCpuOverride" = 0; // REG_DWORD, values 0-3
+    "PreemptionQuantumUnit" = 50000; // REG_DWORD
+    "ProfileLevel" = 2; // REG_DWORD
+    "QuantumUnit" = 25000; // REG_DWORD
+    "QueuedPresentLimit" = 3; // REG_DWORD
+    "VSyncIdleTimeout" = 7; // REG_DWORD, becomes 1 when adapter version >= 1300 and flag set, <1300 min 4
+    "YieldPercentage" = 10; // REG_DWORD, valid 1-0x53 else default 10
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MemoryManager";
+    // ReadConfiguration
+    "BugcheckOnApertureCorruption" = 0; // REG_DWORD
+    "CommitProcessHeapOnDemand" = 1; // REG_DWORD
+    "DirectFlipMemoryRequirement" = 200; // REG_DWORD
+    "DisablePrefetching" = 0; // REG_DWORD
+    "DmaBufferBytesLimitAllDevices" = 0x800000; // REG_DWORD, 0x2000000 if system memory > 0x20000000
+    "DmaBufferListBytesLimitAllDevices" = 0x400000; // REG_DWORD, 0x1000000 if system memory > 0x20000000
+    "EventThrottleThreshold" = 300; // REG_DWORD
+    "EvictTemporaryPeriod" = 60; // REG_DWORD
+    "EvictUnusedPeriod" = 60; // REG_DWORD
+    "ExcessiveMemTransferFlipThreshold" = 15; // REG_DWORD
+    "ExcessiveMemTransferPenalty" = 5; // REG_DWORD
+    "MaxSegmentSize<0-31>" = 0; // REG_DWORD, if set, aligns to 4K and clamps to 0x800000
+    "MemTransferThreshold" = 10; // REG_DWORD
+    "NbCddDmaBufferLimitPerDevice" = 4; // REG_DWORD
+    "NbDmaBufferLimitCompareWatermark" = 10; // REG_DWORD
+    "NbDmaBufferLimitPerDevice" = 256; // REG_DWORD, 1024 if system memory > 0x20000000
+    "NbPagingHistoryRecords" = 0; // REG_DWORD, 0x40 if internal release
+    "PagesHistory" = 0; // REG_DWORD, max 0x7FFFFFF
+    "PinDWMAllocationBackingStore" = 1; // REG_DWORD
+    "PinnedApertureMemoryLimit" = 40; // REG_DWORD, >= 0x5A -> default 40
+    "PinnedMemoryLimit" = 25; // REG_DWORD, >= 0x5A -> default 25
+    "PrivateHeapPackingBlockSize" = 0x800000; // REG_DWORD
+    "PrivateHeapPackingThreshold" = 0x100000; // REG_DWORD
+    "ProcessPendingOfferPeriod" = 1; // REG_DWORD
+    "ProcessSysmemOfferPeriod" = 8; // REG_DWORD
+    "QuickApertureCorruptionCheck" = 0; // REG_DWORD
+    "RemovePagesFromWorkingSetOnPagingForDwm" = 1; // REG_DWORD
+    "SegmentBalancingPolicy" = 2; // REG_DWORD
+    "SegmentCleanupCountThreshold" = 6; // REG_DWORD
+    "SegmentCleanupSizeThreshold" = 4096; // REG_DWORD
+    "SegmentCleanupTime" = 20; // REG_DWORD
+    "SelfRefreshVramForceEvictionTimer" = 900; // REG_DWORD
+    "UseUnreset" = 1; // REG_DWORD
+
+    // unsure about the decomp defaults here
+    "PhysicalHeapHighestAddress" = ?; // REG_QWORD
+    "PhysicalHeapLowestAddress" = ?; // REG_QWORD
+    "PhysicalHeapSize" = ?; // REG_QWORD
+
+    // ReadCommitLimitInformation
+    "MinimumSystemMemoryCommitLimit" = 0; // REG_DWORD, MB (<< 20), min 0x4000000
+    "PinnedBackingStoreLimit" = 0; // REG_DWORD, MB (<< 20), 0 -> system memory / 8
+    "SecondaryPartitionCommitLimitPercentage" = 80; // REG_DWORD, clamped to 5-100
+    "SmallSystemMemorySize" = 0; // REG_DWORD, MB (<< 20)
+    "SystemPartitionCommitLimitPercentage" = 50; // REG_DWORD, clamped to 5-100
+
+    // ReadWorkingSetConfiguration
+    "WorkingSet.DefaultMaximumPercentile" = 90; // REG_DWORD
+    "WorkingSet.DefaultMinimumPercentile" = 65; // REG_DWORD
+
+    // ReadUnusedAllocationConfiguration
+    "Unused.EvictApertureOfferHighThreshold" = 30; // REG_DWORD
+    "Unused.EvictApertureOfferLowThreshold" = 15; // REG_DWORD
+    "Unused.EvictApertureOfferMaximumThreshold" = 30; // REG_DWORD
+    "Unused.EvictApertureOfferNormalThreshold" = 15; // REG_DWORD
+    "Unused.HighThreshold" = 120; // REG_DWORD
+    "Unused.LowThreshold" = 15; // REG_DWORD
+    "Unused.MaximumThreshold" = 1000000; // REG_DWORD
+    "Unused.MinimumThreshold" = 0; // REG_DWORD
+    "Unused.NormalThreshold" = 45; // REG_DWORD
+    "Unused.SelfTrimHighThreshold" = 5; // REG_DWORD
+    "Unused.SelfTrimLowThreshold" = 1; // REG_DWORD
+    "Unused.SelfTrimMaximumThreshold" = 1000000; // REG_DWORD
+    "Unused.SelfTrimMinimumThreshold" = 0; // REG_DWORD
+    "Unused.SelfTrimNormalThreshold" = 2; // REG_DWORD
+    "UnusedTrimmingPeriod" = 1; // REG_DWORD
+
+    // ReadPreparationPeriodConfiguration
+    "Period.AlwaysForceMemReset" = 1; // REG_DWORD
+    "Period.EvictionThresholdForMemReset" = 32; // REG_DWORD, post query << 20
+    "Period.MaximumPolicyHeldPeriod" = 64; // REG_DWORD
+    "Period.MinimumPolicyHeldPeriod" = 4; // REG_DWORD
+    "Period.NbOfAllocationsThresholdToMRU" = 0x7FFFFFFF; // REG_DWORD
+    "PreparationPeriod" = 1; // REG_DWORD, scaled to 100ns
+
+    // ReadHeapConfiguration
+    "DebouncedDecommitAge" = 15; // REG_DWORD
+    "DebouncedPageManagement" = 1; // REG_DWORD
+    "DebouncedUnlockAge" = 15; // REG_DWORD
+    "LeanRecycleHeapPackingBlockSize" = 8; // REG_DWORD
+    "LeanRecycleHeapPackingThreshold" = 4; // REG_DWORD
+    "LeanRecycleHeapPTDBlockSize" = 64; // REG_DWORD
+    "MaximumDecommitDebounce" = 256; // REG_DWORD, 64 if system memory <= 0x53333333
+    "MaximumUnlockDebounce" = 256; // REG_DWORD, 64 if system memory <= 0x53333333
+    "RecycleHeapPackingBlockSize" = 32; // REG_DWORD
+    "RecycleHeapPackingThreshold" = 4; // REG_DWORD
+    "RecycleHeapPTDBlockSize" = 1024; // REG_DWORD
+    "RecycleHistory" = 0; // REG_DWORD
+    "RecycleHistorySize" = 64; // REG_DWORD
+    "ZeroedRecyclePages" = 1; // REG_DWORD
+    "ZeroPageLockThreshold" = 0x200000; // REG_DWORD, found in 25H2 (not in 23H2)
+
+    // ReadPowerConfiguration
+    "MemoryComponentActiveThreshold" = 300; // REG_DWORD, MB (<< 20)
+    "SelfRefreshMemoryEvictionThreshold" = 300; // REG_DWORD, MB (<< 20)
+
+    // ReadGpuVaConfiguration
+    "AllocateGpuVaFromHighAddresses" = 0; // REG_DWORD
+    "CompanionContextMaxPendingOperations" = 128; // REG_DWORD, found in 25H2 (not in 23H2)
+    "DisableMakeIoMmuAddressValid" = 0; // REG_DWORD
+    "DisableUncommitGpuVaInPagingProcess" = 0; // REG_DWORD
+    "EnableGpuVaGuardPages" = 0; // REG_DWORD
+    "EnableZeroFlagInPde" = 0; // REG_DWORD
+    "GpuVaFirstValidAddress" = 0x10000; // REG_DWORD, masked to 4K
+    "PagingProcessVaSpaceBitCount" = 30; // REG_DWORD
+
+    // ReadGpuVaPagingHistoryConfiguration
+    "GpuVaPagingHistoryMask" = 391174; // REG_DWORD, derived, min 0x1000
+    "GpuVaPagingHistorySize" = ?; // REG_DWORD, default 0x40 if system memory > 0x53333333 else 0
+
+    // ReadPagingConfiguration
+    "BreakOnPagingFailure" = 0; // REG_DWORD
+    "DemotionWithinDeviceEnabled" = 1; // REG_DWORD
+    "DeviceResumePeriodMax" = 1000; // REG_DWORD
+    "DeviceResumePeriodMin" = 1000; // REG_DWORD
+    "DeviceSuspendPeriodMax" = 500; // REG_DWORD
+    "DeviceSuspendPeriodMin" = 500; // REG_DWORD
+    "EnableAsyncResidency" = 1; // REG_DWORD
+    "EnablePromotion" = 1; // REG_DWORD, found in 25H2 (not in 23H2)
+    "ForceSynchronousEvict" = 0; // REG_DWORD
+    "ForceUncommitGpuVAOnEvict" = 0; // REG_DWORD
+    "InitialPromotionInterval" = 48; // REG_DWORD
+    "MaximumPromotionInterval" = 5000; // REG_DWORD
+    "PagingQueueProcessingPeriodTime" = 50; // REG_DWORD, clamped 16-300
+    "PromotionNumberCapPerInterval" = 50; // REG_DWORD
+    "PromotionTargetSizePerInterval" = 0x2000000; // REG_QWORD
+    "TemporaryResourcePolicy" = 0; // REG_DWORD, found in 25H2 (not in 23H2)
+    "TransferFlushThreshold" = 1; // REG_DWORD, MB (<< 20)
+
+    // ReadTestAndStagingConfiguration
+    "AlwaysDecommitOnOffer" = 0; // REG_DWORD
+    "BudgetThreshold" = 25; // REG_DWORD, clamped to <= 100
+    "DecommitRepurposeMode" = 1; // REG_DWORD, values 0-2 else 0, found in 23H2 (not in 25H2)
+    "DxgMms2OfferReclaim" = 4294967295; // REG_DWORD, allowed 0/1/2/4294967295, others = 0
+    "ExpandTo64KBAllocationSizeThreshold" = 0x400000; // REG_DWORD
+    "LargifyUpgradeThresholdBytes" = 0; // REG_DWORD, found in 25H2 (not in 23H2)
+    "LargifyUpgradeThresholdPercent" = 0; // REG_DWORD, found in 25H2 (not in 23H2)
+    "LazyDecommitChunkSizeMB" = 32; // REG_DWORD, max 512
+    "PagingQueueFenceIncrement" = 1; // REG_DWORD, 0 = 1, upper bound 0x51EB851
+    "RestrictToPreferredSegment" = 0; // REG_DWORD
+    "Use64KPages" = 0; // REG_DWORD
+
+    // ReadVPRConfiguration
+    "VPRCapacityRatioDenominator" = 5; // REG_DWORD, if denominator <= numerator or numerator == 0 -> 4/5
+    "VPRCapacityRatioNumerator" = 1; // REG_DWORD
+    "VPRGrowRatioDenominator" = 5; // REG_DWORD, if denominator <= numerator or numerator == 0 -> 4/5
+    "VPRGrowRatioNumerator" = 4; // REG_DWORD
+
+    // ReadBudgetConfiguration
+    "CriticalPeriodicTrimThreshold" = 10; // REG_DWORD
+    "EnableTrimWnfCallback" = 1; // REG_DWORD
+    "ForegroundTrimInterval" = 90000; // REG_DWORD
+    "GlobalCommitmentBudget" = 0; // REG_QWORD
+    "IdleTrimInterval" = 90000; // REG_DWORD
+    "L_LocalMemoryBudgetDWMTarget" = 30; // REG_DWORD
+    "L_LocalMemoryBudgetFocusTarget" = 50; // REG_DWORD
+    "LNL_LocalMemoryBudgetDWMTarget" = 30; // REG_DWORD
+    "LNL_LocalMemoryBudgetFocusTarget" = 50; // REG_DWORD
+    "LNL_NonLocalMemoryBudgetDWMTarget" = 30; // REG_DWORD
+    "LNL_NonLocalMemoryBudgetFocusTarget" = 50; // REG_DWORD
+    "MaximumTrimInterval" = 10000; // REG_DWORD
+    "MaxProcessBudgetCapBuffer" = 256; // REG_DWORD
+    "MaxVideoMemoryFragmentationBuffer" = 512; // REG_DWORD
+    "MinimumTrimInterval" = 2000; // REG_DWORD
+    "ProcessBudgetCapBuffer" = 5; // REG_DWORD
+    "StartPeriodicTrimThreshold" = 40; // REG_DWORD
+    "SystemMemoryFragmentationBuffer" = 5; // REG_DWORD
+    "VideoMemoryFragmentationBuffer" = 10; // REG_DWORD
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power";
+    "UseSelfRefreshVRAMInS3" = 1;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay";
+    "BasicDisplayUserNotified" = 0;
+
+    "DisableBasicDisplayFallback" = ?;
+    "EnableBasicDisplayFallback" = ?;
+    "ForcePreserveBootDisplay" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Smm";
+    "DebugMode" = 0;
+    "EnablePageTracking" = 0;
+    "ForceDmaRemapping" = 0;
+    "ForceEnableIommu" = 0;
+    "IdentityMappedPassthrough" = 0;
+    "LogicalAddressMode" = 0;
+    "PreferHighLogicalAddresses" = 0;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DMM";
+    "AssertOnDdiViolation" = 0;
+    "BadMonitorModeDiag" = 2;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DMM";
+    "EnableVirtualRefreshRateOnExternalMonitor" = 0;
+    "HPDFilterLimit" = 20000000;
+    "LongLinkTrainingTimeout" = 1000;
+    "ModeListCaching" = 1;
+    "SetTimingsFlags" = 0;
+    "ShortLinkTrainingTimeout" = 200;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Validation";
+    "FailEscapeDDI" = 0;
+    "FailRenderDDI" = 0;
+    "FailReserveGPUVA" = 0;
+    "Level" = 0;
+    "ReportVirtualMachine" = 0;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MonitorDataStore\\MONITOR-ID"
+    "AdvancedColorEnabled" = 0;
+    "AutoColorManagementEnabled" = 0;
+    "AutoColorManagementSupported" = ?; // REG_DWORD, bool?
+    "DockedOrientation" = ?;
+    "EnableBoostRefreshRateByDefault" = ?;
+    "EnableIntegratedPanelAcmByDefault" = 0;
+    "EnableIntegratedPanelHdrByDefault" = 0;
+    "HDREnabled" = 0;
+    "MicrosoftApprovedAcmSupport" = 0;
+    "MonitorOrientation" = ?;
+    "OverrideWCGCapabilities" = ?;
+    "PreferredScaleFactor" = ?;
+    "SDRWhiteLevel" = ?;
+    "VMSDisabled" = ?;
+
+// the 3 keys below are based on a testing system monitor, therefore the defaults will be different for you
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration"; // from LGPE
+    "DefaultCloneResolutionSetting" = 0; // range 0 (default), 1 (internal), 2 (external), "Set Cloned Monitor Preferred Resolution Source", "Enabling this policy allows to override the default behavior when connecting an additional monitor. It allows control over whether a cloned display prioritizes the internal or external monitor i.e. setting its preferred resolution source. Internal sets the resolution of the main display as the source on both screens. External sets the resolution of the connected (external) display as the source on both screens. Default uses the system's default behavior determined by Windows Settings." This policy is supported on 24H2+
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration\\<CONFIG_ID>";
+    "SetId" = ?; // REG_SZ
+    "Timestamp" = ?; // REG_QWORD
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration\\<CONFIG_ID>\\00\\00";
+    "ActiveSize.cx" = ?; // REG_DWORD, horizontal pixels
+    "ActiveSize.cy" = ?; // REG_DWORD, vertical lines
+    "BoostRefreshRateMultiplier" = ?; // REG_DWORD
+    "ColorBasis" = ?; // REG_DWORD
+    "DwmClipBox.bottom" = ?; // REG_DWORD
+    "DwmClipBox.left" = ?; // REG_DWORD
+    "DwmClipBox.right" = ?; // REG_DWORD
+    "DwmClipBox.top" = ?; // REG_DWORD
+    "Flags" = ?; // REG_DWORD
+    "HSyncFreq.Denominator" = ?; // REG_DWORD
+    "HSyncFreq.Numerator" = ?; // REG_DWORD
+    "PixelFormat" = ?; // REG_DWORD
+    "PixelRate" = ?; // REG_DWORD
+    "PrimSurfSize.cx" = ?; // REG_DWORD
+    "PrimSurfSize.cy" = ?; // REG_DWORD
+    "Rotation" = ?; // REG_DWORD
+    "Scaling" = ?; // REG_DWORD
+    "ScanlineOrdering" = ?; // REG_DWORD
+    "Stride" = ?; // REG_DWORD
+    "VideoStandard" = ?; // REG_DWORD
+    "VirtualRefreshRate.Denominator" = ?; // REG_DWORD
+    "VirtualRefreshRate.Numerator" = ?; // REG_DWORD
+    "VSyncFreq.Denominator" = ?; // REG_DWORD
+    "VSyncFreq.Numerator" = ?; // REG_DWORD, refresh rate
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration\\<CONFIG_ID>\\00";
+    "CcdDbVersion" = ?; // REG_DWORD
+    "ColorBasis" = ?; // REG_DWORD
+    "PixelFormat" = ?; // REG_DWORD
+    "Position.cx" = ?; // REG_DWORD
+    "Position.cy" = ?; // REG_DWORD
+    "PrimSurfSize.cx" = ?; // REG_DWORD
+    "PrimSurfSize.cy" = ?; // REG_DWORD
+    "Stride" = ?; // REG_DWORD
+```
 
 # DWM Values
 
 This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
 
-See win-registry repo for a list of `SOFTWARE\\Microsoft\\Windows\\Dwm\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#dwm-values
+## Registry Values Details
+
+See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
+
+> [!WARNING]
+> Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm";
+    "BlackOutAllReadback" = 0;
+    "ConfigureInput" = 1;
+    "CpuClipAASinkEnableIntermediates" = 1;
+    "CpuClipAASinkEnableOcclusion" = 1;
+    "CpuClipAASinkEnableRender" = 1;
+    "CpuClipAreaThreshold" = 20000;
+    "CpuClipWarpPartitionThreshold" = 1024;
+    "DisableDrawListCaching" = 0; // REG_DWORD
+    "DisableProjectedShadows" = 0;
+    "DisplayChangeTimeoutMs" = 1000;
+    "EnableBackdropBlurCaching" = 1; // REG_DWORD
+    "EnableCommonSuperSets" = 1;
+    "EnableCpuClipping" = 1;
+    "EnableDDisplayScanoutCaching" = 1;
+    "EnableEffectCaching" = 1; // REG_DWORD
+    "EnableFrontBufferRenderChecks" = 1;
+    "EnableMegaRects" = 1;
+    "EnablePrimitiveReordering" = 1;
+    "ForceFullDirtyRendering" = 0;
+    "GammaBlendPencil" = 1;
+    "GammaBlendWithFP16" = 1;
+    "InkGPUAccelOverrideVendorWhitelist" = 0;
+    "LayerClippingMode" = 2;
+    "LogExpressionPerfStats" = 0; // REG_DWORD
+    "MajorityScreenTest_MinArea" = 80;
+    "MajorityScreenTest_MinLength" = 80;
+    "MaxD3DFeatureLevel" = 0;
+    "MegaRectSearchCount" = 100;
+    "MegaRectSize" = 100000;
+    "MousewheelAnimationDurationMs" = 250;
+    "MousewheelScrollingMode" = 0; // REG_DWORD
+    "OptimizeForDirtyExpressions" = 1; // REG_DWORD
+    "OverlayMinFPS" = 15; // If this value is present and set to zero, the Desktop Window Manager disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
+    "RenderThreadTimeoutMilliseconds" = 5000;
+    "SuperWetExtensionTimeMicroseconds" = 1000;
+    "TelemetryFramesReportPeriodMilliseconds" = 300000;
+    "TelemetryFramesSequenceIdleIntervalMilliseconds" = 1000;
+    "TelemetryFramesSequenceMaximumPeriodMilliseconds" = 1000;
+    "UniformSpaceDpiMode" = 1;
+    "UseFastestMonitorAsPrimary" = 0;
+    "vBlankWaitTimeoutMonitorOffMs" = 250;
+    "WarpEnableDebugColor" = 0;
+
+    "BackdropBlurCachingThrottleMs" = 25; // 25ms if missing, clamped to <=1000ms when present?
+    "CompositorClockPolicy" = 1; // range 0-1
+    "CpuClipFlatteningTolerance" = 0; // scaled /1000
+    "CustomRefreshRateMode" = 0; // range 0-2
+    "DisableAdvancedDirectFlip" = 0; // REG_DWORD
+    "DisableIndependentFlip" = 0;
+    "DisableProjectedShadowsRendering" = 0;
+    "FlattenVirtualSurfaceEffectInput" = 0;
+    "ForceEffectMode" = 0; // range 0-2, REG_DWORD
+    "FrameCounterPosition" = 0;
+    "InteractionOutputPredictionDisabled" = 0;
+    "OverlayTestMode" = 0; // 5 = MPO disabled, REG_DWORD
+    "ParallelModePolicy" = 1; // >=3 coerced to 1
+    "ParallelModeRateThreshold" = 119; // divisor for g_qpcFrequency, missing key defaults to 119 Hz (units: Hz)? 0 disables
+    "ResampleInLinearSpace" = 0;
+    "ResampleModeOverride" = 0;
+    "SDRBoostPercentOverride" = 0; // scaled /100
+    "ShowDirtyRegions" = 0;
+
+    "AnimationsShiftKey" = 0;
+    "DisableLockingMemory" = 0;
+    "ModeChangeCurtainUseDebugColor" = 0;
+    "UseDPIScaling" = 1;
+
+    "ChildWindowDpiIsolation" = 1; // range 0-1
+    "DisableDeviceBitmaps" = 0; // range 0-1
+    "EnableResizeOptimization" = 0; // REG_DWORD (no clamp?)
+    "ResizeTimeoutGdi" = 0; // range 0-4294967295 (ms)
+    "ResizeTimeoutModern" = 0; // range 0-4294967295 (ms)
+
+    "DefaultColorizationColorState" = 0;
+    "DisallowAnimations" = 0;
+    "DisallowColorizationColorChanges" = 0;
+
+    "DisableSessionTermination" = 0; // range 0-1
+    "ForceBasicDisplayAdapterOnDWMRestart" = 0; // range 0-1
+    "OneCoreNoBootDWM" = 0; // REG_DWORD, nonzero = enabled
+    "OneCoreNoDWMRawGameController" = ? // didn't look into it yet, but it's probably related to OneCoreNoBootDWM
+
+    "DisableHologramCompositor" = 0;
+
+    // Haven't looked into them yet
+    "ForceUDwmSoftwareDevice" = ?;
+    "ForceDisableModeChangeAnimation" = ?; // REG_DWORD
+
+    // procmon boot trace
+    "AccentColorInactive" = ?;
+    "AnimationAttributionEnabled" = 1; // REG_DWORD
+    "AnimationAttributionHashingEnabled" = 1; // REG_DWORD
+    "ColorPrevalence" = ?;
+    "CpuClipAASinkEnableDebugColors" = ?;
+    "CpuClipAASinkForceEnable" = ?;
+    "DebugFailFast" = ?;
+    "DisableDeviceBitmapsForMultiAdapter" = ?;
+    "DwmInitSessionActivityId_00000001" = ?; // a ID, REG_SZ
+    "EnableDesktopOverlays" = ?;
+    "EnableMPCPerfCounter" = ?;
+    "EnableRenderPathTestMode" = ?;
+    "EnableWindowColorization" = ?;
+    "ForceDesktopTreeFullDirty" = ?;
+    "MajorityScreenTest_MaxCoverage" = ?;
+    "MarshalAllDebugInfo" = ?;
+    "MPCInputRouterWaitForDebugger" = ?;
+    "ShaderLinkingGPUBlacklist" = ?; // REG_SZ
+    "SuperWetEnabled" = ?;
+    "UseHWDrawListEntriesOnWARP" = ?;
+
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene";
+    "EnableBloom" = 0; // REG_DWORD
+    "EnableDrawToBackbuffer" = 1; // REG_DWORD
+    "EnableImageProcessing" = 1; // REG_DWORD
+    "ImageProcessingResizeGrowth" = 200;
+    "MsaaQualityMode" = 2;
+    "SceneVisualCutoffCountOfConsecutiveIncidentsAllowed" = 5;
+    "SceneVisualCutoffThresholdInMS" = 1000;
+
+    "ForceNonPrimaryDisplayAdapter" = 0; // REG_DWORD
+    "ImageProcessingResizeThreshold" = 0; // scaled /100
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\GpuAccelInkTiming";
+    "ExtensionTimeMicroseconds" = 1000;
+    "PeriodicFenceMinDifferenceMicroseconds" = 500;
+    "RefreshRatePercentage" = 10;
+```
 
 # MMCSS Values
 
-See win-registry repo for a list of `SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#mmcss-values
+All values are read via `CiConfigReadDWORD()`, so the type is `REG_DWORD` for all listed ones. If `\Tasks` opens successfully, `CiConfigInitializeFromRegistry()` handles that part?
+
+See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/tree/main/system/assets/mmcss-CiConfigInitialize.c) for notes.
+
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile";
+    "SystemResponsiveness" = 20; // see section below
+    "NetworkThrottlingIndex" = 10; // 0 becomes 1, 1-70 stay unchanged, 71-4294967294 become 70, 4294967295 stays unchanged
+    "NoLazyMode" = 0; // any nonzero value = enabled
+    "IdleDetectionCycles" = 2; // valid range is 1-31, otherwise 2 is used
+    "LazyModeTimeout" = 1000000; // 0 is replaced with 1000000
+    "SchedulerTimerResolution" = 10000; // values above 10000 are capped to 10000
+    "SchedulerPeriod" = 100000; // valid range is 50000-1000000, otherwise 100000 is used
+    "MaxThreadsPerProcess" = 32; // valid range is 8-128, otherwise 32 is used
+    "MaxThreadsTotal" = 256; // valid range is 64-65535, otherwise 256 is used
+```
 
 ## SystemResponsiveness Details
 
@@ -1908,7 +2955,9 @@ BCDEdit is primarily used for boot troubleshooting, recovery, debugging, and sec
 
 BitLocker validates a subset of BCD settings at boot to detect security sensitive changes. The validated set can be extended or reduced via policy, and the hex value of a triggering setting is logged (event ID 523). Friendly names can be listed with `bcdedit /enum all`, but some settings have no friendly name and must be configured by hex. BCD settings are also scoped to specific boot applications (for example, `winload`, `winresume`, `bootmgr`), policy entries can be prefixed with the target application (for example, `winload:nx` or `all:locale`). When secure boot is used for integrity validation, the enhanced BCD validation profile policy is ignored, and secure boot enforces its own BCD rules.
 
-## Key & Value Structure
+## Registry Values Details
+
+### Key & Value Structure
 
 As kind of everything else, BCD edits are also stored in the registry:
 ```c
@@ -1922,10 +2971,283 @@ HKLM\BCD00000000\Objects\{GUID}\Elements\XXXXXXXX : Element // (REG_BINARY/REG_M
 
 See all object identifiers via `bcdedit /enum all /v` (`identifier`). Note that the list below uses `{bootmgr}`, `{current}` etc. which must be replaced by the actual GUID (see block above).
 
-See win-registry repo for a list of `HKLM\\BCD00000000\\Objects\\...` values/defaults/notes:
-> https://github.com/nohuto/win-registry#bcd-edits
+### Value/Data List
 
-## Miscellaneous Notes
+Here are elements which I tracked via Procmon (taken from default store and the MS documentation), note that this doesn't show default states (see block at the buttom), instead it shows several options and their possible states:
+
+```c
+"HKLM\\BCD00000000\\Objects\\{current}\\Elements";
+    "\\26000141"; "Element" = 01; // REG_BINARY, event = true, false = 00
+    "\\26000116"; "Element" = 01; // REG_BINARY, hypervisorusevapic = true, false = 00
+    "\\260000F8"; "Element" = 01; // REG_BINARY, hypervisordisableslat = true, false = 00
+    "\\260000FC"; "Element" = 01; // REG_BINARY, hypervisoruselargevtlb = true, false = 00 - Increases virtual Translation Lookaside Buffer (TLB) size.
+    "\\260000F2"; "Element" = 01; // REG_BINARY, hypervisordebug = true, false = 00 - Controls whether the hypervisor debugger is enabled.
+    "\\260000E1"; "Element" = 00; // REG_BINARY, disableelamdrivers = false, true = 01 - The OS loader removes this entry for security reasons. This option can only be triggered by using the F8 menu.
+    "\\260000C3"; "Element" = 01; // REG_BINARY, onetimeadvancedoptions = true, false = 00 - Controls whether the system boots to the legacy menu (F8 menu) on the next boot.
+    "\\260000C4"; "Element" = 01; // REG_BINARY, onetimeoptionsedit = true, false = 00
+    "\\260000B0"; "Element" = 01; // REG_BINARY, ems = true, false = 00 - Indicates whether EMS should be enabled in the kernel.
+    "\\260000A5"; "Element" = 01; // REG_BINARY, disabledynamictick = true, false = 00
+    "\\260000A4"; "Element" = 01; // REG_BINARY, useplatformtick = true (forces platform clock source, often HPET), false = 00
+    "\\260000A3"; "Element" = 01; // REG_BINARY, forcelegacyplatform = true, false = 00 - Forces the OS to assume the presence of legacy PC devices like CMOS and keyboard controllers.
+    "\\260000A2"; "Element" = 01; // REG_BINARY, useplatformclock = true (forces the use of the platform clock as the system's performance counter), false = 00
+    "\\260000A1"; "Element" = 01; // REG_BINARY, halbreakpoint = true, false = 00 - Indicates whether the HAL should call DbgBreakPoint at the start of HalInitSystem for phase 0 initialization of the kernel.
+    "\\260000A0"; "Element" = 01; // REG_BINARY, debug = true, false = 00 - Indicates whether the kernel debugger should be enabled using the settings in the inherited debugger object.
+    "\\26000091"; "Element" = 01; // REG_BINARY, sos = true, false = 00 - Indicates whether the system should display verbose information.
+    "\\26000090"; "Element" = 01; // REG_BINARY, bootlog = true, false = 00 - Indicates whether the system should write logging information to %SystemRoot%\Ntbtlog.txt during initialization.
+    "\\25000080"; "Element" = 0000000000000000; // REG_BINARY, safeboot = 0 (Minimal, SafeBoot\\Minimal), Network = 0100000000000000 (SafeBoot\\Network), DsRepair = 0200000000000000 (Directory Services Restore), Unset = not present
+    "\\26000081"; "Element" = 01; // REG_BINARY, safebootalternateshell = true, false = 00 - Indicates whether the system should use the shell specified under the following registry key instead of the default shell: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\SafeBoot\AlternateShell.
+    "\\26000070"; "Element" = 01; // REG_BINARY, usefirmwarepcisettings = true, false = 00 - Indicates whether the system should use I/O and IRQ resources created by the system firmware instead of using dynamically configured resources.
+    "\\26000065"; "Element" = 01; // REG_BINARY, groupaware = true, false = 00 - This setting makes drivers group aware and can be used to determine improper group usage.
+    "\\26000064"; "Element" = 01; // REG_BINARY, maxgroup = true, false = 00 - Maximizes the number of groups created when assigning nodes to processor groups.
+    "\\26000062"; "Element" = 01; // REG_BINARY, maxproc = true, false = 00 - Indicates whether the system should use the maximum number of processors.
+    "\\26000060"; "Element" = 01; // REG_BINARY, onecpu = true, false = 00 - Indicates whether the operating system should initialize or start non-boot processors.
+    "\\26000054"; "Element" = 01; // REG_BINARY, uselegacyapicmode = true (forces X2APICPOLICY=DISABLE), false = 00 (no-op) - Used to force legacy APIC mode, even if the processors and chipset support extended APIC mode.
+    "\\26000051"; "Element" = 01; // REG_BINARY, usephysicaldestination = true, false = 00 - Indicates whether to enable physical-destination mode for all APIC messages.
+    "\\26000043"; "Element" = 01; // REG_BINARY, novga = true, false = 00 - Disables the use of VGA modes in the OS.
+    "\\26000042"; "Element" = 01; // REG_BINARY, novesa = true, false = 00 - Indicates whether the VGA driver should avoid VESA BIOS calls.
+    "\\26000041"; "Element" = 01; // REG_BINARY, quietboot = true, false = 00 - Indicates whether the system should initialize the VGA driver responsible for displaying simple graphics during the boot process. If not, there is no display is presented during the boot process.
+    "\\26000040"; "Element" = 01; // REG_BINARY, vga = true, false = 00 - Indicates whether the system should use the standard VGA display driver instead of a high-performance display driver.
+    "\\26000030"; "Element" = 01; // REG_BINARY, nolowmem = true, false = 00 - Indicates whether the system should utilize the first 4GB of physical memory. This option requires 5GB of physical memory, and on x86 systems it requires PAE to be enabled.
+    "\\26000027"; "Element" = 01; // REG_BINARY, allowprereleasesignatures = true, false = 00 - Indicates whether the test code signing certificate is supported.
+    "\\26000025"; "Element" = 01; // REG_BINARY, lastknowngood = true, false = 00 - Indicates that the system should use the last-known good settings.
+    "\\26000024"; "Element" = 01; // REG_BINARY, nocrashautoreboot = true, false = 00 - Indicates that the system should not automatically reboot when it crashes.
+    "\\26000010"; "Element" = 01; // REG_BINARY, detectkernelandhal = true, false = 00 - Indicates whether the operating system loader should determine the kernel and HAL to load based on the platform features.
+    "\\26000004"; "Element" = 01; // REG_BINARY, stampdisks = true, false = 00
+    "\\25000142"; "Element" = 0100000000000000; // REG_BINARY, vsmlaunchtype = 1 (auto), Off = 0000000000000000
+    "\\25000130"; "Element" = 0000000000000000; // REG_BINARY, claimedtpmcounter = 0
+    "\\2500012B"; "Element" = 0100000000000000; // REG_BINARY, xsavedisable = 1, 0 = 0000000000000000 - When set to a value other than zero (0), disables XSAVE functionality in the kernel.
+    "\\2500012A"; "Element" = 0000000000000000; // REG_BINARY, xsaveprocessorsmask = 0
+    "\\25000129"; "Element" = 0000000000000000; // REG_BINARY, xsaveremovefeature = 0
+    "\\25000128"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature7 = 0
+    "\\25000127"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature6 = 0
+    "\\25000126"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature5 = 0
+    "\\25000125"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature4 = 0
+    "\\25000124"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature3 = 0
+    "\\25000123"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature2 = 0
+    "\\25000122"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature1 = 0
+    "\\25000121"; "Element" = 0000000000000000; // REG_BINARY, xsaveaddfeature0 = 0
+    "\\25000120"; "Element" = 0000000000000000; // REG_BINARY, xsavepolicy = 0
+    "\\25000115"; "Element" = 0100000000000000; // REG_BINARY, hypervisoriommupolicy = 1 (enable), Default = 0000000000000000, Disable = 0200000000000000 - Controls whether the hypervisor uses an Input Output Memory Management Unit (IOMMU).
+    "\\25000113"; "Element" = 0200000000000000; // REG_BINARY, hypervisorrootproc = 2
+    "\\25000100"; "Element" = 0200000000000000; // REG_BINARY, tpmbootentropy = 2 (forceenable), Default = 0000000000000000, ForceDisable = 0100000000000000 - Determines whether entropy is gathered from the trusted platform module (TPM) to help seed the random number generator in the OS.
+    "\\250000FB"; "Element" = 0100000000000000; // REG_BINARY, hypervisorrootprocpernode = 1 - Specifies the total number of virtual processors in the root partition that can be started within a pre-split Non-Uniform Memory Architecture (NUMA) node.
+    "\\250000FA"; "Element" = 0200000000000000; // REG_BINARY, hypervisornumproc = 2 - Specifies the total number of logical processors that can be started in the hypervisor.
+    "\\250000F7"; "Element" = 0000000000000000; // REG_BINARY, bootuxpolicy = 0 (Disabled), Basic = 0100000000000000, Standard = 0200000000000000 (defunct) - Values are Disabled (0), Basic (1), and Standard (2).
+    "\\250000F0"; "Element" = 0000000000000000; // REG_BINARY, hypervisorlaunchtype = 0 (Off), Auto = 0100000000000000 - Controls the hypervisor launch type. Options are HyperVisorLaunchOff (0) and HypervisorLaunchAuto (1).
+    "\\250000E0"; "Element" = 0000000000000000; // REG_BINARY, bootstatuspolicy = 0 (displayallfailures), IgnoreAllFailures = 0100000000000000, IgnoreBootFailures = 0300000000000000, IgnoreCheckpointFailures = 0400000000000000, IgnoreShutdownFailures = 0200000000000000, DisplayBootFailures = 0600000000000000, DisplayCheckpointFailures = 0700000000000000, DisplayShutdownFailures = 0500000000000000
+    "\\250000C2"; "Element" = 0000000000000000; // REG_BINARY, bootmenupolicy = 0 (Legacy), Standard = 0100000000000000 - Defines the type of boot menu the system will use. For Windows 10/11, Windows 8.1, Windows 8 and Windows RT the default is Standard. For Windows Server 2012 R2, Windows Server 2012, the default is Legacy. When Legacy is selected, the Advanced options menu (F8) is available. When Standard is selected, the boot menu appears but only under certain conditions: for example, if there is a startup failure, if you are booting up from a repair disk or installation media, if you have configured multiple boot entries, or if you manually configured the computer to use Advanced startup. When Standard is selected, the F8 key is ignored during boot. - Defines the type of boot menus the system will use. Possible values include menupolicylegacy (0) or menupolicystandard (1).
+    "\\250000C1"; "Element" = 0000000000000000; // REG_BINARY, driverloadfailurepolicy = 0 (fatal), UseErrorControl = 0100000000000000 - Indicates the driver load failure policy. Zero (0) indicates that a failed driver load is fatal and the boot will not continue, one (1) indicates that the standard error control is used.
+    "\\250000A6"; "Element" = 0100000000000000; // REG_BINARY, tscsyncpolicy = 1 (legacy), Default = 0000000000000000, Enhanced = 0200000000000000 (HalpTscSyncPolicy symbol not present means this doesn't do anything), this should exist on older Windows versions and controls the TSC synchronization policy
+    "\\25000072"; "Element" = 0100000000000000; // REG_BINARY, pciexpress = 1 (forcedisable), Default = 0000000000000000
+    "\\25000071"; "Element" = 0100000000000000; // REG_BINARY, msi = 1 (forcedisable), Default = 0000000000000000, ForceEnable only via loadoptions FORCEMSI - The PCI Message Signaled Interrupt (MSI) policy. Zero (0) indicates default, and one (1) indicates that MSI interrupts are disabled.
+    "\\25000066"; "Element" = 4000000000000000; // REG_BINARY, groupsize = 64 - Specifies the size of all processor groups. Must be set to a power of 2 (max of 64, see pseudocode below).
+    "\\25000063"; "Element" = 0100000000000000; // REG_BINARY, configflags = 1 - Indicates whether processor specific configuration flags are to be used.
+    "\\25000061"; "Element" = 0200000000000000; // REG_BINARY, numproc = 2 - The maximum number of processors that can be utilized by the system, all other processors are ignored.
+    "\\25000055"; "Element" = 0200000000000000; // REG_BINARY, x2apicpolicy = 2 (enable), Default = 0000000000000000, Disable = 0100000000000000 - Enables the use of extended APIC mode, if supported. Zero (0) indicates default behavior, one (1) indicates that extended APIC mode is disabled, and two (2) indicates that extended APIC mode is enabled. The system defaults to using extended APIC mode if available.
+    "\\25000050"; "Element" = 0100000000000000; // REG_BINARY, clustermodeaddressing = 1 - Indicates that cluster-mode APIC addressing should be utilized, and the value is the maximum number of processors per cluster.
+    "\\25000052"; "Element" = 0000000000000000; // REG_BINARY, restrictapicluster = 0 - The maximum number of APIC clusters that should be used by cluster-mode addressing.
+    "\\25000032"; "Element" = 0004000000000000; // REG_BINARY, increaseuserva = 1024 - Increasing this value from the default 2GB decreases the amount of virtual address space available to the system and device drivers. The amount of memory that should be utilized by the process address space, in bytes. This value should be between 2GB and 3GB.
+    "\\25000033"; "Element" = 0000000000000000; // REG_BINARY, perfmem = 0 - BcdOSLoaderInteger_PerformaceDataMemory (integer)
+    "\\25000031"; "Element" = 8000000000000000; // REG_BINARY, removememory = 128 - The amount of memory the system should ignore.
+    "\\25000021"; "Element" = 0100000000000000; // REG_BINARY, pae = 1 (forceenable), Default = 0000000000000000, ForceDisable = 0200000000000000 - If this value is not specified, the default is PaePolicyDefault which follows the rule "enable PAE if hot-pluggable memory is above 4GB"
+    "\\25000020"; "Element" = 0000000000000000; // REG_BINARY, nx = 0 (OptIn, NX off by default), OptOut = 0100000000000000 (NX on by default), AlwaysOff = 0200000000000000, AlwaysOn = 0300000000000000 - If this value is not specified, the default is NxPolicyAlwaysOff.
+    "\\23000003"; "Element" = {resume}; // REG_SZ, resumeobject = {resume} - The default boot environment application to load if the user does not select one.
+    "\\22000053"; "Element" = \EFI\Microsoft\Boot\EVStore.dat; // REG_SZ, evstore = \EFI\Microsoft\Boot\EVStore.dat
+    "\\22000041"; "Element" = recovery message; // REG_SZ, fverecoverymessage = recovery message
+    "\\22000040"; "Element" = https://example.com/recovery; // REG_SZ, fverecoveryurl = https://example.com/recovery
+    "\\22000013"; "Element" = kdcom.dll; // REG_SZ, dbgtransport = kdcom.dll - The transport DLL to be loaded by the operating system loader. This value overrides the default Kdcom.dll.
+    "\\22000012"; "Element" = hal.dll; // REG_SZ, hal = hal.dll - The HAL to be loaded by the operating system loader. This value overrides the default HAL.
+    "\\22000011"; "Element" = ntoskrnl.exe; // REG_SZ, kernel = ntoskrnl.exe - The kernel to be loaded by the operating system loader. This value overrides the default kernel.
+    "\\22000002"; "Element" = \Windows; // REG_SZ, systemroot = \Windows - This value is reserved.
+    "\\21000001"; "Element" = partition=C:; // REG_BINARY, filedevice = partition=C: - This value is reserved.
+    "\\17000077"; "Element" = 7500001500000000; // REG_BINARY, allowedinmemorysettings = 0x15000075 - Indicates whether or not an in-memory BCD setting passed between boot apps will trigger BitLocker recovery. This value should not be modified as it could trigger a BitLocker recovery action.
+    "\\1600007B"; "Element" = 01; // REG_BINARY, forcefipscrypto = true, false = 00 (BitLocker validation profile)
+    "\\16000079"; "Element" = 01; // REG_BINARY, forcefipscrypto = true, false = 00 (BCD library enum, the one above is probably the used one) - Force the use of FIPS cryptography checks on boot applications.
+    "\\16000074"; "Element" = 01; // REG_BINARY, bootshutdowndisabled = true, false = 00 - Disables the 1-minute timer that triggers shutdown on boot error screens, and the F8 menu, on UEFI systems.
+    "\\16000072"; "Element" = 01; // REG_BINARY, nokeyboard = true, false = 00
+    "\\1600006C"; "Element" = 01; // REG_BINARY, bootuxdisabled = true, false = 00 - This setting disables the progress bar and default Windows logo. If a custom text string has been defined, it is also disabled by this setting.
+    "\\16000069"; "Element" = 01; // REG_BINARY, custom:16000069 = true, false = 00 - disables the loading circle while booting (see image at the bottom)
+    "\\16000067"; "Element" = 01; // REG_BINARY, custom:16000067 = true, false = 00 - disables the Windows logo while booting (see image at the bottom)
+    "\\16000060"; "Element" = 01; // REG_BINARY, isolatedcontext = true, false = 00 - Do not modify this setting. If this setting is removed from a Windows 8 installation, it will not boot. If this setting is added to a Windows 7 installation, it will not boot. - This setting is used to differentiate between the Windows 7 and Windows 8 implementations of UEFI.
+    "\\16000054"; "Element" = 01; // REG_BINARY, highestmode = true, false = 00 - Forces highest available graphics resolution at boot. This value can only be used on UEFI systems.
+    "\\16000053"; "Element" = 01; // REG_BINARY, restartonfailure = true, false = 00 - If enabled, specifies that boot error screens are not shown when OS launch errors occur, and the system is reset rather than exiting directly back to the firmware.
+    "\\16000050"; "Element" = 01; // REG_BINARY, consoleextendedinput = true, false = 00 - Specifies that legacy BIOS systems should use INT 16h Function 10h for console input instead of INT 16h Function 0h.
+    "\\16000049"; "Element" = 01; // REG_BINARY, testsigning = true, false = 00 - Indicates whether the test code signing certificate is supported.
+    "\\16000048"; "Element" = 01; // REG_BINARY, nointegritychecks = true, false = 00 - This value is ignored by Windows 7 and Windows 8. - Disables integrity checks. Cannot be set when secure boot is enabled.
+    "\\16000046"; "Element" = 01; // REG_BINARY, graphicsmodedisabled = true, false = 00 - Indicates whether graphics mode is disabled and boot applications must use text mode display.
+    "\\16000041"; "Element" = 01; // REG_BINARY, optionsedit = true, false = 00 - Indicates whether the boot options editor is enabled.
+    "\\16000040"; "Element" = 01; // REG_BINARY, advancedoptions = true, false = 00 - Indicates whether the advanced options boot menu (F8) is displayed.
+    "\\1600001E"; "Element" = 01; // REG_BINARY, vm = true, false = 00
+    "\\1600000F"; "Element" = 01; // REG_BINARY, traditionalkseg = true, false = 00
+    "\\16000009"; "Element" = 01; // REG_BINARY, recoveryenabled = true, false = 00 - Indicates whether the recovery sequence executes automatically if the boot application fails. Otherwise, the recovery sequence only runs on demand.
+    "\\15000081"; "Element" = 0000000000000000; // REG_BINARY, logcontrol = 0
+    "\\15000088"; "Element" = 0000000000000000; // REG_BINARY, linearaddress57 = 0 (Default), OptOut = 0100000000000000, OptIn = 0200000000000000
+    "\\15000066"; "Element" = 0300000000000000; // REG_BINARY, displaymessageoverride = 3 (Recovery), Resume = 0100000000000000
+    "\\15000052"; "Element" = 0000000000000000; // REG_BINARY, graphicsresolution = 0 (1024x768), 800x600 = 0100000000000000, 1024x600 = 0200000000000000 - Forces a specific graphics resolution at boot. Possible values include GraphicsResolution1024x768 (0), GraphicsResolution800x600 (1), and GraphicsResolution1024x600 (2).
+    "\\15000051"; "Element" = 0000000000000000; // REG_BINARY, initialconsoleinput = 0
+    "\\1500004C"; "Element" = 0000000000000000; // REG_BINARY, volumebandid = 0 (fvebandid) - This value (if present) should not be modified.
+    "\\1500004B"; "Element" = 0000000000000000; // REG_BINARY, integrityservices = 0 (Default, Enabled - Kernel Mode Code Signing), Enable = 0100000000000000, Disable = 0200000000000000
+    "\\15000047"; "Element" = 0000000000000000; // REG_BINARY, configaccesspolicy = 0 (Default, allow MMCONFIG), DisallowMmConfig = 0100000000000000 (use CF8/CFC instead) - Indicates the access policy for PCI configuration space.
+    "\\15000042"; "Element" = 0000000000000000; // REG_BINARY, keyringaddress = 0
+    "\\1500000E"; "Element" = 0000000000000000; // REG_BINARY, avoidlowphysicalmemory = 0 - Specifies a minimum physical address to use in the boot environment.
+    "\\1500000D"; "Element" = 0000000000000000; // REG_BINARY, relocatephysicalmemory = 0 - This value is not used in Windows 8 or Windows Server 2012. - Relocates physical memory on certain AMD processors.
+    "\\1500000C"; "Element" = 0000000000000000; // REG_BINARY, firstmegabytepolicy = 0 (UseNone, use none of first MB), UseAll = 0100000000000000 (use all of first MB), UsePrivate = 0200000000000000 (reserved) - Indicates how the first megabyte of memory is to be used.
+    "\\15000007"; "Element" = 0000008000000000; // REG_BINARY, truncatememory = 2147483648 - Maximum physical address a boot environment application should recognize. All memory above this address is ignored.
+    "\\14000008"; "Element" = {winre}; // REG_MULTI_SZ, recoverysequence = {winre} - List of boot environment applications to be executed if the associated application fails. The applications are executed in the order they appear in this list.
+    "\\14000006"; "Element" = {bootloadersettings}; // REG_MULTI_SZ, inherit = {bootloadersettings} - List of BCD objects from which the current object should inherit elements.
+    "\\1200004A"; "Element" = \Windows\Fonts; // REG_SZ, fontpath = \Windows\Fonts - Use caution when modifying this setting. Boot screens will not work if the correct fonts are not present. - Overrides the default location of the boot fonts.
+    "\\12000044"; "Element" = \Boot\BCD-Log; // REG_SZ, bsdlogpath = \Boot\BCD-Log - Allows a path override for the bootstat.dat log file in the boot manager and winload.exe.
+    "\\12000030"; "Element" = NOCRASHONCTRL; // REG_SZ, loadoptions = NOCRASHONCTRL - String that is appended to the load options string passed to the kernel to be consumed by kernel-mode components. This is useful for communicating with kernel-mode components that are not BCD-aware.
+    "\\12000005"; "Element" = en-US; // REG_SZ, locale = en-US - Preferred locale, in RFC 3066 format.
+    "\\12000004"; "Element" = Windows 11; // REG_SZ, description = Windows 11 - Display name of the boot environment application.
+    "\\12000002"; "Element" = \Windows\system32\winload.efi; // REG_SZ, path = \Windows\system32\winload.efi - Path to a boot environment application.
+    "\\11000043"; "Element" = partition=C:; // REG_BINARY, bsdlogdevice = partition=C: - Allows a device override for the bootstat.dat log in the boot manager and winload.exe.
+    "\\11000001"; "Element" = partition=C:; // REG_BINARY, device = partition=C: - Device on which a boot environment application resides.
+"HKLM\\BCD00000000\\Objects\\{resume}\\Elements";
+    "\\26000006"; "Element" = 00; // REG_BINARY, debugoptionenabled = false, true = 01 - Enables kernel debugging on resume from hibernate.
+    "\\26000004"; "Element" = 01; // REG_BINARY, pae = true, false = 00
+    "\\26000003"; "Element" = 01; // REG_BINARY, usecustomsettings = true, false = 00 - Allows the resume loader BCD object to use custom settings. If this setting is not specified or is not enabled, default settings are applied by the OS before resume.
+    "\\25000008"; "Element" = 0100000000000000; // REG_BINARY, bootmenupolicy = 1 (Standard), Legacy = 0000000000000000 - Defines the type of boot menus the system will use. Possible values are menupolicylegacy (0) or menupolicystandard (1). The default setting is menupolicylegacy (0).
+    "\\25000007"; "Element" = 0000000000000000; // REG_BINARY, bootux = 0 (Disabled), Basic = 0100000000000000, Standard = 0200000000000000 (defunct)
+    "\\22000002"; "Element" = \hiberfil.sys; // REG_SZ, filepath = \hiberfil.sys - This value is reserved.
+    "\\21000026"; "Element" = partition=C:; // REG_BINARY, custom:21000026 = partition=C:
+    "\\21000005"; "Element" = partition=C:; // REG_BINARY, associatedosdevice = partition=C: - Specifies the name of the OS device associated with the hibernated OS. This is only used if the hibernation file is not stored on the OS device.
+    "\\21000001"; "Element" = partition=C:; // REG_BINARY, filedevice = partition=C: - This value is reserved.
+    "\\17000077"; "Element" = 7500001500000000; // REG_BINARY, allowedinmemorysettings = 0x15000075 - Indicates whether or not an in-memory BCD setting passed between boot apps will trigger BitLocker recovery. This value should not be modified as it could trigger a BitLocker recovery action.
+    "\\16000060"; "Element" = 01; // REG_BINARY, isolatedcontext = true, false = 00 - Do not modify this setting. If this setting is removed from a Windows 8 installation, it will not boot. If this setting is added to a Windows 7 installation, it will not boot. - This setting is used to differentiate between the Windows 7 and Windows 8 implementations of UEFI.
+    "\\16000009"; "Element" = 01; // REG_BINARY, recoveryenabled = true, false = 00 - Indicates whether the recovery sequence executes automatically if the boot application fails. Otherwise, the recovery sequence only runs on demand.
+    "\\14000008"; "Element" = {winre}; // REG_MULTI_SZ, recoverysequence = {winre} - List of boot environment applications to be executed if the associated application fails. The applications are executed in the order they appear in this list.
+    "\\14000006"; "Element" = {resumeloadersettings}; // REG_MULTI_SZ, inherit = {resumeloadersettings} - List of BCD objects from which the current object should inherit elements.
+    "\\12000005"; "Element" = en-US; // REG_SZ, locale = en-US - Preferred locale, in RFC 3066 format.
+    "\\12000004"; "Element" = Windows Resume Application; // REG_SZ, description = Windows Resume Application - Display name of the boot environment application.
+    "\\12000002"; "Element" = \Windows\system32\winresume.efi; // REG_SZ, path = \Windows\system32\winresume.efi - Path to a boot environment application.
+    "\\11000001"; "Element" = partition=C:; // REG_BINARY, device = partition=C: - Device on which a boot environment application resides.
+"HKLM\\BCD00000000\\Objects\\{bootmgr}\\Elements";
+    "\\27000030"; "Element" = 0000000000000000; // REG_BINARY, customactionslist = <integer list> - For more information see Custom Bootstrap Actions in Windows Vista.
+    "\\26000031"; "Element" = 01; // REG_BINARY, persistbootsequence = true, false = 00 - Controls whether a boot sequence persists across multiple boots.
+    "\\26000028"; "Element" = 01; // REG_BINARY, processcustomactionsfirst = true, false = 00 - Controls whether custom actions are processed before a boot sequence.
+    "\\26000021"; "Element" = 01; // REG_BINARY, noerrordisplay = true, false = 00 - Indicates whether the display of errors should be suppressed. If this setting is enabled, the boot manager exits to the multi-OS menu on OS launch error.
+    "\\26000020"; "Element" = 01; // REG_BINARY, displaybootmenu = true, false = 00 - Forces the display of the legacy boot menu, regardless of the number of OS entries in the BCD store and their BcdOSLoaderInteger_BootMenuPolicy.
+    "\\26000005"; "Element" = 01; // REG_BINARY, attemptresume = true, false = 00 - Indicates that a resume operation should be attempted during a system restart.
+    "\\25000004"; "Element" = 0300000000000000; // REG_BINARY, timeout = 3 - The boot menu time-out determines how long the boot menu is displayed before the default boot entry is loaded. It is calibrated in seconds. If you want extra time to choose the operating system that loads on your computer, you can extend the time-out value. Or, you can shorten the time-out value so that the default operating system starts faster. - If this value is not specified, the boot manager waits for the user to make a selection. - The maximum number of seconds a boot selection menu is to be displayed to the user. The menu is displayed until the user selects an option or the time-out expires.
+    "\\24000010"; "Element" = {memdiag}; // REG_MULTI_SZ, toolsdisplayorder = {memdiag} - The boot manager tools display order list.
+    "\\24000002"; "Element" = {current}; // REG_MULTI_SZ, bootsequence = {current} - If the firmware boot manager does not support loading multiple applications, this list cannot contain more than one entry. - List of boot environment applications the boot manager should execute. The applications are executed in the order they appear in this list.
+    "\\24000001"; "Element" = {current}; // REG_MULTI_SZ, displayorder = {current} - The order in which BCD objects should be displayed. Objects are displayed using the string specified by the BcdLibraryString_Description element.
+    "\\23000006"; "Element" = {resume}; // REG_SZ, resumeobject = {resume} - The resume application object.
+    "\\23000003"; "Element" = {current}; // REG_SZ, default = {current} - The default boot environment application to load if the user does not select one.
+    "\\22000023"; "Element" = \EFI\Microsoft\Boot\BCD; // REG_SZ, bcdfilepath = \EFI\Microsoft\Boot\BCD - The boot application.
+    "\\21000022"; "Element" = partition=\Device\HarddiskVolume1; // REG_BINARY, bcddevice = partition=\Device\HarddiskVolume1 - The device on which the boot application resides.
+    "\\14000006"; "Element" = {globalsettings}; // REG_MULTI_SZ, inherit = {globalsettings} - List of BCD objects from which the current object should inherit elements.
+    "\\12000005"; "Element" = en-US; // REG_SZ, locale = en-US - Preferred locale, in RFC 3066 format.
+    "\\12000004"; "Element" = Windows Boot Manager; // REG_SZ, description = Windows Boot Manager - Display name of the boot environment application.
+    "\\12000002"; "Element" = \EFI\MICROSOFT\BOOT\BOOTMGFW.EFI; // REG_SZ, path = \EFI\MICROSOFT\BOOT\BOOTMGFW.EFI - Path to a boot environment application.
+    "\\11000001"; "Element" = partition=\Device\HarddiskVolume1; // REG_BINARY, device = partition=\Device\HarddiskVolume1 - Device on which a boot environment application resides.
+"HKLM\\BCD00000000\\Objects\\{memdiag}\\Elements";
+    "\\26000004"; "Element" = 01; // REG_BINARY, failuresenabled = true, false = 00
+    "\\25000009"; "Element" = 0000000000000000; // REG_BINARY, chckrfailcount = 0
+    "\\25000007"; "Element" = 0000000000000000; // REG_BINARY, matsfailcount = 0
+    "\\25000006"; "Element" = 0000000000000000; // REG_BINARY, invcfailcount = 0
+    "\\25000005"; "Element" = 0000000000000000; // REG_BINARY, stridefailcount = 0
+    "\\25000003"; "Element" = 0000000000000000; // REG_BINARY, failurecount = 0 - The number of pages that contain errors. This is useful for simulating error flows in the absence of bad physical memory.
+    "\\25000002"; "Element" = 0000000000000000; // REG_BINARY, testmix = 0
+    "\\25000001"; "Element" = 0000000000000000; // REG_BINARY, passcount = 0 - If this value is not specified, the default is to run memory diagnostic tests until the computer is powered off or the user logs off. - The number of passes for the current test mix.
+    "\\1600000B"; "Element" = 01; // REG_BINARY, badmemoryaccess = true, false = 00 - If TRUE, indicates that a boot application can use memory listed in the BcdLibraryIntegerList_BadMemoryList.
+    "\\14000006"; "Element" = {globalsettings}; // REG_MULTI_SZ, inherit = {globalsettings} - List of BCD objects from which the current object should inherit elements.
+    "\\12000005"; "Element" = en-US; // REG_SZ, locale = en-US - Preferred locale, in RFC 3066 format.
+    "\\12000004"; "Element" = Windows Memory Diagnostic; // REG_SZ, description = Windows Memory Diagnostic - Display name of the boot environment application.
+    "\\12000002"; "Element" = \EFI\Microsoft\Boot\memtest.efi; // REG_SZ, path = \EFI\Microsoft\Boot\memtest.efi - Path to a boot environment application.
+    "\\11000001"; "Element" = partition=\Device\HarddiskVolume1; // REG_BINARY, device = partition=\Device\HarddiskVolume1 - Device on which a boot environment application resides.
+"HKLM\\BCD00000000\\Objects\\{badmemory}\\Elements";
+    "\\1700000A"; "Element" = 0000000000000000; // REG_BINARY, badmemorylist = <integer list> - List of page frame numbers describing faulty memory in the system.
+"HKLM\\BCD00000000\\Objects\\{winre}\\Elements";
+    "\\46000010"; "Element" = 01; // REG_BINARY, custom:46000010 = true, false = 00
+    "\\26000022"; "Element" = 01; // REG_BINARY, winpe = true, false = 00 - Indicates that the system should be started in Windows Preinstallation Environment (Windows PE) mode.
+    "\\250000C2"; "Element" = 0100000000000000; // REG_BINARY, bootmenupolicy = 1 (Standard), Legacy = 0000000000000000 - Defines the type of boot menus the system will use. Possible values include menupolicylegacy (0) or menupolicystandard (1). The default value is menupolicylegacy (0).
+    "\\25000020"; "Element" = 0000000000000000; // REG_BINARY, nx = 0 (OptIn), OptOut = 0100000000000000, AlwaysOff = 0200000000000000, AlwaysOn = 0300000000000000 - If this value is not specified, the default is NxPolicyAlwaysOff. - The no-execute page protection policy.
+    "\\22000002"; "Element" = \windows; // REG_SZ, systemroot = \windows - This value is reserved.
+    "\\21000001"; "Element" = ramdisk=[C:]\Recovery\WindowsRE\Winre.wim,{ramdiskoptions}; // REG_BINARY, osdevice = ramdisk=[C:]\Recovery\WindowsRE\Winre.wim,{ramdiskoptions} - This value is reserved.
+    "\\15000065"; "Element" = 0300000000000000; // REG_BINARY, displaymessage = 3 (Recovery), Resume = 0100000000000000
+    "\\14000006"; "Element" = {bootloadersettings}; // REG_MULTI_SZ, inherit = {bootloadersettings} - List of BCD objects from which the current object should inherit elements.
+    "\\12000005"; "Element" = en-us; // REG_SZ, locale = en-us - Preferred locale, in RFC 3066 format.
+    "\\12000004"; "Element" = Windows Recovery Environment; // REG_SZ, description = Windows Recovery Environment - Display name of the boot environment application.
+    "\\12000002"; "Element" = \windows\system32\winload.efi; // REG_SZ, path = \windows\system32\winload.efi - Path to a boot environment application.
+    "\\11000001"; "Element" = ramdisk=[C:]\Recovery\WindowsRE\Winre.wim,{ramdiskoptions}; // REG_BINARY, device = ramdisk=[C:]\Recovery\WindowsRE\Winre.wim,{ramdiskoptions} - Device on which a boot environment application resides.
+"HKLM\\BCD00000000\\Objects\\{ramdiskoptions}\\Elements";
+    "\\3600000B"; "Element" = 01; // REG_BINARY, ramdisktftpvarwindow = true, false = 00 - Enables or disables the TFTP variable window size extension.
+    "\\3600000A"; "Element" = 01; // REG_BINARY, ramdiskmulticasttftpfallback = true, false = 00 (ramdiskmctftpfallback) - Enables fallback to TFTP if multicast fails.
+    "\\36000009"; "Element" = 01; // REG_BINARY, ramdiskmulticastenabled = true, false = 00 (ramdiskmcenabled) - Enables or disables multicast for the RAM disk WIM file.
+    "\\36000008"; "Element" = 0000000000000000; // REG_BINARY, ramdisktftpwindowsize = 0 - Defines the TFTP window size for the RAM disk WIM file.
+    "\\36000007"; "Element" = 0000000000000000; // REG_BINARY, ramdisktftpblocksize = 0 - Defines the TFTP block size for the RAM disk Windows Imaging (WIM) file.
+    "\\36000006"; "Element" = 01; // REG_BINARY, ramdiskexportascd = true, false = 00 - Enables exporting the RAM disk as a CD.
+    "\\35000008"; "Element" = 0000000000000000; // REG_BINARY, ramdisktftpwindowsize = 0 (BitLocker list uses 0x35000008)
+    "\\35000007"; "Element" = 0000000000000000; // REG_BINARY, ramdisktftpblocksize = 0 (BitLocker list uses 0x35000007)
+    "\\35000005"; "Element" = 0000000000000000; // REG_BINARY, ramdiskimagelength = 0 - The length of the image for the RAM disk.
+    "\\35000002"; "Element" = 0000000000000000; // REG_BINARY, tftpclientport = 0 - If this value is not specified, the default TFTP protocol port is used. - The IP port number to be used for Trivial File Transfer Protocol (TFTP) reads.
+    "\\35000001"; "Element" = 0000000000000000; // REG_BINARY, ramdiskimageoffset = 0 - The RAM disk image offset.
+    "\\32000004"; "Element" = \Recovery\WindowsRE\boot.sdi; // REG_SZ, ramdisksdipath = \Recovery\WindowsRE\boot.sdi - The path from the root of the SDI device to the RAM disk file.
+    "\\31000003"; "Element" = partition=C:; // REG_BINARY, ramdisksdidevice = partition=C: - The device that contains the SDI object.
+    "\\12000004"; "Element" = Windows Recovery; // REG_SZ, description = Windows Recovery - Display name of the boot environment application.
+"HKLM\\BCD00000000\\Objects\\{globalsettings}\\Elements";
+    "\\16000069"; "Element" = 01; // REG_BINARY, custom:16000069 = true, false = 00
+    "\\16000067"; "Element" = 01; // REG_BINARY, custom:16000067 = true, false = 00
+    "\\14000006"; "Element" = {dbgsettings};{emssettings};{badmemory}; // REG_MULTI_SZ, inherit = {dbgsettings}, {emssettings}, {badmemory} - List of BCD objects from which the current object should inherit elements.
+"HKLM\\BCD00000000\\Objects\\{resumeloadersettings}\\Elements";
+    "\\14000006"; "Element" = {globalsettings}; // REG_MULTI_SZ, inherit = {globalsettings} - List of BCD objects from which the current object should inherit elements.
+"HKLM\\BCD00000000\\Objects\\{bootloadersettings}\\Elements";
+    "\\14000006"; "Element" = {globalsettings};{hypervisorsettings}; // REG_MULTI_SZ, inherit = {globalsettings}, {hypervisorsettings} - List of BCD objects from which the current object should inherit elements.
+"HKLM\\BCD00000000\\Objects\\{dbgsettings}\\Elements";
+    "\\1600001C"; "Element" = 01; // REG_BINARY, debuggernetdhcp = true, false = 00 - Controls the use of DHCP by the network debugger. Setting this to false causes the OS to only use link-local addresses.
+    "\\16000017"; "Element" = 01; // REG_BINARY, debuggerignoreusermodeexceptions = true, false = 00 - If TRUE, the debugger will ignore user mode exceptions and only stop for kernel mode exceptions.
+    "\\16000010"; "Element" = 01; // REG_BINARY, debuggerenabled = true, false = 00 - Indicates whether the boot debugger should be enabled.
+    "\\1500001B"; "Element" = 0000000000000000; // REG_BINARY, debuggernetport = 0 - Defines the network port for the network debugger.
+    "\\1500001A"; "Element" = 0000000000000000; // REG_BINARY, debuggernethostip = 0 - Defines the host IP address for the network debugger.
+    "\\15000018"; "Element" = 0000000000000000; // REG_BINARY, debuggerstartpolicy = 0 - Indicates the debugger start policy.
+    "\\15000015"; "Element" = 0000000000000000; // REG_BINARY, debugger1394channel = 0 - Channel number for 1394 debugging.
+    "\\15000014"; "Element" = 00c2010000000000; // REG_BINARY, debuggerserialbaudrate = 115200 - If this value is not specified, the default is specified by the DBGP ACPI table settings. - Baud rate for serial debugging.
+    "\\15000013"; "Element" = 0100000000000000; // REG_BINARY, debuggerserialport = 1 - If this value is not specified, the default is specified by the DBGP ACPI table settings. - Serial port number for serial debugging.
+    "\\15000012"; "Element" = 0000000000000000; // REG_BINARY, debuggerserialportaddress = 0 - I/O port address for the serial debugger.
+    "\\15000011"; "Element" = 0400000000000000; // REG_BINARY, debugtype = 4 (Local - undocumented), Serial = 0000000000000000, 1394 = 0100000000000000, USB = 0200000000000000, NET = 0300000000000000 - Debugger type.
+    "\\1200001D"; "Element" = testkey; // REG_SZ, debuggernetkey = testkey - Holds the key used to encrypt the network debug connection.
+    "\\12000019"; "Element" = 0.25.0; // REG_SZ, debuggerbusparams = 0.25.0 - Defines the PCI bus, device, and function numbers of the debugging device. For example, 1.5.0 describes the debugging device on bus 1, device 5, function 0.
+    "\\12000016"; "Element" = usbtarget; // REG_SZ, debuggerusbtargetname = usbtarget - The target name for the USB debugger. The target name is arbitrary but must match between the debugger and the debug target.
+"HKLM\\BCD00000000\\Objects\\{emssettings}\\Elements";
+    "\\16000020"; "Element" = 00; // REG_BINARY, bootems = false, true = 01 - Indicates whether EMS redirection should be enabled.
+    "\\15000023"; "Element" = 00c2010000000000; // REG_BINARY, emsbaudrate = 115200 - Baud rate for EMS redirection.
+    "\\15000022"; "Element" = 0100000000000000; // REG_BINARY, emsport = 1 - If this value is not specified, the default is specified by the SPCR ACPI table settings. - COM port number for EMS redirection.
+"HKLM\\BCD00000000\\Objects\\{fwbootmgr}\\Elements";
+    "\\25000004"; "Element" = 0100000000000000; // REG_BINARY, timeout = 1 - If this value is not specified, the boot manager waits for the user to make a selection. - The maximum number of seconds a boot selection menu is to be displayed to the user. The menu is displayed until the user selects an option or the time-out expires.
+    "\\24000001"; "Element" = {bootmgr}; // REG_MULTI_SZ, displayorder = {bootmgr} - The order in which BCD objects should be displayed. Objects are displayed using the string specified by the BcdLibraryString_Description element.
+"HKLM\\BCD00000000\\Objects\\{hypervisorsettings}\\Elements";
+    "\\26000114"; "Element" = 00; // REG_BINARY, hypervisordhcp = false, true = 01 - Controls use of DHCP by the network debugger used with the hypervisor. Setting this to false forces local link only address.
+    "\\250000FE"; "Element" = 50c3000000000000; // REG_BINARY, hypervisorhostport = 50000 - Defines the network UDP port for the network debugger.
+    "\\250000FD"; "Element" = 0201a8c000000000; // REG_BINARY, hypervisorhostip = 3232235778 (192.168.1.2) - Defines the host IPv4 address for the network debugger.
+    "\\250000F6"; "Element" = 0000000000000000; // REG_BINARY, hypervisorchannel = 0 - Specifies the channel number for 1394 debugging.
+    "\\250000F5"; "Element" = 00c2010000000000; // REG_BINARY, hypervisorbaudrate = 115200 - If this value is not specified, the default is specified by the DBGP ACPI table settings. - Specifies the baud rate for serial debugging.
+    "\\250000F4"; "Element" = 0100000000000000; // REG_BINARY, hypervisordebugport = 1 - If this value is not specified, the default is specified by the DBGP ACPI table settings. - Specifies the serial port number for serial debugging.
+    "\\250000F3"; "Element" = 0000000000000000; // REG_BINARY, hypervisordebugtype = 0 (Serial), 1394 = 0100000000000000, NET = 0300000000000000 - Controls the hypervisor debugger type. Can be set to SERIAL (0), 1394 (1), or NET (2).
+    "\\22000110"; "Element" = testkey; // REG_SZ, hypervisorusekey = testkey - Holds the key used to encrypt the network debug connection used with the hypervisor.
+    "\\220000F9"; "Element" = 0.25.0; // REG_SZ, hypervisorbusparams = 0.25.0 - Defines the PCI bus, device, and function numbers of the debugging device used with the hypervisor. For example, 1.5.0 describes the debugging device on bus 1, device 5, function 0.
+```
+
+`{bootmgr}` - Windows Boot Manager  
+`{fwbootmgr}` - Firmware Boot Manager  
+`{current}` - Windows Boot Loader (current OS entry)  
+`{resume}` - Windows Resume Application (resumeobject)  
+`{winre}` - Windows Recovery Environment loader (recoverysequence)  
+`{memdiag}` - Windows Memory Diagnostic  
+`{ramdiskoptions}` - Device options for ramdisk (boot.sdi)  
+`{globalsettings}` - Global settings  
+`{bootloadersettings}` - Boot loader settings  
+`{resumeloadersettings}` - Resume loader settings  
+`{dbgsettings}` - Debugger settings  
+`{emssettings}` - EMS settings  
+`{badmemory}` - RAM defects  
+`{hypervisorsettings}` - Hypervisor settings
+
+> https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bcd/bcd-enumerations  
+> https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bcd-settings-and-bitlocker
+
+## Pseudocode Notes
 
 Personal notes on several features, used pseudocode:
 > [system/assets | bcdedit-HalpMiscGetParameters.c](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c)

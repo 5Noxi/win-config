@@ -873,7 +873,7 @@ Excludes (deprecated, chimney too):
 "SaOffloadCapacityEnabled" = 0
 ```
 
-## Registry Values Overview
+## Registry Values Details
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -934,7 +934,7 @@ powercfg /devicequery wake_armed
 `powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state  
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
 
-## Registry Values Overview
+## Registry Values Details
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1174,7 +1174,7 @@ void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT
 }
 ```
 
-## Registry Values Overview
+## Registry Values Details
 
 `*MaxRssProcessors`:  
 The maximum number of RSS processors.
@@ -1559,7 +1559,7 @@ VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the n
 
 It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
-## Registry Values Overview
+## Registry Values Details
 
 ```c
 // Intel
@@ -1611,7 +1611,7 @@ Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
-## Registry Values Overview
+## Registry Values Details
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1676,7 +1676,7 @@ FEC (forwarded error correction) improves link stability, but increases latency.
 
 > https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/
 
-## Registry Values Overview
+## Registry Values Details
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
