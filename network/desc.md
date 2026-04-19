@@ -506,7 +506,7 @@ See links below for a detailed documentation.
 
 > https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-overview  
 > https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-frequently-asked-questions  
-> https://github.com/nohuto/win-registry/blob/main/records/NlaSvc.txt  
+> https://github.com/nohuto/regkit/blob/main/records/NlaSvc.txt  
 > [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
 ## Windows Policies
@@ -674,7 +674,7 @@ Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
 Enabling the option includes disabling `LMHOSTS Lookups` - "LMHOSTS is a local text file Windows uses to map NetBIOS names to IPs when other NetBIOS methods (WINS, broadcast) don't give an answer. It lives in C:\Windows\System32\drivers\etc, there's an `lmhosts.sam` example, and it's checked only if `Enable LMHOSTS lookup` is on."
 
 > https://en.wikipedia.org/wiki/LMHOSTS  
-> https://github.com/nohuto/win-registry/blob/main/records/NetBT.txt
+> https://github.com/nohuto/regkit/blob/main/records/NetBT.txt
 
 `NetbiosOptions`:
 
@@ -914,7 +914,7 @@ Excludes (deprecated, chimney too):
 | `*PMNSOffload` | A value that describes whether the device should be enabled to offload neighbor solicitation (NS) when the system enters a sleep state. | 1 | 0 | 1 |
 | `*PMWiFiRekeyOffload` | A value that describes whether the device should be enabled to offload group temporal key (GTK) rekeying for wake-on-wireless-LAN (WOL) when the computer enters a sleep state. | 1 | 0 | 1 |
 
-> https://github.com/nohuto/win-registry#intel-nic-values  
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt  
 > https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top  
 > https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html  
 > https://docs.nvidia.com/networking/display/winof2v320/configuring+the+driver+registry+keys#src-111583782_ConfiguringtheDriverRegistryKeys-OffloadRegistryKeys  
@@ -945,7 +945,7 @@ powercfg /devicequery wake_armed
   "WakeOnLink" = 0; // range 0-2
 ```
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ### Setup Information
 
@@ -1156,7 +1156,7 @@ I may add more details here soon. RSS is enabled by default, so this is currentl
 
 ## RssReadRegistryParameters
 
-`RSS::RssReadRegistryParameters` shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-registry/blob/main/assets/intelnet6x.c) for reference:
+`RSS::RssReadRegistryParameters` shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
 ```c
 void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
 {
@@ -1427,7 +1427,7 @@ A sending station (computer or network switch) may be transmitting data faster t
     "*FlowControl" = 4; // range 0-4
 ```
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ## Setup Information
 
@@ -1494,7 +1494,7 @@ Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwid
     "RscMode" = 1; // range 0-2
 ```
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ```c
 void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CONTEXT **this)
@@ -1573,7 +1573,7 @@ It depends on your adapter/driver if VMQ is enabled/disabled by default:
     "MaxNumVmqs" = ?; // found it in the "Mellanox ConnectX based IPoIB Adapter (NDIS 6.4)" driver
 ```
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 | Value | Description | Allowed Values | Default | Notes |
 | ----  | ---- | ---- | ---- | ---- |
@@ -1619,7 +1619,7 @@ It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
     "*SriovPreferred" = 0; // range 0-1
 ```
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 | SubkeyName            | Value       | EnumDesc |
 | --------------------  | ----------- | ---- |
@@ -1683,7 +1683,7 @@ FEC (forwarded error correction) improves link stability, but increases latency.
     "FecMode" = 0; // range 0-3
 ```
 
-> https://github.com/nohuto/win-registry?tab=readme-ov-file#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ```c
 RegistryKey<enum HdSplitLocation>::Initialize(
@@ -1785,7 +1785,7 @@ This feature allows packet burst handling, while avoiding packet drops that may 
     "ThreadDpcEnable" = 1; // KeThreadDpcEnable
 ```
 
-> https://github.com/nohuto/win-registry?tab=readme-ov-file#session-manager-values  
+> https://www.noverse.dev/docs/win-config/system/kernel-values/#registry-values-details  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs
 
 | Data | Meaning |

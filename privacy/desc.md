@@ -3237,7 +3237,7 @@ There're two values named `CrashDumpEnabled.New` & `CrashDumpEnabled.Old`, I hav
 
 > https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/automatic-memory-dump  
-> https://github.com/nohuto/win-registry/blob/main/records/CrashControl.txt  
+> https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt  
 > [privacy/assets | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp.c)  
 > [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
 
@@ -3271,7 +3271,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
     "SleepStudyDeviceAccountingLevel" = 4; // PopSleepStudyDeviceAccountingLevel 
     "SleepStudyDisabled" = 0; // PopSleepStudyDisabled 
 ```
-> https://github.com/nohuto/win-registry#power-values
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0030\0\Device Parameters\Wdf : SleepstudyState
@@ -3343,7 +3343,7 @@ __int64 IsDesktopHeapLoggingOn(void)
 
 > [privacy/assets | rsop-IsDesktopHeapLoggingOn.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/rsop-IsDesktopHeapLoggingOn.c)  
 > https://answers.microsoft.com/en-us/windows/forum/all/question-about-some-dwm-registry-settings/341cac5c-d85a-43e5-89d3-d9734f84da4e  
-> https://github.com/nohuto/win-registry/blob/main/records/Winows-NT.txt
+> https://github.com/nohuto/regkit/blob/main/records/Winows-NT.txt
 
 # Disable Message Sync
 

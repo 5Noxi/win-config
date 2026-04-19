@@ -941,7 +941,7 @@ Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
 > https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
-> https://github.com/nohuto/win-registry/blob/main/records/pci.txt  
+> https://github.com/nohuto/regkit/blob/main/records/pci.txt  
 > [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
 
 # Disable Hibernation
@@ -990,9 +990,9 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
 RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HibernateEnabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-> https://github.com/nohuto/win-registry#power-values  
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
 > https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation  
-> https://github.com/nohuto/win-registry/blob/main/records/Power.txt
+> https://github.com/nohuto/regkit/blob/main/records/Power.txt
 
 # Reduced HiberFile
 
@@ -1052,7 +1052,7 @@ To verify or change the type of hibernation file used, run the *powercfg.exe* ut
 | `powercfg /h /type reduced`        | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example.      |
 | `powercfg /h /size 0`<br> `powercfg /h /type reduced`  | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration.     |
 
-> https://github.com/nohuto/win-registry#power-values  
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
 > https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
 
 # Remove Power Options
@@ -1150,7 +1150,7 @@ In Windows, fast startup is the default transition when a system shutdown is req
 
 All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
 
-> https://github.com/nohuto/win-registry#power-values
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -1166,7 +1166,7 @@ All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registr
     "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
     "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
 ```
-> https://github.com/nohuto/win-registry?tab=readme-ov-file#power-values  
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
 > https://github.com/marcosd4h/memhunter/blob/f68bca7efe31f49c0dc9ad988fb17bec443a1ca7/libs/boost/interprocess/detail/win32_api.hpp#L2373
 
 ```c
@@ -1255,7 +1255,7 @@ Not needed, if you disable energy estimation:
                                     // If following HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\knobs\Power/Controls/EnergyEstimationEnabled, it should have a range of 0-4294967295
 ```
 
-> https://github.com/nohuto/win-registry#power-values  
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
 > [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
@@ -1315,7 +1315,7 @@ Using the highest clamp as shown above will end up with a BSoD (same goes for `0
     "CoalescingTimerInterval" = 1500; // PopCoalescingTimerInterval (0x000005DC) - Units: seconds (multiplies value by -10,000,000, one second in 100 ns units, so the default corresponds to a 25min cadence)
     "DeepIoCoalescingEnabled" = 0; // PopDeepIoCoalescingEnabled 
 ```
-> https://github.com/nohuto/win-registry?tab=readme-ov-file#power-values
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 ```c
 void InitTimerPowerSaving(void)
@@ -1330,7 +1330,7 @@ void InitTimerPowerSaving(void)
 The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIoCoalescingEnabled` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RITdemonTimerPowerSave...` & `TimerCoalescing` ones get read.
 
 > [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)  
-> https://github.com/nohuto/win-registry/blob/main/records/Winows-NT.txt
+> https://github.com/nohuto/regkit/blob/main/records/Winows-NT.txt
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)
 
@@ -1367,7 +1367,7 @@ If `IdleStatesNumber` is set, the other values are ignored? Let me know if you h
 
 > The values are located in the `EnergyEstimation` (guesses how much power is used over time), so it's probably related to something else. I'll leave it for documentation reasons (and future extended declaration).
 
-> https://github.com/nohuto/win-registry/blob/main/records/Power.txt  
+> https://github.com/nohuto/regkit/blob/main/records/Power.txt  
 > [power/assets | storageidle-PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
 
 ## Suboption
@@ -1442,7 +1442,7 @@ This policy setting specifies that power management is disabled when the machine
     "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
     "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
 ```
-> https://github.com/nohuto/win-registry?tab=readme-ov-file#power-values
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 ## Windows Policies
 
@@ -1484,7 +1484,7 @@ This policy setting specifies that power management is disabled when the machine
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
 
-> https://github.com/nohuto/win-registry/blob/main/records/NIC-Intel.txt  
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
 > https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md
 
@@ -1516,7 +1516,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ULPMode" = 1; // range 0-1
 ```
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 | SubkeyName | ParamDesc | Default | Minimum | Maximum |
 | --- | --- | --- | --- | --- |
@@ -1532,7 +1532,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 For more detail on each value, see GitHub links above.
 
-> https://github.com/nohuto/win-registry#intel-nic-values
+> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ### Setup Information
 
@@ -1661,7 +1661,7 @@ There's no official documentation on this value, but it probably controls whethe
     "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
 ```
 
-> https://github.com/nohuto/win-registry#power-values
+> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 ```c
 bool PopPowerRequestEvaluateExecutionRequiredStatus()

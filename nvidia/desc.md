@@ -322,7 +322,7 @@ sin(0) = 0  = 0x00000000 hex
 > https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293  
 > https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp  
 > https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp  
-> https://github.com/nohuto/win-registry/blob/main/records/nvlddmkm.txt
+> https://github.com/nohuto/regkit/blob/main/records/nvlddmkm.txt
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\ADAPTER_10DE_2482_00000007_00000000 : StereoPreferredTargetIdRegistryKey
@@ -910,7 +910,7 @@ if (!(unsigned int)GetPersistedRegistryValueW(
 > [nvidia/assets | mpo-bDwmOverlayTestMode.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/mpo-bDwmOverlayTestMode.c)  
 > https://wiki.special-k.info/en/SwapChain  
 > https://wiki.special-k.info/Presentation_Model  
-> https://github.com/nohuto/win-registry/blob/main/records/Windows-Dwm.txt
+> https://github.com/nohuto/regkit/blob/main/records/Windows-Dwm.txt
 
 # NVLDDMKM Hex Values
 
@@ -918,7 +918,7 @@ I'd suggest you don't change this option and just use it for information only.
 
 The `\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State` hive is the driver's persistent state store, not the DRS/NVAPI profile database. In tree it is used for driver owned data like the `State\DisplayDatabase` subtree and other persisted blobs (for example HDCP SRM and TDR timing records), accessed via `NvDriverRegKeyPersistentState`. This information is based on `nvlRegistry.h`, `RegistryKeys.cpp`, `displayDb.h`, `displayMgr.cpp`, `nvlTdr.cpp` (ignore it if you don't know what I mean by file names) if I understood the references correctly. Adding the values to the key doesn't affect the state in NVPI.
 
-Values read under `\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State`, see [nvlddmkm.txt](https://github.com/nohuto/win-registry/blob/main/records/nvlddmkm.txt). These are the only hex ID style values which got read on boot (may differ for you if different driver) and I doubt that these have any affect, this is for documentation reasons only.
+Values read under `\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State`, see [nvlddmkm.txt](https://github.com/nohuto/regkit/blob/main/records/nvlddmkm.txt). These are the only hex ID style values which got read on boot (may differ for you if different driver) and I doubt that these have any affect, this is for documentation reasons only.
 
 ## 0x11112255 (WKS_SCANOUT_COMPOSITION_CONTROL)
 

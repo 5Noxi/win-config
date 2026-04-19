@@ -131,18 +131,18 @@ See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-co
     //"ResetOnErrorInD2Resume"
 ```
 
-> [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)  
-> [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)  
-> [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)  
-> [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)  
-> [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_QueryHubErrataFlags.c)  
-> [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)  
-> [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)  
-> [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/GetConfigValue.c)  
-> [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)  
-> [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)  
-> [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Controller_PopulateTestRegistrySettings.c)  
-> [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-registry/blob/main/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
+> [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)  
+> [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)  
+> [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)  
+> [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)  
+> [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryHubErrataFlags.c)  
+> [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)  
+> [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)  
+> [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/GetConfigValue.c)  
+> [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)  
+> [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)  
+> [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateTestRegistrySettings.c)  
+> [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
 
 ## RegistryMachin_* Keys
 
@@ -171,7 +171,7 @@ The subkeys in `usbflags` always have a length of 12, build in such a structure 
 
 The vendor ID, product ID, and revision number values are obtained from the [USB device descriptor](https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-descriptors.md). The USB_DEVICE_DESCRIPTOR structure describes a device descriptor.
 
-> https://github.com/nohuto/win-registry/blob/main/records/USB-Flags.txt
+> https://github.com/nohuto/regkit/blob/main/records/USB-Flags.txt
 
 ---
 
@@ -611,7 +611,7 @@ The difference is minor (picture), preferable just disable them. Open `mmsys.cpl
 
 Spatial audio positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
 
-> https://github.com/nohuto/win-registry/blob/main/records/Audio.txt  
+> https://github.com/nohuto/regkit/blob/main/records/Audio.txt  
 > https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
@@ -992,7 +992,7 @@ Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch scre
 "Tablet mode makes Windows more touch friendly and is helpful on touch capable devices."
 
 > https://support.microsoft.com/en-us/windows/turn-tablet-mode-on-or-off-in-windows-add3fbce-5cb5-bf76-0f9c-8d7b30041f30  
-> https://github.com/nohuto/win-registry/blob/main/records/Wisp.txt  
+> https://github.com/nohuto/regkit/blob/main/records/Wisp.txt  
 > [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
 
 ---
@@ -1156,8 +1156,8 @@ Default values:
 WakeOnInputDeviceTypes = 46
 UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
 ```
-> https://github.com/nohuto/win-registry/blob/main/records/Input.txt  
-> https://github.com/nohuto/win-registry/blob/main/records/Enum-USB.txt  
+> https://github.com/nohuto/regkit/blob/main/records/Input.txt  
+> https://github.com/nohuto/regkit/blob/main/records/Enum-USB.txt  
 > [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
 
 ---

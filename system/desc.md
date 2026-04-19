@@ -570,13 +570,13 @@ Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://g
 
 `dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
 
-> https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt
+> https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt
 
 Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
 ## Registry Values Details
 
-These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/win-registry/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
+These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
 
 The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values/dxgmms2) for all used files.
 
@@ -2171,7 +2171,7 @@ Forces hung apps and services to terminate faster.
 
 More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
 
-> https://github.com/nohuto/win-registry/blob/main/records/ControlPanel-Desktop.txt
+> https://github.com/nohuto/regkit/blob/main/records/ControlPanel-Desktop.txt
 
 # Disable FTH
 
@@ -2309,7 +2309,7 @@ Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, whil
                     // if the value exists but is stored as REG_NONE (type==0):
                     //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
 ```
-> https://github.com/nohuto/win-registry#session-manager-values  
+> https://www.noverse.dev/docs/win-config/system/kernel-values/#registry-values-details  
 > [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
 
 For a specific executeable:
@@ -2712,7 +2712,7 @@ Symlink: `C:\Users\YourName\Desktop\logo.png`
 > https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-8dot3name  
 > https://github.com/MicrosoftDocs/windows-driver-docs/blob/5e03e46194f2a977da34fdf453f2703262370a23/windows-driver-docs-pr/ifs/offloaded-data-transfers.md?plain=1#L104  
 > https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry  
-> https://github.com/nohuto/win-registry/blob/main/records/FileSystem.txt
+> https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt
 
 > [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
