@@ -2365,8 +2365,13 @@ Enabling segment heap globally forces the system to use the newer segmented allo
 | Turn off access to the Store | `NoUseStoreOpenWith` policy - "*This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the "Look for an app in the Store" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.*" |
 | Hide Time in Notification Center | Works via `SystemSettings > Time & language > Date & time: Show time and date in the System tray` |
 
+## Miscellaneous Notes
 
-## All NOC_GLOBAL_SETTING Values
+### WnsEndpoint
+
+"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
+
+### Registry Research
 
 All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
 ```c
@@ -2385,14 +2390,6 @@ All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
   'NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND'; // Allow notification to play sounds
 ```
 The options I've commented on are included in the options under `System > Notifications`/right click menu of notification center.
-
-## Miscellaneous Notes
-
-### WnsEndpoint
-
-"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
-
-### Registry Research
 
 Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
 ```c
