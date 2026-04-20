@@ -86,8 +86,6 @@ I personally use AdGuard, since it's possible to add custom blocklists/user rule
 
 Windows Internals (E7-P2, Remote FSDs): SMB uses a client-side remote file system driver (LANMan Redirector) and a server-side remote FSD (`Srv2.sys`). Client settings under `LanmanWorkstation` and server settings under `LanmanServer` govern how those components negotiate and handle SMB traffic.
 
-In the current `win-json` layout, the main `SMB Configuration` option disables SMBv1. Disabling SMBv2 stays a suboption because Microsoft recommends keeping SMBv2/SMBv3 enabled except for troubleshooting.
-
 ## Suboptions
 
 - [SMB Client](https://learn.microsoft.com/en-us/powershell/module/smbshare/set-smbclientconfiguration?view=windowsserver2025-ps) -> Outbound connections
