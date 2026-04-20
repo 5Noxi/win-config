@@ -568,7 +568,7 @@ Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://g
 
 ## RegistryMachin_* Keys
 
-These are from `ntoskrnl.exe`. Looking at xrefs of these names is sometimes a startpoint when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
+These are from `ntoskrnl.exe`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
 
 ```c
 aRegistryMachin = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Restrictions"
@@ -1320,7 +1320,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 ## RegistryMachin_* Keys
 
-These are from `dxgkrnl.sys`. Looking at xrefs of these names is sometimes a startpoint when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
+These are from `dxgkrnl.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
 
 ```c
 aRegistryMachin = "\\Registry\\Machine\\SOFTWARE\\Microsoft\\Windows\\DWM"
@@ -1498,7 +1498,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 ### win32kfull
 
-Since some values above are from `win32kfull.sys` I'll add that here. Looking at xrefs of these names is sometimes a startpoint when trying to find values within a binary, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
+Since some values above are from `win32kfull.sys` I'll add that here. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
 
 ```c
 aRegistryMachin = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\PnP"

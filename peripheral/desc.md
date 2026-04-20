@@ -145,7 +145,7 @@ See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-co
 
 ## RegistryMachin_* Keys
 
-These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a startpoint when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
+These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
 
 ```c
 aRegistryMachin_1 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USBFN";
@@ -263,7 +263,7 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 ## RegistryMachin_* Keys
 
-These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a startpoint when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
+These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
 
 ```c
 aRegistryMachin_1 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USBFN";
@@ -349,7 +349,7 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 ## RegistryMachin_* Keys
 
-These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a startpoint when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
+These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings).
 
 ```c
 aRegistryMachin_1 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USBFN";
