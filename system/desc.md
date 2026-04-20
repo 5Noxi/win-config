@@ -1318,7 +1318,7 @@ Existing tasks (OEMs can add additional tasks):
 - Audio
 - Capture
 - Distribution
-- Games (unused)
+- Games
 - Playback
 - Pro Audio
 - Window Manager

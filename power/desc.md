@@ -902,7 +902,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 ## MSPower_DeviceEnable
 
 Note that the known `MSPower_DeviceEnable` command does nothing more than recursively setting `IdleInWorkingState` & `SelectiveSuspendOn` to `0`.
-```c
+```powershell
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\ROOT_HUB30\5&2c35141&0&0\Device Parameters\WDF\IdleInWorkingState	Type: REG_DWORD, Length: 4, Data: 0
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\ROOT_HUB30\5&2bce96aa&0&0\Device Parameters\WDF\IdleInWorkingState	Type: REG_DWORD, Length: 4, Data: 0
 wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Enum\USB\VID_046D&PID_0ABA&MI_03\7&41505d0&0&0003\Device Parameters\SelectiveSuspendOn	Type: REG_DWORD, Length: 4, Data: 0
@@ -1652,6 +1652,10 @@ Reminder: Each adapter uses it's own default values, means that the `default`/`m
 # Disable Audio Execution Power Requests
 
 There's no official documentation on this value, but it probably controls whether audio activity can trigger power execution requests, reducing the responsiveness of the system to power management events, maybe ending up with less efficient power usage or preventing certain power related actions from being triggered.
+
+More information can very likely be gather via WPR/WPA 'Power > Power Requests', I'll update the section as soon as I've time.
+
+![](https://github.com/nohuto/win-config/blob/main/power/images/powerrequests.png?raw=true)
 
 ```c
 // Allowed by default
