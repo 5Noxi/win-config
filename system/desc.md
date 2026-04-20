@@ -132,7 +132,8 @@ Since many people don't yet know which values exist and what default value they 
 
 This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
 
-See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/session-manager-symbols.txt) for reference.
+See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/session-manager-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)).
+
 > [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/ProcLibGlobalInit.c)  
 > [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)  
 > [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
@@ -1211,6 +1212,18 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
 # MMCSS Values
 
+"*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
+
+*MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
+
+Client applications can register with MMCSS by calling AvSetMmThreadCharacteristics with a task name that must match one of the subkeys under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks`, see [task-details](https://www.noverse.dev/docs/win-config/system/mmcss-values/#tasks-details).
+
+MCSS scheduling thread runs at priority 27 because they need to preempt any Pro Audio threads to lower their priority to the exhausted category.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true)
+
+## Registry Values Details
+
 All values are read via `CiConfigReadDWORD()`, so the type is `REG_DWORD` for all listed ones. If `\Tasks` opens successfully, `CiConfigInitializeFromRegistry()` handles that part?
 
 See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/tree/main/system/assets/mmcss-CiConfigInitialize.c) for notes.
@@ -1230,7 +1243,7 @@ See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/tree/main/
 
 ## SystemResponsiveness Details
 
-By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent.
+By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent ("*(Based on a sample of 10 ms, that would be 8 ms and 2 ms, respectively.)*).
 
 Note that when `SystemResponsiveness == 100` it would end up with skipping the part after `if ( CiSystemResponsiveness == 100 )`, the task init (`CiConfigInitializeFromRegistry`), thread priorities (didn't look futher into it yet, see [CiThreadUpdatePriorities](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiThreadUpdatePriorities.c)/[CiSchedulerSetPriority](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerSetPriority.c)), but seems like that it would use a specific priority for the MMCSS thread instead of switching levels? It would also block CiNdisThrottleWorkItem (see below) and cause the [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) starvation threshold down to 0, so any busy-time increase can mark CPUs as starved (see [CiSchedulerWait](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) at line 118 and the bracket block of it).
 
