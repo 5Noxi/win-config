@@ -2696,13 +2696,41 @@ Default value is `85` -> `85%` (gets used if value isn't present), clamp range i
 
 # Enable Segment Heap
 
-"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications."
+"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications." Allows modern apps to use a more efficient memory allocator. Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
 
-Allows modern apps to use a more efficient memory allocator.
+It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
 
-Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
+## Per Executable / Globally
 
-### Default Values
+For a specific executeable:
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\<executable>"
+  "FrontEndHeapDebugOptions"; // REG_DWORD, bit 2 (0x4) = disable segment heap, bit 3 (0x8) = enable segment heap
+```
+
+Globally:
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap"
+  "Enabled"; // REG_DWORD, 0 = disable segment heap, nonzero = enable segment heap
+```
+
+Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`). It's not recommended to enable it.
+  
+> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (Page `334`f.)
+
+## Validating Changes
+
+You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example [SI](https://github.com/winsiderss/systeminformer/) (Right Click > Miscellaneous > Heaps).
+
+`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x4`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ntheap.png?raw=true)
+
+`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x8`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/segmentheap.png?raw=true)
+
+## Default Values
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
@@ -2721,27 +2749,6 @@ Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, whil
 ```
 > https://www.noverse.dev/docs/win-config/system/kernel-values/#registry-values-details  
 > [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
-
-For a specific executeable:
-```
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\
-Image File Execution Options\(executable)
-FrontEndHeapDebugOptions = (DWORD)
-Bit 2 (0x04): Disable Segment Heap
-Bit 3 (0x08): Enable Segment Heap
-```
-Globally:
-```
-HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Segment Heap
-Enabled = (DWORD)
-0 : Disable Segment Heap
-(Not 0): Enable Segment Heap
-```
-Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`).
-
-> https://blog.s-schoener.com/2024-11-05-segment-heap/  
-> https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf  
-> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (Page `334`f.)  
 
 ## Windows Internals
 
