@@ -1350,7 +1350,7 @@ LABEL_4:
 }
 ```
 
-This shows `a1 == 0` & `a1 == 1` don't go into the [`InternalSetTimer`](https://raw.githubusercontent.com/nohuto/decompiled-pseudocode/refs/heads/main/11-23H2/win32kfull/InternalSetTimer.c), so any other than `0`/`1` would go into that TimerPowerSave part. When does it get anything else than `0`/`1`?
+This shows `a1 == 0` & `a1 == 1` don't go into the [`InternalSetTimer`](https://raw.githubusercontent.com/nohuto/decompiled-pseudocode/refs/heads/main/11-23H2/win32kfull/InternalSetTimer.c) part, so any other than `0`/`1` would use the TimerPowerSave values. When does it get anything else than `0`/`1`?
 
 ```c
 // SetTimerCoalescingTolerance
