@@ -1591,7 +1591,7 @@ See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/tree/main/
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile";
     "SystemResponsiveness" = 20; // see section below
-    "NetworkThrottlingIndex" = 10; // 0 becomes 1, 1-70 stay unchanged, 71-4294967294 become 70, 4294967295 stays unchanged
+    "NetworkThrottlingIndex" = 10; // see section below
     "NoLazyMode" = 0; // any nonzero value = enabled
     "IdleDetectionCycles" = 2; // valid range is 1-31, otherwise 2 is used
     "LazyModeTimeout" = 1000000; // 0 is replaced with 1000000
@@ -1608,6 +1608,10 @@ By default, multimedia threads get 80 percent of the CPU time available, while o
 Note that when `SystemResponsiveness == 100` it would end up with skipping the part after `if ( CiSystemResponsiveness == 100 )`, the task init (`CiConfigInitializeFromRegistry`), thread priorities (didn't look futher into it yet, see [CiThreadUpdatePriorities](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiThreadUpdatePriorities.c)/[CiSchedulerSetPriority](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerSetPriority.c)), but seems like that it would use a specific priority for the MMCSS thread instead of switching levels? It would also block CiNdisThrottleWorkItem (see below) and cause the [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) starvation threshold down to 0, so any busy-time increase can mark CPUs as starved (see [CiSchedulerWait](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) at line 118 and the bracket block of it).
 
 Basically means MMCSS initialization fails if `SystemResponsiveness == 100`.
+
+And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
 
 "Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`)." (`mmcss.sys`)
 
@@ -1670,6 +1674,42 @@ CiSystemResponsiveness = 10 * (value / 10);
 90-99  -> 90
 == 100 -> 100  (STATUS_SERVER_DISABLED)
 > 100  -> 20   (fallback)
+```
+
+## NetworkThrottlingIndex Details
+
+"*MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
+
+`0` becomes `1`, `1`-`70` stay unchanged, `71`-`4294967294` become `70`, `4294967295` (`0xFFFFFFFF`) stays unchanged.
+
+As shown above (and again below), if `CiSystemResponsiveness == 100` it doesn't even get to this part = blocking `CiNdisThrottleWorkItem`.
+
+```c
+// CiConfigInitialize
+v3 = CiConfigReadDWORD(KeyHandle, 0x1C00110A0LL, 10LL); // NetworkThrottlingIndex, missing = 10
+LODWORD(WPP_MAIN_CB.Dpc.DpcData) = v3;
+v4 = v3;
+if ( v3 )
+{
+  if ( v3 - 71 <= 0xFFFFFFB7 ) // >=71 = 70
+  {
+    v4 = 70LL;
+    LODWORD(WPP_MAIN_CB.Dpc.DpcData) = 70; // range 1-70
+  }
+}
+else
+{
+  v4 = 1LL; // zero -> force 1
+  LODWORD(WPP_MAIN_CB.Dpc.DpcData) = 1;
+}
+
+// CsIntialize
+if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
+{
+  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
+  if ( CiNdisThrottleWorkItem )
+    CiNdisOpenDevice();
+}
 ```
 
 ## Tasks Details
