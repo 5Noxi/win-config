@@ -119,7 +119,7 @@ That `0x800` flag isn't related to what device you use, it's set from mouse raw 
 
 I've checked that the `0x800` behavior is true with two small apps, one registered mouse raw input with `0x8100`, the other with only `0x0100`. By moving both to the background (`RawMouseThrottleDuration = 20`), the `0x8100` app stayed at `~1000 Hz`, while the `0x0100` app dropped to `~60 Hz`. So with `RawMouseThrottleForced = 0`, the forced registration bypassed throttling (I didn't find any app that uses that flag nor are there docs on it, means it's most likely unused).
 
-You can use [riflags]() to see which processes have a mouse registration with `0x8000`. Read through the section for more details.
+You can use [riflags](https://www.noverse.dev/docs/win-config/peripheral/mouse-values/#riflags) to see which processes have a mouse registration with `0x8000`. Read through the section for more details.
 
 ### Duration / Leeway
 
@@ -180,9 +180,9 @@ Duration = 20ms ~= 50Hz
 
 ### riflags
 
-[`riflags`]() checks current raw input registrations, it injects `riprobe.dll` into each running process, calls `GetRegisteredRawInputDevices` there, then unloads the probe again.
+[`riflags`](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riflags.exe) checks current raw input registrations, it injects [`riprobe.dll`](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riprobe.dll) into each running process, calls `GetRegisteredRawInputDevices` there, then unloads the probe again.
 
-You can either use the prebuild binary ([riflags.exe](), [riprobe.dll]()) or build it yourself from source via:
+You can either use the prebuild binary ([riflags.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riflags.exe), [riprobe.dll](https://github.com/nohuto/win-config/blob/main/peripheral/assets/riprobe.dll)) or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/peripheral/assets/riflags) via:
 
 ```powershell
 cmake -S . -B build
@@ -206,7 +206,7 @@ I've builds two small raw mouse listeners for comparing the two registration mod
 - `ri_0100.exe` registers with `0x0100` (`RIDEV_INPUTSINK`), thats's the normal background raw mouse listener
 - `ri_8100.exe` registers with `0x8100`, that uses the `0x800` raw input flag, so `RawMouseThrottleForced = 0` should let this case bypass throttling
 
-Again, you can either use the prebuild binary ([ri_0100.exe](), [ri_8100.exe]()) or build it yourself from source via:
+Again, you can either use the prebuild binary ([ri_0100.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/ri_0100.exe), [ri_8100.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/ri_8100.exe)) or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/peripheral/assets/ri_flagtest) via:
 
 ```powershell
 cmake -S . -B build
