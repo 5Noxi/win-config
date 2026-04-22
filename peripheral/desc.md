@@ -203,7 +203,7 @@ cmake --build build --config Release
 
 I've builds two small raw mouse listeners for comparing the two registration modes:
 
-- `ri_0100.exe` registers with `0x0100` (`RIDEV_INPUTSINK`), thats's the normal background raw mouse listener
+- `ri_0100.exe` registers with `0x0100` ([`RIDEV_INPUTSINK`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawinputdevice)), thats's the normal background raw mouse listener
 - `ri_8100.exe` registers with `0x8100`, that uses the `0x800` raw input flag, so `RawMouseThrottleForced = 0` should let this case bypass throttling
 
 Again, you can either use the prebuild binary ([ri_0100.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/ri_0100.exe), [ri_8100.exe](https://github.com/nohuto/win-config/blob/main/peripheral/assets/ri_8100.exe)) or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/peripheral/assets/ri_flagtest) via:
@@ -233,7 +233,7 @@ Located in `HKCU\\Control Panel\\Mouse`:
 | `MouseSpeed` | `REG_SZ` | Controls mouse pointer scaling (speed of the mouse pointer relative to the movement of the mouse). Higher acceleration levels increase pointer speed. |
 | `MouseThreshold1` | `REG_SZ` | Adjusts the first acceleration threshold used for mouse movement scaling (motion factor that, when factored with MouseSpeed, controls the motion of the mouse). |
 | `MouseThreshold2` | `REG_SZ` | Adjusts the second acceleration threshold used for mouse movement scaling (motion factor that, when factored with MouseSpeed, controls the motion of the mouse). |
-| `MouseTrails` | `REG_SZ` | If `0` there're no trails, if above `0` there're tails. The higher the number, the more trails there are.
+| `MouseTrails` | `REG_SZ` | If `0` there're no trails, if above `0` there're tails. The higher the number, the more trails there are. |
 | `SmoothMouseXCurve` | `REG_BINARY` | Defines the X-axis smoothing curve used for mouse movement interpolation. |
 | `SmoothMouseYCurve` | `REG_BINARY` | Defines the Y-axis smoothing curve used for mouse movement interpolation. |
 | `SnapToDefaultButton` | `REG_SZ` | Automatically moves the pointer to the default button when a new dialog or window appears. |
