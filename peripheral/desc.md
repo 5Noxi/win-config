@@ -216,6 +216,10 @@ cmake --build .\build --config Release
 .\build\Release\ri_8100.exe
 ```
 
+#### Result
+
+![](https://github.com/nohuto/win-config/blob/main/peripheral/images/RawMouseThrottleForced.png?raw=true)
+
 ## Miscellaneous Values
 
 The main option doesn't change `MouseSensitivity` (leaves it at `10`).
