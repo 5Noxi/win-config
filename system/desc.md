@@ -99,18 +99,18 @@ Note that everything above is based on 23H2 and is not complete yet.
 
 I won't add much more details here since [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) contains details, see 'Quantum / Priority Boosts' (Chapter 3).
 
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PsChangeQuantumTable.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspComputeQuantum.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspInitPhase0.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/MmIsThisAnNtAsSystem.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeSetQuantumProcess.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeStartThread.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiSetQuantumTargetThread.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiInitializeForegroundBoostThread.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiComputeEffectivePriority.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/NtSetSystemInformation.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmInitSystem0.c  
-> https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmpGetSystemControlValues.c
+> [ntoskrnl/PsChangeQuantumTable.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PsChangeQuantumTable.c)  
+> [ntoskrnl/PspComputeQuantum.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspComputeQuantum.c)  
+> [ntoskrnl/PspInitPhase0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspInitPhase0.c)  
+> [ntoskrnl/MmIsThisAnNtAsSystem.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/MmIsThisAnNtAsSystem.c)  
+> [ntoskrnl/KeSetQuantumProcess.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeSetQuantumProcess.c)  
+> [ntoskrnl/KeStartThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeStartThread.c)  
+> [ntoskrnl/KiSetQuantumTargetThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiSetQuantumTargetThread.c)  
+> [ntoskrnl/KiInitializeForegroundBoostThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiInitializeForegroundBoostThread.c)  
+> [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiComputeEffectivePriority.c)  
+> [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/NtSetSystemInformation.c)  
+> [ntoskrnl/CmInitSystem0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmInitSystem0.c)  
+> [ntoskrnl/CmpGetSystemControlValues.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmpGetSystemControlValues.c)
 
 ---
 
@@ -536,7 +536,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "Overrides" = 0;
 ```
 
-## Windows Internals
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
@@ -571,6 +571,7 @@ Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://g
 These are from `ntoskrnl.exe`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 
 ```c
+// ntoskrnl.exe
 aRegistryMachin = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\WMI\\Restrictions"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Arbiters"
 aRegistryMachin_1 = "\\Registry\\Machine\\HARDWARE"
@@ -818,8 +819,6 @@ aRegistryMachin_240 = "\\Registry\\Machine\\System\\Select"
 # DXG Kernel Values
 
 `dxgkrnl.sys` is Windows DirectX/WDDM graphics kernel driver that mediates between apps and the GPU to schedule work, manage graphics memory, present frames, and handle TDR hang recovery.
-
-> https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt
 
 Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
@@ -1323,6 +1322,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 These are from `dxgkrnl.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 
 ```c
+// dxgkrnl.sys
 aRegistryMachin = "\\Registry\\Machine\\SOFTWARE\\Microsoft\\Windows\\DWM"
 aRegistryMachin_0 = "\\Registry\\Machine\\Software\\Microsoft\\Shell\\Docking"
 aRegistryMachin_1 = "\\Registry\\Machine\\System\\Platform\\DeviceTargetingInfo"
@@ -1501,6 +1501,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 Since some values above are from `win32kfull.sys` I'll add that here. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 
 ```c
+// win32kfull.sys
 aRegistryMachin = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\PnP"
 aRegistryMachin_1 = "\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
 aRegistryMachin_2 = "\\Registry\\Machine\\software\\microsoft\\Windows NT\\CurrentVersion\\Windows"
@@ -1534,6 +1535,7 @@ aRegistryMachin_27 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\T
 Added for documentational purposes and future references.
 
 ```c
+// win32kbase.sys
 aRegistryMachin = "\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\DefaultPressure"
 aRegistryMachin_0 = "\\Registry\\Machine\\Software\\Microsoft\\Windows\\CurrentVersion\\PrecisionTouchPad\\LegacyDevices"
 aRegistryMachin_1 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Terminal Server\\Video\\"
@@ -1613,9 +1615,7 @@ And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
 
-"Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`)." (`mmcss.sys`)
-
-> https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings
+"*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*" [[*]](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings) (`mmcss.sys`)
 
 ```c
 // CiConfigInitialize
@@ -1655,7 +1655,8 @@ if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
 
 The GUID allocation server is disabled at the moment.
 ```
-> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55
+
+> [ms-erref#0xC0000080](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55)
 
 Calculation:
 ```c
@@ -1712,7 +1713,7 @@ if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
 }
 ```
 
-## Tasks Details
+## [Tasks Details](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
 
 Existing tasks (OEMs can add additional tasks):
 - Audio
@@ -1734,8 +1735,6 @@ Existing tasks (OEMs can add additional tasks):
 | **Scheduling Category** | **REG\_SZ**    | The scheduling category. This value can be set to High, Medium, or Low. |
 | **SFIO Priority** | **REG\_SZ** | The scheduled I/O priority. This value can be set to Idle, Low, Normal, or High. This value is not used. |
 
-> https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings
-
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss3.png?raw=true)
@@ -1746,15 +1745,14 @@ Existing tasks (OEMs can add additional tasks):
 `LazyModeTimeout` = `1000000` (default)
 
 It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely a placeholder for future documentation. Instead of using `NoLazyMode`, change `LazyModeTimeout`.
+
 ```
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MultiMedia\systemprofile : NoLazyMode
 ```
+
 `AlwaysOn` value exists in W7 and W8, but doesn't exist in W10 and W11 anymore.
 
-"The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results."
-
-> https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do
-> https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-does-the-mmcss-alwayson-registry-setting-exist
+"*The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results.*" [[*]](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/nolazymode.png?raw=true)
 
@@ -1762,8 +1760,8 @@ It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely 
 
 Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
 
-`Windows Internals 7th Edition, Part 2` handpicked snippets (shortened):
-If system physical memory, obtained via `GlobalMemoryStatusEx`, exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
+[`Windows Internals 7th Edition, Part 2`](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) (page `467`f.) handpicked snippets (shortened):
+If system physical memory, obtained via [`GlobalMemoryStatusEx`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex), exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
 
 Service splitting is allowed only if:  
 - Splitting is globally enabled
@@ -1789,14 +1787,11 @@ if ( !RegistryValueWithFallbackW && Type == 4 )
 return v1;
 ```
 
-> [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)  
-> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf (page `467`f)  
-> https://learn.microsoft.com/en-us/windows/application-management/svchost-service-refactoring  
-> https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex
+> [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
 
-## Windows Internals
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
 
@@ -1926,8 +1921,7 @@ Read more about it in [Windows Internals E7, P2](https://github.com/nohuto/windo
 
 ## Service/Driver Table
 
-The suboptions probably overlap the documentation. If so, you can open the markdown file on my GitHub instead:
-> https://github.com/nohuto/win-config/blob/main/system/desc.md#disable-servicesdrivers
+The suboptions probably overlap the documentation. If so, you can open the [page on my website](https://github.com/nohuto/win-config/blob/main/system/desc.md#disable-servicesdrivers) instead.
 
 See [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) for reference, these files were generated on a stock `W11 IoT Enterprise LTSC` installation via [serviwin](https://www.nirsoft.net/utils/serviwin.html).
 
@@ -2396,14 +2390,11 @@ The value doesn't exist by default (not existing = `1`).
 
 ## Pseudocode Interpretation
 
-It might set CPU affinites (`AffinitizeToExclusiveCpus`, `CpuExclusivityMaskHig`, `CpuExclusivityMaskLow`) for the game process and the maximum amount of cores the game uses (`MaxCpuCount`). The percentage of GPU memory (`PercentGpuMemoryAllocatedToGame`), GPU time (`PercentGpuTimeAllocatedToGame`) & system compositor (`PercentGpuMemoryAllocatedToSystemCompositor`) that will be dedicated to the game. It may also create a list of processes (`RelatedProcessNames`) that are gaming related, which means that they won't be affected from the game mode. These are just assumptions, I haven't looked into it in detail yet (`GamingHandlers.c`).
+It might set CPU affinites (`AffinitizeToExclusiveCpus`, `CpuExclusivityMaskHig`, `CpuExclusivityMaskLow`) for the game process and the maximum amount of cores the game uses (`MaxCpuCount`). The percentage of GPU memory (`PercentGpuMemoryAllocatedToGame`), GPU time (`PercentGpuTimeAllocatedToGame`) & system compositor (`PercentGpuMemoryAllocatedToSystemCompositor`) that will be dedicated to the game. It may also create a list of processes (`RelatedProcessNames`) that are gaming related, which means that they won't be affected from the game mode. These are just assumptions, I haven't looked into it in detail yet ([`GamingHandlers.c`](https://github.com/nohuto/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)).
 
-Pavel Yosifovich says: "Game mode tries to kind of steer away the processors from your game so the system itself and all the kernel threads and stuff like that are not going to use some processors, so your game can use those processors exclusively."
-> https://youtu.be/h6BXMcRqYhA?t=3251
+Pavel Yosifovich says: "*Game mode tries to kind of steer away the processors from your game so the system itself and all the kernel threads and stuff like that are not going to use some processors, so your game can use those processors exclusively.*" [[*]](https://youtu.be/h6BXMcRqYhA?t=3251)
 
-> [system/assets | gamemode-GamingHandlers.c](https://github.com/nohuto/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)  
-> https://support.xbox.com/en-US/help/games-apps/game-setup-and-play/use-game-mode-gaming-on-pc  
-> https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-26100
+> [Windows.Gaming.Preview.GamesEnumeration Namespace](https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-28000)
 
 # Disable Windows Search
 
@@ -2431,10 +2422,7 @@ Pavel Yosifovich says: "Game mode tries to kind of steer away the processors fro
 
 ## Search Indexing
 
-Search indexing builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
-
-> https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search
+[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
 
@@ -2488,24 +2476,21 @@ SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Se
 
 # HAGS
 
-HAGS feature is introduced specifically for the WDDM. If disabled the CPU manages the GPU scheduling via a high-priority kernel thread, GPU context switches and task scheduling are handled by the CPU (CPU offloads graphics intensive tasks to the GPU for rendering). If enabled the GPU handles its own scheduling using a built in scheduler processor, context switching between GPU tasks is done directly on the GPU. It is especially beneficial, if you've a slow CPU, or if the CPU is heavily loaded with other tasks.
+[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) feature is introduced specifically for the WDDM. If disabled the CPU manages the GPU scheduling via a high-priority kernel thread, GPU context switches and task scheduling are handled by the CPU (CPU offloads graphics intensive tasks to the GPU for rendering). If enabled the GPU handles its own scheduling using a built in scheduler processor, context switching between GPU tasks is done directly on the GPU. It is especially beneficial, if you've a slow CPU, or if the CPU is heavily loaded with other tasks.
 
-"It depends on your hardware, if you want HAGS to be enabled or not. E.g if using a old GPU, it may not fully support the new scheduler."
+"It depends on your hardware, if you want [HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) to be enabled or not. E.g if using a old GPU, it may not fully support the new scheduler."
 
-HAGS should be enabled.
-
-> https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/  
-> https://maxcloudon.com/hardware-accelerated-gpu-scheduling/
+[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) should be enabled.
 
 ## SystemSettings Records
 
-Enable HAGS:
-```powershell
-SystemSettingsAdminFlows.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 2
+```c
+// Enabled
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 2
 ```
-Disable HAGS:
-```powershell
-SystemSettingsAdminFlows.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 1
+```c
+// Disabled
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
 # Disable Storage Sense
@@ -2581,19 +2566,15 @@ Forces hung apps and services to terminate faster.
 
 More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
 
-> https://github.com/nohuto/regkit/blob/main/records/ControlPanel-Desktop.txt
-
 # Disable FTH
 
-Used for preventing legacy or unstable applications from crashing, read through the picture below for more detailed information (`Windows Internals 7th Edition, Part 1, Page 347`).
+Used for preventing legacy or unstable applications from crashing, read through the picture below for more detailed information ([`Windows Internals 7th Edition, Part 1, Page 347`](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)).
 
-> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf  
-> https://learn.microsoft.com/en-us/windows/win32/win7appqual/fault-tolerant-heap  
-> https://www.youtube.com/watch?v=4SvNNXAwoqE
-
-## Windows Internals
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/fth.png?raw=true)
+
+[YouTube Video](https://www.youtube.com/watch?v=4SvNNXAwoqE).
 
 # Disable Accessibility Features
 
@@ -2620,12 +2601,9 @@ Disables all kind of accessibility features such as `Voice Access`, `Live Captio
 
 Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
 
-"If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish...."."
+"*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
 
-"This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes.
-Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled."
-
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages
+"*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
 
 ## Windows Policies
 
@@ -2680,7 +2658,7 @@ Prevents windows from being minimized or restored when the active window is shak
 
 Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the option switch.
 
-### TranscodeImage
+### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
 
 ```c
 if ( JPEGImportQuality not present or error )
@@ -2691,8 +2669,6 @@ else
         v54 = 100.0f;
 ```
 Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
-
-> [system/assets | jpeg-TranscodeImage.c](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
 
 # Enable Segment Heap
 
@@ -2715,8 +2691,6 @@ Globally:
 ```
 
 Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`). It's not recommended to enable it globally.
-  
-> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (Page `334`f.)
 
 ## Validating Changes
 
@@ -2747,10 +2721,10 @@ You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example 
                     // if the value exists but is stored as REG_NONE (type==0):
                     //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
 ```
-> https://www.noverse.dev/docs/win-config/system/kernel-values/#registry-values-details  
+
 > [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
 
-## Windows Internals
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment2.png?raw=true)
@@ -3026,15 +3000,12 @@ Taskbar pins are saved in a folder and a key, the folder includes the shortcuts:
 ```powershell
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband # Only "Favorites" is needed
 ```
-You can convert the exported `.reg` to `.ps1` with:
-> https://reg2ps.azurewebsites.net/
 
 Post install example (copy the `TaskBar` folder to any folder):
 ```powershell
 del "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" -Recurse -Force
 xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" /e /i /y
 ```
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/xcopy
 
 The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
 
@@ -3057,14 +3028,14 @@ Only this path gets read, `TimeStampEnabled` doesn't get read?
 
 # Disable Prefetch & Superfetch
 
-Disables prefetcher (includes disabling `ApplicationLaunchPrefetching` & `ApplicationPreLaunch`) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
+Disables prefetcher (includes disabling [`ApplicationLaunchPrefetching` & `ApplicationPreLaunch`](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
 
 Windows Internals (E7-P1, Prefetcher): the prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
 
 ## Value Meanings
 
-- `EnablePrefetcher` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
-- `EnableSuperfetch` is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
+- [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
+- [`EnableSuperfetch`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
 - `SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search.
 - `EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
 
@@ -3076,14 +3047,7 @@ Windows Internals (E7-P1, Prefetcher): the prefetcher traces roughly the first 1
 ```
 The same applies to superfetch.
 
-> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN  
-> https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN  
-> https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
-
-## Windows Internals
-
-More detailed information about prefetch and superfetch on page `413`f & `472`f.
-> https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch2.png?raw=true)
@@ -3094,13 +3058,13 @@ More detailed information about prefetch and superfetch on page `413`f & `472`f.
 
 Small documentation on several values the option applies, see links below for more details.
 
-### Registry Values
+### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
 
 | Value | Description |
 | ----- | ------------ |
 | `DisableDeleteNotification` | 0 = TRIM/UNMAP enabled, 1 = disabled. Controls whether delete operations send trim/unmap notifications to the underlying storage. |
 | `DontVerifyRandomDrivers` | 0 = Driver Verifier may pick random drivers, 1 = random selection suppressed, so only explicitly chosen drivers are verified. |
-| `LongPathsEnabled` | 0 = legacy `MAX_PATH` limit, 1 = Win32 long paths enabled (paths up to ~32k characters for apps and policies that opt in). |
+| [`LongPathsEnabled`](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry) | 0 = legacy `MAX_PATH` limit, 1 = Win32 long paths enabled (paths up to ~32k characters for apps and policies that opt in). |
 | `NtfsAllowExtendedCharacter8dot3Rename` | 0 = 8.3 short names restricted to basic ASCII, 1 = extended characters (including diacritics). |
 | `NtfsBugcheckOnCorrupt` | 0 = NTFS attempts self healing without forcing a bugcheck, 1 = triggers a bugcheck when corruption is detected on an NTFS volume, avoiding "silent" data loss with self healing NTFS. |
 | `NtfsDisable8dot3NameCreation` | Disables the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes.<br>0: Enables 8dot3 name creation for all volumes on the system.<br>1: Disables 8dot3 name creation for all volumes on the system.<br>2: Sets 8dot3 name creation on a per volume basis.<br>3: Disables 8dot3 name creation for all volumes except the system volume. |
@@ -3121,12 +3085,6 @@ Scan current 8dot3 files names: `fsutil 8dot3name scan C:\`
 Symlinksare shortcuts or references that point to a file or folder in another location, like a portal. They're not duplicates, just pointers.
 File at: `C:\Projects\Game\assets\logo.png`
 Symlink: `C:\Users\YourName\Desktop\logo.png`
-
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior  
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-8dot3name  
-> https://github.com/MicrosoftDocs/windows-driver-docs/blob/5e03e46194f2a977da34fdf453f2703262370a23/windows-driver-docs-pr/ifs/offloaded-data-transfers.md?plain=1#L104  
-> https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry  
-> https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt
 
 > [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
@@ -3236,7 +3194,7 @@ Example:
 3. The 17 MB saved is used for active apps
 4. When the data is needed again, it's decompressed back to 24 MB
 
-See the current memory compresstion state on your system via:
+See the current memory compression state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
 ```powershell
 Get-MMAgent
 ```
@@ -3250,14 +3208,11 @@ PageCombining                : True
 PSComputerName               :
 ```
 
-## Windows Internals
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
-
-> https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (P. 449)  
-> https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
 
 # Disable Page Combining
 
@@ -3275,7 +3230,7 @@ INIT:0000000140B9C350                 dq offset dword_140D1D1C8
 ALMOSTRO:0000000140D1D1C8 dword_140D1D1C8 dd 0                    ; DATA XREF: MiCombineIdenticalPages:loc_1407F7E3A↑r
 ```
 
-See the current page combining state on your system via:
+See the current page combining state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
 ```powershell
 Get-MMAgent
 ```
@@ -3289,15 +3244,12 @@ PageCombining                : True # Enabled
 PSComputerName               :
 ```
 
-## Windows Internals
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb4.png?raw=true)
-
-> https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf (P. 459)  
-> https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps
 
 # Enable Detailed BSoD
 
@@ -3310,10 +3262,7 @@ PSComputerName               :
 | Extra help                | QR code + link                                  | Text-only advice                                                                  |
 | Purpose                   | Less scary, easier to tell support the code     | See the actual debug information                                                  |
 
-Enabling the options includes setting `AutoReboot` to `0` ("The option specifies that Windows automatically restarts your computer").
-
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options
+Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0` ("The option specifies that Windows automatically restarts your computer").
 
 # Display Scaling
 
@@ -3387,7 +3336,7 @@ See all object identifiers via `bcdedit /enum all /v` (`identifier`). Note that 
 
 ### Value/Data List
 
-Here are elements which I tracked via Procmon (taken from default store and the MS documentation), note that this doesn't show default states (see block at the buttom), instead it shows several options and their possible states:
+Here are elements which I tracked via Procmon (taken from default store and the MS documentation - [bcd-settings-and-bitlocker](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bcd-settings-and-bitlocker), [bcd-enumerations](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bcd/bcd-enumerations)), note that this doesn't show default states (see block at the buttom), instead it shows several options and their possible states:
 
 ```c
 "HKLM\\BCD00000000\\Objects\\{current}\\Elements";
@@ -3658,13 +3607,9 @@ Here are elements which I tracked via Procmon (taken from default store and the 
 `{badmemory}` - RAM defects  
 `{hypervisorsettings}` - Hypervisor settings
 
-> https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bcd/bcd-enumerations  
-> https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bcd-settings-and-bitlocker
-
 ## Pseudocode Notes
 
-Personal notes on several features, used pseudocode:
-> [system/assets | bcdedit-HalpMiscGetParameters.c](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c)
+Personal notes on several features in relation of [HalpMiscGetParameters](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c).
 
 ```c
 lkd> db HalpInterruptX2ApicPolicy l1
@@ -3958,7 +3903,7 @@ ramdisksdipath          \Recovery\WindowsRE\boot.sdi
 
 # Disable Autoruns
 
-The `Open` buttons downloads & executes [`Autoruns.exe`](https://live.sysinternals.com/Autoruns.exe). It's recommended to disable all kind of autoruns in the `Logon` section that you don't need, examples:
+The `Open` buttons downloads & executes [`Autoruns`](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns). It's recommended to disable all kind of autoruns in the `Logon` section that you don't need, examples:
 ```c
 OneDrive
 Spotify
@@ -3971,7 +3916,7 @@ SecurityHealth
 Microsoft Edge // preferable remove edge from the mounted image, otherwise it'll create keys/values in many different places
 ```
 
-Try to minimize the amount of applications that run automatically on system startup. You can go trough the other sections, but this option was created for the `Logon` section, see `Disable Scheduled Tasks`/`Disable Services`.
+Try to minimize the amount of applications that run automatically on system startup. You can go through the other sections, but this option was created for the `Logon` section, see `Disable Scheduled Tasks`/`Disable Services`.
 
 See your current autoruns of installed apps:
 ```powershell
@@ -3981,12 +3926,11 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Run
 HKLM\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
-> https://live.sysinternals.com/  
-> https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns
-
 # Enable FSO
 
 This may not be accurate yet, it's preferable to disable FSO per application via the compability section. Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
+
+See [demystifying-full-screen-optimizations](https://devblogs.microsoft.com/directx/demystifying-full-screen-optimizations/)/[SwapChain](https://wiki.special-k.info/en/SwapChain)/[PresentationModel](https://wiki.special-k.info/Presentation_Model) for more details.
 
 ### FSE (Fullscreen Exclusive)
 
@@ -4045,10 +3989,6 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Progr
 HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
 ```
 
-> https://devblogs.microsoft.com/directx/demystifying-full-screen-optimizations/
-> https://wiki.special-k.info/en/SwapChain
-> https://wiki.special-k.info/Presentation_Model
-
 # App Archive
 
 "Automatically archive your infrequently used apps to save storage and internet bandwidth. Your files and data will still be saved, and the app's full version will be restored on your next use if it's still available."
@@ -4090,7 +4030,7 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{I
 
 # Page File
 
-Several notes I took while reading trough `Windows Internals Part 1, Edition 7`, everything written below is based on it.
+Several notes I took while reading through [`Windows Internals Part 1, Edition 7`](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), everything written below is based on it.
 
 **You should calculate it while daily workload, or your peak value won't be accurate.**
 
@@ -4114,8 +4054,6 @@ Local Security Policy:
 Virtual memory support uses a system pagefile to swap pages of memory to disk when they are not used. On a running system, this pagefile is opened exclusively by the operating system, and it is well protected. However, systems that are configured to allow booting to other operating systems might have to make sure that the system pagefile is wiped clean when this system shuts down. This ensures that sensitive information from process memory that might go into the pagefile is not available to an unauthorized user who manages to directly access the pagefile.
 
 When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled."
-
-> https://github.com/nohuto/windows-books/releases
 
 # Disable Mobility Center
 
@@ -4155,9 +4093,7 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 
 # Disable Hyper-V
 
-"Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications."
-
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v
+"*Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications.*" [[*]](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v)
 
 ## Service/Driver Table
 

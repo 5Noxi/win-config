@@ -23,8 +23,7 @@
 --delete // removes the task
 ```
 
-You can download the executeable from my repository, I packed it into one package since some may not have python installed on their system.
-> https://github.com/nohuto/win-config/blob/main/power/assets/NV-IMOD.exe
+You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/assets/NV-IMOD.exe) from my repository, I packed it into one package since some may not have python installed on their system.
 
 ## xHCI Interrupt Moderation Notes
 
@@ -930,16 +929,9 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 ## Storport Idle (`Device Parameters\\StorPort`)
 
-"Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.
+"*Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.*"
 
-Storport IPM allows the classpnp and disk class drivers to send the SCSI Stop Unit command to the storage device when it's idle for some period of time. The idle period is configurable by the system administrator. The Storport miniport driver is responsible for how the command is used by the Storport miniport driver to conserve power.
-
-Storport Idle Power Management (IPM) isn't enabled by default. It can be enabled in the registry by setting the "EnableIdlePowerManagement" value in the "StorPort" subkey of the device's hardware key to any nonzero value. To do so, use the device INF file or manually edit the registry using the registry editor."
-
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/ipm-configuration-and-usage  
-> https://github.com/nohuto/regkit/blob/main/records/pci.txt  
+> [drivers/storage/registry-entries-for-storport-miniport-drivers](https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers)  
 > [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
 
 # Disable Timer Coalescing
@@ -1137,12 +1129,10 @@ So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCo
     "CoalescingTimerInterval" = 1500; // PopCoalescingTimerInterval (0x000005DC) - Units: seconds (multiplies value by -10,000,000, one second in 100 ns units, so the default corresponds to a 25min cadence)
     "DeepIoCoalescingEnabled" = 0; // PopDeepIoCoalescingEnabled 
 ```
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIoCoalescingEnabled` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RITdemonTimerPowerSave...` & `TimerCoalescing` ones get read.
 
-> [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)  
-> https://github.com/nohuto/regkit/blob/main/records/Winows-NT.txt
+> [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)
 
@@ -1154,7 +1144,7 @@ Windows Internals (E7-P1, Power manager): the system saves a full memory image t
 
 During a full shutdown and boot (S5), the entire user session is torn down and restarted on the next boot. In contrast, during a hibernation (S4), the user session is closed and the user state is saved.
 
-## Power State Table
+## [Power State Table](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states)
 
 | Power state | ACPI state | Description | 
 |-------------|------------|-------------|
@@ -1164,8 +1154,6 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
 | Hibernate | *S4* | The system appears to be off. Power consumption is reduced to the lowest level. The system saves the contents of volatile memory to a hibernation file to preserve system state. Some components remain powered so the computer can wake from input from the keyboard, LAN, or a USB device. The working context can be restored if it's stored on nonvolatile media.<br><br> *Fast startup* is where the user is logged off before the hibernation file is created. This allows for a smaller hibernation file, more appropriate for systems with less storage capabilities. | 
 | Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
 | Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
-
-> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
 
 ## Registry Value Defaults
 
@@ -1191,10 +1179,6 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
 ```c
 RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HibernateEnabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
-
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/disable-and-re-enable-hibernation  
-> https://github.com/nohuto/regkit/blob/main/records/Power.txt
 
 # Reduced HiberFile
 
@@ -1253,9 +1237,6 @@ To verify or change the type of hibernation file used, run the *powercfg.exe* ut
 | `powercfg /h /type full`           | **Change the hibernation file type to full.** This isn't recommended on systems with less than 32GB of storage.                      |
 | `powercfg /h /type reduced`        | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example.      |
 | `powercfg /h /size 0`<br> `powercfg /h /type reduced`  | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration.     |
-
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
-> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states
 
 # Remove Power Options
 
@@ -1352,8 +1333,6 @@ In Windows, fast startup is the default transition when a system shutdown is req
 
 All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
 
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
-
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "HiberbootEnabled" = 0; // PopHiberbootEnabledReg 
@@ -1368,8 +1347,6 @@ All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registr
     "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
     "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
 ```
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
-> https://github.com/marcosd4h/memhunter/blob/f68bca7efe31f49c0dc9ad988fb17bec443a1ca7/libs/boost/interprocess/detail/win32_api.hpp#L2373
 
 ```c
 // PopOpenPowerKey
@@ -1457,7 +1434,6 @@ Not needed, if you disable energy estimation:
                                     // If following HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\knobs\Power/Controls/EnergyEstimationEnabled, it should have a range of 0-4294967295
 ```
 
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details  
 > [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
@@ -1468,28 +1444,21 @@ Not needed, if you disable energy estimation:
 
 # Disable Audio Idle
 
-| Parameter              | Desc                                                                                    | Default  | Notes                                                                 |
-| ---------------------- | --------------------------------------------------------------------------------------- | -------- | --------------------------------------------------------------------- |
-| `ConservationIdleTime` | Idle timeout for the device, when the system is on battery power.                       | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `PerformanceIdleTime`  | Idle timeout for the device, when the system is on AC power.                            | `0`      | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `IdlePowerState`       | Specifies the power state that the device will enter, when power is no longer needed.   | `3` (D3) | Valid values `1 - D1`, `2 - D2`, `3 - D3`.                            |
+| Parameter | Description | Default | Type | Notes |
+| --- | --- | --- | --- |
+| `ConservationIdleTime` | Idle timeout for the device, when the system is on battery power. | `0` | REG_BINARY | `0` disables the inactivity timer for this mode, value is in seconds. |
+| `PerformanceIdleTime` | Idle timeout for the device, when the system is on AC power. | `0` | REG_BINARY | `0` disables the inactivity timer for this mode, value is in seconds. |
+| `IdlePowerState` | Specifies the power state that the device will enter, when power is no longer needed. | `3` (D3) | REG_BINARY | Valid values `1 - D1`, `2 - D2`, `3 - D3`.                            |
 
 I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈ 136 years`) & `IdlePowerState` to `1` (`D1`).
 
-| Parameter              | Type           | Revert Hex data     | Parsed value                      | Meaning                       |
-| ---------------------- | -------------- | ------------------- | --------------------------------- | ----------------------------- |
-| `ConservationIdleTime` | REG_BINARY (3) | `1e,00,00,0`        | malformed; if `1e,00,00,00` -> 30s | `10s` on battery              |
-| `PerformanceIdleTime`  | REG_BINARY (3) | `00,00,00,00`       | 0 seconds                         | No idle mgmt on AC            |
-| `IdlePowerState`       | REG_BINARY (3) | `03,00,00,00`       | 3                                 | Go to `D3` when idle          |
-
 | Category   | Class | Class GUID                           | Description                                                                                       |
 | ---------- | ----- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| Multimedia | Media | 4d36e96c-e325-11ce-bfc1-08002be10318 | Includes Audio and DVD multimedia devices, joystick ports, and full-motion video capture devices. |
+| Multimedia | Media | [4d36e96c-e325-11ce-bfc1-08002be10318](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors) | Includes Audio and DVD multimedia devices, joystick ports, and full-motion video capture devices. |
 
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation  
-> https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings  
+> [drivers/audio/audio-device-class-inactivity-timer-implementation](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation)  
+> [design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms)  
+> [drivers/audio/portcls-registry-power-settings](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings)
 
 # Disable Storage Idle States
 
@@ -1499,7 +1468,6 @@ If `IdleStatesNumber` is set, the other values are ignored? Let me know if you h
 
 The values are located in the `EnergyEstimation` (guesses how much power is used over time), so it's probably related to something else. I'll leave it for documentation reasons (and future extended declaration).
 
-> https://github.com/nohuto/regkit/blob/main/records/Power.txt  
 > [power/assets | storageidle-PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
 
 ## Suboption
@@ -1554,8 +1522,6 @@ dword_4C140 = -1;
 
 > [power/assets | hddpark-amdsbs.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-amdsbs.c)  
 > [power/assets | hddpark-DllInitialize.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-DllInitialize.c)  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-power-states  
-> https://learn.microsoft.com/en-us/windows-hardware/customize/power-settings/disk-settings-link-power-management-mode---hipm-dipm
 
 # Disable PM in Standby Mode
 
@@ -1574,7 +1540,6 @@ This policy setting specifies that power management is disabled when the machine
     "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
     "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
 ```
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 ## Windows Policies
 
@@ -1616,11 +1581,7 @@ This policy setting specifies that power management is disabled when the machine
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
 
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md
-
-## Registry Value Overview
+## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
@@ -1648,8 +1609,6 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ULPMode" = 1; // range 0-1
 ```
 
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
-
 | SubkeyName | ParamDesc | Default | Minimum | Maximum |
 | --- | --- | --- | --- | --- |
 | `*WakeOnPattern` | A value that describes whether the device should be enabled to wake the computer when a network packet matches a specified pattern. | 1 | 0 | 1 |
@@ -1662,9 +1621,8 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 | [`*SSIdleTimeout`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeout-inf-keyword) | This keyword specifies the idle time-out period in units of seconds. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeout value, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 5 | 1 | 60 |
 | [`*SSIdleTimeoutScreenOff`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeoutscreenoff-inf-keyword) | This keyword specifies the idle time-out period in units of seconds and is only applicable when the screen is off. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeoutScreenOff value after the screen is off, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 3 | 1 | 60 |
 
-For more detail on each value, see GitHub links above.
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
+> [network/standardized-inf-keywords-for-power-management](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md)  
+> [network/standardized-inf-keywords-for-ndis-selective-suspend](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md)
 
 ### Setup Information
 
@@ -1796,8 +1754,6 @@ More information can very likely be gather via WPR/WPA 'Power > Power Requests',
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
 ```
-
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
 
 ```c
 bool PopPowerRequestEvaluateExecutionRequiredStatus()

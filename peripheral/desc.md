@@ -290,7 +290,7 @@ Value names in [`usbflags-HUBREG_QueryUsbflagsValuesForDevice.c`](https://github
 
 ## USB_DEVICE_HACKS
 
-You can use `!usb3kd.device_info` to get more information on a USB device in the USB 3.0 tree, example:
+You can use [`!usb3kd.device_info`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debuggercmds/-usb3kd-device-info.md) to get more information on a USB device in the USB 3.0 tree, example:
 ```c
 lkd> !usb3.usb_tree
 
@@ -344,8 +344,6 @@ lkd> dt USBHUB3!_USB_DEVICE_HACKS
    +0x000 EnablePLDRDuringCyclePort : Pos 26, 1 Bit
    +0x000 ResetOnErrorInD2Resume : Pos 27, 1 Bit
 ```
-
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debuggercmds/-usb3kd-device-info.md
 
 ## Registry Values Details
 
@@ -448,7 +446,9 @@ aRegistryMachin_10 = "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg";
 aRegistryMachin_11 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USB";
 aRegistryMachin_12 = "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\policy";
 aRegistryMachin_13 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb";
+```
 
+```c
 // USBHUB3.sys
 aRegistryMachin = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\USBFN\\Default"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Usb\\Ceip"
@@ -464,25 +464,23 @@ aRegistryMachin_10 = "\\Registry\\Machine\\System\\CurrentControlSet\\Services\\
 aRegistryMachin_11 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\USB"
 aRegistryMachin_12 = "\\registry\\machine\\system\\currentcontrolset\\services\\usbhub\\uxd_control\\policy" // g_UxdGlobalSettingsKey
 aRegistryMachin_13 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb"
+```
 
+```c
 // USBXHCI.sys
 aRegistryMachin = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\CrashControl\\\\LiveKernelReports"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb\\HardwareVerifier" // g_HwVerifierKeyName
 aRegistryMachin_1 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usbflags" // g_usbflagsKeyName
 ```
 
-## Subkey Structure
+## [Subkey Structure](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)
 
 The subkeys in `usbflags` always have a length of 12, build in such a structure `vvvvpppprrrr`:
 - **vvvv** is a 4-digit hexadecimal number that identifies the vendor
 - **pppp** is a 4-digit hexadecimal number that identifies the product
 - **rrrr** is a 4-digit hexadecimal number that contains the revision number of the device
 
-The vendor ID, product ID, and revision number values are obtained from the [USB device descriptor](https://github.com/MicrosoftDocs/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-descriptors.md). The USB_DEVICE_DESCRIPTOR structure describes a device descriptor.
-
-> https://github.com/nohuto/regkit/blob/main/records/USB-Flags.txt
-
----
+The vendor ID, product ID, and revision number values are obtained from the [USB device descriptor](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-descriptors.md). The USB_DEVICE_DESCRIPTOR structure describes a device descriptor.
 
 | Registry entry | Description | Possible values |
 |---|---|---|
@@ -496,9 +494,7 @@ The vendor ID, product ID, and revision number values are obtained from the [USB
 \Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : osvc
 ```
 
-`IgnoreHWSerNum<vvvvpppp>` exists in `\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags` too.
-
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md
+`IgnoreHWSerNum<vvvvpppp>` exists in [`\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags`](https://github.com/nohuto/regkit/blob/main/records/USB-Flags.txt) too.
 
 # USB Values
 
@@ -588,7 +584,9 @@ aRegistryMachin_10 = "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg";
 aRegistryMachin_11 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USB";
 aRegistryMachin_12 = "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\policy";
 aRegistryMachin_13 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb";
+```
 
+```c
 // USBHUB3.sys
 aRegistryMachin = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\USBFN\\Default"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Usb\\Ceip"
@@ -604,7 +602,9 @@ aRegistryMachin_10 = "\\Registry\\Machine\\System\\CurrentControlSet\\Services\\
 aRegistryMachin_11 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\USB"
 aRegistryMachin_12 = "\\registry\\machine\\system\\currentcontrolset\\services\\usbhub\\uxd_control\\policy" // g_UxdGlobalSettingsKey
 aRegistryMachin_13 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb"
+```
 
+```c
 // USBXHCI.sys
 aRegistryMachin = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\CrashControl\\\\LiveKernelReports"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb\\HardwareVerifier" // g_HwVerifierKeyName
@@ -696,7 +696,9 @@ aRegistryMachin_10 = "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg";
 aRegistryMachin_11 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USB";
 aRegistryMachin_12 = "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\policy";
 aRegistryMachin_13 = "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb";
+```
 
+```c
 // USBHUB3.sys
 aRegistryMachin = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\USBFN\\Default"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Usb\\Ceip"
@@ -712,7 +714,9 @@ aRegistryMachin_10 = "\\Registry\\Machine\\System\\CurrentControlSet\\Services\\
 aRegistryMachin_11 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\USB"
 aRegistryMachin_12 = "\\registry\\machine\\system\\currentcontrolset\\services\\usbhub\\uxd_control\\policy" // g_UxdGlobalSettingsKey
 aRegistryMachin_13 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb"
+```
 
+```c
 // USBXHCI.sys
 aRegistryMachin = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\CrashControl\\\\LiveKernelReports"
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb\\HardwareVerifier" // g_HwVerifierKeyName
@@ -835,8 +839,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 # Audio Ducking
 
-"Windows audio ducking is a dynamic audio processing technique that enables the **automatic adjustment of audio levels** between different audio sources on a Windows-based computer or operating system."
-> https://multimedia.easeus.com/ai-article/windows-audio-ducking.html
+"*Windows audio ducking is a dynamic audio processing technique that enables the automatic adjustment of audio levels between different audio sources on a Windows-based computer or operating system.*" [[*]](https://multimedia.easeus.com/ai-article/windows-audio-ducking.html)
 
 Can be disabled manually via `mmsys.cpl > Communications` `Do nothing`.
 
@@ -883,16 +886,13 @@ Open `mmsys.cpl`, go into propeties of your used device, click on the `Advanced`
 
 # Disable Spatial Audio
 
-Spatial audio positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
-
-> https://github.com/nohuto/regkit/blob/main/records/Audio.txt  
-> https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/
+[Spatial audio](https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/) positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
 
 ---
 
-Miscellaneous notes:
+Miscellaneous [notes](https://github.com/nohuto/regkit/blob/main/records/Audio.txt):
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio": {
   "DisableSpatialOnLowLatency": { "Type": "REG_DWORD", "Data": 1 }
@@ -1028,6 +1028,8 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserCho
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\AutorunINFLegacyArrival\(Default)	Type: REG_SZ, Length: 30, Data: MSTakeNoAction
 ```
 
+## Windows Policies
+
 ```json
 {
   "File": "AutoPlay.admx",
@@ -1109,14 +1111,12 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHa
 
 # Disk Write Cache Policy
 
-Enables write cache & turns off write cache buffer flushing on all connected disks.
+Enables [write cache & turns off write cache buffer flushing](https://learn.microsoft.com/en-us/previous-versions/troubleshoot/windows-server/turn-disk-write-caching-on-off) on all connected disks.
 
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\SCSI\Disk&Ven_NVMe&Prod_Samsung_SSD_990\5&33c33320&0&000000\Device Parameters\disk : CacheIsPowerProtected
 \Registry\Machine\SYSTEM\ControlSet001\Enum\SCSI\Disk&Ven_NVMe&Prod_Samsung_SSD_990\5&33c33320&0&000000\Device Parameters\disk : UserWriteCacheSetting
 ```
-> https://learn.microsoft.com/en-us/previous-versions/troubleshoot/windows-server/turn-disk-write-caching-on-off  
-> [peripheral/assets | diskwritecache.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/diskwritecache.c)
 
 # Disable Bluetooth
 
@@ -1159,9 +1159,9 @@ AddReg = PS2_Inst.HW.AddReg
 HKR,,"MouseDataQueueSize",0x00010003,100
 ```
 
-"Specifies the number of mouse events to be buffered internally by the driver, in nonpaged pool. The allocated size, in bytes, of the internal buffer is this value times the size of the MOUSE_INPUT_DATA structure (defined in NTDDMOU.H)."
+"*Specifies the number of mouse events to be buffered internally by the driver, in nonpaged pool. The allocated size, in bytes, of the internal buffer is this value times the size of the MOUSE_INPUT_DATA structure (defined in NTDDMOU.H).*" [[*]](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
 
-## MouseDataQueueSize
+## [MouseDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)
 
 - not present = default `100` -> final `2400`
 - present and `0` = forced to `100` -> final `2400`
@@ -1191,7 +1191,7 @@ LABEL_10:
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = v11;
 ```
 
-## KeyboardDataQueueSize
+## [KeyboardDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-KbdConfiguration.c)
 
 - not present = default `100` -> final `1200`
 - present and `0` = forced to `100` -> final `1200`
@@ -1222,10 +1222,6 @@ LABEL_22:
 dword_1C000A234 = v15;
 ```
 
-> https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990  
-> [peripheral/assets | mkdata-MouConfiguration.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)  
-> [peripheral/assets | mkdata-KbdConfiguration.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-KbdConfiguration.c)
-
 # Device Manager
 
 The `Clean` option removes non present devices (`-PresentOnly:$false`/`Status -eq 'Unknown'`) via `/remove-device` ([`pnputil`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax)).
@@ -1253,9 +1249,6 @@ Click on `View` > `Devices by connection`.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/devman.png?raw=true)
 
-> https://learn.microsoft.com/en-us/powershell/module/pnpdevice/get-pnpdevice?view=windowsserver2025-ps  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/pnputil-command-syntax
-
 # Disable Touch & Tablet
 
 Disable the touch screen feature of your device with:
@@ -1265,15 +1258,14 @@ Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch scre
 
 "Tablet mode makes Windows more touch friendly and is helpful on touch capable devices."
 
-> https://support.microsoft.com/en-us/windows/turn-tablet-mode-on-or-off-in-windows-add3fbce-5cb5-bf76-0f9c-8d7b30041f30  
-> https://github.com/nohuto/regkit/blob/main/records/Wisp.txt  
-> [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
-
----
+## Miscellaneous Values
 
 Everything listed below is based on personal research. Mistakes may exist, some parts are speculations. See links below for reference.
 
 ```c
+"HKLM\\SOFTWARE\\Policies\\Microsoft\\TabletPC";
+  "TurnOffTouchInput" // REG_DWORD
+
 "HKCU\\Software\\Microsoft\\Wisp\\Touch";
     "PanningDisabled" = 0;
     "Inertia" = 1;
@@ -1362,7 +1354,8 @@ Everything listed below is based on personal research. Mistakes may exist, some 
 ```
 
 > [peripheral/assets | touch-twinui.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-twinui.c)  
-> [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)
+> [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)  
+> [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
 
 ```
 TabletModeActivated
@@ -1408,17 +1401,15 @@ Windows 7/XP:
 powercfg /devicequery wake_programmable
 powercfg /devicequery wake_armed
 ```
-`powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state
-`powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
+[`powercfg /devicequery wake_programmable`](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a) -> devices that are user-configurable to wake the system from a sleep state
+[`powercfg /devicequery wake_armed`](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a) -> currently configured to wake the system from any sleep state
 
 ```bat
 powercfg /devicedisablewake device
 ```
 Disables the device (replace '*Device*' with the device name) from waking the system from any sleep state. 
 
-> https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a
-
-`WakeOnInputDeviceTypes` probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
+[`WakeOnInputDeviceTypes`](https://github.com/nohuto/regkit/blob/main/records/Input.txt) probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
 ```
 \Registry\Machine\SYSTEM\INPUT : UnDimOnInputDeviceTypes
 \Registry\Machine\SYSTEM\INPUT : WakeOnInputDeviceTypes
@@ -1430,12 +1421,10 @@ Default values:
 WakeOnInputDeviceTypes = 46
 UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
 ```
-> https://github.com/nohuto/regkit/blob/main/records/Input.txt  
-> https://github.com/nohuto/regkit/blob/main/records/Enum-USB.txt  
+
 > [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
 
----
-
+## query_flag
 
 All available flags (`powercfg /devicequery query_flag`):
 
@@ -1455,7 +1444,7 @@ All available flags (`powercfg /devicequery query_flag`):
 
 # Disable Dynamic Lighting
 
-"Dynamic Lighting is a feature that allows you to control LED-powered devices such as keyboards, mice, and other illuminated accessories. This feature enables you to coordinate the colors of LEDs, creating a unified lighting experience both within Windows and across all your devices."
+"*Dynamic Lighting is a feature that allows you to control LED-powered devices such as keyboards, mice, and other illuminated accessories. This feature enables you to coordinate the colors of LEDs, creating a unified lighting experience both within Windows and across all your devices.*" [[*]](ttps://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices)
 
 | Value | Type | Values | Ranges | Notes |
 | --- | --- | --- | --- | --- |
@@ -1468,9 +1457,6 @@ All available flags (`powercfg /devicequery query_flag`):
 | `EffectMode` | REG_DWORD | Rainbow: `0 = Forward`, `1 = Reverse` · Wave: `0 = Right`, `1 = Left`, `2 = Down`, `3 = Up` · Wheel: `0 = Clockwise`, `1 = Counterclockwise` · Gradient: `0 = Horizontal`, `1 = Vertical`, `2 = Outward` | `discrete enum per effect` | Depends on `EffectType`. |
 | `Brightness` | REG_DWORD | `integer (%)` | `0–100` | - |
 | `ControlledByForegroundApp` | REG_DWORD | `0 = ignore apps`, `1 = apps can take control` | `0–1` | - |
-
-> https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices  
-> https://support.microsoft.com/en-us/windows/control-dynamic-lighting-devices-in-windows-8e8f22e3-e820-476c-8f9d-9ffc7b6ffcd2
 
 # Disable Printers
 
@@ -1532,17 +1518,15 @@ dir Registry::HKEY_CLASSES_ROOT -Recurse -ea SilentlyContinue | ? { $_.Name -lik
 
 ## Printer Connections
 
-List all printer connections:
+[List](https://learn.microsoft.com/en-us/powershell/module/printmanagement/get-printer?view=windowsserver2025-ps) all printer connections:
 ```powershell
 Get-Printer
 ```
-> https://learn.microsoft.com/en-us/powershell/module/printmanagement/get-printer?view=windowsserver2025-ps
 
-Remove a specific printer using it's name:
+[Remove](https://learn.microsoft.com/en-us/powershell/module/printmanagement/remove-printer?view=windowsserver2025-ps) a specific printer using it's name:
 ```powershell
 Remove-Printer -Name "Printer Name"
 ```
-> https://learn.microsoft.com/en-us/powershell/module/printmanagement/remove-printer?view=windowsserver2025-ps
 
 # Sample Rate
 
@@ -1557,8 +1541,7 @@ As you may know a bit can be `0` or `1`, means (bit depth * `6` = dB):
 
 `44.1` kHz with a bit depth of `16` is more than enough for general usage.
 
-> https://noirsonance.com/bit-depth-calculator-visualizer/  
-> https://de.wikipedia.org/wiki/Nyquist-Shannon-Abtasttheorem
+## 8 Bit / 16 Bit
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/samplerate.png?raw=true)
 

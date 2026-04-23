@@ -185,7 +185,7 @@ function nvinstall {
     bannercyan
     Write-Host " Installing " -NoNewline
     Write-Host "debloated driver" -NoNewline -ForegroundColor Blue
-    Write-Host ", click trough it yourself"
+    Write-Host ", click through it yourself"
     Start-Process -FilePath "$env:USERPROFILE\Desktop\NV-Driver\setup.exe" -Wait
     bannercyan
     Write-Host " Restart your PC, " -NoNewline

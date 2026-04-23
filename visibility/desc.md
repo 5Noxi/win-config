@@ -327,8 +327,6 @@ It changes every setting, which is shown in the `Folder Options` window. Some ar
   },
 ```
 
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-windowsconnectnow
-
 # Accent Color
 
 This set's the accent color globally and if `AccentColor` (`HKEY_CURRENT_USER\Software\Noverse`) isn't set via the tool settings yet, this will also directly impact the WinConfig colors.
@@ -377,9 +375,7 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-
 
 # Enable Dark Theme
 
-`darktheme-GetThemeFromUnattendSetup.c` for information about the comments, otherwise ignore them.
-
-> [visibility/assets | darktheme-GetThemeFromUnattendSetup.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/darktheme-GetThemeFromUnattendSetup.c)
+See [`darktheme-GetThemeFromUnattendSetup.c`](https://github.com/nohuto/win-config/blob/main/visibility/assets/darktheme-GetThemeFromUnattendSetup.c) for information about the comments, otherwise ignore it.
 
 ### Light Theme
 
@@ -405,12 +401,9 @@ Disables the preview function for (extensions):
 ```
 3gp aac avi flac m4a m4v mkv mod mov mp3 mp4 mpeg mpg ogg ts vob wav webm wma wmv
 ```
-`{E357FCCD-A995-4576-B01F-234630154E96}` - Thumbnail Provider (Thumbnail image handler)
-`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}` - Extract Image (Image handler)
-`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}` - Default shell extension handler for thumbnails
-> https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names  
-> https://learn.microsoft.com/en-us/windows/win32/api/thumbcache/nn-thumbcache-ithumbnailprovider  
-> https://learn.microsoft.com/en-us/windows/win32/api/shobjidl_core/nn-shobjidl_core-iextractimage
+[`{E357FCCD-A995-4576-B01F-234630154E96}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Thumbnail Provider (Thumbnail image handler)
+[`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Extract Image (Image handler)
+[`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Default shell extension handler for thumbnails
 
 ### Enabled
 
@@ -484,7 +477,7 @@ Disable logon animations, which would remove the animation (picture), instead sh
 This policy controls whether users see the first sign-in animation when signing in for the first time, including both the initial setup user and those added later. It also determines if Microsoft account users receive the opt-in prompt for services. If enabled, Microsoft account users see the opt-in prompt and other users see the animation. If disabled, neither the animation nor the opt-in prompt appears. If not configured, the first user sees the animation during setup; later users won't see it if setup was already completed. This policy has no effect on Server editions.
 ```
 
-Second one is used by Windows (`Computer Configuration > Administrative Templates > System > Logon : Show first sign-in animation`:
+Second one is used by Windows (`Computer Configuration > Administrative Templates > System > Logon : Show first sign-in animation`), see [visibility/assets | animation-WinMain.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/animation-WinMain.c) for more:
 ```c
 CMachine::RegQueryDWORD(
   v62,
@@ -503,14 +496,9 @@ CMachine::RegQueryDWORD(
 ```
 `AnimationAfterUserOOBE` & `SkipNextFirstLogonAnimation` (`CurrentVersion\Winlogon`) also exist.
 
-> https://github.com/nohuto/regkit/blob/main/records/ControlPanel-Desktop.txt  
-> [visibility/assets | animation-WinMain.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/animation-WinMain.c)
-
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/animation.png?raw=true)
 
-`ForceDisableModeChangeAnimation` got added in 22621.3807/22631.3807 and is used for "When you set its value to 1 (or a non-zero number), it turns off the display mode change animation. If the value is 0 or the key does not exist, the animation is set to on."
-
-> https://blogs.windows.com/windows-insider/2024/06/13/releasing-windows-11-builds-22621-3807-and-22631-3807-to-the-release-preview-channel/
+`ForceDisableModeChangeAnimation` got added in [22621.3807/22631.3807](https://blogs.windows.com/windows-insider/2024/06/13/releasing-windows-11-builds-22621-3807-and-22631-3807-to-the-release-preview-channel/) and is used for "When you set its value to 1 (or a non-zero number), it turns off the display mode change animation. If the value is 0 or the key does not exist, the animation is set to on."
 
 ## Windows Policies
 
@@ -628,9 +616,6 @@ Obviously, `GetEffectiveCornerStyle` only exists in W11 builds (as you can see i
 Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`)
 
 The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
-
-> https://www.insomniacgeek.com/posts/how-to-disable-windows-folder-discovery/  
-> https://github.com/LesFerch/WinSetView
 
 # Hide Language Bar
 
@@ -923,9 +908,7 @@ Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to
 
 W11 uses `Segoe UI` by default. You can change it via registry edits, the selected font will be used for desktop interfaces, explorer, some apps (`StartAllBack` will use it), but won't get applied for e.g., `SystemSettings.exe` and app fonts in general. Some fonts will cause issues - `Yu Gothic UI Light` uses `¥` instead of `\` (picture).
 
-Either select a installed font with the command shown below or install new fonts via e.g.:
-> https://www.nerdfonts.com/font-downloads
-
+Either select a installed font with the command shown below or install new fonts via e.g. [nerdfonts](https://www.nerdfonts.com/font-downloads).
 
 Applying a new font needs a restart or logout, reverting doesn't.
 ```powershell
@@ -998,8 +981,8 @@ Revert the changes:
 
 ## Notes on System Text Size
 
-Edit text sizes via `TextScaleFactor`, valid ranges are `100-225` (DWORD).
-> https://learn.microsoft.com/en-us/uwp/api/windows.ui.viewmanagement.uisettings.textscalefactor?view=winrt-26100#windows-ui-viewmanagement-uisettings-textscalefactor
+Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.viewmanagement.uisettings.textscalefactor?view=winrt-26100#windows-ui-viewmanagement-uisettings-textscalefactor), valid ranges are `100-225` (DWORD).
+
 ```c
   v10 = 0;
   if ( (int)SHRegGetDWORD(HKEY_CURRENT_USER, L"Software\\Microsoft\\Accessibility", L"TextScaleFactor", &v10) < 0
@@ -1008,6 +991,8 @@ Edit text sizes via `TextScaleFactor`, valid ranges are `100-225` (DWORD).
     v6 = 100LL; // fallback to 100 if missing or out of range (<100 / >225)
   }
 ```
+> [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
+
 Applying changes via `Accessibility > Text size`:
 ```c
 // 100%
@@ -1035,7 +1020,6 @@ StatusFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 
 MessageFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
 IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
 ```
-> [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
 
 # Hide Lock Screen
 
@@ -1301,11 +1285,6 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscripti
 # Disable Spotlight
 
 Spotlight is used to provide new pictures on your lock screen.
-
-> https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11#policy-settings  
-> https://www.dev2qa.com/how-to-show-or-hide-the-windows-spotlight-learn-about-this-picture-icon-on-windows-11-desktop/
-
----
 
 These exist by default on 25H2:
 ```json
@@ -1600,10 +1579,10 @@ else
 }
 ```
 
-Type: `String` (`REG_SZ`) - it uses `StrToIntW` to read the value (converts a string that represents a decimal value to an integer)
+Type: `String` (`REG_SZ`) - it uses [`StrToIntW`](https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw) to read the value (converts a string that represents a decimal value to an integer)
 Min: `0`  
 Max: `65534`?
-Fallback: Depends on `GetDoubleClickTime()` (`Control Panel > Mouse > Double-click speed`), which would change the `DoubleClickSpeed` value (has a default of `500`, which is why the default of `MenuShowDelay` is `400`)  
+Fallback: Depends on [`GetDoubleClickTime()`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime) (`Control Panel > Mouse > Double-click speed`), which would change the `DoubleClickSpeed` value (has a default of `500`, which is why the default of `MenuShowDelay` is `400`)  
 Default: `400`
 
 ```c
@@ -1642,9 +1621,6 @@ return SetTimer(this[2], v2, v4, 0LL);
 
 Timers 32771/32777/32776 clamp the delay to >=2 seconds, so setting `MenuShowDelay` to `0` won't impact everything. Timers 32778/32779 do'nt use the registry at all.
 
-> https://learn.microsoft.com/en-us/windows/win32/api/shlwapi/nf-shlwapi-strtointw  
-> https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdoubleclicktime
-
 # OEM Information
 
 Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
@@ -1667,9 +1643,7 @@ Edit registered owner/orga (visible in `winver`) via:
 }
 ```
 
-Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`):
-
-> https://www.angusj.com/resourcehacker/
+Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`) [resourcehacker](https://www.angusj.com/resourcehacker/).
 
 ### Example
 
@@ -1706,8 +1680,7 @@ Page identifiers are the part after `ms-settings:` in a settings URI.
 `showonly:bluetooth` only shows the `Bluetooth` page
 `hide:bluetooth;windowsdefender` hides the `Bluetooth` & `Windows Security` pages
 
-All categories of `ms-settings` URIs:
-> https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-settings-app#ms-settings-uri-scheme-reference
+See a list of all categories of `ms-settings` URIs [here](https://learn.microsoft.com/en-us/windows/apps/develop/launch/launch-settings-app#ms-settings-uri-scheme-reference).
 
 ### Example Value
 
