@@ -12,17 +12,11 @@ It adds all values to the [`Display`](https://learn.microsoft.com/en-us/windows-
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Global\NVTweak : RmProfilingAdminOnly
 ```
 
-> The calculator uses an converted `.json` version of the official NVIDIA resource manager definitions. I've built the converter myself, and it should be `100%` accurate. However, if you notice any obvious errors, please report them.
+The calculator uses an converted `.json` version of the official NVIDIA resource manager definitions. I've built the converter myself, and it should be `100%` accurate. However, if you notice any obvious errors, please report them.
 
-Preview:
+> [Preview](https://github.com/user-attachments/assets/91b241ef-5e8e-4859-8957-d3b54dc52b0e)
 
-https://github.com/user-attachments/assets/91b241ef-5e8e-4859-8957-d3b54dc52b0e
-
-The tool currently has a selection of `967` values ([`nvvalues.txt`](https://github.com/nohuto/bitmask-calc/blob/main/nvvalues.txt)). It works with my own `.json` converted bitfield definitions. This doesn't mean that all of them are configurable or used by your system. List of values, which got read on my system:
-> [NVIDIA Display Class GUID Record](https://github.com/nohuto/wpr-reg-records/blob/main/records/NVIDIA-DispGUID.txt)
-
-The lower right panel shows the `.json` code of the selected value, I used the `Min Dark` theme as template for colors:
-> [min-dark.json | miguelsolorio](https://github.com/miguelsolorio/min-theme/blob/master/themes/min-dark.json)
+The tool currently has a selection of `967` values ([`nvvalues.txt`](https://github.com/nohuto/bitmask-calc/blob/main/nvvalues.txt)). It works with my own `.json` converted bitfield definitions. This doesn't mean that all of them are configurable or used by your system. See [list of values](https://github.com/nohuto/wpr-reg-records/blob/main/records/NVIDIA-DispGUID.txt, which got read on my system while boot.
 
 ## GUI Buttons
 
@@ -164,29 +158,31 @@ More info about `-shl` & `-bor` can be found in [bitwise-operators.md](https://g
 
 # Debloated Driver
 
-Complete NVIDIA driver preparation tool.
-> https://github.com/nohuto/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1
+Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1).
 
-**Main menu:**  
+### Main Menu
+
 `1` - Debloat driver (includes optional DDU clean uninstall)  
 `2` - Install driver directly  
 
-**Driver debloat option:**  
+### Driver Debloat Option
+
 - Opens [www.techpowerup.com | nvidia-drivers](https://www.techpowerup.com/download/nvidia-geforce-graphics-drivers/)
 - Removes all non-essential folders except `Display.Driver`, `NVI2`, `setup.cfg`, and `setup.exe`
 - Cleans up `.xml` and `.cfg` files by removing telemetry, EULA, and web-link entries
 - Miscellaenous theme configurations
 
-**Optional DDU cleanup:**  
-- Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver), enables Safe Boot, and reboots
+### Optional DDU Cleanup
 
-**Driver installation:**  
-- Runs `setup.exe`
+Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver), enables Safe Boot, and reboots.
+
+### Driver Installation
+
+Runs `setup.exe`.
 
 # NvAPI CLI
 
-This will download the app to your downloads folder, read full documentation for each group here:
-> https://www.noverse.dev/docs/nvapi-cli/sections/overview/
+This will download the app to your downloads folder, read full documentation for each group [here](https://www.noverse.dev/docs/nvapi-cli/sections/overview/).
 
 CLI wrapper around NVIDIA's NVAPI for querying and controlling GPU, display, and driver features on Windows. NVAPI is NVIDIA's proprietary driver API that exposes GPU and display capabilities beyond the standard OS interfaces. It's hardware and driver dependent, many functions are supported only on specific GPUs, drivers, or product lines. Expect `NVAPI_NOT_SUPPORTED` for unsupported features.
 
@@ -244,10 +240,9 @@ The following includes details of how the panel sets the changes and more, a lot
 
 More information - [discord notes](https://discord.com/channels/836870260715028511/1375059420970487838/1412446705869394071)  
 > [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)  
-> [NVIDIA Profile Inspector](https://github.com/Ixeoz/nvidiaProfileInspector-UNLOCKED)  
-> [Profile ReBar OFF](https://github.com/nohuto/Files/releases/download/Fortnite/NV-ROFF.nip)  
-> [Profile ReBar ON](https://github.com/nohuto/Files/releases/download/Fortnite/NV-RON.nip)  
-> [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp))
+> [Noverse-Minimal](https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/nvidia/assets/NV-Minimal.nip)  
+> [Noverse-Compatible](https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/nvidia/assets/NV-Compatible.nip)  
+> [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp)
 
 ## 3D Settings > Configure Surround, PhysX
 
@@ -290,7 +285,7 @@ HKCU\Software\NVIDIA Corporation\Global\NVTweak\Devices\1364265386-0\Color
 `3538949`, `3538950`, `3538951` handle the contrast, same value range as the brightness. 
 `3538952`, `3538953`, `3538954` handles the gamma value (`30-180 Dec`, `100 Dec = 1.00`). 
 `3538970` `1` = `Override to reference mode - Off`, `2` = `Override to reference mode - On`
-`NvCplGammaSet` is also located in the key, but seems to be at `1` all of the time (`DesktopColor.cpp`). If set to non zero, it uses the saved parameters (values from registry), if its `0` it'll use the default values?
+[`NvCplGammaSet`](https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293) is also located in the key, but seems to be at `1` all of the time (`DesktopColor.cpp`). If set to non zero, it uses the saved parameters (values from registry), if its `0` it'll use the default values?
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : SaturationRegistryKey
@@ -319,10 +314,8 @@ sin(0) = 0  = 0x00000000 hex
 = last 2 bytes
 ```
 
-> https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293  
-> https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp  
-> https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp  
-> https://github.com/nohuto/regkit/blob/main/records/nvlddmkm.txt
+> [nvidia/assets | color-displayDB.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)  
+> [nvidia/assets | color-DesktopColors.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\ADAPTER_10DE_2482_00000007_00000000 : StereoPreferredTargetIdRegistryKey
@@ -416,7 +409,8 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 
 ## Developer > Manage GPU Performance Counters
 
-"GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs."
+"*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*" [[*]](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
+
 ```json
 {
 "Name":  "RmProfilingAdminOnly",
@@ -438,11 +432,8 @@ Changing it via NVCPL:
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
 ```
-`Restrict access to the GPU performance counters to admin users only` = `1`
+`Restrict access to the GPU performance counters to admin users only` = `1`  
 `Allow access to the GPU performance counters to all users` = `0`
-
-> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters  
-> https://github.com/nohuto/bitmask-calc
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)  
 
@@ -548,9 +539,6 @@ $home\Desktop\Nvcpl.lnk
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Global\NVTweak : HideXGpuTrayIcon
 \Registry\Machine\SOFTWARE\NVIDIA Corporation\Global\CoProcManager : ShowTrayIcon
 ```
-> https://forums.developer.nvidia.com/t/hide-nvidia-tray-icon/162739
-
----
 
 Other miscellaneous values I found:
 
@@ -585,7 +573,7 @@ Disabled = `0`
 
 ---
 
-### From NVIDIA documentations:  
+### From NVIDIA Documentations
 
 `turn-dlss-indicator-off`
 ```powershell
@@ -808,34 +796,6 @@ bool StartupFeatures::SendTelemetryData(StartupModel &model)
 
 Only a small sequence of the process, which I have quickly written down, can be ignored.
 
-Block NVIDIA telemetry domains (`C:\Windows\System32\drivers\etc\hosts`):
-```
-0.0.0.0 accounts.nvgs.nvidia.cn
-0.0.0.0 accounts.nvgs.nvidia.com
-0.0.0.0 api.commune.ly
-0.0.0.0 assets.nvidiagrid.net
-0.0.0.0 events.gfe.nvidia.com
-0.0.0.0 gfe.geforce.com
-0.0.0.0 gfe.nvidia.com
-0.0.0.0 gfwsl.geforce.com
-0.0.0.0 images.nvidia.com
-0.0.0.0 images.nvidiagrid.net
-0.0.0.0 img.nvidiagrid.net
-0.0.0.0 login.nvgs.nvidia.cn
-0.0.0.0 login.nvgs.nvidia.com
-0.0.0.0 ls.dtrace.nvidia.com
-0.0.0.0 nvidia.com.edgesuite.net
-0.0.0.0 nvidia.telemetry.internet.microsoft.com
-0.0.0.0 nvidia.tt.omtrdc.net
-0.0.0.0 ota-downloads.nvidia.com
-0.0.0.0 ota.nvidia.com
-0.0.0.0 rds-assets.nvidia.com
-0.0.0.0 services.gfe.nvidia.com
-0.0.0.0 telemetry.gfe.nvidia.com
-0.0.0.0 telemetry.nvidia.com
-```
-> https://github.com/ravetank/nvidia-telemetry-blocklist
-
 # Enable Developer Settings
 
 Enables `Enable Developer Settings` in the NVIDIA control panel.
@@ -856,7 +816,8 @@ Disables `Add Desktop Context Menu` in the NVIDIA control panel.
 
 # GPU Performance Counters
 
-"GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs."
+"*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*" [[*]](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
+
 ```json
 {
 "Name":  "RmProfilingAdminOnly",
@@ -878,15 +839,14 @@ Changing it via NVCPL:
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
 ```
-`Restrict access to the GPU performance counters to admin users only` = `1`
+`Restrict access to the GPU performance counters to admin users only` = `1`  
 `Allow access to the GPU performance counters to all users` = `0`
-
-> https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters  
-> https://github.com/nohuto/bitmask-calc
 
 # Disable MPO
 
-"MPO lets the GPU present frames directly to the display using hardware scanout planes, reducing latency by bypassing the DWMs software composition. A display needs at least two planes for MPO to be active. As of April 2023, SKIF shows MPO assignments in its settings tab. NVIDIA typically assigns all available planes (usually 4 or more) to one display, leaving others without."
+"*Multi-Plane Overlay (MPO) refers to the use of additional dedicated hardware scanout planes in the GPU that frames can be presented to, which the GPU then takes care of scanning out to the display itself, thereby allowing the GPU to shoulder the work (again achieving lower latencies) that the DWM would otherwise do but in software (which would incur an additional latency). Typically NVIDIA assigns all of the planes it supports (usually upwards of 4 of them) to a single display while the rest of the displays goes without any.*
+
+*A display typically needs to be assigned at least 2 planes by the display driver for the feature to be regarded as supported on the display.*" [[*]](https://wiki.special-k.info/SwapChain#multi-plane-overlay-mpo)
 
 I decided to add it since MPO can cause issues like screen flickering, if not having such issues, leave it enabled.
 
@@ -908,9 +868,6 @@ if (!(unsigned int)GetPersistedRegistryValueW(
 ```
 
 > [nvidia/assets | mpo-bDwmOverlayTestMode.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/mpo-bDwmOverlayTestMode.c)  
-> https://wiki.special-k.info/en/SwapChain  
-> https://wiki.special-k.info/Presentation_Model  
-> https://github.com/nohuto/regkit/blob/main/records/Windows-Dwm.txt
 
 # NVLDDMKM Hex Values
 
@@ -1218,11 +1175,9 @@ I didn't find any details for `0x11c776e0`, `0x01abac23`, `0x11301a5a`, `0x11424
 
 # OC/UV Guide
 
-> https://github.com/nohuto/gpu-oc-uv
-
 Overclocking means increasing the clock speed, which increases temperatures. Undervolting limits the voltage for the GPU, resulting in lower voltage, wattage, and temperature.
 
-## ToC
+## [ToC](https://github.com/nohuto/gpu-oc-uv)
 
 - [Preconfigurations](https://github.com/nohuto/gpu-oc-uv#preconfigurations)
   - [MSI Afterburner](https://github.com/nohuto/gpu-oc-uv#msi-afterburner)
@@ -1262,8 +1217,6 @@ schtasks /create /sc ONSTART /tn "MSIAfterburnerProfile" /tr "powershell.exe -No
 | /tr `<Taskrun>` | Specifies the program or command that the task runs. Type the fully qualified path and file name of an executable file, script file, or batch file. The path name must not exceed 262 characters. If you don't add the path, **schtasks** assumes that the file is in the `<systemroot>\System32` directory. |
 | /rl `<level>` | Specifies the Run Level for the job. Acceptable values are **LIMITED** (scheduled tasks will be ran with the least level of privileges, such as Standard User accounts) and **HIGHEST** (scheduled tasks will be ran with the highest level of privileges, such as Superuser accounts). The default value is **Limited**. |
 | /delay `<delaytime>` | Specifies the wait time to delay running the task after it's triggered in mmmm:ss format. |
-
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/schtasks-create
 
 Set the `Power Limit` and `Temp. Limit` options to the maximum value and change the priority to power limit. Also, disable the automatic start option for now to prevent a loop if something goes wrong.
 

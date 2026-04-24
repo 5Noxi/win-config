@@ -106,14 +106,6 @@ Since the tool includes a seperate `Policies` section and most of the Defender s
 | `EnabledV9` | Controls whether legacy Microsoft Edge SmartScreen is enforced, including phishing and malware checks against sites that are not on the allow list. |
 | `SmartScreenEnabled` | Controls whether current Microsoft Edge SmartScreen is turned on or off in the browser. |
 
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-defender  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-webthreatdefense  
-> https://learn.microsoft.com/en-us/defender-endpoint/configure-real-time-protection-microsoft-defender-antivirus  
-> https://learn.microsoft.com/en-us/defender-endpoint/configure-protection-features-microsoft-defender-antivirus  
-> https://learn.microsoft.com/en-us/defender-endpoint/configure-block-at-first-sight-microsoft-defender-antivirus  
-> https://learn.microsoft.com/en-us/defender-endpoint/specify-cloud-protection-level-microsoft-defender-antivirus  
-> https://learn.microsoft.com/en-us/defender-endpoint/enable-controlled-folders  
-> https://learn.microsoft.com/en-us/defender-endpoint/troubleshoot-problems-with-tamper-protection  
 > [security/assets | Windows-Defender.txt](https://github.com/nohuto/win-config/blob/main/security/assets/Windows-Defender.txt)
 
 ## Remove Defender from Image
@@ -286,11 +278,6 @@ HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTeleme
 | `Disable Defender Definition Updates` | Stops Defender definition updates from this update path. Malware detection ages quickly unless another definition source is provided. |
 | `Block MRT via WU` | Stops the MRT (Malicious Software Removal Tool) from being offered through Windows Update. MRT scans and related reporting are unavailable from this channel. |
 
-> https://learn.microsoft.com/en-us/windows/deployment/update/waas-configure-wufb  
-> https://learn.microsoft.com/en-us/windows/deployment/update/waas-wu-settings  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-update  
-> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services
-
 # Windows Firewall
 
 "*Windows Firewall is a security feature that helps to protect your device by filtering network traffic that enters and exits your device. This traffic can be filtered based on several criteria, including source and destination IP address, IP protocol, or source and destination port number. Windows Firewall can be configured to block or allow network traffic based on the services and applications that are installed on your device. This allows you to restrict network traffic to only those applications and services that are explicitly allowed to communicate on the network.*" ([*](https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/))
@@ -393,7 +380,7 @@ Windows Internals (E7-P1, UAC): "*User Account Control (UAC) is meant to enable 
 
 Read more about UAC/file virtualization/(auto-)elevation in [Windows Internals E7, P1 - P.722f. 'User Account Control and virtualization'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
 
-## Registry Values Details
+## [Registry Values Details](https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg)
 
 Value: `FilterAdministratorToken`
 
@@ -463,9 +450,6 @@ Value: `EnableVirtualization`
 | `0x00000000` | Disables data redirection for interactive processes.                                          |
 | `0x00000001` | Enables file and registry redirection for legacy apps to allow writes in user-writable paths. |
 
-> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-gpsb/12867da0-2e4e-4a4f-9dc4-84a7f354c8d9  
-> https://learn.microsoft.com/en-us/windows/security/application-security/application-control/user-account-control/settings-and-configuration?tabs=reg
-
 # PS Execution Policy
 
 "*PowerShell execution policy is a safety feature that controls when PowerShell loads configuration files and runs scripts, helping prevent accidental execution of malicious scripts.*
@@ -476,7 +460,7 @@ Value: `EnableVirtualization`
 
 *On non-Windows systems, the reported default is `Unrestricted` and cannot be changed, though the actual behavior is closer to `Bypass` because Windows security zones do not exist there.*"
 
-### Execution Policy
+### [Execution Policy](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5)
 
 | **Execution Policy**  | **Description** |
 | ---- | ---- |
@@ -498,7 +482,7 @@ Value: `EnableVirtualization`
 | `CurrentUser` | The execution policy affects only the current user - stored in the HKCU subkey |
 | `LocalMachine` | The execution policy affects all users on the current computer - stored in the HKLM subkey |
 
-### Registry Values
+### [Registry Values](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_config?view=powershell-7.5)
 
 | **Value Name** | **Description** |
 | ---- | ---- |
@@ -512,11 +496,6 @@ See your current execution policies via:
 ```powershell
 Get-ExecutionPolicy -List
 ```
-
-> https://powershellisfun.com/2022/07/31/powershell-and-logging/  
-> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.security/set-executionpolicy?view=powershell-7.5  
-> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_powershell_config?view=powershell-7.5  
-> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5
 
 # Disable System Mitigations
 
@@ -532,8 +511,8 @@ Disable specific mitigation:
 ```powershell
 Set-ProcessMitigation -Name process.exe -Disable Value
 ```
-
-Editing process mitigations via LGPE (`Administrative Templates\System\Mitigation Options\Process Mitigation Options`):
+ 
+## [Editing Process Mitigations via LGPE](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies)
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/processmiti.png?raw=true)
 
@@ -545,8 +524,6 @@ Editing process mitigations via LGPE (`Administrative Templates\System\Mitigatio
 | D | 8 | PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON (0x00000100) | Uses the force ASLR setting to act as though an image base collision happened at load time, forcibly rebasing images that aren't dynamic base compatible. Images without the base relocation section aren't loaded if relocations are required. |
 | E | 15 | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON (0x00010000) | Turns on the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address. |
 | F | 16 | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_OFF (0x00020000) | Turns off the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address. |
-
-> https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies
 
 ## Process Mitigation Options
 
@@ -676,8 +653,6 @@ AuditUserShadowStack
 | 1 | Opt-in, indicates the device and driver are fully compatible with DMA remapping. |
 | No registry key | Let the system determine the policy. |
 
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md
-
 Example paths:
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\msisadrv\Parameters : DmaRemappingCompatible
@@ -691,13 +666,12 @@ Since `EnableNVMeInterface` is included in the function, I'll add it here. Defau
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\pci\<dev>\<id>\Device Parameters\StorPort : EnableNVMeInterface
 ```
-`DisableNativeNVMeStack`, range `0`-`1`?
+[`DisableNativeNVMeStack`](https://github.com/nohuto/regkit/blob/main/records/StorPort.txt), range `0`-`1`?
 ```c
 \Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : DisableNativeNVMeStack
 
 DisableNativeNVMeStack db 0 // default
 ```
-> https://github.com/nohuto/regkit/blob/main/records/StorPort.txt
 
 # Disable System Restore
 
@@ -709,25 +683,14 @@ Does:
 "wmiprvse.exe", "RegSetValue","HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\RPSessionInterval","Type: REG_DWORD, Length: 4, Data: 0"
 ```
 
-> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/disable-computerrestore?view=powershell-5.1  
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-delete-shadows  
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/vssadmin-list-shadows  
-> https://learn.microsoft.com/en-us/windows-server/storage/file-server/volume-shadow-copy-service
-
 # Disable Downloads Blocking
 
-Windows adds a hidden tag called `Zone.Identifier` to files downloaded from the internet. This tag (also known as MotW) stores info about the file's origin and helps apply security warnings, see files including the tag with:
+Windows adds a hidden tag called [`Zone.Identifier`](https://www.cyberengage.org/post/unveiling-file-origins-the-role-of-alternate-data-streams-ads-zone-identifier-in-forensic-inve) to files downloaded from the internet. This tag (also known as MotW) stores info about the file's origin and helps apply security warnings, see files including the tag with:
 ```powershell
 gi * -Stream "Zone.Identifier" -ErrorAction SilentlyContinue
 ```
 
-> https://www.cyberengage.org/post/unveiling-file-origins-the-role-of-alternate-data-streams-ads-zone-identifier-in-forensic-inve  
-> https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-fscc/6e3f7352-d11c-4d76-8c39-2516a9df36e8?redirectedfrom=MSDN  
-> https://learn.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/ms537183(v=vs.85)?redirectedfrom=MSDN
-
-```powershell
-gc -Path "C:\Path\Script.ps1" -Stream Zone.Identifier
-```
+![](https://github.com/nohuto/win-config/blob/main/security/images/downblocking.png?raw=true)
 
 ## ZoneID Data
 
@@ -769,8 +732,6 @@ dir C:\Path\*Files* | Unblock-File -> Multiple files
 },
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/downblocking.png?raw=true)
-
 # Disable WPBT
 
 WPBT allows hardware manufacturers to run programs during Windows startup that may introduce unwanted software.
@@ -778,19 +739,13 @@ WPBT allows hardware manufacturers to run programs during Windows startup that m
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager : DisableWpbtExecution
 ```
 
-> https://persistence-info.github.io/Data/wpbbin.html  
-> https://github.com/Jamesits/dropWPBT
-
 # Disable Bitlocker & EFS
 
-Disable Bitlocker on all volumes:
+Disable [Bitlocker](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/) on all volumes:
 ```powershell
 $nvbvol = Get-BitLockerVolume
 Disable-BitLocker -MountPoint $nvbvol
 ```
-> https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/  
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/fsutil-behavior  
-> https://learn.microsoft.com/en-us/powershell/module/bitlocker/disable-bitlocker?view=windowsserver2025-ps
 
 ## NtfsDisableEncryption Notes
 
@@ -837,15 +792,15 @@ ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
 
 # Disable VBS (HVCI)
 
-VBS won't work if Hyper-V is disabled. HVCI = hypervisor-protected code integrity.
+[VBS](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs) won't work if Hyper-V is disabled. HVCI = hypervisor-protected code integrity.
 
-Hypervisor-Based Code Integrity (HVCI) and Kernel-Mode Code Integrity (KMCI) power `Device Guard`, LSA (Lsass.exe) and isolated LSA (LsaIso.exe) power `Credential Guard`.
+Hypervisor-Based Code Integrity (HVCI) and Kernel-Mode Code Integrity (KMCI) power `Device Guard`, LSA (Lsass.exe) and isolated LSA (LsaIso.exe) power [`Credential Guard`](https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/).
 
 "Virtualization-based security, or VBS, uses hardware virtualization and the Windows hypervisor to create an isolated virtual environment that becomes the root of trust of the OS that assumes the kernel can be compromised. Windows uses this isolated environment to host a number of security solutions, providing them with greatly increased protection from vulnerabilities in the operating system, and preventing the use of malicious exploits which attempt to defeat protections. VBS enforces restrictions to protect vital system and operating system resources, or to protect security assets such as authenticated user credentials.
 
-One such example security solution is memory integrity, which protects and hardens Windows by running kernel mode code integrity within the isolated virtual environment of VBS. Kernel mode code integrity is the Windows process that checks all kernel mode drivers and binaries before they're started, and prevents unsigned or untrusted drivers or system files from being loaded into system memory. Memory integrity also restricts kernel memory allocations that could be used to compromise the system, ensuring that kernel memory pages are only made executable after passing code integrity checks inside the secure runtime environment, and executable pages themselves are never writable. That way, even if there are vulnerabilities like a buffer overflow that allow malware to attempt to modify memory, executable code pages cannot be modified, and modified memory cannot be made executable."
+One such example security solution is [memory integrity](https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity?tabs=security), which protects and hardens Windows by running kernel mode code integrity within the isolated virtual environment of VBS. Kernel mode code integrity is the Windows process that checks all kernel mode drivers and binaries before they're started, and prevents unsigned or untrusted drivers or system files from being loaded into system memory. Memory integrity also restricts kernel memory allocations that could be used to compromise the system, ensuring that kernel memory pages are only made executable after passing code integrity checks inside the secure runtime environment, and executable pages themselves are never writable. That way, even if there are vulnerabilities like a buffer overflow that allow malware to attempt to modify memory, executable code pages cannot be modified, and modified memory cannot be made executable."
 
-## VBS Requirements
+## [VBS Requirements](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs)
 
 | Hardware requirement | Details |
 | --- | --- |
@@ -858,10 +813,6 @@ One such example security solution is memory integrity, which protects and harde
 | Secure Memory Overwrite Request (MOR)<br>revision 2 | Secure MOR v2 is enhanced to protect the MOR lock setting using a UEFI secure variable. This helps guard against advanced memory attacks. For details, see Secure MOR implementation. |
 | Memory integrity-compatible drivers | Ensure all system drivers have been tested and verified to be compatible with memory integrity. The Windows Driver Kit and Driver Verifier contain tests for driver compatibility with memory integrity. There are three steps to verify driver compatibility:<br><br>1. Use Driver Verifier with the Code Integrity compatibility checks enabled.<br>2. Run the Hypervisor Code Integrity Readiness Test in the Windows HLK.<br>3. Test the driver on a system with VBS and memory integrity enabled. This step is imperative to validate the driver's behavior with memory integrity, as static code analysis tools simply aren't capable of detecting all memory integrity violations possible at runtime. |
 | Secure Boot | Secure Boot must be enabled on devices leveraging VBS. For more information, see Secure Boot |
-
-> https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/oem-vbs  
-> https://learn.microsoft.com/en-us/windows/security/identity-protection/credential-guard/
-> https://learn.microsoft.com/en-us/windows/security/hardware-security/enable-virtualization-based-protection-of-code-integrity?tabs=security
 
 You can disable VBS for a VM with:
 ```powershell
@@ -1008,7 +959,7 @@ Default is configured to LAN. The Group Download mode combined with Group ID, en
 
 The option applies `0` = disables peer-to-peer (P2P) caching but still allows Delivery Optimization to download content over HTTP from the download's original source or a Microsoft Connected Cache server.
 
-### DODownloadMode Data
+### [DODownloadMode Data](https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference#download-mode)
 
 | Download mode option | Data  | Functionality when configured |
 | ---- | :----: | ---- |
@@ -1019,29 +970,21 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 | Simple | `99` | Simple mode disables the use of Delivery Optimization cloud services completely (for offline environments). Delivery Optimization switches to this mode automatically when the Delivery Optimization cloud services are unavailable, unreachable, or when the content file size is less than 50 MB, as the default. In this mode, Delivery Optimization provides a reliable download experience over HTTP from the download's original source or a Microsoft Connected Cache server, with no peer-to-peer caching. |
 | Bypass | `100` | Starting in Windows 11, this option is deprecated. Don't configure Download mode to '100' (Bypass), which can cause some content to fail to download. If you want to disable peer-to-peer functionality, configure DownloadMode to (0). If your device doesn't have internet access, configure Download Mode to (99). When you configure Bypass (100), the download bypasses Delivery Optimization and uses BITS instead. You don't need to configure this option if you're using Configuration Manager. |
 
-> https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference#download-mode
-
-### Set-DODownloadMode
+### [Set-DODownloadMode](https://learn.microsoft.com/en-us/powershell/module/deliveryoptimization/set-dodownloadmode?view=windowsserver2025-ps)
 
 Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
 
-> https://learn.microsoft.com/en-us/powershell/module/deliveryoptimization/set-dodownloadmode?view=windowsserver2025-ps
-
-
 # Increased DH & RSA Key
 
-By default it uses a minimum size of `1024` bits (both) - hardens Windows TLS engine by forcing minimum key sizes during secure communications (SSL/TLS handshake process).
+By default it uses a minimum size of `1024` bits (both) - hardens Windows [TLS](https://learn.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings?tabs=diffie-hellman) engine by forcing minimum key sizes during secure communications (SSL/TLS handshake process).
 
-"NSA recommends RSA key transport and ephemeral DH (DHE) or ECDH (ECDHE) mechanisms, with RSA or DHE key exchange using at least 3072-bit keys and ECDHE key exchanges using the secp384r1 elliptic curve. For RSA keytransport and DH/DHE key exchange, keys less than 2048 bits should not be used, and ECDH/ECDHE using custom curves should not be used."
-
-> https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF  
-> https://learn.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings?tabs=diffie-hellman
+"*NSA recommends RSA key transport and ephemeral DH (DHE) or ECDH (ECDHE) mechanisms, with RSA or DHE key exchange using at least 3072-bit keys and ECDHE key exchanges using the secp384r1 elliptic curve. For RSA keytransport and DH/DHE key exchange, keys less than 2048 bits should not be used, and ECDH/ECDHE using custom curves should not be used.*" [[*]](https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF)
 
 # Disable Legacy TLS/Crypto
 
 Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .NET apps to use strong cryptography (Disables RC2 (40/56/128), RC4 (40/56/64/128), DES, 3DES, NULL, MD5/SHA-1, SSL 2.0/3.0, TLS 1.0/1.1, DTLS 1.0, insecure TLS renegotiation - Enables TLS SCSV, .NET StrongCrypto & SystemDefaultTlsVersions, NTLMv2 only). Windows may use insecure connections for e.g. older software (compatibility reasons), so disabling them can cause issues with old software.
 
-## LmCompatibilityLevel Data
+## [LmCompatibilityLevel Data](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-security-lan-manager-authentication-level#possible-values)
 
 | Setting | Description | Registry security level |
 | ---- | ---- | ---- |
@@ -1053,11 +996,6 @@ Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .
 | Send NTLMv2 response only. Refuse LM & NTLM | Client devices use NTLMv2 authentication, and they use NTLMv2 session security if the server supports it. Domain controllers refuse to accept LM and NTLM authentication, and they'll accept only NTLMv2 authentication. | 5 |
 
 Level `5` gets applied.
-
-> https://browserleaks.com/tls  
-> https://learn.microsoft.com/en-us/dotnet/framework/network-programming/tls#schusestrongcrypto  
-> https://dirteam.com/sander/2019/07/30/howto-disable-weak-protocols-cipher-suites-and-hashing-algorithms-on-web-application-proxies-ad-fs-servers-and-windows-servers-running-azure-ad-connect/  
-> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/network-security-lan-manager-authentication-level
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/insecureconn.png?raw=true)
 
@@ -1111,9 +1049,7 @@ Level `5` gets applied.
 
 # Enhanced Domain NTLM Logs
 
-Controls the Netlogon policy that enables or disables enhanced domain wide NTLM logs on domain controllers (includes NTLMv1 usage). Applies to domain controllers only (Windows 11 24H2+). If not configured, domain controllers default to logging these on supported builds.
-
-> https://aka.ms/ntlmlogandblock
+Controls the Netlogon policy that enables or disables [enhanced domain wide NTLM logs](https://aka.ms/ntlmlogandblock) on domain controllers (includes NTLMv1 usage). Applies to domain controllers only (Windows 11 24H2+). If not configured, domain controllers default to logging these on supported builds.
 
 ## Windows Policies
 
@@ -1144,11 +1080,11 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 
 # Increase TDR
 
-"TDR stands for Timeout Detection and Recovery. This is a feature of the Windows operating system which detects response problems from a graphics card, and recovers to a functional desktop by resetting the card. If the operating system does not receive a response from a graphics card within a certain amount of time (default is 2 seconds), the operating system resets the graphics card."
+"*TDR stands for Timeout Detection and Recovery. This is a feature of the Windows operating system which detects response problems from a graphics card, and recovers to a functional desktop by resetting the card. If the operating system does not receive a response from a graphics card within a certain amount of time (default is 2 seconds), the operating system resets the graphics card.*" [[*]](https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm)
 
-> Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.
+Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.
 
-### Registry Values
+### [Registry Values](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md)
 
 | Registry value     | Value name           | Default data                 | Description                                                                                               |
 | ------------------ | -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -1161,9 +1097,6 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 | TdrTestMode        | `TdrTestMode`        | -                            | Reserved/test entry, not for normal use.                                                                  |
 | TdrDodPresentDelay | `TdrDodPresentDelay` | `2` seconds (min 1, max 900) | Extra time for display-only drivers to report an async present before a TDR is triggered.                 |
 | TdrDodVSyncDelay   | `TdrDodVSyncDelay`   | `2` seconds (min 1, max 900) | Time the VSync watchdog waits for VSync from a display-only driver before triggering TDR.                 |
-
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md  
-> https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm
 
 ## Pseudocode Snippets
 
@@ -1200,7 +1133,7 @@ if (dword_1C015B874 != v15) {
     WdLogGlobalForLineNumber = 2387;
 }
 ```
-> https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt  
+
 > [security/assets | TdrInit.c](https://github.com/nohuto/win-config/blob/main/security/assets/TdrInit.c)
 
 ## NVLDDMKM TDR
@@ -1297,7 +1230,7 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: R
 
 # Sudo
 
-[Sudo](https://github.com/microsoft/sudo) is a new way for users to run elevated commands (as an administrator) directly from an unelevated console session on Windows.
+[Sudo](https://github.com/microsoft/sudo) ([introduction](https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/) is a new way for users to run elevated commands (as an administrator) directly from an unelevated console session on Windows.
 
 Note that sudo uses administrator previledges and doesn't include `TrustedInstaller`/`SYSTEM` previledges.
 
@@ -1335,12 +1268,9 @@ Note that sudo uses administrator previledges and doesn't include `TrustedInstal
 }
 ```
 
-> https://learn.microsoft.com/en-us/windows/advanced-settings/sudo/  
-> https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/
-
 # Enable Camera OSD Indicator
 
-"`NoPhysicalCameraLED` indicates that there is no physical LED for the device's camera. An example of a physical LED for a camera is the small blue light that turns on whenever the camera is streaming video. This setting is used to indicate to the shell component that it will need to provide a small indicator in the user interface (UI) to show when video frames are streaming or not streaming to replace the notification by physical LED."
+"*`NoPhysicalCameraLED` indicates that there is no physical LED for the device's camera. An example of a physical LED for a camera is the small blue light that turns on whenever the camera is streaming video. This setting is used to indicate to the shell component that it will need to provide a small indicator in the user interface (UI) to show when video frames are streaming or not streaming to replace the notification by physical LED.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-coremmres-nophysicalcameraled)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true)
 
@@ -1349,15 +1279,13 @@ Note that sudo uses administrator previledges and doesn't include `TrustedInstal
 | 0 | Does not draw an indicator in the UI to show when the camera is on or off. Instead, a physical LED exists to show when video frames are streaming or not streaming. This is the default value. |
 | 1 | Draws an indicator in the UI to show when video frames are streaming or not streaming. |
 
-> https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-coremmres-nophysicalcameraled
-
 ```
 \Registry\Machine\SOFTWARE\Microsoft\OEM\Device\Capture : NoPhysicalCameraLED
 ```
 
 # Administrator Account
 
-This security setting determines whether the local Administrator account is enabled or disabled. The following conditions prevent disabling the Administrator account, even if this security setting is disabled.
+This security setting determines whether the [local Administrator account](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-administrator-account-status) is enabled or disabled. The following conditions prevent disabling the Administrator account, even if this security setting is disabled.
 
 - he Administrator account is currently in use
 - The Administrators group has no other members
@@ -1375,11 +1303,9 @@ Disabling the administrator account can become a maintenance issue under certain
 
 The built-in administrator account can't be locked out no matter how many failed logons it accrues, which makes it a prime target for brute-force attacks that attempt to guess passwords. Also, this account has a well-known security identifier (SID), and there are non-Microsoft tools that allow authentication by using the SID rather than the account name. Therefore, even if you rename the Administrator account, an attacker could launch a brute-force attack by using the SID to sign in. All other accounts that are members of the Administrator's group have the safeguard of locking out the account if the number of failed logons exceeds its configured maximum.
 
-> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-administrator-account-status
-
 # Guest Account
 
-Guest account status policy setting determines whether the Guest account is enabled or disabled. This account allows unauthenticated network users to gain access to the system by signing in as a Guest with no password. Unauthorized users can access any resources that are accessible to the Guest account over the network. This privilege means that any network shared folders with permissions that allow access to the Guest account, the Guests group, or the Everyone group will be accessible over the network. This accessibility can lead to the exposure or corruption of data.
+[Guest account](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-guest-account-status) status policy setting determines whether the Guest account is enabled or disabled. This account allows unauthenticated network users to gain access to the system by signing in as a Guest with no password. Unauthorized users can access any resources that are accessible to the Guest account over the network. This privilege means that any network shared folders with permissions that allow access to the Guest account, the Guests group, or the Everyone group will be accessible over the network. This accessibility can lead to the exposure or corruption of data.
 
 ## Best practices
 
@@ -1389,13 +1315,9 @@ Set Guest account status to Disabled so that the built-in Guest account is no lo
 
 The default Guest account allows unauthenticated network users to sign in as a Guest with no password. These unauthorized users could access any resources that are accessible to the Guest account over the network. This capability means that any shared folders with permissions that allow access to the Guest account, the Guests group, or the Everyone group are accessible over the network, which could lead to the exposure or corruption of data.
 
-> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/accounts-guest-account-status
-
 # defaultuser0 Account
 
 defaultuser0 is a temporary Windows setup account.
-
----
 
 ### Miscellaneous Notes
 

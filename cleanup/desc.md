@@ -1,6 +1,6 @@
 # WinSxS Folder
 
-Get the current size of the WinSxS folder, by pasting the following command into `cmd`:
+Get the [current size](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder?view=windows-11&source=recommendations#analyze-the-component-store) of the WinSxS folder, by pasting the following command into `cmd`:
 ```cmd
 Dism.exe /Online /Cleanup-Image /AnalyzeComponentStore
 ```
@@ -25,8 +25,6 @@ Component Store Cleanup Recommended : No
 ```
 `Number of Reclaimable Packages : 0` -> This is the number of superseded packages on the system that component cleanup can remove.
 
-> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/determine-the-actual-size-of-the-winsxs-folder?view=windows-11&source=recommendations#analyze-the-component-store
-
 Clean your folder with:
 ```cmd
 Dism.exe /online /Cleanup-Image /StartComponentCleanup
@@ -35,10 +33,7 @@ or
 ```
 Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
 ```
-, if you want to remove all superseded versions of every component in the component store. (no need, if there aren't any)
-
-> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/manage-the-component-store?view=windows-11  
-> https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/clean-up-the-winsxs-folder?view=windows-11
+If you want to remove all superseded versions of every component in the component store (no need, if there aren't any).
 
 Permanently remove outdated update files from `C:\Windows\WinSxS` to free space. Once applied, previous updates cannot be uninstalled:
 ```json
@@ -52,12 +47,9 @@ The value doesn't exist on more recent versions.
 
 Removes old/previous windows installation files from `Windows.old`.
 
-```
-Ten days after you upgrade to Windows, your previous version of Windows will be automatically deleted from your PC. However, if you need to free up drive space, and you're confident that your files and settings are where you want them to be in Windows, you can safely delete it yourself.
+"Ten days after you upgrade to Windows, your previous version of Windows will be automatically deleted from your PC. However, if you need to free up drive space, and you're confident that your files and settings are where you want them to be in Windows, you can safely delete it yourself.
 
-If it's been fewer than 10 days since you upgraded to Windows, your previous version of Windows will be listed as a system file you can delete. You can delete it, but keep in mind that you'll be deleting your Windows.old folder, which contains files that give you the option to go back to your previous version of Windows. If you delete your previous version of Windows, this can't be undone (you won't be able to go back to your previous version of Windows).
-```
-> https://support.microsoft.com/en-us/windows/delete-your-previous-version-of-windows-f8b26680-e083-c710-b757-7567d69dbb74
+If it's been fewer than 10 days since you upgraded to Windows, your previous version of Windows will be listed as a system file you can delete. You can delete it, but keep in mind that you'll be deleting your Windows.old folder, which contains files that give you the option to go back to your previous version of Windows. If you delete your previous version of Windows, this can't be undone (you won't be able to go back to your previous version of Windows)."
 
 # SRUM Data
 
@@ -71,8 +63,8 @@ Paths removed:
 ```c
 %WINDIR%\System32\sru\SRUDB.dat
 ```
-Read the SRUM data:
-> https://github.com/MarkBaggett/srum-dump
+
+Convert SRUM database to an xlsx spreadsheet via [srum-dump](https://github.com/MarkBaggett/srum-dump).
 
 # DirectX Shader Cache
 
@@ -141,15 +133,11 @@ It clears both Quick Access Jump List folders:
 %APPDATA%\Microsoft\Windows\Recent\CustomDestinations\*
 ```
 
-> https://support.microsoft.com/en-us/windows/file-explorer-in-windows-ef370130-1cca-9dc5-e0df-2f7416fe1cb1
-
 # Clear Histories
 
 Microsoft says Windows Search "saves your search history locally on your device" and shows a clear button in `Settings > Privacy & security > Search permissions`. These histories are rebuilt over time as you keep using Search, Run, File Explorer, and file dialogs.
 
 The main button clears all parts mentioned in the suboptions.
-
-> https://support.microsoft.com/en-us/windows/windows-search-and-privacy-99fb8251-7260-1cd6-1bbb-15c2370eb168
 
 # MUI Cache
 
@@ -244,12 +232,10 @@ Clears several local Windows Defender parts. The main button removes all of the 
 
 Only do this if you want to export the data elsewhere or purposely delete logs (security logs can't be recovered afterward).
 
-Display all logs via:
+Display all logs via [wevtutil](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil):
 ```powershell
 wevtutil el
 ```
-
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil
 
 Command used:
 ```powershell
@@ -306,9 +292,7 @@ Paths removed:
 
 # Product Key
 
-"Some servicing operations require the product key to be available in the registry during Out of Box Experience (OOBE) operations. The /cpky option removes the product key from the registry to prevent this key from being stolen by malicious code. For retail installations that deploy keys, the best practice is to run this option. This option isn't required for MAK and KMS host keys, because this is the default behavior for those keys. This option is required only for other types of keys whose default behavior isn't to clear the key from the registry."
-
-> https://learn.microsoft.com/en-us/windows-server/get-started/activation-slmgr-vbs-options#advanced-options
+"*Some servicing operations require the product key to be available in the registry during Out of Box Experience (OOBE) operations. The /cpky option removes the product key from the registry to prevent this key from being stolen by malicious code. For retail installations that deploy keys, the best practice is to run this option. This option isn't required for MAK and KMS host keys, because this is the default behavior for those keys. This option is required only for other types of keys whose default behavior isn't to clear the key from the registry.*" [[*]](https://learn.microsoft.com/en-us/windows-server/get-started/activation-slmgr-vbs-options#advanced-options)
 
 Implementation details (from `slmgr.vbs` and `sppwmi.mof`):
 ```vbscript
@@ -391,5 +375,3 @@ Paths removed:
 "%WINDIR%\\System32\\wbem\\Logs\\*.lo_",
 "%WINDIR%\\System32\\wbem\\Logs\\*.log"
 ```
-
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/schtasks-run#remarks

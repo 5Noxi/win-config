@@ -26,13 +26,13 @@ More info can be found in the repo: https://github.com/nohuto/regkit
 
 # NVFetch
 
-Used to be my personal `neofetch`/`fastfetch` replacement with more details. Some arguments will probably also get added like `ids`, so it doesn't display the serial numbers and miscellaneous HWIDs by default.
+Used to be my personal [`neofetch`](https://github.com/dylanaraps/neofetch)/[`fastfetch`](https://github.com/fastfetch-cli/fastfetch) replacement with more details. Some arguments will probably also get added like `ids`, so it doesn't display the serial numbers and miscellaneous HWIDs by default.
 
 ![](https://github.com/nohuto/win-config/blob/main/misc/images/nvfetch.png?raw=true)
 
 > https://github.com/nohuto/nvfetch
 
-It currently gets most of the information using the [`Get-CimInstance`](https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance?view=powershell-7.5) cmdlet and `nvidia-smi` for NVIDIA GPUs.
+It currently gets most of the information using the [`Get-CimInstance`](https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance?view=powershell-7.5) cmdlet and [`nvidia-smi`](https://docs.nvidia.com/deploy/nvidia-smi/index.html) for NVIDIA GPUs.
 ```powershell
 nvidia-smi -q
 ```
@@ -67,11 +67,6 @@ nvfetch yellow
 nvfetch red
 ```
 Valid colors: `Black`, `Blue`, `Cyan`, `DarkBlue`, `DarkCyan`, `DarkGray`, `DarkGreen`, `DarkMagenta`, `DarkRed`, `DarkYellow`, `Gray`, `Green`, `Magenta`, `Red`, `White`, `Yellow`.
-
-> https://docs.nvidia.com/deploy/nvidia-smi/index.html  
-> https://learn.microsoft.com/en-us/powershell/module/cimcmdlets/get-ciminstance?view=powershell-7.5  
-> https://github.com/fastfetch-cli/fastfetch  
-> https://github.com/dylanaraps/neofetch
 
 # Explorer Blur
 
@@ -327,11 +322,7 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 
 # System Informer
 
-Since system informer is a lot better than the default task manager, it is recommended to replace it.
-
-> https://systeminformer.io/
-
-Undo it by removing the first line and executing the second command (delete the `::`), or just paste the second one in cmd.
+Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it is recommended to replace it.
 
 Enable `Theme support` (dark mode) and disable `Check for updates automatically` with:
 ```powershell
@@ -361,11 +352,7 @@ All *context menu items* are getting handled via `ContextMenu` (`HKCU\Software\7
 7zFM.exe	RegSetValue	HKCU\Software\7-Zip\Options\WriteZoneIdExtract	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-A decent replacement would be NanaZip:
-```powershell
-winget install M2Team.NanaZip
-```
-> https://github.com/M2Team/NanaZip
+A decent replacement would be [NanaZip](https://github.com/M2Team/NanaZip).
 
 # Disable VS Telemetry
 
@@ -399,7 +386,7 @@ for %%p in (
  "%TEMP%\VSTelem.Out"
 ) do rd /s /q "%%~p"
 ```
-Remove VS licenses (could cause the need of a reactivation):
+Remove [VS licenses](https://github.com/jedipi/Visual-Studio-Key-Finder/blob/main/src/VsKeyFinder/Data/ProductData.cs) (could cause the need of a reactivation):
 ```bat
 for %%g in (
  "77550D6B-6352-4E77-9DA3-537419DF564B"
@@ -410,7 +397,6 @@ for %%g in (
  "1299B4B9-DFCC-476D-98F0-F65A2B46C96D"
 ) do reg delete "HKLM\SOFTWARE\Classes\Licenses\%%~g" /f
 ```
-> https://github.com/jedipi/Visual-Studio-Key-Finder/blob/main/src/VsKeyFinder/Data/ProductData.cs
 
 ---
 
@@ -458,7 +444,7 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 | Runtime solution issues                      | Solution issues                        | Event ID; title; explanation; more info; users; sessions                                                                                | Office 2013/2016/2019 (Excel/Outlook/PowerPoint/Word)           | -                                                                                                                                                                                        |
 | Not collected (by design)                    | -                                      | File contents; info about files not in MRU                                                                                              | All                                                             | Data for Office Telemetry Dashboard stays in your org's SQL Server; it is not sent to Microsoft. Office diagnostic data is separate and managed by different settings.                   |
 
----
+## [Registry Values Overview](https://learn.microsoft.com/en-us/office/compatibility/manage-the-privacy-of-data-monitored-by-telemetry-in-office#to-configure-exclusion-settings-by-using-the-registry)
 
 `HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\OSM\preventedapplications`
 
@@ -493,9 +479,6 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 - `1` = Prevent reporting
 - `0` = Allow reporting
 - Default = `0` (Allow reporting)
-
-> https://learn.microsoft.com/en-us/office/compatibility/data-that-the-telemetry-agent-collects-in-office  
-> https://learn.microsoft.com/en-us/office/compatibility/manage-the-privacy-of-data-monitored-by-telemetry-in-office
 
 # OneDrive
 
@@ -658,9 +641,7 @@ Edge is a whole mess, I wouldn't recommend anyone to use it, but here's an optio
 | `TrackingPrevention` | Tracking Prevention mode enforced |
 | `DefaultSensorsSetting` | Site access to  sensors blocked |
 
-See all edge policies here:
-
-> https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies
+See all edge policies [here](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies).
 
 ```json
 {

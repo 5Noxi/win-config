@@ -31,8 +31,7 @@ The option applies all kind of telemetry related values including all values tha
 ```powershell
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
 ```
-Seems to be a fallback if `AllowTelemetry` isn't set.
-> https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106
+[Seems to be a fallback if `AllowTelemetry` isn't set.](https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106)
 
 ## Windows Policies
 
@@ -297,8 +296,7 @@ Disables automatic network traffic on the settings page and prevents automatic d
 | `1`	Enabled | Force enable auto-update over metered connection. |
 | `65535` (Default)	Not configured | User's choice. |
 
-> [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-maps
+> [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)
 
 ## moshostcore (Downloaded Maps Manager Core) Snippets
 
@@ -382,9 +380,9 @@ if ( v6 < 0 )
 
 # Disable Website Access to Language List
 
-"Sets the HTTP Accept Language from the Language List opt-out setting." Disables `Let websites provide locally relevant content by accessing my language list`.
+"Sets the HTTP Accept Language from the Language List opt-out setting." Disables [`Let websites provide locally relevant content by accessing my language list`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general).
 
-Using `Set-WinAcceptLanguageFromLanguageListOptOut`
+Using [`Set-WinAcceptLanguageFromLanguageListOptOut`](https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps):
 ```powershell
 Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 ```
@@ -396,8 +394,6 @@ Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 "powershell.exe","RegDeleteValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut",""
 "powershell.exe","RegSetValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage","Type: REG_SZ, Length: 54, Data: en-US;q=0.7,en;q=0.3"
 ```
-> https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps  
-> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general
 
 # Disable Auto Maintenance
 
@@ -620,25 +616,21 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 
 > [privacy/assets | gamebar-WindowsMediaCaptureIAppCaptureSettings.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/gamebar-WindowsMediaCaptureIAppCaptureSettings.c) (`HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR`)  
 > [privacy/assets | gamebar-WindowsMediaCaptureIAppBroadcastGlobalSettings.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/gamebar-WindowsMediaCaptureIAppBroadcastGlobalSettings.c) (`HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppBroadcast\\GlobalSettings`)  
-> https://github.com/MicrosoftDocs/windows-dev-docs/blob/docs/hub/apps/develop/settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts
+> [settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts](https://github.com/MicrosoftDocs/windows-dev-docs/blob/docs/hub/apps/develop/settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts)
 
----
+## Game Bar Precense Writer
 
-"Game Bar Presence Writer is a component that is notified when a game's "presence" state (i.e. is a game running in the foreground) changes. This functionality is available in Windows 10 and later operating systems. By default, the existing Game Bar Presence Writer will set a user's Xbox Live presence state for a running game if the Xbox App is installed, the user is signed into their Xbox account, and the user has enabled Xbox Live presence to be set when they run a game on their PC. It is possible for Windows Application developers to override this default behavior with their own implementation."
-
-> https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter
+"*Game Bar Presence Writer is a component that is notified when a game's "presence" state (i.e. is a game running in the foreground) changes. This functionality is available in Windows 10 and later operating systems. By default, the existing Game Bar Presence Writer will set a user's Xbox Live presence state for a running game if the Xbox App is installed, the user is signed into their Xbox account, and the user has enabled Xbox Live presence to be set when they run a game on their PC. It is possible for Windows Application developers to override this default behavior with their own implementation.*" [[*]](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
 
 # Disable PSR
 
-"Steps Recorder, also known as Problems Steps Recorder (PSR) in Windows 7, is a Windows inbox program that records screenshots of the desktop along with the annotated steps while recording the activity on the screen. The screenshots and annotated text are saved to a file for later viewing."
+"*Steps Recorder, also known as Problems Steps Recorder (PSR) in Windows 7, is a Windows inbox program that records screenshots of the desktop along with the annotated steps while recording the activity on the screen. The screenshots and annotated text are saved to a file for later viewing.*" [[*]](https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f)
 
 It is a deprecated feature, as the banner shows:
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/psr.png?raw=true)
 
 `PSR` = Problem Steps Recorder
-
-> https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f
 
 ```c
 // SR = Steps Recorder?
@@ -785,41 +777,36 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 
 # Disable Windows Insider
 
-"The Windows Insider Preview program lets you help shape the future of Windows, be part of the community, and get early access to releases of Windows 10 and Windows 11. Windows Insider Preview builds only apply to Windows 10 and Windows 11 and aren't available for Windows Server 2016."
+"*The Windows Insider Preview program lets you help shape the future of Windows, be part of the community, and get early access to releases of Windows 10 and Windows 11. Windows Insider Preview builds only apply to Windows 10 and Windows 11 and aren't available for Windows Server 2016.*"
 
 `AllowBuildPreview` is used up to V1703, I'll still leave it. `Computer Configuration > Administrative Templates > Windows Component > Windows Update > Windows Update for Business : Manage Preview Builds` for W10+ versions.
 
-> https://learn.microsoft.com/en-us/windows-insider/business/manage-builds
-
 # Disable PowerShell & .NET Telemetry
 
-### POWERSHELL_TELEMETRY_OPTOUT
+### [POWERSHELL_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2)
 
 PowerShell Telemetry:
 "At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session."
 ```bat
 setx POWERSHELL_TELEMETRY_OPTOUT 1
 ```
-> https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2
 
-### DOTNET_CLI_TELEMETRY_OPTOUT
+### [DOTNET_CLI_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry#how-to-opt-out)
 
 Disable NET Core CLI Telemetry:
 "To opt out after you started the installer: close the installer, set the environment variable, and then run the installer again with that value set."
 ```bat
 setx DOTNET_CLI_TELEMETRY_OPTOUT 1
 ```
-> https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry#how-to-opt-out
 
 # Disable Reserved Storage
 
 "Windows reserves `~7 GB` of disk space to ensure updates and system processes run reliably. Temporary files and updates use this reserved area first. If it's full, Windows uses normal disk space or asks for external storage. Size increases with optional features or extra languages. Unused ones can be removed to reduce it."
 
-`dism /online /Set-ReservedStorageState /State:Disabled /NoRestart` / `Set-WindowsReservedStorageState -State Disabled` set:
+[`Set-WindowsReservedStorageState -State Disabled`](https://learn.microsoft.com/en-us/powershell/module/dism/set-windowsreservedstoragestate?view=windowsserver2025-ps) sets:
 ```bat
 dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager\DisableDeletes	Type: REG_DWORD, Length: 4, Data: 1
 ```
-> https://learn.microsoft.com/en-us/powershell/module/dism/set-windowsreservedstoragestate?view=windowsserver2025-ps
 
 # Disable Biometrics 
 
@@ -900,9 +887,7 @@ Biometric is used for fingerprint, facial recognition, and other biometric authe
 
 # Disable Remote Desktop
 
-Disables remote desktop, remote assistance, RPC traffic, and device redirection.
-> https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-pc-connections-faq  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-remotedesktopservices
+Disables remote desktop, remote assistance, RPC traffic, and device redirection. See [remote desktop FAQs](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-pc-connections-faq) for more information.
 
 `RemoteAssistance.admx`:  
 `CreateEncryptedOnlyTickets`: Allow only Windows Vista or later connections
@@ -1694,7 +1679,7 @@ C:\WINDOWS\system32\Logfiles\WMI
 
 Removing all autologgers will cause issues, therefore it's not recommended to remove all of them.
 
-## Autologger Value Table
+## [Autologger Value Table](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ETW/configuring-and-starting-an-autologger-session.md)
 
 | Value | Type | Description | 
 |-------|------|-------------|
@@ -1713,8 +1698,6 @@ Removing all autologgers will cause issues, therefore it's not recommended to re
 | **Start** | **REG_DWORD** | To have the AutoLogger session start the next time the computer is restarted, set this value to 1; otherwise, set this value to 0.|
 | **Status** | **REG_DWORD** | The startup status of the AutoLogger. If the AutoLogger failed to start, the value of this key is the appropriate Win32 error code. If the AutoLogger successfully started, the value of this key is **ERROR_SUCCESS** (0).|
 | **Boot** | **REG_DWORD** | This feature should not be used outside of debugging scenarios.<br> If this registry key is set to 1, the autologger will be started earlier than normal during kernel initialization, allowing it to capture events during the initialization of many important kernel subsystems. However, enabling this option has a negative impact on boot times and imposes additional restrictions on the autologger. If this feature is enabled, the autologger session GUID must be populated, and many other autologger settings may not work. <br> This key is supported on Windows Server 2022 and later. |
-
-> https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ETW/configuring-and-starting-an-autologger-session.md
 
 # Disable Inking & Typing Personalization
 
@@ -1795,8 +1778,7 @@ Renames `ctfmon.exe` and `TextInputHost.exe` to block the classic CTF loader and
 
 # Disable Online Speech Recognition
 
-`HasAccepted` disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. `AllowSpeechModelUpdate` blocks automatic updates of speech recognition and synthesis models. I found`DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
-> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech  
+[`HasAccepted`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. [`AllowSpeechModelUpdate`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) blocks automatic updates of speech recognition and synthesis models. I found `DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
 > [privacy/assets | locationaccess-LocationApi.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
 
 # Disable Microsoft Copilot
@@ -1923,8 +1905,6 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 
 `Disable Lock Screen Camera`:  
 "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
-
-> https://support.microsoft.com/en-us/windows/manage-cameras-with-camera-settings-in-windows-11-97997ed5-bb98-47b6-a13d-964106997757
 
 ## Windows Policies
 
@@ -2189,11 +2169,7 @@ All `Microsoft\INPUT\Settings` values which get read on boot:
 
 # Disable Synchronization
 
-Disables all kind of synchronization.
-
-`DisableSyncOnPaidNetwork`: "Do not sync on metered connections"
-> https://support.microsoft.com/en-us/windows/windows-backup-settings-catalog-deebcba2-5bc0-4e63-279a-329926955708#id0ebd=windows_11
-> https://gpsearch.azurewebsites.net/#7999
+Disables all kind of synchronization, see policies.
 
 ## Windows Policies
 
@@ -2666,9 +2642,6 @@ Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `Perio
 
 Voluntary program that collects usage data to help improve the quality and performance of its products.
 
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-admx-icm  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-internetexplorer#disablecustomerexperienceimprovementprogramparticipation
-
 ## Windows Policies
 
 ```json
@@ -2723,20 +2696,126 @@ Voluntary program that collects usage data to help improve the quality and perfo
     { "Type": "DisabledValue", "Data": "1" }
   ]
 },
+{
+  "File": "inetres.admx",
+  "CategoryName": "InternetExplorer",
+  "PolicyName": "SQM_DisableCEIP",
+  "NameSpace": "Microsoft.Policies.InternetExplorer",
+  "Supported": "IE7_NONVISTA - At least Internet Explorer 7.0. Not supported on Windows Vista",
+  "DisplayName": "Prevent participation in the Customer Experience Improvement Program",
+  "ExplainText": "This policy setting prevents the user from participating in the Customer Experience Improvement Program (CEIP). If you enable this policy setting, the user cannot participate in the CEIP, and the Customer Feedback Options command does not appear on the Help menu. If you disable this policy setting, the user must participate in the CEIP, and the Customer Feedback Options command does not appear on the Help menu. If you do not configure this policy setting, the user can choose to participate in the CEIP.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Internet Explorer\\SQM",
+    "HKCU\\Software\\Policies\\Microsoft\\Internet Explorer\\SQM"
+  ],
+  "ValueName": "DisableCustomerImprovementProgram",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+},
 ```
 
 # Disable Cortana
 
-"Cortana was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
+"[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
 
-> https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-abovelock  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-experience#allowcortana
+## Windows Policies
 
----
+```json
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AllowCloudSearch",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Cloud Search",
+  "ExplainText": "Allow search and Cortana to search cloud sources like OneDrive and SharePoint",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "AllowCloudSearch", "Items": [
+        { "DisplayName": "Disable Cloud Search", "Data": "0" },
+        { "DisplayName": "Enable Cloud Search", "Data": "1" },
+        { "DisplayName": "User Selected", "Data": "2" }
+      ]
+    }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AllowCortanaInAAD",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Cortana Page in OOBE on an AAD account",
+  "ExplainText": "Allow the cortana opt-in page during windows setup out of the box experience",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search\\AllowCortanaInAAD"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "AllowCortanaInAADPathOOBE", "Items": [
+        { "DisplayName": "Disable Cortana Page in AAD", "Data": "0" },
+        { "DisplayName": "Enable Cortana Page in AAD", "Data": "1" }
+      ]
+    }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AllowCortana",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Cortana",
+  "ExplainText": "This policy setting specifies whether Cortana is allowed on the device. If you enable or don't configure this setting, Cortana will be allowed on the device. If you disable this setting, Cortana will be turned off. When Cortana is off, users will still be able to use search to find things on the device.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "AllowCortana",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AllowCortanaAboveLock",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Cortana above lock screen",
+  "ExplainText": "This policy setting determines whether or not the user can interact with Cortana using speech while the system is locked. If you enable or don\u2019t configure this setting, the user can interact with Cortana using speech while the system is locked. If you disable this setting, the system will need to be unlocked for the user to interact with Cortana using speech.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "AllowCortanaAboveLock",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AllowSearchToUseLocation",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow search and Cortana to use location",
+  "ExplainText": "This policy setting specifies whether search and Cortana can provide location aware search and Cortana results. If this is enabled, search and Cortana can access location information.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "AllowSearchToUseLocation",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
 
-Miscellaneous notes:
+## Miscellaneous Notes
 ```c
 "HKCU\Software\Microsoft\Windows\CurrentVersion\Cortana\DevOverrideOneSettings","Length: 16"
 "HKCU\Software\Microsoft\Windows\CurrentVersion\Cortana\IsAvailable","Type: REG_DWORD, Length: 4, Data: 1"
@@ -2744,7 +2823,7 @@ Miscellaneous notes:
 
 # Hide Last Logged-In User
 
-Note that if you use this option and don't have a password, you'll have to enter your username at each boot.
+Note that if you use this option and don't have a password, you'll have to enter your username at each boot ([policy](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name)).
 
 "This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC."
 
@@ -2766,8 +2845,6 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 // Disabled
 services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
 ```
-
-> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name
 
 ## Windows Policies
 
@@ -2857,12 +2934,13 @@ Windows Internals (E7-P1, Modern Standby): when the system is in Modern Standby,
 
 # Disable WER
 
-WER (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
+[WER](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
 
 Windows Internals (E7-P2, WER): WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting pipeline.
 
 `\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
 
+[WER network endpoints](https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed):
 ```
 0.0.0.0 watson.microsoft.com
 0.0.0.0 watson.telemetry.microsoft.com
@@ -2877,9 +2955,6 @@ Windows Internals (E7-P2, WER): WER is implemented by the WerSvc service and Wer
 `DisableSendRequestAdditionalSoftwareToWER`: "Prevent Windows from sending an error report when a device driver requests additional software during installation"
 `DisableSendGenericDriverNotFoundToWER`: "Do not send a Windows error report when a generic driver is installed on a device"
 
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed  
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-errorreporting  
-> https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings  
 > [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
 
 ## Suboption
@@ -2896,12 +2971,11 @@ Default: `1` (`DbgkEnableWerUserReporting dd 1`)
 "Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
 ```
 
-Related to PCIe advanced error reporting? Haven't found anything on this and haven't done much research myself:
+Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability)? Haven't found anything on this and haven't done much research myself:
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
 ```
 Default is `0`, non zero would enable the behaviour? The value doesn't exist by default.
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability ?
 
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled
@@ -3146,8 +3220,6 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 4
 ```
 
-> https://support.microsoft.com/en-us/topic/keep-your-device-running-smoothly-with-recommended-troubleshooting-ec76fe10-4ac8-ce9d-49c6-757770fe68f1
-
 ## Windows Policies
 
 ```json
@@ -3218,7 +3290,7 @@ Miscellaneous policies:
 
 Disables the crash dump, logging. Not all values may be read on your system.
 
-### Data Meaning
+### [Data Meaning](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery)
 
 ```c
 CrashDumpEnabled REG_DWORD 0x0 = None
@@ -3229,15 +3301,12 @@ CrashDumpEnabled REG_DWORD 0x7 = Automatic memory dump
 CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dump
 ```
 
-There're two values named `CrashDumpEnabled.New` & `CrashDumpEnabled.Old`, I haven't looked into them yet, see this as note for future reference.
+There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.New
 \Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.Old
 ```
 
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/automatic-memory-dump  
-> https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt  
 > [privacy/assets | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp.c)  
 > [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
 
@@ -3271,7 +3340,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
     "SleepStudyDeviceAccountingLevel" = 4; // PopSleepStudyDeviceAccountingLevel 
     "SleepStudyDisabled" = 0; // PopSleepStudyDisabled 
 ```
-> https://www.noverse.dev/docs/win-config/power/power-values/#registry-values-details
+
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0030\0\Device Parameters\Wdf : SleepstudyState
@@ -3308,24 +3377,40 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Power : SleepStudyTraceDirectory
 ```
 
-> https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/wevtutil
-
 # Disable RSoP Logging
 
-"This setting allows you to enable or disable Resultant Set of Policy (RSoP) logging on a client computer.RSoP logs information on Group Policy settings that have been applied to the client. This information includes details such as which Group Policy Objects (GPO) were applied where they came from and the client-side extension settings that were included.If you enable this setting RSoP logging is turned off.If you disable or do not configure this setting RSoP logging is turned on. By default RSoP logging is always on.Note: To view the RSoP information logged on a client computer you can use the RSoP snap-in in the Microsoft Management Console (MMC)."
-
-> https://www.windows-security.org/370c915e44b6a75efac0d24669aa9434/turn-off-resultant-set-of-policy-logging
+"*This setting allows you to enable or disable Resultant Set of Policy (RSoP) logging on a client computer.RSoP logs information on Group Policy settings that have been applied to the client. This information includes details such as which Group Policy Objects (GPO) were applied where they came from and the client-side extension settings that were included.If you enable this setting RSoP logging is turned off.If you disable or do not configure this setting RSoP logging is turned on. By default RSoP logging is always on.Note: To view the RSoP information logged on a client computer you can use the RSoP snap-in in the Microsoft Management Console (MMC).*" [[*]](https://www.windows-security.org/370c915e44b6a75efac0d24669aa9434/turn-off-resultant-set-of-policy-logging)
 
 ```
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon : RsopLogging
 \Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
 ```
 
-> https://learn.microsoft.com/en-us/previous-versions/windows/desktop/Policy/developing-an-rsop-management-tool  
+## Windows Policies
+
+```json
+{
+  "File": "GroupPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "RSoPLogging",
+  "NameSpace": "Microsoft.Policies.GroupPolicy",
+  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
+  "DisplayName": "Turn off Resultant Set of Policy logging",
+  "ExplainText": "This setting allows you to enable or disable Resultant Set of Policy (RSoP) logging on a client computer. RSoP logs information on Group Policy settings that have been applied to the client. This information includes details such as which Group Policy Objects (GPO) were applied, where they came from, and the client-side extension settings that were included. If you enable this setting, RSoP logging is turned off. If you disable or do not configure this setting, RSoP logging is turned on. By default, RSoP logging is always on. Note: To view the RSoP information logged on a client computer, you can use the RSoP snap-in in the Microsoft Management Console (MMC).",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "RSoPLogging",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+}
+```
 
 # Disable Desktop Heap Logging
 
-"It is meant to log information about desktop heap usage. This can be helpful when diagnosing issues where system resources for desktop objects might be strained." 
+"*It is meant to log information about desktop heap usage. This can be helpful when diagnosing issues where system resources for desktop objects might be strained.*" [[*]](https://answers.microsoft.com/en-us/windows/forum/all/question-about-some-dwm-registry-settings/341cac5c-d85a-43e5-89d3-d9734f84da4e) (this isn't a verified answer, therefore can't be trusted)
 
 ```c
 __int64 IsDesktopHeapLoggingOn(void)
@@ -3341,9 +3426,7 @@ __int64 IsDesktopHeapLoggingOn(void)
 
 `DesktopHeapLogging` seems to have a fallback of `0`, but the value exists by default and is set to `1`. Means deleting it/setting it to `0` should do the same.
 
-> [privacy/assets | rsop-IsDesktopHeapLoggingOn.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/rsop-IsDesktopHeapLoggingOn.c)  
-> https://answers.microsoft.com/en-us/windows/forum/all/question-about-some-dwm-registry-settings/341cac5c-d85a-43e5-89d3-d9734f84da4e  
-> https://github.com/nohuto/regkit/blob/main/records/Winows-NT.txt
+> [privacy/assets | rsop-IsDesktopHeapLoggingOn.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/rsop-IsDesktopHeapLoggingOn.c)
 
 # Disable Message Sync
 
@@ -3352,8 +3435,6 @@ __int64 IsDesktopHeapLoggingOn(void)
 | Policy | Description | Values |
 | ------ | ------ | ------ |
 | AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft's cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
-
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-messaging
 
 ## Windows Policies
 
@@ -3383,7 +3464,7 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 "Offline Files (Client-Side Caching, CSC) lets Windows cache files from network shares locally so users can keep working when the network/server is unavailable. Sync Center handles the background sync between the local CSC cache (`%WINDIR%\CSC`) and the share. It's commonly paired with Folder Redirection so "known folders" (e.g., Documents) live on a server but remain available offline, with options like "Always Offline" for performance on slow links. You enable/disable it via Sync Center (Control Panel) or policy. When disabled, Sync Center has nothing to sync."
 
-> https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/deploy-folder-redirection
+> [folder-redirection/disable-offline-files-on-folders](https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/disable-offline-files-on-folders#windows-powershell-equivalent-commands) (todo)
 
 ## Windows Policies
 
@@ -3537,11 +3618,7 @@ Friendly name: `Turn off KMS Client Online AVS Validation`
 
 If you disable or don't configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates."
 
-> https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-licensing#disallowkmsclientonlineavsvalidation
-
-`Disable Auto Activation` (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
-
-> https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)
+[`Disable Auto Activation`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)#registry-settings) (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
 
 ## Windows Policies
 
@@ -3832,9 +3909,7 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 `DeviceCensus.exe` = "Device and configuration data collection tool"
 
-"In a nutshell, Device Census is a telemetry process from Microsoft. It will analyze the use of the webcam and other components. Then, the data will be transmitted anonymously to Microsoft to help optimize Windows for future versions and fix bugs. In addition, it only checks how often the devices are used and don't record anything."
-
-> https://www.partitionwizard.com/partitionmanager/devicecensus-exe.html
+"*In a nutshell, Device Census is a telemetry process from Microsoft. It will analyze the use of the webcam and other components. Then, the data will be transmitted anonymously to Microsoft to help optimize Windows for future versions and fix bugs. In addition, it only checks how often the devices are used and don't record anything.*" [[*]](https://www.partitionwizard.com/partitionmanager/devicecensus-exe.html)
 
 ## Scheduled Task Actions
 
@@ -3850,11 +3925,9 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 # Disable OneSettings Download
 
-Services Configuration is used by Windows components and apps, such as the telemetry service, to dynamically update their configuration. If you turn off this service, apps using this service may stop working.
+[Services Configuration](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#31-services-configuration) is used by Windows components and apps, such as the telemetry service, to dynamically update their configuration. If you turn off this service, apps using this service may stop working.
 
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
-
-> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#31-services-configuration
 
 ## Windows Policies
 

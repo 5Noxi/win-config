@@ -26,9 +26,6 @@ HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{Net
 | DNSCrypt  | A non IETF protocol that encrypts and authenticates DNS between client and resolver, with more limited ecosystem support. |
 | DoH       | DNS sent inside HTTPS (typically HTTP/2) on port 443, providing encrypted lookups that blend in with regular HTTPS traffic. |
 
-> https://www.cloudflare.com/learning/dns/dns-over-tls/  
-> https://www.privacyguides.org/en/advanced/dns-overview/
-
 ## Providers Compared
 
 | Provider | Encryption | DNSSEC | ECS | QNAME | Logging Policy | Filtering | Jurisdiction / Owner |
@@ -45,7 +42,7 @@ Obviously self-host a DNS resolver for the best privacy, so queries stay local.
 
 ## DNS Explained
 
-DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution).
+DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution). See [dnssimple comics](https://dnsimple.com/comics) for a very simple explanation.
 
 The four types of DNS servers:  
 The **recursive resolver** sends requests to the other three nameservers (root -> TLD -> authoritative), if there's no cached data. It saves the data from the authoritative nameserver so the resolver can skip the requests and send back the IP from the domain to the client. If you're not using any specific DNS server, you're using the resolver from your ISP.
@@ -71,16 +68,9 @@ Step 9 is the HTTP request from the browser to the IP from the resolver & step 1
 Some additional info about HTTP request methods you may want to know:  
 `GET` & `POST` HTTP request methods are the most common ones. `GET` request awaits data (read a web page), `POST` request means that the user is sending data. There more [request methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods), but I won't add them here. You're able to turn off `GET` requests in the DDG search engine settings, to hide search queries in the request body (queries aren't visible in browser history or logs), which is why I added this info. You can see request in the network tab (`F12`).
 
-> https://www.privacyguides.org/en/dns/  
-> https://dnsimple.com/comics
-
 ## Note for iOS users
 
-I personally use AdGuard, since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while NextDNS only supports the main ones), while NextDNS only provides a specific set of blocklists and doesn't allow custom rules (there're also several other reasons why I wouldn't use their private DNS at the moment, e.g.: their TIF isn’t public ([and many other ones](https://github.com/nextdns/metadata))), they didn’t solve issues which got reported months ago (), they use lists that aren’t actively maintained by default (they also don't update [obselete links](https://github.com/nextdns/blocklists/tree/main/blocklists), causing 10 empty blocklists), they don’t look into their GitHub issues (e.g. nextdns/blocklists). Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
-
-> https://adguard-dns.io/  
-> https://my.nextdns.io/  
-> https://github.com/yokoffing/NextDNS-Config
+I personally use [AdGuard](https://adguard-dns.io/), since it's possible to add custom blocklists/user rules (and it supports all lists of Hagezi while [NextDNS](https://my.nextdns.io/) only supports the main ones), while [NextDNS](https://my.nextdns.io/) only provides a specific set of blocklists and doesn't allow custom rules (there're also several other reasons why I wouldn't use their private DNS at the moment, e.g.: their TIF isn’t public ([and many other ones](https://github.com/nextdns/metadata))), they didn’t solve issues which got reported months ago (), they use lists that aren’t actively maintained by default (they also don't update [obselete links](https://github.com/nextdns/blocklists/tree/main/blocklists), causing 10 empty blocklists), they don’t look into their GitHub issues (e.g. nextdns/blocklists). Use 'Configuration Profile' instead of downloading the app, you can configure the profile using the links below.
 
 # SMB Configuration
 
@@ -93,7 +83,7 @@ Windows Internals (E7-P2, Remote FSDs): SMB uses a client-side remote file syste
 
 ### Disable SMBv1
 
-SMBv1 is deprecated, insecure, and should stay disabled unless you are dealing with legacy systems that cannot use SMB2 or newer.
+SMBv1 is [deprecated, insecure, and should stay disabled](https://techcommunity.microsoft.com/blog/filecab/stop-using-smb1/425858) unless you are dealing with legacy systems that cannot use SMB2 or newer.
 
 See current states with:
 ```powershell
@@ -108,7 +98,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB1	Type: REG_DW
 
 ### Disable SMBv2
 
-Disables the SMBv2/SMBv3 stack on the server side. Microsoft recommends using this only for troubleshooting because it also disables SMBv3 functionality (or if you don't use it).
+Disables the SMBv2/SMBv3 part on the server side. Microsoft recommends using this only for troubleshooting because it also disables SMBv3 functionality (or if you don't use it).
 
 See current states with:
 ```powershell
@@ -120,7 +110,7 @@ Set-SmbServerConfiguration -EnableSMB2Protocol $false -Force
 HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-#### Effects of Disabling
+#### [Effects of Disabling](https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3?tabs=client#disable-smbv2-or-smbv3-for-troubleshooting)
 
 | Functionality | Disabled when SMBv3 is off | Disabled when SMBv2 is off |
 | --- | --- | --- |
@@ -142,14 +132,9 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2	Type: REG_DW
 | Large MTU / 10 GbE support | No | Yes |
 | Improved energy efficiency (clients can sleep) | No | Yes |
 
-> https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3?tabs=client#disable-smbv2-or-smbv3-for-troubleshooting  
-> https://learn.microsoft.com/en-us/windows-server/storage/file-server/troubleshoot/detect-enable-and-disable-smbv1-v2-v3?tabs=server  
-> https://techcommunity.microsoft.com/blog/filecab/stop-using-smb1/425858  
-> https://thelinuxcode.com/how-to-detect-and-turn-on-off-smbv1-smbv2-and-smbv3-in-windows/
-
 ### Enforce SMB Signing
 
-The `EnableSecuritySignature` registry setting for SMB2 and later clients and servers is ignored. Therefore, this setting does nothing unless you're using SMB1. SMB 2.02 and later signing is controlled solely by being required or not. This setting is used when either the server or client requires SMB signing. Signing doesn't occur only when both the server and client have signing set to **0**.
+"*The `EnableSecuritySignature` registry setting for SMB2 and later clients and servers is ignored. Therefore, this setting does nothing unless you're using SMB1. SMB 2.02 and later signing is controlled solely by being required or not. This setting is used when either the server or client requires SMB signing. Signing doesn't occur only when both the server and client have signing set to `0`.*" [[*]](https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/storage/file-server/smb-signing-overview.md#understanding-requiresecuritysignature-and-enablesecuritysignature)
 
 In summary SMB is signed when:
 
@@ -175,8 +160,6 @@ Set-SmbServerConfiguration -EnableSecuritySignature $true
 HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\enablesecuritysignature	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-> https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/storage/file-server/smb-signing-overview.md#understanding-requiresecuritysignature-and-enablesecuritysignature
-
 ### Prefer AES-256 SMB Ciphers
 
 Specifies the encryption ciphers used by the SMB client and the preferred order, the suboption uses `AES_256_GCM`/`AES_256_CCM`. Windows automatically uses the most advanced cipher available. 3.1.1 still uses `AES-128-GCM` by default unless you explicitly prefer AES-256-capable ciphers.
@@ -191,17 +174,17 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\CipherSuiteOrder	
 
 ### Disable Admin Shares
 
-By default, Windows Server automatically creates special hidden administrative shares that administrators, programs, and services can use to manage the computer environment or network. These special shared resources aren't visible in Windows Explorer or in My Computer. However, you can view them by using the Shared Folders tool in Computer Management. Depending on the configuration of your computer, some or all of the following special shared resources may be listed in the Shares folder in Shared Folders:
+"*By default, Windows Server automatically creates special hidden administrative shares that administrators, programs, and services can use to manage the computer environment or network. These special shared resources aren't visible in Windows Explorer or in My Computer. However, you can view them by using the Shared Folders tool in Computer Management. Depending on the configuration of your computer, some or all of the following special shared resources may be listed in the Shares folder in Shared Folders:*
 
-- `<DriveLetter>$`: It's a shared root partition or volume. Shared root partitions and volumes are displayed as the drive letter name appended with the dollar sign (`$`). For example, when drive letters C and D are shared, they're displayed as `C$` and `D$`.
-- `ADMIN$`: It's a resource that is used during remote administration of a computer.
-- `IPC$`: It's a resource that shares the named pipes that you must have for communication between programs. This resource cannot be deleted.
-- `NETLOGON`: It's a resource that is used on domain controllers.
-- `SYSVOL`: It's a resource that is used on domain controllers.
-- `PRINT$`: It's a resource that is used during the remote administration of printers.
-- `FAX$`: It's a shared folder on a server that is used by fax clients during fax transmission.
+- *`<DriveLetter>$`: It's a shared root partition or volume. Shared root partitions and volumes are displayed as the drive letter name appended with the dollar sign (`$`). For example, when drive letters C and D are shared, they're displayed as `C$` and `D$`.*
+- *`ADMIN$`: It's a resource that is used during remote administration of a computer.*
+- *`IPC$`: It's a resource that shares the named pipes that you must have for communication between programs. This resource cannot be deleted.*
+- *`NETLOGON`: It's a resource that is used on domain controllers.*
+- *`SYSVOL`: It's a resource that is used on domain controllers.*
+- *`PRINT$`: It's a resource that is used during the remote administration of printers.*
+- *`FAX$`: It's a shared folder on a server that is used by fax clients during fax transmission.*
 
-`NETLOGON` and `SYSVOL` aren't hidden shares. Instead, they are special administrative shares.
+*`NETLOGON` and `SYSVOL` aren't hidden shares. Instead, they are special administrative shares.*" [[*]](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/remove-administrative-shares)
 
 Disable default sharing:
 ```powershell
@@ -209,8 +192,6 @@ Set-SmbServerConfiguration -AutoShareServer $false -AutoShareWorkstation $false 
 HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareServer	Type: REG_DWORD, Length: 4, Data: 0
 HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\AutoShareWks	Type: REG_DWORD, Length: 4, Data: 0
 ```
-
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/remove-administrative-shares
 
 ### Force Encryption
 
@@ -224,20 +205,17 @@ Set-SmbServerConfiguration -RejectUnencryptedAccess $true
 HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\RejectUnencryptedAccess	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/overview-server-message-block-signing  
-> https://techcommunity.microsoft.com/blog/filecab/configure-smb-signing-with-confidence/2418102
-
 ### Enable SMB Over QUIC
 
-SMB over QUIC introduces an alternative to the TCP network transport, providing secure, reliable connectivity to edge file servers over untrusted networks like the Internet. QUIC is an IETF-standardized protocol with many benefits when compared with TCP:
+"*SMB over QUIC introduces an alternative to the TCP network transport, providing secure, reliable connectivity to edge file servers over untrusted networks like the Internet. QUIC is an IETF-standardized protocol with many benefits when compared with TCP:*
 
-- All packets are always encrypted and handshake is authenticated with TLS 1.3
-- Parallel streams of reliable and unreliable application data
-- Exchanges application data in the first round trip (0-RTT)
-- Improved congestion control and loss recovery
-- Survives a change in the clients IP address or port
+- *All packets are always encrypted and handshake is authenticated with TLS 1.3*
+- *Parallel streams of reliable and unreliable application data*
+- *Exchanges application data in the first round trip (0-RTT)*
+- *Improved congestion control and loss recovery*
+- *Survives a change in the clients IP address or port*
 
-SMB over QUIC offers an "SMB VPN" for telecommuters, mobile device users, and high security organizations. The server certificate creates a TLS 1.3-encrypted tunnel over the internet-friendly UDP port 443 instead of the legacy TCP port 445. All SMB traffic, including authentication and authorization within the tunnel is never exposed to the underlying network. SMB behaves normally within the QUIC tunnel, meaning the user experience doesn't change. SMB features like multichannel, signing, compression, continuous availability, directory leasing, and so on, work normally.
+*SMB over QUIC offers an "SMB VPN" for telecommuters, mobile device users, and high security organizations. The server certificate creates a TLS 1.3-encrypted tunnel over the internet-friendly UDP port 443 instead of the legacy TCP port 445. All SMB traffic, including authentication and authorization within the tunnel is never exposed to the underlying network. SMB behaves normally within the QUIC tunnel, meaning the user experience doesn't change. SMB features like multichannel, signing, compression, continuous availability, directory leasing, and so on, work normally.*" [[*]](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-over-quic?tabs=windows-admin-center%2Cpowershell2%2Cwindows-admin-center1)
 
 ```powershell
 Set-SmbClientConfiguration -EnableSMBQUIC $true
@@ -249,7 +227,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\EnableSMBQUIC	Typ
 
 > https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-over-quic
 
-### SMB3 Only
+### [SMB3 Only](https://techcommunity.microsoft.com/blog/filecab/controlling-smb-dialects/860024)
 
 By default is it set to `None`, which means that the client can use any supported version. SMB 3.1.1 is the most secure dialect of the protocol.
 
@@ -291,43 +269,37 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableLarge
 
 ### Enable SMB Multichannel
 
-SMB Multichannel is part of the Server Message Block (SMB) 3.0 protocol, which increases network performance and the availability of file servers.
+"*SMB Multichannel is part of the Server Message Block (SMB) 3.0 protocol, which increases network performance and the availability of file servers.*
 
-SMB Multichannel enables file servers to use multiple network connections simultaneously. It facilitates aggregation of network bandwidth and network fault tolerance when multiple paths are available between the SMB 3.0 client and the SMB 3.0 server. This allows server applications to take full advantage of all available network bandwidth and makes them more resilient to network failures.
+*SMB Multichannel enables file servers to use multiple network connections simultaneously. It facilitates aggregation of network bandwidth and network fault tolerance when multiple paths are available between the SMB 3.0 client and the SMB 3.0 server. This allows server applications to take full advantage of all available network bandwidth and makes them more resilient to network failures.*
 
-SMB Multichannel provides the following capabilities:
-- **Increased throughput.** The file server can simultaneously transmit additional data by using multiple connections for high-speed network adapters or multiple network adapters.
-- **Network fault tolerance.** When clients simultaneously use multiple network connections, the clients can continue without interruption despite the loss of a network connection.
-- **Automatic configuration.** SMB Multichannel automatically discovers multiple available network paths and dynamically adds connections as necessary.
+*SMB Multichannel provides the following capabilities:*
+- ***Increased throughput.** The file server can simultaneously transmit additional data by using multiple connections for high-speed network adapters or multiple network adapters.*
+- ***Network fault tolerance.** When clients simultaneously use multiple network connections, the clients can continue without interruption despite the loss of a network connection.*
+- ***Automatic configuration.** SMB Multichannel automatically discovers multiple available network paths and dynamically adds connections as necessary.*" [[*]](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/manage-smb-multichannel)
 
 ```powershell
 Set-SmbClientConfiguration -EnableMultiChannel $true
 HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableMultiChannel	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-> https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/manage-smb-multichannel
-
 ### Disable Leasing
 
-Disabling leasing may help, but it disables core features like read/write/handle caching that negatively impact many applications, which rely on it.
+Disabling leasing [may help](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/slow-smb-file-transfer#slow-open-of-office-documents), but it disables core features like read/write/handle caching that negatively impact many applications, which rely on it.
 
 ```powershell
 Set-SmbServerConfiguration -EnableLeasing $false
 HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\DisableLeasing	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/slow-smb-file-transfer#slow-open-of-office-documents
-
 ### Disable SMB Direct (RDMA)
 
-If you disable SMB Direct, RDMA backed SMB traffic is no longer available.
+If you disable [SMB Direct](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-direct?tabs=disable), RDMA backed SMB traffic is no longer available.
 
 ```powershell
 Get-WindowsOptionalFeature -Online -FeatureName SMBDirect
 Disable-WindowsOptionalFeature -Online -FeatureName SMBDirect
 ```
-
-> https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-direct
 
 ### Require NTLMv2 Session Security
 
@@ -357,15 +329,13 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainT
 HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainTextPassword	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-# QoS Policy
+# [QoS Policy](https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top)
 
 "*Policy-based QoS lets Windows identify outgoing network traffic by application, user, computer, IP address, port, or protocol, and then either mark the traffic with a DSCP value for priority handling or limit it with an outbound throttle rate. It's most useful on a managed network where routers, switches, and wireless access points are configured to recognize DSCP markings and give matching traffic higher priority when the network is busy. Without QoS aware network equipment, DSCP marking may have little practical effect beyond the local device, while throttling still works because Windows enforces the send rate locally on outgoing traffic.*"
 
-> https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top
-
 ![](https://github.com/nohuto/win-config/blob/main/network/images/qosvalues.png?raw=true)
 
-> https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus1000/sw/4_0/qos/configuration/guide/nexus1000v_qos/qos_6dscp_val.pdf
+> [nexus1000v_qos/qos_6dscp_val.pdf](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus1000/sw/4_0/qos/configuration/guide/nexus1000v_qos/qos_6dscp_val.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/network/images/qosexplanation.png?raw=true)
 
@@ -387,7 +357,7 @@ HKLM\SOFTWARE\Policies\Microsoft\Windows\QoS\Fortnite\Throttle Rate    Type: REG
 
 ## Live Capture
 
-Capturing the network activity after adding the policy:
+Capturing the network activity after adding the policy using [network monitor](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/network-monitor-3):
 ```powershell
 + Versions: IPv4, Internet Protocol, Header Length = 20
 - DifferentiatedServicesField: DSCP: 46, ECN: 0 # Works
@@ -398,17 +368,11 @@ Capturing the network activity after adding the policy:
   Identification: 28587 (0x6FAB)
 ```
 
-> https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/network-monitor-3
-
 # Disable Network Discovery
 
-"LLTDIO and Responder are network protocol drivers used for Link Layer Topology Discovery and network diagnostics. LLTDIO discovers network topology and supports QoS functions, while Responder allows the device to be identified and take part in network health assessments."
+LLTDIO and Responder are network protocol drivers used for Link Layer Topology Discovery and network diagnostics. LLTDIO discovers network topology and supports QoS functions, while Responder allows the device to be identified and take part in network health assessments.
 
-"The Link Layer Discovery Protocol (LLDP) is a vendor-neutral link layer protocol used by network devices for advertising their identity, capabilities, and neighbors on a local area network based on IEEE 802 technology, principally wired Ethernet. LLDP performs functions similar to several proprietary protocols, such as CDP, FDP, NDP and LLTD."
-
-> https://en.wikipedia.org/wiki/Link_Layer_Discovery_Protocol  
-> https://gpsearch.azurewebsites.net/#1829  
-> https://gpsearch.azurewebsites.net/#1830
+The [Link Layer Discovery Protocol (LLDP)](https://en.wikipedia.org/wiki/Link_Layer_Discovery_Protocol) is a vendor-neutral link layer protocol used by network devices for advertising their identity, capabilities, and neighbors on a local area network based on IEEE 802 technology, principally wired Ethernet. LLDP performs functions similar to several proprietary protocols, such as CDP, FDP, NDP and LLTD.
 
 ## Set-NetFirewallRule & Capture
 
@@ -420,7 +384,6 @@ Get the current states with:
 ```powershell
 Get-NetFirewallRule -DisplayGroup "Network Discovery" | Select-Object Name, Enabled, Profile
 ```
-> https://learn.microsoft.com/en-us/powershell/module/netsecurity/set-netfirewallrule?view=windowsserver2025-ps
 
 ```powershell
 svchost.exe	RegSetValue	HKLM\SOFTWARE\Policies\Microsoft\Windows\LLTD\EnableLLTDIO	Type: REG_DWORD, Length: 4, Data: 0
@@ -631,7 +594,7 @@ Reads the active adapter's IPv4 settings from `netsh int ip show config` and app
 
 ### Active Probing
 
-Active probing sends HTTP requests from the client to a predefined web probe server (by default `www.msftconnecttest.com/connecttest.txt`), using both IPv4 and IPv6 in parallel. If it gets an HTTP 200 response with the expected payload, NCSI marks the interface as having internet connectivity, if the probe fails or returns errors (for example, blocked by a proxy or DNS issues), NCSI treats connectivity as limited.
+Active probing sends HTTP requests from the client to a predefined web probe server (by default `www.msftconnecttest.com/connecttest.txt`), using both IPv4 and IPv6 in parallel. If it gets an HTTP 200 response with the expected payload, NCSI marks the interface as having internet connectivity, if the probe fails or returns errors (for example, blocked by a proxy or DNS issues), NCSI treats connectivity as limited. See [NCSI FAQs](https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-frequently-asked-questions) for more information.
 
 ### Passive Probing
 
@@ -641,7 +604,7 @@ Disabling passive probing will break the network icon, causing for example spoti
 
 See links below for a detailed documentation.
 
-## Network Icon Meaning
+## [Network Icon Meaning](https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-overview)
 
 |Icon|Description|
 |--|--|
@@ -651,9 +614,6 @@ See links below for a detailed documentation.
 
 `PassivePollPeriod` is set to `15` by default = Runs passive probe every 15 seconds. `MaxActiveProbes` to `0` (unlimited) = breaks connection status. If disabling active probes, but leaving passive probes enabled, enable `Enable Passive Mode`.
 
-> https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-overview  
-> https://learn.microsoft.com/en-us/windows-server/networking/ncsi/ncsi-frequently-asked-questions  
-> https://github.com/nohuto/regkit/blob/main/records/NlaSvc.txt  
 > [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
 ## Windows Policies
@@ -724,9 +684,6 @@ rasphone -r "Name"
 ```
 or `WIN + I` > Network & Internet > VPN > Remove
 
-> https://learn.microsoft.com/en-us/powershell/module/vpnclient/remove-vpnconnection?view=windowsserver2025-ps  
-> https://learn.microsoft.com/en-us/powershell/module/vpnclient/?view=windowsserver2025-ps
-
 ### `Allow VPN over metered networks`
 
 ```c
@@ -767,18 +724,15 @@ if ( !v17[0] )
 
 "`NetbiosOptions` specifies the configurable security settings for the NetBIOS service and determines the mode of operation for NetBIOS over TCP/IP on the parent interface."
 
-Enabling the option includes disabling `LMHOSTS Lookups` - "LMHOSTS is a local text file Windows uses to map NetBIOS names to IPs when other NetBIOS methods (WINS, broadcast) don't give an answer. It lives in C:\Windows\System32\drivers\etc, there's an `lmhosts.sam` example, and it's checked only if `Enable LMHOSTS lookup` is on."
-
-> https://en.wikipedia.org/wiki/LMHOSTS  
-> https://github.com/nohuto/regkit/blob/main/records/NetBT.txt
+Enabling the option includes disabling [LMHOSTS](https://en.wikipedia.org/wiki/LMHOSTS) Lookups - "LMHOSTS is a local text file Windows uses to map NetBIOS names to IPs when other NetBIOS methods (WINS, broadcast) don't give an answer. It lives in C:\Windows\System32\drivers\etc, there's an `lmhosts.sam` example, and it's checked only if `Enable LMHOSTS lookup` is on."
 
 `NetbiosOptions`:
 
-| Value | Description                                                                                 |
-| ----- | ------------------------------------------------------------------------------------------- |
-| 0     | Specifies that the Dynamic Host Configuration Protocol (DHCP) setting is used if available. |
-| 1     | Specifies that NetBIOS is enabled. This is the default value if DHCP is not available.      |
-| 2     | Specifies that NetBIOS is disabled.                                                         |
+| Value | Description |
+| --- | --- |
+| 0 | Specifies that the Dynamic Host Configuration Protocol (DHCP) setting is used if available. |
+| 1 | Specifies that NetBIOS is enabled. This is the default value if DHCP is not available. |
+| 2 | Specifies that NetBIOS is disabled. |
 
 Disabling `NetbiosOptions` via network center:
 ```powershell
@@ -789,13 +743,9 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
 
 | Protocol | Purpose | How it works | Notes |
 | -------- | ------- | ------------ | ----- |
-| LLMNR (Link-Local Multicast Name Resolution) | Local name resolution when DNS isn't available | Sends multicast queries on the local link (IPv4 224.0.0.252, UDP 5355) asking "who has this name?", hosts that own the name reply | Windows-specific legacy fallback, vulnerable to spoofing/poisoning |
-| mDNS (Multicast DNS) | Zero-config service/host discovery on local networks (e.g. printer.local) | Uses multicast to 224.0.0.251 (IPv6 ff02::fb) on UDP 5353, devices answer for their own .local names | Cross-platform (Apple Bonjour, now Windows), modern replacement for LLMNR in many cases |
-| NetBIOS over TCP/IP | Legacy Windows naming, service announcement and sessions | Uses broadcasts or WINS to resolve NetBIOS names, historically used by SMB/Windows networking | Very old, chatty, bigger attack surface, kept for backward compatibility |
-
-> https://en.wikipedia.org/wiki/Link-Local_Multicast_Name_Resolution  
-> https://en.wikipedia.org/wiki/Multicast_DNS  
-> https://en.wikipedia.org/wiki/NetBIOS  
+| [LLMNR](https://en.wikipedia.org/wiki/Link-Local_Multicast_Name_Resolution) (Link-Local Multicast Name Resolution) | Local name resolution when DNS isn't available | Sends multicast queries on the local link (IPv4 224.0.0.252, UDP 5355) asking "who has this name?", hosts that own the name reply | Windows-specific legacy fallback, vulnerable to spoofing/poisoning |
+| [mDNS](https://en.wikipedia.org/wiki/Multicast_DNS) (Multicast DNS) | Zero-config service/host discovery on local networks (e.g. printer.local) | Uses multicast to 224.0.0.251 (IPv6 ff02::fb) on UDP 5353, devices answer for their own .local names | Cross-platform (Apple Bonjour, now Windows), modern replacement for LLMNR in many cases |
+| [NetBIOS](https://en.wikipedia.org/wiki/NetBIOS) over TCP/IP | Legacy Windows naming, service announcement and sessions | Uses broadcasts or WINS to resolve NetBIOS names, historically used by SMB/Windows networking | Very old, chatty, bigger attack surface, kept for backward compatibility |
 
 ## Windows Policies
 
@@ -894,7 +844,7 @@ Recommended by Microsoft: `0x20` (Prefer IPv4 over IPv6)
 |Re-enable IPv6 on all tunnel interfaces|Binary xxx xxx0|
 |Re-enable IPv6 on nontunnel interfaces and on IPv6 tunnel interfaces|Binary xxx0 xxx0|
 
-## How to calculate the registry value
+## [How to calculate the registry value](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md#how-to-calculate-the-registry-value)
 
 Windows use bitmasks to check the `DisabledComponents` values and determine whether a component should be disabled.
 
@@ -924,17 +874,11 @@ For each bit, **0** means false and **1** means true. Refer to the following tab
 |Binary|0010 0000|0001 0000|0000 0001|0001 0001|
 |Hexadecimal|0x20|0x10|0x01|0x11|
 
-> https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md  
-> https://support.microsoft.com/en-us/topic/startup-delay-occurs-after-you-disable-ipv6-in-windows-da7e0f60-27b0-c27e-7709-7ee9abfc6ef1
-
 # Disable Wi-Fi Sense
 
 Beginning with Windows 10, version 1803, Wi-Fi Sense is no longer available. The following section only applies to Windows 10, version 1709 and prior.
 
-Wi-Fi Sense is enabled by default and, when you're signed in with a Microsoft account, can share Wi-Fi access (password stays encrypted in MS servers) with your Outlook and Skype contacts, Facebook contacts can be added. When you join a new network, it asks whether to share it. Networks you used before the upgrade won't trigger the prompt.
-
-> https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/configure-wifi-sense-and-paid-wifi-service  
-> https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#23-wi-fi-sense
+[Wi-Fi Sense](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#23-wi-fi-sense) is enabled by default and, when you're signed in with a Microsoft account, can share Wi-Fi access (password stays encrypted in MS servers) with your Outlook and Skype contacts, Facebook contacts can be added. When you join a new network, it asks whether to share it. Networks you used before the upgrade won't trigger the prompt.
 
 ## Windows Policies
 
@@ -993,35 +937,26 @@ Excludes (deprecated, chimney too):
 
 | Keyword | Description | Default | Minimum | Maximum |
 | --- | --- | --- | --- | --- |
-| `*IPChecksumOffloadIPv4` | Device IPv4 checksum handling (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*TCPChecksumOffloadIPv4` | TCP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*TCPChecksumOffloadIPv6` | TCP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*UDPChecksumOffloadIPv4` | UDP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*UDPChecksumOffloadIPv6` | UDP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*LsoV1IPv4` | Large Send Offload V1 for IPv4 (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| `*LsoV2IPv4` | Large Send Offload V2 for IPv4 (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| `*LsoV2IPv6` | Large Send Offload V2 for IPv6 (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| `*IPsecOffloadV1IPv4` | IPsec offload V1 for IPv4 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
-| `*IPsecOffloadV2` | IPsec offload V2 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
-| `*IPsecOffloadV2IPv4` | IPsec offload V2 for IPv4 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
-| `*TCPUDPChecksumOffloadIPv4` | Combined IP/TCP/UDP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*TCPUDPChecksumOffloadIPv6` | Combined TCP/UDP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| `*PMARPOffload` | A value that describes whether the device should be enabled to offload the Address Resolution Protocol (ARP) when the system enters a sleep state. | 1 | 0 | 1 |
-| `*PMNSOffload` | A value that describes whether the device should be enabled to offload neighbor solicitation (NS) when the system enters a sleep state. | 1 | 0 | 1 |
-| `*PMWiFiRekeyOffload` | A value that describes whether the device should be enabled to offload group temporal key (GTK) rekeying for wake-on-wireless-LAN (WOL) when the computer enters a sleep state. | 1 | 0 | 1 |
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt  
-> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-top  
-> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html  
-> https://docs.nvidia.com/networking/display/winof2v320/configuring+the+driver+registry+keys#src-111583782_ConfiguringtheDriverRegistryKeys-OffloadRegistryKeys  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md
+| [`*IPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Device IPv4 checksum handling (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*TCPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | TCP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*TCPChecksumOffloadIPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | TCP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*UDPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | UDP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*UDPChecksumOffloadIPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | UDP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*LsoV1IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Large Send Offload V1 for IPv4 (0 disabled, 1 enabled) | 1 | 0 | 1 |
+| [`*LsoV2IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Large Send Offload V2 for IPv4 (0 disabled, 1 enabled) | 1 | 0 | 1 |
+| [`*LsoV2IPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Large Send Offload V2 for IPv6 (0 disabled, 1 enabled) | 1 | 0 | 1 |
+| [`*IPsecOffloadV1IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | IPsec offload V1 for IPv4 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
+| [`*IPsecOffloadV2`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | IPsec offload V2 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
+| [`*IPsecOffloadV2IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | IPsec offload V2 for IPv4 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
+| [`*TCPUDPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#grouped-keywords) | Combined IP/TCP/UDP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*TCPUDPChecksumOffloadIPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#grouped-keywords) | Combined TCP/UDP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
+| [`*PMARPOffload`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md#power-management-keywords-for-netadaptercx-and-ndis) | A value that describes whether the device should be enabled to offload the Address Resolution Protocol (ARP) when the system enters a sleep state. | 1 | 0 | 1 |
+| [`*PMNSOffload`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md#power-management-keywords-for-netadaptercx-and-ndis) | A value that describes whether the device should be enabled to offload neighbor solicitation (NS) when the system enters a sleep state. | 1 | 0 | 1 |
+| [`*PMWiFiRekeyOffload`](PMWiFiRekeyOffload) | A value that describes whether the device should be enabled to offload group temporal key (GTK) rekeying for wake-on-wireless-LAN (WOL) when the computer enters a sleep state. | 1 | 0 | 1 |
 
 # Disable WoL
 
-The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from *S3* sleep or *S4* hibernate. It's not supported from fast startup or *S5* soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the *S5* soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.
-
-> https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior
+"*The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from `S3` sleep or `S4` hibernate. It's not supported from fast startup or `S5` soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the `S5` soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.*" [[*]](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior)
 
 ```bat
 powercfg /devicequery wake_programmable
@@ -1040,8 +975,6 @@ powercfg /devicequery wake_armed
   "WakeOn" = 0; // range 0-4
   "WakeOnLink" = 0; // range 0-2
 ```
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ### Setup Information
 
@@ -1117,14 +1050,11 @@ HKR, Ndi\Params\WakeUpModeCap\enum,  "2",        0 , %WakeUpMode_Pattern%
 
 The maximum data differs for users, e.g. if applying `4096` it may get rejected, see `inf` blocks below (this option won't try to apply the maximum size, read descriptions below).
 
-Transmit Buffers:  
+[Transmit Buffers](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/transmit-buffers/):  
 > Defines the number of Transmit Descriptors. Transmit Descriptors are data segments that enable the adapter to track transmit packets in the system memory. Depending on the size of the packet, each transmit packet requires one or more Transmit Descriptors. You might choose to increase the number of Transmit Descriptors if you notice a problem with transmit performance. Increasing the number of Transmit Descriptors can enhance transmit performance. But, Transmit Descriptors consume system memory. If transmit performance is not an issue, use the default setting.
 
-Receive Buffers:  
+[Receive Buffers](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/29.3.1/receive-buffers/):  
 > Sets the number of buffers used by the driver when copying data to the protocol memory. Increasing this value can enhance the receive performance, but also consumes system memory. Receive Descriptors are data segments that enable the adapter to allocate received packets to memory. Each received packet requires one Receive Descriptor, and each descriptor uses 2 KB of memory.
-
-> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/29.3.1/receive-buffers/  
-> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/transmit-buffers/
 
 ## Setup Information
 
@@ -1170,11 +1100,11 @@ Reminder: Each adapter uses it's own default values, means that the `default`/`m
 
 # Enable IM/ITR
 
-Some NICs expose multiple interrupt-moderation levels. Use interrupt moderation for CPU-bound workloads and weigh host-CPU savings against added latency. For the lowest possible latency, disable Interrupt Moderation, accepting higher CPU use as a tradeoff. At higher link speeds more interrupts drive up CPU and hurt performance, increasing the ITR lowers the interrupt rate and improves performance. IM batches received packets and starts a timer on first arrival, interrupting when the buffer fills or the timer expires. Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
+"*To control interrupt moderation, some network adapters expose different interrupt moderation levels, different buffer coalescing parameters (sometimes separately for send and receive buffers), or both.*
 
-> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/interrupt-moderation-rate/  
-> https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation  
-> https://enterprise-support.nvidia.com/s/article/understanding-interrupt-moderation
+*You should consider interrupt moderation for CPU-bound workloads. When using interrupt moderation, consider the trade-off between the host CPU savings and latency versus the increased host CPU savings because of more interrupts and less latency. If the network adapter doesn't perform interrupt moderation, but it does expose buffer coalescing, you can improve performance by increasing the number of coalesced buffers to allow more buffers per send or receive.*" [[*]](https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation)
+
+Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
 
 ### Data Range
 
@@ -1242,17 +1172,15 @@ Miscellaneous notes:
 
 # Enable RSS
 
-"Receive-Side Scaling (RSS), also known as multi-queue receive, distributes network receive processing across several hardware-based receive queues, allowing inbound network traffic to be processed by multiple CPUs. RSS can be used to relieve bottlenecks in receive interrupt processing caused by overloading a single CPU, and to reduce network latency."
-
-> https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/performance_tuning_guide/network-rss
+"*[Receive-Side Scaling (RSS)](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling), also known as multi-queue receive, distributes network receive processing across several hardware-based receive queues, allowing inbound network traffic to be processed by multiple CPUs. RSS can be used to relieve bottlenecks in receive interrupt processing caused by overloading a single CPU, and to reduce network latency.*" [[*]](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/performance_tuning_guide/network-rss)
 
 Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
 
-I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below) - disabling the option therefore won't "disable" RSS, it only removes the created values.
+I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below), disabling the option therefore won't "disable" RSS, it only removes the created values.
 
 ## RssReadRegistryParameters
 
-`RSS::RssReadRegistryParameters` shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
+[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/power/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
 ```c
 void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
 {
@@ -1275,7 +1203,7 @@ void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT
 `*MaxRssProcessors`:  
 The maximum number of RSS processors.
 
-`*NumRssQueues`:  
+[`*NumRssQueues`](https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html):  
 The maximum number of the RSS queues that the device should use.
 
 Configures the number of RSS queues:  
@@ -1321,12 +1249,6 @@ Enables the RSS v2 feature which improves the Receive Side Scaling by offering d
 `ValidateRssV2`:  
 Enables strict argument validation for upper layer testing. Set along with the RssV2 key to enable the RSSv2 feature.  
 
-> https://docs.kernel.org/networking/scaling.html  
-> https://docs.nvidia.com/networking/display/winof2v280/configuring+the+driver+registry+keys  
-> https://docs.nvidia.com/networking/display/winofv55052000/receive+side+scaling+(rss)  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling  
-> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html
-
 ---
 
 ```
@@ -1363,10 +1285,6 @@ Name                           DisplayName                                      
 ----                           -----------                                        -----------          -------
 Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
 ```
-
-> https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/networking-mpssvc-svc-firewallgroups-firewallgroup-group  
-> https://learn.microsoft.com/en-us/powershell/module/netadapter/get-netadapterbinding?view=windowsserver2025-ps
-
 
 ## Windows Policies
 
@@ -1512,18 +1430,14 @@ Miscellaenous notes:
 
 A sending station (computer or network switch) may be transmitting data faster than the other end of the link can accept it. Using flow control, the receiving station can signal the sender requesting suspension of transmissions until the receiver catches up.
 
-- For adapters to benefit from this feature, link partners must support flow control frames.  
-- On systems running a Microsoft Windows Server* operating system, enabling QoS/priority flow control will disable link level flow control.  
-- Some devices support Auto Negotiation. Selecting this will cause the device to advertise the value stored in its NVM (usually "Disabled").
-
-> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/
+- *For adapters to benefit from this feature, link partners must support flow control frames.*
+- *On systems running a Microsoft Windows Server operating system, enabling QoS/priority flow control will disable link level flow control.*
+- *Some devices support Auto Negotiation. Selecting this will cause the device to advertise the value stored in its NVM (usually `Disabled`).*" [[*]](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
     "*FlowControl" = 4; // range 0-4
 ```
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ## Setup Information
 
@@ -1544,16 +1458,13 @@ These 2 examples also show that each adapter/driver have their own defaults.
 
 As the name says ("Jumbo"), it is used for big packets, you won't use this feature. Jumbo packets are disabled by default. Enable Jumbo Packets **only if all devices across the network support them** and are configured to use the same frame size.
 
-The Jumbo Frames feature enables or disables Jumbo Packet capability. The standard Ethernet frame size is about `1514 bytes`, while Jumbo Packets are larger than this. Jumbo Packets can increase throughput and decrease CPU utilization. However, additional latency may be introduced.
+"*The Jumbo Frames feature enables or disables Jumbo Packet capability. The standard Ethernet frame size is about `1514 bytes`, while Jumbo Packets are larger than this. Jumbo Packets can increase throughput and decrease CPU utilization. However, additional latency may be introduced.*
 
-- Enable Jumbo frames only if devices across the network support them and are configured to use the same frame size. When setting up Jumbo Frames on other network devices, be aware that different network devices calculate Jumbo Frame sizes differently. Some devices include the header information in the frame size while others do not. Intel® adapters do not include header information in the frame size.
-- Supported protocols are limited to IP (TCP, UDP).
-- Using Jumbo frames at 10 or 100 Mbps can result in poor performance or loss of link.
-- You must not lower Receive_Buffers or Transmit_Buffers below 256 if jumbo frames are enabled. Doing so will cause loss of link.
-- When configuring Jumbo frames on a switch, set the frame size 4 bytes higher for CRC, plus 4 bytes if using VLANs or QoS packet tagging.
-
-> https://www.intel.com/content/www/us/en/support/articles/000005593/ethernet-products.html  
-> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/30.5/jumbo-frames/
+- *Enable Jumbo frames only if devices across the network support them and are configured to use the same frame size. When setting up Jumbo Frames on other network devices, be aware that different network devices calculate Jumbo Frame sizes differently. Some devices include the header information in the frame size while others do not. Intel® adapters do not include header information in the frame size.*
+- *Supported protocols are limited to IP (TCP, UDP).*
+- *Using Jumbo frames at 10 or 100 Mbps can result in poor performance or loss of link.*
+- *You must not lower Receive_Buffers or Transmit_Buffers below 256 if jumbo frames are enabled. Doing so will cause loss of link.*
+- *When configuring Jumbo frames on a switch, set the frame size 4 bytes higher for CRC, plus 4 bytes if using VLANs or QoS packet tagging.*" [[*]](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/30.5/jumbo-frames/)
 
 ## Setup Information
 
@@ -1569,14 +1480,11 @@ HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 
 # Enable RSC/URO
 
-When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.
+"*When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
 
-Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.
+"*Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.*
 
-Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.
-
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing
+*Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
 
 ## Registry Value Ranges
 
@@ -1589,8 +1497,6 @@ Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwid
     "ForceRscEnabled" = 0; // range 0-1
     "RscMode" = 1; // range 0-2
 ```
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ```c
 void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CONTEXT **this)
@@ -1651,11 +1557,11 @@ Miscellaneous notes:
 
 # Disable VMQ
 
-VMQ is a scaling networking technology for the Hyper-V switch. Without VMQ the networking performance of the Hyper-V switch bound to this network adapter may be reduced. VMQ offloads packet processing to NIC hardware queues, with each queue tied to a specific VM. This increases throughput, spreads work across CPU cores, lowers host CPU use, and scales effectively as more VMs are added on Hyper-V.
+[VMQ](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/virtual-machine-queue-architecture.md) is a scaling networking technology for the Hyper-V switch. Without VMQ the networking performance of the Hyper-V switch bound to this network adapter may be reduced. VMQ offloads packet processing to NIC hardware queues, with each queue tied to a specific VM. This increases throughput, spreads work across CPU cores, lowers host CPU use, and scales effectively as more VMs are added on Hyper-V.
 
 It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
-## Registry Values Details
+## [Registry Values Details](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md)
 
 ```c
 // Intel
@@ -1668,8 +1574,6 @@ It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
     "MaxNumVmqs" = ?; // found it in the "Mellanox ConnectX based IPoIB Adapter (NDIS 6.4)" driver
 ```
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 | Value | Description | Allowed Values | Default | Notes |
 | ----  | ---- | ---- | ---- | ---- |
@@ -1694,20 +1598,13 @@ HKR, Ndi\Params\*VMQ\enum,  "1",  0, "%Enabled%"
 HKR, "", *VMQ, %REG_SZ%, "1"
 ```
 
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md  
-> https://docs.nvidia.com/networking/display/winofv55053000/ethernet+registry+keys#src-25134589_EthernetRegistryKeys-FlowControlOptions  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/virtual-machine-queue-architecture.md  
-> https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/introduction-to-ndis-virtual-machine-queue--vmq-.md
-
 # Disable SR-IOV
 
-Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.
-
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-  
+"*Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-)
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
-## Registry Values Details
+## [Registry Values Details](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1715,7 +1612,6 @@ It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
     "*SriovPreferred" = 0; // range 0-1
 ```
 
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 | SubkeyName            | Value       | EnumDesc |
 | --------------------  | ----------- | ---- |
@@ -1723,8 +1619,6 @@ It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 |                       | 1 (Default) | Enabled |
 | `*SriovPreferred`     | 0 (Default) | Report RSS/VMQ (per *VmqOrRssPreferrence), do not report SR-IOV |
 |                       | 1           | Report SR-IOV capabilities |
-
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov
 
 ### Setup Information
 
@@ -1763,14 +1657,12 @@ HKR, "", *VMQVlanFiltering, %REG_SZ%, "1"
 
 # Disable FEC
 
-FEC (forwarded error correction) improves link stability, but increases latency. Many high quality optics, direct attach cables, and backplane channels provide a stable link without FEC.
+[FEC](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/) (forwarded error correction) improves link stability, but increases latency. Many high quality optics, direct attach cables, and backplane channels provide a stable link without FEC.
 
 `Auto FEC`: Sets the FEC Mode based on the capabilities of the attached cable.  
 `CL108 RS-FEC`: Selects only RS-FEC ability and request capabilities.  
 `CL74 FC-FEC/BASE-R`: Selects only BASE-R ability and request capabilities.  
 `No FEC`: Disables FEC.
-
-> https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/forward-error-correction-fec-mode/
 
 ## Registry Values Details
 
@@ -1778,8 +1670,6 @@ FEC (forwarded error correction) improves link stability, but increases latency.
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
     "FecMode" = 0; // range 0-3
 ```
-
-> https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt
 
 ```c
 RegistryKey<enum HdSplitLocation>::Initialize(
@@ -1836,9 +1726,9 @@ HKR, PROSetNdi\NdiExt\Params\LinkNegotiationProcess,    ExposeLevel,            
 
 ## NDIS Poll Mode
 
-"NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.
+"*NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.*
 
-Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools."
+*Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
 
 When enabled on RX side, the following capabilities are not be supported:
 - AsyncReceiveIndicate
@@ -1848,9 +1738,6 @@ When enabled on RX side, the following capabilities are not be supported:
 When enabled on TX side, the following capabilities are not be supported:
 - Transmit side Threaded DPC
 - TxMaxPostSendsCoalescing is limited to 32
-
-For a detailed documentation, see:
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode
 
 | Value | Data | Comments |
 | ---- | ---- | ---- |
@@ -1870,19 +1757,16 @@ HKR, Ndi\params\*NdisPoll\enum,  "1",                  0, "Enabled"
 
 Note: `*NdisPoll` is available to NDIS 6.85 and later miniport drivers.
 
-## AsyncReceiveIndicate (Packet Burst Handling)
+## [AsyncReceiveIndicate](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf) (Packet Burst Handling)
 
 This feature allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
 
-"A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC."
+"*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
     "ThreadDpcEnable" = 1; // KeThreadDpcEnable
 ```
-
-> https://www.noverse.dev/docs/win-config/system/kernel-values/#registry-values-details  
-> https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs
 
 | Data | Meaning |
 | :----: | ---- |
@@ -1890,9 +1774,7 @@ This feature allows packet burst handling, while avoiding packet drops that may 
 | 1 | Enables packet burst buffering using threaded DPC |
 | 2 | Enables packet burst buffering using polling |
 
-> https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf
-
-## Receive Completion Method
+## [Receive Completion Method](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf)
 
 Sets the completion methods of the receive packets, and it affects network throughput and CPU utilization. The supported methods are:
 
@@ -1911,5 +1793,3 @@ HKR, NDI\Params\RecvCompletionMethod\enum,  "1", 0, "%Adaptive%"
 HKR, NDI\Params\RecvCompletionMethod\enum,  "2", 0x00000004 , ""
 HKR, "", RecvCompletionMethod, 0, "1"
 ```
-
-> https://docs.nvidia.com/networking/display/winofv55053000/performance+registry+keys
