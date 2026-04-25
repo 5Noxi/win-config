@@ -732,9 +732,9 @@ if ( !v17[0] )
 
 # Disable NetBIOS/mDNS/LLMNR
 
-"`NetbiosOptions` specifies the configurable security settings for the NetBIOS service and determines the mode of operation for NetBIOS over TCP/IP on the parent interface."
+`NetbiosOptions` specifies the configurable security settings for the NetBIOS service and determines the mode of operation for NetBIOS over TCP/IP on the parent interface.
 
-Enabling the option includes disabling [LMHOSTS](https://en.wikipedia.org/wiki/LMHOSTS) Lookups - "LMHOSTS is a local text file Windows uses to map NetBIOS names to IPs when other NetBIOS methods (WINS, broadcast) don't give an answer. It lives in C:\Windows\System32\drivers\etc, there's an `lmhosts.sam` example, and it's checked only if `Enable LMHOSTS lookup` is on."
+Enabling the option includes disabling [LMHOSTS](https://en.wikipedia.org/wiki/LMHOSTS) Lookups - "*LMHOSTS is a local text file Windows uses to map NetBIOS names to IPs when other NetBIOS methods (WINS, broadcast) don't give an answer. It lives in C:\Windows\System32\drivers\etc, there's an `lmhosts.sam` example, and it's checked only if `Enable LMHOSTS lookup` is on.*"
 
 `NetbiosOptions`:
 
