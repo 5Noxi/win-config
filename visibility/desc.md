@@ -991,7 +991,7 @@ Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/ap
     v6 = 100LL; // fallback to 100 if missing or out of range (<100 / >225)
   }
 ```
-> [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
+- [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
 
 Applying changes via `Accessibility > Text size`:
 ```c

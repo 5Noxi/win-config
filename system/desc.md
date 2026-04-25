@@ -15,7 +15,9 @@ Client defaults are short + variable. Server defaults are long + fixed.
 
 ## Bits 0/1
 
-"*For each extra priority level (up to 2), another quantum is given to the thread. For example, if the thread receives a boost of one priority level, it receives an extra quantum as well. By default, Windows sets the maximum possible priority boost to foreground threads, meaning that the priority separation will be 2, which means quantum index 2 is selected in the variable quantum table. This leads to the thread receiving two extra quantums, for a total of three quantums.*"
+> "*For each extra priority level (up to 2), another quantum is given to the thread. For example, if the thread receives a boost of one priority level, it receives an extra quantum as well. By default, Windows sets the maximum possible priority boost to foreground threads, meaning that the priority separation will be 2, which means quantum index 2 is selected in the variable quantum table. This leads to the thread receiving two extra quantums, for a total of three quantums.*"
+>
+> — Microsoft Press, [Windows Internals, Sixth Edition](https://www.microsoftpressstore.com/content/images/9780735648739/samplepages/9780735648739.pdf)
 
 Clamped to `2`:
 ```c
@@ -32,9 +34,11 @@ PsPrioritySeparation = v3;
 
 ## Bits 2/3
 
-"*Determine whether the length of processor time varies or is fixed. It also determines whether the threads of foreground processes have longer processor intervals than those of background processes. If the processor interval is fixed, that interval applies equally to the threads of foreground and background processes. If the processor interval varies, the length of time each thread runs varies, but the ratio of processor time of foreground threads to background threads is fixed.*
-
-*If a variable interval is specified, the ratio of foreground thread processor time to background thread processor time is determined by the value of the lowest set of bits.*"
+> "*Determine whether the length of processor time varies or is fixed. It also determines whether the threads of foreground processes have longer processor intervals than those of background processes. If the processor interval is fixed, that interval applies equally to the threads of foreground and background processes. If the processor interval varies, the length of time each thread runs varies, but the ratio of processor time of foreground threads to background threads is fixed.*
+>
+> *If a variable interval is specified, the ratio of foreground thread processor time to background thread processor time is determined by the value of the lowest set of bits.*"
+>
+> — Microsoft Docs, [Win32PrioritySeparation](https://bitsum.com/files/Win32PrioritySeparation-Microsoft-Docs.pdf)
 
 ```c
 v5 = a2 & 0xC;
@@ -65,7 +69,9 @@ v8 = (char *)v7;
 
 ## Bits 4/5
 
-"*Determine how long the threads of processes are permitted to run each time they are scheduled. This interval is specified as a range because threads can be preempted and processor time is not precisely determined.*"
+> "*Determine how long the threads of processes are permitted to run each time they are scheduled. This interval is specified as a range because threads can be preempted and processor time is not precisely determined.*"
+>
+> — Microsoft Docs, [Win32PrioritySeparation](https://bitsum.com/files/Win32PrioritySeparation-Microsoft-Docs.pdf)
 
 ```c
 LABEL_7:
@@ -99,18 +105,18 @@ Note that everything above is based on 23H2 and is not complete yet.
 
 I won't add much more details here since [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) contains details, see 'Quantum / Priority Boosts' (Chapter 3).
 
-> [ntoskrnl/PsChangeQuantumTable.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PsChangeQuantumTable.c)  
-> [ntoskrnl/PspComputeQuantum.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspComputeQuantum.c)  
-> [ntoskrnl/PspInitPhase0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspInitPhase0.c)  
-> [ntoskrnl/MmIsThisAnNtAsSystem.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/MmIsThisAnNtAsSystem.c)  
-> [ntoskrnl/KeSetQuantumProcess.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeSetQuantumProcess.c)  
-> [ntoskrnl/KeStartThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeStartThread.c)  
-> [ntoskrnl/KiSetQuantumTargetThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiSetQuantumTargetThread.c)  
-> [ntoskrnl/KiInitializeForegroundBoostThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiInitializeForegroundBoostThread.c)  
-> [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiComputeEffectivePriority.c)  
-> [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/NtSetSystemInformation.c)  
-> [ntoskrnl/CmInitSystem0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmInitSystem0.c)  
-> [ntoskrnl/CmpGetSystemControlValues.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmpGetSystemControlValues.c)
+- [ntoskrnl/PsChangeQuantumTable.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PsChangeQuantumTable.c)
+- [ntoskrnl/PspComputeQuantum.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspComputeQuantum.c)
+- [ntoskrnl/PspInitPhase0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspInitPhase0.c)
+- [ntoskrnl/MmIsThisAnNtAsSystem.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/MmIsThisAnNtAsSystem.c)
+- [ntoskrnl/KeSetQuantumProcess.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeSetQuantumProcess.c)
+- [ntoskrnl/KeStartThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeStartThread.c)
+- [ntoskrnl/KiSetQuantumTargetThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiSetQuantumTargetThread.c)
+- [ntoskrnl/KiInitializeForegroundBoostThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiInitializeForegroundBoostThread.c)
+- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiComputeEffectivePriority.c)
+- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/NtSetSystemInformation.c)
+- [ntoskrnl/CmInitSystem0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmInitSystem0.c)
+- [ntoskrnl/CmpGetSystemControlValues.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmpGetSystemControlValues.c)
 
 ---
 
@@ -134,9 +140,9 @@ This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Sess
 
 See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/session-manager-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)).
 
-> [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/ProcLibGlobalInit.c)  
-> [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)  
-> [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
+- [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/ProcLibGlobalInit.c)
+- [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)
+- [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
 
 The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl).
 
@@ -1574,9 +1580,11 @@ aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\P
 
 # MMCSS Values
 
-"*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
-
-*MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
+> "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
+>
+> *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
+>
+> — Microsoft Learn, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
 
 Client applications can register with MMCSS by calling AvSetMmThreadCharacteristics with a task name that must match one of the subkeys under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks`, see [task-details](https://www.noverse.dev/docs/win-config/system/mmcss-values/#tasks-details).
 
@@ -1615,7 +1623,9 @@ And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
 
-"*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*" [[*]](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings) (`mmcss.sys`)
+> "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
+>
+> — MicrosoftDocs/win32, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings) (`mmcss.sys`)
 
 ```c
 // CiConfigInitialize
@@ -1656,7 +1666,7 @@ if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
 The GUID allocation server is disabled at the moment.
 ```
 
-> [ms-erref#0xC0000080](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55)
+- [ms-erref#0xC0000080](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55)
 
 Calculation:
 ```c
@@ -1679,7 +1689,9 @@ CiSystemResponsiveness = 10 * (value / 10);
 
 ## NetworkThrottlingIndex Details
 
-"*MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
+> "*MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
+>
+> — Microsoft Press, [Windows Internals, Sixth Edition](https://www.informit.com/content/images/9780735648739/samplepages/9780735648739.pdf)
 
 `0` becomes `1`, `1`-`70` stay unchanged, `71`-`4294967294` become `70`, `4294967295` (`0xFFFFFFFF`) stays unchanged.
 
@@ -1752,7 +1764,9 @@ It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely 
 
 `AlwaysOn` value exists in W7 and W8, but doesn't exist in W10 and W11 anymore.
 
-"*The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results.*" [[*]](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
+> "*The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results.*"
+>
+> — djdallmann/GamingPCSetup, [NoLazyMode](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/nolazymode.png?raw=true)
 
@@ -1787,7 +1801,7 @@ if ( !RegistryValueWithFallbackW && Type == 4 )
 return v1;
 ```
 
-> [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)
+- [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
 
@@ -2392,9 +2406,11 @@ The value doesn't exist by default (not existing = `1`).
 
 It might set CPU affinites (`AffinitizeToExclusiveCpus`, `CpuExclusivityMaskHig`, `CpuExclusivityMaskLow`) for the game process and the maximum amount of cores the game uses (`MaxCpuCount`). The percentage of GPU memory (`PercentGpuMemoryAllocatedToGame`), GPU time (`PercentGpuTimeAllocatedToGame`) & system compositor (`PercentGpuMemoryAllocatedToSystemCompositor`) that will be dedicated to the game. It may also create a list of processes (`RelatedProcessNames`) that are gaming related, which means that they won't be affected from the game mode. These are just assumptions, I haven't looked into it in detail yet ([`GamingHandlers.c`](https://github.com/nohuto/win-config/blob/main/system/assets/gamemode-GamingHandlers.c)).
 
-Pavel Yosifovich says: "*Game mode tries to kind of steer away the processors from your game so the system itself and all the kernel threads and stuff like that are not going to use some processors, so your game can use those processors exclusively.*" [[*]](https://youtu.be/h6BXMcRqYhA?t=3251)
+> "*Game mode tries to kind of steer away the processors from your game so the system itself and all the kernel threads and stuff like that are not going to use some processors, so your game can use those processors exclusively.*"
+>
+> — Pavel Yosifovich, [Windows Internals and Game Mode](https://youtu.be/h6BXMcRqYhA?t=3251)
 
-> [Windows.Gaming.Preview.GamesEnumeration Namespace](https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-28000)
+- [Windows.Gaming.Preview.GamesEnumeration Namespace](https://learn.microsoft.com/en-us/uwp/api/windows.gaming.preview.gamesenumeration?view=winrt-28000)
 
 # Disable Windows Search
 
@@ -2601,9 +2617,13 @@ Disables all kind of accessibility features such as `Voice Access`, `Live Captio
 
 Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
 
-"*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
+> "*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
+>
+> — Microsoft Learn, [Verbose startup, shutdown, logon, and logoff status messages](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages)
 
-"*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
+> "*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
+>
+> — Windows Security Encyclopedia, [Display highly detailed status messages](https://www.windows-security.org/b74176eebf20a72c6e9cf193ddcedeb7/display-highly-detailed-status-messages)
 
 ## Windows Policies
 
@@ -2722,7 +2742,7 @@ You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example 
                     //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
 ```
 
-> [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
+- [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
@@ -3024,7 +3044,7 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 ```
 Only this path gets read, `TimeStampEnabled` doesn't get read?
 
-> [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
+- [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
 
 # Disable Prefetch & Superfetch
 
@@ -3086,7 +3106,7 @@ Symlinksare shortcuts or references that point to a file or folder in another lo
 File at: `C:\Projects\Game\assets\logo.png`
 Symlink: `C:\Users\YourName\Desktop\logo.png`
 
-> [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
+- [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
 # Disable Clipboard
 
@@ -4093,7 +4113,9 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 
 # Disable Hyper-V
 
-"*Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications.*" [[*]](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v)
+> "*Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications.*"
+>
+> — Microsoft Learn, [Virtualization applications don't work together with Hyper-V](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v)
 
 ## Service/Driver Table
 

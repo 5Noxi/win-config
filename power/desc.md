@@ -866,37 +866,37 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "CompanionServiceList" = ?;
 ```
 
-> [pnp/assets | BthUsb_QuerySelectiveSuspend.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/BthUsb_QuerySelectiveSuspend.c)  
-> [pnp/assets | ExpressDownstreamSwitchPortProcessAspmPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressDownstreamSwitchPortProcessAspmPolicy.c)  
-> [pnp/assets | ExpressPortFindOptInOptOutPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressPortFindOptInOptOutPolicy.c)  
-> [pnp/assets | FDO_GetIdleSupported.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FDO_GetIdleSupported.c)  
-> [pnp/assets | FxPkgPnpSaveState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSaveState.c)  
-> [pnp/assets | FxPkgPnpSleepStudyEvaluateParticipation.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSleepStudyEvaluateParticipation.c)  
-> [pnp/assets | GetEnhancedVerifierOptions.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/GetEnhancedVerifierOptions.c)  
-> [pnp/assets | HidpFdoConfigureIdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpFdoConfigureIdleSettings.c)  
-> [pnp/assets | HidpGetComboHardwareIdV2Enabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetComboHardwareIdV2Enabled.c)  
-> [pnp/assets | HidpGetPdoReenumerateSelfInterfaceEnabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetPdoReenumerateSelfInterfaceEnabled.c)  
-> [pnp/assets | HidpGetRetainWWIrpEnabledFromRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetRetainWWIrpEnabledFromRegistry.c)  
-> [pnp/assets | HidpGetSessionSecurityState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetSessionSecurityState.c)  
-> [pnp/assets | HidpToggleRemoteWakeWorker.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpToggleRemoteWakeWorker.c)  
-> [pnp/assets | HUBMISC_SetExtPropDescSemaphoreInRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBMISC_SetExtPropDescSemaphoreInRegistry.c)  
-> [pnp/assets | HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c)  
-> [pnp/assets | HUBREG_QueryValuesInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInDeviceHardwareKey.c)  
-> [pnp/assets | HUBREG_QueryValuesInHubHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInHubHardwareKey.c)  
-> [pnp/assets | HUBREG_SetWinUsbIdleDefaults.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_SetWinUsbIdleDefaults.c)  
-> [pnp/assets | HUBREG_UpdateSqmFlags.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_UpdateSqmFlags.c)  
-> [pnp/assets | IrqPolicySetDeviceAffinity.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/IrqPolicySetDeviceAffinity.c)  
-> [pnp/assets | PciGetDeviceCustomSetting.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSetting.c)  
-> [pnp/assets | PciGetDeviceCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSettings.c)  
-> [pnp/assets | PciGetDeviceD0DelayTime.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceD0DelayTime.c)  
-> [pnp/assets | PciGetDeviceDpcCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceDpcCustomSettings.c)  
-> [pnp/assets | PcisuppGetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppGetRoutingInfo.c)  
-> [pnp/assets | PcisuppSetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppSetRoutingInfo.c)  
-> [pnp/assets | PowerPolicySetS0IdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PowerPolicySetS0IdleSettings.c)  
-> [pnp/assets | UsbhGetD3Policy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/UsbhGetD3Policy.c)  
-> [pnp/assets | WinUSB_DeterminePowerPolicyOwnership.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_DeterminePowerPolicyOwnership.c)  
-> [pnp/assets | WinUSB_GetRegParams.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_GetRegParams.c)  
-> [pnp/assets | WinUSB_UpdateSqmInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_UpdateSqmInfo.c)
+- [pnp/assets | BthUsb_QuerySelectiveSuspend.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/BthUsb_QuerySelectiveSuspend.c)
+- [pnp/assets | ExpressDownstreamSwitchPortProcessAspmPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressDownstreamSwitchPortProcessAspmPolicy.c)
+- [pnp/assets | ExpressPortFindOptInOptOutPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressPortFindOptInOptOutPolicy.c)
+- [pnp/assets | FDO_GetIdleSupported.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FDO_GetIdleSupported.c)
+- [pnp/assets | FxPkgPnpSaveState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSaveState.c)
+- [pnp/assets | FxPkgPnpSleepStudyEvaluateParticipation.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSleepStudyEvaluateParticipation.c)
+- [pnp/assets | GetEnhancedVerifierOptions.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/GetEnhancedVerifierOptions.c)
+- [pnp/assets | HidpFdoConfigureIdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpFdoConfigureIdleSettings.c)
+- [pnp/assets | HidpGetComboHardwareIdV2Enabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetComboHardwareIdV2Enabled.c)
+- [pnp/assets | HidpGetPdoReenumerateSelfInterfaceEnabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetPdoReenumerateSelfInterfaceEnabled.c)
+- [pnp/assets | HidpGetRetainWWIrpEnabledFromRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetRetainWWIrpEnabledFromRegistry.c)
+- [pnp/assets | HidpGetSessionSecurityState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetSessionSecurityState.c)
+- [pnp/assets | HidpToggleRemoteWakeWorker.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpToggleRemoteWakeWorker.c)
+- [pnp/assets | HUBMISC_SetExtPropDescSemaphoreInRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBMISC_SetExtPropDescSemaphoreInRegistry.c)
+- [pnp/assets | HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c)
+- [pnp/assets | HUBREG_QueryValuesInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInDeviceHardwareKey.c)
+- [pnp/assets | HUBREG_QueryValuesInHubHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInHubHardwareKey.c)
+- [pnp/assets | HUBREG_SetWinUsbIdleDefaults.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_SetWinUsbIdleDefaults.c)
+- [pnp/assets | HUBREG_UpdateSqmFlags.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_UpdateSqmFlags.c)
+- [pnp/assets | IrqPolicySetDeviceAffinity.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/IrqPolicySetDeviceAffinity.c)
+- [pnp/assets | PciGetDeviceCustomSetting.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSetting.c)
+- [pnp/assets | PciGetDeviceCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSettings.c)
+- [pnp/assets | PciGetDeviceD0DelayTime.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceD0DelayTime.c)
+- [pnp/assets | PciGetDeviceDpcCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceDpcCustomSettings.c)
+- [pnp/assets | PcisuppGetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppGetRoutingInfo.c)
+- [pnp/assets | PcisuppSetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppSetRoutingInfo.c)
+- [pnp/assets | PowerPolicySetS0IdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PowerPolicySetS0IdleSettings.c)
+- [pnp/assets | UsbhGetD3Policy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/UsbhGetD3Policy.c)
+- [pnp/assets | WinUSB_DeterminePowerPolicyOwnership.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_DeterminePowerPolicyOwnership.c)
+- [pnp/assets | WinUSB_GetRegParams.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_GetRegParams.c)
+- [pnp/assets | WinUSB_UpdateSqmInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_UpdateSqmInfo.c)
 
 ## MSPower_DeviceEnable
 
@@ -929,10 +929,11 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 ## Storport Idle (`Device Parameters\\StorPort`)
 
-"*Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.*"
+> "*Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.*"
+>
+> — Microsoft Learn, [Registry entries for Storport miniport drivers](https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers)
 
-> [drivers/storage/registry-entries-for-storport-miniport-drivers](https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers)  
-> [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
+- [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
 
 # Disable Timer Coalescing
 
@@ -1132,7 +1133,7 @@ So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCo
 
 The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIoCoalescingEnabled` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RITdemonTimerPowerSave...` & `TimerCoalescing` ones get read.
 
-> [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)
+- [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)
 
@@ -1371,7 +1372,7 @@ if ( result >= 0 )
 }
 ```
 
-> [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
+- [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
 
 ## DisableIdleStatesAtBoot Notes
 
@@ -1434,7 +1435,7 @@ Not needed, if you disable energy estimation:
                                     // If following HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\knobs\Power/Controls/EnergyEstimationEnabled, it should have a range of 0-4294967295
 ```
 
-> [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
+- [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
 
@@ -1445,20 +1446,20 @@ Not needed, if you disable energy estimation:
 # Disable Audio Idle
 
 | Parameter | Description | Default | Type | Notes |
-| --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | `ConservationIdleTime` | Idle timeout for the device, when the system is on battery power. | `0` | REG_BINARY | `0` disables the inactivity timer for this mode, value is in seconds. |
 | `PerformanceIdleTime` | Idle timeout for the device, when the system is on AC power. | `0` | REG_BINARY | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `IdlePowerState` | Specifies the power state that the device will enter, when power is no longer needed. | `3` (D3) | REG_BINARY | Valid values `1 - D1`, `2 - D2`, `3 - D3`.                            |
+| `IdlePowerState` | Specifies the power state that the device will enter, when power is no longer needed. | `3` (D3) | REG_BINARY | Valid values `1 - D1`, `2 - D2`, `3 - D3`. |
 
 I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈ 136 years`) & `IdlePowerState` to `1` (`D1`).
 
-| Category   | Class | Class GUID                           | Description                                                                                       |
-| ---------- | ----- | ------------------------------------ | ------------------------------------------------------------------------------------------------- |
+| Category | Class | Class GUID | Description |
+| --- | --- | --- | --- |
 | Multimedia | Media | [4d36e96c-e325-11ce-bfc1-08002be10318](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors) | Includes Audio and DVD multimedia devices, joystick ports, and full-motion video capture devices. |
 
-> [drivers/audio/audio-device-class-inactivity-timer-implementation](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation)  
-> [design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms)  
-> [drivers/audio/portcls-registry-power-settings](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings)
+- [drivers/audio/audio-device-class-inactivity-timer-implementation](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation)
+- [design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms)
+- [drivers/audio/portcls-registry-power-settings](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings)
 
 # Disable Storage Idle States
 
@@ -1468,7 +1469,7 @@ If `IdleStatesNumber` is set, the other values are ignored? Let me know if you h
 
 The values are located in the `EnergyEstimation` (guesses how much power is used over time), so it's probably related to something else. I'll leave it for documentation reasons (and future extended declaration).
 
-> [power/assets | storageidle-PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
+- [power/assets | storageidle-PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
 
 ## Suboption
 
@@ -1520,8 +1521,8 @@ dword_4C130 = 1;
 dword_4C140 = -1;
 ```
 
-> [power/assets | hddpark-amdsbs.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-amdsbs.c)  
-> [power/assets | hddpark-DllInitialize.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-DllInitialize.c)  
+- [power/assets | hddpark-amdsbs.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-amdsbs.c)
+- [power/assets | hddpark-DllInitialize.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-DllInitialize.c)
 
 # Disable PM in Standby Mode
 
@@ -1621,8 +1622,8 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 | [`*SSIdleTimeout`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeout-inf-keyword) | This keyword specifies the idle time-out period in units of seconds. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeout value, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 5 | 1 | 60 |
 | [`*SSIdleTimeoutScreenOff`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeoutscreenoff-inf-keyword) | This keyword specifies the idle time-out period in units of seconds and is only applicable when the screen is off. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeoutScreenOff value after the screen is off, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 3 | 1 | 60 |
 
-> [network/standardized-inf-keywords-for-power-management](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md)  
-> [network/standardized-inf-keywords-for-ndis-selective-suspend](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md)
+- [network/standardized-inf-keywords-for-power-management](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md)
+- [network/standardized-inf-keywords-for-ndis-selective-suspend](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md)
 
 ### Setup Information
 

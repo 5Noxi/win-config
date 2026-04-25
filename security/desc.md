@@ -106,7 +106,7 @@ Since the tool includes a seperate `Policies` section and most of the Defender s
 | `EnabledV9` | Controls whether legacy Microsoft Edge SmartScreen is enforced, including phishing and malware checks against sites that are not on the allow list. |
 | `SmartScreenEnabled` | Controls whether current Microsoft Edge SmartScreen is turned on or off in the browser. |
 
-> [security/assets | Windows-Defender.txt](https://github.com/nohuto/win-config/blob/main/security/assets/Windows-Defender.txt)
+- [security/assets | Windows-Defender.txt](https://github.com/nohuto/win-config/blob/main/security/assets/Windows-Defender.txt)
 
 ## Remove Defender from Image
 
@@ -280,7 +280,9 @@ HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTeleme
 
 # Windows Firewall
 
-"*Windows Firewall is a security feature that helps to protect your device by filtering network traffic that enters and exits your device. This traffic can be filtered based on several criteria, including source and destination IP address, IP protocol, or source and destination port number. Windows Firewall can be configured to block or allow network traffic based on the services and applications that are installed on your device. This allows you to restrict network traffic to only those applications and services that are explicitly allowed to communicate on the network.*" ([*](https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/))
+> "*Windows Firewall is a security feature that helps to protect your device by filtering network traffic that enters and exits your device. This traffic can be filtered based on several criteria, including source and destination IP address, IP protocol, or source and destination port number. Windows Firewall can be configured to block or allow network traffic based on the services and applications that are installed on your device. This allows you to restrict network traffic to only those applications and services that are explicitly allowed to communicate on the network.*"
+>
+> — Microsoft Learn, [Windows Firewall](https://learn.microsoft.com/en-us/windows/security/operating-system-security/network-security/windows-firewall/)
 
 ## Inbound vs Outbound
 
@@ -452,13 +454,15 @@ Value: `EnableVirtualization`
 
 # PS Execution Policy
 
-"*PowerShell execution policy is a safety feature that controls when PowerShell loads configuration files and runs scripts, helping prevent accidental execution of malicious scripts.*
-
-*On Windows, you can set it for the local computer, current user, a single session, or through Group Policy. Local computer and current user policies are stored in PowerShell configuration files, while session policy exists only in memory until the session closes.*
-
-*It is not a real security boundary, since users can bypass it, but it helps enforce basic rules and avoid accidental misuse.*
-
-*On non-Windows systems, the reported default is `Unrestricted` and cannot be changed, though the actual behavior is closer to `Bypass` because Windows security zones do not exist there.*"
+> "*PowerShell execution policy is a safety feature that controls when PowerShell loads configuration files and runs scripts, helping prevent accidental execution of malicious scripts.*
+>
+> *On Windows, you can set it for the local computer, current user, a single session, or through Group Policy. Local computer and current user policies are stored in PowerShell configuration files, while session policy exists only in memory until the session closes.*
+>
+> *It is not a real security boundary, since users can bypass it, but it helps enforce basic rules and avoid accidental misuse.*
+>
+> *On non-Windows systems, the reported default is `Unrestricted` and cannot be changed, though the actual behavior is closer to `Bypass` because Windows security zones do not exist there.*"
+>
+> — Microsoft Learn, [about_Execution_Policies](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5)
 
 ### [Execution Policy](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-7.5)
 
@@ -766,7 +770,7 @@ Enabling `NtfsDisableEncryption` (`1`) may cause Xbox games to fail to install (
 ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
 ```
 
-> [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
+- [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
 
 ## Windows Policies
 
@@ -978,7 +982,9 @@ Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
 
 By default it uses a minimum size of `1024` bits (both) - hardens Windows [TLS](https://learn.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings?tabs=diffie-hellman) engine by forcing minimum key sizes during secure communications (SSL/TLS handshake process).
 
-"*NSA recommends RSA key transport and ephemeral DH (DHE) or ECDH (ECDHE) mechanisms, with RSA or DHE key exchange using at least 3072-bit keys and ECDHE key exchanges using the secp384r1 elliptic curve. For RSA keytransport and DH/DHE key exchange, keys less than 2048 bits should not be used, and ECDH/ECDHE using custom curves should not be used.*" [[*]](https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF)
+> "*NSA recommends RSA key transport and ephemeral DH (DHE) or ECDH (ECDHE) mechanisms, with RSA or DHE key exchange using at least 3072-bit keys and ECDHE key exchanges using the secp384r1 elliptic curve. For RSA keytransport and DH/DHE key exchange, keys less than 2048 bits should not be used, and ECDH/ECDHE using custom curves should not be used.*"
+>
+> — National Security Agency, [Eliminating obsolete TLS protocol configurations](https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF)
 
 # Disable Legacy TLS/Crypto
 
@@ -1080,7 +1086,9 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 
 # Increase TDR
 
-"*TDR stands for Timeout Detection and Recovery. This is a feature of the Windows operating system which detects response problems from a graphics card, and recovers to a functional desktop by resetting the card. If the operating system does not receive a response from a graphics card within a certain amount of time (default is 2 seconds), the operating system resets the graphics card.*" [[*]](https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm)
+> "*TDR stands for Timeout Detection and Recovery. This is a feature of the Windows operating system which detects response problems from a graphics card, and recovers to a functional desktop by resetting the card. If the operating system does not receive a response from a graphics card within a certain amount of time (default is 2 seconds), the operating system resets the graphics card.*"
+>
+> — NVIDIA Docs, [Timeout Detection & Recovery](https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm)
 
 Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.
 
@@ -1134,7 +1142,7 @@ if (dword_1C015B874 != v15) {
 }
 ```
 
-> [security/assets | TdrInit.c](https://github.com/nohuto/win-config/blob/main/security/assets/TdrInit.c)
+- [security/assets | TdrInit.c](https://github.com/nohuto/win-config/blob/main/security/assets/TdrInit.c)
 
 ## NVLDDMKM TDR
 
@@ -1230,7 +1238,7 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: R
 
 # Sudo
 
-[Sudo](https://github.com/microsoft/sudo) ([introduction](https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/) is a new way for users to run elevated commands (as an administrator) directly from an unelevated console session on Windows.
+[Sudo](https://github.com/microsoft/sudo) ([introduction](https://devblogs.microsoft.com/commandline/introducing-sudo-for-windows/)) is a new way for users to run elevated commands (as an administrator) directly from an unelevated console session on Windows.
 
 Note that sudo uses administrator previledges and doesn't include `TrustedInstaller`/`SYSTEM` previledges.
 
@@ -1270,7 +1278,9 @@ Note that sudo uses administrator previledges and doesn't include `TrustedInstal
 
 # Enable Camera OSD Indicator
 
-"*`NoPhysicalCameraLED` indicates that there is no physical LED for the device's camera. An example of a physical LED for a camera is the small blue light that turns on whenever the camera is streaming video. This setting is used to indicate to the shell component that it will need to provide a small indicator in the user interface (UI) to show when video frames are streaming or not streaming to replace the notification by physical LED.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-coremmres-nophysicalcameraled)
+> "*`NoPhysicalCameraLED` indicates that there is no physical LED for the device's camera. An example of a physical LED for a camera is the small blue light that turns on whenever the camera is streaming video. This setting is used to indicate to the shell component that it will need to provide a small indicator in the user interface (UI) to show when video frames are streaming or not streaming to replace the notification by physical LED.*"
+>
+> — Microsoft Learn, [NoPhysicalCameraLED](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-coremmres-nophysicalcameraled)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/cameraosd.png?raw=true)
 

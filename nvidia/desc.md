@@ -14,7 +14,7 @@ It adds all values to the [`Display`](https://learn.microsoft.com/en-us/windows-
 
 The calculator uses an converted `.json` version of the official NVIDIA resource manager definitions. I've built the converter myself, and it should be `100%` accurate. However, if you notice any obvious errors, please report them.
 
-> [Preview](https://github.com/user-attachments/assets/91b241ef-5e8e-4859-8957-d3b54dc52b0e)
+- [Preview](https://github.com/user-attachments/assets/91b241ef-5e8e-4859-8957-d3b54dc52b0e)
 
 The tool currently has a selection of `967` values ([`nvvalues.txt`](https://github.com/nohuto/bitmask-calc/blob/main/nvvalues.txt)). It works with my own `.json` converted bitfield definitions. This doesn't mean that all of them are configurable or used by your system. See [list of values](https://github.com/nohuto/wpr-reg-records/blob/main/records/NVIDIA-DispGUID.txt, which got read on my system while boot.
 
@@ -239,10 +239,10 @@ The following includes details of how the panel sets the changes and more, a lot
 ## 3D Settings > Manage 3D settings
 
 More information - [discord notes](https://discord.com/channels/836870260715028511/1375059420970487838/1412446705869394071)  
-> [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)  
-> [Noverse-Minimal](https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/nvidia/assets/NV-Minimal.nip)  
-> [Noverse-Compatible](https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/nvidia/assets/NV-Compatible.nip)  
-> [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp)
+- [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)
+- [Noverse-Minimal](https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/nvidia/assets/NV-Minimal.nip)
+- [Noverse-Compatible](https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/nvidia/assets/NV-Compatible.nip)
+- [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp)
 
 ## 3D Settings > Configure Surround, PhysX
 
@@ -266,7 +266,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 00 00 00
 ```
-> [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
+- [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)  
 
@@ -314,8 +314,8 @@ sin(0) = 0  = 0x00000000 hex
 = last 2 bytes
 ```
 
-> [nvidia/assets | color-displayDB.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)  
-> [nvidia/assets | color-DesktopColors.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)
+- [nvidia/assets | color-displayDB.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)
+- [nvidia/assets | color-DesktopColors.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-DesktopColors.cpp)
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\ADAPTER_10DE_2482_00000007_00000000 : StereoPreferredTargetIdRegistryKey
@@ -409,7 +409,9 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 
 ## Developer > Manage GPU Performance Counters
 
-"*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*" [[*]](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
+> "*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*"
+>
+> — NVIDIA Control Panel Help, [Manage GPU Performance Counters](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
 
 ```json
 {
@@ -562,9 +564,9 @@ Hides the icon from the context menu (2nd one is probably related to optimus, fi
 ```
 Only the first value gets used.
 
-> [nvidia/assets | HideManufacturer.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-HideManufacturer.c)  
-> [nvidia/assets | notes.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-notes.cpp)  
-> [nvidia/assets | nvcpl.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-nvcpl.c)
+- [nvidia/assets | HideManufacturer.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-HideManufacturer.c)
+- [nvidia/assets | notes.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-notes.cpp)
+- [nvidia/assets | nvcpl.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-nvcpl.c)
 
 # Disable DLSS Indicator
 
@@ -591,8 +593,8 @@ Disabled = `0`
 "ShowDlssIndicator"=dword:00000002
 ```
 
-> [nvidia/assets | dlss.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/dlss.c)  
-> [nvidia/assets | dlss-NGXCubinGeneric.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/dlss-NGXCubinGeneric.cpp)
+- [nvidia/assets | dlss.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/dlss.c)
+- [nvidia/assets | dlss-NGXCubinGeneric.cpp](https://github.com/nohuto/win-config/blob/main/nvidia/assets/dlss-NGXCubinGeneric.cpp)
 
 # Disable Logging
 
@@ -816,7 +818,9 @@ Disables `Add Desktop Context Menu` in the NVIDIA control panel.
 
 # GPU Performance Counters
 
-"*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*" [[*]](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
+> "*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*"
+>
+> — NVIDIA Control Panel Help, [Manage GPU Performance Counters](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
 
 ```json
 {
@@ -844,9 +848,11 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 
 # Disable MPO
 
-"*Multi-Plane Overlay (MPO) refers to the use of additional dedicated hardware scanout planes in the GPU that frames can be presented to, which the GPU then takes care of scanning out to the display itself, thereby allowing the GPU to shoulder the work (again achieving lower latencies) that the DWM would otherwise do but in software (which would incur an additional latency). Typically NVIDIA assigns all of the planes it supports (usually upwards of 4 of them) to a single display while the rest of the displays goes without any.*
-
-*A display typically needs to be assigned at least 2 planes by the display driver for the feature to be regarded as supported on the display.*" [[*]](https://wiki.special-k.info/SwapChain#multi-plane-overlay-mpo)
+> "*Multi-Plane Overlay (MPO) refers to the use of additional dedicated hardware scanout planes in the GPU that frames can be presented to, which the GPU then takes care of scanning out to the display itself, thereby allowing the GPU to shoulder the work (again achieving lower latencies) that the DWM would otherwise do but in software (which would incur an additional latency). Typically NVIDIA assigns all of the planes it supports (usually upwards of 4 of them) to a single display while the rest of the displays goes without any.*
+>
+> *A display typically needs to be assigned at least 2 planes by the display driver for the feature to be regarded as supported on the display.*"
+>
+> — Special K Wiki, [Multi-Plane Overlay](https://wiki.special-k.info/SwapChain#multi-plane-overlay-mpo)
 
 I decided to add it since MPO can cause issues like screen flickering, if not having such issues, leave it enabled.
 
@@ -867,7 +873,7 @@ if (!(unsigned int)GetPersistedRegistryValueW(
 }
 ```
 
-> [nvidia/assets | mpo-bDwmOverlayTestMode.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/mpo-bDwmOverlayTestMode.c)  
+- [nvidia/assets | mpo-bDwmOverlayTestMode.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/mpo-bDwmOverlayTestMode.c)
 
 # NVLDDMKM Hex Values
 

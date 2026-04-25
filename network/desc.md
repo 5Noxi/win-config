@@ -134,7 +134,9 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2	Type: REG_DW
 
 ### Enforce SMB Signing
 
-"*The `EnableSecuritySignature` registry setting for SMB2 and later clients and servers is ignored. Therefore, this setting does nothing unless you're using SMB1. SMB 2.02 and later signing is controlled solely by being required or not. This setting is used when either the server or client requires SMB signing. Signing doesn't occur only when both the server and client have signing set to `0`.*" [[*]](https://github.com/MicrosoftDocs/windowsserverdocs/blob/main/WindowsServerDocs/storage/file-server/smb-signing-overview.md#understanding-requiresecuritysignature-and-enablesecuritysignature)
+> "*The `EnableSecuritySignature` registry setting for SMB2 and later clients and servers is ignored. Therefore, this setting does nothing unless you're using SMB1. SMB 2.02 and later signing is controlled solely by being required or not. This setting is used when either the server or client requires SMB signing. Signing doesn't occur only when both the server and client have signing set to `0`.*"
+>
+> — Microsoft Learn, [SMB signing overview](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-signing-overview#understanding-requiresecuritysignature-and-enablesecuritysignature)
 
 In summary SMB is signed when:
 
@@ -174,17 +176,19 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\CipherSuiteOrder	
 
 ### Disable Admin Shares
 
-"*By default, Windows Server automatically creates special hidden administrative shares that administrators, programs, and services can use to manage the computer environment or network. These special shared resources aren't visible in Windows Explorer or in My Computer. However, you can view them by using the Shared Folders tool in Computer Management. Depending on the configuration of your computer, some or all of the following special shared resources may be listed in the Shares folder in Shared Folders:*
-
-- *`<DriveLetter>$`: It's a shared root partition or volume. Shared root partitions and volumes are displayed as the drive letter name appended with the dollar sign (`$`). For example, when drive letters C and D are shared, they're displayed as `C$` and `D$`.*
-- *`ADMIN$`: It's a resource that is used during remote administration of a computer.*
-- *`IPC$`: It's a resource that shares the named pipes that you must have for communication between programs. This resource cannot be deleted.*
-- *`NETLOGON`: It's a resource that is used on domain controllers.*
-- *`SYSVOL`: It's a resource that is used on domain controllers.*
-- *`PRINT$`: It's a resource that is used during the remote administration of printers.*
-- *`FAX$`: It's a shared folder on a server that is used by fax clients during fax transmission.*
-
-*`NETLOGON` and `SYSVOL` aren't hidden shares. Instead, they are special administrative shares.*" [[*]](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/remove-administrative-shares)
+> "*By default, Windows Server automatically creates special hidden administrative shares that administrators, programs, and services can use to manage the computer environment or network. These special shared resources aren't visible in Windows Explorer or in My Computer. However, you can view them by using the Shared Folders tool in Computer Management. Depending on the configuration of your computer, some or all of the following special shared resources may be listed in the Shares folder in Shared Folders:*
+>
+> - *`<DriveLetter>$`: It's a shared root partition or volume. Shared root partitions and volumes are displayed as the drive letter name appended with the dollar sign (`$`). For example, when drive letters C and D are shared, they're displayed as `C$` and `D$`.*
+> - *`ADMIN$`: It's a resource that is used during remote administration of a computer.*
+> - *`IPC$`: It's a resource that shares the named pipes that you must have for communication between programs. This resource cannot be deleted.*
+> - *`NETLOGON`: It's a resource that is used on domain controllers.*
+> - *`SYSVOL`: It's a resource that is used on domain controllers.*
+> - *`PRINT$`: It's a resource that is used during the remote administration of printers.*
+> - *`FAX$`: It's a shared folder on a server that is used by fax clients during fax transmission.*
+>
+> *`NETLOGON` and `SYSVOL` aren't hidden shares. Instead, they are special administrative shares.*"
+>
+> — Microsoft Learn, [Remove administrative shares](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/remove-administrative-shares)
 
 Disable default sharing:
 ```powershell
@@ -207,15 +211,17 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\RejectUnencrypted
 
 ### Enable SMB Over QUIC
 
-"*SMB over QUIC introduces an alternative to the TCP network transport, providing secure, reliable connectivity to edge file servers over untrusted networks like the Internet. QUIC is an IETF-standardized protocol with many benefits when compared with TCP:*
-
-- *All packets are always encrypted and handshake is authenticated with TLS 1.3*
-- *Parallel streams of reliable and unreliable application data*
-- *Exchanges application data in the first round trip (0-RTT)*
-- *Improved congestion control and loss recovery*
-- *Survives a change in the clients IP address or port*
-
-*SMB over QUIC offers an "SMB VPN" for telecommuters, mobile device users, and high security organizations. The server certificate creates a TLS 1.3-encrypted tunnel over the internet-friendly UDP port 443 instead of the legacy TCP port 445. All SMB traffic, including authentication and authorization within the tunnel is never exposed to the underlying network. SMB behaves normally within the QUIC tunnel, meaning the user experience doesn't change. SMB features like multichannel, signing, compression, continuous availability, directory leasing, and so on, work normally.*" [[*]](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-over-quic?tabs=windows-admin-center%2Cpowershell2%2Cwindows-admin-center1)
+> "*SMB over QUIC introduces an alternative to the TCP network transport, providing secure, reliable connectivity to edge file servers over untrusted networks like the Internet. QUIC is an IETF-standardized protocol with many benefits when compared with TCP:*
+>
+> - *All packets are always encrypted and handshake is authenticated with TLS 1.3*
+> - *Parallel streams of reliable and unreliable application data*
+> - *Exchanges application data in the first round trip (0-RTT)*
+> - *Improved congestion control and loss recovery*
+> - *Survives a change in the clients IP address or port*
+>
+> *SMB over QUIC offers an "SMB VPN" for telecommuters, mobile device users, and high security organizations. The server certificate creates a TLS 1.3-encrypted tunnel over the internet-friendly UDP port 443 instead of the legacy TCP port 445. All SMB traffic, including authentication and authorization within the tunnel is never exposed to the underlying network. SMB behaves normally within the QUIC tunnel, meaning the user experience doesn't change. SMB features like multichannel, signing, compression, continuous availability, directory leasing, and so on, work normally.*"
+>
+> — Microsoft Learn, [SMB over QUIC](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-over-quic?tabs=windows-admin-center%2Cpowershell2%2Cwindows-admin-center1)
 
 ```powershell
 Set-SmbClientConfiguration -EnableSMBQUIC $true
@@ -269,14 +275,16 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableLarge
 
 ### Enable SMB Multichannel
 
-"*SMB Multichannel is part of the Server Message Block (SMB) 3.0 protocol, which increases network performance and the availability of file servers.*
-
-*SMB Multichannel enables file servers to use multiple network connections simultaneously. It facilitates aggregation of network bandwidth and network fault tolerance when multiple paths are available between the SMB 3.0 client and the SMB 3.0 server. This allows server applications to take full advantage of all available network bandwidth and makes them more resilient to network failures.*
-
-*SMB Multichannel provides the following capabilities:*
-- ***Increased throughput.** The file server can simultaneously transmit additional data by using multiple connections for high-speed network adapters or multiple network adapters.*
-- ***Network fault tolerance.** When clients simultaneously use multiple network connections, the clients can continue without interruption despite the loss of a network connection.*
-- ***Automatic configuration.** SMB Multichannel automatically discovers multiple available network paths and dynamically adds connections as necessary.*" [[*]](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/manage-smb-multichannel)
+> "*SMB Multichannel is part of the Server Message Block (SMB) 3.0 protocol, which increases network performance and the availability of file servers.*
+>
+> *SMB Multichannel enables file servers to use multiple network connections simultaneously. It facilitates aggregation of network bandwidth and network fault tolerance when multiple paths are available between the SMB 3.0 client and the SMB 3.0 server. This allows server applications to take full advantage of all available network bandwidth and makes them more resilient to network failures.*
+>
+> *SMB Multichannel provides the following capabilities:*
+> - ***Increased throughput.** The file server can simultaneously transmit additional data by using multiple connections for high-speed network adapters or multiple network adapters.*
+> - ***Network fault tolerance.** When clients simultaneously use multiple network connections, the clients can continue without interruption despite the loss of a network connection.*
+> - ***Automatic configuration.** SMB Multichannel automatically discovers multiple available network paths and dynamically adds connections as necessary.*"
+>
+> — Microsoft Learn, [Manage SMB Multichannel](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/manage-smb-multichannel)
 
 ```powershell
 Set-SmbClientConfiguration -EnableMultiChannel $true
@@ -331,11 +339,13 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainT
 
 # QoS Policy
 
-"*Policy-based QoS lets Windows identify outgoing network traffic by application, user, computer, IP address, port, or protocol, and then either mark the traffic with a DSCP value for priority handling or limit it with an outbound throttle rate. It's most useful on a managed network where routers, switches, and wireless access points are configured to recognize DSCP markings and give matching traffic higher priority when the network is busy. Without QoS aware network equipment, DSCP marking may have little practical effect beyond the local device, while throttling still works because Windows enforces the send rate locally on outgoing traffic.*" [[*]](https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top)
+> "*Policy-based QoS lets Windows identify outgoing network traffic by application, user, computer, IP address, port, or protocol, and then either mark the traffic with a DSCP value for priority handling or limit it with an outbound throttle rate. It's most useful on a managed network where routers, switches, and wireless access points are configured to recognize DSCP markings and give matching traffic higher priority when the network is busy. Without QoS aware network equipment, DSCP marking may have little practical effect beyond the local device, while throttling still works because Windows enforces the send rate locally on outgoing traffic.*"
+>
+> — Microsoft Learn, [Policy-based QoS](https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top)
 
 ![](https://github.com/nohuto/win-config/blob/main/network/images/qosvalues.png?raw=true)
 
-> [nexus1000v_qos/qos_6dscp_val.pdf](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus1000/sw/4_0/qos/configuration/guide/nexus1000v_qos/qos_6dscp_val.pdf)
+- [nexus1000v_qos/qos_6dscp_val.pdf](https://www.cisco.com/c/en/us/td/docs/switches/datacenter/nexus1000/sw/4_0/qos/configuration/guide/nexus1000v_qos/qos_6dscp_val.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/network/images/qosexplanation.png?raw=true)
 
@@ -469,7 +479,7 @@ RegistryKey<unsigned char>::Initialize(
     0
 )
 ```
-> [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
+- [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
 
 ## Windows Policies
 
@@ -614,7 +624,7 @@ See links below for a detailed documentation.
 
 `PassivePollPeriod` is set to `15` by default = Runs passive probe every 15 seconds. `MaxActiveProbes` to `0` (unlimited) = breaks connection status. If disabling active probes, but leaving passive probes enabled, enable `Enable Passive Mode`.
 
-> [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
+- [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
 ## Windows Policies
 
@@ -718,7 +728,7 @@ if ( !v17[0] )
     g_donotUseRoaming = 0, // default
 ```
 
-> [network/assets | vpn-NlmGetCostedNetworkSettings.c](https://github.com/nohuto/win-config/blob/main/network/assets/vpn-NlmGetCostedNetworkSettings.c)
+- [network/assets | vpn-NlmGetCostedNetworkSettings.c](https://github.com/nohuto/win-config/blob/main/network/assets/vpn-NlmGetCostedNetworkSettings.c)
 
 # Disable NetBIOS/mDNS/LLMNR
 
@@ -956,7 +966,9 @@ Excludes (deprecated, chimney too):
 
 # Disable WoL
 
-"*The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from `S3` sleep or `S4` hibernate. It's not supported from fast startup or `S5` soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the `S5` soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.*" [[*]](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior)
+> "*The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from `S3` sleep or `S4` hibernate. It's not supported from fast startup or `S5` soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the `S5` soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.*"
+>
+> — Microsoft Learn, [System power states](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior)
 
 ```bat
 powercfg /devicequery wake_programmable
@@ -1100,9 +1112,11 @@ Reminder: Each adapter uses it's own default values, means that the `default`/`m
 
 # Enable IM/ITR
 
-"*To control interrupt moderation, some network adapters expose different interrupt moderation levels, different buffer coalescing parameters (sometimes separately for send and receive buffers), or both.*
-
-*You should consider interrupt moderation for CPU-bound workloads. When using interrupt moderation, consider the trade-off between the host CPU savings and latency versus the increased host CPU savings because of more interrupts and less latency. If the network adapter doesn't perform interrupt moderation, but it does expose buffer coalescing, you can improve performance by increasing the number of coalesced buffers to allow more buffers per send or receive.*" [[*]](https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation)
+> "*To control interrupt moderation, some network adapters expose different interrupt moderation levels, different buffer coalescing parameters (sometimes separately for send and receive buffers), or both.*
+>
+> *You should consider interrupt moderation for CPU-bound workloads. When using interrupt moderation, consider the trade-off between the host CPU savings and latency versus the increased host CPU savings because of more interrupts and less latency. If the network adapter doesn't perform interrupt moderation, but it does expose buffer coalescing, you can improve performance by increasing the number of coalesced buffers to allow more buffers per send or receive.*"
+>
+> — Microsoft Learn, [Performance tuning network adapters](https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation)
 
 Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
 
@@ -1172,7 +1186,9 @@ Miscellaneous notes:
 
 # Enable RSS
 
-"*[Receive-Side Scaling (RSS)](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling), also known as multi-queue receive, distributes network receive processing across several hardware-based receive queues, allowing inbound network traffic to be processed by multiple CPUs. RSS can be used to relieve bottlenecks in receive interrupt processing caused by overloading a single CPU, and to reduce network latency.*" [[*]](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/performance_tuning_guide/network-rss)
+> "*[Receive-Side Scaling (RSS)](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/introduction-to-receive-side-scaling), also known as multi-queue receive, distributes network receive processing across several hardware-based receive queues, allowing inbound network traffic to be processed by multiple CPUs. RSS can be used to relieve bottlenecks in receive interrupt processing caused by overloading a single CPU, and to reduce network latency.*"
+>
+> — Red Hat Documentation, [Receive-Side Scaling](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/6/html/performance_tuning_guide/network-rss)
 
 Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
 
@@ -1430,9 +1446,11 @@ Miscellaenous notes:
 
 A sending station (computer or network switch) may be transmitting data faster than the other end of the link can accept it. Using flow control, the receiving station can signal the sender requesting suspension of transmissions until the receiver catches up.
 
-- *For adapters to benefit from this feature, link partners must support flow control frames.*
-- *On systems running a Microsoft Windows Server operating system, enabling QoS/priority flow control will disable link level flow control.*
-- *Some devices support Auto Negotiation. Selecting this will cause the device to advertise the value stored in its NVM (usually `Disabled`).*" [[*]](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/)
+> - *For adapters to benefit from this feature, link partners must support flow control frames.*
+> - *On systems running a Microsoft Windows Server operating system, enabling QoS/priority flow control will disable link level flow control.*
+> - *Some devices support Auto Negotiation. Selecting this will cause the device to advertise the value stored in its NVM (usually `Disabled`).*"
+>
+> — Intel, [Flow Control](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1458,13 +1476,15 @@ These 2 examples also show that each adapter/driver have their own defaults.
 
 As the name says ("Jumbo"), it is used for big packets, you won't use this feature. Jumbo packets are disabled by default. Enable Jumbo Packets **only if all devices across the network support them** and are configured to use the same frame size.
 
-"*The Jumbo Frames feature enables or disables Jumbo Packet capability. The standard Ethernet frame size is about `1514 bytes`, while Jumbo Packets are larger than this. Jumbo Packets can increase throughput and decrease CPU utilization. However, additional latency may be introduced.*
-
-- *Enable Jumbo frames only if devices across the network support them and are configured to use the same frame size. When setting up Jumbo Frames on other network devices, be aware that different network devices calculate Jumbo Frame sizes differently. Some devices include the header information in the frame size while others do not. Intel® adapters do not include header information in the frame size.*
-- *Supported protocols are limited to IP (TCP, UDP).*
-- *Using Jumbo frames at 10 or 100 Mbps can result in poor performance or loss of link.*
-- *You must not lower Receive_Buffers or Transmit_Buffers below 256 if jumbo frames are enabled. Doing so will cause loss of link.*
-- *When configuring Jumbo frames on a switch, set the frame size 4 bytes higher for CRC, plus 4 bytes if using VLANs or QoS packet tagging.*" [[*]](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/30.5/jumbo-frames/)
+> "*The Jumbo Frames feature enables or disables Jumbo Packet capability. The standard Ethernet frame size is about `1514 bytes`, while Jumbo Packets are larger than this. Jumbo Packets can increase throughput and decrease CPU utilization. However, additional latency may be introduced.*
+>
+> - *Enable Jumbo frames only if devices across the network support them and are configured to use the same frame size. When setting up Jumbo Frames on other network devices, be aware that different network devices calculate Jumbo Frame sizes differently. Some devices include the header information in the frame size while others do not. Intel® adapters do not include header information in the frame size.*
+> - *Supported protocols are limited to IP (TCP, UDP).*
+> - *Using Jumbo frames at 10 or 100 Mbps can result in poor performance or loss of link.*
+> - *You must not lower Receive_Buffers or Transmit_Buffers below 256 if jumbo frames are enabled. Doing so will cause loss of link.*
+> - *When configuring Jumbo frames on a switch, set the frame size 4 bytes higher for CRC, plus 4 bytes if using VLANs or QoS packet tagging.*"
+>
+> — Intel, [Jumbo Frames](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/30.5/jumbo-frames/)
 
 ## Setup Information
 
@@ -1480,11 +1500,15 @@ HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 
 # Enable RSC/URO
 
-"*When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
+> "*When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.*"
+>
+> — Microsoft Learn, [Receive segment coalescing](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
 
-"*Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.*
-
-*Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
+> "*Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.*
+>
+> *Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.*"
+>
+> — Microsoft Learn, [UDP receive segment coalescing offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
 
 ## Registry Value Ranges
 
@@ -1600,7 +1624,9 @@ HKR, "", *VMQ, %REG_SZ%, "1"
 
 # Disable SR-IOV
 
-"*Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-)
+> "*Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.*"
+>
+> — Microsoft Learn, [SR-IOV](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-)
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
@@ -1726,9 +1752,11 @@ HKR, PROSetNdi\NdiExt\Params\LinkNegotiationProcess,    ExposeLevel,            
 
 ## NDIS Poll Mode
 
-"*NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.*
-
-*Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
+> "*NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.*
+>
+> *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*"
+>
+> — Microsoft Learn, [NDIS poll mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
 
 When enabled on RX side, the following capabilities are not be supported:
 - AsyncReceiveIndicate
@@ -1761,7 +1789,9 @@ Note: `*NdisPoll` is available to NDIS 6.85 and later miniport drivers.
 
 This feature allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
 
-"*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*" [[*]](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
+> "*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*"
+>
+> — Microsoft Learn, [Threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";

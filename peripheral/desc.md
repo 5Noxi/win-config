@@ -414,18 +414,18 @@ See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-co
     //"ResetOnErrorInD2Resume"
 ```
 
-> [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)  
-> [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)  
-> [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)  
-> [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)  
-> [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryHubErrataFlags.c)  
-> [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)  
-> [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)  
-> [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/GetConfigValue.c)  
-> [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)  
-> [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)  
-> [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateTestRegistrySettings.c)  
-> [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
+- [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)
+- [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)
+- [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)
+- [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)
+- [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryHubErrataFlags.c)
+- [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)
+- [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)
+- [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/GetConfigValue.c)
+- [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)
+- [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)
+- [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateTestRegistrySettings.c)
+- [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
 
 ## RegistryMachin_* Keys
 
@@ -557,13 +557,13 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "BootPathSurpriseRemovalCount" = ?;
 ```
 
-> [peripheral/assets | GetPersistedKeyPath.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/GetPersistedKeyPath.c)  
-> [peripheral/assets | HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)  
-> [peripheral/assets | HUBREG_QueryGlobalUsb20HardwareLpmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsb20HardwareLpmSettings.c)  
-> [peripheral/assets | HUBREG_QueryGlobalUsbLtmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsbLtmSettings.c)  
-> [peripheral/assets | HUBREG_QueryUsbHardwareVerifierValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryUsbHardwareVerifierValue.c)  
-> [peripheral/assets | ReadManifestAssignedValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/ReadManifestAssignedValue.c)  
-> [peripheral/assets | UsbDualRoleFeaturesQueryLocalMachine.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/UsbDualRoleFeaturesQueryLocalMachine.c)
+- [peripheral/assets | GetPersistedKeyPath.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/GetPersistedKeyPath.c)
+- [peripheral/assets | HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
+- [peripheral/assets | HUBREG_QueryGlobalUsb20HardwareLpmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsb20HardwareLpmSettings.c)
+- [peripheral/assets | HUBREG_QueryGlobalUsbLtmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsbLtmSettings.c)
+- [peripheral/assets | HUBREG_QueryUsbHardwareVerifierValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryUsbHardwareVerifierValue.c)
+- [peripheral/assets | ReadManifestAssignedValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/ReadManifestAssignedValue.c)
+- [peripheral/assets | UsbDualRoleFeaturesQueryLocalMachine.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/UsbDualRoleFeaturesQueryLocalMachine.c)
 
 ## RegistryMachin_* Keys
 
@@ -620,7 +620,7 @@ Stop USB devices when my screen is off to help battery.
 ```
 `Bluetooth & devices` > `USB` > `USB battery saver`
 
-> [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/power/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
+- [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/power/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
 
 # USBHUB Values
 
@@ -671,11 +671,11 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "{GUID}" = ?; // value name from RtlStringFromGUID
 ```
 
-> [peripheral/assets | HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryUxdDeviceKey.c)  
-> [peripheral/assets | HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_DeleteUxdDeviceKey.c)  
-> [peripheral/assets | HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalUxdSettings.c)  
-> [peripheral/assets | HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalHubValues.c)  
-> [peripheral/assets | HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_GetUxdPnpValue.c)
+- [peripheral/assets | HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryUxdDeviceKey.c)
+- [peripheral/assets | HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_DeleteUxdDeviceKey.c)
+- [peripheral/assets | HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalUxdSettings.c)
+- [peripheral/assets | HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalHubValues.c)
+- [peripheral/assets | HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_GetUxdPnpValue.c)
 
 ## RegistryMachin_* Keys
 
@@ -839,7 +839,9 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 # Audio Ducking
 
-"*Windows audio ducking is a dynamic audio processing technique that enables the automatic adjustment of audio levels between different audio sources on a Windows-based computer or operating system.*" [[*]](https://multimedia.easeus.com/ai-article/windows-audio-ducking.html)
+> "*Windows audio ducking is a dynamic audio processing technique that enables the automatic adjustment of audio levels between different audio sources on a Windows-based computer or operating system.*"
+>
+> — EaseUS, [Windows audio ducking](https://multimedia.easeus.com/ai-article/windows-audio-ducking.html)
 
 Can be disabled manually via `mmsys.cpl > Communications` `Do nothing`.
 
@@ -1159,7 +1161,9 @@ AddReg = PS2_Inst.HW.AddReg
 HKR,,"MouseDataQueueSize",0x00010003,100
 ```
 
-"*Specifies the number of mouse events to be buffered internally by the driver, in nonpaged pool. The allocated size, in bytes, of the internal buffer is this value times the size of the MOUSE_INPUT_DATA structure (defined in NTDDMOU.H).*" [[*]](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
+> "*Specifies the number of mouse events to be buffered internally by the driver, in nonpaged pool. The allocated size, in bytes, of the internal buffer is this value times the size of the MOUSE_INPUT_DATA structure (defined in NTDDMOU.H).*"
+>
+> — Microsoft KB Archive, [MouseDataQueueSize](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
 
 ## [MouseDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)
 
@@ -1353,9 +1357,9 @@ Everything listed below is based on personal research. Mistakes may exist, some 
 "HKCU\Software\Microsoft\Touchpad\TouchpadDesiredVisibility","Length: 16"
 ```
 
-> [peripheral/assets | touch-twinui.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-twinui.c)  
-> [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)  
-> [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
+- [peripheral/assets | touch-twinui.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-twinui.c)
+- [peripheral/assets | touch-InitializeInputSettingsGlobals.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-InitializeInputSettingsGlobals.c)
+- [peripheral/assets | touch-IsTouchDisabled.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/touch-IsTouchDisabled.c)
 
 ```
 TabletModeActivated
@@ -1422,7 +1426,7 @@ WakeOnInputDeviceTypes = 46
 UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
 ```
 
-> [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
+- [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
 
 ## query_flag
 
@@ -1444,7 +1448,9 @@ All available flags (`powercfg /devicequery query_flag`):
 
 # Disable Dynamic Lighting
 
-"*Dynamic Lighting is a feature that allows you to control LED-powered devices such as keyboards, mice, and other illuminated accessories. This feature enables you to coordinate the colors of LEDs, creating a unified lighting experience both within Windows and across all your devices.*" [[*]](ttps://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices)
+> "*Dynamic Lighting is a feature that allows you to control LED-powered devices such as keyboards, mice, and other illuminated accessories. This feature enables you to coordinate the colors of LEDs, creating a unified lighting experience both within Windows and across all your devices.*"
+>
+> — Microsoft Learn, [Dynamic Lighting devices](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/dynamic-lighting-devices)
 
 | Value | Type | Values | Ranges | Notes |
 | --- | --- | --- | --- | --- |
