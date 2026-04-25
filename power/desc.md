@@ -939,45 +939,68 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 "CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
 
-## TimerCoalescing Data
+## InitTimerCoalescing
 
-`TimerCoalescing` is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`).
+`TimerCoalescing` (queried by [InitTimerCoalescing](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InitTimerCoalescing.c)) is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`), interpreted as 20 DWORDs. The value is used to load two four entry timer coalescing tolerance blocks.
 
 ```c
-"HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\TimerCoalescing","Length: 96" // 0x60u
+// InitTimerCoalescing.c
+
+if ( ZwQueryValueKey(
+      KeyHandle,
+      &DestinationString,
+      KeyValuePartialInformation,
+      KeyValueInformation,
+      0x60u,
+      &ResultLength) >= 0
+&& v16 == 3 // registry Type must be REG_BINARY
+&& v17 == 80 // data must be exactly 20 DWORDs
+&& !v18 ) // DWORD 0 must be zero
 ```
 
+### Data Formatting
+
 ```c
-if (v18 == 3 && v19 == 80 && !v20[0]) // type REG_BINARY, length 80 bytes, leading dword zero
+// InitTimerCoalescing.c
+
+for ( i = &v19; !*(_DWORD *)i; i += 4 ) // DWORDs 1-3 must be zero
 {
-  for (i = 0; i < 3; ++i)
-    if (v20[i + 1]) return ZwClose(KeyHandle); // v20[1..3] must be zero
-
-  for (j = 0; j < 4; ++j)
-    if (v20[j + 8]) return ZwClose(KeyHandle); // v20[8..11] must be zero
-
-  for (k = 0; k < 4; ++k)
-    if (v20[k + 16]) return ZwClose(KeyHandle); // v20[16..19] must be zero
-
-  for (m = 0; (unsigned int)m < 4; ++m)
-    if (v20[m + 4] > 0x7FFFFFF5) return ZwClose(KeyHandle); // clamp tolerance index 0 entries
-
-  while (v0 < 4)
+  if ( (unsigned int)++v2 >= 3 )
   {
-    if (v20[v0 + 12] > 0x7FFFFFF5) return ZwClose(KeyHandle); // clamp tolerance index 3 entries
-    ++v0;
-  }
-}
+    v4 = 0;
+    for ( j = &v21; !*(_DWORD *)j; j += 4 ) // DWORDs 8-11 must be zero
+    {
+      if ( (unsigned int)++v4 >= 4 )
+      {
+        v6 = 0;
+        for ( k = &v23; !*(_DWORD *)k; k += 4 ) // DWORDs 16-19 must be zero
+        {
+          if ( (unsigned int)++v6 >= 4 )
+          {
+            v8 = 0;
+            for ( m = &v20; *(_DWORD *)m <= 0x7FFFFFF5u; m = (__int128 *)((char *)m + 4) ) // DWORDs 4-7 range
+            {
+              if ( (unsigned int)++v8 >= 4 )
+              {
+                for ( n = &v22; *(_DWORD *)n <= 0x7FFFFFF5u; n = (__int128 *)((char *)n + 4) ) // DWORDs 12-15 range
+                {
+                  if ( (unsigned int)++v0 >= 4 )
+                  {
+                    xmmword_1C035A178 = v20; // stores one four DWORD tolerance block
+                    *(_OWORD *)&gTimerCoalescingSpec = v22; // stores the other four DWORD tolerance block
+                    SetTimerCoalescingTolerance(0LL); // applies mode 0 after load
 ```
 
-As the pseudocode shows eight values have data, all other ones are forced to `0` (four dwords of zeros, four dwords for tolerance index 0, four more zeros, four dwords for tolerance index 3, and zeros).
+| DWORD | Data | Note |
+| --- | --- | --- |
+| `0` | `0` | Reserved value checked before the loop validation |
+| `1-3` | all `0` | Reserved |
+| `4-7` | each `<= 0x7FFFFFF5` | Four accepted tolerance values, copied as one block |
+| `8-11` | all `0` | Reserved |
+| `12-15` | each `<= 0x7FFFFFF5` | Four accepted tolerance values, copied to `gTimerCoalescingSpec` |
+| `16-19` | all `0` | Reserved |
 
-```json
-"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows": {
-  "TimerCoalescing": { "Type": "REG_BINARY", "Data": "00000000000000000000000000000000F5FFFF7FF5FFFF7FF5FFFF7FF5FFFF7F00000000000000000000000000000000F5FFFF7FF5FFFF7FF5FFFF7FF5FFFF7F00000000000000000000000000000000" }
-}
-```
-Using the highest clamp as shown above will end up with a BSoD (same goes for `0x7FFFFFF4`/`0` and probably any other data).
+Note that this only shows the data range etc., there's more information in relation to [`SetTimerCoalescingTolerance`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/SetTimerCoalescingTolerance.c) (mode selection), `gCurrentTimerCoalescingTolerance`, [`InternalSetTimer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InternalSetTimer.c), coalescable timers (affected ones) etc. I might or might not add more details whenever I've time.
 
 ## InitTimerPowerSaving Details
 

@@ -560,7 +560,7 @@ You can check if the bit is true or false using [iasl & acpidump](https://github
 `1` = forced on (uses CPU 0 `KiProcessorBlock[0]`)
 `>=2` = forced `0`
 
-This isn't completey, it's currently only for the data ranges.
+This isn't complete, it's currently only for the data ranges.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel-ste.png?raw=true)
 
