@@ -15,9 +15,7 @@ Client defaults are short + variable. Server defaults are long + fixed.
 
 ## Bits 0/1
 
-> "*For each extra priority level (up to 2), another quantum is given to the thread. For example, if the thread receives a boost of one priority level, it receives an extra quantum as well. By default, Windows sets the maximum possible priority boost to foreground threads, meaning that the priority separation will be 2, which means quantum index 2 is selected in the variable quantum table. This leads to the thread receiving two extra quantums, for a total of three quantums.*"
->
-> — Microsoft Press, [Windows Internals, Sixth Edition](https://www.microsoftpressstore.com/content/images/9780735648739/samplepages/9780735648739.pdf)
+For each extra priority level (up to 2), another quantum is given to the thread. For example, if the thread receives a boost of one priority level, it receives an extra quantum as well. By default, Windows sets the maximum possible priority boost to foreground threads, meaning that the priority separation will be 2, which means quantum index 2 is selected in the variable quantum table. This leads to the thread receiving two extra quantums, for a total of three quantums.
 
 Clamped to `2`:
 ```c
@@ -34,11 +32,9 @@ PsPrioritySeparation = v3;
 
 ## Bits 2/3
 
-> "*Determine whether the length of processor time varies or is fixed. It also determines whether the threads of foreground processes have longer processor intervals than those of background processes. If the processor interval is fixed, that interval applies equally to the threads of foreground and background processes. If the processor interval varies, the length of time each thread runs varies, but the ratio of processor time of foreground threads to background threads is fixed.*
->
-> *If a variable interval is specified, the ratio of foreground thread processor time to background thread processor time is determined by the value of the lowest set of bits.*"
->
-> — Microsoft Docs, [Win32PrioritySeparation](https://bitsum.com/files/Win32PrioritySeparation-Microsoft-Docs.pdf)
+Determine whether the length of processor time varies or is fixed. It also determines whether the threads of foreground processes have longer processor intervals than those of background processes. If the processor interval is fixed, that interval applies equally to the threads of foreground and background processes. If the processor interval varies, the length of time each thread runs varies, but the ratio of processor time of foreground threads to background threads is fixed.
+
+If a variable interval is specified, the ratio of foreground thread processor time to background thread processor time is determined by the value of the lowest set of bits.
 
 ```c
 v5 = a2 & 0xC;
@@ -69,9 +65,7 @@ v8 = (char *)v7;
 
 ## Bits 4/5
 
-> "*Determine how long the threads of processes are permitted to run each time they are scheduled. This interval is specified as a range because threads can be preempted and processor time is not precisely determined.*"
->
-> — Microsoft Docs, [Win32PrioritySeparation](https://bitsum.com/files/Win32PrioritySeparation-Microsoft-Docs.pdf)
+Determine how long the threads of processes are permitted to run each time they are scheduled. This interval is specified as a range because threads can be preempted and processor time is not precisely determined.
 
 ```c
 LABEL_7:
@@ -1625,7 +1619,7 @@ And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
 
 > "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
 >
-> — MicrosoftDocs/win32, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings) (`mmcss.sys`)
+> — MicrosoftDocs/win32, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
 
 ```c
 // CiConfigInitialize
