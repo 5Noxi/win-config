@@ -1028,7 +1028,7 @@ Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within 
 
 `RITdemonTimerPowerSaveElapse` is the base timer interval. `RITdemonTimerPowerSaveCoalescing` is a kind of extra coalescing related parameter passed into the timer setup path.
 
-At [RawInputThread](https://raw.githubusercontent.com/nohuto/decompiled-pseudocode/refs/heads/main/11-23H2/win32kfull/RawInputThread.c) start it does call `InitTimerPowerSaving();` but also directly calls `ConfigureRITDelayableTimers(0);` which isn't the "TimerPowerSave" mode. So [`ConfigureRITDelayableTimers`](https://raw.githubusercontent.com/nohuto/decompiled-pseudocode/refs/heads/main/11-23H2/win32kfull/-ConfigureRITDelayableTimers@@YAXW4RitTimerRate@@@Z.c) uses these values as we can see here:
+At [RawInputThread](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/RawInputThread.c) start it does call `InitTimerPowerSaving();` but also directly calls `ConfigureRITDelayableTimers(0);` which isn't the "TimerPowerSave" mode. So [`ConfigureRITDelayableTimers`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-ConfigureRITDelayableTimers@@YAXW4RitTimerRate@@@Z.c) uses these values as we can see here:
 
 ```c
 // ConfigureRITDelayableTimers
@@ -1048,7 +1048,7 @@ LABEL_4:
 }
 ```
 
-This shows `a1 == 0` & `a1 == 1` don't go into the [`InternalSetTimer`](https://raw.githubusercontent.com/nohuto/decompiled-pseudocode/refs/heads/main/11-23H2/win32kfull/InternalSetTimer.c) part, so any other than `0`/`1` would use the TimerPowerSave values. When does it get anything else than `0`/`1`?
+This shows `a1 == 0` & `a1 == 1` don't go into the [`InternalSetTimer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InternalSetTimer.c) part, so any other than `0`/`1` would use the TimerPowerSave values. When does it get anything else than `0`/`1`?
 
 ```c
 // SetTimerCoalescingTolerance
