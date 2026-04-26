@@ -7,6 +7,8 @@ HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{Net
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohFlags  Type: REG_QWORD, Length: 8, Data: 2
 ```
 
+If you're wondering what `Family`/`Malware`/`Extended` etc. behind the provider names mean, see '[Mullvad](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls#specifications)', '[Quad9](https://docs.quad9.net/services/)', '[AdGuard](https://adguard-dns.io/kb/general/dns-providers/)', '[Cloudflare](https://developers.cloudflare.com/1.1.1.1/setup/)' for details. If you want to use NextDNS, create your own profile [here](https://my.nextdns.io/)
+
 `DohFlags` data meaning:
 - `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO (0x0001)`: If this option is present, then the DNS server that's referenced by this property will load its URI template from the system DNS-over-HTTPS system list. When this option is present, the Template field must be set to NULL. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE option.
 - `DNS_DOH_SERVER_SETTINGS_ENABLE (0x0002)`: If this option is present, then the Template field must point to a valid DNS-over-HTTPS URI template. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO option.
