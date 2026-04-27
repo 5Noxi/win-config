@@ -876,7 +876,7 @@ The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio
 ## Registry Values
 
 | Value | Meaning |
-| --- | --- | --- |
+| --- | --- |
 | `\Properties\{f19f064d-082c-4e27-bc73-6882a1bb8e4c},0` | [`PKEY_AudioEngine_DeviceFormat`](https://learn.microsoft.com/en-us/windows/win32/coreaudio/pkey-audioengine-deviceformat) - "*The PKEY_AudioEngine_DeviceFormat property specifies the device format, which is the format that the user has selected for the stream that flows between the audio engine and the audio endpoint device when the device operates in shared mode. This format might not be the best default format for an exclusive-mode application to use.* |  | 
 | `\Properties\{e4870e26-3cc5-4cd2-ba46-ca0a9a70ed04},0` | `PKEY_AudioEngine_OEMFormat_FLOAT` |
 | `\Properties\{3d6e1656-2e50-4c4c-8d85-d0acae3c6c68},3` | - |
