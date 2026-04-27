@@ -883,7 +883,6 @@ Only the first three values are used for my side, this might be different for yo
 | `\Properties\{e4870e26-3cc5-4cd2-ba46-ca0a9a70ed04},0` | `PKEY_AudioEngine_OEMFormat_FLOAT` |
 | `\Properties\{3d6e1656-2e50-4c4c-8d85-d0acae3c6c68},3` | - |
 | `\Properties\{624f56de-fd24-473e-814a-de40aacaed16},3` | - |
-| `\Properties\{3d6e1656-72d5-4661-8d01-10f69e406c60},3` | - |
 
 All values have the same structure. Note that you've to get the `nBlockAlign` bytes from the data since not all values may have the same `nBlockAlign` (what happened to me: using the same for example `16` (`10 00`) multiplier for all even tho 2 of them use `32` (`20 00`) the playback device won't output audio, but will show the changes in the windows UI).
 
