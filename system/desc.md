@@ -3074,6 +3074,8 @@ Small documentation on several values the option applies, see links below for mo
 
 ### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
 
+This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) boot trace for more.
+
 | Value | Description |
 | ----- | ------------ |
 | `DisableDeleteNotification` | 0 = TRIM/UNMAP enabled, 1 = disabled. Controls whether delete operations send trim/unmap notifications to the underlying storage. |
@@ -3091,14 +3093,8 @@ Small documentation on several values the option applies, see links below for mo
 | `NtfsMemoryUsage` | Configures the internal cache levels of NTFS paged-pool memory and NTFS nonpaged-pool memory. |
 | `NtfsMftZoneReservation` | Sets reserved NTFS MFT zone size as 200 MB x value: 1 = 200 MB (default), up to 4 = 800 MB. Larger values reduce MFT fragmentation on volumes with many small files. |
 | `RefsDisableLastAccessUpdate` | Related to NTFSDisableLastAccessUpdate (both get set via disablelastaccess). |
-| `SymlinkXToXEvaluation` | 0 = x->x symlinks not followed, 1 = resolved (X = Local/Remote). |
+| `SymlinkXToXEvaluation` | 0 = x->x symlinks not followed, 1 = resolved (X = Local/Remote). Symlinksare shortcuts or references that point to a file or folder in another location, like a portal. They're not duplicates, just pointers. File at: `C:\Projects\Game\assets\logo.png`, Symlink: `C:\Users\YourName\Desktop\logo.png`. |
 | `Win31FileSystem` | 0 = standard modern FAT behavior (long filenames, richer timestamps), 1 = legacy Windows 3.1–compatible mode with stricter 8.3 naming and older timestamp semantics. |
-
-Scan current 8dot3 files names: `fsutil 8dot3name scan C:\`
-
-Symlinksare shortcuts or references that point to a file or folder in another location, like a portal. They're not duplicates, just pointers.
-File at: `C:\Projects\Game\assets\logo.png`
-Symlink: `C:\Users\YourName\Desktop\logo.png`
 
 - [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
