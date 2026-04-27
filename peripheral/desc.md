@@ -866,7 +866,7 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 
 # Sample Rate
 
-The values below are related to `Default Format`, see [https://winsps-kb.readthedocs.io/en/latest/sources/property-sets/](property-sets) for a list of all names.
+The values below are related to `Default Format`, see [property-sets](https://winsps-kb.readthedocs.io/en/latest/sources/property-sets/) for a list of all names.
 
 The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\{Render\|Capture}\{Endpoint}`.
 
@@ -874,6 +874,8 @@ The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio
 - `Capture` = Recording
 
 ## Registry Values
+
+Only the first three values are used for my side, this might be different for you.
 
 | Value | Meaning |
 | --- | --- |
@@ -977,7 +979,7 @@ Audio enhancements are software based sound processing features that change or i
 
 ## Registry Values
 
-The values below are related to `Exclusive Mode`/`Signal Enhancements`, see [https://winsps-kb.readthedocs.io/en/latest/sources/property-sets/](property-sets) for a list of all names.
+The values below are related to `Exclusive Mode`/`Signal Enhancements`, see [property-sets](https://winsps-kb.readthedocs.io/en/latest/sources/property-sets/) for a list of all names.
 
 The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\{Render\|Capture}\{Endpoint}`.
 
