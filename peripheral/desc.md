@@ -841,6 +841,8 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 The values below are related to Default Format, see [property-sets](https://winsps-kb.readthedocs.io/en/latest/sources/property-sets/) for a list of more names.
 
+The main option lists sample rates that are supported on both active endpoints, if you want to change them individually use the suboptions which list supported sample rates for render/capture endpoints.
+
 Microsoft documents endpoint properties as values that clients can read but "*shouldn't set*". The supported way to inspect/validate formats is Core Audio / WASAPI, especially [`IAudioClient::GetMixFormat`](https://learn.microsoft.com/en-us/windows/win32/api/audioclient/nf-audioclient-iaudioclient-getmixformat) and [`IAudioClient::IsFormatSupported`](https://learn.microsoft.com/en-us/windows/win32/api/audioclient/nf-audioclient-iaudioclient-isformatsupported). Editing the registry can leave the UI, AudioEndpointBuilder, the audio engine, the driver, and APO/effects state out of sync (e.g., what happened to me while working on the doc: using the same for example `16` (`10 00`) multiplier for all even tho 2 of them use `32` (`20 00`) the playback device won't output audio, but will show the changes in the windows UI).
 
 The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\{Render\|Capture}\{Endpoint}`.
