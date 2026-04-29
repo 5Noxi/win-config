@@ -565,7 +565,7 @@ HKLM\SYSTEM\CurrentControlSet\Services\<ServiceName> // software key - service/d
 
 Not every instance has the same subkeys or values.
 
-I won't add details on the PnP manager here, as that's not the purpose of the repo. For more details, read [Windows Internals E7 P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
+I won't add details on the PnP manager here, as that's not the purpose of the repo. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
 
 ---
 
@@ -931,7 +931,7 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 > "*Storport provides support for idle power management to allow storage devices to enter a low power state when not in use. Storport's idle power management (IPM) support includes handling idle power management for storage devices under its management, in coordination with the Power Manager in Windows.*"
 >
-> — Microsoft Learn, [Registry entries for Storport miniport drivers](https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers)
+> — Microsoft, [Registry entries for Storport miniport drivers](https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/registry-entries-for-storport-miniport-drivers)
 
 - [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
 
@@ -1164,7 +1164,7 @@ The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepI
 
 Windows uses hibernation to provide a fast startup experience. When available, it's also used on mobile devices to extend the usable battery life of a system by giving a mechanism to save all of the user's state prior to shutting down the system. In a hibernate transition, all the contents of memory are written to a file on the primary system drive, the hibernation file. This preserves the state of the operating system, applications, and devices. In the case where the combined memory footprint consumes all of physical memory, the hibernation file must be large enough to ensure there's space to save all the contents of physical memory. Since data is written to non-volatile storage, DRAM does not need to maintain self-refresh and can be powered off, which means power consumption of hibernation is very low, almost the same as power off.
 
-Windows Internals (E7-P1, Power manager): the system saves a full memory image to `Hiberfil.sys` for S4 and resumes execution from that image on the next boot. The hibernation file is invalidated after a resume to prevent multiple resume attempts from stale data.
+The system saves a full memory image to `Hiberfil.sys` for S4 and resumes execution from that image on the next boot. The hibernation file is invalidated after a resume to prevent multiple resume attempts from stale data.
 
 During a full shutdown and boot (S5), the entire user session is torn down and restarted on the next boot. In contrast, during a hibernation (S4), the user session is closed and the user state is saved.
 
@@ -1343,7 +1343,7 @@ HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAcco
 
 Fast startup is a type of shutdown that uses a hibernation file to speed up the subsequent boot. During this type of shutdown, the user is logged off before the hibernation file is created. Fast startup allows for a smaller hibernation file, more appropriate for systems with less storage capabilities.
 
-Windows Internals (E7-P2, Hybrid shutdown): Fast Startup is implemented as a hybrid shutdown that writes a hibernation image after user sessions are closed; Boot Manager uses the hiberboot/hiberfile BCD elements to resume from that image on the next boot.
+Fast Startup is implemented as a hybrid shutdown that writes a hibernation image after user sessions are closed; Boot Manager uses the hiberboot/hiberfile BCD elements to resume from that image on the next boot.
 
 When using fast startup, the system appears to the user as though a full shutdown (S5) has occurred, even though the system has actually gone through S4. This includes how the system responds to device wake alarms.
 

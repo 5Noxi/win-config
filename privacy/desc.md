@@ -622,7 +622,7 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 
 > "*Game Bar Presence Writer is a component that is notified when a game's "presence" state (i.e. is a game running in the foreground) changes. This functionality is available in Windows 10 and later operating systems. By default, the existing Game Bar Presence Writer will set a user's Xbox Live presence state for a running game if the Xbox App is installed, the user is signed into their Xbox account, and the user has enabled Xbox Live presence to be set when they run a game on their PC. It is possible for Windows Application developers to override this default behavior with their own implementation.*"
 >
-> — Microsoft Learn, [GameBar PresenceWriter](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
+> — Microsoft, [GameBar PresenceWriter](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
 
 # Disable PSR
 
@@ -783,7 +783,7 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 
 > "*The Windows Insider Preview program lets you help shape the future of Windows, be part of the community, and get early access to releases of Windows 10 and Windows 11. Windows Insider Preview builds only apply to Windows 10 and Windows 11 and aren't available for Windows Server 2016.*"
 >
-> — Microsoft Learn, [Manage connections from Windows operating system components to Microsoft services](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services)
+> — Microsoft, [Manage connections from Windows operating system components to Microsoft services](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services)
 
 `AllowBuildPreview` is used up to V1703, I'll still leave it. `Computer Configuration > Administrative Templates > Windows Component > Windows Update > Windows Update for Business : Manage Preview Builds` for W10+ versions.
 
@@ -2911,7 +2911,7 @@ mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy 
 `Disable Background Task Host`:  
 Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
 
-Windows Internals (E7-P1, Modern Standby): when the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
+When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
 
 ## Windows Policies
 
@@ -2942,7 +2942,7 @@ Windows Internals (E7-P1, Modern Standby): when the system is in Modern Standby,
 
 [WER](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
 
-Windows Internals (E7-P2, WER): WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting pipeline.
+WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting part.
 
 `\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
 

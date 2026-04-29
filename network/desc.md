@@ -76,7 +76,7 @@ I personally use [AdGuard](https://adguard-dns.io/), since it's possible to add 
 
 # SMB Configuration
 
-Windows Internals (E7-P2, Remote FSDs): SMB uses a client-side remote file system driver (LANMan Redirector) and a server-side remote FSD (`Srv2.sys`). Client settings under `LanmanWorkstation` and server settings under `LanmanServer` govern how those components negotiate and handle SMB traffic.
+SMB uses a client-side remote file system driver (LANMan Redirector) and a server-side remote FSD (`Srv2.sys`). Client settings under `LanmanWorkstation` and server settings under `LanmanServer` govern how those components negotiate and handle SMB traffic.
 
 ## Suboptions
 
@@ -138,7 +138,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\SMB2	Type: REG_DW
 
 > "*The `EnableSecuritySignature` registry setting for SMB2 and later clients and servers is ignored. Therefore, this setting does nothing unless you're using SMB1. SMB 2.02 and later signing is controlled solely by being required or not. This setting is used when either the server or client requires SMB signing. Signing doesn't occur only when both the server and client have signing set to `0`.*"
 >
-> — Microsoft Learn, [SMB signing overview](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-signing-overview#understanding-requiresecuritysignature-and-enablesecuritysignature)
+> — Microsoft, [SMB signing overview](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-signing-overview#understanding-requiresecuritysignature-and-enablesecuritysignature)
 
 In summary SMB is signed when:
 
@@ -190,7 +190,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\CipherSuiteOrder	
 >
 > *`NETLOGON` and `SYSVOL` aren't hidden shares. Instead, they are special administrative shares.*"
 >
-> — Microsoft Learn, [Remove administrative shares](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/remove-administrative-shares)
+> — Microsoft, [Remove administrative shares](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/remove-administrative-shares)
 
 Disable default sharing:
 ```powershell
@@ -223,7 +223,7 @@ HKLM\System\CurrentControlSet\Services\LanmanServer\Parameters\RejectUnencrypted
 >
 > *SMB over QUIC offers an "SMB VPN" for telecommuters, mobile device users, and high security organizations. The server certificate creates a TLS 1.3-encrypted tunnel over the internet-friendly UDP port 443 instead of the legacy TCP port 445. All SMB traffic, including authentication and authorization within the tunnel is never exposed to the underlying network. SMB behaves normally within the QUIC tunnel, meaning the user experience doesn't change. SMB features like multichannel, signing, compression, continuous availability, directory leasing, and so on, work normally.*"
 >
-> — Microsoft Learn, [SMB over QUIC](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-over-quic?tabs=windows-admin-center%2Cpowershell2%2Cwindows-admin-center1)
+> — Microsoft, [SMB over QUIC](https://learn.microsoft.com/en-us/windows-server/storage/file-server/smb-over-quic?tabs=windows-admin-center%2Cpowershell2%2Cwindows-admin-center1)
 
 ```powershell
 Set-SmbClientConfiguration -EnableSMBQUIC $true
@@ -286,7 +286,7 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\DisableLarge
 > - ***Network fault tolerance.** When clients simultaneously use multiple network connections, the clients can continue without interruption despite the loss of a network connection.*
 > - ***Automatic configuration.** SMB Multichannel automatically discovers multiple available network paths and dynamically adds connections as necessary.*"
 >
-> — Microsoft Learn, [Manage SMB Multichannel](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/manage-smb-multichannel)
+> — Microsoft, [Manage SMB Multichannel](https://learn.microsoft.com/en-us/windows-server/storage/storage-spaces/manage-smb-multichannel)
 
 ```powershell
 Set-SmbClientConfiguration -EnableMultiChannel $true
@@ -343,7 +343,7 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainT
 
 > "*Policy-based QoS lets Windows identify outgoing network traffic by application, user, computer, IP address, port, or protocol, and then either mark the traffic with a DSCP value for priority handling or limit it with an outbound throttle rate. It's most useful on a managed network where routers, switches, and wireless access points are configured to recognize DSCP markings and give matching traffic higher priority when the network is busy. Without QoS aware network equipment, DSCP marking may have little practical effect beyond the local device, while throttling still works because Windows enforces the send rate locally on outgoing traffic.*"
 >
-> — Microsoft Learn, [Policy-based QoS](https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top)
+> — Microsoft, [Policy-based QoS](https://learn.microsoft.com/en-us/windows-server/networking/technologies/qos/qos-policy-top)
 
 ![](https://github.com/nohuto/win-config/blob/main/network/images/qosvalues.png?raw=true)
 
@@ -970,7 +970,7 @@ Excludes (deprecated, chimney too):
 
 > "*The wake-on-LAN (WOL) feature wakes the computer from a low power state when a network adapter detects a WOL event (typically, a specially constructed Ethernet packet). WOL is supported from `S3` sleep or `S4` hibernate. It's not supported from fast startup or `S5` soft off shutdown states. NICs aren't armed for wake in these states because users don't expect their systems to wake up on their own. WOL is not officially supported from the `S5` soft off state. However, the BIOS on some systems might support arming NICs for wake, even though Windows isn't involved in the process.*"
 >
-> — Microsoft Learn, [System power states](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior)
+> — Microsoft, [System power states](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#wake-on-lan-behavior)
 
 ```bat
 powercfg /devicequery wake_programmable
@@ -1118,7 +1118,7 @@ Reminder: Each adapter uses it's own default values, means that the `default`/`m
 >
 > *You should consider interrupt moderation for CPU-bound workloads. When using interrupt moderation, consider the trade-off between the host CPU savings and latency versus the increased host CPU savings because of more interrupts and less latency. If the network adapter doesn't perform interrupt moderation, but it does expose buffer coalescing, you can improve performance by increasing the number of coalesced buffers to allow more buffers per send or receive.*"
 >
-> — Microsoft Learn, [Performance tuning network adapters](https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation)
+> — Microsoft, [Performance tuning network adapters](https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation)
 
 Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
 
@@ -1330,7 +1330,7 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
 
 Disables the Client for Microsoft Networks (`ms_msclient`) and the Microsoft Network Adapter Multiplexor Protocol (`ms_implat`) bindings on all adapters. This blocks SMB client access and disables NIC teaming.
 
-Windows Internals (E7-P2, Remote FSDs): SMB client I/O is handled by the LANMan Redirector (client-side remote FSD) which translates file I/O into SMB commands, while the server side uses `Srv2.sys`. Disabling `ms_msclient` prevents the redirector from binding to the adapter, so SMB client access is effectively disabled regardless of SMB version. This is broader than the SMBv1 toggle (which only removes the legacy protocol).
+SMB client I/O is handled by the LANMan Redirector (client-side remote FSD) which translates file I/O into SMB commands, while the server side uses `Srv2.sys`. Disabling `ms_msclient` prevents the redirector from binding to the adapter, so SMB client access is effectively disabled regardless of SMB version. This is broader than the SMBv1 toggle (which only removes the legacy protocol).
 
 # Disable ICS / Mobile Hotspot
 
@@ -1383,7 +1383,7 @@ For example:
 
 Once these capabilities are shared, they agree on the highest common speed and prioritize full-duplex over half-duplex.
 
-Windows Internals (E7-P1, I/O system): NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
+NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
 
 ## Setup Information
 
@@ -1504,13 +1504,13 @@ HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 
 > "*When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.*"
 >
-> — Microsoft Learn, [Receive segment coalescing](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
+> — Microsoft, [Receive segment coalescing](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
 
 > "*Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.*
 >
 > *Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.*"
 >
-> — Microsoft Learn, [UDP receive segment coalescing offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
+> — Microsoft, [UDP receive segment coalescing offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
 
 ## Registry Value Ranges
 
@@ -1628,7 +1628,7 @@ HKR, "", *VMQ, %REG_SZ%, "1"
 
 > "*Single Root I/O Virtualization (SR-IOV) is an extension to the PCI Express (PCIe) specification that improves network performance in virtualized environments. SR-IOV allows devices, such as network adapters, to separate access to their resources among various PCIe hardware functions, enabling near-native network performance in Hyper-V virtual machines.*"
 >
-> — Microsoft Learn, [SR-IOV](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-)
+> — Microsoft, [SR-IOV](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-single-root-i-o-virtualization--sr-iov-)
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
@@ -1758,7 +1758,7 @@ HKR, PROSetNdi\NdiExt\Params\LinkNegotiationProcess,    ExposeLevel,            
 >
 > *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*"
 >
-> — Microsoft Learn, [NDIS poll mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
+> — Microsoft, [NDIS poll mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
 
 When enabled on RX side, the following capabilities are not be supported:
 - AsyncReceiveIndicate
@@ -1793,7 +1793,7 @@ This feature allows packet burst handling, while avoiding packet drops that may 
 
 > "*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*"
 >
-> — Microsoft Learn, [Threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
+> — Microsoft, [Threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";

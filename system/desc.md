@@ -2,7 +2,7 @@
 
 A quantum is the amount of time a thread is permitted to run before Windows checks to see whether another thread at the same priority is waiting to run. If a thread completes its quantum and there are no other threads at its priority, Windows permits the thread to run for another quantum.
 
-You can calculate the clock cycles per quantum by dumping the value of `KiCyclesPerClockQuantum` (`dd nt!KiCyclesPerClockQuantum L1`), or follow the 'EXPERIMENT: Determining the clock cycles per quantum' in Windows Internals E7, P1.
+You can calculate the clock cycles per quantum by dumping the value of `KiCyclesPerClockQuantum` (`dd nt!KiCyclesPerClockQuantum L1`), or follow the 'EXPERIMENT: Determining the clock cycles per quantum' in [Windows Internals E7, P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
 
 Gets applied with:
 ```c
@@ -126,7 +126,7 @@ Miscellaneous notes:
 
 # Kernel Values
 
-Since many people don't yet know which values exist and what default value they have, here's a list. I used IDA, WinDbg, WinObjEx, Windows Internals E7 P1 to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
+Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
 ## Registry Values Details
 
@@ -1578,7 +1578,7 @@ aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\P
 >
 > *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
 >
-> — Microsoft Learn, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
+> — Microsoft, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
 
 Client applications can register with MMCSS by calling AvSetMmThreadCharacteristics with a task name that must match one of the subkeys under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks`, see [task-details](https://www.noverse.dev/docs/win-config/system/mmcss-values/#tasks-details).
 
@@ -1619,7 +1619,7 @@ And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
 
 > "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
 >
-> — MicrosoftDocs/win32, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
+> — Microsoft, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
 
 ```c
 // CiConfigInitialize
@@ -1685,7 +1685,7 @@ CiSystemResponsiveness = 10 * (value / 10);
 
 > "*MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
 >
-> — Microsoft Press, [Windows Internals, Sixth Edition](https://www.informit.com/content/images/9780735648739/samplepages/9780735648739.pdf)
+> — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 `0` becomes `1`, `1`-`70` stay unchanged, `71`-`4294967294` become `70`, `4294967295` (`0xFFFFFFFF`) stays unchanged.
 
@@ -1760,7 +1760,7 @@ It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely 
 
 > "*The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results.*"
 >
-> — djdallmann/GamingPCSetup, [NoLazyMode](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
+> — djdallmann, [NoLazyMode](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/nolazymode.png?raw=true)
 
@@ -2077,7 +2077,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
 |  | `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
 |  | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
-| SysMain | `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/windows-books/releases)) |
+| SysMain | `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)) |
 | Microsoft Store | `AppXSvc` | *Disabling breaks CmdPal and other store applications.* - Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
 |  | `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
 |  | `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
@@ -2210,7 +2210,7 @@ Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) / `rdyboost` (Read
 
 Windows marks some services as delayed autostart to reduce boot contention. The Service Control Manager (SCM) waits before starting those services, the default delay is 120 seconds as shown below.
 
-Windows Internals (E7, P2) puts this in the middle of the SCM boot sequence, so the delay only applies after normal autostart processing finishes.
+[Windows Internals (E7, P2)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) puts this in the middle of the SCM boot sequence, so the delay only applies after normal autostart processing finishes.
 
 1. SCM loops through service groups and starts autostart services, relooping groups until dependencies (DependOnService) are satisfied
 2. It ignores Tag values for Windows services (Tag ordering is used by the I/O manager for boot/system-start drivers)
@@ -2255,7 +2255,7 @@ __int64 __fastcall CDelayStartContext::GetAutostartDelay(CDelayStartContext *thi
 
 ## EnableAutostartEvents Notes
 
-Note on a different option which I didn't implement (this information is based on Windows Internals E7 P2, P448-449):
+Note on a different option which I didn't implement (this information is based on [Windows Internals E7 P2](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf), P448-449):
 
 By default the SCM logs events for services that start automatically at boot, which can flood the System event log. Setting this value to 0 suppresses autostart event logging while still keeping normal service start/stop/pause events. Read by SCM at startup = requires reboot to take effect.
 
@@ -2613,7 +2613,7 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
 
 > "*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
 >
-> — Microsoft Learn, [Verbose startup, shutdown, logon, and logoff status messages](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages)
+> — Microsoft, [Verbose startup, shutdown, logon, and logoff status messages](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages)
 
 > "*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
 >
@@ -2686,7 +2686,7 @@ Default value is `85` -> `85%` (gets used if value isn't present), clamp range i
 
 # Enable Segment Heap
 
-"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications." Allows modern apps to use a more efficient memory allocator. Windows Internals (E7-P1, Segment heap): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
+"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications." Allows modern apps to use a more efficient memory allocator. [Windows Internals (E7-P1, Segment heap)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
 
 It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
 
@@ -3044,7 +3044,7 @@ Only this path gets read, `TimeStampEnabled` doesn't get read?
 
 Disables prefetcher (includes disabling [`ApplicationLaunchPrefetching` & `ApplicationPreLaunch`](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
 
-Windows Internals (E7-P1, Prefetcher): the prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
+The prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
 
 ## Value Meanings
 
@@ -3196,7 +3196,7 @@ Miscellaneous notes:
 
 Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
 
-Windows Internals (E7-P1, Memory compression): compressed pages are stored in a dedicated "Memory Compression" process managed by the Store Manager. The memory manager compresses modified list pages into that store and later decompresses them on demand, this is enabled by default on client SKUs.
+Compressed pages are stored in a dedicated "Memory Compression" process managed by the Store Manager. The memory manager compresses modified list pages into that store and later decompresses them on demand, this is enabled by default on client SKUs.
 
 Example:  
 1. System looks for cold/rarely used data in RAM
@@ -3228,7 +3228,11 @@ PSComputerName               :
 
 Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
 
-Windows Internals (E7-P1, Memory combining): the memory manager can be instructed to combine identical pages across the system, and Superfetch can trigger combining when the system is idle. The feature can be disabled via `DisablePageCombining` in the memory manager settings.
+The memory manager can be instructed to combine identical pages across the system, and Superfetch can trigger combining when the system is idle.
+
+> "*Page combining can be disabled by setting a DWORD value named `DisablePageCombining` to `1` in the `HKLM\System\CurrentControlSet\Control\Session Manager\Memory Management` registry key.*"
+>
+> — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 `Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
 
@@ -4024,14 +4028,14 @@ If peak commit is below physical memory, no paging file would have been necessar
 
 ## Clearing Page File on Shutdown
 
-Windows Internals: Paging files can contain fragments of process or kernel data. Enabling the option mitigates offline data exposure at the cost of longer shutdowns.
+Paging files can contain fragments of process or kernel data. Enabling the option mitigates offline data exposure at the cost of longer shutdowns.
 
-Local Security Policy:
-"This security setting determines whether the virtual memory pagefile is cleared when the system is shut down.
-
-Virtual memory support uses a system pagefile to swap pages of memory to disk when they are not used. On a running system, this pagefile is opened exclusively by the operating system, and it is well protected. However, systems that are configured to allow booting to other operating systems might have to make sure that the system pagefile is wiped clean when this system shuts down. This ensures that sensitive information from process memory that might go into the pagefile is not available to an unauthorized user who manages to directly access the pagefile.
-
-When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled."
+Local Security Policy: 
+> *This security setting determines whether the virtual memory pagefile is cleared when the system is shut down.*
+>
+> *Virtual memory support uses a system pagefile to swap pages of memory to disk when they are not used. On a running system, this pagefile is opened exclusively by the operating system, and it is well protected. However, systems that are configured to allow booting to other operating systems might have to make sure that the system pagefile is wiped clean when this system shuts down. This ensures that sensitive information from process memory that might go into the pagefile is not available to an unauthorized user who manages to directly access the pagefile.*
+>
+> *When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled.*
 
 # Disable Mobility Center
 
@@ -4073,7 +4077,7 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 
 > "*Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications.*"
 >
-> — Microsoft Learn, [Virtualization applications don't work together with Hyper-V](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v)
+> — Microsoft, [Virtualization applications don't work together with Hyper-V](https://learn.microsoft.com/en-us/troubleshoot/windows-client/application-management/virtualization-apps-not-work-with-hyper-v)
 
 ## Service/Driver Table
 
