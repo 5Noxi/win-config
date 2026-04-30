@@ -30,6 +30,28 @@ PsPrioritySeparation = v3;
 `10` = `2`: foreground priority adds `+2` ("*3:1. The threads of foreground processes get three times the processor time as the threads of background processes each time they are scheduled for the processor.*")  
 `11` = `2`: same behavior as `10` because of the clamp.
 
+### Watching the Boost
+
+This follows the 'EXPERIMENT: Watching foreground priority boosts and decays' guide of [Windows Internals E7, P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
+
+1. Download [CPUSTRES](https://live.sysinternals.com/CPUSTRES.EXE)
+2. Set bits 1/0 to the state you want to look at, in this test we will use `PsPrioritySeparation` = `2` (means bit `10`/`11`)
+3. Open CPUSTRES & `perfmon`, change activity lebel of first thread to '*Busy*'
+4. Open '*Performance Monitor*' tab in perfmon
+5. Right click on the graph -> `Add Counters` -> `Thread` -> `Priority Current`
+6. Select `<All instances>` in the combobox, click '*Search*'
+7. Select `CPUSTRES/1` (`CPUSTRES/0` = GUI thread) -> '*Add*' -> '*OK*'
+8. Right click graph -> Properties -> Graph -> Verical scale maximum to `16`
+9. Unselect `Processor Time` counter, move CPUSTRES to FG/BG
+
+By doing so you'll see that `PsPrioritySeparation` = `2` causes the priority of the first thread to get boosted by `2`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/PsPrioritySeparation2.png?raw=true)
+
+If doing the same but with `PsPrioritySeparation` = `0` (e.g. `Win32PrioritySeparation` = `0x18`), the priority will stay the same (doesn't get a boost when being moved to FG):
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/PsPrioritySeparation0.png?raw=true)
+
 ## Bits 2/3
 
 Determine whether the length of processor time varies or is fixed. It also determines whether the threads of foreground processes have longer processor intervals than those of background processes. If the processor interval is fixed, that interval applies equally to the threads of foreground and background processes. If the processor interval varies, the length of time each thread runs varies, but the ratio of processor time of foreground threads to background threads is fixed.
