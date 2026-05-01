@@ -121,18 +121,18 @@ Note that everything above is based on 23H2 and is not complete yet.
 
 I won't add much more details here since [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) contains details, see 'Quantum / Priority Boosts' (Chapter 3).
 
-- [ntoskrnl/PsChangeQuantumTable.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PsChangeQuantumTable.c)
-- [ntoskrnl/PspComputeQuantum.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspComputeQuantum.c)
-- [ntoskrnl/PspInitPhase0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/PspInitPhase0.c)
-- [ntoskrnl/MmIsThisAnNtAsSystem.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/MmIsThisAnNtAsSystem.c)
-- [ntoskrnl/KeSetQuantumProcess.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeSetQuantumProcess.c)
-- [ntoskrnl/KeStartThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KeStartThread.c)
-- [ntoskrnl/KiSetQuantumTargetThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiSetQuantumTargetThread.c)
-- [ntoskrnl/KiInitializeForegroundBoostThread.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiInitializeForegroundBoostThread.c)
-- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/KiComputeEffectivePriority.c)
-- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/NtSetSystemInformation.c)
-- [ntoskrnl/CmInitSystem0.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmInitSystem0.c)
-- [ntoskrnl/CmpGetSystemControlValues.c](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl/CmpGetSystemControlValues.c)
+- [ntoskrnl/PsChangeQuantumTable.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c)
+- [ntoskrnl/PspComputeQuantum.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PspComputeQuantum.c)
+- [ntoskrnl/PspInitPhase0.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PspInitPhase0.c)
+- [ntoskrnl/MmIsThisAnNtAsSystem.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/MmIsThisAnNtAsSystem.c)
+- [ntoskrnl/KeSetQuantumProcess.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeSetQuantumProcess.c)
+- [ntoskrnl/KeStartThread.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeStartThread.c)
+- [ntoskrnl/KiSetQuantumTargetThread.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiSetQuantumTargetThread.c)
+- [ntoskrnl/KiInitializeForegroundBoostThread.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiInitializeForegroundBoostThread.c)
+- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiComputeEffectivePriority.c)
+- [ntoskrnl/NtSetSystemInformation.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/NtSetSystemInformation.c)
+- [ntoskrnl/CmInitSystem0.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/CmInitSystem0.c)
+- [ntoskrnl/CmpGetSystemControlValues.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c)
 
 ---
 
@@ -160,7 +160,7 @@ See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/sys
 - [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)
 - [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
 
-The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/ntoskrnl).
+The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
