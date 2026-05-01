@@ -1,4 +1,4 @@
-# Windows Defender
+﻿# Windows Defender
 
 ## [Current Defender Status](https://github.com/MicrosoftDocs/defender-docs/blob/public/defender-endpoint/microsoft-defender-antivirus-windows.md#use-powershell-to-check-the-status-of-microsoft-defender-antivirus)
 
@@ -502,68 +502,106 @@ See your current execution policies via:
 Get-ExecutionPolicy -List
 ```
 
-# Disable System Mitigations
+# Process Mitigations
 
-Security features that protect against memory based attacks like buffer overflows and code injection. Enabling this option will reduce system security.
+Process mitigations are system or per process exploit protections for common memory corruption & control flow attack classes. These can improve exploit resistance, but some mitigations can break older software, drivers, game anti-cheat components, launchers, or injected overlays. The mitigation tables in the sections are copied from [Windows Internals E7 P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), 'Exploit mitigations'.
 
-It currently applies all valid values **system wide** using `Set-ProcessMitigation -System`:
-```powershell
-HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationOptions	Type: REG_BINARY, Length: 24, Data: 00 22 22 20 22 20 22 22 22 20 22 22 22 22 22 22
-HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationAuditOptions	Type: REG_BINARY, Length: 24, Data: 02 22 22 02 02 02 20 22 22 22 22 22 22 22 22 22
+The option currently includes the [system-level mitigations](https://learn.microsoft.com/en-us/defender-endpoint/customize-exploit-protection#exploit-protection-mitigations).
+
+These options are stored system wide in:
+```ini
+HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationOptions ; REG_BINARY, 24 bytes
+HKLM\System\CurrentControlSet\Control\Session Manager\kernel\MitigationAuditOptions ; REG_BINARY, 24 bytes
 ```
 
-Disable specific mitigation:
-```powershell
-Set-ProcessMitigation -Name process.exe -Disable Value
-```
- 
-## [Editing Process Mitigations via LGPE](https://learn.microsoft.com/en-us/windows/security/operating-system-security/device-management/override-mitigation-options-for-app-related-security-policies)
+The relevant 4 bit field uses `0` = default/not configured, `1` = force on, and `2` = force off.
 
-![](https://github.com/nohuto/win-config/blob/main/security/images/processmiti.png?raw=true)
+| Option | [PS reference](https://learn.microsoft.com/en-us/defender-endpoint/customize-exploit-protection#powershell-reference-table) | `MitigationOptions` field | Enable bytes | Disable bytes |
+| --- | --- | --- | --- | --- |
+| DEP | `DEP`, `EmulateAtlThunks` | byte `0`, low 4 bits | `01 00 00 XX` | `02 00 00 XX` |
+| SEHOP | `SEHOP`, `SEHOPTelemetry` | byte `0`, high 4 bits | `10 00 00 XX` | `20 00 00 XX` |
+| Validate heap integrity | `TerminateOnError` | byte `1`, high 4 bits | `00 10 00 XX` | `00 20 00 XX` |
+| Mandatory ASLR | `ForceRelocateImages` | byte `1`, low 4 bits | `00 01 00 XX` | `00 02 00 XX` |
+| Bottom-up ASLR | `BottomUp`, `HighEntropy` | byte `2`, low 4 bits | `00 00 01 XX` | `00 00 02 XX` |
+| High-entropy ASLR | `HighEntropy` suboption of Bottom-up ASLR | byte `2`, high 4 bits | `00 00 10 XX` | `00 00 20 XX` |
+| CFG | `CFG`, `StrictCFG`, `SuppressExports` | byte `5` low 4 bits, byte `9` low 4 bits | `XX XX XX XX XX 01 XX XX XX 01` | `XX XX XX XX XX 02 XX XX XX 02` |
 
-| Flag | Bit | Setting | Details |
-| --- | --- | --- | --- |
-| A | 0 | PROCESS_CREATION_MITIGATION_POLICY_DEP_ENABLE (0x00000001) | Turns on Data Execution Prevention (DEP) for child processes. |
-| B | 1 | PROCESS_CREATION_MITIGATION_POLICY_DEP_ATL_THUNK_ENABLE (0x00000002) | Turns on DEP-ATL thunk emulation for child processes. DEP-ATL thunk emulation lets the system intercept nonexecutable (NX) faults that originate from the Active Template Library (ATL) thunk layer, and then emulate and handle the instructions so the process can continue to run. |
-| C | 2 | PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE (0x00000004) | Turns on Structured Exception Handler Overwrite Protection (SEHOP) for child processes. SEHOP helps to block exploits that use the Structured Exception Handler (SEH) overwrite technique. |
-| D | 8 | PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON (0x00000100) | Uses the force ASLR setting to act as though an image base collision happened at load time, forcibly rebasing images that aren't dynamic base compatible. Images without the base relocation section aren't loaded if relocations are required. |
-| E | 15 | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON (0x00010000) | Turns on the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address. |
-| F | 16 | PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_OFF (0x00020000) | Turns off the bottom-up randomization policy, which includes stack randomization options and causes a random location to be used as the lowest user address. |
+## CFG
 
-## Process Mitigation Options
+> "*validating the target of any indirect `CALL` or `JMP` instruction against a list of valid expected target functions*"
+>
+> — Windows Internals, [E7, P1: 'Exploit mitigations'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-| Mitigation Name | Use Case | Enabling Mechanism |
+| Mitigation | Use case | Enabling mechanism |
 | --- | --- | --- |
-| ASLR Bottom Up Randomization | Makes calls to `VirtualAlloc` subject to ASLR with 8-bit entropy, including stack-base randomization. | Set with the `PROCESS_CREATION_MITIGATION_POLICY_BOTTOM_UP_ASLR_ALWAYS_ON` process-creation attribute flag. |
-| ASLR Force Relocate Images | Forces ASLR even on binaries that do not have the `/DYNAMICBASE` linker flag. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON` process-creation flag. |
-| High Entropy ASLR (HEASLR) | Significantly increases entropy of ASLR on 64-bit images, increasing bottom-up randomization to up to 1 TB of variance. | Must be set through `/HIGHENTROPYVA` at link time or the `PROCESS_CREATION_MITIGATION_POLICY_HIGH_ENTROPY_ASLR_ALWAYS_ON` process-creation attribute flag. |
-| ASLR Disallow Stripped Images | Blocks the load of any library without relocations (linked with the `/FIXED` flag) when combined with ASLR Force Relocate Images. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_FORCE_RELOCATE_IMAGES_ALWAYS_ON_REQ_RELOCS` process-creation flag. |
-| DEP: Permanent | Prevents the process from disabling DEP on itself. Only relevant on x86 and 32-bit applications, including WoW64. | Set with `SetProcessMitigationPolicy`, a process-creation attribute, or `SetProcessDEPPolicy`. |
-| DEP: Disable ATL Thunk Emulation | Prevents legacy ATL library code from executing ATL thunks in the heap, even if a known compatibility issue exists. Only relevant on x86 and 32-bit applications, including WoW64. | Set with `SetProcessMitigationPolicy`, a process-creation attribute, or `SetProcessDEPPolicy`. |
-| SEH Overwrite Protection (SEHOP) | Prevents structured exception handlers from being overwritten with incorrect ones, even if the image was not linked with `Safe SEH` (`/SAFESEH`). Only relevant on 32-bit applications, including WoW64. | Set with `SetProcessDEPPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_SEHOP_ENABLE` process-creation flag. |
-| Raise Exception on Invalid Handle | Helps catch handle reuse attacks by crashing the process instead of returning a failure that the process might ignore. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_STRICT_HANDLE_CHECKS_ALWAYS_ON` process-creation attribute flag. |
-| Raise Exception on Invalid Handle Close | Helps catch double-handle-close attacks, limiting exploit reliability and effectiveness. | Undocumented and can only be set through an undocumented API. |
-| Disallow Win32k System Calls | Disables all access to the Win32 kernel-mode subsystem driver, including Window Manager, GDI, and DirectX system calls. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_WIN32K_SYSTEM_CALL_DISABLE_ALWAYS_ON` process-creation attribute flag. |
-| Filter Win32k System Calls | Filters access to the Win32k subsystem to certain APIs, allowing simple GUI and DirectX access while reducing attack surface. | Set through an internal process-creation attribute flag with one of three hard-coded Win32k filter sets; reserved for Microsoft internal usage. |
-| Disable Extension Points | Prevents a process from loading IMEs, Windows hook DLLs, AppInit DLLs, or Winsock layered service providers. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_EXTENSION_POINT_DISABLE_ALWAYS_ON` process-creation attribute flag. |
-| Arbitrary Code Guard (CFG) | Prevents a process from allocating executable code or changing existing executable code to writable-executable memory. | Set with `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_PROHIBIT_DYNAMIC_CODE_ALWAYS_ON` and `PROCESS_CREATION_MITIGATION_POLICY_PROHIBIT_DYNAMIC_CODE_ALWAYS_ON_ALLOW_OPT_OUT` process-creation attribute flags. |
-| Control Flow Guard (CFG) | Helps prevent memory corruption from hijacking control flow by validating indirect `CALL` and `JMP` targets against valid functions. | The image must be compiled and linked with `/guard:cf`; it can also be set with the `PROCESS_CREATION_MITIGATION_POLICY_CONTROL_FLOW_GUARD_ALWAYS_ON` process-creation attribute flag for other images loading in the process. |
-| CFG Export Suppression | Strengthens CFG by suppressing indirect calls to the exported API table of the image. | The image must be compiled with `/guard: exportsuppress`, and can also be configured through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_CONTROL_FLOW_GUARD_EXPORT_SUPPRESSION` process-creation attribute flag. |
-| CFG Strict Mode | Prevents loading any image library in the current process that was not linked with `/guard:cf`. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY2_STRICT_CONTROL_FLOW_GUARD_ALWAYS_ON` process-creation attribute flag. |
-| Disable Non System Fonts | Prevents loading any font files that were not registered by Winlogon at user logon time after installation in `C:\Windows\Fonts`. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_FONT_DISABLE_ALWAYS_ON` process-creation attribute flag. |
-| Microsoft-Signed Binaries Only | Prevents loading any image library in the current process that was not signed by a Microsoft CA-issued certificate. | Set through the `PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALWAYS_ON` process-attribute flag at startup time. |
-| Store-Signed Binaries Only | Prevents loading any image library in the current process that was not signed by the Microsoft Store CA. | Set through the `PROCESS_CREATION_MITIGATION_POLICY_BLOCK_NON_MICROSOFT_BINARIES_ALLOW_STORE` process attribute flag at startup time. |
-| No Remote Images | Prevents loading any image library in the current process that is present on a non-local UNC or WebDAV path. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_IMAGE_LOAD_NO_REMOTE_ALWAYS_ON` process-creation attribute flag. |
-| No Low IL Images | Prevents loading any image library in the current process that has a mandatory label below medium (`0x2000`). | Set through `SetProcessMitigationPolicy`, the `PROCESS_CREATION_MITIGATION_POLICY_IMAGE_LOAD_NO_LOW_LABEL_ALWAYS_ON` process-creation flag, or a resource claim ACE called `IMAGELOAD` on the process file. |
-| Prefer System32 Images | Modifies the loader search path to always look in `%SystemRoot%\\System32` for relatively named image libraries before other locations. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY_IMAGE_LOAD_PREFER_SYSTEM32_ALWAYS_ON` process-creation attribute flag. |
-| Return Flow Guard (RFG) | Helps prevent additional control-flow attacks by validating `RET` instructions against expected call and stack behavior. | Not yet available; included in the table for completeness. |
-| Restrict Set Thread Context | Restricts modification of the current thread’s context. | Currently disabled pending the availability of RFG and may appear in a future version of Windows; included for completeness. |
-| Loader Continuity | Prohibits dynamic loading of DLLs that do not have the same integrity level as the process when signature-policy mitigations could not be enabled at startup. | Set through `SetProcessMitigationPolicy` or the `PROCESS_CREATION_MITIGATION_POLICY2_LOADER_INTEGRITY_CONTINUITY_ALWAYS_ON` process-creation attribute flag. |
-| Heap Terminate On Corruption | Disables the Fault Tolerant Heap and turns heap corruption into immediate process termination instead of a continuable exception. | Set through `HeapSetInformation` or the `PROCESS_CREATION_MITIGATION_POLICY_HEAP_TERMINATE_ALWAYS_ON` process-creation attribute flag. |
-| Disable Child Process Creation | Prohibits creation of child processes by marking the token with a special restriction. | Set through the `PROCESS_CREATION_CHILD_PROCESS_RESTRICTED` process-creation attribute flag; can be overridden for packaged desktop apps with `PROCESS_CREATION_DESKTOP_APPX_OVERRIDE`. |
-| All Application Packages Policy | Makes an AppContainer application unable to access resources that only have an `ALL APPLICATION PACKAGES` SID, requiring `ALL RESTRICTED APPLICATION PACKAGES` instead. | Set through the `PROC_THREAD_ATTRIBUTE_ALL_APPLICATION_PACKAGES_POLICY` process-creation attribute. |
+| Control Flow Guard (CFG) | Validates indirect `CALL` and `JMP` targets against expected valid functions, which helps stop control-flow hijacking after memory corruption. | Requires binaries compiled and linked with `/guard:cf`, or can be requested with the CFG process-creation mitigation flag for loaded images. |
+| CFG Strict Mode | Blocks libraries that were not linked with `/guard:cf` from loading into the process. | Set through `SetProcessMitigationPolicy` or the strict CFG process-creation mitigation flag. |
 
-Read more about process-mitigation policies in [Windows Internals E7, P1 - P.735f. 'Process-mitigation policies'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
+## DEP
+
+> "*Marking memory regions as non-executable means that code cannot be run from that region of memory*"
+>
+> — Microsoft, [Data Execution Prevention](https://learn.microsoft.com/en-us/windows/win32/memory/data-execution-prevention)
+
+| Mitigation | Use case | Enabling mechanism |
+| --- | --- | --- |
+| DEP: Permanent | Prevents a process from disabling DEP for itself. It mainly applies to x86 and WoW64 processes. | Set through `SetProcessMitigationPolicy`, a process-creation attribute, or `SetProcessDEPPolicy`. |
+| DEP: Disable ATL Thunk Emulation | Prevents legacy ATL thunk code from executing in heap memory, even where compatibility handling would otherwise allow it. | Set through `SetProcessMitigationPolicy`, a process-creation attribute, or `SetProcessDEPPolicy`. |
+
+## Mandatory ASLR
+
+> "*forces a rebase of all DLLs within the process*"
+>
+> "*this rebasing has no entropy, and can therefore be placed at a predictable location in memory*"
+>
+> — Microsoft, [Exploit protection reference](https://learn.microsoft.com/en-us/defender-endpoint/exploit-protection-reference)
+
+| Mitigation | Use case | Enabling mechanism |
+| --- | --- | --- |
+| ASLR Force Relocate Images | Forces rebasing for images that were not linked with `/DYNAMICBASE`. | Set through `SetProcessMitigationPolicy` or the force-relocate process-creation mitigation flag. |
+| ASLR Disallow Stripped Images | Blocks libraries without relocation data when forced relocation is required. | Set through `SetProcessMitigationPolicy` or the force-relocate and require-relocations mitigation flag. |
+
+## Bottom-up ASLR
+
+> "*adds entropy to relocations, so their location is randomized and therefore less predictable*"
+>
+> — Microsoft, [Exploit protection reference](https://learn.microsoft.com/en-us/defender-endpoint/exploit-protection-reference)
+
+| Mitigation | Use case | Enabling mechanism |
+| --- | --- | --- |
+| ASLR Bottom Up Randomization | Randomizes bottom-up allocations such as `VirtualAlloc` and stack bases. | Set with the bottom-up ASLR process-creation mitigation flag. |
+
+## High-entropy ASLR
+
+> "*adds 24 bits of entropy (1 TB of variance) into the bottom-up allocation for 64-bit applications*"
+>
+> — Microsoft, [Exploit protection reference](https://learn.microsoft.com/en-us/defender-endpoint/exploit-protection-reference)
+
+| Mitigation | Use case | Enabling mechanism |
+| --- | --- | --- |
+| High Entropy ASLR (HEASLR) | Adds much more address-space entropy for supported 64-bit images. | Requires `/HIGHENTROPYVA` at link time or the high-entropy ASLR process-creation mitigation flag. |
+
+## SEHOP
+
+> "*validates the SEH chain when an exception is invoked*"
+>
+> "*No exception handler pointers are pointing to the stack... The exception chain ends at a known final exception handler*"
+>
+> — Microsoft, [Exploit protection reference](https://learn.microsoft.com/en-us/defender-endpoint/exploit-protection-reference)
+
+| Mitigation | Use case | Enabling mechanism |
+| --- | --- | --- |
+| SEH Overwrite Protection (SEHOP) | Validates structured exception handler chains so overwritten handlers cannot redirect exception dispatch. It mainly applies to 32-bit and WoW64 processes. | Set through `SetProcessDEPPolicy` or the SEHOP process-creation mitigation flag. |
+
+## Validate Heap Integrity
+
+> "*causing the application to terminate if a heap corruption is detected*"
+>
+> — Microsoft, [Exploit protection reference](https://learn.microsoft.com/en-us/defender-endpoint/exploit-protection-reference)
+
+| Mitigation | Use case | Enabling mechanism |
+| --- | --- | --- |
+| Heap Terminate On Corruption | Terminates the process on heap corruption instead of allowing a continuable heap exception path. This reduces exploit reliability for heap corruption bugs. | Set through `HeapSetInformation` or the heap terminate process-creation mitigation flag. |
 
 ## ProcessMitigation ValidValues
 
@@ -623,32 +661,16 @@ UserShadowStackStrictMode
 AuditUserShadowStack
 ```
 
-# Opt-Out DMA Remapping
+# DMA Remapping
 
-"To ensure compatibility with Kernel DMA Protection and DMAGuard Policy, PCIe device drivers can opt into Direct Memory Access (DMA) remapping. DMA remapping for device drivers protects against memory corruption and malicious DMA attacks, and provides a higher level of compatibility for devices. Also, devices with DMA remapping-compatible drivers can start and perform DMA regardless of lock screen status. On Kernel DMA Protection enabled systems, DMAGuard Policy might block devices, with DMA remapping-incompatible drivers, connected to external/exposed PCIe ports (for example, M.2, Thunderbolt), depending on the policy value set by the system administrator. DMA remapping isn't supported for graphics device drivers. `DmaRemappingCompatible` key is ignored if `RemappingSupported` is set."
+[DMA remapping](https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/enabling-dma-remapping-for-device-drivers) lets PCIe device drivers declare whether they are compatible with IOMMU backed DMA isolation. Windows uses this with [Kernel DMA Protection](https://learn.microsoft.com/en-us/windows/security/hardware-security/kernel-dma-protection-for-thunderbolt) and DMAGuard policy to reduce memory corruption and malicious DMA attack exposure. Devices with DMA remapping compatible drivers can start and perform DMA, incompatible external or exposed PCIe devices can be blocked by DMAGuard policy on systems where Kernel DMA Protection is enabled.
 
-"Only use this per-driver method for Windows versions up to Windows 11 23H2. Use the [per-device method](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/pci/enabling-dma-remapping-for-device-drivers.md#per-device-opt-in-mechanism)."
+`Opt-In` marks matching existing entries as compatible with DMA remapping. `Opt-Out` marks them as incompatible, which can reduce DMA remapping coverage and can cause external devices to be blocked until sign in or unlock.
 
-`per-device` - recommended and preferred mechanism (`DmaRemappingCompatible`)
-`per-driver` - legacy mechanism (`RemappingSupported`)
+`per-device` - recommended and preferred mechanism for Windows 24H2 and later (`RemappingSupported`)
+`per-driver` - legacy mechanism for Windows versions up to Windows 11 23H2 (`DmaRemappingCompatible`)
 
-### `DmaRemappingCompatible`
-
-| Value | Meaning |
-|--|--|
-| 0 | Opt-out, indicates that your driver is incompatible with DMA remapping. |
-| 1 | Opt-in, indicates that your driver is fully compatible with DMA remapping. |
-| 2 | Opt-in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
-| 3 | Opt-in |
-| No registry key | Let the system determine the policy. |
-
-### `RemappingFlags`
-
-| Value | Meaning |
-|--|--|
-| 0 | If **RemappingSupported** is 1, opt in, unconditionally. |
-| 1 | If **RemappingSupported** is 1, opt in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt); B. DMA verification is enabled in Driver Verifier |
-| No registry key | Same as 0 value. |
+If both are present, the per-device setting takes precedence and `DmaRemappingCompatible` is ignored. The PCI driver documentation still warns that DMA remapping is not supported through this path for graphics drivers. Display drivers use the separate [WDDM IOMMU DMA remapping](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/iommu-dma-remapping) path.
 
 ### `RemappingSupported`
 
@@ -656,6 +678,24 @@ AuditUserShadowStack
 |--|--|
 | 0 | Opt-out, indicates the device and driver are incompatible with DMA remapping. |
 | 1 | Opt-in, indicates the device and driver are fully compatible with DMA remapping. |
+| No registry key | Let the system determine the policy. |
+
+### `RemappingFlags`
+
+| Value | Meaning |
+|--|--|
+| 0 | If **RemappingSupported** is 1, opt in, unconditionally. |
+| 1 | If **RemappingSupported** is 1, opt in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt). B. DMA verification is enabled in Driver Verifier |
+| No registry key | Same as 0 value. |
+
+### `DmaRemappingCompatible`
+
+| Value | Meaning |
+|--|--|
+| 0 | Opt-out, indicates that your driver is incompatible with DMA remapping. |
+| 1 | Opt-in, indicates that your driver is fully compatible with DMA remapping. |
+| 2 | Opt-in, but only when one or more of the following conditions are met: A. The device is an external device (for example, Thunderbolt). B. DMA verification is enabled in Driver Verifier |
+| 3 | Opt-in. Support was added in Windows 11 and degrades gracefully on Windows 10. |
 | No registry key | Let the system determine the policy. |
 
 Example paths:
