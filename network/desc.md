@@ -927,6 +927,8 @@ Excludes (deprecated, chimney too):
 
 ## Registry Values Details
 
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
   "*IPChecksumOffloadIPv4" = 3; // range 0-3
@@ -945,6 +947,35 @@ Excludes (deprecated, chimney too):
   "LSOTcpOptions" = 1; // range 0-1 - Enables that the miniport driver to segment a large TCP packet whose TCP header contains TCP options.
   "LSOIpOptions" = 1; // range 0-1 - Enables its NIC to segment a large TCP packet whose IP header contains IP options.
 
+  // miscellaneous values, since there's no option to add them I'll add them here for now
+  // https://github.com/nohuto/win-registry/blob/main/records/NIC-Intel-IDA.txt
+  // https://github.com/nohuto/win-registry/blob/main/records/NIC-Intel.txt
+  "*EncapsulatedPacketTaskOffloadVxlan" = 0; // range 0-1
+  "*HeaderDataSplit" = 0; // range 0-1
+  "*VxlanUDPPortNumber" = 4789; // range 1-65535
+  "AdaptiveQHysteresis" = 64; // range 16-1024
+  "AdaptiveQSize" = 128; // range 64-8192
+  "AdaptiveQWorkSet" = 96; // range 32-8192
+  "CheckForHangTime" = 2; // range 0-60
+  "EnableAdaptiveQueuing" = 1; // range 0-1
+  "EnableHWAutonomous" = 0; // range 0-1
+  "EnableRxDescriptorChaining" = 1; // range 0-1
+  "HDSplitAlways" = 0; // range 0-1
+  "HDSplitBufferPad" = 2; // range 0-2
+  "HDSplitLocation" = 2; // range 0-3
+  "HDSplitSize" = 128; // range 128-960
+  "MaxPacketCountPerDPC" = 256; // range 8-65535
+  "MaxPacketCountPerIndicate" = 64; // range 1-65535
+  "MinHardwareOwnedPacketCount" = 32; // range 8-4096
+  "PadReceiveBuffer" = 0; // range 0-1
+  "ReceiveBuffersOverride" = 1; // range 0-1
+  "RegForceRxPathSerialization" = 0; // range 0-1
+  "ResetTest" = 0; // range 0-1
+  "ResetTestTime" = 300; // range 20-604800
+  "RxBufferPad" = 10; // range 0-63
+  "RxDescriptorCountPerTailWrite" = 8; // range 4-4096
+  "SidebandUngateOverride" = 0; // range 0-1
+  "StoreBadPackets" = 0; // range 0-1
 ```
 
 | Keyword | Description | Default | Minimum | Maximum |
@@ -980,6 +1011,8 @@ powercfg /devicequery wake_armed
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
 
 ## Registry Values Details
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1385,6 +1418,13 @@ Once these capabilities are shared, they agree on the highest common speed and p
 
 NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
 
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*SpeedDuplex" = 0; // range 0-50000
+```
+
 ## Setup Information
 
 Intel driver example:
@@ -1454,6 +1494,8 @@ A sending station (computer or network switch) may be transmitting data faster t
 >
 > — Intel, [Flow Control](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/flow-control/)
 
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
     "*FlowControl" = 4; // range 0-4
@@ -1515,6 +1557,8 @@ HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 ## Registry Value Ranges
 
 `"*UdpRsc": { "Type": "REG_SZ", "Data": 1 }` causes high usage of the system idle process for whatever reason, I'll leave it out for now.
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1589,6 +1633,8 @@ It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
 ## [Registry Values Details](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md)
 
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
 ```c
 // Intel
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1633,6 +1679,8 @@ HKR, "", *VMQ, %REG_SZ%, "1"
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
 ## [Registry Values Details](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov)
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
@@ -1693,6 +1741,8 @@ HKR, "", *VMQVlanFiltering, %REG_SZ%, "1"
 `No FEC`: Disables FEC.
 
 ## Registry Values Details
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";

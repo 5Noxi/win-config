@@ -1609,17 +1609,15 @@ You can get a lot of information about data ranges and more from `.inf` files, s
 
 Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
 
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
     "*DeviceSleepOnDisconnect" = 0; // range 0-1
     "*EnableDynamicPowerGating" = 1; // range 0-1
-    "CheckForHangTime" = 2; // range 0-60
     "DisableIntelRST" = 1; // range 0-1
-    "DisableReset" = 0; // range 0-1
     "DMACoalescing" = 0; // range 0-10240
-    "EnableAdaptiveQueuing" = 1; // range 0-1
     "EnableDisconnectedStandby" = 0; // range 0-1
-    "EnableHWAutonomous" = 0; // range 0-1
     "EnableModernStandby" = 0; // range 0-1
     "EnablePME" = 0; // range 0-1
     "EnablePowerManagement" = 1; // range 0-1
@@ -1628,8 +1626,6 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "I218DisablePLLShut" = 0; // range 0-1
     "I218DisablePLLShutGiga" = 0; // range 0-1
     "I219DisableK1Off" = 0; // range 0-1
-    "RegForceRxPathSerialization" = 0; // range 0-1
-    "SidebandUngateOverride" = 0; // range 0-1
     "ULPMode" = 1; // range 0-1
 ```
 
