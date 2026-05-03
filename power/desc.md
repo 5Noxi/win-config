@@ -1271,7 +1271,7 @@ If hiding `Lock` for example via `Control Panel > All Control Panel Items > Powe
 DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer`:
 ```json
@@ -1418,7 +1418,7 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
   *(_DWORD *)(v23 + 32) = 0x80000000;
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1565,7 +1565,7 @@ This policy setting specifies that power management is disabled when the machine
     "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {

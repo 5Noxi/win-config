@@ -43,7 +43,7 @@ If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/
   - `*.config.ecs.gov.teams.microsoft.us` (GCC-H)
   - `*.config.ecs.dod.teams.microsoft.us` (DoD)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 Since the tool includes a seperate `Policies` section and most of the Defender settings are controlled via them (not all SmartScreen parts are, which is why it's a suboption), I won't add all of them as suboptions to keep the UI clean. If you want to fine tune specific parts of Defender after applying the `Configured` preset, you can do so by copying the value name and pasting it into the search bar, it'll show the policy (or go into the Policies section and open WindowsDefender / WindowsDefenderSecurityCenter / WebThreatDefense).
 
@@ -755,7 +755,7 @@ Unblock-File -Path "C:\Path\Script.ps1" -> File
 dir C:\Path\*Files* | Unblock-File -> Multiple files 
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -813,7 +813,7 @@ ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
 
 - [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -871,7 +871,7 @@ Set-VMSecurity -VMName <VMName> -VirtualizationBasedSecurityOptOut $true
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards3.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards4.png?raw=true)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -958,7 +958,7 @@ Set-VMSecurity -VMName <VMName> -VirtualizationBasedSecurityOptOut $true
 
 `Disable Picture Password Sign-In`: "This policy setting allows you to control whether a domain user can sign in using a picture password. If you enable this policy setting, a domain user can't set up or sign in with a picture password. If you disable or don't configure this policy setting, a domain user can set up and use a picture password. Note that the user's domain password will be cached in the system vault when using this feature."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1098,7 +1098,7 @@ Level `5` gets applied.
 
 Controls the Netlogon policy that enables or disables [enhanced domain wide NTLM logs](https://aka.ms/ntlmlogandblock) on domain controllers (includes NTLMv1 usage). Applies to domain controllers only (Windows 11 24H2+). If not configured, domain controllers default to logging these on supported builds.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1220,7 +1220,7 @@ Congigure the policy yourself via `Computer Configuration > Windows Settings > S
 
 This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user's Windows credentials.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1254,7 +1254,7 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: R
 HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1291,7 +1291,7 @@ Note that sudo uses administrator previledges and doesn't include `TrustedInstal
 | `disableInput` | Runs elevated in the same window but blocks keyboard input while it runs. |
 | `normal` | Runs elevated in the same window with normal input and output behavior. |
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {

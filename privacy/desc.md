@@ -33,7 +33,7 @@ The option applies all kind of telemetry related values including all values tha
 ```
 [Seems to be a fallback if `AllowTelemetry` isn't set.](https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -339,7 +339,7 @@ if ( v6 < 0 )
 }
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
   {
@@ -641,7 +641,7 @@ It is a deprecated feature, as the banner shows:
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -687,7 +687,7 @@ Disables app access to your location, locating your system will be disabled, geo
 
 - [privacy/assets | locationaccess-LocationApi.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -757,7 +757,7 @@ Blocks apps/system from using hardware sensors such as ambient light, orientatio
 
 No other [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) depend on these three services.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -818,7 +818,7 @@ dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveM
 
 Biometric is used for fingerprint, facial recognition, and other biometric authentication methods in Windows Hello and related security features.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -906,7 +906,7 @@ Disables remote desktop, remote assistance, RPC traffic, and device redirection.
 `TerminalServer.admx`:  
 `fDisableCdm`: Do not allow drive redirection
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1145,7 +1145,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/appaccess.png?raw=true)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1717,7 +1717,7 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/inking.png?raw=true)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1829,7 +1829,7 @@ Miscellaneous notes:
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1860,7 +1860,7 @@ Miscellaneous notes:
 `Disable ClickToDo`:  
 "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -1912,7 +1912,7 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 `Disable Lock Screen Camera`:  
 "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2004,7 +2004,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2177,7 +2177,7 @@ All `Microsoft\INPUT\Settings` values which get read on boot:
 
 Disables all kind of synchronization, see policies.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2475,7 +2475,7 @@ L"WifiLastDisabledNearShare",
 
 - [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2515,7 +2515,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\I
 
 By default resume is enabled, OneDrive is the only app which exists under the "Control which apps can use Resume" on a stock 25H2 installation and can be toggled via `IsOneDriveResumeAllowed` (same key as `IsResumeAllowed`). Disabling resume will disallow all apps to use Resume (doesn't set `IsXResumeAllowed` to `0`).
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2541,7 +2541,7 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 
 "File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2571,7 +2571,7 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 `AutoEnrollMDM`:  
 "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2622,7 +2622,7 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 
 Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2648,7 +2648,7 @@ Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `Perio
 
 Voluntary program that collects usage data to help improve the quality and performance of its products.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2726,7 +2726,7 @@ Voluntary program that collects usage data to help improve the quality and perfo
 
 "[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2852,7 +2852,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2913,7 +2913,7 @@ Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (n
 
 When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -2988,7 +2988,7 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3226,7 +3226,7 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 4
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3394,7 +3394,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3446,7 +3446,7 @@ __int64 IsDesktopHeapLoggingOn(void)
 | ------ | ------ | ------ |
 | AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft's cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3476,7 +3476,7 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 - [folder-redirection/disable-offline-files-on-folders](https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/disable-offline-files-on-folders#windows-powershell-equivalent-commands) (todo)
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3630,7 +3630,7 @@ If you disable or don't configure this policy setting, KMS client activation dat
 
 [`Disable Auto Activation`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)#registry-settings) (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3671,7 +3671,7 @@ If you enable this policy setting, Windows periodically queries an online font p
 
 If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3697,7 +3697,7 @@ If you disable this policy setting, Windows does not connect to an online font p
 
 Prevent the use of security questions for local accounts.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3722,7 +3722,7 @@ Disables persistent File Explorer thumbnail caching so previews are less likely 
 
 This improves privacy mainly by reducing leftover preview artifacts for images, videos, documents, and other shell items. Microsoft explicitly notes that the thumbnail cache can be read by everyone on shared or security sensitive systems, and the related network folder thumbnail policies note that allowing thumbnail use on network folders can expose computers to security risks.
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3777,7 +3777,7 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 //"\\Microsoft\\Windows\\Application Experience\\PcaWallpaperAppDetect",
 ```
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3941,7 +3941,7 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
@@ -3997,7 +3997,7 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 
 - You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles."
 
-## Windows Policies
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
