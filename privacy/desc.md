@@ -1780,12 +1780,11 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 Renames `ctfmon.exe` and `TextInputHost.exe` to block the classic CTF loader and the modern text input host. This disables IME, emoji/clipboard panels, and touch keyboard input in most cases.
 
-`TextInputManagementService` is the Windows service backing text input, expressive input, touch keyboard, handwriting, and IMEs. `ctfmon.exe` loads the Text Services Framework (IME/language bar), while `TextInputHost.exe` hosts the modern input UI (touch keyboard, emoji, clipboard). Renaming them can break language switching, IME input, and UWP input surfaces.
+`TextInputManagementService` is the Windows service for text input, expressive input, touch keyboard, handwriting, and IMEs. `ctfmon.exe` loads the Text Services Framework (IME/language bar), while `TextInputHost.exe` hosts the modern input UI (touch keyboard, emoji, clipboard).
 
 # Disable Online Speech Recognition
 
 [`HasAccepted`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. [`AllowSpeechModelUpdate`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) blocks automatic updates of speech recognition and synthesis models. I found `DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
-- [privacy/assets | locationaccess-LocationApi.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
 
 # Disable Microsoft Copilot
 

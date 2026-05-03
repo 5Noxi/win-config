@@ -2511,7 +2511,7 @@ HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD,
 
 # Disable Storage Sense
 
-Storage Sense deletes temporary files automatically - revert it by changing it back to `1`.
+Storage Sense deletes temporary/user files automatically, see [windows policies](https://www.noverse.dev/docs/win-config/system/disable-storage-sense/#windows-policies) for more.
 
 Head over to the `Policies` tab, then `StorageSense` to configure other related policies.
 
@@ -2679,28 +2679,6 @@ Forces hung apps and services to terminate faster.
 `WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000` (`20` sec))
 
 More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
-
-# Disable FTH
-
-Used for preventing legacy or unstable applications from crashing, read through the picture below for more detailed information ([`Windows Internals 7th Edition, Part 1, Page 347`](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)).
-
-In [Exploit Protection](https://learn.microsoft.com/en-us/defender-endpoint/customize-exploit-protection#powershell-reference-table) you can see the `Heap` mitigation with `TerminateOnError`, Windows Internals names the same heap termination behavior `Heap Terminate On Corruption`, so the FTH note below refers to that.
-
-> "*causing the application to terminate if a heap corruption is detected*"
->
-> — Microsoft, [Exploit protection reference](https://learn.microsoft.com/en-us/defender-endpoint/exploit-protection-reference)
-
-> "*disables the Fault Tolerant Heap (FTH)... by terminating the process instead*"
->
-> — Windows Internals, [E7, P1: 'Exploit mitigations'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-I'll keep the option for documentation purposes for now (and might move it to the Process Mitigation in the security section soon).
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/fth.png?raw=true)
-
-[YouTube Video](https://www.youtube.com/watch?v=4SvNNXAwoqE).
 
 # Disable Accessibility Features
 
@@ -3466,7 +3444,9 @@ See all object identifiers via `bcdedit /enum all /v` (`identifier`). Note that 
 
 ### Value/Data List
 
-Here are elements which I tracked via Procmon (taken from default store and the MS documentation - [bcd-settings-and-bitlocker](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bcd-settings-and-bitlocker), [bcd-enumerations](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bcd/bcd-enumerations)), note that this doesn't show default states (see block at the buttom), instead it shows several options and their possible states:
+Here are elements which I tracked via Procmon (taken from default store and the MS documentation - [bcd-settings-and-bitlocker](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bcd-settings-and-bitlocker), [bcd-enumerations](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bcd/bcd-enumerations)).
+
+Note that this doesn't show default states, instead it shows several options and their possible states. And obviously the descriptions are most likely parsed, means that even "useless" descriptions will be included whenever the mentioned MS docs above include them.
 
 ```c
 "HKLM\\BCD00000000\\Objects\\{current}\\Elements";
@@ -4190,6 +4170,9 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 ```
 
 # Disable Hyper-V
+
+> "*The Hyper-V hypervisor (also known as Windows hypervisor) is a type-1 (native or bare-metal) hypervisor: a mini operating system that runs directly on the host’s hardware to manage a single root and one or more guest operating systems. Unlike type-2 (or hosted) hypervisors, which run on the base of a conventional OS like normal applications, the Windows hypervisor abstracts the root OS, which knows about the existence of the hypervisor and communicates with it to allow the execution of one or more guest virtual machines.*"
+> — Windows Internals E7 P2, [The Windows hypervisor](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 > "*Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications.*"
 >
