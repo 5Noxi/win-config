@@ -2537,10 +2537,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePo
 // Every month = 30
 // Every week = 7
 // Every day = 1
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	Type: REG_DWORD, Length: 4, Data: 30
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	Type: REG_DWORD, Length: 4, Data: 7
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	// Type: REG_DWORD
 
 // Delete files in my recycle bin if they have been there for over
 // 30 days (default): 08 = 1, 25 = 30
