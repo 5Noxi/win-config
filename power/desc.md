@@ -1248,19 +1248,19 @@ RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Ty
 RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-| Hibernation file type | Default size           | Supports                              |
-|-----------------------|------------------------|---------------------------------------|
-| Full                  | 40% of physical memory | hibernate, hybrid sleep, fast startup |
-| Reduced               | 20% of physical memory | fast startup                          |
+| Hibernation file type | Default size | Supports |
+| --- | --- | --- |
+| Full | 40% of physical memory | hibernate, hybrid sleep, fast startup |
+| Reduced | 20% of physical memory | fast startup |
 
 To verify or change the type of hibernation file used, run the *powercfg.exe* utility. The following examples demonstrate how.
 
-| Example      |Description   |
-|--------------|--------------|
-| `powercfg /a`                      | **Verify the hibernation file type.** When a full hibernation file is used, the results state that hibernation is an available option. When a reduced hibernation file is used, the results say hibernation is not supported. If the system has no hibernation file at all, the results say hibernation hasn't been enabled. |
-| `powercfg /h /type full`           | **Change the hibernation file type to full.** This isn't recommended on systems with less than 32GB of storage.                      |
-| `powercfg /h /type reduced`        | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example.      |
-| `powercfg /h /size 0`<br> `powercfg /h /type reduced`  | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration.     |
+| Example | Description |
+| --- | --- |
+| `powercfg /a` | **Verify the hibernation file type.** When a full hibernation file is used, the results state that hibernation is an available option. When a reduced hibernation file is used, the results say hibernation is not supported. If the system has no hibernation file at all, the results say hibernation hasn't been enabled. |
+| `powercfg /h /type full` | **Change the hibernation file type to full.** This isn't recommended on systems with less than 32GB of storage. |
+| `powercfg /h /type reduced` | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example. |
+| `powercfg /h /size 0`<br> `powercfg /h /type reduced` | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration. |
 
 # Remove Power Options
 
@@ -1585,20 +1585,6 @@ This policy setting specifies that power management is disabled when the machine
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
-```
-```powershell
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fAllowFailoverToCellular
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fBlockNonDomain
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fBlockRoaming
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fDisablePowerManagement
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fMinimizeConnections
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\GroupPolicy : fSoftDisconnectConnections
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fAllowFailoverToCellular
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fBlockNonDomain
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fBlockRoaming
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fDisablePowerManagement
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fMinimizeConnections
-\Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\Wcmsvc\Local : fSoftDisconnectConnections
 ```
 
 # Disable NIC Power Savings

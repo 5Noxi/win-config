@@ -31,7 +31,7 @@ The option applies all kind of telemetry related values including all values tha
 ```powershell
 \Registry\Machine\SOFTWARE\Policies\Microsoft\WINDOWS\DataCollection : AllowTelemetry_PolicyManager
 ```
-[Seems to be a fallback if `AllowTelemetry` isn't set.](https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106)
+Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106) if `AllowTelemetry` isn't set.
 
 ## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
