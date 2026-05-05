@@ -703,6 +703,14 @@ Disables app access to your location, locating your system will be disabled, geo
 
 - [privacy/assets | locationaccess-LocationApi.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/locationaccess-LocationApi.c)
 
+---
+
+There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't seem to exist anymore.
+```html
+<!-- Help improve Microsoft services by sending some location data when you use location-aware apps -->
+<pattern type="Registry">HKLM\Software\Microsoft\Sensors\LocationProvider [CSEnable]</pattern>
+```
+
 ## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
