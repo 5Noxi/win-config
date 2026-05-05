@@ -1271,16 +1271,26 @@ If hiding `Lock` for example via `Control Panel > All Control Panel Items > Powe
 DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
+---
+
+Miscellaneous keys:
+```powershell
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HidePowerButton
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideRestart
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideShutDown
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
+```
+
 ## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
-LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer`:
 ```json
 {
   "File": "WindowsExplorer.admx",
   "CategoryName": "WindowsExplorer",
   "PolicyName": "ShowLockOption",
   "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
   "DisplayName": "Show lock in the user tile menu",
   "ExplainText": "Shows or hides lock from the user tile menu. If you enable this policy setting, the lock option will be shown in the User Tile menu. If you disable this policy setting, the lock option will never be shown in the User Tile menu. If you do not configure this policy setting, users will be able to choose whether they want lock to show through the Power Options Control Panel.",
   "KeyPath": [
@@ -1297,7 +1307,7 @@ LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Expl
   "CategoryName": "WindowsExplorer",
   "PolicyName": "ShowSleepOption",
   "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
   "DisplayName": "Show sleep in the power options menu",
   "ExplainText": "Shows or hides sleep from the power options menu. If you enable this policy setting, the sleep option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the sleep option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want sleep to show through the Power Options Control Panel.",
   "KeyPath": [
@@ -1314,7 +1324,7 @@ LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Expl
   "CategoryName": "WindowsExplorer",
   "PolicyName": "ShowHibernateOption",
   "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
   "DisplayName": "Show hibernate in the power options menu",
   "ExplainText": "Shows or hides hibernate from the power options menu. If you enable this policy setting, the hibernate option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the hibernate option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want hibernate to show through the Power Options Control Panel.",
   "KeyPath": [
@@ -1325,18 +1335,7 @@ LGPE would set the values in `HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Expl
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
-```
-
----
-
-Miscellaneous keys:
-```powershell
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HidePowerButton
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideRestart
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideShutDown
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
+}
 ```
 
 # Disable Hiberboot
@@ -1426,7 +1425,7 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
   "CategoryName": "ShutdownOptions",
   "PolicyName": "Hiberboot",
   "NameSpace": "Microsoft.Policies.WindowsInitialization",
-  "Supported": "Windows8",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
   "DisplayName": "Require use of fast startup",
   "ExplainText": "This policy setting controls the use of fast startup. If you enable this policy setting, the system requires hibernate to be enabled. If you disable or do not configure this policy setting, the local setting is used.",
   "KeyPath": [
@@ -1437,7 +1436,7 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Disable Energy Estimation
@@ -1573,7 +1572,7 @@ This policy setting specifies that power management is disabled when the machine
   "CategoryName": "WCM_Category",
   "PolicyName": "WCM_DisablePowerManagement",
   "NameSpace": "Microsoft.Policies.WindowsConnectionManager",
-  "Supported": "Windows8",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
   "DisplayName": "Disable power management in connected standby mode",
   "ExplainText": "This policy setting specifies that power management is disabled when the machine enters connected standby mode. If this policy setting is enabled, Windows Connection Manager does not manage adapter radios to reduce power consumption when the machine enters connected standby mode. If this policy setting is not configured or is disabled, power management is enabled when the machine enters connected standby mode.",
   "KeyPath": [
@@ -1584,7 +1583,7 @@ This policy setting specifies that power management is disabled when the machine
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Disable NIC Power Savings

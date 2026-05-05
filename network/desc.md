@@ -525,7 +525,7 @@ RegistryKey<unsigned char>::Initialize(
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Congestion Provider
@@ -649,21 +649,6 @@ See links below for a detailed documentation.
   ]
 },
 {
-  "File": "NCSI.admx",
-  "CategoryName": "NCSI_Category",
-  "PolicyName": "NCSI_PassivePolling",
-  "NameSpace": "Microsoft.Policies.NCSI",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Specify passive polling",
-  "ExplainText": "This Policy setting enables you to specify passive polling behavior. NCSI polls various measurements throughout the network stack on a frequent interval to determine if network connectivity has been lost. Use the options to control the passive polling behavior.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisablePassivePolling", "TrueValue": "1", "FalseValue": "0" }
-  ]
-},
-{
   "File": "nca.admx",
   "CategoryName": "NetworkConnectivityAssistant",
   "PolicyName": "PassiveMode",
@@ -680,6 +665,21 @@ See links below for a detailed documentation.
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+{
+  "File": "NCSI.admx",
+  "CategoryName": "NCSI_Category",
+  "PolicyName": "NCSI_PassivePolling",
+  "NameSpace": "Microsoft.Policies.NCSI",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Specify passive polling",
+  "ExplainText": "This Policy setting enables you to specify passive polling behavior. NCSI polls various measurements throughout the network stack on a frequent interval to determine if network connectivity has been lost. Use the options to control the passive polling behavior.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
+  ],
+  "Elements": [
+    { "Type": "Boolean", "ValueName": "DisablePassivePolling", "TrueValue": "1", "FalseValue": "0" }
+  ]
+}
 ```
 
 # Disable VPNs
@@ -767,7 +767,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
   "CategoryName": "DNS_Client",
   "PolicyName": "DNS_MDNS",
   "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "Windows_10_0_RS2",
+  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
   "DisplayName": "Configure multicast DNS (mDNS) protocol",
   "ExplainText": "Specifies if the DNS client will perform name resolution over mDNS. If you enable this policy, the DNS client will use mDNS protocol. If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
   "KeyPath": [
@@ -784,7 +784,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
   "CategoryName": "DNS_Client",
   "PolicyName": "DNS_SmartMultiHomedNameResolution",
   "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "Windows8",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
   "DisplayName": "Turn off smart multi-homed name resolution",
   "ExplainText": "Specifies that a multi-homed DNS client should optimize name resolution across networks. The setting improves performance by issuing parallel DNS, link local multicast name resolution (LLMNR) and NetBIOS over TCP/IP (NetBT) queries across all networks. In the event that multiple positive responses are received, the network binding order is used to determine which response to accept. If you enable this policy setting, the DNS client will not perform any optimizations. DNS queries will be issued across all networks first. LLMNR queries will be issued if the DNS queries fail, followed by NetBT queries if LLMNR queries fail. If you disable this policy setting, or if you do not configure this policy setting, name resolution will be optimized when issuing DNS, LLMNR and NetBT queries.",
   "KeyPath": [
@@ -801,7 +801,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
   "CategoryName": "DNS_Client",
   "PolicyName": "DNS_Netbios",
   "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "WindowsVista",
+  "Supported": "WindowsVista - At least Windows Vista",
   "DisplayName": "Configure NetBIOS settings",
   "ExplainText": "Specifies if the DNS client will perform name resolution over NetBIOS. By default, the DNS client will disable NetBIOS name resolution on public networks for security reasons. To use this policy setting, click Enabled, and then select one of the following options from the drop-down list: Disable NetBIOS name resolution: Never allow NetBIOS name resolution. Allow NetBIOS name resolution: Always allow NetBIOS name resolution. Disable NetBIOS name resolution on public networks: Only allow NetBIOS name resolution on network adapters which are not connected to public networks. NetBIOS learning mode: Always allow NetBIOS name resolution and use it as a fallback after mDNS/LLMNR queries fail. If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
   "KeyPath": [
@@ -822,7 +822,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
   "CategoryName": "DNS_Client",
   "PolicyName": "Turn_Off_Multicast",
   "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "WindowsVista",
+  "Supported": "WindowsVista - At least Windows Vista",
   "DisplayName": "Turn off multicast name resolution",
   "ExplainText": "Specifies that link local multicast name resolution (LLMNR) is disabled on the DNS client. LLMNR is a secondary name resolution protocol. With LLMNR, queries are sent using multicast over a local network link on a single subnet from a DNS client to another DNS client on the same subnet that also has LLMNR enabled. LLMNR does not require a DNS server or DNS client configuration, and provides name resolution in scenarios in which conventional DNS name resolution is not possible. If you enable this policy setting, LLMNR will be disabled on all available network adapters on the DNS client. If you disable this policy setting, or you do not configure this policy setting, LLMNR will be enabled on all available network adapters.",
   "KeyPath": [
@@ -833,7 +833,7 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
     { "Type": "EnabledValue", "Data": "0" },
     { "Type": "DisabledValue", "Data": "1" }
   ]
-},
+}
 ```
 
 # Disable IPv6
@@ -900,7 +900,7 @@ Beginning with Windows 10, version 1803, Wi-Fi Sense is no longer available. The
   "CategoryName": "WlanSettings_Category",
   "PolicyName": "WiFiSense",
   "NameSpace": "Microsoft.Policies.WlanSvc",
-  "Supported": "Windows_10_0_NOSERVER",
+  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
   "DisplayName": "Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services",
   "ExplainText": "This policy setting determines whether users can enable the following WLAN settings: \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\". \"Connect to suggested open hotspots\" enables Windows to automatically connect users to open hotspots it knows about by crowdsourcing networks that other people using Windows have connected to. \"Connect to networks shared by my contacts\" enables Windows to automatically connect to networks that the user's contacts have shared with them, and enables users on this device to share networks with their contacts. \"Enable paid services\" enables Windows to temporarily connect to open hotspots to determine if paid services are available. If this policy setting is disabled, both \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\" will be turned off and users on this device will be prevented from enabling them. If this policy setting is not configured or is enabled, users can choose to enable or disable either \"Connect to suggested open hotspots\" or \"Connect to networks shared by my contacts\".",
   "KeyPath": [
@@ -911,7 +911,7 @@ Beginning with Windows 10, version 1803, Wi-Fi Sense is no longer available. The
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Enable Offloads
@@ -1345,7 +1345,7 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
   "CategoryName": "WindowsSandbox",
   "PolicyName": "AllowPrinterRedirection",
   "NameSpace": "Microsoft.Policies.WindowsSandbox",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
   "DisplayName": "Allow printer sharing with Windows Sandbox",
   "ExplainText": "This policy setting enables or disables printer sharing from the host into the Sandbox. If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host. If you do not configure this policy setting, printer redirection will be disabled.",
   "KeyPath": [
@@ -1356,7 +1356,7 @@ Ethernet                       File and Printer Sharing for Microsoft Networks  
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Disable Microsoft Client/Multiplexor
@@ -1380,23 +1380,23 @@ When disabled, the PC can no longer share its internet connection to other devic
 ## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
-  {
-    "File": "NetworkConnections.admx",
-    "CategoryName": "NetworkConnections",
-    "PolicyName": "NC_ShowSharedAccessUI",
-    "NameSpace": "Microsoft.Policies.NetworkConnections",
-    "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
-    "DisplayName": "Prohibit use of Internet Connection Sharing on your DNS domain network",
-    "ExplainText": "Determines whether administrators can enable and configure the Internet Connection Sharing (ICS) feature of an Internet connection and if the ICS service can run on the computer. ICS lets administrators configure their system as an Internet gateway for a small network and provides network services, such as name resolution and addressing through DHCP, to the local private network. If you enable this setting, ICS cannot be enabled or configured by administrators, and the ICS service cannot run on the computer. The Advanced tab in the Properties dialog box for a LAN or remote access connection is removed. The Internet Connection Sharing page is removed from the New Connection Wizard. The Network Setup Wizard is disabled. If you disable this setting or do not configure it and have two or more connections, administrators can enable ICS. The Advanced tab in the properties dialog box for a LAN or remote access connection is available. In addition, the user is presented with the option to enable Internet Connection Sharing in the Network Setup Wizard and Make New Connection Wizard. (The Network Setup Wizard is available only in Windows XP Professional.) By default, ICS is disabled when you create a remote access connection, but administrators can use the Advanced tab to enable it. When running the New Connection Wizard or Network Setup Wizard, administrators can choose to enable ICS. Note: Internet Connection Sharing is only available when two or more network connections are present. Note: When the \"Prohibit access to properties of a LAN connection,\" \"Ability to change properties of an all user remote access connection,\" or \"Prohibit changing properties of a private remote access connection\" settings are set to deny access to the Connection Properties dialog box, the Advanced tab for the connection is blocked. Note: Nonadministrators are already prohibited from configuring Internet Connection Sharing, regardless of this setting. Note: Disabling this setting does not prevent Wireless Hosted Networking from using the ICS service for DHCP services. To prevent the ICS service from running, on the Network Permissions tab in the network's policy properties, select the \"Don't use hosted networks\" check box.",
-    "KeyPath": [
-      "HKLM\\Software\\Policies\\Microsoft\\Windows\\Network Connections"
-    ],
-    "ValueName": "NC_ShowSharedAccessUI",
-    "Elements": [
-      { "Type": "EnabledValue", "Data": "0" },
-      { "Type": "DisabledValue", "Data": "1" }
-    ]
-  },
+{
+  "File": "NetworkConnections.admx",
+  "CategoryName": "NetworkConnections",
+  "PolicyName": "NC_ShowSharedAccessUI",
+  "NameSpace": "Microsoft.Policies.NetworkConnections",
+  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
+  "DisplayName": "Prohibit use of Internet Connection Sharing on your DNS domain network",
+  "ExplainText": "Determines whether administrators can enable and configure the Internet Connection Sharing (ICS) feature of an Internet connection and if the ICS service can run on the computer. ICS lets administrators configure their system as an Internet gateway for a small network and provides network services, such as name resolution and addressing through DHCP, to the local private network. If you enable this setting, ICS cannot be enabled or configured by administrators, and the ICS service cannot run on the computer. The Advanced tab in the Properties dialog box for a LAN or remote access connection is removed. The Internet Connection Sharing page is removed from the New Connection Wizard. The Network Setup Wizard is disabled. If you disable this setting or do not configure it and have two or more connections, administrators can enable ICS. The Advanced tab in the properties dialog box for a LAN or remote access connection is available. In addition, the user is presented with the option to enable Internet Connection Sharing in the Network Setup Wizard and Make New Connection Wizard. (The Network Setup Wizard is available only in Windows XP Professional.) By default, ICS is disabled when you create a remote access connection, but administrators can use the Advanced tab to enable it. When running the New Connection Wizard or Network Setup Wizard, administrators can choose to enable ICS. Note: Internet Connection Sharing is only available when two or more network connections are present. Note: When the \"Prohibit access to properties of a LAN connection,\" \"Ability to change properties of an all user remote access connection,\" or \"Prohibit changing properties of a private remote access connection\" settings are set to deny access to the Connection Properties dialog box, the Advanced tab for the connection is blocked. Note: Nonadministrators are already prohibited from configuring Internet Connection Sharing, regardless of this setting. Note: Disabling this setting does not prevent Wireless Hosted Networking from using the ICS service for DHCP services. To prevent the ICS service from running, on the Network Permissions tab in the network's policy properties, select the \"Don't use hosted networks\" check box.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Network Connections"
+  ],
+  "ValueName": "NC_ShowSharedAccessUI",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+}
 ```
 
 # Speed & Duplex

@@ -320,6 +320,27 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 }
 ```
 
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "NoRecentDocsHistory",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "Win2k - At least Windows 2000",
+  "DisplayName": "Do not keep history of recently opened documents",
+  "ExplainText": "Prevents the operating system and installed programs from creating and displaying shortcuts to recently opened documents. If you enable this setting, the system and Windows programs do not create shortcuts to documents opened while the setting is in effect. Also, they retain but do not display existing document shortcuts. The system empties the Recent Items menu on the Start menu, and Windows programs do not display shortcuts at the bottom of the File menu. In addition, the Jump Lists off of programs in the Start Menu and Taskbar do not show lists of recently or frequently used files, folders, or websites. If you disable or do not configure this setting, the system will store and display shortcuts to recently and frequently used files, folders, and websites. Note: The system saves document shortcuts in the user profile in the System-drive\\Users\\User-name\\Recent folder. Also, see the \"Remove Recent Items menu from Start Menu\" and \"Clear history of recently opened documents on exit\" policies in this folder. If you enable this setting but do not enable the \"Remove Recent Items menu from Start Menu\" setting, the Recent Items menu appears on the Start menu, but it is empty. If you enable this setting, but then later disable it or set it to Not Configured, the document shortcuts saved before the setting was enabled reappear in the Recent Items menu and program File menus, and Jump Lists. This setting does not hide or prevent the user from pinning files, folders, or websites to the Jump Lists. See the \"Do not allow pinning items in Jump Lists\" setting. This policy also does not hide Tasks that the application has provided for their Jump List. This setting does not hide document shortcuts displayed in the Open dialog box. See the \"Hide the dropdown list of recent files\" setting. Note: It is a requirement for third-party applications with Windows 2000 or later certification to adhere to this setting.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "NoRecentDocsHistory",
+  "Elements": []
+}
+```
+
+
 # System Informer
 
 Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it is recommended to replace it.
@@ -600,154 +621,79 @@ HKLM\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\OneDrive
 },
 ```
 
-# Disable Edge Features
-
-Edge is a whole mess, I wouldn't recommend anyone to use it, but here's an option that applies the following values:
-
-| Value | Disables / Hides |
-| ----- | ----- |
-| `AutoImportAtFirstRun` | Auto-import from other browsers at first run |
-| `PersonalizationReportingEnabled` | Personalization (ads, news, browser suggestions) |
-| `ShowRecommendationsEnabled` | Recommendations and desktop notifications |
-| `HideFirstRunExperience` | First-run experience |
-| `PinBrowserEssentialsToolbarButton` | Browser Essentials toolbar button |
-| `DefaultBrowserSettingEnabled` | "Set Edge as default browser” prompts |
-| `EdgeFollowEnabled` | Follow creators |
-| `HubsSidebarEnabled` | Sidebar |
-| `StandaloneHubsSidebarEnabled` | Standalone Sidebar |
-| `SyncDisabled` | Sync (all kinds of data) |
-| `HideRestoreDialogEnabled` | Restore pages dialog after crash |
-| `EdgeShoppingAssistantEnabled` | Shopping features |
-| `ShowMicrosoftRewards` | Microsoft Rewards |
-| `QuickSearchShowMiniMenu` | Mini context menu (quick search) |
-| `ImplicitSignInEnabled` | Implicit sign-in with Microsoft account |
-| `EdgeCollectionsEnabled` | Collections |
-| `SplitScreenEnabled` | Split screen |
-| `UserFeedbackAllowed` | User feedback prompts |
-| `SearchbarAllowed` | Floating Bing search bar |
-| `StartupBoostEnabled` | Startup Boost |
-| `NewTabPageHideDefaultTopSites` | Microsoft's default pinned sites on New Tab |
-| `NewTabPageQuickLinksEnabled` | Quick links on New Tab |
-| `NewTabPageAllowedBackgroundTypes` | New Tab background image (restricts types) |
-| `NewTabPageContentEnabled` | Microsoft content on New Tab (news, highlights, etc.) |
-| `DisableHelpSticker` | Windows help tips ("help stickers”) |
-| `DisableMFUTracking` | Tracking of most-frequently-used apps |
-| `DisableRecentApps` | Recent apps UI in upper-left corner |
-| `DisableCharms` | Charms UI in upper-right corner |
-| `TurnOffBackstack` | Switching between recent apps (backstack) |
-| `AllowEdgeSwipe` | Edge swipe gestures (set to 0 to disable) |
-| `TabServicesEnabled` | Tab-related background services (e.g., shopping/price tracking helpers) disabled |
-| `TextPredictionEnabled` | Text predictions will not be provided in eligible text fields |
-| `TrackingPrevention` | Tracking Prevention mode enforced |
-| `DefaultSensorsSetting` | Site access to  sensors blocked |
-
-See all edge policies [here](https://learn.microsoft.com/en-us/deployedge/microsoft-edge-policies).
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
-  "File": "EdgeUI.admx",
-  "CategoryName": "EdgeUI",
-  "PolicyName": "TurnOffBackstack",
-  "NameSpace": "Microsoft.Policies.EdgeUI",
-  "Supported": "Windows8",
-  "DisplayName": "Turn off switching between recent apps",
-  "ExplainText": "If you enable this setting, users will not be allowed to switch between recent apps. The App Switching option in the PC settings app will be disabled as well. If you disable or do not configure this policy setting, users will be allowed to switch between recent apps.",
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventOnedriveFileSync",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Prevent the usage of OneDrive for file storage",
+  "ExplainText": "This policy setting lets you prevent apps and features from working with files on OneDrive. If you enable this policy setting: * Users can\u2019t access OneDrive from the OneDrive app and file picker. * Packaged Microsoft Store apps can\u2019t access OneDrive using the WinRT API. * OneDrive doesn\u2019t appear in the navigation pane in File Explorer. * OneDrive files aren\u2019t kept in sync with the cloud. * Users can\u2019t automatically upload photos and videos from the camera roll folder. If you disable or do not configure this policy setting, apps and features can work with OneDrive file storage.",
   "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
   ],
-  "ValueName": "TurnOffBackstack",
+  "ValueName": "DisableFileSyncNGSC",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
 {
-  "File": "EdgeUI.admx",
-  "CategoryName": "EdgeUI",
-  "PolicyName": "DisableMFUTracking",
-  "NameSpace": "Microsoft.Policies.EdgeUI",
-  "Supported": "Windows8",
-  "DisplayName": "Turn off tracking of app usage",
-  "ExplainText": "This policy setting prevents Windows from keeping track of the apps that are used and searched most frequently. If you enable this policy setting, apps will be sorted alphabetically in: - search results - the Search and Share panes - the drop-down app list in the Picker If you disable or don't configure this policy setting, Windows will keep track of the apps that are used and searched most frequently. Most frequently used apps will appear at the top.",
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventOnedriveFileSyncForBlue",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
+  "DisplayName": "Prevent the usage of OneDrive for file storage on Windows 8.1",
+  "ExplainText": "This policy setting lets you prevent apps and features from working with files on OneDrive for Windows 8.1. If you enable this policy setting: * Users can\u2019t access OneDrive from the OneDrive app and file picker. * Packaged Microsoft Store apps can\u2019t access OneDrive using the WinRT API. * OneDrive doesn\u2019t appear in the navigation pane in File Explorer. * OneDrive files aren\u2019t kept in sync with the cloud. * Users can\u2019t automatically upload photos and videos from the camera roll folder. If you disable or do not configure this policy setting, apps and features can work with OneDrive file storage.",
   "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
   ],
-  "ValueName": "DisableMFUTracking",
+  "ValueName": "DisableFileSync",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
 {
-  "File": "EdgeUI.admx",
-  "CategoryName": "EdgeUI",
-  "PolicyName": "DisableRecentApps",
-  "NameSpace": "Microsoft.Policies.EdgeUI",
-  "Supported": "Windows_6_3",
-  "DisplayName": "Do not show recent apps when the mouse is pointing to the upper-left corner of the screen",
-  "ExplainText": "This policy setting allows you to prevent the last app and the list of recent apps from appearing when the mouse is pointing to the upper-left corner of the screen. If you enable this policy setting, the user will no longer be able to switch to recent apps using the mouse. The user will still be able to switch apps using touch gestures, keyboard shortcuts, and the Start screen. If you disable or don't configure this policy setting, the recent apps will be available by default, and the user can configure this setting.",
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "PreventOneDriveFileSyncOnMeteredNetwork",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
+  "DisplayName": "Prevent OneDrive files from syncing over metered connections",
+  "ExplainText": "This policy setting allows configuration of OneDrive file sync behavior on metered connections.",
   "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
   ],
-  "ValueName": "DisableRecentApps",
   "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
+    { "Type": "Enum", "ValueName": "DisableMeteredNetworkFileSync", "Items": [
+        { "DisplayName": "Block syncing on all metered connections", "Data": "0" },
+        { "DisplayName": "Block syncing on metered connections only when roaming", "Data": "1" }
+      ]
+    }
   ]
 },
 {
-  "File": "EdgeUI.admx",
-  "CategoryName": "EdgeUI",
-  "PolicyName": "DisableCharms",
-  "NameSpace": "Microsoft.Policies.EdgeUI",
-  "Supported": "Windows_6_3",
-  "DisplayName": "Search, Share, Start, Devices, and Settings don't appear when the mouse is pointing to the upper-right corner of the screen",
-  "ExplainText": "This policy setting allows you to prevent Search, Share, Start, Devices, and Settings from appearing when the mouse is pointing to the upper-right corner of the screen. If you enable this policy setting, Search, Share, Start, Devices, and Settings will no longer appear when the mouse is pointing to the upper-right corner. They'll still be available if the mouse is pointing to the lower-right corner. If you disable or don't configure this policy setting, Search, Share, Start, Devices, and Settings will be available by default, and the user can configure this setting.",
+  "File": "SkyDrive.admx",
+  "CategoryName": "OneDrive",
+  "PolicyName": "DisableLibrariesDefaultSaveToOneDrive",
+  "NameSpace": "Microsoft.Policies.OneDrive",
+  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
+  "DisplayName": "Save documents to OneDrive by default",
+  "ExplainText": "This policy setting lets you disable OneDrive as the default save location. It does not prevent apps and users from saving files on OneDrive. If you disable this policy setting, files will be saved locally by default. Users will still be able to change the value of this setting to save to OneDrive by default. They will also be able to open and save files on OneDrive using the OneDrive app and file picker, and packaged Microsoft Store apps will still be able to access OneDrive using the WinRT API. If you enable or do not configure this policy setting, users with a connected account will save documents to OneDrive by default.",
   "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive"
   ],
-  "ValueName": "DisableCharms",
+  "ValueName": "DisableLibrariesDefaultSaveToOneDrive",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
-{
-  "File": "EdgeUI.admx",
-  "CategoryName": "EdgeUI",
-  "PolicyName": "DisableHelpSticker",
-  "NameSpace": "Microsoft.Policies.EdgeUI",
-  "Supported": "Windows_6_3",
-  "DisplayName": "Disable help tips",
-  "ExplainText": "Disables help tips that Windows shows to the user. By default, Windows will show the user help tips until the user has successfully completed the scenarios. If this setting is enabled, Windows will not show any help tips to the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
-  ],
-  "ValueName": "DisableHelpSticker",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "EdgeUI.admx",
-  "CategoryName": "EdgeUI",
-  "PolicyName": "AllowEdgeSwipe",
-  "NameSpace": "Microsoft.Policies.EdgeUI",
-  "Supported": "Windows_10_0",
-  "DisplayName": "Allow edge swipe",
-  "ExplainText": "If you disable this policy setting, users will not be able to invoke any system UI by swiping in from any screen edge. If you enable or do not configure this policy setting, users will be able to invoke system UI by swiping in from the screen edges.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\EdgeUI",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\EdgeUI"
-  ],
-  "ValueName": "AllowEdgeSwipe",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
+}
 ```
 
 # Hash Generator

@@ -2452,23 +2452,102 @@ The `WSearch` service is needed for CmdPals `File Search` extension to work.
 {
   "File": "Search.admx",
   "CategoryName": "Search",
-  "PolicyName": "SearchPrivacy",
+  "PolicyName": "PreventRemoteQueries",
   "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "WinBlueExclusive - Microsoft Windows 8.1. Not supported on Windows 10 or later",
-  "DisplayName": "Set what information is shared in Search",
-  "ExplainText": "This policy setting allows you to control what information is shared with Bing in Search. If you enable this policy setting, you can specify one of four settings, which users won't be able to change: -User info and location: Share a user's search history, some Microsoft account info, and specific location to personalize their search and other Microsoft experiences. -User info only: Share a user's search history and some Microsoft account info to personalize their search and other Microsoft experiences. -Anonymous info: Share usage information but don't share search history, Microsoft account info or specific location. If you disable or don't configure this policy setting, users can choose what information is shared in Search.",
+  "Supported": "4OrLater - Any version of Microsoft Windows with Windows Search 4.0 or later",
+  "DisplayName": "Prevent clients from querying the index remotely",
+  "ExplainText": "If enabled, clients will be unable to query this computer's index remotely. Thus, when they are browsing network shares that are stored on this computer, they will not search them using the index. If disabled, client search requests will use this computer's index. Default is disabled.",
   "KeyPath": [
     "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
   ],
+  "ValueName": "PreventRemoteQueries",
   "Elements": [
-    { "Type": "Enum", "ValueName": "ConnectedSearchPrivacy", "Items": [
-        { "DisplayName": "User info and location", "Data": "1" },
-        { "DisplayName": "User info only", "Data": "2" },
-        { "DisplayName": "Anonymous info", "Data": "3" }
-      ]
-    }
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "PreventIndexOnBattery",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "301OrLater - Microsoft Windows XP, Windows Server 2003 with Windows Search version 3.01, or any version of Microsoft Windows with Windows Search 4.0 or later",
+  "DisplayName": "Prevent indexing when running on battery power to conserve energy",
+  "ExplainText": "If enabled, the indexer pauses whenever the computer is running on battery. If disabled, the indexing follows the default behavior. Default is disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "PreventIndexOnBattery",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AlwaysUseAutoLangDetection",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Win8Only - Microsoft Windows 8 or later",
+  "DisplayName": "Always use automatic language detection when indexing content and properties",
+  "ExplainText": "This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. If you enable this policy setting, Windows will always use automatic language detection to index (as it did in Windows 7). Using automatic language detection can increase memory usage. We recommend enabling this policy setting only on PCs where documents are stored in many languages. If you disable or do not configure this policy setting, Windows will use automatic language detection only when it can determine the language of a document with high confidence.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "AlwaysUseAutoLangDetection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "DoNotUseWebResults",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "WinBlueOnly - Microsoft Windows 8.1 or later",
+  "DisplayName": "Don't search the web or display web results in Search",
+  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web, and if the web results are displayed in Search.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "ConnectedSearchUseWeb",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "DoNotUseWebResultsOnMeteredConnections",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "WinBlueExclusive - Microsoft Windows 8.1. Not supported on Windows 10 or later",
+  "DisplayName": "Don't search the web or display web results in Search over metered connections",
+  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web over metered connections and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. Note: If you enable the \"Don't search the web or display web results in Search\" policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "ConnectedSearchUseWebOverMeteredConnections",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "DisableWebSearch",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "RedistOnly - Microsoft Windows XP, or Windows Server 2003 with Windows Search version 3.01 or later",
+  "DisplayName": "Do not allow web search",
+  "ExplainText": "Enabling this policy removes the option of searching the Web from Windows Desktop Search. When this policy is disabled or not configured, the Web option is available and users can search the Web via their default browser search engine.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "DisableWebSearch",
+  "Elements": []
+}
 ```
 
 ## Miscellaneous Notes
@@ -2581,27 +2660,6 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePo
 {
   "File": "StorageSense.admx",
   "CategoryName": "StorageSense",
-  "PolicyName": "SS_ConfigStorageSenseGlobalCadence",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Configure Storage Sense cadence",
-  "ExplainText": "Storage Sense can automatically clean some of the user\u2019s files to free up disk space. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the desired Storage Sense cadence. Supported options are: daily, weekly, monthly, and during low free disk space. The default is 0 (during low free disk space). Disabled or Not Configured: By default, the Storage Sense cadence is set to \u201cduring low free disk space\u201d. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "ConfigStorageSenseGlobalCadence", "Items": [
-        { "DisplayName": "Every day", "Data": "1" },
-        { "DisplayName": "Every week", "Data": "7" },
-        { "DisplayName": "Every month", "Data": "30" },
-        { "DisplayName": "During low free disk space", "Data": "0" }
-      ]
-    }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
   "PolicyName": "SS_AllowStorageSenseTemporaryFilesCleanup",
   "NameSpace": "Microsoft.Policies.StorageSense",
   "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
@@ -2645,22 +2703,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePo
   "Elements": [
     { "Type": "Decimal", "ValueName": "ConfigStorageSenseDownloadsCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
   ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_ConfigStorageSenseCloudContentDehydrationThreshold",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Configure Storage Sense Cloud Content dehydration threshold",
-  "ExplainText": "When Storage Sense runs, it can dehydrate cloud-backed content that hasn\u2019t been opened in a certain amount of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum number of days a cloud-backed file can remain unopened before Storage Sense dehydrates it from the sync root. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not dehydrate any cloud-backed content. The default value is 0, or never dehydrating cloud-backed content. Disabled or Not Configured: By default, Storage Sense will not dehydrate any cloud-backed content. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "ConfigStorageSenseCloudContentDehydrationThreshold", "MinValue": "0", "MaxValue": "365" }
-  ]
-},
+}
 ```
 
 # Reduce Shutdown Time
@@ -2721,7 +2764,7 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
   "CategoryName": "System",
   "PolicyName": "VerboseStatus",
   "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Win2k",
+  "Supported": "Win2k - At least Windows 2000",
   "DisplayName": "Display highly detailed status messages",
   "ExplainText": "This policy setting directs the system to display highly detailed status messages. This policy setting is designed for advanced users who require this information. If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"\"Remove Boot/Shutdown/Logon/Logoff status messages\"\" policy setting is enabled.",
   "KeyPath": [
@@ -2729,7 +2772,7 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
   ],
   "ValueName": "VerboseStatus",
   "Elements": []
-},
+}
 ```
 
 # Disable Aero Shake
@@ -2748,7 +2791,7 @@ Prevents windows from being minimized or restored when the active window is shak
   "CategoryName": "Desktop",
   "PolicyName": "NoWindowMinimizingShortcuts",
   "NameSpace": "Microsoft.Policies.WindowsDesktop",
-  "Supported": "Windows7",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
   "DisplayName": "Turn off Aero Shake window minimizing mouse gesture",
   "ExplainText": "Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse. If you enable this policy, application windows will not be minimized or restored when the active window is shaken back and forth with the mouse. If you disable or do not configure this policy, this window minimizing and restoring gesture will apply.",
   "KeyPath": [
@@ -2759,7 +2802,7 @@ Prevents windows from being minimized or restored when the active window is shak
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Disable JPEG Reduction
@@ -2988,17 +3031,120 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
 
 ```json
 {
-  "File": "WindowsDefenderSecurityCenter.admx",
-  "CategoryName": "Notifications",
-  "PolicyName": "Notifications_DisableEnhancedNotifications",
-  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
-  "Supported": "Windows_10_0_RS3",
-  "DisplayName": "Hide non-critical notifications",
-  "ExplainText": "Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
+  "File": "AccountNotifications.admx",
+  "CategoryName": "AccountNotifications",
+  "PolicyName": "DisableAccountNotifications",
+  "NameSpace": "Microsoft.Policies.AccountNotifications",
+  "Supported": "Windows_10_0_20H1_NOSERVER - At least Windows 10 Version 2004",
+  "DisplayName": "Turn off account notifications in Start",
+  "ExplainText": "This policy allows you to prevent Windows from displaying notifications to Microsoft account (MSA) and local users in Start (user tile). Notifications include getting users to: reauthenticate; backup their device; manage cloud storage quotas as well as manage their Microsoft 365 or XBOX subscription. If you enable this policy setting, Windows will not send account related notifications for local and MSA users to the user tile in Start. If you disable or do not configure this policy setting, Windows will send account related notifications for local and MSA users to the user tile in Start. No reboots or service restarts are required for this policy setting to take effect.",
   "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\AccountNotifications"
   ],
-  "ValueName": "DisableEnhancedNotifications",
+  "ValueName": "DisableAccountNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ICM.admx",
+  "CategoryName": "InternetManagement_Settings",
+  "PolicyName": "ShellNoUseStoreOpenWith_2",
+  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off access to the Store",
+  "ExplainText": "This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the \"Look for an app in the Store\" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "NoUseStoreOpenWith",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Logon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "DisableLockScreenAppNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsLogon",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off app notifications on the lock screen",
+  "ExplainText": "This policy setting allows you to prevent app notifications from appearing on the lock screen. If you enable this policy setting, no app notifications are displayed on the lock screen. If you disable or do not configure this policy setting, users can choose which apps display notifications on the lock screen.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "DisableLockScreenAppNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Taskbar.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "DisableNotificationCenter",
+  "NameSpace": "Microsoft.Policies.TaskBar2",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Remove Notifications and Action Center",
+  "ExplainText": "This policy setting removes Notifications and Action Center from the notification area on the taskbar. The notification area is located at the far right end of the taskbar and includes icons for current notifications and the system clock. If this setting is enabled, Notifications and Action Center is not displayed in the notification area. The user will be able to read notifications when they appear, but they won\u2019t be able to review any notifications they miss. If you disable or do not configure this policy setting, Notification and Security and Maintenance will be displayed on the taskbar. A reboot is required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "DisableNotificationCenter",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WebThreatDefense.admx",
+  "CategoryName": "WebThreatDefense",
+  "PolicyName": "NotifyMalicious",
+  "NameSpace": "Microsoft.Policies.WebThreatDefense",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Notify Malicious",
+  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school password into one of the following malicious scenarios: into a reported phishing site, into a Microsoft login URL with an invalid certificate, or into an application connecting to either a reported phishing site or a Microsoft login URL with an invalid certificate. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school password into one of the malicious scenarios described above and encourages them to change their password. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn your users if they type their work or school password into one of the malicious scenarios described above.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
+  ],
+  "ValueName": "NotifyMalicious",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WebThreatDefense.admx",
+  "CategoryName": "WebThreatDefense",
+  "PolicyName": "NotifyPasswordReuse",
+  "NameSpace": "Microsoft.Policies.WebThreatDefense",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Notify Password Reuse",
+  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they reuse their work or school password. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns users if they reuse their work or school password and encourages them to change it. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn users if they reuse their work or school password.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
+  ],
+  "ValueName": "NotifyPasswordReuse",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WebThreatDefense.admx",
+  "CategoryName": "WebThreatDefense",
+  "PolicyName": "NotifyUnsafeApp",
+  "NameSpace": "Microsoft.Policies.WebThreatDefense",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Notify Unsafe App",
+  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school passwords in Notepad, Winword, or M365 Office apps like OneNote, Word, Excel, etc. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they store their password in text editor apps. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn users if they store their password in text editor apps.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
+  ],
+  "ValueName": "NotifyUnsafeApp",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
@@ -3009,7 +3155,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
   "CategoryName": "Reporting",
   "PolicyName": "Reporting_DisableEnhancedNotifications",
   "NameSpace": "Microsoft.Policies.WindowsDefender",
-  "Supported": "Windows_10_0",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
   "DisplayName": "Turn off enhanced notifications",
   "ExplainText": "Use this policy setting to specify if you want Microsoft Defender Antivirus enhanced notifications to display on clients. If you disable or do not configure this setting, Microsoft Defender Antivirus enhanced notifications will display on clients. If you enable this setting, Microsoft Defender Antivirus enhanced notifications will not display on clients.",
   "KeyPath": [
@@ -3026,7 +3172,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
   "CategoryName": "Notifications",
   "PolicyName": "Notifications_DisableNotifications",
   "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
-  "Supported": "Windows_10_0_RS3",
+  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
   "DisplayName": "Hide all notifications",
   "ExplainText": "Hide notifications from Windows Security. Enabled: Local users will not see notifications from Windows Security. Disabled: Local users can see notifications from Windows Security. Not configured: Same as Disabled.",
   "KeyPath": [
@@ -3039,17 +3185,17 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
   ]
 },
 {
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "ShellNoUseStoreOpenWith_2",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "Windows8",
-  "DisplayName": "Turn off access to the Store",
-  "ExplainText": "This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the \"Look for an app in the Store\" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.",
+  "File": "WindowsDefenderSecurityCenter.admx",
+  "CategoryName": "Notifications",
+  "PolicyName": "Notifications_DisableEnhancedNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
+  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
+  "DisplayName": "Hide non-critical notifications",
+  "ExplainText": "Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
   "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
   ],
-  "ValueName": "NoUseStoreOpenWith",
+  "ValueName": "DisableEnhancedNotifications",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
@@ -3067,23 +3213,6 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
     "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
   ],
   "ValueName": "NoTileApplicationNotification",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WPN.admx",
-  "CategoryName": "NotificationsCategory",
-  "PolicyName": "NoNotificationMirroring",
-  "NameSpace": "Microsoft.Policies.Notifications",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Turn off notification mirroring",
-  "ExplainText": "This policy setting turns off notification mirroring. If you enable this policy setting, notifications from applications and system will not be mirrored to your other devices. If you disable or do not configure this policy setting, notifications will be mirrored, and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
-  ],
-  "ValueName": "DisallowNotificationMirroring",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
@@ -3124,6 +3253,40 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoCloudNotification",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off notifications network usage",
+  "ExplainText": "This policy setting blocks applications from using the network to send notifications to update tiles, tile badges, toast, or raw notifications. This policy setting turns off the connection between Windows and the Windows Push Notification Service (WNS). This policy setting also stops applications from being able to poll application services to update tiles. If you enable this policy setting, applications and system features will not be able receive notifications from the network from WNS or via notification polling APIs. If you enable this policy setting, notifications can still be raised by applications running on the machine via local API calls from within the application. If you disable or do not configure this policy setting, the client computer will connect to WNS at user login and applications will be allowed to poll for tile notification updates in the background. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "NoCloudApplicationNotification",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoNotificationMirroring",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Turn off notification mirroring",
+  "ExplainText": "This policy setting turns off notification mirroring. If you enable this policy setting, notifications from applications and system will not be mirrored to your other devices. If you disable or do not configure this policy setting, notifications will be mirrored, and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "DisallowNotificationMirroring",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
 ```
 
 # Export Explorer/Taskbar Pins
@@ -3175,6 +3338,29 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 Only this path gets read, `TimeStampEnabled` doesn't get read?
 
 - [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "Reliability.admx",
+  "CategoryName": "System",
+  "PolicyName": "EE_EnablePersistentTimeStamp",
+  "NameSpace": "Microsoft.Policies.Reliability",
+  "Supported": "WindowsNET - At least Windows Server 2003",
+  "DisplayName": "Enable Persistent Time Stamp",
+  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
+  ],
+  "ValueName": "TimeStampEnabled",
+  "Elements": [
+    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
 
 # Disable Prefetch & Superfetch
 
@@ -3234,6 +3420,29 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 - [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "FileSys.admx",
+  "CategoryName": "Filesystem",
+  "PolicyName": "LongPathsEnabled",
+  "NameSpace": "Microsoft.Policies.FileSys",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Enable Win32 long paths",
+  "ExplainText": "Enabling Win32 long paths will allow manifested win32 applications and packaged Microsoft Store applications to access paths beyond the normal 260 character limit. Enabling this setting will cause the long paths to be accessible within the process.",
+  "KeyPath": [
+    "HKLM\\System\\CurrentControlSet\\Control\\FileSystem"
+  ],
+  "ValueName": "LongPathsEnabled",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+
 # Disable Clipboard
 
 If you copy or cut something it gets stored to your clipboard.
@@ -3259,45 +3468,11 @@ Miscellaneous notes:
 
 ```json
 {
-  "File": "TerminalServer.admx",
-  "CategoryName": "TS_REDIRECTION",
-  "PolicyName": "TS_CLIENT_CLIPBOARD",
-  "NameSpace": "Microsoft.Policies.TerminalServer",
-  "Supported": "WindowsXP",
-  "DisplayName": "Do not allow Clipboard redirection",
-  "ExplainText": "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session. You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection. If you enable this policy setting, users cannot redirect Clipboard data. If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection. If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services"
-  ],
-  "ValueName": "fDisableClip",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsSandbox.admx",
-  "CategoryName": "WindowsSandbox",
-  "PolicyName": "AllowClipboardRedirection",
-  "NameSpace": "Microsoft.Policies.WindowsSandbox",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX",
-  "DisplayName": "Allow clipboard sharing with Windows Sandbox",
-  "ExplainText": "This policy setting enables or disables clipboard sharing with the sandbox. If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted. If you do not configure this policy setting, clipboard sharing will be enabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
-  ],
-  "ValueName": "AllowClipboardRedirection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
   "File": "OSPolicy.admx",
   "CategoryName": "PolicyPolicies",
   "PolicyName": "AllowCrossDeviceClipboard",
   "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
   "DisplayName": "Allow Clipboard synchronization across devices",
   "ExplainText": "This policy setting determines whether Clipboard contents can be synchronized across devices. If you enable this policy setting, Clipboard contents are allowed to be synchronized across devices logged in under the same Microsoft account or Azure AD account. If you disable this policy setting, Clipboard contents cannot be shared to other devices. Policy change takes effect immediately.",
   "KeyPath": [
@@ -3314,7 +3489,7 @@ Miscellaneous notes:
   "CategoryName": "PolicyPolicies",
   "PolicyName": "AllowClipboardHistory",
   "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
   "DisplayName": "Allow Clipboard History",
   "ExplainText": "This policy setting determines whether history of Clipboard contents can be stored in memory. If you enable this policy setting, history of Clipboard contents are allowed to be stored. If you disable this policy setting, history of Clipboard contents are not allowed to be stored. Policy change takes effect immediately.",
   "KeyPath": [
@@ -3326,6 +3501,40 @@ Miscellaneous notes:
     { "Type": "DisabledValue", "Data": "0" }
   ]
 },
+{
+  "File": "TerminalServer.admx",
+  "CategoryName": "TS_REDIRECTION",
+  "PolicyName": "TS_CLIENT_CLIPBOARD",
+  "NameSpace": "Microsoft.Policies.TerminalServer",
+  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
+  "DisplayName": "Do not allow Clipboard redirection",
+  "ExplainText": "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session. You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection. If you enable this policy setting, users cannot redirect Clipboard data. If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection. If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services"
+  ],
+  "ValueName": "fDisableClip",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsSandbox.admx",
+  "CategoryName": "WindowsSandbox",
+  "PolicyName": "AllowClipboardRedirection",
+  "NameSpace": "Microsoft.Policies.WindowsSandbox",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Allow clipboard sharing with Windows Sandbox",
+  "ExplainText": "This policy setting enables or disables clipboard sharing with the sandbox. If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted. If you do not configure this policy setting, clipboard sharing will be enabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
+  ],
+  "ValueName": "AllowClipboardRedirection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
 ```
 
 # Disable Memory Compression
@@ -4145,7 +4354,7 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{I
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
+}
 ```
 
 # Page File
@@ -4200,15 +4409,7 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]
-},
-```
-
-### Miscellaneous Values
-
-```c
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\LastResumeOnPCInteractionTime","Length: 20"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\LastResumeOnPCTime","Length: 20"
-"HKCU\Software\Microsoft\Windows\CurrentVersion\Mobility\OptedIn","Length: 16"
+}
 ```
 
 # Disable Hyper-V
