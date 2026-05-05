@@ -182,7 +182,7 @@ cmake --build build --config Release
 .\build\Release\gm_effects.exe
 ```
 
-If you want it to loop faster/slower, change `Sleep(1000)`.
+If you want it to loop faster/slower, change `Sleep(1000)`, it also support a `--pid` argument which lets you track a single PID instead of the current foreground process.
 
 Microsoft also documents behavior that I didn't find in the RM functions, so I guess it's handled somewhere else, such as "Game Mode can suppress Windows Update driver installs and Windows Update restart notifications while a game is running".
 
@@ -544,7 +544,7 @@ v14 = RmGameModeUnregisterProcess(v13); // remove process
 
 The service also watches process lifetime with a threadpool wait. When the process terminates, paired auxiliary processes are cleared and the process is removed from Game Mode service state ([`RmpGameModeRecipientProcessTerminationCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeRecipientProcessTerminationCallback@@YAXPEAU_TP_CALLBACK_INSTANCE@@PEAXPEAU_TP_WAIT@.c)). Input focus changes queue the same policy worker so the active Game Mode state can move to another registered primary process ([`RmpSystemNotificationInputFocusChangeCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemNotificationInputFocusChangeCallback@@YAJU_WNF_STATE_NAME@@KPEAU_WNF_TYPE_ID@@PEAXPEBX.c)).
 
-This can be validated using [`gm_effects.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects.exe) with the `--pid` argument, so you enable Game Mode, start the game, use `--pid` with the PID of the game, move the game to FG/BG. By doing so you'll see that the state changes.
+This can be validated using [`gm_effects`](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects) with the `--pid` argument, so you enable Game Mode, start the game, use `--pid` with the PID of the game, move the game to FG/BG. By doing so you'll see that the state changes.
 
 ```ini
 ; not in FG
@@ -864,7 +864,7 @@ return NtUpdateWnfStateData(&WNF_SEB_GAME_MODE, &v2, 8LL, 0LL, 0LL, 0, 0);
 
 When enabled, WNF uses low value `3`, when disabled, it uses low value `1`. The high value stays `0xFFFFFFFF` in both cases. The GameMode profile has one processor override `Minimum processor state` = `100%` for AC/DC (note that you won't see the changes via powercfg, as these are profile values not a scheme).
 
-You can use [`gm_effects.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects.exe) to see what value is set.
+You can use [`gm_effects`](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects) to see what value is set.
 
 [`BroadcastDVRComponent::IsUsingPowerProfile`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-IsUsingPowerProfile@BroadcastDVRComponent@@AEAA_NAEBU_GUID@@@Z.c) checks whether the active power scheme is `GUID_MIN_POWER_SAVINGS` (High Performance), the request builder uses that result as "already using a performance plan". In the default cases, it asks the service for the GameMode power profile only when the current plan isn't High Performance (`GUID_MIN_POWER_SAVINGS` has `PROCTHROTTLEMIN`/`PROCTHROTTLEMIN1` at `100` by default).
 
