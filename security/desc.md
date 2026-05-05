@@ -2053,14 +2053,6 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 
 Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
 
-# Increased DH & RSA Key
-
-By default it uses a minimum size of `1024` bits (both) - hardens Windows [TLS](https://learn.microsoft.com/en-us/windows-server/security/tls/tls-registry-settings?tabs=diffie-hellman) engine by forcing minimum key sizes during secure communications (SSL/TLS handshake process).
-
-> "*NSA recommends RSA key transport and ephemeral DH (DHE) or ECDH (ECDHE) mechanisms, with RSA or DHE key exchange using at least 3072-bit keys and ECDHE key exchanges using the secp384r1 elliptic curve. For RSA keytransport and DH/DHE key exchange, keys less than 2048 bits should not be used, and ECDH/ECDHE using custom curves should not be used.*"
->
-> — National Security Agency, [Eliminating obsolete TLS protocol configurations](https://media.defense.gov/2021/Jan/05/2002560140/-1/-1/0/ELIMINATING_OBSOLETE_TLS_UOO197443-20.PDF)
-
 # Disable Legacy TLS/Crypto
 
 Disables legacy/insecure protocols, ciphers, renegotiation, hashes, and forces .NET apps to use strong cryptography (Disables RC2 (40/56/128), RC4 (40/56/64/128), DES, 3DES, NULL, MD5/SHA-1, SSL 2.0/3.0, TLS 1.0/1.1, DTLS 1.0, insecure TLS renegotiation - Enables TLS SCSV, .NET StrongCrypto & SystemDefaultTlsVersions, NTLMv2 only). Windows may use insecure connections for e.g. older software (compatibility reasons), so disabling them can cause issues with old software.
