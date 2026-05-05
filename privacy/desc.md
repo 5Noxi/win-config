@@ -1822,9 +1822,9 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 # Disable Text Input Hosts
 
-Renames `ctfmon.exe` and `TextInputHost.exe` to block the classic CTF loader and the modern text input host. This disables IME, emoji/clipboard panels, and touch keyboard input in most cases.
+`ctfmon.exe` is the classic CTF (Collaborative Translation Framework) loader, it's started for the user at logon by `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`. It seems to handle [IME](https://learn.microsoft.com/en-us/windows/apps/develop/input/input-method-editors) (Input Method Editor) support, language/input profiles, language bar/input indicator, and [keyboard layout switching](https://www.noverse.dev/docs/win-config/peripheral/keyboard-values/).
 
-`TextInputManagementService` is the Windows service for text input, expressive input, touch keyboard, handwriting, and IMEs. `ctfmon.exe` loads the Text Services Framework (IME/language bar), while `TextInputHost.exe` hosts the modern input UI (touch keyboard, emoji, clipboard).
+`TextInputHost.exe` is the modern text input host (from `MicrosoftWindows.Client.CBS`), it seems to get used (on demand) through the `InputApp` registration when opening modern input parts such as `Win+.`, `Win+V`, touch keyboard, handwriting, voice typing, and so on.
 
 # Disable Online Speech Recognition
 
@@ -3169,18 +3169,33 @@ WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed proce
 ## Suboption
 
 `Disable DHA Report`:  
-"This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows."
+> "*This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.*"
 
-## Miscellaneous Notes  
+`Disable Persistent System Timestamp`:
+
+Disables the Reliability policy that periodically writes the current system time to disk. Windows uses that persistent timestamp as a "last known alive" time so Reliability Monitor / WER can estimate when an unexpected shutdown, power loss, hard reset, or crash happened (see policies below).
+
+> "*This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.*"
 
 ```c
+if ( !RegQueryValueExW(hKey[0], "TimeStampEnabled", 0LL, 0LL, (LPBYTE)&Data, &cbData) )
+if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbData) && v4 <= 0x15180 ) // 86400 seconds = 24h?
+```
+
+`TimeStampInterval` under `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` is in seconds. The non-policy value under `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` is read as minutes and multiplied by 60. The default policy presentation is 60 seconds.
+
+- [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
+
+## Miscellaneous Notes
+
 `EnableWerUserReporting`  
 Default: `1` (`DbgkEnableWerUserReporting dd 1`)
 
+```powershell
 "Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
 ```
 
-Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability)? Haven't found anything on this and haven't done much research myself:
+Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability)? Haven't informed myself about it yet, therefore ignore it:
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
 ```
@@ -3309,6 +3324,24 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
   ],
   "ValueName": "EnableDeviceHealthAttestationService",
   "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Reliability.admx",
+  "CategoryName": "System",
+  "PolicyName": "EE_EnablePersistentTimeStamp",
+  "NameSpace": "Microsoft.Policies.Reliability",
+  "Supported": "WindowsNET - At least Windows Server 2003",
+  "DisplayName": "Enable Persistent Time Stamp",
+  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
+  ],
+  "ValueName": "TimeStampEnabled",
+  "Elements": [
+    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
   ]

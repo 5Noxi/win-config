@@ -3322,46 +3322,6 @@ xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinne
 
 The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
 
-# Disable Timestamp Interval
-
-Disables the interval at which reliability events are timestamped (will not log regular timestamped reliability events).
-
-```c
-if ( !RegQueryValueExW(hKey[0], "TimeStampEnabled", 0LL, 0LL, (LPBYTE)&Data, &cbData) )
-if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbData) && v4 <= 0x15180 ) // 86400 seconds = 24h?
-```
-`TimeStampInterval` has a max value of `86400` dec = 24h, `TimeStampEnabled` can probably be set to `0`/`1`.
-
-```
-\Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability : TimeStampInterval
-```
-Only this path gets read, `TimeStampEnabled` doesn't get read?
-
-- [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "Reliability.admx",
-  "CategoryName": "System",
-  "PolicyName": "EE_EnablePersistentTimeStamp",
-  "NameSpace": "Microsoft.Policies.Reliability",
-  "Supported": "WindowsNET - At least Windows Server 2003",
-  "DisplayName": "Enable Persistent Time Stamp",
-  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
-  ],
-  "ValueName": "TimeStampEnabled",
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
 # Disable Prefetch & Superfetch
 
 Disables prefetcher (includes disabling [`ApplicationLaunchPrefetching` & `ApplicationPreLaunch`](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
