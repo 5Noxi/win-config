@@ -963,7 +963,7 @@ else
 - [GPU policy](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling or GPU memory issues.
 - [Game Mode power profile](https://www.noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme.
 
-FPS testing isn't a good way to decide whether Game Mode has any benefits for you, rather check whether the game registers with Game Mode at all, whether the game already sets thread priorities correctly itself, whether CPU sets are applied, and if they are applied, which CPU set IDs are used. Use [gm_effects]/WPR/SI for it.
+FPS testing isn't a good way to decide whether Game Mode has any benefits for you, rather check whether the game registers with Game Mode at all, whether the game already sets thread priorities correctly itself, whether CPU sets are applied, and if they are applied, which CPU set IDs are used. Use [gm_effects](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects)/WPR/SI for it.
 
 # Kernel Values
 
