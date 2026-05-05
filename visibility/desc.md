@@ -1686,7 +1686,7 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
 
-`MenuShowDelay` controls the menu-specific hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
+`MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
 
 ## CMenuToolbarBase::_SetTimer
 
@@ -1699,7 +1699,7 @@ if ( SystemParametersInfoW(0x6Au, 0, &g_lMenuPopupTimeout, 0) ) // 0x6A = SPI_GE
 v4 = g_lMenuPopupTimeout;
 if ( g_lMenuPopupTimeout != -1 )
   goto LABEL_6;
-g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // fallback based on current double-click speed
+g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // fallback (depends on DoubleClickSpeed)
 if ( SHRegGetStringEx(HKEY_CURRENT_USER, L"Control Panel\\Desktop", L"MenuShowDelay", 2u, pszSrc, 6u) < 0 ) // 2u = REG_SZ
 {
 LABEL_5:
