@@ -528,6 +528,85 @@ RegistryKey<unsigned char>::Initialize(
 }
 ```
 
+# NDIS Poll Mode
+
+`Threaded DPC + Adaptive` = NDIS poll mode disabled, aptive receive completion method, packet burst buffering via threaded DPC.  
+`NDIS Poll Mode` = Packet burst handing disabled (unsupported), NDIS poll mode enabled.
+
+## NDIS Poll Mode
+
+> "*NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.*
+>
+> *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*"
+>
+> — Microsoft, [NDIS poll mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
+
+When enabled on RX side, the following capabilities are not be supported:
+- AsyncReceiveIndicate
+- Receive side Threaded DPC
+- Force low resource indication
+
+When enabled on TX side, the following capabilities are not be supported:
+- Transmit side Threaded DPC
+- TxMaxPostSendsCoalescing is limited to 32
+
+| Value | Data | Comments |
+| ---- | ---- | ---- |
+| RecvCompletionMethod | Set to 4 to register and use Ndis Poll Mode | Default is 1 (Adaptive) |
+| SendCompletionMethod | Set to 2 to register and use Ndis Poll Mode | Default is 1 (Interrupt) |
+
+### Setup Information
+
+```inf
+HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
+HKR, Ndi\params\*NdisPoll,       Type,                 0, "enum"
+HKR, Ndi\params\*NdisPoll,       Default,              0, "1"
+HKR, Ndi\params\*NdisPoll,       Optional,             0, "0"
+HKR, Ndi\params\*NdisPoll\enum,  "0",                  0, "Disabled"
+HKR, Ndi\params\*NdisPoll\enum,  "1",                  0, "Enabled"
+```
+
+Note: `*NdisPoll` is available to NDIS 6.85 and later miniport drivers.
+
+## [AsyncReceiveIndicate](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf) (Packet Burst Handling)
+
+This feature allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
+
+> "*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*"
+>
+> — Microsoft, [Threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
+```
+
+| Data | Meaning |
+| :----: | ---- |
+| 0 | Disabled (default) |
+| 1 | Enables packet burst buffering using threaded DPC |
+| 2 | Enables packet burst buffering using polling |
+
+## [Receive Completion Method](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf)
+
+Sets the completion methods of the receive packets, and it affects network throughput and CPU utilization. The supported methods are:
+
+- Polling - increases the CPU utilization, because the system polls the received rings for incoming packets; however, it may increase the network bandwidth since the incoming packet is handled faster.
+- Adaptive - combines the interrupt and polling methods dynamically, depending on traffic type and network usage.
+
+### Setup Information
+
+```inf
+HKR, NDI\Params\RecvCompletionMethod,  ParamDesc, 0, "%RecvCompletionMethod%"
+HKR, NDI\Params\RecvCompletionMethod,  Type,  0, "enum"
+HKR, NDI\Params\RecvCompletionMethod,  Default, 0, "1"
+HKR, NDI\Params\RecvCompletionMethod,  Optional, 0, "0"
+HKR, NDI\Params\RecvCompletionMethod\enum,  "0", 0, "%Polling%"
+HKR, NDI\Params\RecvCompletionMethod\enum,  "1", 0, "%Adaptive%"
+HKR, NDI\Params\RecvCompletionMethod\enum,  "2", 0x00000004 , ""
+HKR, "", RecvCompletionMethod, 0, "1"
+```
+
 # Congestion Provider
 
 The following information isn't meant to be complete or whatever, it's a short overview including some basics.
@@ -573,6 +652,63 @@ See your current congestion provider via:
 ```powershell
 Get-NetTCPSetting | Select SettingName, CongestionProvider
 ```
+
+# Speed & Duplex
+
+Speed = rate at which data is transmitted.
+Duplex = nature of the communication:
+- Half-duplex: data can either be sent or received, but not both at the same time
+- Full-duplex: data transmission occurs in both directions at once
+
+![](https://github.com/nohuto/win-config/blob/main/network/images/duplex.jpg?raw=true)
+
+You should always use `Full-duplex`, `Half-duplex` was used in older networks with hubs. In auto negotiation, both devices announce their capabilities for speed and duplex.
+
+For example:
+- A computer's network interface can operate at 10 or 100 Mbps and supports both half-duplex and full-duplex
+- A network switch's interface can operate at 10, 100, or 1000 Mbps and supports both duplex modes
+
+Once these capabilities are shared, they agree on the highest common speed and prioritize full-duplex over half-duplex.
+
+NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*SpeedDuplex" = 0; // range 0-50000
+```
+
+## Setup Information
+
+Intel driver example:
+```inf
+HKR, Ndi\params\*SpeedDuplex,                           ParamDesc,              0, %SpeedDuplex%
+HKR, Ndi\params\*SpeedDuplex,                           default,                0, "0"
+HKR, Ndi\params\*SpeedDuplex,                           type,                   0, "enum"
+HKR, Ndi\params\*SpeedDuplex\enum,                      "0",                    0, %AutoNegotiation%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "1",                    0, %10Mb_Half_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "2",                    0, %10Mb_Full_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "3",                    0, %100Mb_Half_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "4",                    0, %100Mb_Full_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "6",                    0, %1000Mb_Full_Duplex%
+HKR, Ndi\params\*SpeedDuplex\enum,                      "2500",                 0, %2500Mb_Full_Duplex%
+
+; Localizable Strings
+SpeedDuplex                     = "Speed & Duplex"
+10Mb_Half_Duplex                = "10 Mbps Half Duplex"
+10Mb_Full_Duplex                = "10 Mbps Full Duplex"
+100Mb_Half_Duplex               = "100 Mbps Half Duplex"
+100Mb_Full_Duplex               = "100 Mbps Full Duplex"
+1000Mb_Full_Duplex              = "1.0 Gbps Full Duplex"
+2500Mb_Full_Duplex              = "2.5 Gbps Full Duplex"
+```
+
+Note: 2.5 Gbps Full Duplex may be driver specific. The 10/100/1000 enums are typically consistent across drivers. You can get all valid data from:
+```c
+HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX\Ndi\Params\*SpeedDuplex
+```
+`00XX` depends on the used adapter.
 
 # Disable Wi-Fi
 
@@ -1318,53 +1454,6 @@ Enables strict argument validation for upper layer testing. Set along with the R
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : RssBaseCpu
 ```
 
-# Disable File/Printer Sharing
-
-Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_server`.
-
-```powershell
-PS C:\Users\Nohuto> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
-
-DisplayGroup                                                                      Group
-------------                                                                      -----
-File and Printer Sharing                                                          @FirewallAPI.dll,-28502
-File and Printer Sharing (Restrictive)                                            @FirewallAPI.dll,-28672
-
-PS C:\Users\Nohuto> Get-NetAdapterBinding -Name *
-
-Name                           DisplayName                                        ComponentID          Enabled
-----                           -----------                                        -----------          -------
-Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "WindowsSandbox.admx",
-  "CategoryName": "WindowsSandbox",
-  "PolicyName": "AllowPrinterRedirection",
-  "NameSpace": "Microsoft.Policies.WindowsSandbox",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Allow printer sharing with Windows Sandbox",
-  "ExplainText": "This policy setting enables or disables printer sharing from the host into the Sandbox. If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host. If you do not configure this policy setting, printer redirection will be disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
-  ],
-  "ValueName": "AllowPrinterRedirection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable Microsoft Client/Multiplexor
-
-Disables the Client for Microsoft Networks (`ms_msclient`) and the Microsoft Network Adapter Multiplexor Protocol (`ms_implat`) bindings on all adapters. This blocks SMB client access and disables NIC teaming.
-
-SMB client I/O is handled by the LANMan Redirector (client-side remote FSD) which translates file I/O into SMB commands, while the server side uses `Srv2.sys`. Disabling `ms_msclient` prevents the redirector from binding to the adapter, so SMB client access is effectively disabled regardless of SMB version. This is broader than the SMBv1 toggle (which only removes the legacy protocol).
-
 # Disable ICS / Mobile Hotspot
 
 Disables Internet Connection Sharing (ICS), which lets Windows use one network adapter as the public/uplink interface and another as the private/downlink interface. In full mode, ICS turns the PC into a small gateway for other devices by providing NAT and local network services such as addressing through DHCP and name resolution on the private side.
@@ -1398,63 +1487,6 @@ When disabled, the PC can no longer share its internet connection to other devic
   ]
 }
 ```
-
-# Speed & Duplex
-
-Speed = rate at which data is transmitted.
-Duplex = nature of the communication:
-- Half-duplex: data can either be sent or received, but not both at the same time
-- Full-duplex: data transmission occurs in both directions at once
-
-![](https://github.com/nohuto/win-config/blob/main/network/images/duplex.jpg?raw=true)
-
-You should always use `Full-duplex`, `Half-duplex` was used in older networks with hubs. In auto negotiation, both devices announce their capabilities for speed and duplex.
-
-For example:
-- A computer's network interface can operate at 10 or 100 Mbps and supports both half-duplex and full-duplex
-- A network switch's interface can operate at 10, 100, or 1000 Mbps and supports both duplex modes
-
-Once these capabilities are shared, they agree on the highest common speed and prioritize full-duplex over half-duplex.
-
-NDIS is the network "port" driver, and vendor miniport drivers interpret adapter specific settings. `*SpeedDuplex` is a miniport defined advanced property, unsupported values are ignored or treated as auto negotiation by the driver.
-
-See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-    "*SpeedDuplex" = 0; // range 0-50000
-```
-
-## Setup Information
-
-Intel driver example:
-```inf
-HKR, Ndi\params\*SpeedDuplex,                           ParamDesc,              0, %SpeedDuplex%
-HKR, Ndi\params\*SpeedDuplex,                           default,                0, "0"
-HKR, Ndi\params\*SpeedDuplex,                           type,                   0, "enum"
-HKR, Ndi\params\*SpeedDuplex\enum,                      "0",                    0, %AutoNegotiation%
-HKR, Ndi\params\*SpeedDuplex\enum,                      "1",                    0, %10Mb_Half_Duplex%
-HKR, Ndi\params\*SpeedDuplex\enum,                      "2",                    0, %10Mb_Full_Duplex%
-HKR, Ndi\params\*SpeedDuplex\enum,                      "3",                    0, %100Mb_Half_Duplex%
-HKR, Ndi\params\*SpeedDuplex\enum,                      "4",                    0, %100Mb_Full_Duplex%
-HKR, Ndi\params\*SpeedDuplex\enum,                      "6",                    0, %1000Mb_Full_Duplex%
-HKR, Ndi\params\*SpeedDuplex\enum,                      "2500",                 0, %2500Mb_Full_Duplex%
-
-; Localizable Strings
-SpeedDuplex                     = "Speed & Duplex"
-10Mb_Half_Duplex                = "10 Mbps Half Duplex"
-10Mb_Full_Duplex                = "10 Mbps Full Duplex"
-100Mb_Half_Duplex               = "100 Mbps Half Duplex"
-100Mb_Full_Duplex               = "100 Mbps Full Duplex"
-1000Mb_Full_Duplex              = "1.0 Gbps Full Duplex"
-2500Mb_Full_Duplex              = "2.5 Gbps Full Duplex"
-```
-
-Note: 2.5 Gbps Full Duplex may be driver specific. The 10/100/1000 enums are typically consistent across drivers. You can get all valid data from:
-```c
-HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be10318}\00XX\Ndi\Params\*SpeedDuplex
-```
-`00XX` depends on the used adapter.
 
 # Disable LLSE
 
@@ -1776,6 +1808,53 @@ HKR, Ndi\Params\FecMode\Enum,                    "3",                    0, %NO_
 HKR, Ndi\Params\FecMode,                         type,                   0, "enum"
 ```
 
+# Disable File/Printer Sharing
+
+Disables "Allow other on the network to access shared files and printers on this device" via `@FirewallAPI.dll,-28502` & `ms_server`.
+
+```powershell
+PS C:\Users\Nohuto> Get-NetFirewallRule | sort -unique Group | sort DisplayGroup | ft DisplayGroup, Group
+
+DisplayGroup                                                                      Group
+------------                                                                      -----
+File and Printer Sharing                                                          @FirewallAPI.dll,-28502
+File and Printer Sharing (Restrictive)                                            @FirewallAPI.dll,-28672
+
+PS C:\Users\Nohuto> Get-NetAdapterBinding -Name *
+
+Name                           DisplayName                                        ComponentID          Enabled
+----                           -----------                                        -----------          -------
+Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "WindowsSandbox.admx",
+  "CategoryName": "WindowsSandbox",
+  "PolicyName": "AllowPrinterRedirection",
+  "NameSpace": "Microsoft.Policies.WindowsSandbox",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Allow printer sharing with Windows Sandbox",
+  "ExplainText": "This policy setting enables or disables printer sharing from the host into the Sandbox. If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host. If you do not configure this policy setting, printer redirection will be disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
+  ],
+  "ValueName": "AllowPrinterRedirection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable Microsoft Client/Multiplexor
+
+Disables the Client for Microsoft Networks (`ms_msclient`) and the Microsoft Network Adapter Multiplexor Protocol (`ms_implat`) bindings on all adapters. This blocks SMB client access and disables NIC teaming.
+
+SMB client I/O is handled by the LANMan Redirector (client-side remote FSD) which translates file I/O into SMB commands, while the server side uses `Srv2.sys`. Disabling `ms_msclient` prevents the redirector from binding to the adapter, so SMB client access is effectively disabled regardless of SMB version. This is broader than the SMBv1 toggle (which only removes the legacy protocol).
+
 # Enable Legacy Switch Compatibility Mode
 
 Probably a setting that controls how the adapter handles link negotiation when it's connected behind certain (usually older) network switches. There's no official documentation on it, but it seems to be disabled by default. Some older switches may have problems with modern auto negotiation behavior, enabling the mode (probably) changes how the NIC negotiates speed/duplex so that it behaves more like older hardware.
@@ -1795,83 +1874,4 @@ HKR, Ndi\params\LinkNegotiationProcess,                 type,                   
 HKR, Ndi\params\LinkNegotiationProcess\enum,            "2",                    0, %Enabled%
 HKR, Ndi\params\LinkNegotiationProcess\enum,            "1",                    0, %Disabled%
 HKR, PROSetNdi\NdiExt\Params\LinkNegotiationProcess,    ExposeLevel,            0, "3"
-```
-
-# NDIS Poll Mode
-
-`Threaded DPC + Adaptive` = NDIS poll mode disabled, aptive receive completion method, packet burst buffering via threaded DPC.  
-`NDIS Poll Mode` = Packet burst handing disabled (unsupported), NDIS poll mode enabled.
-
-## NDIS Poll Mode
-
-> "*NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.*
->
-> *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*"
->
-> — Microsoft, [NDIS poll mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
-
-When enabled on RX side, the following capabilities are not be supported:
-- AsyncReceiveIndicate
-- Receive side Threaded DPC
-- Force low resource indication
-
-When enabled on TX side, the following capabilities are not be supported:
-- Transmit side Threaded DPC
-- TxMaxPostSendsCoalescing is limited to 32
-
-| Value | Data | Comments |
-| ---- | ---- | ---- |
-| RecvCompletionMethod | Set to 4 to register and use Ndis Poll Mode | Default is 1 (Adaptive) |
-| SendCompletionMethod | Set to 2 to register and use Ndis Poll Mode | Default is 1 (Interrupt) |
-
-### Setup Information
-
-```inf
-HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
-HKR, Ndi\params\*NdisPoll,       Type,                 0, "enum"
-HKR, Ndi\params\*NdisPoll,       Default,              0, "1"
-HKR, Ndi\params\*NdisPoll,       Optional,             0, "0"
-HKR, Ndi\params\*NdisPoll\enum,  "0",                  0, "Disabled"
-HKR, Ndi\params\*NdisPoll\enum,  "1",                  0, "Enabled"
-```
-
-Note: `*NdisPoll` is available to NDIS 6.85 and later miniport drivers.
-
-## [AsyncReceiveIndicate](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf) (Packet Burst Handling)
-
-This feature allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
-
-> "*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*"
->
-> — Microsoft, [Threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
-    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
-```
-
-| Data | Meaning |
-| :----: | ---- |
-| 0 | Disabled (default) |
-| 1 | Enables packet burst buffering using threaded DPC |
-| 2 | Enables packet burst buffering using polling |
-
-## [Receive Completion Method](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf)
-
-Sets the completion methods of the receive packets, and it affects network throughput and CPU utilization. The supported methods are:
-
-- Polling - increases the CPU utilization, because the system polls the received rings for incoming packets; however, it may increase the network bandwidth since the incoming packet is handled faster.
-- Adaptive - combines the interrupt and polling methods dynamically, depending on traffic type and network usage.
-
-### Setup Information
-
-```inf
-HKR, NDI\Params\RecvCompletionMethod,  ParamDesc, 0, "%RecvCompletionMethod%"
-HKR, NDI\Params\RecvCompletionMethod,  Type,  0, "enum"
-HKR, NDI\Params\RecvCompletionMethod,  Default, 0, "1"
-HKR, NDI\Params\RecvCompletionMethod,  Optional, 0, "0"
-HKR, NDI\Params\RecvCompletionMethod\enum,  "0", 0, "%Polling%"
-HKR, NDI\Params\RecvCompletionMethod\enum,  "1", 0, "%Adaptive%"
-HKR, NDI\Params\RecvCompletionMethod\enum,  "2", 0x00000004 , ""
-HKR, "", RecvCompletionMethod, 0, "1"
 ```

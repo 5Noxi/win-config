@@ -146,6 +146,10 @@ Miscellaneous notes:
     "Win32PrioritySeparation" = 2;
 ```
 
+# Game Mode
+
+A complete explanation will be added soon.
+
 # Kernel Values
 
 Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
@@ -1375,6 +1379,197 @@ aRegistryMachin_25 = "\\Registry\\Machine\\System"
 aRegistryMachin_26 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations"
 ```
 
+# MMCSS Values
+
+> "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
+>
+> *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
+>
+> — Microsoft, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
+
+Client applications can register with MMCSS by calling AvSetMmThreadCharacteristics with a task name that must match one of the subkeys under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks`, see [task-details](https://www.noverse.dev/docs/win-config/system/mmcss-values/#tasks-details).
+
+MCSS scheduling thread runs at priority 27 because they need to preempt any Pro Audio threads to lower their priority to the exhausted category.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true)
+
+## Registry Values Details
+
+All values are read via `CiConfigReadDWORD()`, so the type is `REG_DWORD` for all listed ones. If `\Tasks` opens successfully, `CiConfigInitializeFromRegistry()` handles that part?
+
+See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/tree/main/system/assets/mmcss-CiConfigInitialize.c) for notes.
+
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile";
+    "SystemResponsiveness" = 20; // see section below
+    "NetworkThrottlingIndex" = 10; // see section below
+    "NoLazyMode" = 0; // any nonzero value = enabled
+    "IdleDetectionCycles" = 2; // valid range is 1-31, otherwise 2 is used
+    "LazyModeTimeout" = 1000000; // 0 is replaced with 1000000
+    "SchedulerTimerResolution" = 10000; // values above 10000 are capped to 10000
+    "SchedulerPeriod" = 100000; // valid range is 50000-1000000, otherwise 100000 is used
+    "MaxThreadsPerProcess" = 32; // valid range is 8-128, otherwise 32 is used
+    "MaxThreadsTotal" = 256; // valid range is 64-65535, otherwise 256 is used
+```
+
+## SystemResponsiveness Details
+
+By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent ("*(Based on a sample of 10 ms, that would be 8 ms and 2 ms, respectively.)*).
+
+Note that when `SystemResponsiveness == 100` it would end up with skipping the part after `if ( CiSystemResponsiveness == 100 )`, the task init (`CiConfigInitializeFromRegistry`), thread priorities (didn't look futher into it yet, see [CiThreadUpdatePriorities](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiThreadUpdatePriorities.c)/[CiSchedulerSetPriority](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerSetPriority.c)), but seems like that it would use a specific priority for the MMCSS thread instead of switching levels? It would also block CiNdisThrottleWorkItem (see below) and cause the [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) starvation threshold down to 0, so any busy-time increase can mark CPUs as starved (see [CiSchedulerWait](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) at line 118 and the bracket block of it).
+
+Basically means MMCSS initialization fails if `SystemResponsiveness == 100`.
+
+And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
+
+> "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
+>
+> — Microsoft, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
+
+```c
+// CiConfigInitialize
+{
+  DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL); // SystemResponsiveness, missing = 100
+  if ( DWORD - 10 > 0x5A ) // data - 10 > 90 = 20
+    v2 = 20LL;
+  else
+    v2 = 10 * (DWORD / 0xA); // 10 step
+  CiSystemResponsiveness = v2;
+  if ( (HIDWORD(WPP_GLOBAL_Control->Timer) & 1) != 0 && BYTE1(WPP_GLOBAL_Control->Timer) >= 4u )
+    WPP_SF_d(WPP_GLOBAL_Control->AttachedDevice, 18LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids, v2);
+  if ( CiSystemResponsiveness == 100 )
+  {
+    if ( (HIDWORD(WPP_GLOBAL_Control->Timer) & 1) != 0 && BYTE1(WPP_GLOBAL_Control->Timer) >= 2u )
+      WPP_SF_(WPP_GLOBAL_Control->AttachedDevice, 19LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids);
+    v0 = -1073741696; // STATUS_SERVER_DISABLED
+  }
+  else // only if CiSystemResponsiveness =! 100
+  {
+  // all other values
+  }
+  ZwClose(KeyHandle);
+}
+
+// CsIntialize (blocking CiNdisThrottleWorkItem if 100)
+if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
+{
+  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
+  if ( CiNdisThrottleWorkItem )
+    CiNdisOpenDevice();
+}
+```
+```c
+// -1073741696 = 0xC0000080
+0xC0000080 // STATUS_SERVER_DISABLED
+
+The GUID allocation server is disabled at the moment.
+```
+
+- [ms-erref#0xC0000080](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55)
+
+Calculation:
+```c
+CiSystemResponsiveness = 10 * (value / 10);
+
+// Examples
+< 10   -> 20   (fallback)
+10-19  -> 10
+20-29  -> 20
+30-39  -> 30
+40-49  -> 40
+50-59  -> 50
+60-69  -> 60
+70-79  -> 70
+80-89  -> 80
+90-99  -> 90
+== 100 -> 100  (STATUS_SERVER_DISABLED)
+> 100  -> 20   (fallback)
+```
+
+## NetworkThrottlingIndex Details
+
+> "*MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
+>
+> — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+`0` becomes `1`, `1`-`70` stay unchanged, `71`-`4294967294` become `70`, `4294967295` (`0xFFFFFFFF`) stays unchanged.
+
+As shown above (and again below), if `CiSystemResponsiveness == 100` it doesn't even get to this part = blocking `CiNdisThrottleWorkItem`.
+
+```c
+// CiConfigInitialize
+v3 = CiConfigReadDWORD(KeyHandle, 0x1C00110A0LL, 10LL); // NetworkThrottlingIndex, missing = 10
+LODWORD(WPP_MAIN_CB.Dpc.DpcData) = v3;
+v4 = v3;
+if ( v3 )
+{
+  if ( v3 - 71 <= 0xFFFFFFB7 ) // >=71 = 70
+  {
+    v4 = 70LL;
+    LODWORD(WPP_MAIN_CB.Dpc.DpcData) = 70; // range 1-70
+  }
+}
+else
+{
+  v4 = 1LL; // zero -> force 1
+  LODWORD(WPP_MAIN_CB.Dpc.DpcData) = 1;
+}
+
+// CsIntialize
+if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
+{
+  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
+  if ( CiNdisThrottleWorkItem )
+    CiNdisOpenDevice();
+}
+```
+## [Tasks Details](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
+
+Existing tasks (OEMs can add additional tasks):
+- Audio
+- Capture
+- Distribution
+- Games
+- Playback
+- Pro Audio
+- Window Manager
+
+| Value | Format | Possible values |
+| --- | --- | --- |
+| **Affinity** | **REG\_DWORD** | A bitmask that indicates the processor affinity. Both 0x00 and 0xFFFFFFFF indicate that processor affinity is not used. |
+| **Background Only** | **REG\_SZ**    | Indicates whether this is a background task (no user interface). The threads of a background task do not change because of a change in window focus. This value can be set to True or False. |
+| **BackgroundPriority** | **REG\_DWORD** | The background priority. The range of values is 1-8. |
+| **Clock Rate** | **REG\_DWORD** | A hint used by MMCSS to determine the granularity of processor resource scheduling.**Windows Server 2008 and Windows Vista:** The maximum guaranteed clock rate the system uses if a thread joins this task, in 100-nanosecond intervals. Starting with Windows 7 and Windows Server 2008 R2, this guarantee was removed to reduce system power consumption.<br/> |
+| **GPU Priority** | **REG\_DWORD** | The GPU priority. The range of values is 0-31. This priority is not yet used. |
+| **Priority** | **REG\_DWORD** | The task priority. The range of values is 1 (low) to 8 (high).For tasks with a **Scheduling Category** of High, this value is always treated as 2.<br/> |
+| **Scheduling Category** | **REG\_SZ**    | The scheduling category. This value can be set to High, Medium, or Low. |
+| **SFIO Priority** | **REG\_SZ** | The scheduled I/O priority. This value can be set to Idle, Low, Normal, or High. This value is not used. |
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss3.png?raw=true)
+
+## NoLazyMode Details
+
+`NoLazyMode` = `0` (default)
+`LazyModeTimeout` = `1000000` (default)
+
+It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely a placeholder for future documentation. Instead of using `NoLazyMode`, change `LazyModeTimeout`.
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MultiMedia\systemprofile : NoLazyMode
+```
+
+`AlwaysOn` value exists in W7 and W8, but doesn't exist in W10 and W11 anymore.
+
+> "*The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results.*"
+>
+> — djdallmann, [NoLazyMode](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/nolazymode.png?raw=true)
+
 # DWM Values
 
 This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
@@ -1593,237 +1788,6 @@ aRegistryMachin_31 = "\\Registry\\Machine\\SOFTWARE\\Policies\\Microsoft\\Window
 aRegistryMachin_32 = "\\Registry\\Machine\\Software\\WowAA32Node\\Microsoft\\Windows\\Tablet PC"
 aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\Power"
 ```
-
-# MMCSS Values
-
-> "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
->
-> *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
->
-> — Microsoft, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
-
-Client applications can register with MMCSS by calling AvSetMmThreadCharacteristics with a task name that must match one of the subkeys under `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks`, see [task-details](https://www.noverse.dev/docs/win-config/system/mmcss-values/#tasks-details).
-
-MCSS scheduling thread runs at priority 27 because they need to preempt any Pro Audio threads to lower their priority to the exhausted category.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true)
-
-## Registry Values Details
-
-All values are read via `CiConfigReadDWORD()`, so the type is `REG_DWORD` for all listed ones. If `\Tasks` opens successfully, `CiConfigInitializeFromRegistry()` handles that part?
-
-See [mmcss-CiConfigInitialize.c](https://github.com/nohuto/win-config/tree/main/system/assets/mmcss-CiConfigInitialize.c) for notes.
-
-```c
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\multimedia\\systemprofile";
-    "SystemResponsiveness" = 20; // see section below
-    "NetworkThrottlingIndex" = 10; // see section below
-    "NoLazyMode" = 0; // any nonzero value = enabled
-    "IdleDetectionCycles" = 2; // valid range is 1-31, otherwise 2 is used
-    "LazyModeTimeout" = 1000000; // 0 is replaced with 1000000
-    "SchedulerTimerResolution" = 10000; // values above 10000 are capped to 10000
-    "SchedulerPeriod" = 100000; // valid range is 50000-1000000, otherwise 100000 is used
-    "MaxThreadsPerProcess" = 32; // valid range is 8-128, otherwise 32 is used
-    "MaxThreadsTotal" = 256; // valid range is 64-65535, otherwise 256 is used
-```
-
-## SystemResponsiveness Details
-
-By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent ("*(Based on a sample of 10 ms, that would be 8 ms and 2 ms, respectively.)*).
-
-Note that when `SystemResponsiveness == 100` it would end up with skipping the part after `if ( CiSystemResponsiveness == 100 )`, the task init (`CiConfigInitializeFromRegistry`), thread priorities (didn't look futher into it yet, see [CiThreadUpdatePriorities](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiThreadUpdatePriorities.c)/[CiSchedulerSetPriority](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerSetPriority.c)), but seems like that it would use a specific priority for the MMCSS thread instead of switching levels? It would also block CiNdisThrottleWorkItem (see below) and cause the [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) starvation threshold down to 0, so any busy-time increase can mark CPUs as starved (see [CiSchedulerWait](https://github.com/nohuto/decompiled-pseudocode/blob/main/mmcss/CiSchedulerWait.c) at line 118 and the bracket block of it).
-
-Basically means MMCSS initialization fails if `SystemResponsiveness == 100`.
-
-And as we can see here the MMCSS thread isn't present anymore if `100 (0x64)`:
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
-
-> "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
->
-> — Microsoft, [Multimedia Class Scheduler Service](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
-
-```c
-// CiConfigInitialize
-{
-  DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL); // SystemResponsiveness, missing = 100
-  if ( DWORD - 10 > 0x5A ) // data - 10 > 90 = 20
-    v2 = 20LL;
-  else
-    v2 = 10 * (DWORD / 0xA); // 10 step
-  CiSystemResponsiveness = v2;
-  if ( (HIDWORD(WPP_GLOBAL_Control->Timer) & 1) != 0 && BYTE1(WPP_GLOBAL_Control->Timer) >= 4u )
-    WPP_SF_d(WPP_GLOBAL_Control->AttachedDevice, 18LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids, v2);
-  if ( CiSystemResponsiveness == 100 )
-  {
-    if ( (HIDWORD(WPP_GLOBAL_Control->Timer) & 1) != 0 && BYTE1(WPP_GLOBAL_Control->Timer) >= 2u )
-      WPP_SF_(WPP_GLOBAL_Control->AttachedDevice, 19LL, &WPP_350503daac883abe7be9cf63f89038d9_Traceguids);
-    v0 = -1073741696; // STATUS_SERVER_DISABLED
-  }
-  else // only if CiSystemResponsiveness =! 100
-  {
-  // all other values
-  }
-  ZwClose(KeyHandle);
-}
-
-// CsIntialize (blocking CiNdisThrottleWorkItem if 100)
-if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
-{
-  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
-  if ( CiNdisThrottleWorkItem )
-    CiNdisOpenDevice();
-}
-```
-```c
-// -1073741696 = 0xC0000080
-0xC0000080 // STATUS_SERVER_DISABLED
-
-The GUID allocation server is disabled at the moment.
-```
-
-- [ms-erref#0xC0000080](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55)
-
-Calculation:
-```c
-CiSystemResponsiveness = 10 * (value / 10);
-
-// Examples
-< 10   -> 20   (fallback)
-10-19  -> 10
-20-29  -> 20
-30-39  -> 30
-40-49  -> 40
-50-59  -> 50
-60-69  -> 60
-70-79  -> 70
-80-89  -> 80
-90-99  -> 90
-== 100 -> 100  (STATUS_SERVER_DISABLED)
-> 100  -> 20   (fallback)
-```
-
-## NetworkThrottlingIndex Details
-
-> "*MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
->
-> — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-`0` becomes `1`, `1`-`70` stay unchanged, `71`-`4294967294` become `70`, `4294967295` (`0xFFFFFFFF`) stays unchanged.
-
-As shown above (and again below), if `CiSystemResponsiveness == 100` it doesn't even get to this part = blocking `CiNdisThrottleWorkItem`.
-
-```c
-// CiConfigInitialize
-v3 = CiConfigReadDWORD(KeyHandle, 0x1C00110A0LL, 10LL); // NetworkThrottlingIndex, missing = 10
-LODWORD(WPP_MAIN_CB.Dpc.DpcData) = v3;
-v4 = v3;
-if ( v3 )
-{
-  if ( v3 - 71 <= 0xFFFFFFB7 ) // >=71 = 70
-  {
-    v4 = 70LL;
-    LODWORD(WPP_MAIN_CB.Dpc.DpcData) = 70; // range 1-70
-  }
-}
-else
-{
-  v4 = 1LL; // zero -> force 1
-  LODWORD(WPP_MAIN_CB.Dpc.DpcData) = 1;
-}
-
-// CsIntialize
-if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
-{
-  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
-  if ( CiNdisThrottleWorkItem )
-    CiNdisOpenDevice();
-}
-```
-
-## [Tasks Details](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
-
-Existing tasks (OEMs can add additional tasks):
-- Audio
-- Capture
-- Distribution
-- Games
-- Playback
-- Pro Audio
-- Window Manager
-
-| Value | Format | Possible values |
-| --- | --- | --- |
-| **Affinity** | **REG\_DWORD** | A bitmask that indicates the processor affinity. Both 0x00 and 0xFFFFFFFF indicate that processor affinity is not used. |
-| **Background Only** | **REG\_SZ**    | Indicates whether this is a background task (no user interface). The threads of a background task do not change because of a change in window focus. This value can be set to True or False. |
-| **BackgroundPriority** | **REG\_DWORD** | The background priority. The range of values is 1-8. |
-| **Clock Rate** | **REG\_DWORD** | A hint used by MMCSS to determine the granularity of processor resource scheduling.**Windows Server 2008 and Windows Vista:** The maximum guaranteed clock rate the system uses if a thread joins this task, in 100-nanosecond intervals. Starting with Windows 7 and Windows Server 2008 R2, this guarantee was removed to reduce system power consumption.<br/> |
-| **GPU Priority** | **REG\_DWORD** | The GPU priority. The range of values is 0-31. This priority is not yet used. |
-| **Priority** | **REG\_DWORD** | The task priority. The range of values is 1 (low) to 8 (high).For tasks with a **Scheduling Category** of High, this value is always treated as 2.<br/> |
-| **Scheduling Category** | **REG\_SZ**    | The scheduling category. This value can be set to High, Medium, or Low. |
-| **SFIO Priority** | **REG\_SZ** | The scheduled I/O priority. This value can be set to Idle, Low, Normal, or High. This value is not used. |
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss3.png?raw=true)
-
-## NoLazyMode Details
-
-`NoLazyMode` = `0` (default)
-`LazyModeTimeout` = `1000000` (default)
-
-It sets `NoLazyMode` to `0`, don't set it to `1`. This is currently more likely a placeholder for future documentation. Instead of using `NoLazyMode`, change `LazyModeTimeout`.
-
-```
-\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\MultiMedia\systemprofile : NoLazyMode
-```
-
-`AlwaysOn` value exists in W7 and W8, but doesn't exist in W10 and W11 anymore.
-
-> "*The screenshot below demonstrates some of the initial differences between each mode enabled (0x1) vs off (x0, Non-Present), during these tests MMCSS tasks were engaged and the same pattern reoccurred each time e.g. the Idle related conditions were no longer present leaving only System Responsiveness, Deep Sleep and Realtime MMCSS scheduler task results.*"
->
-> — djdallmann, [NoLazyMode](https://github.com/djdallmann/GamingPCSetup/blob/master/CONTENT/RESEARCH/WINSERVICES/README.md#q-what-the-heck-is-nolazymode-is-it-real-what-does-it-do)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/nolazymode.png?raw=true)
-
-# Disable Service Splitting
-
-Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
-
-[`Windows Internals 7th Edition, Part 2`](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) (page `467`f.) handpicked snippets (shortened):
-If system physical memory, obtained via [`GlobalMemoryStatusEx`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex), exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
-
-Service splitting is allowed only if:  
-- Splitting is globally enabled
-- The service is not marked as critical (i.e., it doesn't reboot the machine on failure)
-- The service is hosted in `svchost.exe`
-- `SvcHostSplitDisable` is not set to `1` in the service registry key
-
-Setting `SvcHostSplitDisable` to `0` for a critical service forces it to be split, but this can lead to issues.
-
-Get the current amount of `svchost` process instances with:
-```cmd
-(get-process -Name "svchost" | measure).Count
-```
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostDebug
-\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostSplitThresholdInKB
-```
-`SvcHostDebug` is set to `0` by default:
-```c
-v1 = 0;
-if ( !RegistryValueWithFallbackW && Type == 4 )
-    LOBYTE(v1) = Data != 0;
-return v1;
-```
-
-- [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
 
 # Disable Scheduled Tasks
 
@@ -2227,1407 +2191,6 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 |  | `SmsRouter` | Routes messages based on rules to appropriate clients. |
 
 Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) / `rdyboost` (ReadyBoost) (rdyboost.sys) = `INACCESSIBLE_BOOT_DEVICE` BSoD.
-
-# SCM Autostart Delay
-
-Windows marks some services as delayed autostart to reduce boot contention. The Service Control Manager (SCM) waits before starting those services, the default delay is 120 seconds as shown below.
-
-[Windows Internals (E7, P2)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) puts this in the middle of the SCM boot sequence, so the delay only applies after normal autostart processing finishes.
-
-1. SCM loops through service groups and starts autostart services, relooping groups until dependencies (DependOnService) are satisfied
-2. It ignores Tag values for Windows services (Tag ordering is used by the I/O manager for boot/system-start drivers)
-3. Once all groups listed in ServiceGroupOrder\\List are processed, it runs groups not listed there, then services without a group
-4. After that, SCM calls ScInitDelayStart to queue a delayed work item for services marked DelayedAutostart
-
-The delayed work item runs on a worker thread after the delay expires and performs the same actions as a normal autostart service start. The delay is a single global value 120000 ms, but it can be overridden.
-
-Autostart services were originally meant for early boot dependencies (for example RPC), but many services are autostart only to run unattended after boot (for example update services). Marking these as delayed autostart lets critical services start faster and makes the desktop responsive sooner right after logon. Delayed autostart services are also started in background mode, which lowers their thread, I/O, and memory priority.
-
-If a non delayed autostart service depends on a delayed autostart service, the delayed flag is ignored and the service is started immediately to satisfy the dependency.
-
-When SCM finishes starting autostart services/drivers and schedules the delayed autostart work item, it signals \\BaseNamedObjects\\SC_AutoStartComplete.
-
-```c
-__int64 __fastcall CDelayStartContext::GetAutostartDelay(CDelayStartContext *this, __int64 a2, unsigned int a3)
-{
-  unsigned int v3; // ebx
-  unsigned int v4; // eax
-  int v7; // [rsp+40h] [rbp+8h] BYREF
-  unsigned int v9; // [rsp+48h] [rbp+10h] BYREF
-  unsigned int v10; // [rsp+50h] [rbp+18h] BYREF
-  HANDLE Handle; // [rsp+58h] [rbp+20h] BYREF
-
-  Handle = 0LL;
-  v3 = 120000;
-  v7 = 120000;
-  v9 = 4;
-  v4 = ScRegOpenKeyExW(HKEY_LOCAL_MACHINE, L"System\\CurrentControlSet\\Control", a3, 0x20019u, (HKEY *)&Handle);
-  if ( v4 )
-  {
-    //...
-  }
-  else
-  {
-    if ( !ScRegQueryValueExW((HKEY)Handle, L"AutostartDelay", 0LL, &v10, (unsigned __int8 *)&v7, &v9) && v10 == 4 )
-      v3 = v7;
-  }
-  return v3;
-}
-```
-
-## EnableAutostartEvents Notes
-
-Note on a different option which I didn't implement (this information is based on [Windows Internals E7 P2](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf), P448-449):
-
-By default the SCM logs events for services that start automatically at boot, which can flood the System event log. Setting this value to 0 suppresses autostart event logging while still keeping normal service start/stop/pause events. Read by SCM at startup = requires reboot to take effect.
-
-"Note that the Service Control Manager by default logs all the events generated by services started automatically at system startup. This can generate an undesired number of events flooding the System event log. To mitigate the problem, you can disable SCM autostart events by creating a registry value named EnableAutostartEvents in the HKLM\System\CurrentControlSet\ Control key and set it to 0 (the default implicit value is 1 in both client and server SKUs). As a result, this will log only events generated by service applications when starting, pausing, or stopping a target service."
-
-I didn't see any differences in the Event Viewer between setting them to `0`/`1` on my current system and on a 25H2 VM. The value exists and gets read:
-
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control : EnableAutostartEvents
-```
-```c
-void __fastcall ScCheckAutostartEventsEnabled(__int64 a1, __int64 a2, unsigned int a3)
-{
-  unsigned int v3; // eax
-  unsigned int *v4; // r8
-  int v6; // [rsp+40h] [rbp+8h] BYREF
-  unsigned int v7; // [rsp+48h] [rbp+10h] BYREF
-  unsigned int v8; // [rsp+50h] [rbp+18h] BYREF
-  HANDLE Handle; // [rsp+58h] [rbp+20h] BYREF
-
-  v6 = 0;
-  Handle = 0LL;
-  v7 = 4;
-  v3 = ScRegOpenKeyExW(HKEY_LOCAL_MACHINE, L"System\\CurrentControlSet\\Control", a3, 0x20019u, (HKEY *)&Handle);
-  if ( v3 )
-  {
-    //...
-  }
-  else if ( !ScRegQueryValueExW((HKEY)Handle, L"EnableAutostartEvents", v4, &v8, (unsigned __int8 *)&v6, &v7) && v8 == 4 )
-  {
-    g_fEnableAutostartEvents = v6 != 0;
-  }
-}
-```
-```json
-"Disable Autostart Events": {
-  "apply": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
-      "EnableAutostartEvents": { "Type": "REG_DWORD", "Data": 0 }
-    }
-  },
-  "revert": {
-    "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
-      "EnableAutostartEvents": { "Action": "deletevalue" }
-    }
-  }
-},
-```
-
-# Time Zone
-
-| ID                              | Display Name                                                  | ID                              | Display Name                                              |
-| ------------------------------- | ------------------------------------------------------------- | ------------------------------- | --------------------------------------------------------- |
-| Afghanistan Standard Time       | (UTC+04:30) Kabul                                             | Alaskan Standard Time           | (UTC-09:00) Alaska                                        |
-| Aleutian Standard Time          | (UTC-10:00) Aleutian Islands                                  | Altai Standard Time             | (UTC+07:00) Barnaul, Gorno-Altaysk                        |
-| Arab Standard Time              | (UTC+03:00) Kuwait, Riyadh                                    | Arabian Standard Time           | (UTC+04:00) Abu Dhabi, Muscat                             |
-| Arabic Standard Time            | (UTC+03:00) Baghdad                                           | Argentina Standard Time         | (UTC-03:00) City of Buenos Aires                          |
-| Astrakhan Standard Time         | (UTC+04:00) Astrakhan, Ulyanovsk                              | Atlantic Standard Time          | (UTC-04:00) Atlantic Time (Canada)                        |
-| AUS Central Standard Time       | (UTC+09:30) Darwin                                            | Aus Central W. Standard Time    | (UTC+08:45) Eucla                                         |
-| AUS Eastern Standard Time       | (UTC+10:00) Canberra, Melbourne, Sydney                       | Azerbaijan Standard Time        | (UTC+04:00) Baku                                          |
-| Azores Standard Time            | (UTC-01:00) Azores                                            | Bahia Standard Time             | (UTC-03:00) Salvador                                      |
-| Bangladesh Standard Time        | (UTC+06:00) Dhaka                                             | Belarus Standard Time           | (UTC+03:00) Minsk                                         |
-| Bougainville Standard Time      | (UTC+11:00) Bougainville Island                               | Canada Central Standard Time    | (UTC-06:00) Saskatchewan                                  |
-| Cape Verde Standard Time        | (UTC-01:00) Cabo Verde Is.                                    | Caucasus Standard Time          | (UTC+04:00) Yerevan                                       |
-| Cen. Australia Standard Time    | (UTC+09:30) Adelaide                                          | Central America Standard Time   | (UTC-06:00) Central America                               |
-| Central Asia Standard Time      | (UTC+06:00) Nur-Sultan                                        | Central Brazilian Standard Time | (UTC-04:00) Cuiaba                                        |
-| Central Europe Standard Time    | (UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague | Central European Standard Time  | (UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb              |
-| Central Pacific Standard Time   | (UTC+11:00) Solomon Is., New Caledonia                        | Central Standard Time           | (UTC-06:00) Central Time (US & Canada)                    |
-| Central Standard Time (Mexico)  | (UTC-06:00) Guadalajara, Mexico City, Monterrey               | Chatham Islands Standard Time   | (UTC+12:45) Chatham Islands                               |
-| China Standard Time             | (UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi             | Cuba Standard Time              | (UTC-05:00) Havana                                        |
-| Dateline Standard Time          | (UTC-12:00) International Date Line West                      | E. Africa Standard Time         | (UTC+03:00) Nairobi                                       |
-| E. Australia Standard Time      | (UTC+10:00) Brisbane                                          | E. Europe Standard Time         | (UTC+02:00) Chisinau                                      |
-| E. South America Standard Time  | (UTC-03:00) Brasilia                                          | Easter Island Standard Time     | (UTC-06:00) Easter Island                                 |
-| Eastern Standard Time           | (UTC-05:00) Eastern Time (US & Canada)                        | Eastern Standard Time (Mexico)  | (UTC-05:00) Chetumal                                      |
-| Egypt Standard Time             | (UTC+02:00) Cairo                                             | Ekaterinburg Standard Time      | (UTC+05:00) Ekaterinburg                                  |
-| Fiji Standard Time              | (UTC+12:00) Fiji                                              | FLE Standard Time               | (UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius |
-| Georgian Standard Time          | (UTC+04:00) Tbilisi                                           | GMT Standard Time               | (UTC+00:00) Dublin, Edinburgh, Lisbon, London             |
-| Greenland Standard Time         | (UTC-02:00) Greenland                                         | Greenwich Standard Time         | (UTC+00:00) Monrovia, Reykjavik                           |
-| GTB Standard Time               | (UTC+02:00) Athens, Bucharest                                 | Haiti Standard Time             | (UTC-05:00) Haiti                                         |
-| Hawaiian Standard Time          | (UTC-10:00) Hawaii                                            | India Standard Time             | (UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi           |
-| Iran Standard Time              | (UTC+03:30) Tehran                                            | Israel Standard Time            | (UTC+02:00) Jerusalem                                     |
-| Jordan Standard Time            | (UTC+03:00) Amman                                             | Kaliningrad Standard Time       | (UTC+02:00) Kaliningrad                                   |
-| Kamchatka Standard Time         | (UTC+12:00) Petropavlovsk-Kamchatsky - Old                    | Korea Standard Time             | (UTC+09:00) Seoul                                         |
-| Libya Standard Time             | (UTC+02:00) Tripoli                                           | Line Islands Standard Time      | (UTC+14:00) Kiritimati Island                             |
-| Lord Howe Standard Time         | (UTC+10:30) Lord Howe Island                                  | Magadan Standard Time           | (UTC+11:00) Magadan                                       |
-| Magallanes Standard Time        | (UTC-03:00) Punta Arenas                                      | Marquesas Standard Time         | (UTC-09:30) Marquesas Islands                             |
-| Mauritius Standard Time         | (UTC+04:00) Port Louis                                        | Mid-Atlantic Standard Time      | (UTC-02:00) Mid-Atlantic - Old                            |
-| Middle East Standard Time       | (UTC+02:00) Beirut                                            | Montevideo Standard Time        | (UTC-03:00) Montevideo                                    |
-| Morocco Standard Time           | (UTC+01:00) Casablanca                                        | Mountain Standard Time          | (UTC-07:00) Mountain Time (US & Canada)                   |
-| Mountain Standard Time (Mexico) | (UTC-07:00) La Paz, Mazatlan                                  | Myanmar Standard Time           | (UTC+06:30) Yangon (Rangoon)                              |
-| N. Central Asia Standard Time   | (UTC+07:00) Novosibirsk                                       | Namibia Standard Time           | (UTC+02:00) Windhoek                                      |
-| Nepal Standard Time             | (UTC+05:45) Kathmandu                                         | New Zealand Standard Time       | (UTC+12:00) Auckland, Wellington                          |
-| Newfoundland Standard Time      | (UTC-03:30) Newfoundland                                      | Norfolk Standard Time           | (UTC+11:00) Norfolk Island                                |
-| North Asia East Standard Time   | (UTC+08:00) Irkutsk                                           | North Asia Standard Time        | (UTC+07:00) Krasnoyarsk                                   |
-| North Korea Standard Time       | (UTC+09:00) Pyongyang                                         | Omsk Standard Time              | (UTC+06:00) Omsk                                          |
-| Pacific SA Standard Time        | (UTC-04:00) Santiago                                          | Pacific Standard Time           | (UTC-08:00) Pacific Time (US & Canada)                    |
-| Pacific Standard Time (Mexico)  | (UTC-08:00) Baja California                                   | Pakistan Standard Time          | (UTC+05:00) Islamabad, Karachi                            |
-| Paraguay Standard Time          | (UTC-04:00) Asuncion                                          | Qyzylorda Standard Time         | (UTC+05:00) Qyzylorda                                     |
-| Romance Standard Time           | (UTC+01:00) Brussels, Copenhagen, Madrid, Paris               | Russia Time Zone 10             | (UTC+11:00) Chokurdakh                                    |
-| Russia Time Zone 11             | (UTC+12:00) Anadyr, Petropavlovsk-Kamchatsky                  | Russia Time Zone 3              | (UTC+04:00) Izhevsk, Samara                               |
-| Russian Standard Time           | (UTC+03:00) Moscow, St. Petersburg                            | SA Eastern Standard Time        | (UTC-03:00) Cayenne, Fortaleza                            |
-| SA Pacific Standard Time        | (UTC-05:00) Bogota, Lima, Quito, Rio Branco                   | SA Western Standard Time        | (UTC-04:00) Georgetown, La Paz, Manaus, San Juan          |
-| Sakhalin Standard Time          | (UTC+11:00) Sakhalin                                          | Saint Pierre Standard Time      | (UTC-03:00) Saint Pierre and Miquelon                     |
-| Samoa Standard Time             | (UTC+13:00) Samoa                                             | Sao Tome Standard Time          | (UTC+00:00) Sao Tome                                      |
-| Saratov Standard Time           | (UTC+04:00) Saratov                                           | SE Asia Standard Time           | (UTC+07:00) Bangkok, Hanoi, Jakarta                       |
-| Singapore Standard Time         | (UTC+08:00) Kuala Lumpur, Singapore                           | South Africa Standard Time      | (UTC+02:00) Harare, Pretoria                              |
-| South Sudan Standard Time       | (UTC+02:00) Juba                                              | Sri Lanka Standard Time         | (UTC+05:30) Sri Jayawardenepura                           |
-| Sudan Standard Time             | (UTC+02:00) Khartoum                                          | Syria Standard Time             | (UTC+03:00) Damascus                                      |
-| Taipei Standard Time            | (UTC+08:00) Taipei                                            | Tasmania Standard Time          | (UTC+10:00) Hobart                                        |
-| Tocantins Standard Time         | (UTC-03:00) Araguaina                                         | Tokyo Standard Time             | (UTC+09:00) Osaka, Sapporo, Tokyo                         |
-| Tomsk Standard Time             | (UTC+07:00) Tomsk                                             | Tonga Standard Time             | (UTC+13:00) Nuku'alofa                                    |
-| Transbaikal Standard Time       | (UTC+09:00) Chita                                             | Turkey Standard Time            | (UTC+03:00) Istanbul                                      |
-| Turks And Caicos Standard Time  | (UTC-05:00) Turks and Caicos                                  | Ulaanbaatar Standard Time       | (UTC+08:00) Ulaanbaatar                                   |
-| US Eastern Standard Time        | (UTC-05:00) Indiana (East)                                    | US Mountain Standard Time       | (UTC-07:00) Arizona                                       |
-| UTC                             | (UTC) Coordinated Universal Time                              | UTC+12                          | (UTC+12:00) Coordinated Universal Time+12                 |
-| UTC+13                          | (UTC+13:00) Coordinated Universal Time+13                     | UTC-02                          | (UTC-02:00) Coordinated Universal Time-02                 |
-| UTC-08                          | (UTC-08:00) Coordinated Universal Time-08                     | UTC-09                          | (UTC-09:00) Coordinated Universal Time-09                 |
-| UTC-11                          | (UTC-11:00) Coordinated Universal Time-11                     | Venezuela Standard Time         | (UTC-04:00) Caracas                                       |
-| Vladivostok Standard Time       | (UTC+10:00) Vladivostok                                       | Volgograd Standard Time         | (UTC+03:00) Volgograd                                     |
-| W. Australia Standard Time      | (UTC+08:00) Perth                                             | W. Central Africa Standard Time | (UTC+01:00) West Central Africa                           |
-| W. Europe Standard Time         | (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna  | W. Mongolia Standard Time       | (UTC+07:00) Hovd                                          |
-| West Asia Standard Time         | (UTC+05:00) Ashgabat, Tashkent                                | West Bank Standard Time         | (UTC+02:00) Gaza, Hebron                                  |
-| West Pacific Standard Time      | (UTC+10:00) Guam, Port Moresby                                | Yakutsk Standard Time           | (UTC+09:00) Yakutsk                                       |
-| Yukon Standard Time             | (UTC-07:00) Yukon                                             |                                 |                                                           |
-
-Get a list of available timezones with more detail via:
-```powershell
-Get-TimeZone -ListAvailable
-```
-
-# Game Mode
-
-A complete explanation will be added soon.
-
-# Disable Windows Search
-
-## Suboptions
-
-| **Suboption** | **Description** |
-| ---- | ---- |
-| **Disable SafeSearch** | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
-| **Prevent Index on Battery** | Prevents Windows from indexing content while running on battery power, saving system resources. |
-| **Disable Index Usage for System File Search** | Disables the use of the index when searching system files, requiring a full scan each time. |
-| **Find Partial Matches** | Allows partial matches to be found when searching for files, enabling more flexible search results. |
-| **Exclude System Directories** | Excludes system directories from search results, narrowing down the search to user files and folders. |
-| **Exclude Archived Files** | Prevents archived files from being included in search results. |
-| **Disable Natural Language Search** | Disables the use of natural language search, which allows more conversational queries for search results. |
-| **Search Only in Indexed Locations** | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
-| **Exclude System Directories** | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
-| **Exclude Compressed Files** | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
-| **Search Only in Indexed Locations** | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
-| [**Disallow Indexing of Encrypted Items**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#allowindexingencryptedstoresoritems) | This policy setting allows encrypted items to be indexed. |
-| [**Disable Language Detection**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#alwaysuseautolangdetection) | This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. |
-| [**Prevent Querying Index Remotely**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#preventremotequeries) | If enabled, clients will be unable to query this computer's index remotely. Thus, when they're browsing network shares that are stored on this computer, they won't search them using the index. If disabled, client search requests will use this computer's index. |
-| [**Disable Web Results in Search**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
-| **Disable Search Highlights** | If enabled: "See content suggestions in the search boxi and in search home". |
-| **Disable Web Search** | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
-
-## Search Indexing
-
-[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
-
-Instead of using the explorer to search for a file or folder, use [`Everything`](https://www.voidtools.com/downloads/), it's a lot faster.
-
-The `WSearch` service is needed for CmdPals `File Search` extension to work.
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "PreventRemoteQueries",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "4OrLater - Any version of Microsoft Windows with Windows Search 4.0 or later",
-  "DisplayName": "Prevent clients from querying the index remotely",
-  "ExplainText": "If enabled, clients will be unable to query this computer's index remotely. Thus, when they are browsing network shares that are stored on this computer, they will not search them using the index. If disabled, client search requests will use this computer's index. Default is disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "PreventRemoteQueries",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "PreventIndexOnBattery",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "301OrLater - Microsoft Windows XP, Windows Server 2003 with Windows Search version 3.01, or any version of Microsoft Windows with Windows Search 4.0 or later",
-  "DisplayName": "Prevent indexing when running on battery power to conserve energy",
-  "ExplainText": "If enabled, the indexer pauses whenever the computer is running on battery. If disabled, the indexing follows the default behavior. Default is disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "PreventIndexOnBattery",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AlwaysUseAutoLangDetection",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Win8Only - Microsoft Windows 8 or later",
-  "DisplayName": "Always use automatic language detection when indexing content and properties",
-  "ExplainText": "This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. If you enable this policy setting, Windows will always use automatic language detection to index (as it did in Windows 7). Using automatic language detection can increase memory usage. We recommend enabling this policy setting only on PCs where documents are stored in many languages. If you disable or do not configure this policy setting, Windows will use automatic language detection only when it can determine the language of a document with high confidence.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "AlwaysUseAutoLangDetection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DoNotUseWebResults",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "WinBlueOnly - Microsoft Windows 8.1 or later",
-  "DisplayName": "Don't search the web or display web results in Search",
-  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web, and if the web results are displayed in Search.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "ConnectedSearchUseWeb",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DoNotUseWebResultsOnMeteredConnections",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "WinBlueExclusive - Microsoft Windows 8.1. Not supported on Windows 10 or later",
-  "DisplayName": "Don't search the web or display web results in Search over metered connections",
-  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web over metered connections and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. Note: If you enable the \"Don't search the web or display web results in Search\" policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "ConnectedSearchUseWebOverMeteredConnections",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DisableWebSearch",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "RedistOnly - Microsoft Windows XP, or Windows Server 2003 with Windows Search version 3.01 or later",
-  "DisplayName": "Do not allow web search",
-  "ExplainText": "Enabling this policy removes the option of searching the Web from Windows Desktop Search. When this policy is disabled or not configured, the Web option is available and users can search the Web via their default browser search engine.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "DisableWebSearch",
-  "Elements": []
-}
-```
-
-## Miscellaneous Notes
-
-Exists in [Search Policies](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search), but isn't present anymore on 24H2 and probably versions above.
-
-```c
-// Disabling this setting turns off search highlights in the start menu search box and in search home. Enabling or not configuring this setting turns on search highlights in the start menu search box and in search home.
-"Disable Search Highlights": {
-  "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
-    "EnableDynamicContentInWSB": { "Type": "REG_DWORD", "Data": 0 }
-  }
-}
-```
-
-It probably got replaced by:
-```c
-// Privacy & security > Search - Show search highlights
-SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-# HAGS
-
-[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) feature is introduced specifically for the WDDM. If disabled the CPU manages the GPU scheduling via a high-priority kernel thread, GPU context switches and task scheduling are handled by the CPU (CPU offloads graphics intensive tasks to the GPU for rendering). If enabled the GPU handles its own scheduling using a built in scheduler processor, context switching between GPU tasks is done directly on the GPU. It is especially beneficial, if you've a slow CPU, or if the CPU is heavily loaded with other tasks.
-
-"It depends on your hardware, if you want [HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) to be enabled or not. E.g if using a old GPU, it may not fully support the new scheduler."
-
-[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) should be enabled.
-
-## SystemSettings Records
-
-```c
-// Enabled
-HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 2
-```
-```c
-// Disabled
-HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 1
-```
-
-# Disable Storage Sense
-
-Storage Sense deletes temporary/user files automatically, see [windows policies](https://www.noverse.dev/docs/win-config/system/disable-storage-sense/#windows-policies) for more & [disable-notifications/#registry-values](https://www.noverse.dev/docs/win-config/system/disable-notifications/#registry-values) for storage sense related notification values.
-
-Head over to the `Policies` tab, then `StorageSense` to configure other related policies.
-
-## SystemSettings Captures
-
-The main storage sense toggle in `System > Storage` does the same as the `Automatic User content cleanup` in `System > Storage > Storage Sense`.
-
-```c
-// System > Storage > Storage Sense
-
-// Keep WIndows running smoothly by automatically cleaning up temorary system and app files
-// 1 = On
-// 0 = Off
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\04 // Type: REG_DWORD
-
-// Automatic User content cleanup
-// 1 = On
-// 0 = Off
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\01 // Type: REG_DWORD
-
-// Run Storage Sense
-// During low free disk space (default) = 0
-// Every month = 30
-// Every week = 7
-// Every day = 1
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	// Type: REG_DWORD
-
-// Delete files in my recycle bin if they have been there for over
-// 30 days (default): 08 = 1, 25 = 30
-// 60 days: 08 = 1, 256 = 60
-// 14 days: 08 = 1, 256 = 14
-// 1 day: 08 = 1, 256 = 1
-// Never: 08 = 0, 256 = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\08 // Type: REG_DWORD
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\256 // Type: REG_DWORD
-
-// Delete files in my Downloads folder if they haven't been opened for more than
-// Never (default): 32 = 0, 512 = 0
-// 1 day: 32 = 1, 512 = 1
-// 14 days: 32 = 1, 512 = 14
-// 30 days: 32 = 1, 512 = 30
-// 60 days: 32 = 1, 512 = 60
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\32 // Type: REG_DWORD
-HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\512 // Type: REG_DWORD
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_AllowStorageSenseGlobal",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Allow Storage Sense",
-  "ExplainText": "Storage Sense can automatically clean some of the user\u2019s files to free up disk space. By default, Storage Sense is automatically turned on when the machine runs into low disk space and is set to run whenever the machine runs into storage pressure. This cadence can be changed in Storage settings or set with the \"Configure Storage Sense cadence\" group policy. Enabled: Storage Sense is turned on for the machine, with the default cadence as \u2018during low free disk space\u2019. Users cannot disable Storage Sense, but they can adjust the cadence (unless you also configure the \"Configure Storage Sense cadence\" group policy). Disabled: Storage Sense is turned off the machine. Users cannot enable Storage Sense. Not Configured: By default, Storage Sense is turned off until the user runs into low disk space or the user enables it manually. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "ValueName": "AllowStorageSenseGlobal",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_AllowStorageSenseTemporaryFilesCleanup",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Allow Storage Sense Temporary Files cleanup",
-  "ExplainText": "When Storage Sense runs, it can delete the user\u2019s temporary files that are not in use. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: Storage Sense will delete the user\u2019s temporary files that are not in use. Users cannot disable this setting in Storage settings. Disabled: Storage Sense will not delete the user\u2019s temporary files. Users cannot enable this setting in Storage settings. Not Configured: By default, Storage Sense will delete the user\u2019s temporary files. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "ValueName": "AllowStorageSenseTemporaryFilesCleanup",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_ConfigStorageSenseRecycleBinCleanupThreshold",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Configure Storage Sense Recycle Bin cleanup threshold",
-  "ExplainText": "When Storage Sense runs, it can delete files in the user\u2019s Recycle Bin if they have been there for over a certain amount of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum age threshold (in days) of a file in the Recycle Bin before Storage Sense will delete it. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not delete files in the user\u2019s Recycle Bin. The default is 30 days. Disabled or Not Configured: By default, Storage Sense will delete files in the user\u2019s Recycle Bin that have been there for over 30 days. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "ConfigStorageSenseRecycleBinCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
-  ]
-},
-{
-  "File": "StorageSense.admx",
-  "CategoryName": "StorageSense",
-  "PolicyName": "SS_ConfigStorageSenseDownloadsCleanupThreshold",
-  "NameSpace": "Microsoft.Policies.StorageSense",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Configure Storage Storage Downloads cleanup threshold",
-  "ExplainText": "When Storage Sense runs, it can delete files in the user\u2019s Downloads folder if they haven\u2019t been opened for more than a certain number of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum number of days a file can remain unopened before Storage Sense deletes it from Downloads folder. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not delete files in the user\u2019s Downloads folder. The default is 0, or never deleting files in the Downloads folder. Disabled or Not Configured: By default, Storage Sense will not delete files in the user\u2019s Downloads folder. Users can configure this setting in Storage settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
-  ],
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "ConfigStorageSenseDownloadsCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
-  ]
-}
-```
-
-# Reduce Shutdown Time
-
-Forces hung apps and services to terminate faster.
-
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control : WaitToKillServiceTimeout
-\Registry\User\S-ID\Control Panel\Desktop : WaitToKillTimeout
-\Registry\User\S-ID\Control Panel\Desktop : HungAppTimeout
-\Registry\User\S-ID\Control Panel\Desktop : AutoEndTasks
-```
-`HungAppTimeout`-> `1500` (`1.5` sec; default is `5` sec)
-`WaitToKillTimeout`-> `2500` (`2.5` sec)
-`WaitToKillServiceTimeout`-> `2500` (`2.5` sec; default is `5` sec)
-`WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000` (`20` sec))
-
-More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
-
-# Disable Accessibility Features
-
-Disables all kind of accessibility features such as `Voice Access`, `Live Captions`, `Narrator`, `Magnifier`, `OSK` etc. (`SystemSettings > Accessibility`/`Control Panel > All Control Panel Items > Ease of Access Center`). Specific features can be enabled via the suboptions.
-
-## Suboptions
-
-| Suboption | Description |
-| --- | --- |
-| Audio Description | Hear descriptions of what's happening in videos (when available). |
-| Dynamic Scrollbars | "Always show scrollbars", `On` dynamically hide them. |
-| [Voice Access](https://support.microsoft.com/en-us/topic/use-voice-access-to-control-your-pc-author-text-with-your-voice-4dcd23ee-f1b9-4fd1-bacc-862ab611f55d) | Modern voice command feature to help you interact with your PC and dictate text. |
-| Live Captions | Audio and video will be captioned live on your screen. |
-| Notification Box Visbility Time | Time how long the Windows notification boxes should stay opened. |
-| Narrator | Narrator reads aloud any text on the screen. You will need speakers. |
-| Sound Sentry | Visual notifications for sounds (this option chooses 'None' as visual warning). |
-| Color Filters | "Use a color filter to make colors on your screen easier to see and differentiate." |
-| Mono Audio | Combine left and right audio channels into one. |
-| Magnifier | Magnifier zooms in anywhere on the screen, and makes everything in that area larger. You can move Magnifier around, lock it in one place, or resize it. |
-| On-Screen Keyboard | Tyoe using the mouse or another pointing device such as a joystick by selecting keys from a picture of a keyboard. |
-| [Accessibility Insights Telemetry](https://github.com/microsoft/accessibility-insights-windows/blob/main/docs/TelemetryOverview.md#control-of-telemery) | "Accessibility Insights for Windows uses telemetry to better understand what features are most helpful to users, as well as to help identify potential issues that users are experiencing." |
-
-# Detailed Verbose Messages
-
-Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
-
-> "*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
->
-> — Microsoft, [Verbose startup, shutdown, logon, and logoff status messages](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages)
-
-> "*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
->
-> — Windows Security Encyclopedia, [Display highly detailed status messages](https://www.windows-security.org/b74176eebf20a72c6e9cf193ddcedeb7/display-highly-detailed-status-messages)
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "Logon.admx",
-  "CategoryName": "System",
-  "PolicyName": "VerboseStatus",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Display highly detailed status messages",
-  "ExplainText": "This policy setting directs the system to display highly detailed status messages. This policy setting is designed for advanced users who require this information. If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"\"Remove Boot/Shutdown/Logon/Logoff status messages\"\" policy setting is enabled.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "VerboseStatus",
-  "Elements": []
-}
-```
-
-# Disable Aero Shake
-
-Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
-
-`SystemSettings > System > Multitasking: Title bar window shake`.
-
-![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "Desktop.admx",
-  "CategoryName": "Desktop",
-  "PolicyName": "NoWindowMinimizingShortcuts",
-  "NameSpace": "Microsoft.Policies.WindowsDesktop",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off Aero Shake window minimizing mouse gesture",
-  "ExplainText": "Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse. If you enable this policy, application windows will not be minimized or restored when the active window is shaken back and forth with the mouse. If you disable or do not configure this policy, this window minimizing and restoring gesture will apply.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "NoWindowMinimizingShortcuts",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable JPEG Reduction
-
-Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the option switch.
-
-### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
-
-```c
-if ( JPEGImportQuality not present or error )
-    v54 = 85.0f;
-else
-    v54 = max(JPEGImportQuality, 60.0f);
-    if (v54 > 100.0f)
-        v54 = 100.0f;
-```
-Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
-
-# Enable Segment Heap
-
-"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications." Allows modern apps to use a more efficient memory allocator. [Windows Internals (E7-P1, Segment heap)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
-
-It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
-
-## Per Executable / Globally
-
-For a specific executeable:
-```c
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\<executable>"
-  "FrontEndHeapDebugOptions"; // REG_DWORD, bit 2 (0x4) = disable segment heap, bit 3 (0x8) = enable segment heap
-```
-
-Globally:
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap"
-  "Enabled"; // REG_DWORD, 0 = disable segment heap, nonzero = enable segment heap
-```
-
-Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`). It's not recommended to enable it globally.
-
-## Validating Changes
-
-You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example [SI](https://github.com/winsiderss/systeminformer/) (Right Click > Miscellaneous > Heaps).
-
-`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x4`:
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/ntheap.png?raw=true)
-
-`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x8`:
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/segmentheap.png?raw=true)
-
-## Default Values
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
-    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
-    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
-    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
-    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
-    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
-                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
-                    //    if (value & 0x2)                      // low byte, bit 1
-                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
-                    // if the value exists but is stored as REG_NONE (type==0):
-                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
-```
-
-- [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment4.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/segment5.png?raw=true)
-
-# Disable Notifications
-
-## Option/Suboptions
-
-| Option | Description |
-| ---- | ---- |
-| Main | Disables all kind of notifications completely. |
-| Disable Low Disk Space Checks | Disables the `Low Disk Space` notification. ![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true) |
-| Hide all Windows Security notifications | Disables all notifications via the `DisableNotifications`  policy (this probably overrides all other security notifications below). |
-| Hide non-critical Windows Security notifications | Disables non-critical/enhanced notifications via the Windows Security and Microsoft Defender Antivirus `DisableEnhancedNotifications` policies. |
-| Disable Enhanced Phishing Protection warnings | Disables the Enhanced Phishing Protection warning prompts for malicious sites, password reuse, and unsafe apps. |
-| Disable Virus & threat protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Virus & threat protection notifications` |
-| Disable Account protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Account protection notifications` |
-| Disable Firewall & network protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Firewall & network protection notifications` |
-| Disable Security & Maintenance Notifications | Disables it via `SystemSettings > System > Notifications: Security and Maintenance` |
-| Disable Sync Provider Notifications | Disables it via `Explorer > View > Options > View: Show sync provider notifications` |
-| Disable account-related notifications | Disables it via `SystemSettings > Personalization > Start: Show account related notifications occasionally in Start` |
-| Disable Clock Change notifications | Disables it via `Control Panel > Clock and Region > Date and Time: Notify me when the clock chanes` |
-| Hide Notification Center | Works via `NoAutoTrayNotify`/`DisableNotificationCenter` policies and `SystemSettings > System > Notifications: Show notification bell icon` |
-| Disable Notification Sound | Disables it via `SystemSettings > System > Notifications > Allow notifications to play sound` |
-| Disable Lockscreen Notifications | Works via `DisableLockScreenAppNotifications` policy and `SystemSettings > System > Notifications: Show notifications on the lock screen + Show reminders and incoming VoIP calls on the lock screen` |
-| Turn off access to the Store | `NoUseStoreOpenWith` policy - "*This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the "Look for an app in the Store" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.*" |
-| Hide Time in Notification Center | Works via `SystemSettings > Time & language > Date & time: Show time and date in the System tray` |
-
-## Miscellaneous Notes
-
-### WnsEndpoint
-
-"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
-
-### Registry Values
-
-All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
-```c
-"HKLM\\SOFTWARE\\Microsoft\\WINDOWS\\CurrentVersion\\Notifications\\Settings"
-  'NOC_GLOBAL_SETTING_SUPRESS_TOASTS_WHILE_DUPLICATING'; // Hide notifications when I'm duplicating my screen
-  'NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK'; // Show notifications on the lock screen
-  'NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK'; // Show reminders and incoming VoIP calls on the lock screen
-  'NOC_GLOBAL_SETTING_CORTANA_MANAGED_NOTIFICATIONS';
-  'NOC_GLOBAL_SETTING_ALLOW_ACTION_CENTER_ABOVE_LOCK';
-  'NOC_GLOBAL_SETTING_HIDE_NOTIFICATION_CONTENT';
-  'NOC_GLOBAL_SETTING_TOASTS_ENABLED';
-  'NOC_GLOBAL_SETTING_BADGE_ENABLED'; // Don't show number of notifications
-  'NOC_GLOBAL_SETTING_GLEAM_ENABLED'; // App icons (Action Center)
-  'NOC_GLOBAL_SETTING_ALLOW_HMD_NOTIFICATIONS'; // Show notifications on my head mounted display
-  'NOC_GLOBAL_SETTING_ALLOW_CONTROL_CENTER_ABOVE_LOCK';
-  'NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND'; // Allow notification to play sounds
-```
-The options I've commented on are included in the options under `System > Notifications`/right click menu of notification center.
-
-Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
-```c
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy";
-    "StoragePoliciesNotified" = 0; // REG_DWORD, default 0 if missing, range: 0-1
-    "StoragePoliciesChanged" = 0; // REG_DWORD, default 0 if missing, range: 0-1
-    "OptinToastFired" = 0; // REG_DWORD, default 0 if missing, range: 0-1
-    "FirstLaunchToastFired" = 0; // REG_DWORD, default 0 if missing, range: 0-1
-    "CloudfilePolicyConsent" = 0; // REG_DWORD, default 0 if missing, range: 0-1
-    "CloudConsentToastCount" = 0; // REG_DWORD, default 0 if missing, range: 0-3
-    "OptOutButtonClicked" = 0; // REG_DWORD, default 0 if missing, range: 0-1
-
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DiskSpaceChecking";
-    "LastInstallTimeLowStorageNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: OneDay
-    "NumWinOldLowStorageNotify" = 0; // REG_DWORD, default 0 if missing, range: 0-3
-
-"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion";
-    "InstallTime" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoHours
-
-"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
-    "TestBackupReminderToast" = 0; // REG_DWORD, default 0 if missing, range: 0-2?
-
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
-    "FirstProfileSeenTime" = 0; // REG_QWORD FILETIME, default set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
-    "BackupReminderToastCount" = 0; // REG_DWORD, default 0 if missing, range: 0-3
-    "LastTimeBackupReminderNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoMinutes
-
-// FILETIME THRESHOLDS
-"OneDay" = 0xC92A69C000; // Seconds: 86400, 1 day, LastInstallTimeLowStorageNotify
-"TwoHours" = 0x10C388D000; // Seconds: 7200, 2 hours, InstallTime
-"FourMinutes" = 0x8F0D1800; // Seconds: 240, 4 minutes, FirstProfileSeenTime
-"TwoMinutes" = 0x47868C00; // Seconds: 120, 2 minutes, LastTimeBackupReminderNotify
-```
-
-See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://github.com/nohuto/win-config/blob/main/system/assets/noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c) for used pseudocode. Note that I added my chosen values to the `Disable Low Disk Space Checks` suboption for safety reasons.
-
-```c
-"HKCU\\Control Panel\\Accessibility";
-  // Dismiss notifications after this amount of time
-  "MessageDuration" = 5; // REG_DWORD, range 5-300(s) - According to pseudocode, it has a range from `0` to `0xFFFFFFFF`. Fallback of `5`, SystemSettings supports ranges from `5` (5 seconds) to `300` (5 minutes). Anything above/below will likely be limited (haven't tested it yet).
-
-"HKCU\\Software\\Microsoft\\Windows\\MiracastDiscovery"
-  "DisableNotification" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\DisableNotification","Type: REG_DWORD, Length: 4, Data: 0"
-  "NotificationCount" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\NotificationCount","Type: REG_DWORD, Length: 4, Data: 0"
-
-// miscellaneous procmon boot trace values
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\IsDebugEnabled","Length: 16"
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\InitialTimerCooldown","Length: 20"
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\PeriodicTimerCooldown","Length: 20"
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\SmartOptOutRevision","Type: REG_QWORD, Length: 8, Data: "
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\TimestampWhenSeen","Length: 20"
-```
-
-## SystemSettings Captures
-
-```c
-// System > Notifications
-
-// Get notifications from apps and other senders
-// On = 1 or value missing
-// Off = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications\ToastEnabled // Type: REG_DWORD
-
-// Allow notifications to play sounds
-// On = delete
-// Off = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND // Type: REG_DWORD
-
-// Show notifications on the lock screen
-// On = NOC value deleted, LockScreenToastEnabled = 1
-// Off = NOC value 0, LockScreenToastEnabled = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK // Type: REG_DWORD
-HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications\LockScreenToastEnabled // Type: REG_DWORD
-
-// Show reminders and incoming VoIP calls on the lock screen
-// On = delete
-// Off = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK // Type: REG_DWORD
-
-// Show notification bell icon
-// On = 1
-// Off = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ShowNotificationIcon // Type: REG_DWORD
-
-// Notifications from apps and other senders (examples since this depends on the installed apps)
-// On = delete
-// Off = 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.ActionCenter.SmartOptOut\Enabled // Notification Suggestions
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Microsoft.Windows.Explorer\Enabled // File Explorer
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance\Enabled // Security and Maintenance
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.PinConsent\Enabled // Apps
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel\Enabled // Settings
-HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.StartupApp\Enabled // Startup App Notification
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "AccountNotifications.admx",
-  "CategoryName": "AccountNotifications",
-  "PolicyName": "DisableAccountNotifications",
-  "NameSpace": "Microsoft.Policies.AccountNotifications",
-  "Supported": "Windows_10_0_20H1_NOSERVER - At least Windows 10 Version 2004",
-  "DisplayName": "Turn off account notifications in Start",
-  "ExplainText": "This policy allows you to prevent Windows from displaying notifications to Microsoft account (MSA) and local users in Start (user tile). Notifications include getting users to: reauthenticate; backup their device; manage cloud storage quotas as well as manage their Microsoft 365 or XBOX subscription. If you enable this policy setting, Windows will not send account related notifications for local and MSA users to the user tile in Start. If you disable or do not configure this policy setting, Windows will send account related notifications for local and MSA users to the user tile in Start. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\AccountNotifications"
-  ],
-  "ValueName": "DisableAccountNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "ShellNoUseStoreOpenWith_2",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off access to the Store",
-  "ExplainText": "This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the \"Look for an app in the Store\" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "NoUseStoreOpenWith",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Logon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "DisableLockScreenAppNotifications",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off app notifications on the lock screen",
-  "ExplainText": "This policy setting allows you to prevent app notifications from appearing on the lock screen. If you enable this policy setting, no app notifications are displayed on the lock screen. If you disable or do not configure this policy setting, users can choose which apps display notifications on the lock screen.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "DisableLockScreenAppNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Taskbar.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "DisableNotificationCenter",
-  "NameSpace": "Microsoft.Policies.TaskBar2",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Remove Notifications and Action Center",
-  "ExplainText": "This policy setting removes Notifications and Action Center from the notification area on the taskbar. The notification area is located at the far right end of the taskbar and includes icons for current notifications and the system clock. If this setting is enabled, Notifications and Action Center is not displayed in the notification area. The user will be able to read notifications when they appear, but they won\u2019t be able to review any notifications they miss. If you disable or do not configure this policy setting, Notification and Security and Maintenance will be displayed on the taskbar. A reboot is required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableNotificationCenter",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WebThreatDefense.admx",
-  "CategoryName": "WebThreatDefense",
-  "PolicyName": "NotifyMalicious",
-  "NameSpace": "Microsoft.Policies.WebThreatDefense",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Notify Malicious",
-  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school password into one of the following malicious scenarios: into a reported phishing site, into a Microsoft login URL with an invalid certificate, or into an application connecting to either a reported phishing site or a Microsoft login URL with an invalid certificate. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school password into one of the malicious scenarios described above and encourages them to change their password. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn your users if they type their work or school password into one of the malicious scenarios described above.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
-  ],
-  "ValueName": "NotifyMalicious",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WebThreatDefense.admx",
-  "CategoryName": "WebThreatDefense",
-  "PolicyName": "NotifyPasswordReuse",
-  "NameSpace": "Microsoft.Policies.WebThreatDefense",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Notify Password Reuse",
-  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they reuse their work or school password. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns users if they reuse their work or school password and encourages them to change it. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn users if they reuse their work or school password.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
-  ],
-  "ValueName": "NotifyPasswordReuse",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WebThreatDefense.admx",
-  "CategoryName": "WebThreatDefense",
-  "PolicyName": "NotifyUnsafeApp",
-  "NameSpace": "Microsoft.Policies.WebThreatDefense",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Notify Unsafe App",
-  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school passwords in Notepad, Winword, or M365 Office apps like OneNote, Word, Excel, etc. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they store their password in text editor apps. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn users if they store their password in text editor apps.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
-  ],
-  "ValueName": "NotifyUnsafeApp",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsDefender.admx",
-  "CategoryName": "Reporting",
-  "PolicyName": "Reporting_DisableEnhancedNotifications",
-  "NameSpace": "Microsoft.Policies.WindowsDefender",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Turn off enhanced notifications",
-  "ExplainText": "Use this policy setting to specify if you want Microsoft Defender Antivirus enhanced notifications to display on clients. If you disable or do not configure this setting, Microsoft Defender Antivirus enhanced notifications will display on clients. If you enable this setting, Microsoft Defender Antivirus enhanced notifications will not display on clients.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows Defender\\Reporting"
-  ],
-  "ValueName": "DisableEnhancedNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsDefenderSecurityCenter.admx",
-  "CategoryName": "Notifications",
-  "PolicyName": "Notifications_DisableNotifications",
-  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Hide all notifications",
-  "ExplainText": "Hide notifications from Windows Security. Enabled: Local users will not see notifications from Windows Security. Disabled: Local users can see notifications from Windows Security. Not configured: Same as Disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
-  ],
-  "ValueName": "DisableNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsDefenderSecurityCenter.admx",
-  "CategoryName": "Notifications",
-  "PolicyName": "Notifications_DisableEnhancedNotifications",
-  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Hide non-critical notifications",
-  "ExplainText": "Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
-  ],
-  "ValueName": "DisableEnhancedNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WPN.admx",
-  "CategoryName": "NotificationsCategory",
-  "PolicyName": "NoTileNotification",
-  "NameSpace": "Microsoft.Policies.Notifications",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off tile notifications",
-  "ExplainText": "This policy setting turns off tile notifications. If you enable this policy setting, applications and system features will not be able to update their tiles and tile badges in the Start screen. If you disable or do not configure this policy setting, tile and badge notifications are enabled and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
-  ],
-  "ValueName": "NoTileApplicationNotification",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WPN.admx",
-  "CategoryName": "NotificationsCategory",
-  "PolicyName": "NoToastNotification",
-  "NameSpace": "Microsoft.Policies.Notifications",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off toast notifications",
-  "ExplainText": "This policy setting turns off toast notifications for applications. If you enable this policy setting, applications will not be able to raise toast notifications. Note that this policy does not affect taskbar notification balloons. Note that Windows system features are not affected by this policy. You must enable/disable system features individually to stop their ability to raise toast notifications. If you disable or do not configure this policy setting, toast notifications are enabled and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
-  ],
-  "ValueName": "NoToastApplicationNotification",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WPN.admx",
-  "CategoryName": "NotificationsCategory",
-  "PolicyName": "NoLockScreenToastNotification",
-  "NameSpace": "Microsoft.Policies.Notifications",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off toast notifications on the lock screen",
-  "ExplainText": "This policy setting turns off toast notifications on the lock screen. If you enable this policy setting, applications will not be able to raise toast notifications on the lock screen. If you disable or do not configure this policy setting, toast notifications on the lock screen are enabled and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
-  ],
-  "ValueName": "NoToastApplicationNotificationOnLockScreen",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WPN.admx",
-  "CategoryName": "NotificationsCategory",
-  "PolicyName": "NoCloudNotification",
-  "NameSpace": "Microsoft.Policies.Notifications",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off notifications network usage",
-  "ExplainText": "This policy setting blocks applications from using the network to send notifications to update tiles, tile badges, toast, or raw notifications. This policy setting turns off the connection between Windows and the Windows Push Notification Service (WNS). This policy setting also stops applications from being able to poll application services to update tiles. If you enable this policy setting, applications and system features will not be able receive notifications from the network from WNS or via notification polling APIs. If you enable this policy setting, notifications can still be raised by applications running on the machine via local API calls from within the application. If you disable or do not configure this policy setting, the client computer will connect to WNS at user login and applications will be allowed to poll for tile notification updates in the background. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
-  ],
-  "ValueName": "NoCloudApplicationNotification",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WPN.admx",
-  "CategoryName": "NotificationsCategory",
-  "PolicyName": "NoNotificationMirroring",
-  "NameSpace": "Microsoft.Policies.Notifications",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Turn off notification mirroring",
-  "ExplainText": "This policy setting turns off notification mirroring. If you enable this policy setting, notifications from applications and system will not be mirrored to your other devices. If you disable or do not configure this policy setting, notifications will be mirrored, and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
-  ],
-  "ValueName": "DisallowNotificationMirroring",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Export Explorer/Taskbar Pins
-
-Can be useful when creating your own image and trying to automate the installation and configuration part.
-
-### Quick Access Pins
-
-Quick access pins are saved in a file named `f01b4d95cf55d32a.automaticDestinations-ms`, located at:
-```bat
-%appdata%\Microsoft\Windows\Recent\AutomaticDestinations
-```
-You can either terminate `explorer` while copying it to the path, or just restart it afterwards.
-```bat
-copy /y ".\f01b4d95cf55d32a.automaticDestinations-ms" "%appdata%\Microsoft\Windows\Recent\AutomaticDestinations"
-```
-
-### Taskbar Pins
-
-Taskbar pins are saved in a folder and a key, the folder includes the shortcuts:
-```bat
-%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
-```
-```powershell
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband # Only "Favorites" is needed
-```
-
-Post install example (copy the `TaskBar` folder to any folder):
-```powershell
-del "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" -Recurse -Force
-xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" /e /i /y
-```
-
-The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
-
-# Disable Prefetch & Superfetch
-
-Disables prefetcher (includes disabling [`ApplicationLaunchPrefetching` & `ApplicationPreLaunch`](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
-
-The prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
-
-## Value Meanings
-
-- [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
-- [`EnableSuperfetch`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
-- `SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search.
-- `EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
-
-```
-0 - Disables Prefetch
-1 - Enables Prefetch when the application starts
-2 - Enables Prefetch when the device starts up
-3 - Enables Prefetch when the application or device starts up
-```
-The same applies to superfetch.
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch4.png?raw=true)
-
-# Optimize File System
-
-Small documentation on several values the option applies, see links below for more details.
-
-### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
-
-This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) boot trace for more.
-
-| Value | Description |
-| ----- | ------------ |
-| `DisableDeleteNotification` | 0 = TRIM/UNMAP enabled, 1 = disabled. Controls whether delete operations send trim/unmap notifications to the underlying storage. |
-| `DontVerifyRandomDrivers` | 0 = Driver Verifier may pick random drivers, 1 = random selection suppressed, so only explicitly chosen drivers are verified. |
-| [`LongPathsEnabled`](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry) | 0 = legacy `MAX_PATH` limit, 1 = Win32 long paths enabled (paths up to ~32k characters for apps and policies that opt in). |
-| `NtfsAllowExtendedCharacter8dot3Rename` | 0 = 8.3 short names restricted to basic ASCII, 1 = extended characters (including diacritics). |
-| `NtfsBugcheckOnCorrupt` | 0 = NTFS attempts self healing without forcing a bugcheck, 1 = triggers a bugcheck when corruption is detected on an NTFS volume, avoiding "silent" data loss with self healing NTFS. |
-| `NtfsDisable8dot3NameCreation` | Disables the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes.<br>0: Enables 8dot3 name creation for all volumes on the system.<br>1: Disables 8dot3 name creation for all volumes on the system.<br>2: Sets 8dot3 name creation on a per volume basis.<br>3: Disables 8dot3 name creation for all volumes except the system volume. |
-| `NtfsDisableCompression` | 0 = NTFS compression allowed, 1 = new compressed files/folders cannot be created (existing compressed data remains readable). |
-| `NtfsDisableCompressionLimit` | 0 = when a compressed file gets highly fragmented, NTFS stops compressing new extents so the file can grow larger uncompressed, 1 = disables this behavior and enforces the internal compression limit. |
-| `NtfsDisableEncryption` | 0 = NTFS EFS file/folder encryption available, 1 = EFS disabled on NTFS volumes. |
-| `NTFSDisableLastAccessUpdate` | Controls Last Access Time updates on NTFS files/directories. |
-| `NtfsDisableSpotCorruptionHandling` | 0 = NTFS spot corruption handling active, 1 = disabled, so NTFS relies on manual tools. Also allows running CHKDSK to analyze a volume online without taking it offline. |
-| `NtfsEncryptPagingFile` | 0 = pagefile.sys stored unencrypted, 1 = paging file encrypted. |
-| `NtfsMemoryUsage` | Configures the internal cache levels of NTFS paged-pool memory and NTFS nonpaged-pool memory. |
-| `NtfsMftZoneReservation` | Sets reserved NTFS MFT zone size as 200 MB x value: 1 = 200 MB (default), up to 4 = 800 MB. Larger values reduce MFT fragmentation on volumes with many small files. |
-| `RefsDisableLastAccessUpdate` | Related to NTFSDisableLastAccessUpdate (both get set via disablelastaccess). |
-| `SymlinkXToXEvaluation` | 0 = x->x symlinks not followed, 1 = resolved (X = Local/Remote). Symlinksare shortcuts or references that point to a file or folder in another location, like a portal. They're not duplicates, just pointers. File at: `C:\Projects\Game\assets\logo.png`, Symlink: `C:\Users\YourName\Desktop\logo.png`. |
-| `Win31FileSystem` | 0 = standard modern FAT behavior (long filenames, richer timestamps), 1 = legacy Windows 3.1–compatible mode with stricter 8.3 naming and older timestamp semantics. |
-
-- [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "FileSys.admx",
-  "CategoryName": "Filesystem",
-  "PolicyName": "LongPathsEnabled",
-  "NameSpace": "Microsoft.Policies.FileSys",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Enable Win32 long paths",
-  "ExplainText": "Enabling Win32 long paths will allow manifested win32 applications and packaged Microsoft Store applications to access paths beyond the normal 260 character limit. Enabling this setting will cause the long paths to be accessible within the process.",
-  "KeyPath": [
-    "HKLM\\System\\CurrentControlSet\\Control\\FileSystem"
-  ],
-  "ValueName": "LongPathsEnabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-
-# Disable Clipboard
-
-If you copy or cut something it gets stored to your clipboard.
-
-Miscellaneous notes:
-```c 
-"HKLM\SOFTWARE\Microsoft\Clipboard\ClipboardSvcDebugWaitInSec","Length: 16"
-"HKLM\SOFTWARE\Microsoft\Clipboard\IsClipboardSignalProducingFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
-"HKLM\SOFTWARE\Microsoft\Clipboard\IsCloudAndHistoryFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
-
-"HKCU\Software\Microsoft\Clipboard\ClipboardTipRequired","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudClipRDPOverride","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudClipboardAutomaticUpload","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudContentRemoteOverrideValueWindowInSec","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudContentValueWindowInSec","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\DoubleCopyGestureEnabled","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\EnableClipboardHistory","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\PastedFromClipboardUI","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\ShellHotKeyUsed","Length: 16"
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "AllowCrossDeviceClipboard",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Clipboard synchronization across devices",
-  "ExplainText": "This policy setting determines whether Clipboard contents can be synchronized across devices. If you enable this policy setting, Clipboard contents are allowed to be synchronized across devices logged in under the same Microsoft account or Azure AD account. If you disable this policy setting, Clipboard contents cannot be shared to other devices. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "AllowCrossDeviceClipboard",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "AllowClipboardHistory",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Clipboard History",
-  "ExplainText": "This policy setting determines whether history of Clipboard contents can be stored in memory. If you enable this policy setting, history of Clipboard contents are allowed to be stored. If you disable this policy setting, history of Clipboard contents are not allowed to be stored. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "AllowClipboardHistory",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "TerminalServer.admx",
-  "CategoryName": "TS_REDIRECTION",
-  "PolicyName": "TS_CLIENT_CLIPBOARD",
-  "NameSpace": "Microsoft.Policies.TerminalServer",
-  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
-  "DisplayName": "Do not allow Clipboard redirection",
-  "ExplainText": "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session. You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection. If you enable this policy setting, users cannot redirect Clipboard data. If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection. If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services"
-  ],
-  "ValueName": "fDisableClip",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsSandbox.admx",
-  "CategoryName": "WindowsSandbox",
-  "PolicyName": "AllowClipboardRedirection",
-  "NameSpace": "Microsoft.Policies.WindowsSandbox",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Allow clipboard sharing with Windows Sandbox",
-  "ExplainText": "This policy setting enables or disables clipboard sharing with the sandbox. If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted. If you do not configure this policy setting, clipboard sharing will be enabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
-  ],
-  "ValueName": "AllowClipboardRedirection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable Memory Compression
-
-Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
-
-Compressed pages are stored in a dedicated "Memory Compression" process managed by the Store Manager. The memory manager compresses modified list pages into that store and later decompresses them on demand, this is enabled by default on client SKUs.
-
-Example:  
-1. System looks for cold/rarely used data in RAM
-2. It compresses that data, e.g. 24 MB -> 7 MB
-3. The 17 MB saved is used for active apps
-4. When the data is needed again, it's decompressed back to 24 MB
-
-See the current memory compression state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
-```powershell
-Get-MMAgent
-```
-```powershell
-ApplicationLaunchPrefetching : True
-ApplicationPreLaunch         : True
-MaxOperationAPIFiles         : 512
-MemoryCompression            : True # Enabled
-OperationAPI                 : True
-PageCombining                : True
-PSComputerName               :
-```
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
-
-# Disable Page Combining
-
-Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
-
-The memory manager can be instructed to combine identical pages across the system, and Superfetch can trigger combining when the system is idle.
-
-> "*Page combining can be disabled by setting a DWORD value named `DisablePageCombining` to `1` in the `HKLM\System\CurrentControlSet\Control\Session Manager\Memory Management` registry key.*"
->
-> — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-`Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
-
-```c
-INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
-INIT:0000000140B9C348                 dq offset aDisablepagecom ; "DisablePageCombining"
-INIT:0000000140B9C350                 dq offset dword_140D1D1C8
-
-ALMOSTRO:0000000140D1D1C8 dword_140D1D1C8 dd 0                    ; DATA XREF: MiCombineIdenticalPages:loc_1407F7E3A↑r
-```
-
-See the current page combining state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
-```powershell
-Get-MMAgent
-```
-```powershell
-ApplicationLaunchPrefetching : True
-ApplicationPreLaunch         : True
-MaxOperationAPIFiles         : 512
-MemoryCompression            : True
-OperationAPI                 : True
-PageCombining                : True # Enabled
-PSComputerName               :
-```
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb4.png?raw=true)
-
-# Enable Detailed BSoD
-
-| Aspect                    | New BSoD (Windows 8/10/11)                      | Old BSoD (Windows 7/classic)                                                      |
-| ------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------- |
-| Main look                 | Big blue screen, sad face, simple text, QR code | Plain blue text screen, no icons                                                  |
-| Stop code shown           | e.g. CRITICAL_PROCESS_DIED                      | e.g. STOP 0x0000007E                                                              |
-| Hex parameters            | Hidden                                          | Shown: (0x00000000, 0x00000000...)                                                |
-| Faulty driver/module name | Hidden                                          | Often shown (e.g. nvlddmkm.sys)                                                   |
-| Extra help                | QR code + link                                  | Text-only advice                                                                  |
-| Purpose                   | Less scary, easier to tell support the code     | See the actual debug information                                                  |
-
-Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0` ("The option specifies that Windows automatically restarts your computer").
-
-# Display Scaling
-
-Changes the size of text, apps, and other items. Note that on laptops the default display scaling might not be `100%`. You can set a custom scaling size via `System > Display > Custom scaling`:
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/displayscaling.png?raw=true)
-
-## SystemSettings Captures
-
-```c
-// 100%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
-
-// 125%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
-
-// 150%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
-
-// 175%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
-
-// 200%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
-
-// 225%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
-```
-
-## Suboption
-
-`Prevent Window Minimization on Monitor Disconnection` disables `Minimize windows then a monitor is diconnected` (`System > Display`).
-
-```c
-// Enabled
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
-
-// Disabled
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
-```
 
 # BCD Edits
 
@@ -4222,101 +2785,6 @@ ramdisksdidevice        partition=\Device\HarddiskVolume3
 ramdisksdipath          \Recovery\WindowsRE\boot.sdi
 ```
 
-# Disable Autoruns
-
-The `Open` buttons downloads & executes [`Autoruns`](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns). It's recommended to disable all kind of autoruns in the `Logon` section that you don't need, examples:
-```c
-OneDrive
-Spotify
-Discord
-Steam
-WingetUI
-Lghub
-SecurityHealth
-
-Microsoft Edge // preferable remove edge from the mounted image, otherwise it'll create keys/values in many different places
-```
-
-Try to minimize the amount of applications that run automatically on system startup. You can go through the other sections, but this option was created for the `Logon` section, see `Disable Scheduled Tasks`/`Disable Services`.
-
-See your current autoruns of installed apps:
-```powershell
-HKCU\Software\Microsoft\Windows\CurrentVersion\Run
-```
-```powershell
-HKLM\Software\Microsoft\Windows\CurrentVersion\Run
-```
-
-# Enable FSO
-
-This isn't accurate nor complete yet, it's preferable to disable FSO per application via the compability section if doing so. Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
-
-See [demystifying-full-screen-optimizations](https://devblogs.microsoft.com/directx/demystifying-full-screen-optimizations/)/[SwapChain](https://wiki.special-k.info/en/SwapChain)/[PresentationModel](https://wiki.special-k.info/Presentation_Model) for some details.
-
-## ResourcePolicyServer
-
-All values I found that are `GameDVR` related in `ResourcePolicyServer.dll`:
-```c
-GameDVR_DXGIHonorFSEWindowsCompatible
-GameDVR_EFSEFeatureFlags
-GameDVR_FSEBehavior
-GameDVR_FSEBehaviorMode
-GameDVR_HonorUserFSEBehaviorMode
-```
-
-`GameDVR_DSEBehavior` doesn't exist on my current system.
-
-## Compability Captures
-
-Disable/enable FSO for a specific application via `Properties > Compatibility > Change settings for all users` - `Disable fullscreen optimizations` or do it per user one step before.
-
-```c
-// User
-HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
-
-// Machine
-HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
-```
-
-# App Archive
-
-"Automatically archive your infrequently used apps to save storage and internet bandwidth. Your files and data will still be saved, and the app's full version will be restored on your next use if it's still available."
-
-If enabled, the system will periodically check for such infrequently used apps. By default app archiving is turned on.
-
-## SystemSettings Records
-
-Toggling the option via `Apps > Advanced app settings`:
-```c
-// On
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 1
-
-// Off
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 0
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "AppxPackageManager.admx",
-  "CategoryName": "AppxDeployment",
-  "PolicyName": "AllowAutomaticAppArchiving",
-  "NameSpace": "Microsoft.Policies.Appx",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Archive infrequently used apps",
-  "ExplainText": "This policy setting controls whether the system can archive infrequently used apps. If you enable this policy setting, then the system will periodically check for and archive infrequently used apps. If you disable this policy setting, then the system will not archive any apps. If you do not configure this policy setting (default), then the system will follow default behavior, which is to periodically check for and archive infrequently used apps, and the user will be able to configure this setting themselves.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Appx"
-  ],
-  "ValueName": "AllowAutomaticAppArchiving",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
 # Page File
 
 Several notes I took while reading through [`Windows Internals Part 1, Edition 7`](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), everything written below is based on it.
@@ -4344,27 +2812,519 @@ Local Security Policy:
 >
 > *When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled.*
 
-# Disable Mobility Center
+# Enable Segment Heap
 
-Note that this is a laptop only feature. The "Mobility Center" is a feature that includes controls for screen brightness, power options, volume, battery status, wireless network status, external display settings, and more.
+"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications." Allows modern apps to use a more efficient memory allocator. [Windows Internals (E7-P1, Segment heap)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/mobility-center.png?raw=true)
+It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
+
+## Per Executable / Globally
+
+For a specific executeable:
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\<executable>"
+  "FrontEndHeapDebugOptions"; // REG_DWORD, bit 2 (0x4) = disable segment heap, bit 3 (0x8) = enable segment heap
+```
+
+Globally:
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap"
+  "Enabled"; // REG_DWORD, 0 = disable segment heap, nonzero = enable segment heap
+```
+
+Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`). It's not recommended to enable it globally.
+
+## Validating Changes
+
+You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example [SI](https://github.com/winsiderss/systeminformer/) (Right Click > Miscellaneous > Heaps).
+
+`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x4`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ntheap.png?raw=true)
+
+`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x8`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/segmentheap.png?raw=true)
+
+## Default Values
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
+    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
+    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
+    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
+    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
+    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
+                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
+                    //    if (value & 0x2)                      // low byte, bit 1
+                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
+                    // if the value exists but is stored as REG_NONE (type==0):
+                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
+```
+
+- [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/segment1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/segment2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/segment3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/segment4.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/segment5.png?raw=true)
+
+# Disable Notifications
+
+## Option/Suboptions
+
+| Option | Description |
+| ---- | ---- |
+| Main | Disables all kind of notifications completely. |
+| Disable Low Disk Space Checks | Disables the `Low Disk Space` notification. ![](https://github.com/nohuto/win-config/blob/main/system/images/lowdiskspace.jpg?raw=true) |
+| Hide all Windows Security notifications | Disables all notifications via the `DisableNotifications`  policy (this probably overrides all other security notifications below). |
+| Hide non-critical Windows Security notifications | Disables non-critical/enhanced notifications via the Windows Security and Microsoft Defender Antivirus `DisableEnhancedNotifications` policies. |
+| Disable Enhanced Phishing Protection warnings | Disables the Enhanced Phishing Protection warning prompts for malicious sites, password reuse, and unsafe apps. |
+| Disable Virus & threat protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Virus & threat protection notifications` |
+| Disable Account protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Account protection notifications` |
+| Disable Firewall & network protection notifications | Disables all in `Windows Security > Settings > Manage notifications: Firewall & network protection notifications` |
+| Disable Security & Maintenance Notifications | Disables it via `SystemSettings > System > Notifications: Security and Maintenance` |
+| Disable Sync Provider Notifications | Disables it via `Explorer > View > Options > View: Show sync provider notifications` |
+| Disable account-related notifications | Disables it via `SystemSettings > Personalization > Start: Show account related notifications occasionally in Start` |
+| Disable Clock Change notifications | Disables it via `Control Panel > Clock and Region > Date and Time: Notify me when the clock chanes` |
+| Hide Notification Center | Works via `NoAutoTrayNotify`/`DisableNotificationCenter` policies and `SystemSettings > System > Notifications: Show notification bell icon` |
+| Disable Notification Sound | Disables it via `SystemSettings > System > Notifications > Allow notifications to play sound` |
+| Disable Lockscreen Notifications | Works via `DisableLockScreenAppNotifications` policy and `SystemSettings > System > Notifications: Show notifications on the lock screen + Show reminders and incoming VoIP calls on the lock screen` |
+| Turn off access to the Store | `NoUseStoreOpenWith` policy - "*This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the "Look for an app in the Store" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.*" |
+| Hide Time in Notification Center | Works via `SystemSettings > Time & language > Date & time: Show time and date in the System tray` |
+
+## Miscellaneous Notes
+
+### WnsEndpoint
+
+"`WnsEndpoint` (`REG_SZ`) determines which Windows Notification Service (WNS) endpoint will be used to connect for Windows push notifications. If you disable or don't configure this setting, the push notifications will connect to the default endpoint of `client.wns.windows.com`. " Located in `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`. Block `client.wns.windows.com` via the hosts file.
+
+### Registry Values
+
+All `NOC_GLOBAL_SETTING_*` I found in `NotificationController.dll`:
+```c
+"HKLM\\SOFTWARE\\Microsoft\\WINDOWS\\CurrentVersion\\Notifications\\Settings"
+  'NOC_GLOBAL_SETTING_SUPRESS_TOASTS_WHILE_DUPLICATING'; // Hide notifications when I'm duplicating my screen
+  'NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK'; // Show notifications on the lock screen
+  'NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK'; // Show reminders and incoming VoIP calls on the lock screen
+  'NOC_GLOBAL_SETTING_CORTANA_MANAGED_NOTIFICATIONS';
+  'NOC_GLOBAL_SETTING_ALLOW_ACTION_CENTER_ABOVE_LOCK';
+  'NOC_GLOBAL_SETTING_HIDE_NOTIFICATION_CONTENT';
+  'NOC_GLOBAL_SETTING_TOASTS_ENABLED';
+  'NOC_GLOBAL_SETTING_BADGE_ENABLED'; // Don't show number of notifications
+  'NOC_GLOBAL_SETTING_GLEAM_ENABLED'; // App icons (Action Center)
+  'NOC_GLOBAL_SETTING_ALLOW_HMD_NOTIFICATIONS'; // Show notifications on my head mounted display
+  'NOC_GLOBAL_SETTING_ALLOW_CONTROL_CENTER_ABOVE_LOCK';
+  'NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND'; // Allow notification to play sounds
+```
+The options I've commented on are included in the options under `System > Notifications`/right click menu of notification center.
+
+Since `BackupReminderToastCount` isn't a well known value, I've done quick research where it exists and if it does exist. While doing so I found different values:
+```c
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\StoragePolicy";
+    "StoragePoliciesNotified" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "StoragePoliciesChanged" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "OptinToastFired" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "FirstLaunchToastFired" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "CloudfilePolicyConsent" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+    "CloudConsentToastCount" = 0; // REG_DWORD, default 0 if missing, range: 0-3
+    "OptOutButtonClicked" = 0; // REG_DWORD, default 0 if missing, range: 0-1
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\DiskSpaceChecking";
+    "LastInstallTimeLowStorageNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: OneDay
+    "NumWinOldLowStorageNotify" = 0; // REG_DWORD, default 0 if missing, range: 0-3
+
+"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion";
+    "InstallTime" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoHours
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
+    "TestBackupReminderToast" = 0; // REG_DWORD, default 0 if missing, range: 0-2?
+
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\StorageSense\\Parameters\\BackupReminder";
+    "FirstProfileSeenTime" = 0; // REG_QWORD FILETIME, default set to current system time if missing, range: FILETIME, ComparedTo: FourMinutes
+    "BackupReminderToastCount" = 0; // REG_DWORD, default 0 if missing, range: 0-3
+    "LastTimeBackupReminderNotify" = 0; // REG_QWORD FILETIME, range: FILETIME, ComparedTo: TwoMinutes
+
+// FILETIME THRESHOLDS
+"OneDay" = 0xC92A69C000; // Seconds: 86400, 1 day, LastInstallTimeLowStorageNotify
+"TwoHours" = 0x10C388D000; // Seconds: 7200, 2 hours, InstallTime
+"FourMinutes" = 0x8F0D1800; // Seconds: 240, 4 minutes, FirstProfileSeenTime
+"TwoMinutes" = 0x47868C00; // Seconds: 120, 2 minutes, LastTimeBackupReminderNotify
+```
+
+See [system/assets | noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c](https://github.com/nohuto/win-config/blob/main/system/assets/noti-CLowDiskSpaceUI_CanShowStorageSenseToast.c) for used pseudocode. Note that I added my chosen values to the `Disable Low Disk Space Checks` suboption for safety reasons.
+
+```c
+"HKCU\\Control Panel\\Accessibility";
+  // Dismiss notifications after this amount of time
+  "MessageDuration" = 5; // REG_DWORD, range 5-300(s) - According to pseudocode, it has a range from `0` to `0xFFFFFFFF`. Fallback of `5`, SystemSettings supports ranges from `5` (5 seconds) to `300` (5 minutes). Anything above/below will likely be limited (haven't tested it yet).
+
+"HKCU\\Software\\Microsoft\\Windows\\MiracastDiscovery"
+  "DisableNotification" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\DisableNotification","Type: REG_DWORD, Length: 4, Data: 0"
+  "NotificationCount" = 0; // read on boot - "HKCU\Software\Microsoft\Windows\MiracastDiscovery\NotificationCount","Type: REG_DWORD, Length: 4, Data: 0"
+
+// miscellaneous procmon boot trace values
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\IsDebugEnabled","Length: 16"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\InitialTimerCooldown","Length: 20"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\PeriodicTimerCooldown","Length: 20"
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\SmartOptOut\\SmartOptOutRevision","Type: REG_QWORD, Length: 8, Data: "
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Notifications\\TimestampWhenSeen","Length: 20"
+```
+
+## SystemSettings Captures
+
+```c
+// System > Notifications
+
+// Get notifications from apps and other senders
+// On = 1 or value missing
+// Off = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications\ToastEnabled // Type: REG_DWORD
+
+// Allow notifications to play sounds
+// On = delete
+// Off = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\NOC_GLOBAL_SETTING_ALLOW_NOTIFICATION_SOUND // Type: REG_DWORD
+
+// Show notifications on the lock screen
+// On = NOC value deleted, LockScreenToastEnabled = 1
+// Off = NOC value 0, LockScreenToastEnabled = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\NOC_GLOBAL_SETTING_ALLOW_TOASTS_ABOVE_LOCK // Type: REG_DWORD
+HKCU\Software\Microsoft\Windows\CurrentVersion\PushNotifications\LockScreenToastEnabled // Type: REG_DWORD
+
+// Show reminders and incoming VoIP calls on the lock screen
+// On = delete
+// Off = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\NOC_GLOBAL_SETTING_ALLOW_CRITICAL_TOASTS_ABOVE_LOCK // Type: REG_DWORD
+
+// Show notification bell icon
+// On = 1
+// Off = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\ShowNotificationIcon // Type: REG_DWORD
+
+// Notifications from apps and other senders (examples since this depends on the installed apps)
+// On = delete
+// Off = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.ActionCenter.SmartOptOut\Enabled // Notification Suggestions
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Microsoft.Windows.Explorer\Enabled // File Explorer
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance\Enabled // Security and Maintenance
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.PinConsent\Enabled // Apps
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\windows.immersivecontrolpanel_cw5n1h2txyewy!microsoft.windows.immersivecontrolpanel\Enabled // Settings
+HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.StartupApp\Enabled // Startup App Notification
+```
 
 ## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
 ```json
 {
-  "File": "MobilePCMobilityCenter.admx",
-  "CategoryName": "MobilityCenterCat",
-  "PolicyName": "MobilityCenterEnable_2",
-  "NameSpace": "Microsoft.Policies.MobilePCMobilityCenter",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Windows Mobility Center",
-  "ExplainText": "This policy setting turns off Windows Mobility Center. If you enable this policy setting, the user is unable to invoke Windows Mobility Center. The Windows Mobility Center UI is removed from all shell entry points and the .exe file does not launch it. If you disable this policy setting, the user is able to invoke Windows Mobility Center and the .exe file launches it. If you do not configure this policy setting, Windows Mobility Center is on by default.",
+  "File": "AccountNotifications.admx",
+  "CategoryName": "AccountNotifications",
+  "PolicyName": "DisableAccountNotifications",
+  "NameSpace": "Microsoft.Policies.AccountNotifications",
+  "Supported": "Windows_10_0_20H1_NOSERVER - At least Windows 10 Version 2004",
+  "DisplayName": "Turn off account notifications in Start",
+  "ExplainText": "This policy allows you to prevent Windows from displaying notifications to Microsoft account (MSA) and local users in Start (user tile). Notifications include getting users to: reauthenticate; backup their device; manage cloud storage quotas as well as manage their Microsoft 365 or XBOX subscription. If you enable this policy setting, Windows will not send account related notifications for local and MSA users to the user tile in Start. If you disable or do not configure this policy setting, Windows will send account related notifications for local and MSA users to the user tile in Start. No reboots or service restarts are required for this policy setting to take effect.",
   "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\MobilityCenter"
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\AccountNotifications"
   ],
-  "ValueName": "NoMobilityCenter",
+  "ValueName": "DisableAccountNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ICM.admx",
+  "CategoryName": "InternetManagement_Settings",
+  "PolicyName": "ShellNoUseStoreOpenWith_2",
+  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off access to the Store",
+  "ExplainText": "This policy setting specifies whether to use the Store service for finding an application to open a file with an unhandled file type or protocol association. When a user opens a file type or protocol that is not associated with any applications on the computer, the user is given the choice to select a local application or use the Store service to find an application. If you enable this policy setting, the \"Look for an app in the Store\" item in the Open With dialog is removed. If you disable or do not configure this policy setting, the user is allowed to use the Store service and the Store item is available in the Open With dialog.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "NoUseStoreOpenWith",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Logon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "DisableLockScreenAppNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsLogon",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off app notifications on the lock screen",
+  "ExplainText": "This policy setting allows you to prevent app notifications from appearing on the lock screen. If you enable this policy setting, no app notifications are displayed on the lock screen. If you disable or do not configure this policy setting, users can choose which apps display notifications on the lock screen.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "DisableLockScreenAppNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Taskbar.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "DisableNotificationCenter",
+  "NameSpace": "Microsoft.Policies.TaskBar2",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Remove Notifications and Action Center",
+  "ExplainText": "This policy setting removes Notifications and Action Center from the notification area on the taskbar. The notification area is located at the far right end of the taskbar and includes icons for current notifications and the system clock. If this setting is enabled, Notifications and Action Center is not displayed in the notification area. The user will be able to read notifications when they appear, but they won\u2019t be able to review any notifications they miss. If you disable or do not configure this policy setting, Notification and Security and Maintenance will be displayed on the taskbar. A reboot is required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "DisableNotificationCenter",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WebThreatDefense.admx",
+  "CategoryName": "WebThreatDefense",
+  "PolicyName": "NotifyMalicious",
+  "NameSpace": "Microsoft.Policies.WebThreatDefense",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Notify Malicious",
+  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school password into one of the following malicious scenarios: into a reported phishing site, into a Microsoft login URL with an invalid certificate, or into an application connecting to either a reported phishing site or a Microsoft login URL with an invalid certificate. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school password into one of the malicious scenarios described above and encourages them to change their password. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn your users if they type their work or school password into one of the malicious scenarios described above.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
+  ],
+  "ValueName": "NotifyMalicious",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WebThreatDefense.admx",
+  "CategoryName": "WebThreatDefense",
+  "PolicyName": "NotifyPasswordReuse",
+  "NameSpace": "Microsoft.Policies.WebThreatDefense",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Notify Password Reuse",
+  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they reuse their work or school password. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns users if they reuse their work or school password and encourages them to change it. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn users if they reuse their work or school password.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
+  ],
+  "ValueName": "NotifyPasswordReuse",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WebThreatDefense.admx",
+  "CategoryName": "WebThreatDefense",
+  "PolicyName": "NotifyUnsafeApp",
+  "NameSpace": "Microsoft.Policies.WebThreatDefense",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Notify Unsafe App",
+  "ExplainText": "This policy setting determines whether Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they type their work or school passwords in Notepad, Winword, or M365 Office apps like OneNote, Word, Excel, etc. If you enable this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen warns your users if they store their password in text editor apps. If you disable or don\u2019t configure this policy setting, Enhanced Phishing Protection in Microsoft Defender SmartScreen will not warn users if they store their password in text editor apps.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WTDS\\Components"
+  ],
+  "ValueName": "NotifyUnsafeApp",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsDefender.admx",
+  "CategoryName": "Reporting",
+  "PolicyName": "Reporting_DisableEnhancedNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefender",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Turn off enhanced notifications",
+  "ExplainText": "Use this policy setting to specify if you want Microsoft Defender Antivirus enhanced notifications to display on clients. If you disable or do not configure this setting, Microsoft Defender Antivirus enhanced notifications will display on clients. If you enable this setting, Microsoft Defender Antivirus enhanced notifications will not display on clients.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows Defender\\Reporting"
+  ],
+  "ValueName": "DisableEnhancedNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsDefenderSecurityCenter.admx",
+  "CategoryName": "Notifications",
+  "PolicyName": "Notifications_DisableNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
+  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
+  "DisplayName": "Hide all notifications",
+  "ExplainText": "Hide notifications from Windows Security. Enabled: Local users will not see notifications from Windows Security. Disabled: Local users can see notifications from Windows Security. Not configured: Same as Disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
+  ],
+  "ValueName": "DisableNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsDefenderSecurityCenter.admx",
+  "CategoryName": "Notifications",
+  "PolicyName": "Notifications_DisableEnhancedNotifications",
+  "NameSpace": "Microsoft.Policies.WindowsDefenderSecurityCenter",
+  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
+  "DisplayName": "Hide non-critical notifications",
+  "ExplainText": "Only show critical notifications from Windows Security. If the Suppress all notifications GP setting has been enabled, this setting will have no effect. Enabled: Local users will only see critical notifications from Windows Security. They will not see other types of notifications, such as regular PC or device health information. Disabled: Local users will see all types of notifications from Windows Security. Not configured: Same as Disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows Defender Security Center\\Notifications"
+  ],
+  "ValueName": "DisableEnhancedNotifications",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoTileNotification",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off tile notifications",
+  "ExplainText": "This policy setting turns off tile notifications. If you enable this policy setting, applications and system features will not be able to update their tiles and tile badges in the Start screen. If you disable or do not configure this policy setting, tile and badge notifications are enabled and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "NoTileApplicationNotification",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoToastNotification",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off toast notifications",
+  "ExplainText": "This policy setting turns off toast notifications for applications. If you enable this policy setting, applications will not be able to raise toast notifications. Note that this policy does not affect taskbar notification balloons. Note that Windows system features are not affected by this policy. You must enable/disable system features individually to stop their ability to raise toast notifications. If you disable or do not configure this policy setting, toast notifications are enabled and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications",
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "NoToastApplicationNotification",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoLockScreenToastNotification",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off toast notifications on the lock screen",
+  "ExplainText": "This policy setting turns off toast notifications on the lock screen. If you enable this policy setting, applications will not be able to raise toast notifications on the lock screen. If you disable or do not configure this policy setting, toast notifications on the lock screen are enabled and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "NoToastApplicationNotificationOnLockScreen",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoCloudNotification",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Turn off notifications network usage",
+  "ExplainText": "This policy setting blocks applications from using the network to send notifications to update tiles, tile badges, toast, or raw notifications. This policy setting turns off the connection between Windows and the Windows Push Notification Service (WNS). This policy setting also stops applications from being able to poll application services to update tiles. If you enable this policy setting, applications and system features will not be able receive notifications from the network from WNS or via notification polling APIs. If you enable this policy setting, notifications can still be raised by applications running on the machine via local API calls from within the application. If you disable or do not configure this policy setting, the client computer will connect to WNS at user login and applications will be allowed to poll for tile notification updates in the background. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "NoCloudApplicationNotification",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WPN.admx",
+  "CategoryName": "NotificationsCategory",
+  "PolicyName": "NoNotificationMirroring",
+  "NameSpace": "Microsoft.Policies.Notifications",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Turn off notification mirroring",
+  "ExplainText": "This policy setting turns off notification mirroring. If you enable this policy setting, notifications from applications and system will not be mirrored to your other devices. If you disable or do not configure this policy setting, notifications will be mirrored, and can be turned off by the administrator or user. No reboots or service restarts are required for this policy setting to take effect.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CurrentVersion\\PushNotifications"
+  ],
+  "ValueName": "DisallowNotificationMirroring",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Optimize File System
+
+Small documentation on several values the option applies, see links below for more details.
+
+### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
+
+This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) boot trace for more.
+
+| Value | Description |
+| ----- | ------------ |
+| `DisableDeleteNotification` | 0 = TRIM/UNMAP enabled, 1 = disabled. Controls whether delete operations send trim/unmap notifications to the underlying storage. |
+| `DontVerifyRandomDrivers` | 0 = Driver Verifier may pick random drivers, 1 = random selection suppressed, so only explicitly chosen drivers are verified. |
+| [`LongPathsEnabled`](https://learn.microsoft.com/en-us/windows/win32/fileio/maximum-file-path-limitation?tabs=registry) | 0 = legacy `MAX_PATH` limit, 1 = Win32 long paths enabled (paths up to ~32k characters for apps and policies that opt in). |
+| `NtfsAllowExtendedCharacter8dot3Rename` | 0 = 8.3 short names restricted to basic ASCII, 1 = extended characters (including diacritics). |
+| `NtfsBugcheckOnCorrupt` | 0 = NTFS attempts self healing without forcing a bugcheck, 1 = triggers a bugcheck when corruption is detected on an NTFS volume, avoiding "silent" data loss with self healing NTFS. |
+| `NtfsDisable8dot3NameCreation` | Disables the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes.<br>0: Enables 8dot3 name creation for all volumes on the system.<br>1: Disables 8dot3 name creation for all volumes on the system.<br>2: Sets 8dot3 name creation on a per volume basis.<br>3: Disables 8dot3 name creation for all volumes except the system volume. |
+| `NtfsDisableCompression` | 0 = NTFS compression allowed, 1 = new compressed files/folders cannot be created (existing compressed data remains readable). |
+| `NtfsDisableCompressionLimit` | 0 = when a compressed file gets highly fragmented, NTFS stops compressing new extents so the file can grow larger uncompressed, 1 = disables this behavior and enforces the internal compression limit. |
+| `NtfsDisableEncryption` | 0 = NTFS EFS file/folder encryption available, 1 = EFS disabled on NTFS volumes. |
+| `NTFSDisableLastAccessUpdate` | Controls Last Access Time updates on NTFS files/directories. |
+| `NtfsDisableSpotCorruptionHandling` | 0 = NTFS spot corruption handling active, 1 = disabled, so NTFS relies on manual tools. Also allows running CHKDSK to analyze a volume online without taking it offline. |
+| `NtfsEncryptPagingFile` | 0 = pagefile.sys stored unencrypted, 1 = paging file encrypted. |
+| `NtfsMemoryUsage` | Configures the internal cache levels of NTFS paged-pool memory and NTFS nonpaged-pool memory. |
+| `NtfsMftZoneReservation` | Sets reserved NTFS MFT zone size as 200 MB x value: 1 = 200 MB (default), up to 4 = 800 MB. Larger values reduce MFT fragmentation on volumes with many small files. |
+| `RefsDisableLastAccessUpdate` | Related to NTFSDisableLastAccessUpdate (both get set via disablelastaccess). |
+| `SymlinkXToXEvaluation` | 0 = x->x symlinks not followed, 1 = resolved (X = Local/Remote). Symlinksare shortcuts or references that point to a file or folder in another location, like a portal. They're not duplicates, just pointers. File at: `C:\Projects\Game\assets\logo.png`, Symlink: `C:\Users\YourName\Desktop\logo.png`. |
+| `Win31FileSystem` | 0 = standard modern FAT behavior (long filenames, richer timestamps), 1 = legacy Windows 3.1–compatible mode with stricter 8.3 naming and older timestamp semantics. |
+
+- [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "FileSys.admx",
+  "CategoryName": "Filesystem",
+  "PolicyName": "LongPathsEnabled",
+  "NameSpace": "Microsoft.Policies.FileSys",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Enable Win32 long paths",
+  "ExplainText": "Enabling Win32 long paths will allow manifested win32 applications and packaged Microsoft Store applications to access paths beyond the normal 260 character limit. Enabling this setting will cause the long paths to be accessible within the process.",
+  "KeyPath": [
+    "HKLM\\System\\CurrentControlSet\\Control\\FileSystem"
+  ],
+  "ValueName": "LongPathsEnabled",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
@@ -4406,3 +3366,1041 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 |  | `vmicvmsession` | Provides a mechanism to manage virtual machine with PowerShell via VM session without a virtual network. |
 |  | `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
 |  | `vpci` | Microsoft Hyper-V Virtual PCI Bus |
+
+# Disable Service Splitting
+
+Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
+
+[`Windows Internals 7th Edition, Part 2`](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) (page `467`f.) handpicked snippets (shortened):
+If system physical memory, obtained via [`GlobalMemoryStatusEx`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex), exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
+
+Service splitting is allowed only if:  
+- Splitting is globally enabled
+- The service is not marked as critical (i.e., it doesn't reboot the machine on failure)
+- The service is hosted in `svchost.exe`
+- `SvcHostSplitDisable` is not set to `1` in the service registry key
+
+Setting `SvcHostSplitDisable` to `0` for a critical service forces it to be split, but this can lead to issues.
+
+Get the current amount of `svchost` process instances with:
+```cmd
+(get-process -Name "svchost" | measure).Count
+```
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostDebug
+\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostSplitThresholdInKB
+```
+`SvcHostDebug` is set to `0` by default:
+```c
+v1 = 0;
+if ( !RegistryValueWithFallbackW && Type == 4 )
+    LOBYTE(v1) = Data != 0;
+return v1;
+```
+
+- [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting2.png?raw=true)
+
+# Disable Storage Sense
+
+Storage Sense deletes temporary/user files automatically, see [windows policies](https://www.noverse.dev/docs/win-config/system/disable-storage-sense/#windows-policies) for more & [disable-notifications/#registry-values](https://www.noverse.dev/docs/win-config/system/disable-notifications/#registry-values) for storage sense related notification values.
+
+Head over to the `Policies` tab, then `StorageSense` to configure other related policies.
+
+## SystemSettings Captures
+
+The main storage sense toggle in `System > Storage` does the same as the `Automatic User content cleanup` in `System > Storage > Storage Sense`.
+
+```c
+// System > Storage > Storage Sense
+
+// Keep WIndows running smoothly by automatically cleaning up temorary system and app files
+// 1 = On
+// 0 = Off
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\04 // Type: REG_DWORD
+
+// Automatic User content cleanup
+// 1 = On
+// 0 = Off
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\01 // Type: REG_DWORD
+
+// Run Storage Sense
+// During low free disk space (default) = 0
+// Every month = 30
+// Every week = 7
+// Every day = 1
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\2048	// Type: REG_DWORD
+
+// Delete files in my recycle bin if they have been there for over
+// 30 days (default): 08 = 1, 25 = 30
+// 60 days: 08 = 1, 256 = 60
+// 14 days: 08 = 1, 256 = 14
+// 1 day: 08 = 1, 256 = 1
+// Never: 08 = 0, 256 = 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\08 // Type: REG_DWORD
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\256 // Type: REG_DWORD
+
+// Delete files in my Downloads folder if they haven't been opened for more than
+// Never (default): 32 = 0, 512 = 0
+// 1 day: 32 = 1, 512 = 1
+// 14 days: 32 = 1, 512 = 14
+// 30 days: 32 = 1, 512 = 30
+// 60 days: 32 = 1, 512 = 60
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\32 // Type: REG_DWORD
+HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\512 // Type: REG_DWORD
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "StorageSense.admx",
+  "CategoryName": "StorageSense",
+  "PolicyName": "SS_AllowStorageSenseGlobal",
+  "NameSpace": "Microsoft.Policies.StorageSense",
+  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
+  "DisplayName": "Allow Storage Sense",
+  "ExplainText": "Storage Sense can automatically clean some of the user\u2019s files to free up disk space. By default, Storage Sense is automatically turned on when the machine runs into low disk space and is set to run whenever the machine runs into storage pressure. This cadence can be changed in Storage settings or set with the \"Configure Storage Sense cadence\" group policy. Enabled: Storage Sense is turned on for the machine, with the default cadence as \u2018during low free disk space\u2019. Users cannot disable Storage Sense, but they can adjust the cadence (unless you also configure the \"Configure Storage Sense cadence\" group policy). Disabled: Storage Sense is turned off the machine. Users cannot enable Storage Sense. Not Configured: By default, Storage Sense is turned off until the user runs into low disk space or the user enables it manually. Users can configure this setting in Storage settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
+  ],
+  "ValueName": "AllowStorageSenseGlobal",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "StorageSense.admx",
+  "CategoryName": "StorageSense",
+  "PolicyName": "SS_AllowStorageSenseTemporaryFilesCleanup",
+  "NameSpace": "Microsoft.Policies.StorageSense",
+  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
+  "DisplayName": "Allow Storage Sense Temporary Files cleanup",
+  "ExplainText": "When Storage Sense runs, it can delete the user\u2019s temporary files that are not in use. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: Storage Sense will delete the user\u2019s temporary files that are not in use. Users cannot disable this setting in Storage settings. Disabled: Storage Sense will not delete the user\u2019s temporary files. Users cannot enable this setting in Storage settings. Not Configured: By default, Storage Sense will delete the user\u2019s temporary files. Users can configure this setting in Storage settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
+  ],
+  "ValueName": "AllowStorageSenseTemporaryFilesCleanup",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "StorageSense.admx",
+  "CategoryName": "StorageSense",
+  "PolicyName": "SS_ConfigStorageSenseRecycleBinCleanupThreshold",
+  "NameSpace": "Microsoft.Policies.StorageSense",
+  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
+  "DisplayName": "Configure Storage Sense Recycle Bin cleanup threshold",
+  "ExplainText": "When Storage Sense runs, it can delete files in the user\u2019s Recycle Bin if they have been there for over a certain amount of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum age threshold (in days) of a file in the Recycle Bin before Storage Sense will delete it. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not delete files in the user\u2019s Recycle Bin. The default is 30 days. Disabled or Not Configured: By default, Storage Sense will delete files in the user\u2019s Recycle Bin that have been there for over 30 days. Users can configure this setting in Storage settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
+  ],
+  "Elements": [
+    { "Type": "Decimal", "ValueName": "ConfigStorageSenseRecycleBinCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
+  ]
+},
+{
+  "File": "StorageSense.admx",
+  "CategoryName": "StorageSense",
+  "PolicyName": "SS_ConfigStorageSenseDownloadsCleanupThreshold",
+  "NameSpace": "Microsoft.Policies.StorageSense",
+  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
+  "DisplayName": "Configure Storage Storage Downloads cleanup threshold",
+  "ExplainText": "When Storage Sense runs, it can delete files in the user\u2019s Downloads folder if they haven\u2019t been opened for more than a certain number of days. If the group policy \"Allow Storage Sense\" is disabled, then this policy does not have any effect. Enabled: You must provide the minimum number of days a file can remain unopened before Storage Sense deletes it from Downloads folder. Supported values are: 0 - 365. If you set this value to zero, Storage Sense will not delete files in the user\u2019s Downloads folder. The default is 0, or never deleting files in the Downloads folder. Disabled or Not Configured: By default, Storage Sense will not delete files in the user\u2019s Downloads folder. Users can configure this setting in Storage settings.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\StorageSense"
+  ],
+  "Elements": [
+    { "Type": "Decimal", "ValueName": "ConfigStorageSenseDownloadsCleanupThreshold", "MinValue": "0", "MaxValue": "365" }
+  ]
+}
+```
+
+# Disable Accessibility Features
+
+Disables all kind of accessibility features such as `Voice Access`, `Live Captions`, `Narrator`, `Magnifier`, `OSK` etc. (`SystemSettings > Accessibility`/`Control Panel > All Control Panel Items > Ease of Access Center`). Specific features can be enabled via the suboptions.
+
+## Suboptions
+
+| Suboption | Description |
+| --- | --- |
+| Audio Description | Hear descriptions of what's happening in videos (when available). |
+| Dynamic Scrollbars | "Always show scrollbars", `On` dynamically hide them. |
+| [Voice Access](https://support.microsoft.com/en-us/topic/use-voice-access-to-control-your-pc-author-text-with-your-voice-4dcd23ee-f1b9-4fd1-bacc-862ab611f55d) | Modern voice command feature to help you interact with your PC and dictate text. |
+| Live Captions | Audio and video will be captioned live on your screen. |
+| Notification Box Visbility Time | Time how long the Windows notification boxes should stay opened. |
+| Narrator | Narrator reads aloud any text on the screen. You will need speakers. |
+| Sound Sentry | Visual notifications for sounds (this option chooses 'None' as visual warning). |
+| Color Filters | "Use a color filter to make colors on your screen easier to see and differentiate." |
+| Mono Audio | Combine left and right audio channels into one. |
+| Magnifier | Magnifier zooms in anywhere on the screen, and makes everything in that area larger. You can move Magnifier around, lock it in one place, or resize it. |
+| On-Screen Keyboard | Tyoe using the mouse or another pointing device such as a joystick by selecting keys from a picture of a keyboard. |
+| [Accessibility Insights Telemetry](https://github.com/microsoft/accessibility-insights-windows/blob/main/docs/TelemetryOverview.md#control-of-telemery) | "Accessibility Insights for Windows uses telemetry to better understand what features are most helpful to users, as well as to help identify potential issues that users are experiencing." |
+
+# Disable Windows Search
+
+## Suboptions
+
+| **Suboption** | **Description** |
+| ---- | ---- |
+| **Disable SafeSearch** | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
+| **Prevent Index on Battery** | Prevents Windows from indexing content while running on battery power, saving system resources. |
+| **Disable Index Usage for System File Search** | Disables the use of the index when searching system files, requiring a full scan each time. |
+| **Find Partial Matches** | Allows partial matches to be found when searching for files, enabling more flexible search results. |
+| **Exclude System Directories** | Excludes system directories from search results, narrowing down the search to user files and folders. |
+| **Exclude Archived Files** | Prevents archived files from being included in search results. |
+| **Disable Natural Language Search** | Disables the use of natural language search, which allows more conversational queries for search results. |
+| **Search Only in Indexed Locations** | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
+| **Exclude System Directories** | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
+| **Exclude Compressed Files** | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
+| **Search Only in Indexed Locations** | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
+| [**Disallow Indexing of Encrypted Items**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#allowindexingencryptedstoresoritems) | This policy setting allows encrypted items to be indexed. |
+| [**Disable Language Detection**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#alwaysuseautolangdetection) | This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. |
+| [**Prevent Querying Index Remotely**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#preventremotequeries) | If enabled, clients will be unable to query this computer's index remotely. Thus, when they're browsing network shares that are stored on this computer, they won't search them using the index. If disabled, client search requests will use this computer's index. |
+| [**Disable Web Results in Search**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
+| **Disable Search Highlights** | If enabled: "See content suggestions in the search boxi and in search home". |
+| **Disable Web Search** | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
+
+## Search Indexing
+
+[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
+
+Instead of using the explorer to search for a file or folder, use [`Everything`](https://www.voidtools.com/downloads/), it's a lot faster.
+
+The `WSearch` service is needed for CmdPals `File Search` extension to work.
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "PreventRemoteQueries",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "4OrLater - Any version of Microsoft Windows with Windows Search 4.0 or later",
+  "DisplayName": "Prevent clients from querying the index remotely",
+  "ExplainText": "If enabled, clients will be unable to query this computer's index remotely. Thus, when they are browsing network shares that are stored on this computer, they will not search them using the index. If disabled, client search requests will use this computer's index. Default is disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "PreventRemoteQueries",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "PreventIndexOnBattery",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "301OrLater - Microsoft Windows XP, Windows Server 2003 with Windows Search version 3.01, or any version of Microsoft Windows with Windows Search 4.0 or later",
+  "DisplayName": "Prevent indexing when running on battery power to conserve energy",
+  "ExplainText": "If enabled, the indexer pauses whenever the computer is running on battery. If disabled, the indexing follows the default behavior. Default is disabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "PreventIndexOnBattery",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "AlwaysUseAutoLangDetection",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "Win8Only - Microsoft Windows 8 or later",
+  "DisplayName": "Always use automatic language detection when indexing content and properties",
+  "ExplainText": "This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. If you enable this policy setting, Windows will always use automatic language detection to index (as it did in Windows 7). Using automatic language detection can increase memory usage. We recommend enabling this policy setting only on PCs where documents are stored in many languages. If you disable or do not configure this policy setting, Windows will use automatic language detection only when it can determine the language of a document with high confidence.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "AlwaysUseAutoLangDetection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "DoNotUseWebResults",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "WinBlueOnly - Microsoft Windows 8.1 or later",
+  "DisplayName": "Don't search the web or display web results in Search",
+  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web, and if the web results are displayed in Search.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "ConnectedSearchUseWeb",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "DoNotUseWebResultsOnMeteredConnections",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "WinBlueExclusive - Microsoft Windows 8.1. Not supported on Windows 10 or later",
+  "DisplayName": "Don't search the web or display web results in Search over metered connections",
+  "ExplainText": "This policy setting allows you to control whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. If you enable this policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search. If you disable this policy setting, queries will be performed on the web over metered connections and web results will be displayed when a user performs a query in Search. If you don't configure this policy setting, a user can choose whether or not Search can perform queries on the web over metered connections, and if the web results are displayed in Search. Note: If you enable the \"Don't search the web or display web results in Search\" policy setting, queries won't be performed on the web over metered connections and web results won't be displayed when a user performs a query in Search.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "ConnectedSearchUseWebOverMeteredConnections",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "0" },
+    { "Type": "DisabledValue", "Data": "1" }
+  ]
+},
+{
+  "File": "Search.admx",
+  "CategoryName": "Search",
+  "PolicyName": "DisableWebSearch",
+  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
+  "Supported": "RedistOnly - Microsoft Windows XP, or Windows Server 2003 with Windows Search version 3.01 or later",
+  "DisplayName": "Do not allow web search",
+  "ExplainText": "Enabling this policy removes the option of searching the Web from Windows Desktop Search. When this policy is disabled or not configured, the Web option is available and users can search the Web via their default browser search engine.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
+  ],
+  "ValueName": "DisableWebSearch",
+  "Elements": []
+}
+```
+
+## Miscellaneous Notes
+
+Exists in [Search Policies](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search), but isn't present anymore on 24H2 and probably versions above.
+
+```c
+// Disabling this setting turns off search highlights in the start menu search box and in search home. Enabling or not configuring this setting turns on search highlights in the start menu search box and in search home.
+"Disable Search Highlights": {
+  "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search": {
+    "EnableDynamicContentInWSB": { "Type": "REG_DWORD", "Data": 0 }
+  }
+}
+```
+
+It probably got replaced by:
+```c
+// Privacy & security > Search - Show search highlights
+SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+# HAGS
+
+[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) feature is introduced specifically for the WDDM. If disabled the CPU manages the GPU scheduling via a high-priority kernel thread, GPU context switches and task scheduling are handled by the CPU (CPU offloads graphics intensive tasks to the GPU for rendering). If enabled the GPU handles its own scheduling using a built in scheduler processor, context switching between GPU tasks is done directly on the GPU. It is especially beneficial, if you've a slow CPU, or if the CPU is heavily loaded with other tasks.
+
+"It depends on your hardware, if you want [HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) to be enabled or not. E.g if using a old GPU, it may not fully support the new scheduler."
+
+[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) should be enabled.
+
+## SystemSettings Records
+
+```c
+// Enabled
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 2
+```
+```c
+// Disabled
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+# Enable FSO
+
+This isn't accurate nor complete yet, it's preferable to disable FSO per application via the compability section if doing so. Disabling this option won't revert the changes like all other ones do, it'll disable FSO.
+
+See [demystifying-full-screen-optimizations](https://devblogs.microsoft.com/directx/demystifying-full-screen-optimizations/)/[SwapChain](https://wiki.special-k.info/en/SwapChain)/[PresentationModel](https://wiki.special-k.info/Presentation_Model) for some details.
+
+## ResourcePolicyServer
+
+All values I found that are `GameDVR` related in `ResourcePolicyServer.dll`:
+```c
+GameDVR_DXGIHonorFSEWindowsCompatible
+GameDVR_EFSEFeatureFlags
+GameDVR_FSEBehavior
+GameDVR_FSEBehaviorMode
+GameDVR_HonorUserFSEBehaviorMode
+```
+
+`GameDVR_DSEBehavior` doesn't exist on my current system.
+
+## Compability Captures
+
+Disable/enable FSO for a specific application via `Properties > Compatibility > Change settings for all users` - `Disable fullscreen optimizations` or do it per user one step before.
+
+```c
+// User
+HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
+
+// Machine
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\C:\Program Files (x86)\Steam\steamapps\common\Battlefield 6\bf6.exe	Type: REG_SZ, Length: 66, Data: ~ DISABLEDXMAXIMIZEDWINDOWEDMODE
+```
+
+# Disable Memory Compression
+
+Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
+
+Compressed pages are stored in a dedicated "Memory Compression" process managed by the Store Manager. The memory manager compresses modified list pages into that store and later decompresses them on demand, this is enabled by default on client SKUs.
+
+Example:  
+1. System looks for cold/rarely used data in RAM
+2. It compresses that data, e.g. 24 MB -> 7 MB
+3. The 17 MB saved is used for active apps
+4. When the data is needed again, it's decompressed back to 24 MB
+
+See the current memory compression state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
+```powershell
+Get-MMAgent
+```
+```powershell
+ApplicationLaunchPrefetching : True
+ApplicationPreLaunch         : True
+MaxOperationAPIFiles         : 512
+MemoryCompression            : True # Enabled
+OperationAPI                 : True
+PageCombining                : True
+PSComputerName               :
+```
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
+
+# Disable Page Combining
+
+Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
+
+The memory manager can be instructed to combine identical pages across the system, and Superfetch can trigger combining when the system is idle.
+
+> "*Page combining can be disabled by setting a DWORD value named `DisablePageCombining` to `1` in the `HKLM\System\CurrentControlSet\Control\Session Manager\Memory Management` registry key.*"
+>
+> — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+`Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
+
+```c
+INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
+INIT:0000000140B9C348                 dq offset aDisablepagecom ; "DisablePageCombining"
+INIT:0000000140B9C350                 dq offset dword_140D1D1C8
+
+ALMOSTRO:0000000140D1D1C8 dword_140D1D1C8 dd 0                    ; DATA XREF: MiCombineIdenticalPages:loc_1407F7E3A↑r
+```
+
+See the current page combining state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
+```powershell
+Get-MMAgent
+```
+```powershell
+ApplicationLaunchPrefetching : True
+ApplicationPreLaunch         : True
+MaxOperationAPIFiles         : 512
+MemoryCompression            : True
+OperationAPI                 : True
+PageCombining                : True # Enabled
+PSComputerName               :
+```
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb4.png?raw=true)
+
+# SCM Autostart Delay
+
+Windows marks some services as delayed autostart to reduce boot contention. The Service Control Manager (SCM) waits before starting those services, the default delay is 120 seconds as shown below.
+
+[Windows Internals (E7, P2)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) puts this in the middle of the SCM boot sequence, so the delay only applies after normal autostart processing finishes.
+
+1. SCM loops through service groups and starts autostart services, relooping groups until dependencies (DependOnService) are satisfied
+2. It ignores Tag values for Windows services (Tag ordering is used by the I/O manager for boot/system-start drivers)
+3. Once all groups listed in ServiceGroupOrder\\List are processed, it runs groups not listed there, then services without a group
+4. After that, SCM calls ScInitDelayStart to queue a delayed work item for services marked DelayedAutostart
+
+The delayed work item runs on a worker thread after the delay expires and performs the same actions as a normal autostart service start. The delay is a single global value 120000 ms, but it can be overridden.
+
+Autostart services were originally meant for early boot dependencies (for example RPC), but many services are autostart only to run unattended after boot (for example update services). Marking these as delayed autostart lets critical services start faster and makes the desktop responsive sooner right after logon. Delayed autostart services are also started in background mode, which lowers their thread, I/O, and memory priority.
+
+If a non delayed autostart service depends on a delayed autostart service, the delayed flag is ignored and the service is started immediately to satisfy the dependency.
+
+When SCM finishes starting autostart services/drivers and schedules the delayed autostart work item, it signals \\BaseNamedObjects\\SC_AutoStartComplete.
+
+```c
+__int64 __fastcall CDelayStartContext::GetAutostartDelay(CDelayStartContext *this, __int64 a2, unsigned int a3)
+{
+  unsigned int v3; // ebx
+  unsigned int v4; // eax
+  int v7; // [rsp+40h] [rbp+8h] BYREF
+  unsigned int v9; // [rsp+48h] [rbp+10h] BYREF
+  unsigned int v10; // [rsp+50h] [rbp+18h] BYREF
+  HANDLE Handle; // [rsp+58h] [rbp+20h] BYREF
+
+  Handle = 0LL;
+  v3 = 120000;
+  v7 = 120000;
+  v9 = 4;
+  v4 = ScRegOpenKeyExW(HKEY_LOCAL_MACHINE, L"System\\CurrentControlSet\\Control", a3, 0x20019u, (HKEY *)&Handle);
+  if ( v4 )
+  {
+    //...
+  }
+  else
+  {
+    if ( !ScRegQueryValueExW((HKEY)Handle, L"AutostartDelay", 0LL, &v10, (unsigned __int8 *)&v7, &v9) && v10 == 4 )
+      v3 = v7;
+  }
+  return v3;
+}
+```
+
+## EnableAutostartEvents Notes
+
+Note on a different option which I didn't implement (this information is based on [Windows Internals E7 P2](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf), P448-449):
+
+By default the SCM logs events for services that start automatically at boot, which can flood the System event log. Setting this value to 0 suppresses autostart event logging while still keeping normal service start/stop/pause events. Read by SCM at startup = requires reboot to take effect.
+
+"Note that the Service Control Manager by default logs all the events generated by services started automatically at system startup. This can generate an undesired number of events flooding the System event log. To mitigate the problem, you can disable SCM autostart events by creating a registry value named EnableAutostartEvents in the HKLM\System\CurrentControlSet\ Control key and set it to 0 (the default implicit value is 1 in both client and server SKUs). As a result, this will log only events generated by service applications when starting, pausing, or stopping a target service."
+
+I didn't see any differences in the Event Viewer between setting them to `0`/`1` on my current system and on a 25H2 VM. The value exists and gets read:
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control : EnableAutostartEvents
+```
+```c
+void __fastcall ScCheckAutostartEventsEnabled(__int64 a1, __int64 a2, unsigned int a3)
+{
+  unsigned int v3; // eax
+  unsigned int *v4; // r8
+  int v6; // [rsp+40h] [rbp+8h] BYREF
+  unsigned int v7; // [rsp+48h] [rbp+10h] BYREF
+  unsigned int v8; // [rsp+50h] [rbp+18h] BYREF
+  HANDLE Handle; // [rsp+58h] [rbp+20h] BYREF
+
+  v6 = 0;
+  Handle = 0LL;
+  v7 = 4;
+  v3 = ScRegOpenKeyExW(HKEY_LOCAL_MACHINE, L"System\\CurrentControlSet\\Control", a3, 0x20019u, (HKEY *)&Handle);
+  if ( v3 )
+  {
+    //...
+  }
+  else if ( !ScRegQueryValueExW((HKEY)Handle, L"EnableAutostartEvents", v4, &v8, (unsigned __int8 *)&v6, &v7) && v8 == 4 )
+  {
+    g_fEnableAutostartEvents = v6 != 0;
+  }
+}
+```
+```json
+"Disable Autostart Events": {
+  "apply": {
+    "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
+      "EnableAutostartEvents": { "Type": "REG_DWORD", "Data": 0 }
+    }
+  },
+  "revert": {
+    "HKLM\\SYSTEM\\CurrentControlSet\\Control": {
+      "EnableAutostartEvents": { "Action": "deletevalue" }
+    }
+  }
+},
+```
+
+# Time Zone
+
+| ID                              | Display Name                                                  | ID                              | Display Name                                              |
+| ------------------------------- | ------------------------------------------------------------- | ------------------------------- | --------------------------------------------------------- |
+| Afghanistan Standard Time       | (UTC+04:30) Kabul                                             | Alaskan Standard Time           | (UTC-09:00) Alaska                                        |
+| Aleutian Standard Time          | (UTC-10:00) Aleutian Islands                                  | Altai Standard Time             | (UTC+07:00) Barnaul, Gorno-Altaysk                        |
+| Arab Standard Time              | (UTC+03:00) Kuwait, Riyadh                                    | Arabian Standard Time           | (UTC+04:00) Abu Dhabi, Muscat                             |
+| Arabic Standard Time            | (UTC+03:00) Baghdad                                           | Argentina Standard Time         | (UTC-03:00) City of Buenos Aires                          |
+| Astrakhan Standard Time         | (UTC+04:00) Astrakhan, Ulyanovsk                              | Atlantic Standard Time          | (UTC-04:00) Atlantic Time (Canada)                        |
+| AUS Central Standard Time       | (UTC+09:30) Darwin                                            | Aus Central W. Standard Time    | (UTC+08:45) Eucla                                         |
+| AUS Eastern Standard Time       | (UTC+10:00) Canberra, Melbourne, Sydney                       | Azerbaijan Standard Time        | (UTC+04:00) Baku                                          |
+| Azores Standard Time            | (UTC-01:00) Azores                                            | Bahia Standard Time             | (UTC-03:00) Salvador                                      |
+| Bangladesh Standard Time        | (UTC+06:00) Dhaka                                             | Belarus Standard Time           | (UTC+03:00) Minsk                                         |
+| Bougainville Standard Time      | (UTC+11:00) Bougainville Island                               | Canada Central Standard Time    | (UTC-06:00) Saskatchewan                                  |
+| Cape Verde Standard Time        | (UTC-01:00) Cabo Verde Is.                                    | Caucasus Standard Time          | (UTC+04:00) Yerevan                                       |
+| Cen. Australia Standard Time    | (UTC+09:30) Adelaide                                          | Central America Standard Time   | (UTC-06:00) Central America                               |
+| Central Asia Standard Time      | (UTC+06:00) Nur-Sultan                                        | Central Brazilian Standard Time | (UTC-04:00) Cuiaba                                        |
+| Central Europe Standard Time    | (UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague | Central European Standard Time  | (UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb              |
+| Central Pacific Standard Time   | (UTC+11:00) Solomon Is., New Caledonia                        | Central Standard Time           | (UTC-06:00) Central Time (US & Canada)                    |
+| Central Standard Time (Mexico)  | (UTC-06:00) Guadalajara, Mexico City, Monterrey               | Chatham Islands Standard Time   | (UTC+12:45) Chatham Islands                               |
+| China Standard Time             | (UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi             | Cuba Standard Time              | (UTC-05:00) Havana                                        |
+| Dateline Standard Time          | (UTC-12:00) International Date Line West                      | E. Africa Standard Time         | (UTC+03:00) Nairobi                                       |
+| E. Australia Standard Time      | (UTC+10:00) Brisbane                                          | E. Europe Standard Time         | (UTC+02:00) Chisinau                                      |
+| E. South America Standard Time  | (UTC-03:00) Brasilia                                          | Easter Island Standard Time     | (UTC-06:00) Easter Island                                 |
+| Eastern Standard Time           | (UTC-05:00) Eastern Time (US & Canada)                        | Eastern Standard Time (Mexico)  | (UTC-05:00) Chetumal                                      |
+| Egypt Standard Time             | (UTC+02:00) Cairo                                             | Ekaterinburg Standard Time      | (UTC+05:00) Ekaterinburg                                  |
+| Fiji Standard Time              | (UTC+12:00) Fiji                                              | FLE Standard Time               | (UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius |
+| Georgian Standard Time          | (UTC+04:00) Tbilisi                                           | GMT Standard Time               | (UTC+00:00) Dublin, Edinburgh, Lisbon, London             |
+| Greenland Standard Time         | (UTC-02:00) Greenland                                         | Greenwich Standard Time         | (UTC+00:00) Monrovia, Reykjavik                           |
+| GTB Standard Time               | (UTC+02:00) Athens, Bucharest                                 | Haiti Standard Time             | (UTC-05:00) Haiti                                         |
+| Hawaiian Standard Time          | (UTC-10:00) Hawaii                                            | India Standard Time             | (UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi           |
+| Iran Standard Time              | (UTC+03:30) Tehran                                            | Israel Standard Time            | (UTC+02:00) Jerusalem                                     |
+| Jordan Standard Time            | (UTC+03:00) Amman                                             | Kaliningrad Standard Time       | (UTC+02:00) Kaliningrad                                   |
+| Kamchatka Standard Time         | (UTC+12:00) Petropavlovsk-Kamchatsky - Old                    | Korea Standard Time             | (UTC+09:00) Seoul                                         |
+| Libya Standard Time             | (UTC+02:00) Tripoli                                           | Line Islands Standard Time      | (UTC+14:00) Kiritimati Island                             |
+| Lord Howe Standard Time         | (UTC+10:30) Lord Howe Island                                  | Magadan Standard Time           | (UTC+11:00) Magadan                                       |
+| Magallanes Standard Time        | (UTC-03:00) Punta Arenas                                      | Marquesas Standard Time         | (UTC-09:30) Marquesas Islands                             |
+| Mauritius Standard Time         | (UTC+04:00) Port Louis                                        | Mid-Atlantic Standard Time      | (UTC-02:00) Mid-Atlantic - Old                            |
+| Middle East Standard Time       | (UTC+02:00) Beirut                                            | Montevideo Standard Time        | (UTC-03:00) Montevideo                                    |
+| Morocco Standard Time           | (UTC+01:00) Casablanca                                        | Mountain Standard Time          | (UTC-07:00) Mountain Time (US & Canada)                   |
+| Mountain Standard Time (Mexico) | (UTC-07:00) La Paz, Mazatlan                                  | Myanmar Standard Time           | (UTC+06:30) Yangon (Rangoon)                              |
+| N. Central Asia Standard Time   | (UTC+07:00) Novosibirsk                                       | Namibia Standard Time           | (UTC+02:00) Windhoek                                      |
+| Nepal Standard Time             | (UTC+05:45) Kathmandu                                         | New Zealand Standard Time       | (UTC+12:00) Auckland, Wellington                          |
+| Newfoundland Standard Time      | (UTC-03:30) Newfoundland                                      | Norfolk Standard Time           | (UTC+11:00) Norfolk Island                                |
+| North Asia East Standard Time   | (UTC+08:00) Irkutsk                                           | North Asia Standard Time        | (UTC+07:00) Krasnoyarsk                                   |
+| North Korea Standard Time       | (UTC+09:00) Pyongyang                                         | Omsk Standard Time              | (UTC+06:00) Omsk                                          |
+| Pacific SA Standard Time        | (UTC-04:00) Santiago                                          | Pacific Standard Time           | (UTC-08:00) Pacific Time (US & Canada)                    |
+| Pacific Standard Time (Mexico)  | (UTC-08:00) Baja California                                   | Pakistan Standard Time          | (UTC+05:00) Islamabad, Karachi                            |
+| Paraguay Standard Time          | (UTC-04:00) Asuncion                                          | Qyzylorda Standard Time         | (UTC+05:00) Qyzylorda                                     |
+| Romance Standard Time           | (UTC+01:00) Brussels, Copenhagen, Madrid, Paris               | Russia Time Zone 10             | (UTC+11:00) Chokurdakh                                    |
+| Russia Time Zone 11             | (UTC+12:00) Anadyr, Petropavlovsk-Kamchatsky                  | Russia Time Zone 3              | (UTC+04:00) Izhevsk, Samara                               |
+| Russian Standard Time           | (UTC+03:00) Moscow, St. Petersburg                            | SA Eastern Standard Time        | (UTC-03:00) Cayenne, Fortaleza                            |
+| SA Pacific Standard Time        | (UTC-05:00) Bogota, Lima, Quito, Rio Branco                   | SA Western Standard Time        | (UTC-04:00) Georgetown, La Paz, Manaus, San Juan          |
+| Sakhalin Standard Time          | (UTC+11:00) Sakhalin                                          | Saint Pierre Standard Time      | (UTC-03:00) Saint Pierre and Miquelon                     |
+| Samoa Standard Time             | (UTC+13:00) Samoa                                             | Sao Tome Standard Time          | (UTC+00:00) Sao Tome                                      |
+| Saratov Standard Time           | (UTC+04:00) Saratov                                           | SE Asia Standard Time           | (UTC+07:00) Bangkok, Hanoi, Jakarta                       |
+| Singapore Standard Time         | (UTC+08:00) Kuala Lumpur, Singapore                           | South Africa Standard Time      | (UTC+02:00) Harare, Pretoria                              |
+| South Sudan Standard Time       | (UTC+02:00) Juba                                              | Sri Lanka Standard Time         | (UTC+05:30) Sri Jayawardenepura                           |
+| Sudan Standard Time             | (UTC+02:00) Khartoum                                          | Syria Standard Time             | (UTC+03:00) Damascus                                      |
+| Taipei Standard Time            | (UTC+08:00) Taipei                                            | Tasmania Standard Time          | (UTC+10:00) Hobart                                        |
+| Tocantins Standard Time         | (UTC-03:00) Araguaina                                         | Tokyo Standard Time             | (UTC+09:00) Osaka, Sapporo, Tokyo                         |
+| Tomsk Standard Time             | (UTC+07:00) Tomsk                                             | Tonga Standard Time             | (UTC+13:00) Nuku'alofa                                    |
+| Transbaikal Standard Time       | (UTC+09:00) Chita                                             | Turkey Standard Time            | (UTC+03:00) Istanbul                                      |
+| Turks And Caicos Standard Time  | (UTC-05:00) Turks and Caicos                                  | Ulaanbaatar Standard Time       | (UTC+08:00) Ulaanbaatar                                   |
+| US Eastern Standard Time        | (UTC-05:00) Indiana (East)                                    | US Mountain Standard Time       | (UTC-07:00) Arizona                                       |
+| UTC                             | (UTC) Coordinated Universal Time                              | UTC+12                          | (UTC+12:00) Coordinated Universal Time+12                 |
+| UTC+13                          | (UTC+13:00) Coordinated Universal Time+13                     | UTC-02                          | (UTC-02:00) Coordinated Universal Time-02                 |
+| UTC-08                          | (UTC-08:00) Coordinated Universal Time-08                     | UTC-09                          | (UTC-09:00) Coordinated Universal Time-09                 |
+| UTC-11                          | (UTC-11:00) Coordinated Universal Time-11                     | Venezuela Standard Time         | (UTC-04:00) Caracas                                       |
+| Vladivostok Standard Time       | (UTC+10:00) Vladivostok                                       | Volgograd Standard Time         | (UTC+03:00) Volgograd                                     |
+| W. Australia Standard Time      | (UTC+08:00) Perth                                             | W. Central Africa Standard Time | (UTC+01:00) West Central Africa                           |
+| W. Europe Standard Time         | (UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna  | W. Mongolia Standard Time       | (UTC+07:00) Hovd                                          |
+| West Asia Standard Time         | (UTC+05:00) Ashgabat, Tashkent                                | West Bank Standard Time         | (UTC+02:00) Gaza, Hebron                                  |
+| West Pacific Standard Time      | (UTC+10:00) Guam, Port Moresby                                | Yakutsk Standard Time           | (UTC+09:00) Yakutsk                                       |
+| Yukon Standard Time             | (UTC-07:00) Yukon                                             |                                 |                                                           |
+
+Get a list of available timezones with more detail via:
+```powershell
+Get-TimeZone -ListAvailable
+```
+
+# Display Scaling
+
+Changes the size of text, apps, and other items. Note that on laptops the default display scaling might not be `100%`. You can set a custom scaling size via `System > Display > Custom scaling`:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/displayscaling.png?raw=true)
+
+## SystemSettings Captures
+
+```c
+// 100%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+
+// 125%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+
+// 150%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+
+// 175%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+
+// 200%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+
+// 225%
+SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\MONITORID\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+```
+
+## Suboption
+
+`Prevent Window Minimization on Monitor Disconnection` disables `Minimize windows then a monitor is diconnected` (`System > Display`).
+
+```c
+// Enabled
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 0
+
+// Disabled
+SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+# Reduce Shutdown Time
+
+Forces hung apps and services to terminate faster.
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control : WaitToKillServiceTimeout
+\Registry\User\S-ID\Control Panel\Desktop : WaitToKillTimeout
+\Registry\User\S-ID\Control Panel\Desktop : HungAppTimeout
+\Registry\User\S-ID\Control Panel\Desktop : AutoEndTasks
+```
+`HungAppTimeout`-> `1500` (`1.5` sec; default is `5` sec)
+`WaitToKillTimeout`-> `2500` (`2.5` sec)
+`WaitToKillServiceTimeout`-> `2500` (`2.5` sec; default is `5` sec)
+`WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000` (`20` sec))
+
+More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
+
+# Detailed Verbose Messages
+
+Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
+
+> "*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
+>
+> — Microsoft, [Verbose startup, shutdown, logon, and logoff status messages](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages)
+
+> "*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
+>
+> — Windows Security Encyclopedia, [Display highly detailed status messages](https://www.windows-security.org/b74176eebf20a72c6e9cf193ddcedeb7/display-highly-detailed-status-messages)
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "Logon.admx",
+  "CategoryName": "System",
+  "PolicyName": "VerboseStatus",
+  "NameSpace": "Microsoft.Policies.WindowsLogon",
+  "Supported": "Win2k - At least Windows 2000",
+  "DisplayName": "Display highly detailed status messages",
+  "ExplainText": "This policy setting directs the system to display highly detailed status messages. This policy setting is designed for advanced users who require this information. If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"\"Remove Boot/Shutdown/Logon/Logoff status messages\"\" policy setting is enabled.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "VerboseStatus",
+  "Elements": []
+}
+```
+
+# Disable JPEG Reduction
+
+Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the option switch.
+
+### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
+
+```c
+if ( JPEGImportQuality not present or error )
+    v54 = 85.0f;
+else
+    v54 = max(JPEGImportQuality, 60.0f);
+    if (v54 > 100.0f)
+        v54 = 100.0f;
+```
+Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
+
+# Disable Prefetch & Superfetch
+
+Disables prefetcher (includes disabling [`ApplicationLaunchPrefetching` & `ApplicationPreLaunch`](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)) features, used to speed up the boot process and application startup by preloading data - **shouldn't be disabled**, leaving it for documentation reasons. Read through the pictures for more detailed information.
+
+The prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
+
+## Value Meanings
+
+- [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
+- [`EnableSuperfetch`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
+- `SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search.
+- `EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
+
+```
+0 - Disables Prefetch
+1 - Enables Prefetch when the application starts
+2 - Enables Prefetch when the device starts up
+3 - Enables Prefetch when the application or device starts up
+```
+The same applies to superfetch.
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch4.png?raw=true)
+
+# Disable Clipboard
+
+If you copy or cut something it gets stored to your clipboard.
+
+Miscellaneous notes:
+```c 
+"HKLM\SOFTWARE\Microsoft\Clipboard\ClipboardSvcDebugWaitInSec","Length: 16"
+"HKLM\SOFTWARE\Microsoft\Clipboard\IsClipboardSignalProducingFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
+"HKLM\SOFTWARE\Microsoft\Clipboard\IsCloudAndHistoryFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
+
+"HKCU\Software\Microsoft\Clipboard\ClipboardTipRequired","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudClipRDPOverride","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudClipboardAutomaticUpload","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudContentRemoteOverrideValueWindowInSec","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\CloudContentValueWindowInSec","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\DoubleCopyGestureEnabled","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\EnableClipboardHistory","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\PastedFromClipboardUI","Length: 16"
+"HKCU\Software\Microsoft\Clipboard\ShellHotKeyUsed","Length: 16"
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "OSPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "AllowCrossDeviceClipboard",
+  "NameSpace": "Microsoft.Policies.OSPolicy",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Clipboard synchronization across devices",
+  "ExplainText": "This policy setting determines whether Clipboard contents can be synchronized across devices. If you enable this policy setting, Clipboard contents are allowed to be synchronized across devices logged in under the same Microsoft account or Azure AD account. If you disable this policy setting, Clipboard contents cannot be shared to other devices. Policy change takes effect immediately.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "AllowCrossDeviceClipboard",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "OSPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "AllowClipboardHistory",
+  "NameSpace": "Microsoft.Policies.OSPolicy",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Allow Clipboard History",
+  "ExplainText": "This policy setting determines whether history of Clipboard contents can be stored in memory. If you enable this policy setting, history of Clipboard contents are allowed to be stored. If you disable this policy setting, history of Clipboard contents are not allowed to be stored. Policy change takes effect immediately.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "AllowClipboardHistory",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "TerminalServer.admx",
+  "CategoryName": "TS_REDIRECTION",
+  "PolicyName": "TS_CLIENT_CLIPBOARD",
+  "NameSpace": "Microsoft.Policies.TerminalServer",
+  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
+  "DisplayName": "Do not allow Clipboard redirection",
+  "ExplainText": "This policy setting specifies whether to prevent the sharing of Clipboard contents (Clipboard redirection) between a remote computer and a client computer during a Remote Desktop Services session. You can use this setting to prevent users from redirecting Clipboard data to and from the remote computer and the local computer. By default, Remote Desktop Services allows Clipboard redirection. If you enable this policy setting, users cannot redirect Clipboard data. If you disable this policy setting, Remote Desktop Services always allows Clipboard redirection. If you do not configure this policy setting, Clipboard redirection is not specified at the Group Policy level.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services"
+  ],
+  "ValueName": "fDisableClip",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsSandbox.admx",
+  "CategoryName": "WindowsSandbox",
+  "PolicyName": "AllowClipboardRedirection",
+  "NameSpace": "Microsoft.Policies.WindowsSandbox",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Allow clipboard sharing with Windows Sandbox",
+  "ExplainText": "This policy setting enables or disables clipboard sharing with the sandbox. If you enable this policy setting, copy and paste between the host and Windows Sandbox are permitted. If you disable this policy setting, copy and paste in and out of Sandbox will be restricted. If you do not configure this policy setting, clipboard sharing will be enabled.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
+  ],
+  "ValueName": "AllowClipboardRedirection",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Enable Detailed BSoD
+
+| Aspect                    | New BSoD (Windows 8/10/11)                      | Old BSoD (Windows 7/classic)                                                      |
+| ------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------- |
+| Main look                 | Big blue screen, sad face, simple text, QR code | Plain blue text screen, no icons                                                  |
+| Stop code shown           | e.g. CRITICAL_PROCESS_DIED                      | e.g. STOP 0x0000007E                                                              |
+| Hex parameters            | Hidden                                          | Shown: (0x00000000, 0x00000000...)                                                |
+| Faulty driver/module name | Hidden                                          | Often shown (e.g. nvlddmkm.sys)                                                   |
+| Extra help                | QR code + link                                  | Text-only advice                                                                  |
+| Purpose                   | Less scary, easier to tell support the code     | See the actual debug information                                                  |
+
+Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0` ("The option specifies that Windows automatically restarts your computer").
+
+# Disable Autoruns
+
+The `Open` buttons downloads & executes [`Autoruns`](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns). It's recommended to disable all kind of autoruns in the `Logon` section that you don't need, examples:
+```c
+OneDrive
+Spotify
+Discord
+Steam
+WingetUI
+Lghub
+SecurityHealth
+
+Microsoft Edge // preferable remove edge from the mounted image, otherwise it'll create keys/values in many different places
+```
+
+Try to minimize the amount of applications that run automatically on system startup. You can go through the other sections, but this option was created for the `Logon` section, see `Disable Scheduled Tasks`/`Disable Services`.
+
+See your current autoruns of installed apps:
+```powershell
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+```
+```powershell
+HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+```
+
+# Export Explorer/Taskbar Pins
+
+Can be useful when creating your own image and trying to automate the installation and configuration part.
+
+### Quick Access Pins
+
+Quick access pins are saved in a file named `f01b4d95cf55d32a.automaticDestinations-ms`, located at:
+```bat
+%appdata%\Microsoft\Windows\Recent\AutomaticDestinations
+```
+You can either terminate `explorer` while copying it to the path, or just restart it afterwards.
+```bat
+copy /y ".\f01b4d95cf55d32a.automaticDestinations-ms" "%appdata%\Microsoft\Windows\Recent\AutomaticDestinations"
+```
+
+### Taskbar Pins
+
+Taskbar pins are saved in a folder and a key, the folder includes the shortcuts:
+```bat
+%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar
+```
+```powershell
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Taskband # Only "Favorites" is needed
+```
+
+Post install example (copy the `TaskBar` folder to any folder):
+```powershell
+del "$env:appdata\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" -Recurse -Force
+xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar" /e /i /y
+```
+
+The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
+
+# Disable Aero Shake
+
+Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
+
+`SystemSettings > System > Multitasking: Title bar window shake`.
+
+![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "Desktop.admx",
+  "CategoryName": "Desktop",
+  "PolicyName": "NoWindowMinimizingShortcuts",
+  "NameSpace": "Microsoft.Policies.WindowsDesktop",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Turn off Aero Shake window minimizing mouse gesture",
+  "ExplainText": "Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse. If you enable this policy, application windows will not be minimized or restored when the active window is shaken back and forth with the mouse. If you disable or do not configure this policy, this window minimizing and restoring gesture will apply.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "NoWindowMinimizingShortcuts",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# App Archive
+
+"Automatically archive your infrequently used apps to save storage and internet bandwidth. Your files and data will still be saved, and the app's full version will be restored on your next use if it's still available."
+
+If enabled, the system will periodically check for such infrequently used apps. By default app archiving is turned on.
+
+## SystemSettings Records
+
+Toggling the option via `Apps > Advanced app settings`:
+```c
+// On
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 1
+
+// Off
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 0
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "AppxPackageManager.admx",
+  "CategoryName": "AppxDeployment",
+  "PolicyName": "AllowAutomaticAppArchiving",
+  "NameSpace": "Microsoft.Policies.Appx",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Archive infrequently used apps",
+  "ExplainText": "This policy setting controls whether the system can archive infrequently used apps. If you enable this policy setting, then the system will periodically check for and archive infrequently used apps. If you disable this policy setting, then the system will not archive any apps. If you do not configure this policy setting (default), then the system will follow default behavior, which is to periodically check for and archive infrequently used apps, and the user will be able to configure this setting themselves.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Appx"
+  ],
+  "ValueName": "AllowAutomaticAppArchiving",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable Mobility Center
+
+Note that this is a laptop only feature. The "Mobility Center" is a feature that includes controls for screen brightness, power options, volume, battery status, wireless network status, external display settings, and more.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mobility-center.png?raw=true)
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "MobilePCMobilityCenter.admx",
+  "CategoryName": "MobilityCenterCat",
+  "PolicyName": "MobilityCenterEnable_2",
+  "NameSpace": "Microsoft.Policies.MobilePCMobilityCenter",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Turn off Windows Mobility Center",
+  "ExplainText": "This policy setting turns off Windows Mobility Center. If you enable this policy setting, the user is unable to invoke Windows Mobility Center. The Windows Mobility Center UI is removed from all shell entry points and the .exe file does not launch it. If you disable this policy setting, the user is able to invoke Windows Mobility Center and the .exe file launches it. If you do not configure this policy setting, Windows Mobility Center is on by default.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\MobilityCenter"
+  ],
+  "ValueName": "NoMobilityCenter",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```

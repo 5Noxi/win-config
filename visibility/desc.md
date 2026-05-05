@@ -1,88 +1,3 @@
-# Pointer Style
-
-Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`. The first three are controlled by `CursorType`, custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string. Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
-
-## Installing Custom Cursors
-
-If you want a full custom cursor pack instead of Windows built in white, black, inverted, or recolored accessibility cursors, you can install one from diffrenrent sources such as [vsthemes.org](https://vsthemes.org/en/cursors/).
-
-1. Download and extract the pack
-2. Copy the pack files into `%SystemRoot%\Cursors\<Pack Name>` if you want to keep them in the standard system cursor location
-3. Open `main.cpl`, go to the `Pointers` tab, select a cursor role, click `Browse`, and pick the downloaded `.cur` or `.ani` file
-
-## Cursor Previews
-
-| Name | Preview |
-|--|--|
-| Custom colors + dark/light/invert | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/defaults.png?raw=true) |
-| [Simplify Dot](https://vsthemes.org/en/cursors/static/47356-simplify-dot-2.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/simplify-dot.webp?raw=true) |
-| [Colloid Dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-dark.webp?raw=true) |
-| [Colloid Light](https://vsthemes.org/en/cursors/white/68371-colloid-light.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-light.webp?raw=true) |
-| [Monolith](https://vsthemes.org/en/cursors/black/70650-monolith.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/monolith.webp?raw=true) |
-| [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
-| [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
-
-## Pointer Style Captures
-
-```c
-// Main style
-// 0 = White, 1 = Black, 2 = Inverted, 6 = Custom color
-HKCU\Software\Microsoft\Accessibility\CursorType	Type: REG_DWORD
-
-// Custom color only (COLORREF format: 0x00bbggrr)
-HKCU\Software\Microsoft\Accessibility\CursorColor	Type: REG_DWORD
-
-// Standard styles use the built in system cursor sets
-HKCU\Control Panel\Cursors\(Default)		Type: REG_SZ
-HKCU\Control Panel\Cursors\Arrow		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\Help		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\AppStarting	Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\Wait		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\Crosshair	Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\IBeam		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\NWPen		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\No		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\SizeNS		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\SizeWE		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\SizeNWSE	Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\SizeNESW	Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\SizeAll		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\UpArrow	Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\Hand		Type: REG_EXPAND_SZ
-HKCU\Control Panel\Cursors\Scheme Source	Type: REG_DWORD
-
-// Custom colored styles use generated peruser cursor files
-HKCU\Control Panel\Cursors\Arrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\arrow_eoa.cur
-HKCU\Control Panel\Cursors\AppStarting // %LOCALAPPDATA%\Microsoft\Windows\Cursors\busy_eoa.cur
-HKCU\Control Panel\Cursors\Crosshair // %LOCALAPPDATA%\Microsoft\Windows\Cursors\cross_eoa.cur
-HKCU\Control Panel\Cursors\Hand // %LOCALAPPDATA%\Microsoft\Windows\Cursors\link_eoa.cur
-HKCU\Control Panel\Cursors\Help // %LOCALAPPDATA%\Microsoft\Windows\Cursors\helpsel_eoa.cur
-HKCU\Control Panel\Cursors\IBeam // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ibeam_eoa.cur
-HKCU\Control Panel\Cursors\No // %LOCALAPPDATA%\Microsoft\Windows\Cursors\unavail_eoa.cur
-HKCU\Control Panel\Cursors\NWPen // %LOCALAPPDATA%\Microsoft\Windows\Cursors\pen_eoa.cur
-HKCU\Control Panel\Cursors\Person // %LOCALAPPDATA%\Microsoft\Windows\Cursors\person_eoa.cur
-HKCU\Control Panel\Cursors\Pin // %LOCALAPPDATA%\Microsoft\Windows\Cursors\pin_eoa.cur
-HKCU\Control Panel\Cursors\SizeAll // %LOCALAPPDATA%\Microsoft\Windows\Cursors\move_eoa.cur
-HKCU\Control Panel\Cursors\SizeNESW // %LOCALAPPDATA%\Microsoft\Windows\Cursors\nesw_eoa.cur
-HKCU\Control Panel\Cursors\SizeNS // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ns_eoa.cur
-HKCU\Control Panel\Cursors\SizeNWSE // %LOCALAPPDATA%\Microsoft\Windows\Cursors\nwse_eoa.cur
-HKCU\Control Panel\Cursors\SizeWE // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ew_eoa.cur
-HKCU\Control Panel\Cursors\UpArrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\up_eoa.cur
-HKCU\Control Panel\Cursors\Wait // %LOCALAPPDATA%\Microsoft\Windows\Cursors\wait_eoa.cur
-HKCU\Control Panel\Cursors\CursorBaseSize	Type: REG_DWORD
-
-// Used custom color DWORDs (these are the predefined ones from SystemSettings)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 16711871	// Pink (0x00FF00BF)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 65471		// Lime (0x0000FFBF)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 64250		// Yellow (0x0000FAFA)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 49151		// Gold (0x0000BFFF)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 12517631	// Pink (0x00BF00FF)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 16760576	// Turquise (0x00FFBF00)
-HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF00)
-```
-
-*Note: when applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).
-
 # Desktop Wallpaper
 
 This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
@@ -272,154 +187,180 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 }
 ```
 
-# Account Picture
+# Pointer Style
 
-Changes the user account picture via:
-```
-C:\ProgramData\Microsoft\Default Account Pictures
-```
+Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`. The first three are controlled by `CursorType`, custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string. Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
 
-### Suboption
+## Installing Custom Cursors
 
-`Global Account Picture`:  
-"This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
+If you want a full custom cursor pack instead of Windows built in white, black, inverted, or recolored accessibility cursors, you can install one from diffrenrent sources such as [vsthemes.org](https://vsthemes.org/en/cursors/).
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+1. Download and extract the pack
+2. Copy the pack files into `%SystemRoot%\Cursors\<Pack Name>` if you want to keep them in the standard system cursor location
+3. Open `main.cpl`, go to the `Pointers` tab, select a cursor role, click `Browse`, and pick the downloaded `.cur` or `.ani` file
 
-```json
-{
-  "File": "Cpls.admx",
-  "CategoryName": "Users",
-  "PolicyName": "UseDefaultTile",
-  "NameSpace": "Microsoft.Policies.ControlPanel2",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Apply the default account picture to all users",
-  "ExplainText": "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture. One application for this policy setting is to standardize the account pictures to a company logo. Note: The default account picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\user.jpg. The default guest picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\guest.jpg. If the default pictures do not exist, an empty frame is displayed. If you enable this policy setting, the default user account picture will display for all users on the system with no customization allowed. If you disable or do not configure this policy setting, users will be able to customize their account pictures.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "UseDefaultTile",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+## Cursor Previews
 
-# Explorer Options
+| Name | Preview |
+|--|--|
+| Custom colors + dark/light/invert | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/defaults.png?raw=true) |
+| [Simplify Dot](https://vsthemes.org/en/cursors/static/47356-simplify-dot-2.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/simplify-dot.webp?raw=true) |
+| [Colloid Dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-dark.webp?raw=true) |
+| [Colloid Light](https://vsthemes.org/en/cursors/white/68371-colloid-light.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-light.webp?raw=true) |
+| [Monolith](https://vsthemes.org/en/cursors/black/70650-monolith.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/monolith.webp?raw=true) |
+| [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
+| [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
 
-It changes every setting, which is shown in the `Folder Options` window. Some are personal preference, see suboptions bellow for customization.
+## Pointer Style Captures
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
-
-## Miscellaneous Notes
-
-```json
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-  "ShellState": { "Type": "REG_BINARY", "Data": "240000003e20000000000000000000000001000000130000000000000042000000" }
-},
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
-  "Settings": { "Type": "REG_BINARY", "Data": "0c0002000a01000060000000" }
-}
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "Desktop.admx",
-  "CategoryName": "Desktop",
-  "PolicyName": "NoDesktop",
-  "NameSpace": "Microsoft.Policies.WindowsDesktop",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Hide and disable all items on the desktop",
-  "ExplainText": "Removes icons, shortcuts, and other default and user-defined items from the desktop, including Briefcase, Recycle Bin, Computer, and Network Locations. Removing icons and shortcuts does not prevent the user from using another method to start the programs or opening the items they represent. Also, see \"Items displayed in Places Bar\" in User Configuration\\Administrative Templates\\Windows Components\\Common Open File Dialog to remove the Desktop icon from the Places Bar. This will help prevent users from saving data to the Desktop.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoDesktop",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "NoRecentDocsHistory",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Do not keep history of recently opened documents",
-  "ExplainText": "Prevents the operating system and installed programs from creating and displaying shortcuts to recently opened documents. If you enable this setting, the system and Windows programs do not create shortcuts to documents opened while the setting is in effect. Also, they retain but do not display existing document shortcuts. The system empties the Recent Items menu on the Start menu, and Windows programs do not display shortcuts at the bottom of the File menu. In addition, the Jump Lists off of programs in the Start Menu and Taskbar do not show lists of recently or frequently used files, folders, or websites. If you disable or do not configure this setting, the system will store and display shortcuts to recently and frequently used files, folders, and websites. Note: The system saves document shortcuts in the user profile in the System-drive\\Users\\User-name\\Recent folder. Also, see the \"Remove Recent Items menu from Start Menu\" and \"Clear history of recently opened documents on exit\" policies in this folder. If you enable this setting but do not enable the \"Remove Recent Items menu from Start Menu\" setting, the Recent Items menu appears on the Start menu, but it is empty. If you enable this setting, but then later disable it or set it to Not Configured, the document shortcuts saved before the setting was enabled reappear in the Recent Items menu and program File menus, and Jump Lists. This setting does not hide or prevent the user from pinning files, folders, or websites to the Jump Lists. See the \"Do not allow pinning items in Jump Lists\" setting. This policy also does not hide Tasks that the application has provided for their Jump List. This setting does not hide document shortcuts displayed in the Open dialog box. See the \"Hide the dropdown list of recent files\" setting. Note: It is a requirement for third-party applications with Windows 2000 or later certification to adhere to this setting.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoRecentDocsHistory",
-  "Elements": []
-},
-{
-  "File": "WindowsConnectNow.admx",
-  "CategoryName": "WCN_Category",
-  "PolicyName": "WCN_DisableWcnUi_2",
-  "NameSpace": "Microsoft.Policies.WindowsConnectNow",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Prohibit access of the Windows Connect Now wizards",
-  "ExplainText": "This policy setting prohibits access to Windows Connect Now (WCN) wizards. If you enable this policy setting, the wizards are turned off and users have no access to any of the wizard tasks. All the configuration related tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device\" are disabled. If you disable or do not configure this policy setting, users can access the wizard tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device.\" The default for this policy setting allows users to access all WCN wizards.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI"
-  ],
-  "ValueName": "DisableWcnUi",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Accent Color
-
-This set's the accent color globally and if `AccentColor` (`HKEY_CURRENT_USER\Software\Noverse`) isn't set via the tool settings yet, this will also directly impact the WinConfig colors.
-
-`Show Accent Color on Start and Taskbar` only works if using dark theme.
-
-Something I noticed while creating the option is that procmon doesn't show the actual used binary data:
 ```c
-// Procmon
-59657CFF4A5468FF3F4859FF353C4AFF // 16
+// Main style
+// 0 = White, 1 = Black, 2 = Inverted, 6 = Custom color
+HKCU\Software\Microsoft\Accessibility\CursorType	Type: REG_DWORD
 
-// After refreshing
-59657CFF4A5468FF3F4859FF353C4AFF2A303BFF1F242CFF111317FF88179800 // 32
+// Custom color only (COLORREF format: 0x00bbggrr)
+HKCU\Software\Microsoft\Accessibility\CursorColor	Type: REG_DWORD
 
-// Procmon
-99EBFF004CC2FF000091F8000078D400
+// Standard styles use the built in system cursor sets
+HKCU\Control Panel\Cursors\(Default)		Type: REG_SZ
+HKCU\Control Panel\Cursors\Arrow		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Help		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\AppStarting	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Wait		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Crosshair	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\IBeam		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\NWPen		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\No		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeNS		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeWE		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeNWSE	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeNESW	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\SizeAll		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\UpArrow	Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Hand		Type: REG_EXPAND_SZ
+HKCU\Control Panel\Cursors\Scheme Source	Type: REG_DWORD
 
-// After refreshing
-99EBFF004CC2FF000091F8000078D4000067C000003E9200001A6800F7630C00
+// Custom colored styles use generated peruser cursor files
+HKCU\Control Panel\Cursors\Arrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\arrow_eoa.cur
+HKCU\Control Panel\Cursors\AppStarting // %LOCALAPPDATA%\Microsoft\Windows\Cursors\busy_eoa.cur
+HKCU\Control Panel\Cursors\Crosshair // %LOCALAPPDATA%\Microsoft\Windows\Cursors\cross_eoa.cur
+HKCU\Control Panel\Cursors\Hand // %LOCALAPPDATA%\Microsoft\Windows\Cursors\link_eoa.cur
+HKCU\Control Panel\Cursors\Help // %LOCALAPPDATA%\Microsoft\Windows\Cursors\helpsel_eoa.cur
+HKCU\Control Panel\Cursors\IBeam // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ibeam_eoa.cur
+HKCU\Control Panel\Cursors\No // %LOCALAPPDATA%\Microsoft\Windows\Cursors\unavail_eoa.cur
+HKCU\Control Panel\Cursors\NWPen // %LOCALAPPDATA%\Microsoft\Windows\Cursors\pen_eoa.cur
+HKCU\Control Panel\Cursors\Person // %LOCALAPPDATA%\Microsoft\Windows\Cursors\person_eoa.cur
+HKCU\Control Panel\Cursors\Pin // %LOCALAPPDATA%\Microsoft\Windows\Cursors\pin_eoa.cur
+HKCU\Control Panel\Cursors\SizeAll // %LOCALAPPDATA%\Microsoft\Windows\Cursors\move_eoa.cur
+HKCU\Control Panel\Cursors\SizeNESW // %LOCALAPPDATA%\Microsoft\Windows\Cursors\nesw_eoa.cur
+HKCU\Control Panel\Cursors\SizeNS // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ns_eoa.cur
+HKCU\Control Panel\Cursors\SizeNWSE // %LOCALAPPDATA%\Microsoft\Windows\Cursors\nwse_eoa.cur
+HKCU\Control Panel\Cursors\SizeWE // %LOCALAPPDATA%\Microsoft\Windows\Cursors\ew_eoa.cur
+HKCU\Control Panel\Cursors\UpArrow // %LOCALAPPDATA%\Microsoft\Windows\Cursors\up_eoa.cur
+HKCU\Control Panel\Cursors\Wait // %LOCALAPPDATA%\Microsoft\Windows\Cursors\wait_eoa.cur
+HKCU\Control Panel\Cursors\CursorBaseSize	Type: REG_DWORD
+
+// Used custom color DWORDs (these are the predefined ones from SystemSettings)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 16711871	// Pink (0x00FF00BF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 65471		// Lime (0x0000FFBF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 64250		// Yellow (0x0000FAFA)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 49151		// Gold (0x0000BFFF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 12517631	// Pink (0x00BF00FF)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 16760576	// Turquise (0x00FFBF00)
+HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF00)
 ```
 
-## SystemSettings Captures
+*Note: when applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).
 
-Changing the color via `Personalization > Colors` sets:
+# Disable Rounded Corners
+
+This currently works via [Win11DisableRoundedCorners](https://github.com/valinet/Win11DisableRoundedCorners) which works fine on [latest version since the function exists/works the same on latest builds](https://www.noverse.dev/bin-diff.html). Note that the revert doesn't run `sfc /scannow` to restore proper file permissions to `uDWM.dll` since it does a lot more than restoring permissions. If you're aware if it, run the command after reverting the option.
+
+It works by overriding the first 8 bytes in the function with `48 C7 C0 00 00 00 00 C3`:
+
 ```c
-// Nord Theme (#2e3440)
-HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3291823178
-HKCU\Software\Microsoft\Windows\DWM\ColorizationAfterglow	Type: REG_DWORD, Length: 4, Data: 3291823178
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentPalette	Type: REG_BINARY, Length: 32, Data: 59 65 7C FF 4A 54 68 FF 3F 48 59 FF 35 3C 4A FF // see note above
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\StartColorMenu	Type: REG_DWORD, Length: 4, Data: 4282069034
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentColorMenu	Type: REG_DWORD, Length: 4, Data: 4283055157
-HKCU\Software\Microsoft\Windows\DWM\AccentColor	Type: REG_DWORD, Length: 4, Data: 4283055157
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\StartColor	Type: REG_DWORD, Length: 4, Data: 4282069034
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\AccentColor	Type: REG_DWORD, Length: 4, Data: 4283055157
-
-// Default Blue
-HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3288365268
-HKCU\Software\Microsoft\Windows\DWM\ColorizationAfterglow	Type: REG_DWORD, Length: 4, Data: 3288365268
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentPalette	Type: REG_BINARY, Length: 32, Data: 99 EB FF 00 4C C2 FF 00 00 91 F8 00 00 78 D4 00
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\StartColorMenu	Type: REG_DWORD, Length: 4, Data: 4290799360
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentColorMenu	Type: REG_DWORD, Length: 4, Data: 4292114432
-HKCU\Software\Microsoft\Windows\DWM\AccentColor	Type: REG_DWORD, Length: 4, Data: 4292114432
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\StartColor	Type: REG_DWORD, Length: 4, Data: 4290799360
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\AccentColor	Type: REG_DWORD, Length: 4, Data: 4292114432
+mov rax, 0; ret // result = 0
 ```
+
+## [GetEffectiveCornerStyle](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-GetEffectiveCornerStyle%40CTopLevelWindow%40%40AEAA-AW4CORNER_STYLE%40%40XZ.c)
+
+That function calculates the effective corner mode, its callers include border/shadow/radius.
+```c
+/*
+ * XREFs of ?GetEffectiveCornerStyle@CTopLevelWindow@@AEAA?AW4CORNER_STYLE@@XZ @ 0x18003AB74
+ * Callers:
+ *     ?GetShadowStyle@CTopLevelWindow@@AEAA?AW4ShadowStyle@CWindowBorder@@XZ @ 0x18001AA04 (-GetShadowStyle@CTopLevelWindow@@AEAA-AW4ShadowStyle@CWindowBorder@@XZ.c)
+ *     ?UpdateWindowVisuals@CTopLevelWindow@@AEAAJXZ @ 0x18003D8E0 (-UpdateWindowVisuals@CTopLevelWindow@@AEAAJXZ.c)
+ *     ?GetRadiusFromCornerStyle@CTopLevelWindow@@AEAAMXZ @ 0x1800E5B98 (-GetRadiusFromCornerStyle@CTopLevelWindow@@AEAAMXZ.c)
+ * Callees:
+ *     IsOpenThemeDataPresent @ 0x18005DB28 (IsOpenThemeDataPresent.c)
+ */
+
+__int64 __fastcall CTopLevelWindow::GetEffectiveCornerStyle(__int64 a1)
+{
+  __int64 result; // rax
+  int v2; // ebx
+
+  if ( *((_BYTE *)CDesktopManager::s_pDesktopManagerInstance + 27)
+    && !*((_BYTE *)CDesktopManager::s_pDesktopManagerInstance + 29)
+    || *((int *)CDesktopManager::s_pDesktopManagerInstance + 8) >= 2 )
+  {
+    return 1LL;
+  }
+  result = *(unsigned int *)(*(_QWORD *)(a1 + 752) + 184LL);
+  if ( !(_DWORD)result )
+  {
+    v2 = *(_DWORD *)(a1 + 624);
+    if ( (v2 & 2) != 0 )
+      return 3LL;
+    if ( !(unsigned __int8)IsOpenThemeDataPresent() )
+      return 1LL;
+    result = 2LL;
+    if ( (v2 & 6) == 0 )
+      return 1LL;
+  }
+  return result;
+}
+```
+
+Obviously, `GetEffectiveCornerStyle` only exists in W11 builds (as you can see in [decompiled-pseudocode](https://github.com/nohuto/decompiled-pseudocode)).
+
+# Optimize Visual Effects
+
+Disables all kind of animations, while leaving font smoothing + window content while dragging + thumbnails instead of icons enabled.
+
+## UserPreferencesMask
+
+Anything written as "- *text*" behind the linked name equals the source where the option can be toggled (and where I recorded the bit differences), "(untested)" means that I didn't find the Windows UI toggle for the bit yet, means that the meaning is currently based on pseudocode, or on [SystemParametersInfo (`SPI_*`)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow) naming. All meanings have a link to the win32k pseudocode function where the bit is read.
+
+| Bit | Hex | Meaning |
+| --- | --- | --- |
+| 0 | `0x00000001` | [Active window tracking (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxTrackingActivateWindow@@YA_NPEAUtagWND@@@Z.c) |
+| 1 | `0x00000002` | [Fade or slide menus into view](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxMenuWindowProc.c) - *Performance Options* |
+| 2 | `0x00000004` | [Slide open combo boxes](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxSystemParametersInfoWorker.c) - *Performance Options* |
+| 3 | `0x00000008` | [Smooth-scroll list boxes](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxSystemParametersInfoWorker.c) - *Performance Options* |
+| 4 | `0x00000010` | [Caption/gradient visual effects (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxAnimateCaption@@YAXPEAUtagWND@@PEAUHDC__@@PEAUtagRECT@@2@Z.c) - "When set, each window title bar has a gradient effect (changes from one color or shade to another along the length of the title bar)." |
+| 5 | `0x00000020` | [Keyboard cues / menu underlines (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxDrawMenuItemText@@YAXAEBV-$SmartObjStackRef@UtagMENU@@@@PEAUtagITEM@@PEAUHDC__@@HHPEAGHH@Z.c) |
+| 6 | `0x00000040` | [Active window tracking Z-order (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxTrackingActivateWindow@@YA_NPEAUtagWND@@@Z.c) |
+| 7 | `0x00000080` | [Hot tracking (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxTrackMouseMove.c) |
+| 9 | `0x00000200` | [Menu fade (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/ShouldHaveShadow.c), requires bit `1` to be set |
+| 10 | `0x00000400` | [Fade out menu items after clicking](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-zzzMNFadeSelection@@YAHAEBV-$SmartObjStackRef@UtagMENU@@@@PEAUtagITEM@@@Z.c) - *Performance Options* |
+| 11 | `0x00000800` | [Fade or slide ToolTips into view](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxShowTooltip@@YAHPEAUtagTOOLTIPWND@@@Z.c) - *Performance Options* |
+| 12 | `0x00001000` | [Tooltip fade (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxTooltipWndProc.c), required bit `11` to be set |
+| 13 | `0x00002000` | [Show shadows under mouse pointer](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-FCursorShadowed@@YA_NPEAU_CURSINFO@@@Z.c) - *Performance Options* |
+| 14 | `0x00004000` | [Show location of pointer when I press the CTRL key](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionHandleSonarKeyEvent.c) - *Mouse Properties* |
+| 15 | `0x00008000` | [Turn on ClickLock](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-ProcessMouseButton@CMouseProcessor@@AEAAXAEBVCButtonEvent@1@@Z.c) - *Mouse Properties* |
+| 16 | `0x00010000` | [Hide pointer while typing](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/NtUserHideCursorNoCapture.c) - *Mouse Properties* |
+| 17 | `0x00020000` | [Flat menus (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxDrawMenuBarUnderlines.c) |
+| 18 | `0x00040000` | [Show shadows under windows](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/ShouldHaveShadow.c) - *Performance Options* |
+| 31 | `0x80000000` | [Master UI effects (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxSystemParametersInfoWorker.c) - "When enabled, all user interface effects (combo box animation, cursor shadow, gradient captions, hot tracking, list box smooth scrolling, menu animation, menu underlines, selection fade, tool tip animation) are enabled." |
+| 33 | `0x00000002` in high dword | Animate controls and elements inside windows |
+| 39 | `0x00000080` in high dword | [Suppress/apply global input-settings updates on focus/delegation changes (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionKeyboardInputDelegationChanged.c) |
+| 41 | `0x00000200` in high dword | [Pen button yield / pen quick-launch hotkey (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-NotifyISMPenButtonYieldSettingChange@@YAXXZ.c) |
+
+## Font Smoothing
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/visual1.jpg?raw=true)
 
 # Enable Dark Theme
 
@@ -442,75 +383,6 @@ See [`darktheme-GetThemeFromUnattendSetup.c`](https://github.com/nohuto/win-conf
 ### Transparency Disabled
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/transpa2.png?raw=true)
-
-# Disable Audio / Video Preview
-
-Disables the preview function for (extensions):
-```
-3gp aac avi flac m4a m4v mkv mod mov mp3 mp4 mpeg mpg ogg ts vob wav webm wma wmv
-```
-[`{E357FCCD-A995-4576-B01F-234630154E96}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Thumbnail Provider (Thumbnail image handler)
-[`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Extract Image (Image handler)
-[`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Default shell extension handler for thumbnails
-
-### Enabled
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true)
-
-### Disabled
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true)
-
----
-
-Hide preview pane:
-```powershell
-"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\Sizer\DetailsContainerSizer","Type: REG_BINARY, Length: 16, Data: 15 01 00 00 00 00 00 00 00 00 00 00 6B 03 00 00"
-"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\DetailsContainer\DetailsContainer","Type: REG_BINARY, Length: 8, Data: 02 00 00 00 02 00 00 00"
-```
-
-# Remove Home & Gallery
-
-### Home / Galery
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/homegal.png?raw=true)
-
-### Network Sharing Folder (Suboption)
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/homenet.png?raw=true)
-
-### Miscellaneous Notes
-
-```c
-{018D5C66-4533-4307-9B53-224DE2ED1FE6} = OneDrive
-{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} = Network Sharing Folder
-{031E4825-7B94-4dc3-B131-E946B44C8DD5} = Libraries Folder
-```
-```json
-// LaunchTo:
-// 1 = This PC
-// 2 = Home (default)
-// 3 = Downloads
-// 4 = OneDrive
-"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-  "LaunchTo": { "Type": "REG_DWORD", "Data": 1 }
-},
-"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-  "HubMode": { "Type": "REG_DWORD", "Data": 1 }
-}
-```
-
-# Classic Context Menu
-
-Use it on W11, unless you like the new menu.
-
-### Before
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true)
-
-### After
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
 
 # Disable Animations
 
@@ -621,117 +493,74 @@ CMachine::RegQueryDWORD(
 }
 ```
 
-# Disable Rounded Corners
+# Explorer Options
 
-This currently works via [Win11DisableRoundedCorners](https://github.com/valinet/Win11DisableRoundedCorners) which works fine on [latest version since the function exists/works the same on latest builds](https://www.noverse.dev/bin-diff.html). Note that the revert doesn't run `sfc /scannow` to restore proper file permissions to `uDWM.dll` since it does a lot more than restoring permissions. If you're aware if it, run the command after reverting the option.
+It changes every setting, which is shown in the `Folder Options` window. Some are personal preference, see suboptions bellow for customization.
 
-It works by overriding the first 8 bytes in the function with `48 C7 C0 00 00 00 00 C3`:
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
 
-```c
-mov rax, 0; ret // result = 0
-```
+## Miscellaneous Notes
 
-## [GetEffectiveCornerStyle](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-GetEffectiveCornerStyle%40CTopLevelWindow%40%40AEAA-AW4CORNER_STYLE%40%40XZ.c)
-
-That function calculates the effective corner mode, its callers include border/shadow/radius.
-```c
-/*
- * XREFs of ?GetEffectiveCornerStyle@CTopLevelWindow@@AEAA?AW4CORNER_STYLE@@XZ @ 0x18003AB74
- * Callers:
- *     ?GetShadowStyle@CTopLevelWindow@@AEAA?AW4ShadowStyle@CWindowBorder@@XZ @ 0x18001AA04 (-GetShadowStyle@CTopLevelWindow@@AEAA-AW4ShadowStyle@CWindowBorder@@XZ.c)
- *     ?UpdateWindowVisuals@CTopLevelWindow@@AEAAJXZ @ 0x18003D8E0 (-UpdateWindowVisuals@CTopLevelWindow@@AEAAJXZ.c)
- *     ?GetRadiusFromCornerStyle@CTopLevelWindow@@AEAAMXZ @ 0x1800E5B98 (-GetRadiusFromCornerStyle@CTopLevelWindow@@AEAAMXZ.c)
- * Callees:
- *     IsOpenThemeDataPresent @ 0x18005DB28 (IsOpenThemeDataPresent.c)
- */
-
-__int64 __fastcall CTopLevelWindow::GetEffectiveCornerStyle(__int64 a1)
-{
-  __int64 result; // rax
-  int v2; // ebx
-
-  if ( *((_BYTE *)CDesktopManager::s_pDesktopManagerInstance + 27)
-    && !*((_BYTE *)CDesktopManager::s_pDesktopManagerInstance + 29)
-    || *((int *)CDesktopManager::s_pDesktopManagerInstance + 8) >= 2 )
-  {
-    return 1LL;
-  }
-  result = *(unsigned int *)(*(_QWORD *)(a1 + 752) + 184LL);
-  if ( !(_DWORD)result )
-  {
-    v2 = *(_DWORD *)(a1 + 624);
-    if ( (v2 & 2) != 0 )
-      return 3LL;
-    if ( !(unsigned __int8)IsOpenThemeDataPresent() )
-      return 1LL;
-    result = 2LL;
-    if ( (v2 & 6) == 0 )
-      return 1LL;
-  }
-  return result;
+```json
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+  "ShellState": { "Type": "REG_BINARY", "Data": "240000003e20000000000000000000000001000000130000000000000042000000" }
+},
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\CabinetState": {
+  "Settings": { "Type": "REG_BINARY", "Data": "0c0002000a01000060000000" }
 }
 ```
 
-Obviously, `GetEffectiveCornerStyle` only exists in W11 builds (as you can see in [decompiled-pseudocode](https://github.com/nohuto/decompiled-pseudocode)).
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
-# Disable Automatic Folder Type Discovery
-
-"Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders."
-
-Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`)
-
-The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
-
-# Hide Language Bar
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
-
-## Text Services and Input Languages Captures
-
-`Time & language > Typing > Advanced keyboard settings > Language bar options`:
-```c
-// Floating On Desktop
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 0
-
-// Hidden
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 3
-
-// Docked in the taskbar
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 4
+```json
+{
+  "File": "Desktop.admx",
+  "CategoryName": "Desktop",
+  "PolicyName": "NoDesktop",
+  "NameSpace": "Microsoft.Policies.WindowsDesktop",
+  "Supported": "Win2k - At least Windows 2000",
+  "DisplayName": "Hide and disable all items on the desktop",
+  "ExplainText": "Removes icons, shortcuts, and other default and user-defined items from the desktop, including Briefcase, Recycle Bin, Computer, and Network Locations. Removing icons and shortcuts does not prevent the user from using another method to start the programs or opening the items they represent. Also, see \"Items displayed in Places Bar\" in User Configuration\\Administrative Templates\\Windows Components\\Common Open File Dialog to remove the Desktop icon from the Places Bar. This will help prevent users from saving data to the Desktop.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "NoDesktop",
+  "Elements": []
+},
+{
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "NoRecentDocsHistory",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "Win2k - At least Windows 2000",
+  "DisplayName": "Do not keep history of recently opened documents",
+  "ExplainText": "Prevents the operating system and installed programs from creating and displaying shortcuts to recently opened documents. If you enable this setting, the system and Windows programs do not create shortcuts to documents opened while the setting is in effect. Also, they retain but do not display existing document shortcuts. The system empties the Recent Items menu on the Start menu, and Windows programs do not display shortcuts at the bottom of the File menu. In addition, the Jump Lists off of programs in the Start Menu and Taskbar do not show lists of recently or frequently used files, folders, or websites. If you disable or do not configure this setting, the system will store and display shortcuts to recently and frequently used files, folders, and websites. Note: The system saves document shortcuts in the user profile in the System-drive\\Users\\User-name\\Recent folder. Also, see the \"Remove Recent Items menu from Start Menu\" and \"Clear history of recently opened documents on exit\" policies in this folder. If you enable this setting but do not enable the \"Remove Recent Items menu from Start Menu\" setting, the Recent Items menu appears on the Start menu, but it is empty. If you enable this setting, but then later disable it or set it to Not Configured, the document shortcuts saved before the setting was enabled reappear in the Recent Items menu and program File menus, and Jump Lists. This setting does not hide or prevent the user from pinning files, folders, or websites to the Jump Lists. See the \"Do not allow pinning items in Jump Lists\" setting. This policy also does not hide Tasks that the application has provided for their Jump List. This setting does not hide document shortcuts displayed in the Open dialog box. See the \"Hide the dropdown list of recent files\" setting. Note: It is a requirement for third-party applications with Windows 2000 or later certification to adhere to this setting.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
+    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "NoRecentDocsHistory",
+  "Elements": []
+},
+{
+  "File": "WindowsConnectNow.admx",
+  "CategoryName": "WCN_Category",
+  "PolicyName": "WCN_DisableWcnUi_2",
+  "NameSpace": "Microsoft.Policies.WindowsConnectNow",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Prohibit access of the Windows Connect Now wizards",
+  "ExplainText": "This policy setting prohibits access to Windows Connect Now (WCN) wizards. If you enable this policy setting, the wizards are turned off and users have no access to any of the wizard tasks. All the configuration related tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device\" are disabled. If you disable or do not configure this policy setting, users can access the wizard tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device.\" The default for this policy setting allows users to access all WCN wizards.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI"
+  ],
+  "ValueName": "DisableWcnUi",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
 ```
-
-`Show the Language bar as transparent when inactive`:
-```c
-// Enabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 64
-
-// Disabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 255
-```
-
-`Show additional Language bar icons in the taskbar`:
-```c
-// Enabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-`Show text labels on the Language bar`:
-```c
-// Enabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-# System Clock Seconds
-
-"Uses more power" (in relation to laptops).
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
 
 # Taskbar Settings
 
@@ -822,42 +651,363 @@ Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0
 }
 ```
 
-# Optimize Visual Effects
+# Accent Color
 
-Disables all kind of animations, while leaving font smoothing + window content while dragging + thumbnails instead of icons enabled.
+This set's the accent color globally and if `AccentColor` (`HKEY_CURRENT_USER\Software\Noverse`) isn't set via the tool settings yet, this will also directly impact the WinConfig colors.
 
-## UserPreferencesMask
+`Show Accent Color on Start and Taskbar` only works if using dark theme.
 
-Anything written as "- *text*" behind the linked name equals the source where the option can be toggled (and where I recorded the bit differences), "(untested)" means that I didn't find the Windows UI toggle for the bit yet, means that the meaning is currently based on pseudocode, or on [SystemParametersInfo (`SPI_*`)](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfow) naming. All meanings have a link to the win32k pseudocode function where the bit is read.
+Something I noticed while creating the option is that procmon doesn't show the actual used binary data:
+```c
+// Procmon
+59657CFF4A5468FF3F4859FF353C4AFF // 16
 
-| Bit | Hex | Meaning |
-| --- | --- | --- |
-| 0 | `0x00000001` | [Active window tracking (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxTrackingActivateWindow@@YA_NPEAUtagWND@@@Z.c) |
-| 1 | `0x00000002` | [Fade or slide menus into view](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxMenuWindowProc.c) - *Performance Options* |
-| 2 | `0x00000004` | [Slide open combo boxes](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxSystemParametersInfoWorker.c) - *Performance Options* |
-| 3 | `0x00000008` | [Smooth-scroll list boxes](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxSystemParametersInfoWorker.c) - *Performance Options* |
-| 4 | `0x00000010` | [Caption/gradient visual effects (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxAnimateCaption@@YAXPEAUtagWND@@PEAUHDC__@@PEAUtagRECT@@2@Z.c) - "When set, each window title bar has a gradient effect (changes from one color or shade to another along the length of the title bar)." |
-| 5 | `0x00000020` | [Keyboard cues / menu underlines (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxDrawMenuItemText@@YAXAEBV-$SmartObjStackRef@UtagMENU@@@@PEAUtagITEM@@PEAUHDC__@@HHPEAGHH@Z.c) |
-| 6 | `0x00000040` | [Active window tracking Z-order (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxTrackingActivateWindow@@YA_NPEAUtagWND@@@Z.c) |
-| 7 | `0x00000080` | [Hot tracking (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxTrackMouseMove.c) |
-| 9 | `0x00000200` | [Menu fade (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/ShouldHaveShadow.c), requires bit `1` to be set |
-| 10 | `0x00000400` | [Fade out menu items after clicking](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-zzzMNFadeSelection@@YAHAEBV-$SmartObjStackRef@UtagMENU@@@@PEAUtagITEM@@@Z.c) - *Performance Options* |
-| 11 | `0x00000800` | [Fade or slide ToolTips into view](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-xxxShowTooltip@@YAHPEAUtagTOOLTIPWND@@@Z.c) - *Performance Options* |
-| 12 | `0x00001000` | [Tooltip fade (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxTooltipWndProc.c), required bit `11` to be set |
-| 13 | `0x00002000` | [Show shadows under mouse pointer](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-FCursorShadowed@@YA_NPEAU_CURSINFO@@@Z.c) - *Performance Options* |
-| 14 | `0x00004000` | [Show location of pointer when I press the CTRL key](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionHandleSonarKeyEvent.c) - *Mouse Properties* |
-| 15 | `0x00008000` | [Turn on ClickLock](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-ProcessMouseButton@CMouseProcessor@@AEAAXAEBVCButtonEvent@1@@Z.c) - *Mouse Properties* |
-| 16 | `0x00010000` | [Hide pointer while typing](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/NtUserHideCursorNoCapture.c) - *Mouse Properties* |
-| 17 | `0x00020000` | [Flat menus (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxDrawMenuBarUnderlines.c) |
-| 18 | `0x00040000` | [Show shadows under windows](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/ShouldHaveShadow.c) - *Performance Options* |
-| 31 | `0x80000000` | [Master UI effects (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/xxxSystemParametersInfoWorker.c) - "When enabled, all user interface effects (combo box animation, cursor shadow, gradient captions, hot tracking, list box smooth scrolling, menu animation, menu underlines, selection fade, tool tip animation) are enabled." |
-| 33 | `0x00000002` in high dword | Animate controls and elements inside windows |
-| 39 | `0x00000080` in high dword | [Suppress/apply global input-settings updates on focus/delegation changes (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionKeyboardInputDelegationChanged.c) |
-| 41 | `0x00000200` in high dword | [Pen button yield / pen quick-launch hotkey (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-NotifyISMPenButtonYieldSettingChange@@YAXXZ.c) |
+// After refreshing
+59657CFF4A5468FF3F4859FF353C4AFF2A303BFF1F242CFF111317FF88179800 // 32
 
-## Font Smoothing
+// Procmon
+99EBFF004CC2FF000091F8000078D400
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/visual1.jpg?raw=true)
+// After refreshing
+99EBFF004CC2FF000091F8000078D4000067C000003E9200001A6800F7630C00
+```
+
+## SystemSettings Captures
+
+Changing the color via `Personalization > Colors` sets:
+```c
+// Nord Theme (#2e3440)
+HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3291823178
+HKCU\Software\Microsoft\Windows\DWM\ColorizationAfterglow	Type: REG_DWORD, Length: 4, Data: 3291823178
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentPalette	Type: REG_BINARY, Length: 32, Data: 59 65 7C FF 4A 54 68 FF 3F 48 59 FF 35 3C 4A FF // see note above
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\StartColorMenu	Type: REG_DWORD, Length: 4, Data: 4282069034
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentColorMenu	Type: REG_DWORD, Length: 4, Data: 4283055157
+HKCU\Software\Microsoft\Windows\DWM\AccentColor	Type: REG_DWORD, Length: 4, Data: 4283055157
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\StartColor	Type: REG_DWORD, Length: 4, Data: 4282069034
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\AccentColor	Type: REG_DWORD, Length: 4, Data: 4283055157
+
+// Default Blue
+HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3288365268
+HKCU\Software\Microsoft\Windows\DWM\ColorizationAfterglow	Type: REG_DWORD, Length: 4, Data: 3288365268
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentPalette	Type: REG_BINARY, Length: 32, Data: 99 EB FF 00 4C C2 FF 00 00 91 F8 00 00 78 D4 00
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\StartColorMenu	Type: REG_DWORD, Length: 4, Data: 4290799360
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent\AccentColorMenu	Type: REG_DWORD, Length: 4, Data: 4292114432
+HKCU\Software\Microsoft\Windows\DWM\AccentColor	Type: REG_DWORD, Length: 4, Data: 4292114432
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\StartColor	Type: REG_DWORD, Length: 4, Data: 4290799360
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\AccentColor	Type: REG_DWORD, Length: 4, Data: 4292114432
+```
+
+# Account Picture
+
+Changes the user account picture via:
+```
+C:\ProgramData\Microsoft\Default Account Pictures
+```
+
+### Suboption
+
+`Global Account Picture`:  
+"This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "Cpls.admx",
+  "CategoryName": "Users",
+  "PolicyName": "UseDefaultTile",
+  "NameSpace": "Microsoft.Policies.ControlPanel2",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Apply the default account picture to all users",
+  "ExplainText": "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture. One application for this policy setting is to standardize the account pictures to a company logo. Note: The default account picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\user.jpg. The default guest picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\guest.jpg. If the default pictures do not exist, an empty frame is displayed. If you enable this policy setting, the default user account picture will display for all users on the system with no customization allowed. If you disable or do not configure this policy setting, users will be able to customize their account pictures.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "ValueName": "UseDefaultTile",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# System Fonts
+
+W11 uses `Segoe UI` by default. You can change it via registry edits, the selected font will be used for desktop interfaces, explorer, some apps (`StartAllBack` will use it), but won't get applied for e.g., `SystemSettings.exe` and app fonts in general. Some fonts will cause issues - `Yu Gothic UI Light` uses `¥` instead of `\` (picture).
+
+Either select a installed font with the command shown below or install new fonts via e.g. [nerdfonts](https://www.nerdfonts.com/font-downloads).
+
+Applying a new font needs a restart or logout, reverting doesn't.
+```powershell
+shutdown -l # logout
+```
+
+List all available font families on your system with the `Open` option, or via `Personalization > Fonts`:
+```powershell
+Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % {$_.Name}
+```
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/font1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/font2.png?raw=true)
+
+## Manually Adding Custom Fonts
+
+The option lists the default fonts, add your own custom font via:
+```json
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
+  "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Black (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Black Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Bold (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Bold Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Historic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Light (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Light Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Semibold (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Semibold Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Semilight (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Semilight Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
+  "Segoe UI Symbol (TrueType)": { "Type": "REG_SZ", "Data": "" }
+}
+// "Font Name" = Replace with the font name
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes": {
+  "Segoe UI": { "Type": "REG_SZ", "Data": "Font Name" }
+}
+```
+
+Revert the changes:
+```json
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
+  "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "segoeui.ttf" },
+  "Segoe UI Black (TrueType)": { "Type": "REG_SZ", "Data": "seguibl.ttf" },
+  "Segoe UI Black Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguibli.ttf" },
+  "Segoe UI Bold (TrueType)": { "Type": "REG_SZ", "Data": "segoeuib.ttf" },
+  "Segoe UI Bold Italic (TrueType)": { "Type": "REG_SZ", "Data": "segoeuiz.ttf" },
+  "Segoe UI Historic (TrueType)": { "Type": "REG_SZ", "Data": "seguihis.ttf" },
+  "Segoe UI Italic (TrueType)": { "Type": "REG_SZ", "Data": "segoeuii.ttf" },
+  "Segoe UI Light (TrueType)": { "Type": "REG_SZ", "Data": "segoeuil.ttf" },
+  "Segoe UI Light Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguili.ttf" },
+  "Segoe UI Semibold (TrueType)": { "Type": "REG_SZ", "Data": "seguisb.ttf" },
+  "Segoe UI Semibold Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguisbi.ttf" },
+  "Segoe UI Semilight (TrueType)": { "Type": "REG_SZ", "Data": "segoeuisl.ttf" },
+  "Segoe UI Semilight Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguisli.ttf" },
+  "Segoe UI Symbol (TrueType)": { "Type": "REG_SZ", "Data": "seguisym.ttf" }
+},
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes": {
+  "Segoe UI": { "Action": "deletevalue" }
+}
+```
+
+## Suboptions
+
+| Option | Description |
+| --- | --- |
+| Hide fonts based on language settings | "Windows can hide fonts that are not designed for your input language settings. If you choose this option, only fonts that are designed for your language settings will be listed in your programs. |
+| Allow fonts to be installed using a shortcut | To save space on your computer, you can choose to install a shortcut to a font file instead of the file itself. If the font file becomes unavailable, you might not be able to use the font. |
+
+## Notes on System Text Size
+
+Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.viewmanagement.uisettings.textscalefactor?view=winrt-26100#windows-ui-viewmanagement-uisettings-textscalefactor), valid ranges are `100-225` (DWORD).
+
+```c
+  v10 = 0;
+  if ( (int)SHRegGetDWORD(HKEY_CURRENT_USER, L"Software\\Microsoft\\Accessibility", L"TextScaleFactor", &v10) < 0
+    || (v6 = v10, v10 - 101 > 0x7C) ) // valid range: [101, 225] -> v10 - 101 > 124  -> v10 > 225
+  {
+    v6 = 100LL; // fallback to 100 if missing or out of range (<100 / >225)
+  }
+```
+- [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
+
+Applying changes via `Accessibility > Text size`:
+```c
+// 100%
+RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: REG_DWORD, Length: 4, Data: 100
+
+// 225%
+RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: REG_DWORD, Length: 4, Data: 225
+```
+Depending on the selected size, `CaptionFont`, `SmCaptionFont`, `MenuFont`, `StatusFont`, `MessageFont`, `IconFont` (located in `HKCU\Control Panel\Desktop\WindowMetrics`) will also change. Not every % increase will edit them, I may add exact data soon. Example of `100%`/`225%`:
+
+```c
+// 100%
+IconFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+CaptionFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+SmCaptionFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+MenuFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+StatusFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+MessageFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+
+// 225%
+CaptionFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+SmCaptionFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+MenuFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+StatusFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+MessageFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
+```
+
+# Mouse Hover Time
+
+`MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
+
+`MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
+
+## CMenuToolbarBase::_SetTimer
+
+[`SPI_GETMENUSHOWDELAY`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa):
+> "*Retrieves the time, in milliseconds, that the system waits before displaying a shortcut menu when the mouse cursor is over a submenu item. The pvParam parameter must point to a DWORD variable that receives the time of the delay.*"
+
+```c
+if ( SystemParametersInfoW(0x6Au, 0, &g_lMenuPopupTimeout, 0) ) // 0x6A = SPI_GETMENUSHOWDELAY
+  goto LABEL_5;
+v4 = g_lMenuPopupTimeout;
+if ( g_lMenuPopupTimeout != -1 )
+  goto LABEL_6;
+g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // fallback (depends on DoubleClickSpeed)
+if ( SHRegGetStringEx(HKEY_CURRENT_USER, L"Control Panel\\Desktop", L"MenuShowDelay", 2u, pszSrc, 6u) < 0 ) // 2u = REG_SZ
+{
+LABEL_5:
+  v4 = g_lMenuPopupTimeout;
+}
+else
+{
+  v4 = StrToIntW(pszSrc);
+  g_lMenuPopupTimeout = v4;
+}
+```
+
+It first uses [`SystemParametersInfoW(SPI_GETMENUSHOWDELAY)`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), so the registry value is normally used through the API. If that API fails and no cached value exists, it falls back to `4 * GetDoubleClickTime() / 5`, means the fallback depends on the current double click speed (`HKCU\Control Panel\Mouse\DoubleClickSpeed`). By default it's set to `500 ms` = fallback becomes `400 ms`.
+
+```c
+if ( (_DWORD)v2 == 32771 )
+  goto LABEL_19;
+if ( (_DWORD)v2 != 32776 )
+{
+  if ( (_DWORD)v2 != 32777 )
+  {
+    if ( (_DWORD)v2 == 32778 )
+    {
+      v4 = 60000; // fixed 60 seconds
+    }
+    else if ( (_DWORD)v2 == 32779 )
+    {
+      v4 = 2 * GetDoubleClickTime(); // ignores MenuShowDelay
+    }
+    return SetTimer(this[2], v2, v4, 0LL); // v4 = uElapse
+  }
+LABEL_19:
+  v4 *= 2;
+  if ( v4 < 2000 )
+    v4 = 2000;
+  return SetTimer(this[2], v2, v4, 0LL); // v4 = uElapse
+}
+if ( ((_BYTE)this[15] & 1) == 0 )
+  return 1LL;
+v5 = *((_QWORD *)this[5] + 34);
+if ( !v5 || (*(_BYTE *)(v5 + 72) & 1) != 0 || ((_BYTE)this[15] & 0x20) != 0 )
+  return 1LL;
+v4 *= 5;
+if ( v4 < 2000 )
+  v4 = 2000;
+return SetTimer(this[2], v2, v4, 0LL); // v4 = uElapse
+```
+
+`v4` is the final value passed to [`SetTimer`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-settimer) as `uElapse`, which can be used as maximum I guess (as the part above doesn't show any max clamp) values below `USER_TIMER_MINIMUM` (`10 ms`) are increased to `10 ms`, values above `USER_TIMER_MAXIMUM` (`0x7FFFFFFF`, `~24.8 days`) are lowered to that maximum. Obviously, that's just my current interpretation, and I don't claim that it's the truth.
+
+The normal menu hover timers use `MenuShowDelay`, some menu timers ignore or extend it, `32771` & `32777` use at least `2 seconds`, `32776` can use at least `2 seconds` after multiplying the value by `5`, `32778` is fixed to `60 seconds`, `32779` uses double click time instead.
+
+# Disable Audio / Video Preview
+
+Disables the preview function for (extensions):
+```
+3gp aac avi flac m4a m4v mkv mod mov mp3 mp4 mpeg mpg ogg ts vob wav webm wma wmv
+```
+[`{E357FCCD-A995-4576-B01F-234630154E96}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Thumbnail Provider (Thumbnail image handler)
+[`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Extract Image (Image handler)
+[`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Default shell extension handler for thumbnails
+
+### Enabled
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreon.png?raw=true)
+
+### Disabled
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/audiovidpreonoff.png?raw=true)
+
+---
+
+Hide preview pane:
+```powershell
+"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\Sizer\DetailsContainerSizer","Type: REG_BINARY, Length: 16, Data: 15 01 00 00 00 00 00 00 00 00 00 00 6B 03 00 00"
+"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\DetailsContainer\DetailsContainer","Type: REG_BINARY, Length: 8, Data: 02 00 00 00 02 00 00 00"
+```
+
+# Classic Context Menu
+
+Use it on W11, unless you like the new menu.
+
+### Before
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true)
+
+### After
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
+
+# Disable Automatic Folder Type Discovery
+
+"Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders."
+
+Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`)
+
+The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
+
+# Hide Language Bar
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
+
+## Text Services and Input Languages Captures
+
+`Time & language > Typing > Advanced keyboard settings > Language bar options`:
+```c
+// Floating On Desktop
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 0
+
+// Hidden
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 3
+
+// Docked in the taskbar
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 4
+```
+
+`Show the Language bar as transparent when inactive`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 64
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 255
+```
+
+`Show additional Language bar icons in the taskbar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+`Show text labels on the Language bar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
+```
 
 # Hide Shortcut Icon
 
@@ -997,128 +1147,42 @@ Hides the snap assist flyout that would appear after hovering over the maximize/
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/snapflyout.png?raw=true)
 
+# Remove Home & Gallery
+
+### Home / Galery
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/homegal.png?raw=true)
+
+### Network Sharing Folder (Suboption)
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/homenet.png?raw=true)
+
+### Miscellaneous Notes
+
+```c
+{018D5C66-4533-4307-9B53-224DE2ED1FE6} = OneDrive
+{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} = Network Sharing Folder
+{031E4825-7B94-4dc3-B131-E946B44C8DD5} = Libraries Folder
+```
+```json
+// LaunchTo:
+// 1 = This PC
+// 2 = Home (default)
+// 3 = Downloads
+// 4 = OneDrive
+"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
+  "LaunchTo": { "Type": "REG_DWORD", "Data": 1 }
+},
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
+  "HubMode": { "Type": "REG_DWORD", "Data": 1 }
+}
+```
+
 # Remove Quick Access
 
 Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to `This PC`.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/quickaccess.png?raw=true)
-
-# System Fonts
-
-W11 uses `Segoe UI` by default. You can change it via registry edits, the selected font will be used for desktop interfaces, explorer, some apps (`StartAllBack` will use it), but won't get applied for e.g., `SystemSettings.exe` and app fonts in general. Some fonts will cause issues - `Yu Gothic UI Light` uses `¥` instead of `\` (picture).
-
-Either select a installed font with the command shown below or install new fonts via e.g. [nerdfonts](https://www.nerdfonts.com/font-downloads).
-
-Applying a new font needs a restart or logout, reverting doesn't.
-```powershell
-shutdown -l # logout
-```
-
-List all available font families on your system with the `Open` option, or via `Personalization > Fonts`:
-```powershell
-Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % {$_.Name}
-```
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/font1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/font2.png?raw=true)
-
-## Manually Adding Custom Fonts
-
-The option lists the default fonts, add your own custom font via:
-```json
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
-  "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Black (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Black Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Bold (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Bold Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Historic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Light (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Light Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Semibold (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Semibold Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Semilight (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Semilight Italic (TrueType)": { "Type": "REG_SZ", "Data": "" },
-  "Segoe UI Symbol (TrueType)": { "Type": "REG_SZ", "Data": "" }
-}
-// "Font Name" = Replace with the font name
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes": {
-  "Segoe UI": { "Type": "REG_SZ", "Data": "Font Name" }
-}
-```
-
-Revert the changes:
-```json
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
-  "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "segoeui.ttf" },
-  "Segoe UI Black (TrueType)": { "Type": "REG_SZ", "Data": "seguibl.ttf" },
-  "Segoe UI Black Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguibli.ttf" },
-  "Segoe UI Bold (TrueType)": { "Type": "REG_SZ", "Data": "segoeuib.ttf" },
-  "Segoe UI Bold Italic (TrueType)": { "Type": "REG_SZ", "Data": "segoeuiz.ttf" },
-  "Segoe UI Historic (TrueType)": { "Type": "REG_SZ", "Data": "seguihis.ttf" },
-  "Segoe UI Italic (TrueType)": { "Type": "REG_SZ", "Data": "segoeuii.ttf" },
-  "Segoe UI Light (TrueType)": { "Type": "REG_SZ", "Data": "segoeuil.ttf" },
-  "Segoe UI Light Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguili.ttf" },
-  "Segoe UI Semibold (TrueType)": { "Type": "REG_SZ", "Data": "seguisb.ttf" },
-  "Segoe UI Semibold Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguisbi.ttf" },
-  "Segoe UI Semilight (TrueType)": { "Type": "REG_SZ", "Data": "segoeuisl.ttf" },
-  "Segoe UI Semilight Italic (TrueType)": { "Type": "REG_SZ", "Data": "seguisli.ttf" },
-  "Segoe UI Symbol (TrueType)": { "Type": "REG_SZ", "Data": "seguisym.ttf" }
-},
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\FontSubstitutes": {
-  "Segoe UI": { "Action": "deletevalue" }
-}
-```
-
-## Suboptions
-
-| Option | Description |
-| --- | --- |
-| Hide fonts based on language settings | "Windows can hide fonts that are not designed for your input language settings. If you choose this option, only fonts that are designed for your language settings will be listed in your programs. |
-| Allow fonts to be installed using a shortcut | To save space on your computer, you can choose to install a shortcut to a font file instead of the file itself. If the font file becomes unavailable, you might not be able to use the font. |
-
-## Notes on System Text Size
-
-Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/api/windows.ui.viewmanagement.uisettings.textscalefactor?view=winrt-26100#windows-ui-viewmanagement-uisettings-textscalefactor), valid ranges are `100-225` (DWORD).
-
-```c
-  v10 = 0;
-  if ( (int)SHRegGetDWORD(HKEY_CURRENT_USER, L"Software\\Microsoft\\Accessibility", L"TextScaleFactor", &v10) < 0
-    || (v6 = v10, v10 - 101 > 0x7C) ) // valid range: [101, 225] -> v10 - 101 > 124  -> v10 > 225
-  {
-    v6 = 100LL; // fallback to 100 if missing or out of range (<100 / >225)
-  }
-```
-- [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
-
-Applying changes via `Accessibility > Text size`:
-```c
-// 100%
-RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: REG_DWORD, Length: 4, Data: 100
-
-// 225%
-RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: REG_DWORD, Length: 4, Data: 225
-```
-Depending on the selected size, `CaptionFont`, `SmCaptionFont`, `MenuFont`, `StatusFont`, `MessageFont`, `IconFont` (located in `HKCU\Control Panel\Desktop\WindowMetrics`) will also change. Not every % increase will edit them, I may add exact data soon. Example of `100%`/`225%`:
-
-```c
-// 100%
-IconFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-CaptionFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-SmCaptionFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-MenuFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-StatusFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-MessageFont    Type: REG_BINARY, Length: 92, Data: F4 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-
-// 225%
-CaptionFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-SmCaptionFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-MenuFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-StatusFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-MessageFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00 00 00 00 00 00
-```
 
 # Hide Lock Screen
 
@@ -1682,75 +1746,11 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 }
 ```
 
-# Mouse Hover Time
+# System Clock Seconds
 
-`MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
+"Uses more power" (in relation to laptops).
 
-`MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
-
-## CMenuToolbarBase::_SetTimer
-
-[`SPI_GETMENUSHOWDELAY`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa):
-> "*Retrieves the time, in milliseconds, that the system waits before displaying a shortcut menu when the mouse cursor is over a submenu item. The pvParam parameter must point to a DWORD variable that receives the time of the delay.*"
-
-```c
-if ( SystemParametersInfoW(0x6Au, 0, &g_lMenuPopupTimeout, 0) ) // 0x6A = SPI_GETMENUSHOWDELAY
-  goto LABEL_5;
-v4 = g_lMenuPopupTimeout;
-if ( g_lMenuPopupTimeout != -1 )
-  goto LABEL_6;
-g_lMenuPopupTimeout = 4 * GetDoubleClickTime() / 5; // fallback (depends on DoubleClickSpeed)
-if ( SHRegGetStringEx(HKEY_CURRENT_USER, L"Control Panel\\Desktop", L"MenuShowDelay", 2u, pszSrc, 6u) < 0 ) // 2u = REG_SZ
-{
-LABEL_5:
-  v4 = g_lMenuPopupTimeout;
-}
-else
-{
-  v4 = StrToIntW(pszSrc);
-  g_lMenuPopupTimeout = v4;
-}
-```
-
-It first uses [`SystemParametersInfoW(SPI_GETMENUSHOWDELAY)`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), so the registry value is normally used through the API. If that API fails and no cached value exists, it falls back to `4 * GetDoubleClickTime() / 5`, means the fallback depends on the current double click speed (`HKCU\Control Panel\Mouse\DoubleClickSpeed`). By default it's set to `500 ms` = fallback becomes `400 ms`.
-
-```c
-if ( (_DWORD)v2 == 32771 )
-  goto LABEL_19;
-if ( (_DWORD)v2 != 32776 )
-{
-  if ( (_DWORD)v2 != 32777 )
-  {
-    if ( (_DWORD)v2 == 32778 )
-    {
-      v4 = 60000; // fixed 60 seconds
-    }
-    else if ( (_DWORD)v2 == 32779 )
-    {
-      v4 = 2 * GetDoubleClickTime(); // ignores MenuShowDelay
-    }
-    return SetTimer(this[2], v2, v4, 0LL); // v4 = uElapse
-  }
-LABEL_19:
-  v4 *= 2;
-  if ( v4 < 2000 )
-    v4 = 2000;
-  return SetTimer(this[2], v2, v4, 0LL); // v4 = uElapse
-}
-if ( ((_BYTE)this[15] & 1) == 0 )
-  return 1LL;
-v5 = *((_QWORD *)this[5] + 34);
-if ( !v5 || (*(_BYTE *)(v5 + 72) & 1) != 0 || ((_BYTE)this[15] & 0x20) != 0 )
-  return 1LL;
-v4 *= 5;
-if ( v4 < 2000 )
-  v4 = 2000;
-return SetTimer(this[2], v2, v4, 0LL); // v4 = uElapse
-```
-
-`v4` is the final value passed to [`SetTimer`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-settimer) as `uElapse`, which can be used as maximum I guess (as the part above doesn't show any max clamp) values below `USER_TIMER_MINIMUM` (`10 ms`) are increased to `10 ms`, values above `USER_TIMER_MAXIMUM` (`0x7FFFFFFF`, `~24.8 days`) are lowered to that maximum. Obviously, that's just my current interpretation, and I don't claim that it's the truth.
-
-The normal menu hover timers use `MenuShowDelay`, some menu timers ignore or extend it, `32771` & `32777` use at least `2 seconds`, `32776` can use at least `2 seconds` after multiplying the value by `5`, `32778` is fixed to `60 seconds`, `32779` uses double click time instead.
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
 
 # OEM Information
 
@@ -1790,7 +1790,7 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/oem.png?raw=true)
 
-# Settings Page Visibility 
+# Settings Page Visibility
 
 It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).
 

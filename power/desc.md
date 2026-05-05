@@ -1,77 +1,3 @@
-# xHCI IMOD
-
-| Flag | Description |
-| --- | --- |
-| `--rw-path PATH` | Override the default `%LOCALAPPDATA%\Noverse\IMOD\RwPortable\Win64\Portable\Rw.exe` location |
-| `--bdf BB:DD.F` | Use a specific controller by Bus:Device.Function (hex). Mutually exclusive with `--xhci-index`/`--all` |
-| `--xhci-index N` | Use the Nth xHCI controller reported by `FPciClass` (defaults to 0 when `--bdf/--all` absent) |
-| `--all` | Iterate through every xHCI controller and apply the same IMOD changes to each |
-| `--interrupter ID` / `-i ID` | Restrict the operation to specific interrupter IDs, repeat the flag for multiple IDs (defaults to all) |
-| `--interval VALUE` | Set a custom IMOD interval (0–0xFFFF, in 250 ns ticks). Use for example `0xC800` (~48 Hz) to see if chaning the interval works |
-| `--no-write` | Only read and print IMOD registers (skip the write for information only) |
-| `--startup` | Copy the script or exe to `%LOCALAPPDATA%\Noverse\IMOD\` and creates a scheduled task that runs the command at each logon |
-| `--delete` | Delete the scheduled task created by `--startup` |
-| `--no-exit` | Keep the console open after completion |
-| `--verbose` | Output all `rw.exe` commands/results |
-
-```c
---all --no-write --no-exit // information only
---all --no-write --verbose --no-exit // rw commands/output
---all // 0 for all controllers
---all --interval 0xC800 // testing (~48hz)
---all --startup // 0 for all controllers, creates scheduled task
---delete // removes the task
-```
-
-You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/assets/NV-IMOD.exe) from my repository, I packed it into one package since some may not have python installed on their system.
-
-## xHCI Interrupt Moderation Notes
-
-Interrupt Moderation (IMOD) is the pacing logic inside an xHCI controller that decides how quickly hardware interrupts are sent up to the CPU. Every time the host controller has new events to report, it can either raise an interrupt immediately or wait for a programmable delay. IMOD is that programmable timer, you choose an interval value, the controller loads a counter, and no second interrupt is allowed until the counter has expired and the Event Handler is ready again.
-
-Note that everything written below is based on the [`eXtensible Host Controller Interfact for Universal Serial Bus`](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf) document. See pages `289f.`, `295`, `383`, `388`, `425`, `426`.
-
-`HCSPARAMS1` (Base + 0x04) reports the number of interrupters (`MaxIntrs`). Each *Interrupter Register Set* has its own moderation and the range is 0x1-0x400, so the field must be non zero for a usable controller. The *Runtime Register Base* address equals the *Operational Base* plus the *Runtime Register Space Offset* (`RTSOFF`). `RTSOFF` is at Base + 0x18 and bits [31:5] provide the aligned offset (bits [4:0] are reserved). Every *Interrupter Register Set* has 32 bytes starting at Runtime Base + 0x20. `IMAN` is at `Runtime Base + 0x20 + 32*n`, `IMOD` at `+0x24 + 32*n`, followed by the *Event Ring* registers (`ERSTSZ`, `ERSTBA`, `ERDP`).
-
-When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification is throttled according to the Interrupter's Moderation (`IMOD`) register. `IMOD` combines the Interrupt Moderation Interval (`IMODI`) and the Interrupt Moderation Counter (`IMODC`). Software programs `IMODI` in 250 ns units, the hardware copies it into `IMODC`, counts down, and only raises the interrupt once the counter reaches zero and the *Event Handler Busy* (`EHB`) flag has been cleared. `interrupts/sec = 1 / (250 ns * IMODI)` and `inter-interrupt interval = 250 ns * (interrupts/sec)^-1`. "Recommended tuning values" are 0x28B-0x15CC with a default of 0x4000 (~1ms). For example, `IMODI = 512` guarantees at least 128 us between interrupts, so the maximum rate stays under 8kHz. Writing `IMODI = 0` disables throttling and interrupts are delivered immediately once `EHB` is clear and the *Event Ring* is non empty. Blocking Event handling ensures `IPE` (an internal flag) and `EHB` cooperate with `IMODC`. A new interrupt is prevented until `IMODC` reaches zero, `IPE` is asserted, and `EHB` is cleared, when those conditions hold, the counter reloads from `IMODI` so the pacing cycle repeats.
-
-## Bit Descriptions
-
-### Interrupter Moderation Register (IMOD)
-
-| Bit   | Description|
-| :---: | --- |
-| 15:0 | **Interrupt Moderation Interval (IMODI) – RW.** Default = '4000' (~1ms). Minimum inter-interrupt interval. The interval is specified in 250ns increments. A value of '0' disables interrupt throttling logic and interrupts shall be generated immediately if IP = '0', EHB = '0', and the *Event Ring* is not empty. |
-| 31:16 | **Interrupt Moderation Counter (IMODC) – RW.** Default = undefined. Down counter. Loaded with the IMODI value whenever IP is cleared to '0', counts down to '0', and stops. The associated interrupt shall be signaled whenever this counter is '0', the *Event Ring* is not empty, the IE and IP flags = '1', and EHB = '0'. This counter may be directly written by software at any time to alter the interrupt rate. |
-
-### Host Controller Structural Parameters 2 (HCSPARAMS2)
-
-| Bit  | Description |
-| :---: | --- |
-| 0:3 | **Isochronous Scheduling Threshold (IST).** Default = implementation dependent. The value in this field indicates to system software the minimum distance (in time) that it is required to stay ahead of the host controller while adding TRBs, in order to have the host controller process them at the correct time. The value shall be specified in terms of number of frames/microframes.<br><br>If bit [3] of IST is cleared to '0', software can add a TRB no later than IST[2:0] Microframes before that TRB is scheduled to be executed.<br><br>If bit [3] of IST is set to '1', software can add a TRB no later than IST[2:0] Frames before that TRB is scheduled to be executed.<br><br>Refer to Section 4.14.2 for details on how software uses this information for scheduling isochronous transfers. |
-| 7:4 | ***Event Ring* Segment Table Max (ERST Max).** Default = implementation dependent. Valid values are 0 – 15. This field determines the maximum value supported the **Event Ring* Segment Table Base Size* registers (5.5.2.3.1), where:<br><br>  The maximum number of *Event Ring* Segment Table entries = 2 ERST Max.<br><br>e.g. if the ERST Max = 7, then the xHC **Event Ring* Segment Table(s)* supports up to 128 entries, 15 then 32K entries, etc. |
-| 20:8 | Reserved. |
-
-![](https://github.com/nohuto/win-config/blob/main/power/images/HCSPARAMS2-structure.png?raw=true)
-
-### Runtime Register Space Offset Register (RTSOFF)
-
-| Bit  | Description |
-| :---: | --- |
-| 0 | **Interrupt Pending (IP) – RW1C.** Default = '0'. This flag represents the current state of the Interrupter. If IP = '1', an interrupt is pending for this Interrupter. A '0' value indicates that no interrupt is pending for the Interrupter. Refer to section 4.17.3 for the conditions that modify the state of this flag.                                    |
-| 1 | **Interrupt Enable (IE) – RW.** Default = '0'. This flag specifies whether the Interrupter is capable of generating an interrupt. When this bit and the IP bit are set ('1'), the Interrupter shall generate an interrupt when the Interrupter Moderation Counter reaches '0'. If this bit is '0', then the Interrupter is prohibited from generating interrupts. |
-| 31:2 | Reserved and Preserved. |
-
-![](https://github.com/nohuto/win-config/blob/main/power/images/RTSOFF-structure.png?raw=true)
-
-### Interrupter Management Register Bit Definitions (IMAN)
-
-| Bit  | Description |
-| :---: | --- |
-| 0 | **Interrupt Pending (IP) – RW1C.** Default = '0'. This flag represents the current state of the Interrupter. If IP = '1', an interrupt is pending for this Interrupter. A '0' value indicates that no interrupt is pending for the Interrupter. Refer to section 4.17.3 for the conditions that modify the state of this flag. |
-| 1 | **Interrupt Enable (IE) – RW.** Default = '0'. This flag specifies whether the Interrupter is capable of generating an interrupt. When this bit and the IP bit are set ('1'), the Interrupter shall generate an interrupt when the Interrupter Moderation Counter reaches '0'. If this bit is '0', then the Interrupter is prohibited from generating interrupts. |
-| 31:2 | Reserved and Preserved. |
-
 # Power Plan
 
 ### Noverse Performance
@@ -316,227 +242,79 @@ Adds a `Import` option when right clicking on `.pow` files.
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/powcontextmenu.png?raw=true)
 
-# Power Values
+# xHCI IMOD
 
-Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation. No values are applied that apply to other options in this section.
-
-## Registry Values Details
-
-See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
-
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "ActiveIdleLevel" = 1; // PopFxActiveIdleLevel 
-    "ActiveIdleThreshold" = 5000000; // PopFxActiveIdleThreshold (0x004C4B40) 
-    "ActiveIdleTimeout" = 1000; // PopFxActiveIdleTimeout (0x000003E8) 
-    "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
-    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (4294967295) - REG_DWORD
-    "AllowSystemRequiredPowerRequests" = 1; // PopPowerRequestConvertSystemToExecution 
-    "AlwaysComputeQosHints" = 0; // PpmPerfAlwaysComputeQosEnabled 
-    "BootHeteroPolicyOverride" = 0; // PpmPerfBootHeteroPolicyOverrideEnabled 
-    "CheckpointSystemSleep" = 0; // PopCheckpointSystemSleepEnabledReg 
-    "CheckpointSystemSleepSimulateFlags" = 0; // PopCheckpointSystemSleepSimulateFlags 
-    "CheckPowerSourceAfterRtcWakeTime" = 30; // PopCheckPowerSourceAfterRtcWakeTime (0x1E) 
-    "Class1InitialUnparkCount" = 64; // PpmParkInitialClass1UnParkCount (0x40) 
-    "CoalescingFlushInterval" = 60; // PopCoalescingFlushInterval (0x0000003C) 
-    "CoalescingTimerInterval" = 1500; // PopCoalescingTimerInterval (0x000005DC) - Units: seconds (multiplies value by -10,000,000, one second in 100?ns units, so the default corresponds to a 25min cadence)
-    "DeepIoCoalescingEnabled" = 0; // PopDeepIoCoalescingEnabled 
-    "DirectedDripsAction" = 3; // PopDirectedDripsAction 
-    "DirectedDripsDebounceInterval" = 120; // PopDirectedDripsDebounceInterval (0x78) 
-    "DirectedDripsDfxEnforcementPolicy" = 1; // PopDirectedDripsDfxEnforcementPolicy 
-    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (4294967295) 
-    "DirectedDripsSurprisePowerOnTimeout" = 5; // PopDirectedDripsSurprisePowerOnTimeoutSeconds 
-    "DirectedDripsTimeout" = 300; // PopDirectedDripsTimeout (0x12C) 
-    "DirectedDripsWaitWakeTimeout" = 5; // PopDirectedDripsWaitWakeTimeoutSeconds 
-    "DirectedFxDefaultTimeout" = 120; // PopFxDirectedFxDefaultTimeout (0x00000078) 
-    "DisableDisplayBurstOnPowerSourceChange" = 0; // PopDisableDisplayBurstOnPowerSourceChange 
-    "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
-    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (4294967295) 
-    "DisableVsyncLatencyUpdate" = 0; // PpmDisableVsyncLatencyUpdate 
-    "DozeDeferralChecksToIgnore" = 0; // PopDozeDeferralChecksToIgnore 
-    "DozeDeferralMaxSeconds" = 259200; // PopDozeDeferralMaxSeconds (0x0003F480) 
-    "DripsCallbackInterval" = 35; // PopDripsCallbackInterval (0x23) 
-    "DripsSwHwDivergenceEnableLiveDump" = 0; // PopDripsSwHwDivergenceEnableLiveDump 
-    "DripsSwHwDivergenceThreshold" = 270; // PopDripsSwHwDivergenceThreshold (0x010E) 
-    "DripsWatchdogAction" = 198; // PopDripsWatchdogAction (0xC6) 
-    "DripsWatchdogDebounceInterval" = 120; // PopDripsWatchdogDebounceInterval (0x78) 
-    "DripsWatchdogTimeout" = 300; // PopDripsWatchdogTimeout (0x12C) 
-    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (4294967295) 
-    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile 
-    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (4294967295) 
-    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled 
-    "EnforceAusterityMode" = 0; // PopEnforceAusterityMode 
-    "EnforceConsoleLockScreenTimeout" = 0; // PopEnforceConsoleLockScreenTimeout 
-    "EnforceDisconnectedStandby" = 0; // PopEnforceDisconnectedStandby 
-    "EventProcessorEnabled" = 1; // PopEventProcessorEnabled 
-    "ExitLatencyCheckEnabled" = 0; // PpmExitLatencyCheckEnabled 
-    "ExperimentalClusterIdleMitigation" = 0; // PpmIdleClusterIdleMitigation 
-    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile 
-    "FxAccountingTelemetryDisabled" = 0; // PopDiagFxAccountingTelemetryDisabled 
-    "FxRuntimeLogNumberEntries" = 64; // PopFxRuntimeLogNumberEntries (0x40) - Changing it to 0 will end up with a BSoD
-    "HeteroFavoredCoreRotationTimeoutMs" = 30000; // PpmHeteroFavoredCoreRotationTimeoutMs (0x00007530) 
-    "HeteroHgsEePerfHintsIndependentEnabled" = 0; // PpmHeteroHgsEePerfHintsIndependentEnabled 
-    "HeteroHgsPlusDisabled" = 0; // PpmHeteroHgsThreadDisabled 
-    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (4294967295) 
-    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (4294967295) 
-    "HeteroWpsContainmentEnumOverride" = 0; // PpmHeteroWpsContainmentEnumOverride 
-    "HeteroWpsWorkloadProminenceCutoff" = 35; // PpmHeteroWpsWorkloadProminenceCutoff (0x23) 
-    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default - REG_DWORD
-    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295)
-    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295)
-    "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
-    "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
-    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg - REG_DWORD
-    "HighPerfDurationBoot" = 90000; // PpmHighPerfDuration (0x00015F90) 
-    "HighPerfDurationCSExit" = ?; // unk_140FC337C
-    "HighPerfDurationSxExit" = ?; // unk_140FC3380
-    "IdleDurationExpirationTimeout" = 4; // PpmIdleDurationExpirationTimeoutMs 
-    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (4294967295) 
-    "IdleStateTimeout" = 500; // PopPepIdleStateTimeout (0x000001F4) 
-    "IgnoreCsComplianceCheck" = 0; // PopIgnoreCsComplianceCheck 
-    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (4294967295) 
-    "IpiLastClockOwnerDisable" = 0; // PpmIpiLastClockOwnerDisable 
-    "LatencyToleranceDefault" = 100000; // PpmLatencyToleranceLimit (0x000186A0) 
-    "LatencyToleranceFSVP" = 20000; // dword_140FC3428 dd 4E20
-    "LatencyToleranceIdleResiliency" = 1500000; // dword_140FC342C dd 16E360
-    "LatencyToleranceParked" = 0; // PpmIdleParkedLatencyLimit 
-    "LatencyToleranceSoftParked" = 0; // PpmIdleSoftParkedLatencyLimit 
-    "LatencyToleranceVSyncEnabled" = 13001; // dword_140FC3424 dd 32C9
-    "LidReliabilityState" = 1; // REG_DWORD, range 0-1
-    "ManualDimTimeout" = 0; // PopAdaptiveManualDimTimeout 
-    "MaximumFrequencyOverride" = 0; // PpmFrequencyOverride 
-    "MfBufferingThreshold" = 0; // PpmMfBufferingThreshold 
-    "MfOverridesDisabled" = 1; // PpmMfOverridesDisabled 
-    "MSDisabled" = 0; // PopModernStandbyDisabled 
-    "MultiparkGranularity" = 8; // PpmParkMultiparkGranularity 
-    "PdcIdlePhaseDefaultWatchdogTimeoutSeconds" = 30; // PopPdcIdlePhaseDefaultWatchdogTimeoutSeconds (0x0000001E) 
-    "PdcOneWayEntry" = 0; // PopPowerAggregatorOneWayEntry 
-    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (4294967295) 
-    "PerfBoostAtGuaranteed" = 0; // PpmPerfBoostAtGuaranteed 
-    "PerfCalculateActualUtilization" = 1; // PpmPerfCalculateActualUtilization 
-    "PerfCheckTimerImplementation" = 0; // PpmCheckTimerImplementation 
-    "PerfIdealAggressiveIncreasePolicyThreshold" = 90; // PpmPerfIdealAggressiveIncreaseThreshold (0x5A) 
-    "PerfQueryOnDevicePowerChanges" = 0; // PopFxPerfQueryOnDevicePowerChanges 
-    "PerfSingleStepSize" = 5; // PpmPerfSingleStepSize (0x05) 
-    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (4294967295) 
-    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (4294967295) 
-    "PoFxSystemIrpWaitForReportDevicePowered" = 0; // PopPoFxSystemIrpWaitForReportDevicePoweredReg 
-    "PowerActionResumeWatchdogTimeoutDefault" = 300; // PopPowerActionResumingWatchdogTimeoutDefault (0x0000012C) 
-    "PowerActionTransitioningWatchdogTimeoutDefault" = 600; // PopPowerActionTransitioningWatchdogTimeoutDefault (0x00000258) 
-    "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
-    "ProximityEscapeMsec" = 0; // TtmpProximityEscapeMsec 
-    "RestrictedStandbyDozeTimeoutSeconds" = 0; // PopPowerAggregatorRestrictedStandbyDozeTimeoutSeconds 
-    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (4294967295) 
-    "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
-    "SleepstudyGlobalBlockerLimit" = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
-    "SleepstudyLibraryBlockerLimit" = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
-    "SmartUserPresenceAction" = 0; // PopSmartUserPresenceAction 
-    "SmartUserPresenceCheckTimeout" = 10800; // PopSmartUserPresenceCheckTimeout (0x00002A30) 
-    "SmartUserPresenceGracePeriod" = 1800; // PopSmartUserPresenceGracePeriod (0x00000708) 
-    "SmartUserPresenceWakeOffset" = 300; // PopSmartUserPresenceWakeOffset (0x0000012C) 
-    "StandbyConnectivityGracePeriod" = 0; // PopStandbyConnectivityGracePeriod 
-    "SuppressResumePrompt" = 0; // PopSuppressResumePrompt 
-    "ThermalPollingMode" = 0; // PopThermalPollingMode 
-    "ThermalTelemetryVerbosity" = 1; // PopThermalTelemetryVerbosity 
-    "TimerRebaseThresholdOnDripsExit" = 60; // PopTimerRebaseThresholdRegValue (0x3C) 
-    "TtmEnabled" = 0; // TtmpEnabled 
-    "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator 
-    "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator 
-    "WatchdogWorkOrderTimeout" = 300000; // PopFxWatchdogWorkOrderTimeout (0x000493E0) 
-    "Win32kCalloutWatchdogTimeoutSeconds" = 30; // PopWin32kCalloutWatchdogTimeoutSeconds (0x0000001E) 
-
-    // UmpoRestoreEsOverrideState
-    "EnergySaverState" = 2; // 1 = override state (more power savings) if != 1 no override? (WNF_PO_ENERGY_SAVER_OVERRIDE/WNF_SEB_ENERGY_SAVER_STATE_V2), this value is controlled by System > Power: Always use energy saver (1=on, 2=off)
-
-    // InitializePowerWatchdogTimeoutDefaults
-    "PowerWatchdogDrvSetMonitorTimeoutMsec" = 10000; // v10[13]
-    "PowerWatchdogDwmSyncFlushTimeoutMsec" = 30000; // v10[10]
-    "PowerWatchdogPoCalloutTimeoutMsec" = 10000;
-    "PowerWatchdogPowerOnGdiTimeoutMsec" = 30000;
-    "PowerWatchdogRequestQueueTimeoutMsec" = 30000;
-
-    // from procmon boot trace
-    "DisableHotKeyWhenConsoleOff" = ?;
-    "EmiPollingInterval" = ?;
-    "EmiTelemetryActivePollingInterval" = ?;
-    "EmiTelemetryCsPollingInterval" = ?;
-    "LidNotifyReliable" = ?;
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
-    "GuardedHost" = ?; // unk_140FC5234
-    "Policy" = 0; // PopHiberForceDisabledReg 
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
-    "Percent16GBFull" = ?; // unk_140FC36D0 - 28Hex/40Dec?
-    "Percent16GBReduced" = ?; // unk_140FC36CC - 14Hex/20Dec?
-    "Percent1GBFull" = ?; // unk_140FC3670 - 28Hex/40Dec?
-    "Percent1GBReduced" = ?; // unk_140FC366C - 14Hex/20Dec?
-    "Percent2GBFull" = ?; // unk_140FC3688 - 28Hex/40Dec?
-    "Percent2GBReduced" = ?; // unk_140FC3684 - 14Hex/20Dec?
-    "Percent32GBFull" = ?; // unk_140FC36E8 - 28Hex/40Dec?
-    "Percent32GBReduced" = ?; // unk_140FC36E4 - 14Hex/20Dec?
-    "Percent4GBFull" = ?; // unk_140FC36A0 - 28Hex/40Dec?
-    "Percent4GBReduced" = ?; // unk_140FC369C - 14Hex/20Dec?
-    "Percent8GBFull" = ?; // unk_140FC36B8 - 28Hex/40Dec?
-    "Percent8GBReduced" = ?; // unk_140FC36B4 - 14Hex/20Dec?
-    "PercentUnlimitedFull" = ?; // unk_140FC3700 - 28Hex/40Dec?
-    "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec?
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep";
-    "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
-    "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
-    "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
-```
-
-## PowerThrottlingOff Details
-
-```
-Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
-```
-
-When looking into the pseudocode (PopInitializeHeteroProcessors) it shows that if the value is set to nonzero it would:
-- force QoS allow variable `v5` to `0` and stores it in `PpmPerfQosSupportedAndAllowed` at the end
-- passes `v5` (`0`) value into `KeConfigureHeteroProcessors`
-- skips `PpmIdleEnableIdleDurationExpirationTimeout` (`PpmIdleDurationExpirationTimeout = (unsigned int)(10000 * PpmIdleDurationExpirationTimeoutMs);`, `PpmInstallNewIdleStates` can also set `PpmIdleDurationExpirationTimeout`), causing the idle expiration to be off by exiting PoExecuteIdleCheck instantly (otherwise periodic checks would run, see `PoExecuteIdleCheck`)
-
-All of this seems to depend on whenever either
-```c
-v4 = 0;
-if ( (PpmBackgroundProfile || PpmEntryLevelPerfProfile || PpmMultimediaQosProfile || PpmPerfAlwaysComputeQosEnabled)
-  && PpmPerfSchedulerDirectedPerfStatesSupported
-  && KeQueryActiveProcessorCountEx(0) >= 2 )
-{
-  v4 = 1;
-}
-if ( PpmPerfVmQosSupported )
-{
-  v4 = 1;
-  goto LABEL_13;
-}
-if ( v4 )
-{
-LABEL_13:
-  v5 = 1;
-  if ( !PpmPerfQosGroupPolicyDisable ) // if PowerThrottlingOff = 1, then v5 = 0
-    goto LABEL_15;
-}
-v5 = 0; // forced 0 if v4 not true
-LABEL_15:
-```
-or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresent) are true. If both aren't true, then v5 is already 0 means changing PowerThrottlingOff would have no impact?
-
-On my system both aren't true means that changing the value has no impact as v5 can't be `1` (this is my current interpretation).
-
-Note that this is based on [binary build version 22631 (23H2)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) and isn't complete. I might add more/get better structure into whenever I've time.
+| Flag | Description |
+| --- | --- |
+| `--rw-path PATH` | Override the default `%LOCALAPPDATA%\Noverse\IMOD\RwPortable\Win64\Portable\Rw.exe` location |
+| `--bdf BB:DD.F` | Use a specific controller by Bus:Device.Function (hex). Mutually exclusive with `--xhci-index`/`--all` |
+| `--xhci-index N` | Use the Nth xHCI controller reported by `FPciClass` (defaults to 0 when `--bdf/--all` absent) |
+| `--all` | Iterate through every xHCI controller and apply the same IMOD changes to each |
+| `--interrupter ID` / `-i ID` | Restrict the operation to specific interrupter IDs, repeat the flag for multiple IDs (defaults to all) |
+| `--interval VALUE` | Set a custom IMOD interval (0–0xFFFF, in 250 ns ticks). Use for example `0xC800` (~48 Hz) to see if chaning the interval works |
+| `--no-write` | Only read and print IMOD registers (skip the write for information only) |
+| `--startup` | Copy the script or exe to `%LOCALAPPDATA%\Noverse\IMOD\` and creates a scheduled task that runs the command at each logon |
+| `--delete` | Delete the scheduled task created by `--startup` |
+| `--no-exit` | Keep the console open after completion |
+| `--verbose` | Output all `rw.exe` commands/results |
 
 ```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
-    "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
+--all --no-write --no-exit // information only
+--all --no-write --verbose --no-exit // rw commands/output
+--all // 0 for all controllers
+--all --interval 0xC800 // testing (~48hz)
+--all --startup // 0 for all controllers, creates scheduled task
+--delete // removes the task
 ```
+
+You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/assets/NV-IMOD.exe) from my repository, I packed it into one package since some may not have python installed on their system.
+
+## xHCI Interrupt Moderation Notes
+
+Interrupt Moderation (IMOD) is the pacing logic inside an xHCI controller that decides how quickly hardware interrupts are sent up to the CPU. Every time the host controller has new events to report, it can either raise an interrupt immediately or wait for a programmable delay. IMOD is that programmable timer, you choose an interval value, the controller loads a counter, and no second interrupt is allowed until the counter has expired and the Event Handler is ready again.
+
+Note that everything written below is based on the [`eXtensible Host Controller Interfact for Universal Serial Bus`](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf) document. See pages `289f.`, `295`, `383`, `388`, `425`, `426`.
+
+`HCSPARAMS1` (Base + 0x04) reports the number of interrupters (`MaxIntrs`). Each *Interrupter Register Set* has its own moderation and the range is 0x1-0x400, so the field must be non zero for a usable controller. The *Runtime Register Base* address equals the *Operational Base* plus the *Runtime Register Space Offset* (`RTSOFF`). `RTSOFF` is at Base + 0x18 and bits [31:5] provide the aligned offset (bits [4:0] are reserved). Every *Interrupter Register Set* has 32 bytes starting at Runtime Base + 0x20. `IMAN` is at `Runtime Base + 0x20 + 32*n`, `IMOD` at `+0x24 + 32*n`, followed by the *Event Ring* registers (`ERSTSZ`, `ERSTBA`, `ERDP`).
+
+When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification is throttled according to the Interrupter's Moderation (`IMOD`) register. `IMOD` combines the Interrupt Moderation Interval (`IMODI`) and the Interrupt Moderation Counter (`IMODC`). Software programs `IMODI` in 250 ns units, the hardware copies it into `IMODC`, counts down, and only raises the interrupt once the counter reaches zero and the *Event Handler Busy* (`EHB`) flag has been cleared. `interrupts/sec = 1 / (250 ns * IMODI)` and `inter-interrupt interval = 250 ns * (interrupts/sec)^-1`. "Recommended tuning values" are 0x28B-0x15CC with a default of 0x4000 (~1ms). For example, `IMODI = 512` guarantees at least 128 us between interrupts, so the maximum rate stays under 8kHz. Writing `IMODI = 0` disables throttling and interrupts are delivered immediately once `EHB` is clear and the *Event Ring* is non empty. Blocking Event handling ensures `IPE` (an internal flag) and `EHB` cooperate with `IMODC`. A new interrupt is prevented until `IMODC` reaches zero, `IPE` is asserted, and `EHB` is cleared, when those conditions hold, the counter reloads from `IMODI` so the pacing cycle repeats.
+
+## Bit Descriptions
+
+### Interrupter Moderation Register (IMOD)
+
+| Bit   | Description|
+| :---: | --- |
+| 15:0 | **Interrupt Moderation Interval (IMODI) – RW.** Default = '4000' (~1ms). Minimum inter-interrupt interval. The interval is specified in 250ns increments. A value of '0' disables interrupt throttling logic and interrupts shall be generated immediately if IP = '0', EHB = '0', and the *Event Ring* is not empty. |
+| 31:16 | **Interrupt Moderation Counter (IMODC) – RW.** Default = undefined. Down counter. Loaded with the IMODI value whenever IP is cleared to '0', counts down to '0', and stops. The associated interrupt shall be signaled whenever this counter is '0', the *Event Ring* is not empty, the IE and IP flags = '1', and EHB = '0'. This counter may be directly written by software at any time to alter the interrupt rate. |
+
+### Host Controller Structural Parameters 2 (HCSPARAMS2)
+
+| Bit  | Description |
+| :---: | --- |
+| 0:3 | **Isochronous Scheduling Threshold (IST).** Default = implementation dependent. The value in this field indicates to system software the minimum distance (in time) that it is required to stay ahead of the host controller while adding TRBs, in order to have the host controller process them at the correct time. The value shall be specified in terms of number of frames/microframes.<br><br>If bit [3] of IST is cleared to '0', software can add a TRB no later than IST[2:0] Microframes before that TRB is scheduled to be executed.<br><br>If bit [3] of IST is set to '1', software can add a TRB no later than IST[2:0] Frames before that TRB is scheduled to be executed.<br><br>Refer to Section 4.14.2 for details on how software uses this information for scheduling isochronous transfers. |
+| 7:4 | ***Event Ring* Segment Table Max (ERST Max).** Default = implementation dependent. Valid values are 0 – 15. This field determines the maximum value supported the **Event Ring* Segment Table Base Size* registers (5.5.2.3.1), where:<br><br>  The maximum number of *Event Ring* Segment Table entries = 2 ERST Max.<br><br>e.g. if the ERST Max = 7, then the xHC **Event Ring* Segment Table(s)* supports up to 128 entries, 15 then 32K entries, etc. |
+| 20:8 | Reserved. |
+
+![](https://github.com/nohuto/win-config/blob/main/power/images/HCSPARAMS2-structure.png?raw=true)
+
+### Runtime Register Space Offset Register (RTSOFF)
+
+| Bit  | Description |
+| :---: | --- |
+| 0 | **Interrupt Pending (IP) – RW1C.** Default = '0'. This flag represents the current state of the Interrupter. If IP = '1', an interrupt is pending for this Interrupter. A '0' value indicates that no interrupt is pending for the Interrupter. Refer to section 4.17.3 for the conditions that modify the state of this flag.                                    |
+| 1 | **Interrupt Enable (IE) – RW.** Default = '0'. This flag specifies whether the Interrupter is capable of generating an interrupt. When this bit and the IP bit are set ('1'), the Interrupter shall generate an interrupt when the Interrupter Moderation Counter reaches '0'. If this bit is '0', then the Interrupter is prohibited from generating interrupts. |
+| 31:2 | Reserved and Preserved. |
+
+![](https://github.com/nohuto/win-config/blob/main/power/images/RTSOFF-structure.png?raw=true)
+
+### Interrupter Management Register Bit Definitions (IMAN)
+
+| Bit  | Description |
+| :---: | --- |
+| 0 | **Interrupt Pending (IP) – RW1C.** Default = '0'. This flag represents the current state of the Interrupter. If IP = '1', an interrupt is pending for this Interrupter. A '0' value indicates that no interrupt is pending for the Interrupter. Refer to section 4.17.3 for the conditions that modify the state of this flag. |
+| 1 | **Interrupt Enable (IE) – RW.** Default = '0'. This flag specifies whether the Interrupter is capable of generating an interrupt. When this bit and the IP bit are set ('1'), the Interrupter shall generate an interrupt when the Interrupter Moderation Counter reaches '0'. If this bit is '0', then the Interrupter is prohibited from generating interrupts. |
+| 31:2 | Reserved and Preserved. |
 
 # PnP Device Values
 
@@ -935,6 +713,388 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 - [power/assets | storport.c](https://github.com/nohuto/win-config/blob/main/power/assets/storport.c)
 
+# Power Values
+
+Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation. No values are applied that apply to other options in this section.
+
+## Registry Values Details
+
+See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
+
+Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "ActiveIdleLevel" = 1; // PopFxActiveIdleLevel 
+    "ActiveIdleThreshold" = 5000000; // PopFxActiveIdleThreshold (0x004C4B40) 
+    "ActiveIdleTimeout" = 1000; // PopFxActiveIdleTimeout (0x000003E8) 
+    "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
+    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (4294967295) - REG_DWORD
+    "AllowSystemRequiredPowerRequests" = 1; // PopPowerRequestConvertSystemToExecution 
+    "AlwaysComputeQosHints" = 0; // PpmPerfAlwaysComputeQosEnabled 
+    "BootHeteroPolicyOverride" = 0; // PpmPerfBootHeteroPolicyOverrideEnabled 
+    "CheckpointSystemSleep" = 0; // PopCheckpointSystemSleepEnabledReg 
+    "CheckpointSystemSleepSimulateFlags" = 0; // PopCheckpointSystemSleepSimulateFlags 
+    "CheckPowerSourceAfterRtcWakeTime" = 30; // PopCheckPowerSourceAfterRtcWakeTime (0x1E) 
+    "Class1InitialUnparkCount" = 64; // PpmParkInitialClass1UnParkCount (0x40) 
+    "CoalescingFlushInterval" = 60; // PopCoalescingFlushInterval (0x0000003C) 
+    "CoalescingTimerInterval" = 1500; // PopCoalescingTimerInterval (0x000005DC) - Units: seconds (multiplies value by -10,000,000, one second in 100?ns units, so the default corresponds to a 25min cadence)
+    "DeepIoCoalescingEnabled" = 0; // PopDeepIoCoalescingEnabled 
+    "DirectedDripsAction" = 3; // PopDirectedDripsAction 
+    "DirectedDripsDebounceInterval" = 120; // PopDirectedDripsDebounceInterval (0x78) 
+    "DirectedDripsDfxEnforcementPolicy" = 1; // PopDirectedDripsDfxEnforcementPolicy 
+    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (4294967295) 
+    "DirectedDripsSurprisePowerOnTimeout" = 5; // PopDirectedDripsSurprisePowerOnTimeoutSeconds 
+    "DirectedDripsTimeout" = 300; // PopDirectedDripsTimeout (0x12C) 
+    "DirectedDripsWaitWakeTimeout" = 5; // PopDirectedDripsWaitWakeTimeoutSeconds 
+    "DirectedFxDefaultTimeout" = 120; // PopFxDirectedFxDefaultTimeout (0x00000078) 
+    "DisableDisplayBurstOnPowerSourceChange" = 0; // PopDisableDisplayBurstOnPowerSourceChange 
+    "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
+    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (4294967295) 
+    "DisableVsyncLatencyUpdate" = 0; // PpmDisableVsyncLatencyUpdate 
+    "DozeDeferralChecksToIgnore" = 0; // PopDozeDeferralChecksToIgnore 
+    "DozeDeferralMaxSeconds" = 259200; // PopDozeDeferralMaxSeconds (0x0003F480) 
+    "DripsCallbackInterval" = 35; // PopDripsCallbackInterval (0x23) 
+    "DripsSwHwDivergenceEnableLiveDump" = 0; // PopDripsSwHwDivergenceEnableLiveDump 
+    "DripsSwHwDivergenceThreshold" = 270; // PopDripsSwHwDivergenceThreshold (0x010E) 
+    "DripsWatchdogAction" = 198; // PopDripsWatchdogAction (0xC6) 
+    "DripsWatchdogDebounceInterval" = 120; // PopDripsWatchdogDebounceInterval (0x78) 
+    "DripsWatchdogTimeout" = 300; // PopDripsWatchdogTimeout (0x12C) 
+    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (4294967295) 
+    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile 
+    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (4294967295) 
+    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled 
+    "EnforceAusterityMode" = 0; // PopEnforceAusterityMode 
+    "EnforceConsoleLockScreenTimeout" = 0; // PopEnforceConsoleLockScreenTimeout 
+    "EnforceDisconnectedStandby" = 0; // PopEnforceDisconnectedStandby 
+    "EventProcessorEnabled" = 1; // PopEventProcessorEnabled 
+    "ExitLatencyCheckEnabled" = 0; // PpmExitLatencyCheckEnabled 
+    "ExperimentalClusterIdleMitigation" = 0; // PpmIdleClusterIdleMitigation 
+    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile 
+    "FxAccountingTelemetryDisabled" = 0; // PopDiagFxAccountingTelemetryDisabled 
+    "FxRuntimeLogNumberEntries" = 64; // PopFxRuntimeLogNumberEntries (0x40) - Changing it to 0 will end up with a BSoD
+    "HeteroFavoredCoreRotationTimeoutMs" = 30000; // PpmHeteroFavoredCoreRotationTimeoutMs (0x00007530) 
+    "HeteroHgsEePerfHintsIndependentEnabled" = 0; // PpmHeteroHgsEePerfHintsIndependentEnabled 
+    "HeteroHgsPlusDisabled" = 0; // PpmHeteroHgsThreadDisabled 
+    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (4294967295) 
+    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (4294967295) 
+    "HeteroWpsContainmentEnumOverride" = 0; // PpmHeteroWpsContainmentEnumOverride 
+    "HeteroWpsWorkloadProminenceCutoff" = 35; // PpmHeteroWpsWorkloadProminenceCutoff (0x23) 
+    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default - REG_DWORD
+    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295)
+    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295)
+    "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
+    "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
+    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg - REG_DWORD
+    "HighPerfDurationBoot" = 90000; // PpmHighPerfDuration (0x00015F90) 
+    "HighPerfDurationCSExit" = ?; // unk_140FC337C
+    "HighPerfDurationSxExit" = ?; // unk_140FC3380
+    "IdleDurationExpirationTimeout" = 4; // PpmIdleDurationExpirationTimeoutMs 
+    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (4294967295) 
+    "IdleStateTimeout" = 500; // PopPepIdleStateTimeout (0x000001F4) 
+    "IgnoreCsComplianceCheck" = 0; // PopIgnoreCsComplianceCheck 
+    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (4294967295) 
+    "IpiLastClockOwnerDisable" = 0; // PpmIpiLastClockOwnerDisable 
+    "LatencyToleranceDefault" = 100000; // PpmLatencyToleranceLimit (0x000186A0) 
+    "LatencyToleranceFSVP" = 20000; // dword_140FC3428 dd 4E20
+    "LatencyToleranceIdleResiliency" = 1500000; // dword_140FC342C dd 16E360
+    "LatencyToleranceParked" = 0; // PpmIdleParkedLatencyLimit 
+    "LatencyToleranceSoftParked" = 0; // PpmIdleSoftParkedLatencyLimit 
+    "LatencyToleranceVSyncEnabled" = 13001; // dword_140FC3424 dd 32C9
+    "LidReliabilityState" = 1; // REG_DWORD, range 0-1
+    "ManualDimTimeout" = 0; // PopAdaptiveManualDimTimeout 
+    "MaximumFrequencyOverride" = 0; // PpmFrequencyOverride 
+    "MfBufferingThreshold" = 0; // PpmMfBufferingThreshold 
+    "MfOverridesDisabled" = 1; // PpmMfOverridesDisabled 
+    "MSDisabled" = 0; // PopModernStandbyDisabled 
+    "MultiparkGranularity" = 8; // PpmParkMultiparkGranularity 
+    "PdcIdlePhaseDefaultWatchdogTimeoutSeconds" = 30; // PopPdcIdlePhaseDefaultWatchdogTimeoutSeconds (0x0000001E) 
+    "PdcOneWayEntry" = 0; // PopPowerAggregatorOneWayEntry 
+    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (4294967295) 
+    "PerfBoostAtGuaranteed" = 0; // PpmPerfBoostAtGuaranteed 
+    "PerfCalculateActualUtilization" = 1; // PpmPerfCalculateActualUtilization 
+    "PerfCheckTimerImplementation" = 0; // PpmCheckTimerImplementation 
+    "PerfIdealAggressiveIncreasePolicyThreshold" = 90; // PpmPerfIdealAggressiveIncreaseThreshold (0x5A) 
+    "PerfQueryOnDevicePowerChanges" = 0; // PopFxPerfQueryOnDevicePowerChanges 
+    "PerfSingleStepSize" = 5; // PpmPerfSingleStepSize (0x05) 
+    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (4294967295) 
+    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (4294967295) 
+    "PoFxSystemIrpWaitForReportDevicePowered" = 0; // PopPoFxSystemIrpWaitForReportDevicePoweredReg 
+    "PowerActionResumeWatchdogTimeoutDefault" = 300; // PopPowerActionResumingWatchdogTimeoutDefault (0x0000012C) 
+    "PowerActionTransitioningWatchdogTimeoutDefault" = 600; // PopPowerActionTransitioningWatchdogTimeoutDefault (0x00000258) 
+    "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
+    "ProximityEscapeMsec" = 0; // TtmpProximityEscapeMsec 
+    "RestrictedStandbyDozeTimeoutSeconds" = 0; // PopPowerAggregatorRestrictedStandbyDozeTimeoutSeconds 
+    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (4294967295) 
+    "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
+    "SleepstudyGlobalBlockerLimit" = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
+    "SleepstudyLibraryBlockerLimit" = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
+    "SmartUserPresenceAction" = 0; // PopSmartUserPresenceAction 
+    "SmartUserPresenceCheckTimeout" = 10800; // PopSmartUserPresenceCheckTimeout (0x00002A30) 
+    "SmartUserPresenceGracePeriod" = 1800; // PopSmartUserPresenceGracePeriod (0x00000708) 
+    "SmartUserPresenceWakeOffset" = 300; // PopSmartUserPresenceWakeOffset (0x0000012C) 
+    "StandbyConnectivityGracePeriod" = 0; // PopStandbyConnectivityGracePeriod 
+    "SuppressResumePrompt" = 0; // PopSuppressResumePrompt 
+    "ThermalPollingMode" = 0; // PopThermalPollingMode 
+    "ThermalTelemetryVerbosity" = 1; // PopThermalTelemetryVerbosity 
+    "TimerRebaseThresholdOnDripsExit" = 60; // PopTimerRebaseThresholdRegValue (0x3C) 
+    "TtmEnabled" = 0; // TtmpEnabled 
+    "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator 
+    "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator 
+    "WatchdogWorkOrderTimeout" = 300000; // PopFxWatchdogWorkOrderTimeout (0x000493E0) 
+    "Win32kCalloutWatchdogTimeoutSeconds" = 30; // PopWin32kCalloutWatchdogTimeoutSeconds (0x0000001E) 
+
+    // UmpoRestoreEsOverrideState
+    "EnergySaverState" = 2; // 1 = override state (more power savings) if != 1 no override? (WNF_PO_ENERGY_SAVER_OVERRIDE/WNF_SEB_ENERGY_SAVER_STATE_V2), this value is controlled by System > Power: Always use energy saver (1=on, 2=off)
+
+    // InitializePowerWatchdogTimeoutDefaults
+    "PowerWatchdogDrvSetMonitorTimeoutMsec" = 10000; // v10[13]
+    "PowerWatchdogDwmSyncFlushTimeoutMsec" = 30000; // v10[10]
+    "PowerWatchdogPoCalloutTimeoutMsec" = 10000;
+    "PowerWatchdogPowerOnGdiTimeoutMsec" = 30000;
+    "PowerWatchdogRequestQueueTimeoutMsec" = 30000;
+
+    // from procmon boot trace
+    "DisableHotKeyWhenConsoleOff" = ?;
+    "EmiPollingInterval" = ?;
+    "EmiTelemetryActivePollingInterval" = ?;
+    "EmiTelemetryCsPollingInterval" = ?;
+    "LidNotifyReliable" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
+    "GuardedHost" = ?; // unk_140FC5234
+    "Policy" = 0; // PopHiberForceDisabledReg 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
+    "Percent16GBFull" = ?; // unk_140FC36D0 - 28Hex/40Dec?
+    "Percent16GBReduced" = ?; // unk_140FC36CC - 14Hex/20Dec?
+    "Percent1GBFull" = ?; // unk_140FC3670 - 28Hex/40Dec?
+    "Percent1GBReduced" = ?; // unk_140FC366C - 14Hex/20Dec?
+    "Percent2GBFull" = ?; // unk_140FC3688 - 28Hex/40Dec?
+    "Percent2GBReduced" = ?; // unk_140FC3684 - 14Hex/20Dec?
+    "Percent32GBFull" = ?; // unk_140FC36E8 - 28Hex/40Dec?
+    "Percent32GBReduced" = ?; // unk_140FC36E4 - 14Hex/20Dec?
+    "Percent4GBFull" = ?; // unk_140FC36A0 - 28Hex/40Dec?
+    "Percent4GBReduced" = ?; // unk_140FC369C - 14Hex/20Dec?
+    "Percent8GBFull" = ?; // unk_140FC36B8 - 28Hex/40Dec?
+    "Percent8GBReduced" = ?; // unk_140FC36B4 - 14Hex/20Dec?
+    "PercentUnlimitedFull" = ?; // unk_140FC3700 - 28Hex/40Dec?
+    "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec?
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep";
+    "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
+    "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
+    "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
+```
+
+## PowerThrottlingOff Details
+
+```
+Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
+```
+
+When looking into the pseudocode (PopInitializeHeteroProcessors) it shows that if the value is set to nonzero it would:
+- force QoS allow variable `v5` to `0` and stores it in `PpmPerfQosSupportedAndAllowed` at the end
+- passes `v5` (`0`) value into `KeConfigureHeteroProcessors`
+- skips `PpmIdleEnableIdleDurationExpirationTimeout` (`PpmIdleDurationExpirationTimeout = (unsigned int)(10000 * PpmIdleDurationExpirationTimeoutMs);`, `PpmInstallNewIdleStates` can also set `PpmIdleDurationExpirationTimeout`), causing the idle expiration to be off by exiting PoExecuteIdleCheck instantly (otherwise periodic checks would run, see `PoExecuteIdleCheck`)
+
+All of this seems to depend on whenever either
+```c
+v4 = 0;
+if ( (PpmBackgroundProfile || PpmEntryLevelPerfProfile || PpmMultimediaQosProfile || PpmPerfAlwaysComputeQosEnabled)
+  && PpmPerfSchedulerDirectedPerfStatesSupported
+  && KeQueryActiveProcessorCountEx(0) >= 2 )
+{
+  v4 = 1;
+}
+if ( PpmPerfVmQosSupported )
+{
+  v4 = 1;
+  goto LABEL_13;
+}
+if ( v4 )
+{
+LABEL_13:
+  v5 = 1;
+  if ( !PpmPerfQosGroupPolicyDisable ) // if PowerThrottlingOff = 1, then v5 = 0
+    goto LABEL_15;
+}
+v5 = 0; // forced 0 if v4 not true
+LABEL_15:
+```
+or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresent) are true. If both aren't true, then v5 is already 0 means changing PowerThrottlingOff would have no impact?
+
+On my system both aren't true means that changing the value has no impact as v5 can't be `1` (this is my current interpretation).
+
+Note that this is based on [binary build version 22631 (23H2)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) and isn't complete. I might add more/get better structure into whenever I've time.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
+    "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
+```
+
+# Disable NIC Power Savings
+
+You can get a lot of information about data ranges and more from `.inf` files, see examples below.
+
+## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
+
+Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+
+See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
+    "*DeviceSleepOnDisconnect" = 0; // range 0-1
+    "*EnableDynamicPowerGating" = 1; // range 0-1
+    "DisableIntelRST" = 1; // range 0-1
+    "DMACoalescing" = 0; // range 0-10240
+    "EnableDisconnectedStandby" = 0; // range 0-1
+    "EnableModernStandby" = 0; // range 0-1
+    "EnablePME" = 0; // range 0-1
+    "EnablePowerManagement" = 1; // range 0-1
+    "ForceHostExitUlp" = 0; // range 0-1
+    "ForceLtrValue" = 65535; // range 0-65535
+    "I218DisablePLLShut" = 0; // range 0-1
+    "I218DisablePLLShutGiga" = 0; // range 0-1
+    "I219DisableK1Off" = 0; // range 0-1
+    "ULPMode" = 1; // range 0-1
+```
+
+| SubkeyName | ParamDesc | Default | Minimum | Maximum |
+| --- | --- | --- | --- | --- |
+| `*WakeOnPattern` | A value that describes whether the device should be enabled to wake the computer when a network packet matches a specified pattern. | 1 | 0 | 1 |
+| `*WakeOnMagicPacket` | A value that describes whether the device should be enabled to wake the computer when the device receives a magic packet. A magic packet is a packet that contains 16 contiguous copies of the receiving network adapter's ethernet address. | 1 | 0 | 1 |
+| `*EEE` | A value that describes whether the device should enable IEEE 802.3az energy-efficient ethernet. | 1 | 0 | 1 |
+| `*IdleRestriction` | If a network device has both idle power down and wake on packet filter capabilities, this setting allows the user to decide when the device idle power down can happen. `1` = Only idle when user isn't present, `0` = No restriction | 0 | 0 | 1 |
+| `*ModernStandbyWoLMagicPacket` | A value that describes whether the device should be enabled to wake the computer when the device receives a magic packet and the system is in the S0ix power state. This doesn't apply when the system is in the S4 power state. | 0 | 0 | 1 |
+| `*DeviceSleepOnDisconnect` | A value that describes whether the device should be enabled to put the device into a low-power state (sleep state) when media is disconnected and return to a full-power state (wake state) when media is connected again. | 1 | 0 | 1 |
+| [`*SelectiveSuspend`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-selective-suspend) | Selective suspend (0 disabled, 1 enabled) | 1 | 0 | 1 |
+| [`*SSIdleTimeout`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeout-inf-keyword) | This keyword specifies the idle time-out period in units of seconds. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeout value, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 5 | 1 | 60 |
+| [`*SSIdleTimeoutScreenOff`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeoutscreenoff-inf-keyword) | This keyword specifies the idle time-out period in units of seconds and is only applicable when the screen is off. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeoutScreenOff value after the screen is off, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 3 | 1 | 60 |
+
+- [network/standardized-inf-keywords-for-power-management](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md)
+- [network/standardized-inf-keywords-for-ndis-selective-suspend](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md)
+
+### Setup Information
+
+```inf
+HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
+HKR,Ndi\Params\*DeviceSleepOnDisconnect,type,         ,enum
+HKR,Ndi\Params\*DeviceSleepOnDisconnect,default,      ,0
+HKR,Ndi\Params\*DeviceSleepOnDisconnect\enum,0,       ,%Disabled%
+HKR,Ndi\Params\*DeviceSleepOnDisconnect\enum,1,       ,%Enabled%
+
+HKR, Ndi\Params\*EEE,    	                ParamDesc,      0,       %EEE%
+HKR, Ndi\Params\*EEE,    	                Type,           0,       "enum"
+HKR, Ndi\Params\*EEE\enum, 	                "1",            0,       %Enabled%
+HKR, Ndi\Params\*EEE\enum, 	                "0",            0,       %Disabled%
+HKR, Ndi\Params\*EEE,    	                Default,        0,       "0"
+
+HKR,Ndi\params\*SelectiveSuspend,	    ParamDesc,  0, %SelectiveSuspend%
+HKR,Ndi\params\*SelectiveSuspend,	    default,    0, "1"
+HKR,Ndi\params\*SelectiveSuspend,	    type,       0, "enum"
+HKR,Ndi\params\*SelectiveSuspend\enum,   "0",        0, "Disabled"
+HKR,Ndi\params\*SelectiveSuspend\enum,   "1",        0, "Enabled"
+
+HKR,Ndi\Params\*SSIdleTimeout,      ParamDesc,  0, "SSIdleTimeout"
+HKR,Ndi\Params\*SSIdleTimeout,      Type,       0, "int"
+HKR,Ndi\Params\*SSIdleTimeout,      Default,    0, "60"
+HKR,Ndi\Params\*SSIdleTimeout,      Min,        0, "1" ; might also be at 5
+HKR,Ndi\Params\*SSIdleTimeout,      Max,        0, "60"
+HKR,Ndi\Params\*SSIdleTimeout,      Step,       0, "1"
+HKR,Ndi\Params\*SSIdleTimeout,      Base,       0, "10"
+
+HKR, Ndi\params\AdvancedEEE,        ParamDesc,  0, %AdvancedEEE%
+HKR, Ndi\params\AdvancedEEE,        optional,   0, "1"
+HKR, Ndi\params\AdvancedEEE,        Type,       0, "enum"
+HKR, Ndi\params\AdvancedEEE,        Default,    0, "0"
+HKR, Ndi\params\AdvancedEEE\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\AdvancedEEE\enum,   "1",        0, %Enabled%
+
+[DisableAutoPowerSave.reg]
+HKR,,				       AutoPowerSaveModeEnabled, 0, "0"
+
+HKR, Ndi\params\EnableGreenEthernet,        ParamDesc,  0, %GreenEthernet%
+;HKR, Ndi\params\EnableGreenEthernet,        optional,   0, "1"
+HKR, Ndi\params\EnableGreenEthernet,        Type,       0, "enum"
+HKR, Ndi\params\EnableGreenEthernet,        Default,    0, "0"
+HKR, Ndi\params\EnableGreenEthernet\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\EnableGreenEthernet\enum,   "1",        0, %Enabled%
+
+HKR, Ndi\params\GigaLite,        ParamDesc,  0, %GigaLite%
+;HKR, Ndi\params\GigaLite,        optional,   0, "1"
+HKR, Ndi\params\GigaLite,        Type,       0, "enum"
+HKR, Ndi\params\GigaLite,        Default,    0, "1"
+HKR, Ndi\params\GigaLite\enum,   "0",        0, %Disabled%
+HKR, Ndi\params\GigaLite\enum,   "1",        0, %Enabled%
+
+HKR,Ndi\params\*IdleRestriction,        ParamDesc,  0, %IdleRestriction%
+HKR,Ndi\params\*IdleRestriction,        Type,       0, "enum"
+HKR,Ndi\params\*IdleRestriction,        Default,    0, "0"
+HKR,Ndi\params\*IdleRestriction\enum,   "0",        0, %RestrictionDisable%
+HKR,Ndi\params\*IdleRestriction\enum,   "1",        0, %RestrictionEnable%
+
+HKR,Ndi\params\PowerSavingMode,    ParamDesc,  0, %PowerSavingMode%
+HKR,Ndi\params\PowerSavingMode,    Type,       0, "enum"
+HKR,Ndi\params\PowerSavingMode,    Default,    0, "1"
+HKR,Ndi\params\PowerSavingMode\enum,   "0",    0, %Disabled%
+HKR,Ndi\params\PowerSavingMode\enum,   "1",    0, %Enabled%
+
+HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  ParamDesc,              0, %ReduceSpeedOnPowerDown%
+HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  Type,                   0, "enum"
+HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  Default,                0, "1"
+HKR,Ndi\Params\ReduceSpeedOnPowerDown\Enum,             "1",                    0, %Enabled%
+HKR,Ndi\Params\ReduceSpeedOnPowerDown\Enum,             "0",                    0, %Disabled%
+
+HKR,Ndi\Params\ULPMode,                                 Type,                   0, "enum"
+HKR,Ndi\Params\ULPMode,                                 Default,                0, "1"
+HKR,Ndi\Params\ULPMode\Enum,                            "1",                    0, %Enabled%
+HKR,Ndi\Params\ULPMode\Enum,                            "0",                    0, %Disabled%
+
+; Allow host driver to force exit ULP on ME systems
+HKR,,                                                   ForceHostExitUlp,       0, "1"
+
+HKR,Ndi\params\WolShutdownLinkSpeed,           ParamDesc,       0, %WolShutdownLinkSpeed%
+;HKR,Ndi\params\WolShutdownLinkSpeed,          optional,        0, "1"
+HKR,Ndi\params\WolShutdownLinkSpeed,           Type,            0, "enum"
+HKR,Ndi\params\WolShutdownLinkSpeed,           Default,         0, "0"
+HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "0",             0, %10MbFirst%
+HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "1",             0, %100MbFirst%
+HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "2",             0, %NotSpeedDown%
+```
+
+Reminder: Each adapter uses it's own default values, means that the `default`/`min`/`max` may be different for you. E.g. `SSIdleTimeout` minimum value was `1` in the first setup information file (`.inf`), but `5` in the second.
+
+### Miscellaneous Values
+
+```c
+"DynamicLTR": { "Type": "REG_SZ", "Data": 0 },
+"EnableAdvancedDynamicITR": { "Type": "REG_SZ", "Data": 0 },
+"S3S4WolPowerSaving": { "Type": "REG_SZ", "Data": 0 },
+"AutoLinkDownPcieMacOff": { "Type": "REG_SZ", "Data": 0 }, // "Auto Disable PCIe"
+"BatteryModeLinkSpeed": { "Type": "REG_SZ", "Data": 2 },  // Similar to WolShutdownLinkSpeed?
+// 10MbFirst                      = "10 Mbps First"
+// 100MbFirst                     = "100 Mbps First"
+// NotSpeedDown                   = "Not Speed Down"
+// AdaptiveLinkSpeed              = "Adaptive Link Speed"
+// BatteryModeLinkSpeed           = "Battery Mode Link Speed"
+"CLKREQ": { "Type": "REG_SZ", "Data": 0 },
+"EnableCoalesce": { "Type": "REG_SZ", "Data": 0 },
+"DMACoalescing": { "Type": "REG_SZ", "Data": 0 },
+"CoalesceBufferSize": { "Type": "REG_SZ", "Data": 0 },
+"*PacketCoalescing": { "Type": "REG_SZ", "Data": 0 },
+
+"SVOFFMode": { "Type": "REG_SZ", "Data": 1 },  // SV: Save?
+"SVOFFModeHWM": { "Type": "REG_SZ", "Data": 0 },
+"SVOFFModeTimer": { "Type": "REG_SZ", "Data": 0 }
+
+"EnabledDatapathCycleCounters":  { "Type": "REG_SZ", "Data": ? }
+"EnabledDatapathEventCounters": { "Type": "REG_SZ", "Data": ? }
+```
+
 # Disable Timer Coalescing
 
 "CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
@@ -1262,82 +1422,6 @@ To verify or change the type of hibernation file used, run the *powercfg.exe* ut
 | `powercfg /h /type reduced` | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example. |
 | `powercfg /h /size 0`<br> `powercfg /h /type reduced` | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration. |
 
-# Remove Power Options
-
-Removes the `Hibernate`, `Lock`, `Sleep` power options.
-
-If hiding `Lock` for example via `Control Panel > All Control Panel Items > Power Options > Choose what the power buttons do > Change settings that are currently unavailable`, it sets:
-```c
-DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
-```
-
----
-
-Miscellaneous keys:
-```powershell
-HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HidePowerButton
-HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideRestart
-HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideShutDown
-HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
-HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "ShowLockOption",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Show lock in the user tile menu",
-  "ExplainText": "Shows or hides lock from the user tile menu. If you enable this policy setting, the lock option will be shown in the User Tile menu. If you disable this policy setting, the lock option will never be shown in the User Tile menu. If you do not configure this policy setting, users will be able to choose whether they want lock to show through the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "ShowLockOption",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "ShowSleepOption",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Show sleep in the power options menu",
-  "ExplainText": "Shows or hides sleep from the power options menu. If you enable this policy setting, the sleep option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the sleep option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want sleep to show through the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "ShowSleepOption",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "ShowHibernateOption",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Show hibernate in the power options menu",
-  "ExplainText": "Shows or hides hibernate from the power options menu. If you enable this policy setting, the hibernate option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the hibernate option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want hibernate to show through the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "ShowHibernateOption",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
 # Disable Hiberboot
 
 Fast startup is a type of shutdown that uses a hibernation file to speed up the subsequent boot. During this type of shutdown, the user is logged off before the hibernation file is created. Fast startup allows for a smaller hibernation file, more appropriate for systems with less storage capabilities.
@@ -1432,6 +1516,82 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
     "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
   ],
   "ValueName": "HiberbootEnabled",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Remove Power Options
+
+Removes the `Hibernate`, `Lock`, `Sleep` power options.
+
+If hiding `Lock` for example via `Control Panel > All Control Panel Items > Power Options > Choose what the power buttons do > Change settings that are currently unavailable`, it sets:
+```c
+DllHost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\FlyoutMenuSettings\ShowLockOption	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+---
+
+Miscellaneous keys:
+```powershell
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HidePowerButton
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideRestart
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideShutDown
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
+HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "ShowLockOption",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Show lock in the user tile menu",
+  "ExplainText": "Shows or hides lock from the user tile menu. If you enable this policy setting, the lock option will be shown in the User Tile menu. If you disable this policy setting, the lock option will never be shown in the User Tile menu. If you do not configure this policy setting, users will be able to choose whether they want lock to show through the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "ShowLockOption",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "ShowSleepOption",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Show sleep in the power options menu",
+  "ExplainText": "Shows or hides sleep from the power options menu. If you enable this policy setting, the sleep option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the sleep option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want sleep to show through the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "ShowSleepOption",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "ShowHibernateOption",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
+  "DisplayName": "Show hibernate in the power options menu",
+  "ExplainText": "Shows or hides hibernate from the power options menu. If you enable this policy setting, the hibernate option will be shown in the Power Options menu (as long as it is supported by the machine's hardware). If you disable this policy setting, the hibernate option will never be shown in the Power Options menu. If you do not configure this policy setting, users will be able to choose whether they want hibernate to show through the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "ShowHibernateOption",
   "Elements": [
     { "Type": "EnabledValue", "Data": "1" },
     { "Type": "DisabledValue", "Data": "0" }
@@ -1584,166 +1744,6 @@ This policy setting specifies that power management is disabled when the machine
     { "Type": "DisabledValue", "Data": "0" }
   ]
 }
-```
-
-# Disable NIC Power Savings
-
-You can get a lot of information about data ranges and more from `.inf` files, see examples below.
-
-## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
-
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
-
-See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-    "*DeviceSleepOnDisconnect" = 0; // range 0-1
-    "*EnableDynamicPowerGating" = 1; // range 0-1
-    "DisableIntelRST" = 1; // range 0-1
-    "DMACoalescing" = 0; // range 0-10240
-    "EnableDisconnectedStandby" = 0; // range 0-1
-    "EnableModernStandby" = 0; // range 0-1
-    "EnablePME" = 0; // range 0-1
-    "EnablePowerManagement" = 1; // range 0-1
-    "ForceHostExitUlp" = 0; // range 0-1
-    "ForceLtrValue" = 65535; // range 0-65535
-    "I218DisablePLLShut" = 0; // range 0-1
-    "I218DisablePLLShutGiga" = 0; // range 0-1
-    "I219DisableK1Off" = 0; // range 0-1
-    "ULPMode" = 1; // range 0-1
-```
-
-| SubkeyName | ParamDesc | Default | Minimum | Maximum |
-| --- | --- | --- | --- | --- |
-| `*WakeOnPattern` | A value that describes whether the device should be enabled to wake the computer when a network packet matches a specified pattern. | 1 | 0 | 1 |
-| `*WakeOnMagicPacket` | A value that describes whether the device should be enabled to wake the computer when the device receives a magic packet. A magic packet is a packet that contains 16 contiguous copies of the receiving network adapter's ethernet address. | 1 | 0 | 1 |
-| `*EEE` | A value that describes whether the device should enable IEEE 802.3az energy-efficient ethernet. | 1 | 0 | 1 |
-| `*IdleRestriction` | If a network device has both idle power down and wake on packet filter capabilities, this setting allows the user to decide when the device idle power down can happen. `1` = Only idle when user isn't present, `0` = No restriction | 0 | 0 | 1 |
-| `*ModernStandbyWoLMagicPacket` | A value that describes whether the device should be enabled to wake the computer when the device receives a magic packet and the system is in the S0ix power state. This doesn't apply when the system is in the S4 power state. | 0 | 0 | 1 |
-| `*DeviceSleepOnDisconnect` | A value that describes whether the device should be enabled to put the device into a low-power state (sleep state) when media is disconnected and return to a full-power state (wake state) when media is connected again. | 1 | 0 | 1 |
-| [`*SelectiveSuspend`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-selective-suspend) | Selective suspend (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| [`*SSIdleTimeout`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeout-inf-keyword) | This keyword specifies the idle time-out period in units of seconds. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeout value, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 5 | 1 | 60 |
-| [`*SSIdleTimeoutScreenOff`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-ndis-selective-suspend#ssidletimeoutscreenoff-inf-keyword) | This keyword specifies the idle time-out period in units of seconds and is only applicable when the screen is off. If NDIS does not detect any activity on the network adapter for a period that exceeds the *SSIdleTimeoutScreenOff value after the screen is off, NDIS starts a selective suspend operation by calling the miniport driver's MiniportIdleNotification handler function. | 3 | 1 | 60 |
-
-- [network/standardized-inf-keywords-for-power-management](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md)
-- [network/standardized-inf-keywords-for-ndis-selective-suspend](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-ndis-selective-suspend.md)
-
-### Setup Information
-
-```inf
-HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
-HKR,Ndi\Params\*DeviceSleepOnDisconnect,type,         ,enum
-HKR,Ndi\Params\*DeviceSleepOnDisconnect,default,      ,0
-HKR,Ndi\Params\*DeviceSleepOnDisconnect\enum,0,       ,%Disabled%
-HKR,Ndi\Params\*DeviceSleepOnDisconnect\enum,1,       ,%Enabled%
-
-HKR, Ndi\Params\*EEE,    	                ParamDesc,      0,       %EEE%
-HKR, Ndi\Params\*EEE,    	                Type,           0,       "enum"
-HKR, Ndi\Params\*EEE\enum, 	                "1",            0,       %Enabled%
-HKR, Ndi\Params\*EEE\enum, 	                "0",            0,       %Disabled%
-HKR, Ndi\Params\*EEE,    	                Default,        0,       "0"
-
-HKR,Ndi\params\*SelectiveSuspend,	    ParamDesc,  0, %SelectiveSuspend%
-HKR,Ndi\params\*SelectiveSuspend,	    default,    0, "1"
-HKR,Ndi\params\*SelectiveSuspend,	    type,       0, "enum"
-HKR,Ndi\params\*SelectiveSuspend\enum,   "0",        0, "Disabled"
-HKR,Ndi\params\*SelectiveSuspend\enum,   "1",        0, "Enabled"
-
-HKR,Ndi\Params\*SSIdleTimeout,      ParamDesc,  0, "SSIdleTimeout"
-HKR,Ndi\Params\*SSIdleTimeout,      Type,       0, "int"
-HKR,Ndi\Params\*SSIdleTimeout,      Default,    0, "60"
-HKR,Ndi\Params\*SSIdleTimeout,      Min,        0, "1" ; might also be at 5
-HKR,Ndi\Params\*SSIdleTimeout,      Max,        0, "60"
-HKR,Ndi\Params\*SSIdleTimeout,      Step,       0, "1"
-HKR,Ndi\Params\*SSIdleTimeout,      Base,       0, "10"
-
-HKR, Ndi\params\AdvancedEEE,        ParamDesc,  0, %AdvancedEEE%
-HKR, Ndi\params\AdvancedEEE,        optional,   0, "1"
-HKR, Ndi\params\AdvancedEEE,        Type,       0, "enum"
-HKR, Ndi\params\AdvancedEEE,        Default,    0, "0"
-HKR, Ndi\params\AdvancedEEE\enum,   "0",        0, %Disabled%
-HKR, Ndi\params\AdvancedEEE\enum,   "1",        0, %Enabled%
-
-[DisableAutoPowerSave.reg]
-HKR,,				       AutoPowerSaveModeEnabled, 0, "0"
-
-HKR, Ndi\params\EnableGreenEthernet,        ParamDesc,  0, %GreenEthernet%
-;HKR, Ndi\params\EnableGreenEthernet,        optional,   0, "1"
-HKR, Ndi\params\EnableGreenEthernet,        Type,       0, "enum"
-HKR, Ndi\params\EnableGreenEthernet,        Default,    0, "0"
-HKR, Ndi\params\EnableGreenEthernet\enum,   "0",        0, %Disabled%
-HKR, Ndi\params\EnableGreenEthernet\enum,   "1",        0, %Enabled%
-
-HKR, Ndi\params\GigaLite,        ParamDesc,  0, %GigaLite%
-;HKR, Ndi\params\GigaLite,        optional,   0, "1"
-HKR, Ndi\params\GigaLite,        Type,       0, "enum"
-HKR, Ndi\params\GigaLite,        Default,    0, "1"
-HKR, Ndi\params\GigaLite\enum,   "0",        0, %Disabled%
-HKR, Ndi\params\GigaLite\enum,   "1",        0, %Enabled%
-
-HKR,Ndi\params\*IdleRestriction,        ParamDesc,  0, %IdleRestriction%
-HKR,Ndi\params\*IdleRestriction,        Type,       0, "enum"
-HKR,Ndi\params\*IdleRestriction,        Default,    0, "0"
-HKR,Ndi\params\*IdleRestriction\enum,   "0",        0, %RestrictionDisable%
-HKR,Ndi\params\*IdleRestriction\enum,   "1",        0, %RestrictionEnable%
-
-HKR,Ndi\params\PowerSavingMode,    ParamDesc,  0, %PowerSavingMode%
-HKR,Ndi\params\PowerSavingMode,    Type,       0, "enum"
-HKR,Ndi\params\PowerSavingMode,    Default,    0, "1"
-HKR,Ndi\params\PowerSavingMode\enum,   "0",    0, %Disabled%
-HKR,Ndi\params\PowerSavingMode\enum,   "1",    0, %Enabled%
-
-HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  ParamDesc,              0, %ReduceSpeedOnPowerDown%
-HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  Type,                   0, "enum"
-HKR,Ndi\Params\ReduceSpeedOnPowerDown,                  Default,                0, "1"
-HKR,Ndi\Params\ReduceSpeedOnPowerDown\Enum,             "1",                    0, %Enabled%
-HKR,Ndi\Params\ReduceSpeedOnPowerDown\Enum,             "0",                    0, %Disabled%
-
-HKR,Ndi\Params\ULPMode,                                 Type,                   0, "enum"
-HKR,Ndi\Params\ULPMode,                                 Default,                0, "1"
-HKR,Ndi\Params\ULPMode\Enum,                            "1",                    0, %Enabled%
-HKR,Ndi\Params\ULPMode\Enum,                            "0",                    0, %Disabled%
-
-; Allow host driver to force exit ULP on ME systems
-HKR,,                                                   ForceHostExitUlp,       0, "1"
-
-HKR,Ndi\params\WolShutdownLinkSpeed,           ParamDesc,       0, %WolShutdownLinkSpeed%
-;HKR,Ndi\params\WolShutdownLinkSpeed,          optional,        0, "1"
-HKR,Ndi\params\WolShutdownLinkSpeed,           Type,            0, "enum"
-HKR,Ndi\params\WolShutdownLinkSpeed,           Default,         0, "0"
-HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "0",             0, %10MbFirst%
-HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "1",             0, %100MbFirst%
-HKR,Ndi\params\WolShutdownLinkSpeed\enum,      "2",             0, %NotSpeedDown%
-```
-
-Reminder: Each adapter uses it's own default values, means that the `default`/`min`/`max` may be different for you. E.g. `SSIdleTimeout` minimum value was `1` in the first setup information file (`.inf`), but `5` in the second.
-
-### Miscellaneous Values
-
-```c
-"DynamicLTR": { "Type": "REG_SZ", "Data": 0 },
-"EnableAdvancedDynamicITR": { "Type": "REG_SZ", "Data": 0 },
-"S3S4WolPowerSaving": { "Type": "REG_SZ", "Data": 0 },
-"AutoLinkDownPcieMacOff": { "Type": "REG_SZ", "Data": 0 }, // "Auto Disable PCIe"
-"BatteryModeLinkSpeed": { "Type": "REG_SZ", "Data": 2 },  // Similar to WolShutdownLinkSpeed?
-// 10MbFirst                      = "10 Mbps First"
-// 100MbFirst                     = "100 Mbps First"
-// NotSpeedDown                   = "Not Speed Down"
-// AdaptiveLinkSpeed              = "Adaptive Link Speed"
-// BatteryModeLinkSpeed           = "Battery Mode Link Speed"
-"CLKREQ": { "Type": "REG_SZ", "Data": 0 },
-"EnableCoalesce": { "Type": "REG_SZ", "Data": 0 },
-"DMACoalescing": { "Type": "REG_SZ", "Data": 0 },
-"CoalesceBufferSize": { "Type": "REG_SZ", "Data": 0 },
-"*PacketCoalescing": { "Type": "REG_SZ", "Data": 0 },
-
-"SVOFFMode": { "Type": "REG_SZ", "Data": 1 },  // SV: Save?
-"SVOFFModeHWM": { "Type": "REG_SZ", "Data": 0 },
-"SVOFFModeTimer": { "Type": "REG_SZ", "Data": 0 }
-
-"EnabledDatapathCycleCounters":  { "Type": "REG_SZ", "Data": ? }
-"EnabledDatapathEventCounters": { "Type": "REG_SZ", "Data": ? }
 ```
 
 # Disable Audio Execution Power Requests

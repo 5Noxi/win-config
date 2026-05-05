@@ -278,6 +278,593 @@ Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a619194
 }
 ```
 
+# Disable WER
+
+[WER](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
+
+WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting part.
+
+`\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
+
+[WER network endpoints](https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed):
+```
+0.0.0.0 watson.microsoft.com
+0.0.0.0 watson.telemetry.microsoft.com
+0.0.0.0 umwatsonc.events.data.microsoft.com
+0.0.0.0 ceuswatcab01.blob.core.windows.net
+0.0.0.0 ceuswatcab02.blob.core.windows.net
+0.0.0.0 eaus2watcab01.blob.core.windows.net
+0.0.0.0 eaus2watcab02.blob.core.windows.net
+0.0.0.0 weus2watcab01.blob.core.windows.net
+0.0.0.0 weus2watcab02.blob.core.windows.net
+```
+`DisableSendRequestAdditionalSoftwareToWER`: "Prevent Windows from sending an error report when a device driver requests additional software during installation"
+`DisableSendGenericDriverNotFoundToWER`: "Do not send a Windows error report when a generic driver is installed on a device"
+
+- [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
+
+## Suboption
+
+`Disable DHA Report`:  
+> "*This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.*"
+
+`Disable Persistent System Timestamp`:
+
+Disables the Reliability policy that periodically writes the current system time to disk. Windows uses that persistent timestamp as a "last known alive" time so Reliability Monitor / WER can estimate when an unexpected shutdown, power loss, hard reset, or crash happened (see policies below).
+
+> "*This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.*"
+
+```c
+if ( !RegQueryValueExW(hKey[0], "TimeStampEnabled", 0LL, 0LL, (LPBYTE)&Data, &cbData) )
+if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbData) && v4 <= 0x15180 ) // 86400 seconds = 24h?
+```
+
+`TimeStampInterval` under `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` is in seconds, the value under `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` is read as minutes and multiplied by 60.
+
+- [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
+
+## Miscellaneous Notes
+
+`EnableWerUserReporting`  
+Default: `1` (`DbgkEnableWerUserReporting dd 1`)
+
+```powershell
+"Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
+```
+
+Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability)? Haven't informed myself about it yet, therefore ignore it:
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
+```
+Default is `0`, non zero would enable the behaviour? The value doesn't exist by default.
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled
+\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "DeviceSetup.admx",
+  "CategoryName": "DeviceInstall_Category",
+  "PolicyName": "DeviceInstall_GenericDriverSendToWER",
+  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
+  "Supported": "Windows_10_0_RS3ToVista - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, Windows 7, and Windows Vista only",
+  "DisplayName": "Do not send a Windows error report when a generic driver is installed on a device",
+  "ExplainText": "Windows has a feature that sends \"generic-driver-installed\" reports through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, an error report is not sent when a generic driver is installed. If you disable or do not configure this policy setting, an error report is sent when a generic driver is installed.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
+  ],
+  "ValueName": "DisableSendGenericDriverNotFoundToWER",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "DeviceSetup.admx",
+  "CategoryName": "DeviceInstall_Category",
+  "PolicyName": "DeviceInstall_RequestAdditionalSoftwareSendToWER",
+  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
+  "Supported": "Windows_10_0_RS3ToWindows7 - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, and Windows 7 only",
+  "DisplayName": "Prevent Windows from sending an error report when a device driver requests additional software during installation",
+  "ExplainText": "Windows has a feature that allows a device driver to request additional software through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, Windows will not send an error report to request additional software even if this is specified by the device driver. If you disable or do not configure this policy setting, Windows sends an error report when a device driver that requests additional software is installed.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
+  ],
+  "ValueName": "DisableSendRequestAdditionalSoftwareToWER",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ErrorReporting.admx",
+  "CategoryName": "CAT_WindowsErrorReporting",
+  "PolicyName": "WerDisable_2",
+  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Disable Windows Error Reporting",
+  "ExplainText": "This policy setting turns off Windows Error Reporting, so that reports are not collected or sent to either Microsoft or internal servers within your organization when software unexpectedly stops working or fails. If you enable this policy setting, Windows Error Reporting does not send any problem information to Microsoft. Additionally, solution information is not available in Security and Maintenance in Control Panel. If you disable or do not configure this policy setting, the Turn off Windows Error Reporting policy setting in Computer Configuration/Administrative Templates/System/Internet Communication Management/Internet Communication settings takes precedence. If Turn off Windows Error Reporting is also either disabled or not configured, user settings in Control Panel for Windows Error Reporting are applied.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
+  ],
+  "ValueName": "Disabled",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ErrorReporting.admx",
+  "CategoryName": "CAT_WindowsErrorReporting",
+  "PolicyName": "WerNoLogging_1",
+  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Disable logging",
+  "ExplainText": "This policy setting controls whether Windows Error Reporting saves its own events and error messages to the system event log. If you enable this policy setting, Windows Error Reporting events are not recorded in the system event log. If you disable or do not configure this policy setting, Windows Error Reporting events and errors are logged to the system event log, as with other Windows-based programs.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
+  ],
+  "ValueName": "LoggingDisabled",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ErrorReporting.admx",
+  "CategoryName": "CAT_WindowsErrorReporting",
+  "PolicyName": "WerAutoApproveOSDumps_1",
+  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
+  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
+  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
+  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
+  ],
+  "ValueName": "AutoApproveOSDumps",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ErrorReporting.admx",
+  "CategoryName": "CAT_WindowsErrorReporting",
+  "PolicyName": "WerAutoApproveOSDumps_2",
+  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
+  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
+  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
+  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
+  ],
+  "ValueName": "AutoApproveOSDumps",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "TPM.admx",
+  "CategoryName": "DSHACategory",
+  "PolicyName": "OptIntoDSHA_Name",
+  "NameSpace": "Microsoft.Policies.TrustedPlatformModule",
+  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
+  "DisplayName": "Enable Device Health Attestation Monitoring and Reporting",
+  "ExplainText": "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\DeviceHealthAttestationService"
+  ],
+  "ValueName": "EnableDeviceHealthAttestationService",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "Reliability.admx",
+  "CategoryName": "System",
+  "PolicyName": "EE_EnablePersistentTimeStamp",
+  "NameSpace": "Microsoft.Policies.Reliability",
+  "Supported": "WindowsNET - At least Windows Server 2003",
+  "DisplayName": "Enable Persistent Time Stamp",
+  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
+  ],
+  "ValueName": "TimeStampEnabled",
+  "Elements": [
+    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Troubleshooter Preference
+
+It's set to `Ask me before running` by default.
+
+| Option | Description |
+| ---- | ---- |
+| Run automatically, don't notify me | Windows will automatically run recommended troubleshooters for problems detected on your device without bothering you. |
+| Run automatically, then notify me | Windows will tell you after recommended troubleshooters have solved a problem so you know what happened. |
+| Ask me before running (default) | We'll let you know when recommended troubleshooting is available. You can review the problem and changes before running the troubleshooters. |
+| Don't run any | Windows will automatically run critical troubleshooters but won't recommend troubleshooting for other problems. You will not get notifications for known problems, and you will need to manually troubleshoot these problems on your device. |
+
+| Service | Description |
+| ---- | ---- |
+| `DPS` | The Diagnostic Policy Service enables problem detection, troubleshooting and resolution for Windows components. If this service is stopped, diagnostics will no longer function. |
+| `TroubleshootingSvc` | Enables automatic mitigation for known problems by applying recommended troubleshooting. If stopped, your device will not get recommended troubleshooting for problems on your device. |
+| `diagsvc` | Executes diagnostic actions for troubleshooting support |
+
+These get disabled in the `Don't run any` option.
+
+## SystemSettings Captures
+
+`System > Troubleshoot` - `Recommended troubleshooter preferences`:
+```c
+// Don't run any
+HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 1
+
+// Ask me before running (default)
+HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 2
+
+// Run automatically, then notify me
+HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 3
+
+// Run automatically, don't notify me
+HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 4
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "MSDT.admx",
+  "CategoryName": "WdiScenarioCategory",
+  "PolicyName": "MsdtSupportProvider",
+  "NameSpace": "Microsoft.Policies.MSDT",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider",
+  "ExplainText": "This policy setting configures Microsoft Support Diagnostic Tool (MSDT) interactive communication with the support provider. MSDT gathers diagnostic data for analysis by support professionals. If you enable this policy setting, users can use MSDT to collect and send diagnostic data to a support professional to resolve a problem. By default, the support provider is set to Microsoft Corporation. If you disable this policy setting, MSDT cannot run in support mode, and no data can be collected or sent to the support provider. If you do not configure this policy setting, MSDT support mode is enabled by default. No reboots or service restarts are required for this policy setting to take effect. Changes take effect immediately.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnosticsProvider\\Policy"
+  ],
+  "ValueName": "DisableQueryRemoteServer",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "sdiageng.admx",
+  "CategoryName": "ScriptedDiagnosticsCategory",
+  "PolicyName": "ScriptedDiagnosticsExecutionPolicy",
+  "NameSpace": "Microsoft.Policies.ScriptedDiagnostics",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Troubleshooting: Allow users to access and run Troubleshooting Wizards",
+  "ExplainText": "This policy setting allows users to access and run the troubleshooting tools that are available in the Troubleshooting Control Panel and to run the troubleshooting wizard to troubleshoot problems on their computers. If you enable or do not configure this policy setting, users can access and run the troubleshooting tools from the Troubleshooting Control Panel. If you disable this policy setting, users cannot access or run the troubleshooting tools from the Control Panel. Note that this setting also controls a user's ability to launch standalone troubleshooting packs such as those found in .diagcab files.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnostics"
+  ],
+  "ValueName": "EnableDiagnostics",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "sdiageng.admx",
+  "CategoryName": "ScriptedDiagnosticsCategory",
+  "PolicyName": "BetterWhenConnected",
+  "NameSpace": "Microsoft.Policies.ScriptedDiagnostics",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Troubleshooting: Allow users to access online troubleshooting content on Microsoft servers from the Troubleshooting Control Panel (via the Windows Online Troubleshooting Service - WOTS)",
+  "ExplainText": "This policy setting allows users who are connected to the Internet to access and search troubleshooting content that is hosted on Microsoft content servers. Users can access online troubleshooting content from within the Troubleshooting Control Panel UI by clicking \"Yes\" when they are prompted by a message that states, \"Do you want the most up-to-date troubleshooting content?\" If you enable or do not configure this policy setting, users who are connected to the Internet can access and search troubleshooting content that is hosted on Microsoft content servers from within the Troubleshooting Control Panel user interface. If you disable this policy setting, users can only access and search troubleshooting content that is available locally on their computers, even if they are connected to the Internet. They are prevented from connecting to the Microsoft servers that host the Windows Online Troubleshooting Service.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnosticsProvider\\Policy"
+  ],
+  "ValueName": "EnableQueryRemoteServer",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "MSDT.admx",
+  "CategoryName": "WdiScenarioCategory",
+  "PolicyName": "TroubleshootingAllowRecommendations",
+  "NameSpace": "Microsoft.Policies.MSDT",
+  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
+  "DisplayName": "Troubleshooting: Allow users to access recommended troubleshooting for known problems",
+  "ExplainText": "This policy setting configures how troubleshooting for known problems can be applied on the device and lets administrators configure how it's applied to their domains/IT environments. Not configuring this policy setting will allow the user to configure how troubleshooting is applied. Enabling this policy allows you to configure how troubleshooting is applied on the user's device. You can select from one of the following values: 0 = Do not allow users, system features, or Microsoft to apply troubleshooting. 1 = Only automatically apply troubleshooting for critical problems by system features and Microsoft. 2 = Automatically apply troubleshooting for critical problems by system features and Microsoft. Notify users when troubleshooting for other problems is available and allow users to choose to apply or ignore. 3 = Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Notify users when troubleshooting has solved a problem. 4 = Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Do not notify users when troubleshooting has solved a problem. 5 = Allow the user to choose their own troubleshooting settings. After setting this policy, you can use the following instructions to check devices in your domain for available troubleshooting from Microsoft: 1. Create a bat script with the following contents: rem The following batch script triggers Recommended Troubleshooting schtasks /run /TN \"\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner\" 2. To create a new immediate task, navigate to the Group Policy Management Editor > Computer Configuration > Preferences and select Control Panel Settings. 3. Under Control Panel settings, right-click on Scheduled Tasks and select New. Select Immediate Task (At least Windows 7). 4. Provide name and description as appropriate, then under Security Options set the user account to System and select the Run with highest privileges checkbox. 5. In the Actions tab, create a new action, select Start a Program as its type, then enter the file created in step 1. 6. Configure the task to deploy to your domain.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Troubleshooting\\AllowRecommendations"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "TroubleshootingAllowRecommendations", "Items": [
+        { "DisplayName": "Do not allow users, system features, or Microsoft to apply troubleshooting.", "Data": "0" },
+        { "DisplayName": "Only automatically apply troubleshooting for critical problems by system features and Microsoft.", "Data": "1" },
+        { "DisplayName": "Automatically apply troubleshooting for critical problems by system features and Microsoft. Notify users when troubleshooting for other problems is available and allow users to choose to apply or ignore.", "Data": "2" },
+        { "DisplayName": "Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Notify users when troubleshooting has solved a problem.", "Data": "3" },
+        { "DisplayName": "Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Do not notify users when troubleshooting has solved a problem.", "Data": "4" },
+        { "DisplayName": "Allow the user to choose their own troubleshooting settings.", "Data": "5" }
+      ]
+    }
+  ]
+},
+{
+  "File": "sdiagschd.admx",
+  "CategoryName": "ScheduledDiagnosticsCategory",
+  "PolicyName": "ScheduledDiagnosticsExecutionPolicy",
+  "NameSpace": "Microsoft.Policies.ScheduledDiagnostics",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Configure Scheduled Maintenance Behavior",
+  "ExplainText": "Determines whether scheduled diagnostics will run to proactively detect and resolve system problems. If you enable this policy setting, you must choose an execution level. If you choose detection and troubleshooting only, Windows will periodically detect and troubleshoot problems. The user will be notified of the problem for interactive resolution. If you choose detection, troubleshooting and resolution, Windows will resolve some of these problems silently without requiring user input. If you disable this policy setting, Windows will not be able to detect, troubleshoot or resolve problems on a scheduled basis. If you do not configure this policy setting, local troubleshooting preferences will take precedence, as configured in the control panel. If no local troubleshooting preference is configured, scheduled diagnostics are enabled for detection, troubleshooting and resolution by default. No reboots or service restarts are required for this policy to take effect: changes take effect immediately. This policy setting will only take effect when the Task Scheduler service is in the running state. When the service is stopped or disabled, scheduled diagnostics will not be executed. The Task Scheduler service can be configured with the Services snap-in to the Microsoft Management Console.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScheduledDiagnostics"
+  ],
+  "ValueName": "EnabledExecution",
+  "Elements": [
+    { "Type": "Enum", "ValueName": "EnabledExecutionLevel", "Items": [
+        { "DisplayName": "Troubleshooting Only", "Data": "1" },
+        { "DisplayName": "Regular", "Data": "2" }
+      ]
+    },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WDI.admx",
+  "CategoryName": "Troubleshooting",
+  "PolicyName": "WdiDpsScenarioExecutionPolicy",
+  "NameSpace": "Microsoft.Policies.WindowsDiagnostics",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Diagnostics: Configure scenario execution level",
+  "ExplainText": "This policy setting determines the execution level for Diagnostic Policy Service (DPS) scenarios. If you enable this policy setting, you must select an execution level from the drop-down menu. If you select problem detection and troubleshooting only, the DPS will detect problems and attempt to determine their root causes. These root causes will be logged to the event log when detected, but no corrective action will be taken. If you select detection, troubleshooting and resolution, the DPS will attempt to automatically fix problems it detects or indicate to the user that assisted resolution is available. If you disable this policy setting, Windows cannot detect, troubleshoot, or resolve any problems that are handled by the DPS. If you do not configure this policy setting, the DPS enables all scenarios for resolution by default, unless you configure separate scenario-specific policy settings. This policy setting takes precedence over any scenario-specific policy settings when it is enabled or disabled. Scenario-specific policy settings only take effect if this policy setting is not configured. No reboots or service restarts are required for this policy setting to take effect: changes take effect immediately.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WDI"
+  ],
+  "ValueName": "ScenarioExecutionEnabled",
+  "Elements": [
+    { "Type": "Enum", "ValueName": "EnabledScenarioExecutionLevel", "Items": [
+        { "DisplayName": "Detection and Troubleshooting Only", "Data": "1" },
+        { "DisplayName": "Detection, Troubleshooting and Resolution", "Data": "2" }
+      ]
+    },
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable Suggestions/Tips/Tricks
+
+Disables all kind of suggestions: in start, text suggestions (multilingual...), in the timeline, content. `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
+
+## SubscribedContent IDs
+
+Since the `SubscribedContent-*` values aren't documented literally anywhere I've tried to get some information to see which exist and what they do. You can find information on them in `ContentDeliveryManager.Utilities.dll`, see [contentdelivery.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/contentdelivery.c) for machine code snippets that include these information.
+
+| Feature | IDs | Practical meaning |
+|---|---|---|
+| `LockScreen` | `338380`, `338387` | Windows Spotlight / lock-screen creative content |
+| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for 'System > Notifications > Additional settings - Get tips and suggestions when using Windows' |
+| `StartSuggestions` | `338381`, `338388` | suggested/recommended content in Start |
+| `Settings` | `338386`, `338393` | promoted content inside Settings |
+| `SettingsHome` | `353697`, `353696` | Settings Home recommendations/cards |
+| `SettingsAccountsYourInfo` | `353695`, `353694` | promoted content in Settings > Accounts > Your info |
+| `SettingsValueBanner` | `88000106`, `88000105` | banner/value-promoting content in Settings |
+| `OobeOffers` | `314566`, `314567` | OOBE and post-setup offers |
+| `MinuteZeroOffers` | `310094`, `310093` | very-early setup / first-run offers - `310093` is used for 'System > Notifications > Additional settings - Show the Windows welcome experience after updates and when signed in to show what's new and suggested' |
+| `ApiTest` | `280812` | internal/test subscription used by CDM |
+| `ActionCenter` | `310092`, `310091` | Action Center / notification-surface content |
+| `ShareAppSuggestions` | `280814`, `280815` | app suggestions around sharing flows |
+| `SilentInstalledApps` | `202913`, `202914` | silent/preinstalled app delivery |
+| `PeopleAppSuggestions` | `314562`, `314563` | People-related app suggestions |
+| `DynamicLayouts` | `314558`, `314559` | dynamic layout-driven targeted content |
+| `DynamicLayoutsSV` | `88000531`, `88000530` | variant of dynamic layouts |
+| `Timeline` | `353699`, `353698` | Timeline-related suggested content |
+| `AppDefaultsEdgeEnlightenment` | `88000044`, `88000045` | Edge/default-app promotion |
+| `OneDriveLocal` | `280797`, `280811` | local OneDrive promotion/setup |
+| `OneDriveSync` | `280817`, `280810` | OneDrive sync promotion/setup |
+| `OneDriveDocuments` | `88000162`, `88000161` | OneDrive documents backup/setup |
+| `OneDriveDesktop` | `88000164`, `88000163` | OneDrive desktop backup/setup |
+| `OneDrivePictures` | `88000166`, `88000165` | OneDrive pictures backup/setup |
+
+`SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableWindowsConsumerFeatures",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+  "DisplayName": "Turn off Microsoft consumer experiences",
+  "ExplainText": "This policy setting turns off experiences that help consumers make the most of their devices and Microsoft account. If you enable this policy setting, users will no longer see personalized recommendations from Microsoft and notifications about their Microsoft account. If you disable or do not configure this policy setting, users may see suggestions from Microsoft and notifications about their Microsoft account. Note: This setting only applies to Enterprise and Education SKUs.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableWindowsConsumerFeatures",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableSoftLanding",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+  "DisplayName": "Do not show Windows tips",
+  "ExplainText": "This policy setting prevents Windows tips from being shown to users. If you enable this policy setting, users will no longer see Windows tips. If you disable or do not configure this policy setting, users may see contextual popups explaining how to use Windows. Microsoft uses diagnostic data to determine which tips to show. Note: If you disable or do not configure this policy setting, but enable the \"Computer Configuration\\Administrative Templates\\Windows Components\\Data Collection and Preview Builds\\Allow Telemetry\" policy setting with a level of \"Basic\" or below, users may see a limited set of tips. Also, this setting only applies to Enterprise and Education SKUs.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableSoftLanding",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "CloudContent.admx",
+  "CategoryName": "CloudContent",
+  "PolicyName": "DisableThirdPartySuggestions",
+  "NameSpace": "Microsoft.Policies.CloudContent",
+  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
+  "DisplayName": "Do not suggest third-party content in Windows spotlight",
+  "ExplainText": "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps. If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
+  ],
+  "ValueName": "DisableThirdPartySuggestions",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "ControlPanel.admx",
+  "CategoryName": "ControlPanel",
+  "PolicyName": "AllowOnlineTips",
+  "NameSpace": "Microsoft.Policies.ControlPanel",
+  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
+  "DisplayName": "Allow Online Tips",
+  "ExplainText": "Enables or disables the retrieval of online tips and help for the Settings app. If disabled, Settings will not contact Microsoft content services to retrieve tips and help content.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
+  ],
+  "Elements": [
+    { "Type": "Boolean", "ValueName": "AllowOnlineTips", "TrueValue": "1", "FalseValue": "0" }
+  ]
+},
+{
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "HideRecommendedSection",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "Windows_11_0_SE - Windows 11 SE",
+  "DisplayName": "Remove Recommended section from Start Menu",
+  "ExplainText": "This policy allows you to prevent the Start Menu from displaying a list of recommended applications and files. If you enable this policy setting, the Start Menu will no longer show the section containing a list of recommended files and apps.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "HideRecommendedSection",
+  "Elements": []
+},
+{
+  "File": "StartMenu.admx",
+  "CategoryName": "StartMenu",
+  "PolicyName": "HideRecommendedPersonalizedSites",
+  "NameSpace": "Microsoft.Policies.StartMenu",
+  "Supported": "Windows_11_0_SE - Windows 11 SE",
+  "DisplayName": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
+  "ExplainText": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "HideRecommendedPersonalizedSites",
+  "Elements": []
+},
+{
+  "File": "WindowsExplorer.admx",
+  "CategoryName": "WindowsExplorer",
+  "PolicyName": "DisableSearchBoxSuggestions",
+  "NameSpace": "Microsoft.Policies.WindowsExplorer",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Turn off display of recent search entries in the File Explorer search box",
+  "ExplainText": "Disables suggesting recent queries for the Search Box and prevents entries into the Search Box from being stored in the registry for future references. File Explorer shows suggestion pop-ups as users type into the Search Box. These suggestions are based on their past entries into the Search Box. Note: If you enable this policy, File Explorer will not show suggestion pop-ups as users type into the Search Box, and it will not store Search Box entries into the registry for future references. If the user types a property, values that match this property will be shown but no data will be saved in the registry or re-shown on subsequent uses of the search box.",
+  "KeyPath": [
+    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
+  ],
+  "ValueName": "DisableSearchBoxSuggestions",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+## Miscellaneous Notes
+
+Disable edge related suggestions with (search suggestions in address bar):
+```json
+"HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge": {
+  "SearchSuggestEnabled": { "Type": "REG_DWORD", "Data": 0 },
+  "LocalProvidersEnabled": { "Type": "REG_DWORD", "Data": 0 }
+},
+"HKLM\\Software\\Policies\\Microsoft\\MicrosoftEdge\\SearchScopes": {
+  "ShowSearchSuggestionsGlobal": { "Type": "REG_DWORD", "Data": 0 }
+}
+```
+
+All `Microsoft\INPUT\Settings` values which get read on boot:
+```
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAP
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTFIRSTWORD
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollBottomZone
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollThreshold
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollTopZone
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : BluebirdDTWMultiplier
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DisablePersonalizationGTKM
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DynamicAutocorrectionAllowed
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EMOJISUGGESTION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbAutocorrection2
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbTextPrediction
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : FLIPDebugOptions
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HASTRAILER
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbNavigationOverrideMode
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbTextPredictionDelay
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : INPUTHISTORYGUID
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Insights
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : InsightsEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : KEYBOARDMODE
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : LMDataLoggerEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MAXCORRECTIONS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MultilingualEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : NotActiveLanguagePenalty
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PERIODSHORTCUT
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabledCleared
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PRIVATE
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : RULEBASEDCONVERSION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_1
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_10
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_3
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeDataSources
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_10
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_4
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_5
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SHAPEWRITINGPREDICTION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShortenMultilingualTraversal
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShowAllSuggestions
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SPELLCHECK
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SUPPRESSCONVERSION
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Transliteration
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONONTHEFLY
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONSYMBOLS
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : USEDANDA
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : UserStatsEnabled
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementLimit
+\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementUpLimit
+```
+
 # Disable Automatic Map Downloads
 
 Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location-related data updates.
@@ -389,6 +976,209 @@ Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 "powershell.exe","RegSetValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage","Type: REG_SZ, Length: 54, Data: en-US;q=0.7,en;q=0.3"
 ```
 
+# Disable Cross-Device Experiences
+
+Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).
+
+## SystemSettings Captures
+
+Changing "Share across devices" option via `SystemSettings`:
+```c
+// Off
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0
+
+// My device only
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 1
+
+// Everyone nearby
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
+
+// Miscellaneous note
+HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\EnableRemoteLaunchToast  Type: REG_DWORD, Length: 4, Data: 1
+```
+
+`RomeSdkChannelUserAuthzPolicy` (`CDP\SettingsPage`) is only used for "My device only"/"Everyone nearby" (it's still getting changed to `0` in this option).
+
+```c
+L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage",
+L"BluetoothLastDisabledNearShare",
+
+L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage",
+L"WifiLastDisabledNearShare",
+```
+
+- [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "GroupPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "EnableCDP",
+  "NameSpace": "Microsoft.Policies.GroupPolicy",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Continue experiences on this device",
+  "ExplainText": "This policy setting determines whether the Windows device is allowed to participate in cross-device experiences (continue experiences). If you enable this policy setting, the Windows device is discoverable by other Windows devices that belong to the same user, and can participate in cross-device experiences. If you disable this policy setting, the Windows device is not discoverable by other devices, and cannot participate in cross-device experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "EnableCdp",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable Phone Linking
+
+"This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC.If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences.If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences.If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot."
+
+## SystemSettings Captures
+
+This option will also disable resume ("Start something on one device and continue on this PC") - `System Settings > Apps > Resume`.
+
+```c
+// Off
+HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\IsResumeAllowed	Type: REG_DWORD, Length: 4, Data: 0
+
+// On
+HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\IsResumeAllowed	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+By default resume is enabled, OneDrive is the only app which exists under the "Control which apps can use Resume" on a stock 25H2 installation and can be toggled via `IsOneDriveResumeAllowed` (same key as `IsResumeAllowed`). Disabling resume will disallow all apps to use Resume (doesn't set `IsXResumeAllowed` to `0`).
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "GroupPolicy.admx",
+  "CategoryName": "PolicyPolicies",
+  "PolicyName": "EnableMMX",
+  "NameSpace": "Microsoft.Policies.GroupPolicy",
+  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
+  "DisplayName": "Phone-PC linking on this device",
+  "ExplainText": "This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC. If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences. If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
+  ],
+  "ValueName": "EnableMmx",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Hide Last Logged-In User
+
+Note that if you use this option and don't have a password, you'll have to enter your username at each boot ([policy](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name)).
+
+"This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC."
+
+```c
+// Enabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+`Hide Username at Sign-In`:  
+"This security setting determines whether the username of the person signing in to this PC appears at Windows sign-in, after credentials are entered, and before the PC desktop is shown."
+
+```c
+// Enabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "WinLogon.admx",
+  "CategoryName": "Logon",
+  "PolicyName": "DisplayLastLogonInfoDescription",
+  "NameSpace": "Microsoft.Policies.WindowsLogon2",
+  "Supported": "WindowsVista - At least Windows Vista",
+  "DisplayName": "Display information about previous logons during user logon",
+  "ExplainText": "This policy setting controls whether or not the system displays information about previous logons and logon failures to the user. For local user accounts and domain user accounts in domains of at least a Windows Server 2008 functional level, if you enable this setting, a message appears after the user logs on that displays the date and time of the last successful logon by that user, the date and time of the last unsuccessful logon attempted with that user name, and the number of unsuccessful logons since the last successful logon by that user. This message must be acknowledged by the user before the user is presented with the Microsoft Windows desktop. For domain user accounts in Windows Server 2003, Windows 2000 native, or Windows 2000 mixed functional level domains, if you enable this setting, a warning message will appear that Windows could not retrieve the information and the user will not be able to log on. Therefore, you should not enable this policy setting if the domain is not at the Windows Server 2008 domain functional level. If you disable or do not configure this setting, messages about the previous logon or logon failures are not displayed.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
+  ],
+  "ValueName": "DisplayLastLogonInfo",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable Background Apps
+
+"This policy setting specifies whether Windows apps can run in the background.You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device.If you choose the "Force Allow" option, Windows apps are allowed to run in the background and employees in your organization cannot change it.If you choose the "Force Deny" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it.If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app."
+
+```
+Computer Configuration\Administrative Templates\Windows Components\App Privacy
+```
+`Enabled` -> `Deny All changes`:
+```powershell
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground	Type: REG_DWORD, Length: 4, Data: 2
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_UserInControlOfTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceAllowTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
+mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceDenyTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
+```
+
+## Suboption
+
+`Disable Background Task Host`:  
+Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
+
+When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "AppPrivacy.admx",
+  "CategoryName": "AppPrivacy",
+  "PolicyName": "LetAppsRunInBackground",
+  "NameSpace": "Microsoft.Policies.AppPrivacy",
+  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
+  "DisplayName": "Let Windows apps run in the background",
+  "ExplainText": "This policy setting specifies whether Windows apps can run in the background. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to run in the background and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
+  ],
+  "Elements": [
+    { "Type": "Enum", "ValueName": "LetAppsRunInBackground", "Items": [
+        { "DisplayName": "User is in control", "Data": "0" },
+        { "DisplayName": "Force Allow", "Data": "1" },
+        { "DisplayName": "Force Deny", "Data": "2" }
+      ]
+    }
+  ]
+}
+```
+
+# Disable App Launch Tracking
+
+`Privacy & security > General : Let Windows improve Start and search results by tracking app launches`
+
+```bat
+"Process Name","Operation","Path","Detail"
+"SystemSettings.exe","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackProgs","Type: REG_DWORD, Length: 4, Data: 0"
+```
+
 # Disable Auto Maintenance
 
 Runs updates and scans daily when your PC is idle, it helps keep your system secure and efficient without affecting performance. Theres no actual reason to disable it, as it doesn't do anything while being active, however if you've any reason for not wanting it to run the tasks while being in idle, toggle the switch.
@@ -422,132 +1212,201 @@ Miscellaneous notes:
 }
 ```
 
-# Disable WMPlayer Telemetry
+# Disable Microsoft Copilot
 
-WMPlayer (Windows Media Player) sends player usage data by default, if using the "Recommended ". This option turns off the `Diagnistics and Feedback` option, use the suboptions for further configuration.
+"Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they're available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced."
 
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/wmplayer.png?raw=true)
+`CopilotDisabledReason`:
+```c
+ValueW = RegGetValueW(
+    HKEY_CURRENT_USER,
+    L"SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot",
+    L"CopilotDisabledReason",
+    2u, // REG_SZ
+    0LL,
+    pvData,
+    pcbData);
 
-Note: I gathered all registry values via the legacy WMPlayer.
-
-## Suboptions
-
-| Option | Description |
-| ---- | ---- |
-| `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
-| `Prevent Send User ID` | Prevents sending a unique player ID to content providers. |
-| `Disable Metadata Retrieval` | Disables displaying media information from the internet and updating music files by retrieving media info from the internet. |
-| `Prevent Usage Rights Download` | Prevents downloading usage rights automatically when playing or syncing a file. |
-| `Prevent Auto Clock` | Prevents setting the clock on devices automatically. |
-| `Max Connection Speed` | Selects the `LAN (10 Mbps or more)` connection speed, which is the highest available. |
-| `Prevent Frame Dropping` | Prevents dropping frames in order to keep audio and video synchronized. |
-| `Disable Video Smoothing` | Disables the `Use video smoothing` option.|
-| `Disable Multicast Streams` | Disallows the player from receiving multicast streams. |
-| `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
-| `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
-
-## setup_wm Capture
-
-Registry values `setup_wm.exe` creates on first start, if unticking all options:
-```powershell
-HKCU\Software\Microsoft\MediaPlayer\Preferences\AcceptedPrivacyStatement	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Setup\UserOptions\DesktopShortcut	SUCCESS	Type: REG_SZ, Length: 6, Data: no
-HKCU\Software\Microsoft\MediaPlayer\Preferences\MetadataRetrieval	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\SendUserGUID	SUCCESS	Type: REG_BINARY, Length: 1, Data: 00
-HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentAcquisition	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageTracking	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUMusic	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPictures	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUVideo	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPlaylists	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
-HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3BC3475	SUCCESS	Type: REG_BINARY, Length: 650, Data: 7A 01 00 00 00 00 00 00 04 00 04 00 01 02 1C 00
-HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3BC2475	SUCCESS	Type: REG_BINARY, Length: 3,056, Data: 3A 03 00 00 00 00 00 00 04 00 04 00 01 00 EF 01
-HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3BC2475	SUCCESS	Type: REG_BINARY, Length: 3,064, Data: 3B 03 00 00 00 00 00 00 04 00 04 00 01 00 F1 01
+v16 = L"FailedToGetReason"; // if value is missing
 ```
 
-All queried values in the `Player` section:
-```powershell
-HKCU\Software\Microsoft\MediaPlayer\Preferences\AlwaysOnTopVTenSkin	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\EnableScreensaver	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\AutoAddMusicToLibrary	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\AutoAddUNC	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\PromptLicenseBackup	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\ForceOnline	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\StopOnFastUserSwitch2	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageLoggerCategories	Type: REG_DWORD, Length: 4, Data: 1
+```json
+"HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot": {
+  "CopilotDisabledReason": { "Type": "REG_SZ", "Data": "FeatureIsDisabled" }
+}
 ```
+`FeatureIsDisabled` seems to be used by default here (`IsRequiredEdgeBrowserInstalledFailed` exists too):
+```c
+// procmon boot trace (value unset)
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotDisabledReason","SUCCESS","Type: REG_SZ, Length: 36, Data: FeatureIsDisabled"
 
-All queried values in the `Privacy` section:
-```powershell
-HKCU\Software\Microsoft\MediaPlayer\Preferences\MetadataRetrieval	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\SendUserGUID	Type: REG_BINARY, Length: 1, Data: 00
-HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentAcquisition	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableLicenseRefresh	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentDRMConfiguration	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageTracking	Type: REG_DWORD, Length: 4, Data: 0
-HKLM\SOFTWARE\WOW6432Node\Microsoft\MediaPlayer\PREFERENCES\HME\S-1-5-21-312647486-2989864140-179540406-1001\AcceptedPrivacyStatement	Type: REG_DWORD, Length: 4, Data: 1
-HKLM\SOFTWARE\WOW6432Node\Microsoft\MediaPlayer\PREFERENCES\HME\S-1-5-21-312647486-2989864140-179540406-1001\UsageTracking	Type: REG_DWORD, Length: 4, Data: 0
-HKLM\SOFTWARE\WOW6432Node\Microsoft\MediaPlayer\PREFERENCES\HME\S-1-5-21-312647486-2989864140-179540406-1001\ForceUsageTracking	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUMusic	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPictures	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUVideo	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPlaylists	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\PlayerScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\HTMLViewAsk	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\LocalSAMIFilesEnabled	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
-```
-
-All queried values in the `Performance` section:
-```powershell
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DontUseFrameInterpolation	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseFullScrMS	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DVDUseVMRFSCntrls	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\IgnoreAVSync	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\Scrunch\WMVideo\DXVA	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DontUseFrameInterpolation	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseFullScrMS	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DVDUseVMRFSCntrls	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseVMRFullScreenCntr	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\IgnoreAVSync	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\Scrunch\WMVideo\DXVA	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UseDefaultBufferTime	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\CustomBufferTime	Type: REG_DWORD, Length: 4, Data: 5000
-HKCU\Software\Microsoft\MediaPlayer\Preferences\MaxBandwidth	Type: REG_DWORD, Length: 4, Data: 2147483647
-HKCU\Software\Microsoft\MediaPlayer\Preferences\PlayerScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\HTMLViewAsk	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\LocalSAMIFilesEnabled	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
-```
-
-All queried values in the `Network` section:
-```powershell
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UseUDP	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UseCustomUDPPort	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UseMulticast	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UseTCP	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\UseHTTP	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\PlayerScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\HTMLViewAsk	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\LocalSAMIFilesEnabled	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+// ?
+"HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotLogonTelemetryTime","Type: REG_BINARY, Length: 8, Data: 7A 84 DA 49 6B 89 DC 01"
 ```
 
 ---
 
 Miscellaneous notes:
-
 ```c
-// Apps > Video playback
+"OneDrive.exe","HKCU\Software\Microsoft\OneDrive\Accounts\Personal\CopilotEducationalExperienceInfoIconDismissed","NAME NOT FOUND","Length: 16"
+"MicrosoftEdgeUpdate.exe","HKLM\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\CopilotUpgradeCheck","NAME NOT FOUND","Length: 16"
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotHWKeyChoiceSet","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
+```
 
-// Save network bandwidth by playing video at lower resolution
-"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
 
-// Process video automatically to enhance it (depends ony our device hardware)
-"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
+```json
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "WindowsCopilot",
+  "PolicyName": "TurnOffWindowsCopilot",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Turn off Windows Copilot",
+  "ExplainText": "This policy setting allows you to turn off Windows Copilot. If you enable this policy setting, users will not be able to use Copilot. The Copilot icon will not appear on the taskbar either. If you disable or do not configure this policy setting, users will be able to use Copilot when it's available to them.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot"
+  ],
+  "ValueName": "TurnOffWindowsCopilot",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "WindowsCopilot",
+  "PolicyName": "SetCopilotHardwareKey",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_NOSERVER - At least Windows 11",
+  "DisplayName": "Set Copilot Hardware Key",
+  "ExplainText": "This policy setting determines which app opens when the user presses the Copilot key on their keyboard. If the policy is enabled, the specified app will open when the user presses the Copilot key. Users can change the key assignment in Settings. If the policy is not configured, Copilot will open if it's available in that country or region.",
+  "KeyPath": [
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CopilotKey"
+  ],
+  "Elements": [
+    { "Type": "Text", "ValueName": "SetCopilotHardwareKey" }
+  ]
+},
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "Paint",
+  "PolicyName": "DisableImageCreator",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Disable Image Creator",
+  "ExplainText": "This policy setting allows you to control whether Image Creator functionality is disabled in the Windows Paint app. If this policy is enabled, Image Creator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Image Creator functionality.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
+  ],
+  "ValueName": "DisableImageCreator",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "Paint",
+  "PolicyName": "DisableCocreator",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Disable Cocreator",
+  "ExplainText": "This policy setting allows you to control whether Cocreator functionality is disabled in the Windows Paint app. If this policy is enabled, Cocreator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Cocreator functionality.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
+  ],
+  "ValueName": "DisableCocreator",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "Paint",
+  "PolicyName": "DisableGenerativeFill",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
+  "DisplayName": "Disable generative fill",
+  "ExplainText": "This policy setting allows you to control whether generative fill functionality is disabled in the Windows Paint app. If this policy is enabled, generative fill functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access generative fill functionality.",
+  "KeyPath": [
+    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
+  ],
+  "ValueName": "DisableGenerativeFill",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable Recall
+
+"Allows you to control whether Windows saves snapshots of the screen and analyzes the user's activity on their device. If you enable this policy setting, Windows will not be able to save snapshots and users won't be able to search for or browse through their historical device activity using Recall. If you disable or do not configure this policy setting, Windows will save snapshots of the screen and users will be able to search for or browse through a timeline of their past activities using Recall." (`WindowsCopilot.admx`)
+
+## Suboption
+
+`Disable ClickToDo`:  
+"Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "WindowsAI",
+  "PolicyName": "DisableAIDataAnalysis",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Turn off saving snapshots for use with Recall",
+  "ExplainText": "This policy setting allows you to determine whether snapshots of the screen can be saved for use with Recall. For managed devices, snapshots for Recall are not enabled by default. IT administrators cannot, on their own, enable saving snapshots on behalf of their users. The choice to enable saving snapshots requires individual user opt-in consent. If the policy is not configured, snapshots won't be saved for use with Recall. If you enable this policy, snapshots won't be saved for use with Recall. If snapshots were previously saved on the device, they will be deleted when this policy is enabled. If you set this policy to disabled, end users will have a choice to save snapshots of their screen and use Recall to find things they've seen on their device.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
+  ],
+  "ValueName": "DisableAIDataAnalysis",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "WindowsAI",
+  "PolicyName": "AllowRecallEnablement",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Allow Recall to be enabled",
+  "ExplainText": "This policy setting allows you to determine whether the Recall optional component is available for end users to enable on their device. By default, Recall is disabled for managed commercial devices. Recall isn't available on managed devices by default, and individual users can't enable Recall on their own. If this policy is not configured, end users will have the Recall component in a disabled state. If this policy is disabled, the Recall component will be in disabled state and the bits for Recall will be removed from the device. If snapshots were previously saved on the device, they will be deleted when this policy is disabled. Removing Recall requires a device restart. If the policy is enabled, end users will have Recall available on their device. Depending on the state of the DisableAIDataAnalysis policy (Turn off saving snapshots for use with Recall), end users will be able to choose if they want to save snapshots of their screen and use Recall to find things they've seen on their device.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
+  ],
+  "ValueName": "AllowRecallEnablement",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+},
+{
+  "File": "WindowsCopilot.admx",
+  "CategoryName": "WindowsAI",
+  "PolicyName": "DisableClickToDo",
+  "NameSpace": "Microsoft.Policies.WindowsCopilot",
+  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
+  "DisplayName": "Disable Click to Do",
+  "ExplainText": "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device.",
+  "KeyPath": [
+    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
+    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
+  ],
+  "ValueName": "DisableClickToDo",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
 ```
 
 # Disable Xbox Game Bar
@@ -638,54 +1497,6 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
     { "Type": "DisabledValue", "Data": "0" }
   ]
 }
-```
-
-# Disable PSR
-
-> "*Steps Recorder, also known as Problems Steps Recorder (PSR) in Windows 7, is a Windows inbox program that records screenshots of the desktop along with the annotated steps while recording the activity on the screen. The screenshots and annotated text are saved to a file for later viewing.*"
->
-> — Microsoft Support, [Steps Recorder deprecation](https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f)
-
-It is a deprecated feature, as the banner shows:
-
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/psr.png?raw=true)
-
-`PSR` = Problem Steps Recorder
-
-```c
-// SR = Steps Recorder?
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffUserActionRecord",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off Steps Recorder",
-  "ExplainText": "This policy setting controls the state of Steps Recorder. Steps Recorder keeps a record of steps taken by the user. The data generated by Steps Recorder can be used in feedback systems such as Windows Error Reporting to help developers understand and fix problems. The data includes user actions such as keyboard input and mouse input, user interface data, and screen shots. Steps Recorder includes an option to turn on and off data collection. If you enable this policy setting, Steps Recorder will be disabled. If you disable or do not configure this policy setting, Steps Recorder will be enabled.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableUAR",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable App Launch Tracking
-
-`Privacy & security > General : Let Windows improve Start and search results by tracking app launches`
-
-```bat
-"Process Name","Operation","Path","Detail"
-"SystemSettings.exe","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackProgs","Type: REG_DWORD, Length: 4, Data: 0"
 ```
 
 # Disable Location Access
@@ -897,7 +1708,7 @@ setx DOTNET_CLI_TELEMETRY_OPTOUT 1
 dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager\DisableDeletes	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-# Disable Biometrics 
+# Disable Biometrics
 
 Biometric is used for fingerprint, facial recognition, and other biometric authentication methods in Windows Hello and related security features.
 
@@ -1860,203 +2671,6 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 }
 ```
 
-# Disable Microsoft Copilot
-
-"Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they're available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced."
-
-`CopilotDisabledReason`:
-```c
-ValueW = RegGetValueW(
-    HKEY_CURRENT_USER,
-    L"SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot",
-    L"CopilotDisabledReason",
-    2u, // REG_SZ
-    0LL,
-    pvData,
-    pcbData);
-
-v16 = L"FailedToGetReason"; // if value is missing
-```
-
-```json
-"HKCU\\SOFTWARE\\Microsoft\\Windows\\Shell\\Copilot": {
-  "CopilotDisabledReason": { "Type": "REG_SZ", "Data": "FeatureIsDisabled" }
-}
-```
-`FeatureIsDisabled` seems to be used by default here (`IsRequiredEdgeBrowserInstalledFailed` exists too):
-```c
-// procmon boot trace (value unset)
-"Explorer.EXE","HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotDisabledReason","SUCCESS","Type: REG_SZ, Length: 36, Data: FeatureIsDisabled"
-
-// ?
-"HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotLogonTelemetryTime","Type: REG_BINARY, Length: 8, Data: 7A 84 DA 49 6B 89 DC 01"
-```
-
----
-
-Miscellaneous notes:
-```c
-"OneDrive.exe","HKCU\Software\Microsoft\OneDrive\Accounts\Personal\CopilotEducationalExperienceInfoIconDismissed","NAME NOT FOUND","Length: 16"
-"MicrosoftEdgeUpdate.exe","HKLM\SOFTWARE\WOW6432Node\Microsoft\EdgeUpdate\CopilotUpgradeCheck","NAME NOT FOUND","Length: 16"
-"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotHWKeyChoiceSet","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
-"Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsCopilot",
-  "PolicyName": "TurnOffWindowsCopilot",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Turn off Windows Copilot",
-  "ExplainText": "This policy setting allows you to turn off Windows Copilot. If you enable this policy setting, users will not be able to use Copilot. The Copilot icon will not appear on the taskbar either. If you disable or do not configure this policy setting, users will be able to use Copilot when it's available to them.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot"
-  ],
-  "ValueName": "TurnOffWindowsCopilot",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsCopilot",
-  "PolicyName": "SetCopilotHardwareKey",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER - At least Windows 11",
-  "DisplayName": "Set Copilot Hardware Key",
-  "ExplainText": "This policy setting determines which app opens when the user presses the Copilot key on their keyboard. If the policy is enabled, the specified app will open when the user presses the Copilot key. Users can change the key assignment in Settings. If the policy is not configured, Copilot will open if it's available in that country or region.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CopilotKey"
-  ],
-  "Elements": [
-    { "Type": "Text", "ValueName": "SetCopilotHardwareKey" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableImageCreator",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Image Creator",
-  "ExplainText": "This policy setting allows you to control whether Image Creator functionality is disabled in the Windows Paint app. If this policy is enabled, Image Creator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Image Creator functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableImageCreator",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableCocreator",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Cocreator",
-  "ExplainText": "This policy setting allows you to control whether Cocreator functionality is disabled in the Windows Paint app. If this policy is enabled, Cocreator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Cocreator functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableCocreator",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableGenerativeFill",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable generative fill",
-  "ExplainText": "This policy setting allows you to control whether generative fill functionality is disabled in the Windows Paint app. If this policy is enabled, generative fill functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access generative fill functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableGenerativeFill",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable Recall
-
-"Allows you to control whether Windows saves snapshots of the screen and analyzes the user's activity on their device. If you enable this policy setting, Windows will not be able to save snapshots and users won't be able to search for or browse through their historical device activity using Recall. If you disable or do not configure this policy setting, Windows will save snapshots of the screen and users will be able to search for or browse through a timeline of their past activities using Recall." (`WindowsCopilot.admx`)
-
-## Suboption
-
-`Disable ClickToDo`:  
-"Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsAI",
-  "PolicyName": "DisableAIDataAnalysis",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Turn off saving snapshots for use with Recall",
-  "ExplainText": "This policy setting allows you to determine whether snapshots of the screen can be saved for use with Recall. For managed devices, snapshots for Recall are not enabled by default. IT administrators cannot, on their own, enable saving snapshots on behalf of their users. The choice to enable saving snapshots requires individual user opt-in consent. If the policy is not configured, snapshots won't be saved for use with Recall. If you enable this policy, snapshots won't be saved for use with Recall. If snapshots were previously saved on the device, they will be deleted when this policy is enabled. If you set this policy to disabled, end users will have a choice to save snapshots of their screen and use Recall to find things they've seen on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
-  ],
-  "ValueName": "DisableAIDataAnalysis",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsAI",
-  "PolicyName": "AllowRecallEnablement",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Allow Recall to be enabled",
-  "ExplainText": "This policy setting allows you to determine whether the Recall optional component is available for end users to enable on their device. By default, Recall is disabled for managed commercial devices. Recall isn't available on managed devices by default, and individual users can't enable Recall on their own. If this policy is not configured, end users will have the Recall component in a disabled state. If this policy is disabled, the Recall component will be in disabled state and the bits for Recall will be removed from the device. If snapshots were previously saved on the device, they will be deleted when this policy is disabled. Removing Recall requires a device restart. If the policy is enabled, end users will have Recall available on their device. Depending on the state of the DisableAIDataAnalysis policy (Turn off saving snapshots for use with Recall), end users will be able to choose if they want to save snapshots of their screen and use Recall to find things they've seen on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
-  ],
-  "ValueName": "AllowRecallEnablement",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsAI",
-  "PolicyName": "DisableClickToDo",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Disable Click to Do",
-  "ExplainText": "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
-  ],
-  "ValueName": "DisableClickToDo",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
 # Disable Camera
 
 Disallows the use of a camera on your system, by denying access via `LetAppsAccessCamera`/`AllowCamera`/services (and app permission).
@@ -2123,227 +2737,6 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
   "ValueName": "NoLockScreenCamera",
   "Elements": []
 }
-```
-
-# Disable Suggestions/Tips/Tricks
-
-Disables all kind of suggestions: in start, text suggestions (multilingual...), in the timeline, content. `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
-
-## SubscribedContent IDs
-
-Since the `SubscribedContent-*` values aren't documented literally anywhere I've tried to get some information to see which exist and what they do. You can find information on them in `ContentDeliveryManager.Utilities.dll`, see [contentdelivery.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/contentdelivery.c) for machine code snippets that include these information.
-
-| Feature | IDs | Practical meaning |
-|---|---|---|
-| `LockScreen` | `338380`, `338387` | Windows Spotlight / lock-screen creative content |
-| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for 'System > Notifications > Additional settings - Get tips and suggestions when using Windows' |
-| `StartSuggestions` | `338381`, `338388` | suggested/recommended content in Start |
-| `Settings` | `338386`, `338393` | promoted content inside Settings |
-| `SettingsHome` | `353697`, `353696` | Settings Home recommendations/cards |
-| `SettingsAccountsYourInfo` | `353695`, `353694` | promoted content in Settings > Accounts > Your info |
-| `SettingsValueBanner` | `88000106`, `88000105` | banner/value-promoting content in Settings |
-| `OobeOffers` | `314566`, `314567` | OOBE and post-setup offers |
-| `MinuteZeroOffers` | `310094`, `310093` | very-early setup / first-run offers - `310093` is used for 'System > Notifications > Additional settings - Show the Windows welcome experience after updates and when signed in to show what's new and suggested' |
-| `ApiTest` | `280812` | internal/test subscription used by CDM |
-| `ActionCenter` | `310092`, `310091` | Action Center / notification-surface content |
-| `ShareAppSuggestions` | `280814`, `280815` | app suggestions around sharing flows |
-| `SilentInstalledApps` | `202913`, `202914` | silent/preinstalled app delivery |
-| `PeopleAppSuggestions` | `314562`, `314563` | People-related app suggestions |
-| `DynamicLayouts` | `314558`, `314559` | dynamic layout-driven targeted content |
-| `DynamicLayoutsSV` | `88000531`, `88000530` | variant of dynamic layouts |
-| `Timeline` | `353699`, `353698` | Timeline-related suggested content |
-| `AppDefaultsEdgeEnlightenment` | `88000044`, `88000045` | Edge/default-app promotion |
-| `OneDriveLocal` | `280797`, `280811` | local OneDrive promotion/setup |
-| `OneDriveSync` | `280817`, `280810` | OneDrive sync promotion/setup |
-| `OneDriveDocuments` | `88000162`, `88000161` | OneDrive documents backup/setup |
-| `OneDriveDesktop` | `88000164`, `88000163` | OneDrive desktop backup/setup |
-| `OneDrivePictures` | `88000166`, `88000165` | OneDrive pictures backup/setup |
-
-`SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsConsumerFeatures",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off Microsoft consumer experiences",
-  "ExplainText": "This policy setting turns off experiences that help consumers make the most of their devices and Microsoft account. If you enable this policy setting, users will no longer see personalized recommendations from Microsoft and notifications about their Microsoft account. If you disable or do not configure this policy setting, users may see suggestions from Microsoft and notifications about their Microsoft account. Note: This setting only applies to Enterprise and Education SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsConsumerFeatures",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableSoftLanding",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not show Windows tips",
-  "ExplainText": "This policy setting prevents Windows tips from being shown to users. If you enable this policy setting, users will no longer see Windows tips. If you disable or do not configure this policy setting, users may see contextual popups explaining how to use Windows. Microsoft uses diagnostic data to determine which tips to show. Note: If you disable or do not configure this policy setting, but enable the \"Computer Configuration\\Administrative Templates\\Windows Components\\Data Collection and Preview Builds\\Allow Telemetry\" policy setting with a level of \"Basic\" or below, users may see a limited set of tips. Also, this setting only applies to Enterprise and Education SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableSoftLanding",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableThirdPartySuggestions",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not suggest third-party content in Windows spotlight",
-  "ExplainText": "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps. If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableThirdPartySuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ControlPanel.admx",
-  "CategoryName": "ControlPanel",
-  "PolicyName": "AllowOnlineTips",
-  "NameSpace": "Microsoft.Policies.ControlPanel",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Allow Online Tips",
-  "ExplainText": "Enables or disables the retrieval of online tips and help for the Settings app. If disabled, Settings will not contact Microsoft content services to retrieve tips and help content.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "AllowOnlineTips", "TrueValue": "1", "FalseValue": "0" }
-  ]
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecommendedSection",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_11_0_SE - Windows 11 SE",
-  "DisplayName": "Remove Recommended section from Start Menu",
-  "ExplainText": "This policy allows you to prevent the Start Menu from displaying a list of recommended applications and files. If you enable this policy setting, the Start Menu will no longer show the section containing a list of recommended files and apps.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecommendedSection",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecommendedPersonalizedSites",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_11_0_SE - Windows 11 SE",
-  "DisplayName": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
-  "ExplainText": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecommendedPersonalizedSites",
-  "Elements": []
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "DisableSearchBoxSuggestions",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off display of recent search entries in the File Explorer search box",
-  "ExplainText": "Disables suggesting recent queries for the Search Box and prevents entries into the Search Box from being stored in the registry for future references. File Explorer shows suggestion pop-ups as users type into the Search Box. These suggestions are based on their past entries into the Search Box. Note: If you enable this policy, File Explorer will not show suggestion pop-ups as users type into the Search Box, and it will not store Search Box entries into the registry for future references. If the user types a property, values that match this property will be shown but no data will be saved in the registry or re-shown on subsequent uses of the search box.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableSearchBoxSuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-## Miscellaneous Notes
-
-Disable edge related suggestions with (search suggestions in address bar):
-```json
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge": {
-  "SearchSuggestEnabled": { "Type": "REG_DWORD", "Data": 0 },
-  "LocalProvidersEnabled": { "Type": "REG_DWORD", "Data": 0 }
-},
-"HKLM\\Software\\Policies\\Microsoft\\MicrosoftEdge\\SearchScopes": {
-  "ShowSearchSuggestionsGlobal": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
-
-All `Microsoft\INPUT\Settings` values which get read on boot:
-```
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAP
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTFIRSTWORD
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollBottomZone
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollThreshold
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollTopZone
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : BluebirdDTWMultiplier
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DisablePersonalizationGTKM
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DynamicAutocorrectionAllowed
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EMOJISUGGESTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbAutocorrection2
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbTextPrediction
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : FLIPDebugOptions
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HASTRAILER
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbNavigationOverrideMode
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbTextPredictionDelay
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : INPUTHISTORYGUID
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Insights
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : InsightsEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : KEYBOARDMODE
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : LMDataLoggerEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MAXCORRECTIONS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MultilingualEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : NotActiveLanguagePenalty
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PERIODSHORTCUT
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabledCleared
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PRIVATE
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : RULEBASEDCONVERSION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_1
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_10
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_3
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeDataSources
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_10
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_4
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_5
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SHAPEWRITINGPREDICTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShortenMultilingualTraversal
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShowAllSuggestions
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SPELLCHECK
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SUPPRESSCONVERSION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Transliteration
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONONTHEFLY
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONSYMBOLS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : USEDANDA
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : UserStatsEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementLimit
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementUpLimit
 ```
 
 # Disable Synchronization
@@ -2682,106 +3075,6 @@ Disables all kind of synchronization, see policies.
 }
 ```
 
-# Disable Cross-Device Experiences
-
-Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).
-
-## SystemSettings Captures
-
-Changing "Share across devices" option via `SystemSettings`:
-```c
-// Off
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0
-
-// My device only
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 1
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 1
-
-// Everyone nearby
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\CdpSessionUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 2
-
-// Miscellaneous note
-HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\EnableRemoteLaunchToast  Type: REG_DWORD, Length: 4, Data: 1
-```
-
-`RomeSdkChannelUserAuthzPolicy` (`CDP\SettingsPage`) is only used for "My device only"/"Everyone nearby" (it's still getting changed to `0` in this option).
-
-```c
-L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage",
-L"BluetoothLastDisabledNearShare",
-
-L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CDP\\SettingsPage",
-L"WifiLastDisabledNearShare",
-```
-
-- [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableCDP",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Continue experiences on this device",
-  "ExplainText": "This policy setting determines whether the Windows device is allowed to participate in cross-device experiences (continue experiences). If you enable this policy setting, the Windows device is discoverable by other Windows devices that belong to the same user, and can participate in cross-device experiences. If you disable this policy setting, the Windows device is not discoverable by other devices, and cannot participate in cross-device experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableCdp",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable Phone Linking
-
-"This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC.If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences.If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences.If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot."
-
-## SystemSettings Captures
-
-This option will also disable resume ("Start something on one device and continue on this PC") - `System Settings > Apps > Resume`.
-
-```c
-// Off
-HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\IsResumeAllowed	Type: REG_DWORD, Length: 4, Data: 0
-
-// On
-HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\IsResumeAllowed	Type: REG_DWORD, Length: 4, Data: 1
-```
-
-By default resume is enabled, OneDrive is the only app which exists under the "Control which apps can use Resume" on a stock 25H2 installation and can be toggled via `IsOneDriveResumeAllowed` (same key as `IsResumeAllowed`). Disabling resume will disallow all apps to use Resume (doesn't set `IsXResumeAllowed` to `0`).
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableMMX",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Phone-PC linking on this device",
-  "ExplainText": "This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC. If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences. If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableMmx",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
 # Disable File History
 
 "File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."
@@ -3053,466 +3346,6 @@ Voluntary program that collects usage data to help improve the quality and perfo
 ```c
 "HKCU\Software\Microsoft\Windows\CurrentVersion\Cortana\DevOverrideOneSettings","Length: 16"
 "HKCU\Software\Microsoft\Windows\CurrentVersion\Cortana\IsAvailable","Type: REG_DWORD, Length: 4, Data: 1"
-```
-
-# Hide Last Logged-In User
-
-Note that if you use this option and don't have a password, you'll have to enter your username at each boot ([policy](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name)).
-
-"This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC."
-
-```c
-// Enabled
-services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayLastUserName	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-`Hide Username at Sign-In`:  
-"This security setting determines whether the username of the person signing in to this PC appears at Windows sign-in, after credentials are entered, and before the PC desktop is shown."
-
-```c
-// Enabled
-services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "WinLogon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "DisplayLastLogonInfoDescription",
-  "NameSpace": "Microsoft.Policies.WindowsLogon2",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Display information about previous logons during user logon",
-  "ExplainText": "This policy setting controls whether or not the system displays information about previous logons and logon failures to the user. For local user accounts and domain user accounts in domains of at least a Windows Server 2008 functional level, if you enable this setting, a message appears after the user logs on that displays the date and time of the last successful logon by that user, the date and time of the last unsuccessful logon attempted with that user name, and the number of unsuccessful logons since the last successful logon by that user. This message must be acknowledged by the user before the user is presented with the Microsoft Windows desktop. For domain user accounts in Windows Server 2003, Windows 2000 native, or Windows 2000 mixed functional level domains, if you enable this setting, a warning message will appear that Windows could not retrieve the information and the user will not be able to log on. Therefore, you should not enable this policy setting if the domain is not at the Windows Server 2008 domain functional level. If you disable or do not configure this setting, messages about the previous logon or logon failures are not displayed.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "DisplayLastLogonInfo",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Disable Background Apps
-
-"This policy setting specifies whether Windows apps can run in the background.You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device.If you choose the "Force Allow" option, Windows apps are allowed to run in the background and employees in your organization cannot change it.If you choose the "Force Deny" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it.If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app."
-
-```
-Computer Configuration\Administrative Templates\Windows Components\App Privacy
-```
-`Enabled` -> `Deny All changes`:
-```powershell
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground	Type: REG_DWORD, Length: 4, Data: 2
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_UserInControlOfTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceAllowTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
-mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_ForceDenyTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
-```
-
-## Suboption
-
-`Disable Background Task Host`:  
-Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
-
-When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsRunInBackground",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps run in the background",
-  "ExplainText": "This policy setting specifies whether Windows apps can run in the background. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to run in the background and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsRunInBackground", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-}
-```
-
-# Disable WER
-
-[WER](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
-
-WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting part.
-
-`\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
-
-[WER network endpoints](https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed):
-```
-0.0.0.0 watson.microsoft.com
-0.0.0.0 watson.telemetry.microsoft.com
-0.0.0.0 umwatsonc.events.data.microsoft.com
-0.0.0.0 ceuswatcab01.blob.core.windows.net
-0.0.0.0 ceuswatcab02.blob.core.windows.net
-0.0.0.0 eaus2watcab01.blob.core.windows.net
-0.0.0.0 eaus2watcab02.blob.core.windows.net
-0.0.0.0 weus2watcab01.blob.core.windows.net
-0.0.0.0 weus2watcab02.blob.core.windows.net
-```
-`DisableSendRequestAdditionalSoftwareToWER`: "Prevent Windows from sending an error report when a device driver requests additional software during installation"
-`DisableSendGenericDriverNotFoundToWER`: "Do not send a Windows error report when a generic driver is installed on a device"
-
-- [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
-
-## Suboption
-
-`Disable DHA Report`:  
-> "*This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.*"
-
-`Disable Persistent System Timestamp`:
-
-Disables the Reliability policy that periodically writes the current system time to disk. Windows uses that persistent timestamp as a "last known alive" time so Reliability Monitor / WER can estimate when an unexpected shutdown, power loss, hard reset, or crash happened (see policies below).
-
-> "*This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.*"
-
-```c
-if ( !RegQueryValueExW(hKey[0], "TimeStampEnabled", 0LL, 0LL, (LPBYTE)&Data, &cbData) )
-if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbData) && v4 <= 0x15180 ) // 86400 seconds = 24h?
-```
-
-`TimeStampInterval` under `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` is in seconds, the value under `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` is read as minutes and multiplied by 60.
-
-- [system/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/system/assets/timestamp-OsEventsTimestampInterval.c)
-
-## Miscellaneous Notes
-
-`EnableWerUserReporting`  
-Default: `1` (`DbgkEnableWerUserReporting dd 1`)
-
-```powershell
-"Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
-```
-
-Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability)? Haven't informed myself about it yet, therefore ignore it:
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
-```
-Default is `0`, non zero would enable the behaviour? The value doesn't exist by default.
-
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled
-\Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "DeviceSetup.admx",
-  "CategoryName": "DeviceInstall_Category",
-  "PolicyName": "DeviceInstall_GenericDriverSendToWER",
-  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
-  "Supported": "Windows_10_0_RS3ToVista - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, Windows 7, and Windows Vista only",
-  "DisplayName": "Do not send a Windows error report when a generic driver is installed on a device",
-  "ExplainText": "Windows has a feature that sends \"generic-driver-installed\" reports through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, an error report is not sent when a generic driver is installed. If you disable or do not configure this policy setting, an error report is sent when a generic driver is installed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
-  ],
-  "ValueName": "DisableSendGenericDriverNotFoundToWER",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DeviceSetup.admx",
-  "CategoryName": "DeviceInstall_Category",
-  "PolicyName": "DeviceInstall_RequestAdditionalSoftwareSendToWER",
-  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
-  "Supported": "Windows_10_0_RS3ToWindows7 - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, and Windows 7 only",
-  "DisplayName": "Prevent Windows from sending an error report when a device driver requests additional software during installation",
-  "ExplainText": "Windows has a feature that allows a device driver to request additional software through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, Windows will not send an error report to request additional software even if this is specified by the device driver. If you disable or do not configure this policy setting, Windows sends an error report when a device driver that requests additional software is installed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
-  ],
-  "ValueName": "DisableSendRequestAdditionalSoftwareToWER",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerDisable_2",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Disable Windows Error Reporting",
-  "ExplainText": "This policy setting turns off Windows Error Reporting, so that reports are not collected or sent to either Microsoft or internal servers within your organization when software unexpectedly stops working or fails. If you enable this policy setting, Windows Error Reporting does not send any problem information to Microsoft. Additionally, solution information is not available in Security and Maintenance in Control Panel. If you disable or do not configure this policy setting, the Turn off Windows Error Reporting policy setting in Computer Configuration/Administrative Templates/System/Internet Communication Management/Internet Communication settings takes precedence. If Turn off Windows Error Reporting is also either disabled or not configured, user settings in Control Panel for Windows Error Reporting are applied.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "Disabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerNoLogging_1",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Disable logging",
-  "ExplainText": "This policy setting controls whether Windows Error Reporting saves its own events and error messages to the system event log. If you enable this policy setting, Windows Error Reporting events are not recorded in the system event log. If you disable or do not configure this policy setting, Windows Error Reporting events and errors are logged to the system event log, as with other Windows-based programs.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "LoggingDisabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerAutoApproveOSDumps_1",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
-  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "AutoApproveOSDumps",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerAutoApproveOSDumps_2",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
-  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "AutoApproveOSDumps",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "TPM.admx",
-  "CategoryName": "DSHACategory",
-  "PolicyName": "OptIntoDSHA_Name",
-  "NameSpace": "Microsoft.Policies.TrustedPlatformModule",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Enable Device Health Attestation Monitoring and Reporting",
-  "ExplainText": "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\DeviceHealthAttestationService"
-  ],
-  "ValueName": "EnableDeviceHealthAttestationService",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Reliability.admx",
-  "CategoryName": "System",
-  "PolicyName": "EE_EnablePersistentTimeStamp",
-  "NameSpace": "Microsoft.Policies.Reliability",
-  "Supported": "WindowsNET - At least Windows Server 2003",
-  "DisplayName": "Enable Persistent Time Stamp",
-  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
-  ],
-  "ValueName": "TimeStampEnabled",
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
-
-# Troubleshooter Preference
-
-It's set to `Ask me before running` by default.
-
-| Option | Description |
-| ---- | ---- |
-| Run automatically, don't notify me | Windows will automatically run recommended troubleshooters for problems detected on your device without bothering you. |
-| Run automatically, then notify me | Windows will tell you after recommended troubleshooters have solved a problem so you know what happened. |
-| Ask me before running (default) | We'll let you know when recommended troubleshooting is available. You can review the problem and changes before running the troubleshooters. |
-| Don't run any | Windows will automatically run critical troubleshooters but won't recommend troubleshooting for other problems. You will not get notifications for known problems, and you will need to manually troubleshoot these problems on your device. |
-
-| Service | Description |
-| ---- | ---- |
-| `DPS` | The Diagnostic Policy Service enables problem detection, troubleshooting and resolution for Windows components. If this service is stopped, diagnostics will no longer function. |
-| `TroubleshootingSvc` | Enables automatic mitigation for known problems by applying recommended troubleshooting. If stopped, your device will not get recommended troubleshooting for problems on your device. |
-| `diagsvc` | Executes diagnostic actions for troubleshooting support |
-
-These get disabled in the `Don't run any` option.
-
-## SystemSettings Captures
-
-`System > Troubleshoot` - `Recommended troubleshooter preferences`:
-```c
-// Don't run any
-HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 1
-
-// Ask me before running (default)
-HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 2
-
-// Run automatically, then notify me
-HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 3
-
-// Run automatically, don't notify me
-HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 4
-```
-
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "MSDT.admx",
-  "CategoryName": "WdiScenarioCategory",
-  "PolicyName": "MsdtSupportProvider",
-  "NameSpace": "Microsoft.Policies.MSDT",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider",
-  "ExplainText": "This policy setting configures Microsoft Support Diagnostic Tool (MSDT) interactive communication with the support provider. MSDT gathers diagnostic data for analysis by support professionals. If you enable this policy setting, users can use MSDT to collect and send diagnostic data to a support professional to resolve a problem. By default, the support provider is set to Microsoft Corporation. If you disable this policy setting, MSDT cannot run in support mode, and no data can be collected or sent to the support provider. If you do not configure this policy setting, MSDT support mode is enabled by default. No reboots or service restarts are required for this policy setting to take effect. Changes take effect immediately.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnosticsProvider\\Policy"
-  ],
-  "ValueName": "DisableQueryRemoteServer",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "sdiageng.admx",
-  "CategoryName": "ScriptedDiagnosticsCategory",
-  "PolicyName": "ScriptedDiagnosticsExecutionPolicy",
-  "NameSpace": "Microsoft.Policies.ScriptedDiagnostics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Troubleshooting: Allow users to access and run Troubleshooting Wizards",
-  "ExplainText": "This policy setting allows users to access and run the troubleshooting tools that are available in the Troubleshooting Control Panel and to run the troubleshooting wizard to troubleshoot problems on their computers. If you enable or do not configure this policy setting, users can access and run the troubleshooting tools from the Troubleshooting Control Panel. If you disable this policy setting, users cannot access or run the troubleshooting tools from the Control Panel. Note that this setting also controls a user's ability to launch standalone troubleshooting packs such as those found in .diagcab files.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnostics"
-  ],
-  "ValueName": "EnableDiagnostics",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "sdiageng.admx",
-  "CategoryName": "ScriptedDiagnosticsCategory",
-  "PolicyName": "BetterWhenConnected",
-  "NameSpace": "Microsoft.Policies.ScriptedDiagnostics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Troubleshooting: Allow users to access online troubleshooting content on Microsoft servers from the Troubleshooting Control Panel (via the Windows Online Troubleshooting Service - WOTS)",
-  "ExplainText": "This policy setting allows users who are connected to the Internet to access and search troubleshooting content that is hosted on Microsoft content servers. Users can access online troubleshooting content from within the Troubleshooting Control Panel UI by clicking \"Yes\" when they are prompted by a message that states, \"Do you want the most up-to-date troubleshooting content?\" If you enable or do not configure this policy setting, users who are connected to the Internet can access and search troubleshooting content that is hosted on Microsoft content servers from within the Troubleshooting Control Panel user interface. If you disable this policy setting, users can only access and search troubleshooting content that is available locally on their computers, even if they are connected to the Internet. They are prevented from connecting to the Microsoft servers that host the Windows Online Troubleshooting Service.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnosticsProvider\\Policy"
-  ],
-  "ValueName": "EnableQueryRemoteServer",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "MSDT.admx",
-  "CategoryName": "WdiScenarioCategory",
-  "PolicyName": "TroubleshootingAllowRecommendations",
-  "NameSpace": "Microsoft.Policies.MSDT",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Troubleshooting: Allow users to access recommended troubleshooting for known problems",
-  "ExplainText": "This policy setting configures how troubleshooting for known problems can be applied on the device and lets administrators configure how it's applied to their domains/IT environments. Not configuring this policy setting will allow the user to configure how troubleshooting is applied. Enabling this policy allows you to configure how troubleshooting is applied on the user's device. You can select from one of the following values: 0 = Do not allow users, system features, or Microsoft to apply troubleshooting. 1 = Only automatically apply troubleshooting for critical problems by system features and Microsoft. 2 = Automatically apply troubleshooting for critical problems by system features and Microsoft. Notify users when troubleshooting for other problems is available and allow users to choose to apply or ignore. 3 = Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Notify users when troubleshooting has solved a problem. 4 = Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Do not notify users when troubleshooting has solved a problem. 5 = Allow the user to choose their own troubleshooting settings. After setting this policy, you can use the following instructions to check devices in your domain for available troubleshooting from Microsoft: 1. Create a bat script with the following contents: rem The following batch script triggers Recommended Troubleshooting schtasks /run /TN \"\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner\" 2. To create a new immediate task, navigate to the Group Policy Management Editor > Computer Configuration > Preferences and select Control Panel Settings. 3. Under Control Panel settings, right-click on Scheduled Tasks and select New. Select Immediate Task (At least Windows 7). 4. Provide name and description as appropriate, then under Security Options set the user account to System and select the Run with highest privileges checkbox. 5. In the Actions tab, create a new action, select Start a Program as its type, then enter the file created in step 1. 6. Configure the task to deploy to your domain.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Troubleshooting\\AllowRecommendations"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "TroubleshootingAllowRecommendations", "Items": [
-        { "DisplayName": "Do not allow users, system features, or Microsoft to apply troubleshooting.", "Data": "0" },
-        { "DisplayName": "Only automatically apply troubleshooting for critical problems by system features and Microsoft.", "Data": "1" },
-        { "DisplayName": "Automatically apply troubleshooting for critical problems by system features and Microsoft. Notify users when troubleshooting for other problems is available and allow users to choose to apply or ignore.", "Data": "2" },
-        { "DisplayName": "Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Notify users when troubleshooting has solved a problem.", "Data": "3" },
-        { "DisplayName": "Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Do not notify users when troubleshooting has solved a problem.", "Data": "4" },
-        { "DisplayName": "Allow the user to choose their own troubleshooting settings.", "Data": "5" }
-      ]
-    }
-  ]
-},
-{
-  "File": "sdiagschd.admx",
-  "CategoryName": "ScheduledDiagnosticsCategory",
-  "PolicyName": "ScheduledDiagnosticsExecutionPolicy",
-  "NameSpace": "Microsoft.Policies.ScheduledDiagnostics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Configure Scheduled Maintenance Behavior",
-  "ExplainText": "Determines whether scheduled diagnostics will run to proactively detect and resolve system problems. If you enable this policy setting, you must choose an execution level. If you choose detection and troubleshooting only, Windows will periodically detect and troubleshoot problems. The user will be notified of the problem for interactive resolution. If you choose detection, troubleshooting and resolution, Windows will resolve some of these problems silently without requiring user input. If you disable this policy setting, Windows will not be able to detect, troubleshoot or resolve problems on a scheduled basis. If you do not configure this policy setting, local troubleshooting preferences will take precedence, as configured in the control panel. If no local troubleshooting preference is configured, scheduled diagnostics are enabled for detection, troubleshooting and resolution by default. No reboots or service restarts are required for this policy to take effect: changes take effect immediately. This policy setting will only take effect when the Task Scheduler service is in the running state. When the service is stopped or disabled, scheduled diagnostics will not be executed. The Task Scheduler service can be configured with the Services snap-in to the Microsoft Management Console.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScheduledDiagnostics"
-  ],
-  "ValueName": "EnabledExecution",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "EnabledExecutionLevel", "Items": [
-        { "DisplayName": "Troubleshooting Only", "Data": "1" },
-        { "DisplayName": "Regular", "Data": "2" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WDI.admx",
-  "CategoryName": "Troubleshooting",
-  "PolicyName": "WdiDpsScenarioExecutionPolicy",
-  "NameSpace": "Microsoft.Policies.WindowsDiagnostics",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Diagnostics: Configure scenario execution level",
-  "ExplainText": "This policy setting determines the execution level for Diagnostic Policy Service (DPS) scenarios. If you enable this policy setting, you must select an execution level from the drop-down menu. If you select problem detection and troubleshooting only, the DPS will detect problems and attempt to determine their root causes. These root causes will be logged to the event log when detected, but no corrective action will be taken. If you select detection, troubleshooting and resolution, the DPS will attempt to automatically fix problems it detects or indicate to the user that assisted resolution is available. If you disable this policy setting, Windows cannot detect, troubleshoot, or resolve any problems that are handled by the DPS. If you do not configure this policy setting, the DPS enables all scenarios for resolution by default, unless you configure separate scenario-specific policy settings. This policy setting takes precedence over any scenario-specific policy settings when it is enabled or disabled. Scenario-specific policy settings only take effect if this policy setting is not configured. No reboots or service restarts are required for this policy setting to take effect: changes take effect immediately.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WDI"
-  ],
-  "ValueName": "ScenarioExecutionEnabled",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "EnabledScenarioExecutionLevel", "Items": [
-        { "DisplayName": "Detection and Troubleshooting Only", "Data": "1" },
-        { "DisplayName": "Detection, Troubleshooting and Resolution", "Data": "2" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
 ```
 
 # Disable Crash Dumps
@@ -4229,4 +4062,171 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
     { "Type": "DisabledValue", "Data": "0" }
   ]
 }
+```
+
+# Disable PSR
+
+> "*Steps Recorder, also known as Problems Steps Recorder (PSR) in Windows 7, is a Windows inbox program that records screenshots of the desktop along with the annotated steps while recording the activity on the screen. The screenshots and annotated text are saved to a file for later viewing.*"
+>
+> — Microsoft Support, [Steps Recorder deprecation](https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f)
+
+It is a deprecated feature, as the banner shows:
+
+![](https://github.com/nohuto/win-config/blob/main/privacy/images/psr.png?raw=true)
+
+`PSR` = Problem Steps Recorder
+
+```c
+// SR = Steps Recorder?
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
+```
+
+## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+
+```json
+{
+  "File": "AppCompat.admx",
+  "CategoryName": "AppCompat",
+  "PolicyName": "AppCompatTurnOffUserActionRecord",
+  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
+  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
+  "DisplayName": "Turn off Steps Recorder",
+  "ExplainText": "This policy setting controls the state of Steps Recorder. Steps Recorder keeps a record of steps taken by the user. The data generated by Steps Recorder can be used in feedback systems such as Windows Error Reporting to help developers understand and fix problems. The data includes user actions such as keyboard input and mouse input, user interface data, and screen shots. Steps Recorder includes an option to turn on and off data collection. If you enable this policy setting, Steps Recorder will be disabled. If you disable or do not configure this policy setting, Steps Recorder will be enabled.",
+  "KeyPath": [
+    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
+  ],
+  "ValueName": "DisableUAR",
+  "Elements": [
+    { "Type": "EnabledValue", "Data": "1" },
+    { "Type": "DisabledValue", "Data": "0" }
+  ]
+}
+```
+
+# Disable WMPlayer Telemetry
+
+WMPlayer (Windows Media Player) sends player usage data by default, if using the "Recommended ". This option turns off the `Diagnistics and Feedback` option, use the suboptions for further configuration.
+
+![](https://github.com/nohuto/win-config/blob/main/privacy/images/wmplayer.png?raw=true)
+
+Note: I gathered all registry values via the legacy WMPlayer.
+
+## Suboptions
+
+| Option | Description |
+| ---- | ---- |
+| `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
+| `Prevent Send User ID` | Prevents sending a unique player ID to content providers. |
+| `Disable Metadata Retrieval` | Disables displaying media information from the internet and updating music files by retrieving media info from the internet. |
+| `Prevent Usage Rights Download` | Prevents downloading usage rights automatically when playing or syncing a file. |
+| `Prevent Auto Clock` | Prevents setting the clock on devices automatically. |
+| `Max Connection Speed` | Selects the `LAN (10 Mbps or more)` connection speed, which is the highest available. |
+| `Prevent Frame Dropping` | Prevents dropping frames in order to keep audio and video synchronized. |
+| `Disable Video Smoothing` | Disables the `Use video smoothing` option.|
+| `Disable Multicast Streams` | Disallows the player from receiving multicast streams. |
+| `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
+| `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
+
+## setup_wm Capture
+
+Registry values `setup_wm.exe` creates on first start, if unticking all options:
+```powershell
+HKCU\Software\Microsoft\MediaPlayer\Preferences\AcceptedPrivacyStatement	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Setup\UserOptions\DesktopShortcut	SUCCESS	Type: REG_SZ, Length: 6, Data: no
+HKCU\Software\Microsoft\MediaPlayer\Preferences\MetadataRetrieval	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\SendUserGUID	SUCCESS	Type: REG_BINARY, Length: 1, Data: 00
+HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentAcquisition	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageTracking	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUMusic	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPictures	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUVideo	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPlaylists	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3BC3475	SUCCESS	Type: REG_BINARY, Length: 650, Data: 7A 01 00 00 00 00 00 00 04 00 04 00 01 02 1C 00
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3BC2475	SUCCESS	Type: REG_BINARY, Length: 3,056, Data: 3A 03 00 00 00 00 00 00 04 00 04 00 01 00 EF 01
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Notifications\Data\418A073AA3BC2475	SUCCESS	Type: REG_BINARY, Length: 3,064, Data: 3B 03 00 00 00 00 00 00 04 00 04 00 01 00 F1 01
+```
+
+All queried values in the `Player` section:
+```powershell
+HKCU\Software\Microsoft\MediaPlayer\Preferences\AlwaysOnTopVTenSkin	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\EnableScreensaver	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\AutoAddMusicToLibrary	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\AutoAddUNC	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\PromptLicenseBackup	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\ForceOnline	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\StopOnFastUserSwitch2	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageLoggerCategories	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+All queried values in the `Privacy` section:
+```powershell
+HKCU\Software\Microsoft\MediaPlayer\Preferences\MetadataRetrieval	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\SendUserGUID	Type: REG_BINARY, Length: 1, Data: 00
+HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentAcquisition	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableLicenseRefresh	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\SilentDRMConfiguration	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UsageTracking	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\SOFTWARE\WOW6432Node\Microsoft\MediaPlayer\PREFERENCES\HME\S-1-5-21-312647486-2989864140-179540406-1001\AcceptedPrivacyStatement	Type: REG_DWORD, Length: 4, Data: 1
+HKLM\SOFTWARE\WOW6432Node\Microsoft\MediaPlayer\PREFERENCES\HME\S-1-5-21-312647486-2989864140-179540406-1001\UsageTracking	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\SOFTWARE\WOW6432Node\Microsoft\MediaPlayer\PREFERENCES\HME\S-1-5-21-312647486-2989864140-179540406-1001\ForceUsageTracking	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUMusic	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPictures	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUVideo	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\DisableMRUPlaylists	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\PlayerScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\HTMLViewAsk	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\LocalSAMIFilesEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+All queried values in the `Performance` section:
+```powershell
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DontUseFrameInterpolation	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseFullScrMS	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DVDUseVMRFSCntrls	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\IgnoreAVSync	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\Scrunch\WMVideo\DXVA	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DontUseFrameInterpolation	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseFullScrMS	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\DVDUseVMRFSCntrls	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\UseVMRFullScreenCntr	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\VideoSettings\IgnoreAVSync	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\Scrunch\WMVideo\DXVA	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UseDefaultBufferTime	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\CustomBufferTime	Type: REG_DWORD, Length: 4, Data: 5000
+HKCU\Software\Microsoft\MediaPlayer\Preferences\MaxBandwidth	Type: REG_DWORD, Length: 4, Data: 2147483647
+HKCU\Software\Microsoft\MediaPlayer\Preferences\PlayerScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\HTMLViewAsk	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\LocalSAMIFilesEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+All queried values in the `Network` section:
+```powershell
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UseUDP	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UseCustomUDPPort	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UseMulticast	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UseTCP	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\UseHTTP	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\PlayerScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\HTMLViewAsk	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\LocalSAMIFilesEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+---
+
+Miscellaneous notes:
+
+```c
+// Apps > Video playback
+
+// Save network bandwidth by playing video at lower resolution
+"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
+
+// Process video automatically to enhance it (depends ony our device hardware)
+"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
 ```

@@ -340,7 +340,6 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 }
 ```
 
-
 # System Informer
 
 Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it is recommended to replace it.
