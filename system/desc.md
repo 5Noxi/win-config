@@ -171,7 +171,9 @@ if ( (int)NtQueryWnfStateData(&WNF_RM_GAME_MODE_ACTIVE, 0LL, 0LL, &v6, &v4, &v5)
 }
 ```
 
-I've created [`gm_effects.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects.exe), which reads the current foreground PID, the active Game Mode PID, the process default CPU sets (and CPU set IDs), and the Game Mode power profile WNF low value. You can either use the prebuild binary, or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects):
+## gm_effects
+
+I've created [`gm_effects.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects.exe), which reads the current foreground PID, active Game Mode PID, process default CPU sets (and CPU set IDs), and the Game Mode power profile WNF low value. You can either use the prebuild binary, or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/gm_effects):
 
 ```powershell
 cmake -S . -B build
