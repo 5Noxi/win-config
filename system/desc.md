@@ -610,7 +610,7 @@ The request byte is the native `ProcessPriorityClass` value used by `NtSetInform
 That means a process priority class isn't the final scheduling value by itself. It sets the base priority that the process threads start from, the scheduler then uses each thread's current priority, which can include wait completion boosts, GUI boosts, MMCSS boosts, etc.
 
 | Request byte | Public class | Thread base |
-| --- | --- | --- | --- |
+| --- | --- | --- |
 | `0` | - | - |
 | `2` | `NORMAL_PRIORITY_CLASS` | `8` |
 | `6` | `ABOVE_NORMAL_PRIORITY_CLASS` | `10` |
@@ -699,7 +699,7 @@ When Game Mode is removed from the process, [`RmpGameModeUnapplyCpuSetAllocation
 Game Mode changes graphics policy through D3DKMT calls, the service applies a scheduler yield percentage with `D3DKMTSetYieldPercentage` and a GPU memory budget target with `D3DKMTSetMemoryBudgetTarget`.
 
 | Part | Description |
-|---|---|
+| --- | --- |
 | GPU yield percentage | Scheduler policy value passed to `D3DKMTSetYieldPercentage`, Game Mode accepts `2-10`. From my understanding a lower yield value means that the game yields less GPU scheduling time in relation to other work and the opposite. |
 | Game GPU memory budget percentage | First budget target passed to `D3DKMTSetMemoryBudgetTarget`, the default fallback is `50`. Note that this is a "target" not a reservation of VRAM. |
 | System compositor GPU memory budget percentage | Second budget target passed to `D3DKMTSetMemoryBudgetTarget`, the default fallback is `30`. |
