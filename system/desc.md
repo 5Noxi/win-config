@@ -958,7 +958,7 @@ else
 
 - WU driver updates/automatic restarts/restart notifications shouldn't be enabled, so that behavior doesn't matter.
 - [Process priority class](https://www.noverse.dev/docs/win-config/system/game-mode/#process-priority-class) can prevent a game from setting itself to `REALTIME_PRIORITY_CLASS` as Game Mode would overwrite that with `NORMAL_PRIORITY_CLASS`. If a game doesn't have such issues, the priority classes Game Mode uses are usually similar to what normal games already use.
-- Game Mode prevents the FG wait boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter.
+- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter.
 - I haven't seen any game yet where Game Mode applied [CPU Sets](https://www.noverse.dev/docs/win-config/system/game-mode/#cpu-sets) through `GetProcessDefaultCpuSets`, if Game Mode chose proper CPU set IDs, this could be useful, but I wouldn't trust Microsoft with that.
 - [GPU policy](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling or GPU memory issues.
 - [Game Mode power profile](https://www.noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme.
