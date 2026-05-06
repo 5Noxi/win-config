@@ -674,7 +674,7 @@ else
 
 ### CPU Sets
 
-Game Mode can request CPU set allocation and apply CPU set restrictions and defaults to the registered process. CPU sets are groups for logical processors, means Game Mode uses them to give the game a preferred or limited processor selection while moving selected system activity away from those CPU sets.
+Game Mode can request CPU set allocation and apply CPU set restrictions and defaults to the registered process. A CPU set ID usually means one logical processor, and a process or thread can be assigned a list of CPU set IDs. Game Mode uses this to give the game a preferred or limited processor selection while moving selected system activity away from those CPU sets.
 
 > "*Game mode tries to kind of steer away the processors from your game so the system itself and all the kernel threads and stuff like that are not going to use some processors, so your game can use those processors exclusively.*"
 >
