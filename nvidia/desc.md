@@ -644,7 +644,7 @@ Disables NVIDIA scheduled tasks recusively. All 3 tasks no longer seem to be cre
 
 # Disable Telemetry
 
-Removes several files & preventing the system from sending telemetry data.
+Installing a [debloated driver](https://www.noverse.dev/docs/win-config/nvidia/debloated-driver/) is the first step, the option removes several files & preventing the system from sending telemetry data.
 
 ```json
 "HKLM\\SOFTWARE\\NVIDIA Corporation\\Global\\FTS": {
@@ -653,37 +653,8 @@ Removes several files & preventing the system from sending telemetry data.
   "EnableRID66610": { "Type": "REG_DWORD", "Data": 0 }
 },
 ```
-These three values are often applied in reference to "NVIDIA Telemetry", but since these seem to be outdated (they don't exist - test it yourself via [strings2-tui](https://github.com/nohuto/strings2-tui)) they won't get applied. The only "telemetry" related FTS parameters I found are:
-```cfg
-Parameter NVCFG_GLOBAL_FEATURE_RID67822_NVCPLTELEMETRYPHASE2_DYNAMIC
-{
-    Description   = "RID - 67822 NVCPL Telemetry support - Phase 2"
-    OutputTypes   = { cRegkeyHeader regkeyInfx regkeyDB }
-    DocURL        = "https://itproject.nvidia.com/itg/web/knta/crt/RequestDetail.jsp?REQUEST_ID=67822"
-    Tags          = { Feature FTS Disabled }
-    ReleaseTarget = { rFuture }
-    FtsRegkey     = "FTS_ENABLE_RID67822;EnableRID67822;0"
-}
-Parameter NVCFG_GLOBAL_FEATURE_RID69433_VIDEO_TELEMETRY_DX
-{
-    Description   = "RID - 69433 Video telemetry: DX drivers"
-    OutputTypes   = { cheader mkfile }
-    DocURL        = "https://itproject.nvidia.com/itg/web/knta/crt/RequestDetail.jsp?REQUEST_ID=69433"
-    Tags          = { Feature FTS }
-    ReleaseTarget = { rFuture }
-}
 
-Parameter NVCFG_GLOBAL_FEATURE_RID69434_VIDEO_TELEMETRY_CUVID
-{
-    Description   = "RID - 69434 Video telemetry : CUVID driver"
-    OutputTypes   = { cheader mkfile }
-    DocURL        = "https://itproject.nvidia.com/itg/web/knta/crt/RequestDetail.jsp?REQUEST_ID=69434"
-    Tags          = { Feature FTS }
-    ReleaseTarget = { rFuture }
-}
-```
-Note: `rFuture` = release schedule not yet determined.
-
+These three values are often applied in reference to "NVIDIA Telemetry", but since these seem to be outdated (they don't exist - test it yourself via [strings2-tui](https://github.com/nohuto/strings2-tui)) they won't get applied.
 
 Miscellaneous code snippets for `OptInOrOutPreference` & `SendTelemetryData`:
 ```cpp
@@ -815,36 +786,6 @@ NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
 Disables `Add Desktop Context Menu` in the NVIDIA control panel.
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true)
-
-# GPU Performance Counters
-
-> "*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*"
->
-> — NVIDIA Control Panel Help, [Manage GPU Performance Counters](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/index.htm#t=mergedProjects%2FDeveloper%2FManage_Performance_Counters_-_Reference.htm&rhsearch=counters)
-
-```json
-{
-"Name":  "RmProfilingAdminOnly",
-"Comment":  [
-     "Type DWORD",
-     "This regkey restricts profiling capabilities (creation of profiling objects",
-     "and access to profiling-related registers) to admin only.",
-     "0 - (default - disabled)",
-     "1 - Enables admin check"
- ],
-"Elements":  [
-      {"Name":  "FALSE","Value":  "0"},
-      {"Name":  "TRUE","Value":  "1"}
-  ]
-},
-```
-Changing it via NVCPL:
-```powershell
-NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
-NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
-```
-`Restrict access to the GPU performance counters to admin users only` = `1`  
-`Allow access to the GPU performance counters to all users` = `0`
 
 # Disable MPO
 

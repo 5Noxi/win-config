@@ -483,50 +483,12 @@ RegistryKey<unsigned char>::Initialize(
 ```
 - [network/assets | networkdisc-DataCenterBridgingConfiguration.c](https://github.com/nohuto/win-config/blob/main/network/assets/networkdisc-DataCenterBridgingConfiguration.c)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "LinkLayerTopologyDiscovery.admx",
-  "CategoryName": "LLTD_Category",
-  "PolicyName": "LLTD_EnableLLTDIO",
-  "NameSpace": "Microsoft.Policies.LinkLayerTopology",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn on Mapper I/O (LLTDIO) driver",
-  "ExplainText": "This policy setting changes the operational behavior of the Mapper I/O network protocol driver. LLTDIO allows a computer to discover the topology of a network it's connected to. It also allows a computer to initiate Quality-of-Service requests such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow LLTDIO to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior of LLTDIO will apply.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD"
-  ],
-  "ValueName": "EnableLLTDIO",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "AllowLLTDIOOnDomain", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Boolean", "ValueName": "AllowLLTDIOOnPublicNet", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Boolean", "ValueName": "ProhibitLLTDIOOnPrivateNet", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "LinkLayerTopologyDiscovery.admx",
-  "CategoryName": "LLTD_Category",
-  "PolicyName": "LLTD_EnableRspndr",
-  "NameSpace": "Microsoft.Policies.LinkLayerTopology",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn on Responder (RSPNDR) driver",
-  "ExplainText": "This policy setting changes the operational behavior of the Responder network protocol driver. The Responder allows a computer to participate in Link Layer Topology Discovery requests so that it can be discovered and located on the network. It also allows a computer to participate in Quality-of-Service activities such as bandwidth estimation and network health analysis. If you enable this policy setting, additional options are available to fine-tune your selection. You may choose the \"Allow operation while in domain\" option to allow the Responder to operate on a network interface that's connected to a managed network. On the other hand, if a network interface is connected to an unmanaged network, you may choose the \"Allow operation while in public network\" and \"Prohibit operation while in private network\" options instead. If you disable or do not configure this policy setting, the default behavior for the Responder will apply.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LLTD"
-  ],
-  "ValueName": "EnableRspndr",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "AllowRspndrOnDomain", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Boolean", "ValueName": "AllowRspndrOnPublicNet", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "Boolean", "ValueName": "ProhibitRspndrOnPrivateNet", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn on Mapper I/O (LLTDIO) driver](https://www.noverse.dev/policies.html?p=LinkLayerTopologyDiscovery*LLTD_EnableLLTDIO) | `HKLM\Software\Policies\Microsoft\Windows\LLTD` | `EnableLLTDIO`<br>`AllowLLTDIOOnDomain`<br>`AllowLLTDIOOnPublicNet`<br>`ProhibitLLTDIOOnPrivateNet` |
+| [Turn on Responder (RSPNDR) driver](https://www.noverse.dev/policies.html?p=LinkLayerTopologyDiscovery*LLTD_EnableRspndr) | `HKLM\Software\Policies\Microsoft\Windows\LLTD` | `EnableRspndr`<br>`AllowRspndrOnDomain`<br>`AllowRspndrOnPublicNet`<br>`ProhibitRspndrOnPrivateNet` |
 
 # NDIS Poll Mode
 
@@ -764,59 +726,13 @@ See links below for a detailed documentation.
 
 - [network/assets | probing-NcsiConfigData.c](https://github.com/nohuto/win-config/blob/main/network/assets/probing-NcsiConfigData.c)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "NoActiveProbe",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Windows Network Connectivity Status Indicator active tests",
-  "ExplainText": "This policy setting turns off the active tests performed by the Windows Network Connectivity Status Indicator (NCSI) to determine whether your computer is connected to the Internet or to a more limited network. As part of determining the connectivity level, NCSI performs one of two active tests: downloading a page from a dedicated Web server or making a DNS request for a dedicated address. If you enable this policy setting, NCSI does not run either of the two active tests. This may reduce the ability of NCSI, and of other components that use NCSI, to determine Internet access. If you disable or do not configure this policy setting, NCSI runs one of the two active tests.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
-  ],
-  "ValueName": "NoActiveProbe",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "nca.admx",
-  "CategoryName": "NetworkConnectivityAssistant",
-  "PolicyName": "PassiveMode",
-  "NameSpace": "Microsoft.Policies.NetworkConnectivityAssistant",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "DirectAccess Passive Mode",
-  "ExplainText": "Specifies whether NCA service runs in Passive Mode or not. Set this to Disabled to keep NCA probing actively all the time. If this setting is not configured, NCA probing is in active mode by default.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\NetworkConnectivityAssistant"
-  ],
-  "ValueName": "PassiveMode",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "NCSI.admx",
-  "CategoryName": "NCSI_Category",
-  "PolicyName": "NCSI_PassivePolling",
-  "NameSpace": "Microsoft.Policies.NCSI",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Specify passive polling",
-  "ExplainText": "This Policy setting enables you to specify passive polling behavior. NCSI polls various measurements throughout the network stack on a frequent interval to determine if network connectivity has been lost. Use the options to control the passive polling behavior.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetworkConnectivityStatusIndicator"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisablePassivePolling", "TrueValue": "1", "FalseValue": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Windows Network Connectivity Status Indicator active tests](https://www.noverse.dev/policies.html?p=ICM*NoActiveProbe) | `HKLM\Software\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator` | `NoActiveProbe` |
+| [DirectAccess Passive Mode](https://www.noverse.dev/policies.html?p=nca*PassiveMode) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\NetworkConnectivityAssistant` | `PassiveMode` |
+| [Specify passive polling](https://www.noverse.dev/policies.html?p=NCSI*NCSI_PassivePolling) | `HKLM\Software\Policies\Microsoft\Windows\NetworkConnectivityStatusIndicator` | `DisablePassivePolling` |
 
 # Disable VPNs
 
@@ -895,82 +811,14 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
 | [mDNS](https://en.wikipedia.org/wiki/Multicast_DNS) (Multicast DNS) | Zero-config service/host discovery on local networks (e.g. printer.local) | Uses multicast to 224.0.0.251 (IPv6 ff02::fb) on UDP 5353, devices answer for their own .local names | Cross-platform (Apple Bonjour, now Windows), modern replacement for LLMNR in many cases |
 | [NetBIOS](https://en.wikipedia.org/wiki/NetBIOS) over TCP/IP | Legacy Windows naming, service announcement and sessions | Uses broadcasts or WINS to resolve NetBIOS names, historically used by SMB/Windows networking | Very old, chatty, bigger attack surface, kept for backward compatibility |
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DnsClient.admx",
-  "CategoryName": "DNS_Client",
-  "PolicyName": "DNS_MDNS",
-  "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
-  "DisplayName": "Configure multicast DNS (mDNS) protocol",
-  "ExplainText": "Specifies if the DNS client will perform name resolution over mDNS. If you enable this policy, the DNS client will use mDNS protocol. If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
-  ],
-  "ValueName": "EnableMDNS",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DnsClient.admx",
-  "CategoryName": "DNS_Client",
-  "PolicyName": "DNS_SmartMultiHomedNameResolution",
-  "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off smart multi-homed name resolution",
-  "ExplainText": "Specifies that a multi-homed DNS client should optimize name resolution across networks. The setting improves performance by issuing parallel DNS, link local multicast name resolution (LLMNR) and NetBIOS over TCP/IP (NetBT) queries across all networks. In the event that multiple positive responses are received, the network binding order is used to determine which response to accept. If you enable this policy setting, the DNS client will not perform any optimizations. DNS queries will be issued across all networks first. LLMNR queries will be issued if the DNS queries fail, followed by NetBT queries if LLMNR queries fail. If you disable this policy setting, or if you do not configure this policy setting, name resolution will be optimized when issuing DNS, LLMNR and NetBT queries.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
-  ],
-  "ValueName": "DisableSmartNameResolution",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DnsClient.admx",
-  "CategoryName": "DNS_Client",
-  "PolicyName": "DNS_Netbios",
-  "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Configure NetBIOS settings",
-  "ExplainText": "Specifies if the DNS client will perform name resolution over NetBIOS. By default, the DNS client will disable NetBIOS name resolution on public networks for security reasons. To use this policy setting, click Enabled, and then select one of the following options from the drop-down list: Disable NetBIOS name resolution: Never allow NetBIOS name resolution. Allow NetBIOS name resolution: Always allow NetBIOS name resolution. Disable NetBIOS name resolution on public networks: Only allow NetBIOS name resolution on network adapters which are not connected to public networks. NetBIOS learning mode: Always allow NetBIOS name resolution and use it as a fallback after mDNS/LLMNR queries fail. If you disable this policy setting, or if you do not configure this policy setting, the DNS client will use locally configured settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "EnableNetbios", "Items": [
-        { "DisplayName": "Disable NetBIOS name resolution", "Data": "0" },
-        { "DisplayName": "Allow NetBIOS name resolution", "Data": "1" },
-        { "DisplayName": "Disable NetBIOS name resolution on public networks", "Data": "2" },
-        { "DisplayName": "NetBIOS learning mode", "Data": "3" }
-      ]
-    }
-  ]
-},
-{
-  "File": "DnsClient.admx",
-  "CategoryName": "DNS_Client",
-  "PolicyName": "Turn_Off_Multicast",
-  "NameSpace": "Microsoft.Policies.DNSClient",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off multicast name resolution",
-  "ExplainText": "Specifies that link local multicast name resolution (LLMNR) is disabled on the DNS client. LLMNR is a secondary name resolution protocol. With LLMNR, queries are sent using multicast over a local network link on a single subnet from a DNS client to another DNS client on the same subnet that also has LLMNR enabled. LLMNR does not require a DNS server or DNS client configuration, and provides name resolution in scenarios in which conventional DNS name resolution is not possible. If you enable this policy setting, LLMNR will be disabled on all available network adapters on the DNS client. If you disable this policy setting, or you do not configure this policy setting, LLMNR will be enabled on all available network adapters.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\DNSClient"
-  ],
-  "ValueName": "EnableMulticast",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Configure multicast DNS (mDNS) protocol](https://www.noverse.dev/policies.html?p=DnsClient*DNS_MDNS) | `HKLM\Software\Policies\Microsoft\Windows NT\DNSClient` | `EnableMDNS` |
+| [Turn off smart multi-homed name resolution](https://www.noverse.dev/policies.html?p=DnsClient*DNS_SmartMultiHomedNameResolution) | `HKLM\Software\Policies\Microsoft\Windows NT\DNSClient` | `DisableSmartNameResolution` |
+| [Configure NetBIOS settings](https://www.noverse.dev/policies.html?p=DnsClient*DNS_Netbios) | `HKLM\Software\Policies\Microsoft\Windows NT\DNSClient` | `EnableNetbios` |
+| [Turn off multicast name resolution](https://www.noverse.dev/policies.html?p=DnsClient*Turn_Off_Multicast) | `HKLM\Software\Policies\Microsoft\Windows NT\DNSClient` | `EnableMulticast` |
 
 # Disable IPv6
 
@@ -1028,27 +876,11 @@ Beginning with Windows 10, version 1803, Wi-Fi Sense is no longer available. The
 
 [Wi-Fi Sense](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#23-wi-fi-sense) is enabled by default and, when you're signed in with a Microsoft account, can share Wi-Fi access (password stays encrypted in MS servers) with your Outlook and Skype contacts, Facebook contacts can be added. When you join a new network, it asks whether to share it. Networks you used before the upgrade won't trigger the prompt.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "wlansvc.admx",
-  "CategoryName": "WlanSettings_Category",
-  "PolicyName": "WiFiSense",
-  "NameSpace": "Microsoft.Policies.WlanSvc",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services",
-  "ExplainText": "This policy setting determines whether users can enable the following WLAN settings: \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\". \"Connect to suggested open hotspots\" enables Windows to automatically connect users to open hotspots it knows about by crowdsourcing networks that other people using Windows have connected to. \"Connect to networks shared by my contacts\" enables Windows to automatically connect to networks that the user's contacts have shared with them, and enables users on this device to share networks with their contacts. \"Enable paid services\" enables Windows to temporarily connect to open hotspots to determine if paid services are available. If this policy setting is disabled, both \"Connect to suggested open hotspots,\" \"Connect to networks shared by my contacts,\" and \"Enable paid services\" will be turned off and users on this device will be prevented from enabling them. If this policy setting is not configured or is enabled, users can choose to enable or disable either \"Connect to suggested open hotspots\" or \"Connect to networks shared by my contacts\".",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\wcmsvc\\wifinetworkmanager\\config"
-  ],
-  "ValueName": "AutoConnectAllowedOEM",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services](https://www.noverse.dev/policies.html?p=wlansvc*WiFiSense) | `HKLM\Software\Microsoft\wcmsvc\wifinetworkmanager\config` | `AutoConnectAllowedOEM` |
 
 # Enable Offloads
 
@@ -1466,27 +1298,11 @@ When disabled, the PC can no longer share its internet connection to other devic
 | `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing |
 | `SharedAccess` | Provides network address translation, addressing, name resolution and/or intrusion prevention services for a home or small office network. |
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "NetworkConnections.admx",
-  "CategoryName": "NetworkConnections",
-  "PolicyName": "NC_ShowSharedAccessUI",
-  "NameSpace": "Microsoft.Policies.NetworkConnections",
-  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
-  "DisplayName": "Prohibit use of Internet Connection Sharing on your DNS domain network",
-  "ExplainText": "Determines whether administrators can enable and configure the Internet Connection Sharing (ICS) feature of an Internet connection and if the ICS service can run on the computer. ICS lets administrators configure their system as an Internet gateway for a small network and provides network services, such as name resolution and addressing through DHCP, to the local private network. If you enable this setting, ICS cannot be enabled or configured by administrators, and the ICS service cannot run on the computer. The Advanced tab in the Properties dialog box for a LAN or remote access connection is removed. The Internet Connection Sharing page is removed from the New Connection Wizard. The Network Setup Wizard is disabled. If you disable this setting or do not configure it and have two or more connections, administrators can enable ICS. The Advanced tab in the properties dialog box for a LAN or remote access connection is available. In addition, the user is presented with the option to enable Internet Connection Sharing in the Network Setup Wizard and Make New Connection Wizard. (The Network Setup Wizard is available only in Windows XP Professional.) By default, ICS is disabled when you create a remote access connection, but administrators can use the Advanced tab to enable it. When running the New Connection Wizard or Network Setup Wizard, administrators can choose to enable ICS. Note: Internet Connection Sharing is only available when two or more network connections are present. Note: When the \"Prohibit access to properties of a LAN connection,\" \"Ability to change properties of an all user remote access connection,\" or \"Prohibit changing properties of a private remote access connection\" settings are set to deny access to the Connection Properties dialog box, the Advanced tab for the connection is blocked. Note: Nonadministrators are already prohibited from configuring Internet Connection Sharing, regardless of this setting. Note: Disabling this setting does not prevent Wireless Hosted Networking from using the ICS service for DHCP services. To prevent the ICS service from running, on the Network Permissions tab in the network's policy properties, select the \"Don't use hosted networks\" check box.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Network Connections"
-  ],
-  "ValueName": "NC_ShowSharedAccessUI",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Prohibit use of Internet Connection Sharing on your DNS domain network](https://www.noverse.dev/policies.html?p=NetworkConnections*NC_ShowSharedAccessUI) | `HKLM\Software\Policies\Microsoft\Windows\Network Connections` | `NC_ShowSharedAccessUI` |
 
 # Disable LLSE
 
@@ -1827,27 +1643,11 @@ Name                           DisplayName                                      
 Ethernet                       File and Printer Sharing for Microsoft Networks    ms_server            False
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WindowsSandbox.admx",
-  "CategoryName": "WindowsSandbox",
-  "PolicyName": "AllowPrinterRedirection",
-  "NameSpace": "Microsoft.Policies.WindowsSandbox",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Allow printer sharing with Windows Sandbox",
-  "ExplainText": "This policy setting enables or disables printer sharing from the host into the Sandbox. If you enable this policy setting, host printers will be shared into Windows Sandbox. If you disable this policy setting, Windows Sandbox will not be able to view printers from the host. If you do not configure this policy setting, printer redirection will be disabled.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Sandbox"
-  ],
-  "ValueName": "AllowPrinterRedirection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow printer sharing with Windows Sandbox](https://www.noverse.dev/policies.html?p=WindowsSandbox*AllowPrinterRedirection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Sandbox` | `AllowPrinterRedirection` |
 
 # Disable Microsoft Client/Multiplexor
 

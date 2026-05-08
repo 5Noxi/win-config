@@ -158,34 +158,11 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Desktop.admx",
-  "CategoryName": "ActiveDesktop",
-  "PolicyName": "Wallpaper",
-  "NameSpace": "Microsoft.Policies.WindowsDesktop",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Desktop Wallpaper",
-  "ExplainText": "Specifies the desktop background (\"wallpaper\") displayed on all users' desktops. This setting lets you specify the wallpaper on users' desktops and prevents users from changing the image or its presentation. The wallpaper you specify can be stored in a bitmap (*.bmp) or JPEG (*.jpg) file. To use this setting, type the fully qualified path and name of the file that stores the wallpaper image. You can type a local path, such as C:\\Windows\\web\\wallpaper\\home.jpg or a UNC path, such as \\\\Server\\Share\\Corp.jpg. If the specified file is not available when the user logs on, no wallpaper is displayed. Users cannot specify alternative wallpaper. You can also use this setting to specify that the wallpaper image be centered, tiled, or stretched. Users cannot change this specification. If you disable this setting or do not configure it, no wallpaper is displayed. However, users can select the wallpaper of their choice. Also, see the \"Allow only bitmapped wallpaper\" in the same location, and the \"Prevent changing wallpaper\" setting in User Configuration\\Administrative Templates\\Control Panel. Note: This setting does not apply to remote desktop server sessions.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "Elements": [
-    { "Type": "Text", "ValueName": "Wallpaper" },
-    { "Type": "Enum", "ValueName": "WallpaperStyle", "Items": [
-        { "DisplayName": "Center", "Data": "0" },
-        { "DisplayName": "Tile", "Data": "1" },
-        { "DisplayName": "Stretch", "Data": "2" },
-        { "DisplayName": "Fit", "Data": "3" },
-        { "DisplayName": "Fill", "Data": "4" },
-        { "DisplayName": "Span", "Data": "5" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Desktop Wallpaper](https://www.noverse.dev/policies.html?p=Desktop*Wallpaper) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `Wallpaper`<br>`WallpaperStyle` |
 
 # Pointer Style
 
@@ -420,78 +397,14 @@ CMachine::RegQueryDWORD(
 
 `ForceDisableModeChangeAnimation` got added in [22621.3807/22631.3807](https://blogs.windows.com/windows-insider/2024/06/13/releasing-windows-11-builds-22621-3807-and-22631-3807-to-the-release-preview-channel/) and is used for "When you set its value to 1 (or a non-zero number), it turns off the display mode change animation. If the value is 0 or the key does not exist, the animation is set to on."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DWM.admx",
-  "CategoryName": "CAT_DesktopWindowManager",
-  "PolicyName": "DwmDisallowAnimations_1",
-  "NameSpace": "Microsoft.Policies.DesktopWindowManager",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Do not allow window animations",
-  "ExplainText": "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM"
-  ],
-  "ValueName": "DisallowAnimations",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DWM.admx",
-  "CategoryName": "CAT_DesktopWindowManager",
-  "PolicyName": "DwmDisallowAnimations_2",
-  "NameSpace": "Microsoft.Policies.DesktopWindowManager",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Do not allow window animations",
-  "ExplainText": "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\DWM"
-  ],
-  "ValueName": "DisallowAnimations",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Explorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "TurnOffSPIAnimations",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer2",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off common control and window animations",
-  "ExplainText": "This policy is similar to settings directly available to computer users. Disabling animations can improve usability for users with some visual disabilities as well as improving performance and battery life in some scenarios.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "TurnOffSPIAnimations",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Logon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "EnableFirstLogonAnimation",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Show first sign-in animation",
-  "ExplainText": "This policy setting allows you to control whether users see the first sign-in animation when signing in to the computer for the first time. This applies to both the first user of the computer who completes the initial setup and users who are added to the computer later. It also controls if Microsoft account users will be offered the opt-in prompt for services during their first sign-in. If you enable this policy setting, Microsoft account users will see the opt-in prompt for services, and users with other accounts will see the sign-in animation. If you disable this policy setting, users will not see the animation and Microsoft account users will not see the opt-in prompt for services. If you do not configure this policy setting, the user who completes the initial Windows setup will see the animation during their first sign-in. If the first user had already completed the initial setup and this policy setting is not configured, users new to this computer will not see the animation. Note: The first sign-in animation will not be shown on Server, so this policy will have no effect.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "EnableFirstLogonAnimation",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not allow window animations](https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\DWM` | `DisallowAnimations` |
+| [Do not allow window animations](https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DWM` | `DisallowAnimations` |
+| [Turn off common control and window animations](https://www.noverse.dev/policies.html?p=Explorer*TurnOffSPIAnimations) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `TurnOffSPIAnimations` |
+| [Show first sign-in animation](https://www.noverse.dev/policies.html?p=Logon*EnableFirstLogonAnimation) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `EnableFirstLogonAnimation` |
 
 # Explorer Options
 
@@ -510,57 +423,13 @@ It changes every setting, which is shown in the `Folder Options` window. Some ar
 }
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Desktop.admx",
-  "CategoryName": "Desktop",
-  "PolicyName": "NoDesktop",
-  "NameSpace": "Microsoft.Policies.WindowsDesktop",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Hide and disable all items on the desktop",
-  "ExplainText": "Removes icons, shortcuts, and other default and user-defined items from the desktop, including Briefcase, Recycle Bin, Computer, and Network Locations. Removing icons and shortcuts does not prevent the user from using another method to start the programs or opening the items they represent. Also, see \"Items displayed in Places Bar\" in User Configuration\\Administrative Templates\\Windows Components\\Common Open File Dialog to remove the Desktop icon from the Places Bar. This will help prevent users from saving data to the Desktop.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoDesktop",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "NoRecentDocsHistory",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Do not keep history of recently opened documents",
-  "ExplainText": "Prevents the operating system and installed programs from creating and displaying shortcuts to recently opened documents. If you enable this setting, the system and Windows programs do not create shortcuts to documents opened while the setting is in effect. Also, they retain but do not display existing document shortcuts. The system empties the Recent Items menu on the Start menu, and Windows programs do not display shortcuts at the bottom of the File menu. In addition, the Jump Lists off of programs in the Start Menu and Taskbar do not show lists of recently or frequently used files, folders, or websites. If you disable or do not configure this setting, the system will store and display shortcuts to recently and frequently used files, folders, and websites. Note: The system saves document shortcuts in the user profile in the System-drive\\Users\\User-name\\Recent folder. Also, see the \"Remove Recent Items menu from Start Menu\" and \"Clear history of recently opened documents on exit\" policies in this folder. If you enable this setting but do not enable the \"Remove Recent Items menu from Start Menu\" setting, the Recent Items menu appears on the Start menu, but it is empty. If you enable this setting, but then later disable it or set it to Not Configured, the document shortcuts saved before the setting was enabled reappear in the Recent Items menu and program File menus, and Jump Lists. This setting does not hide or prevent the user from pinning files, folders, or websites to the Jump Lists. See the \"Do not allow pinning items in Jump Lists\" setting. This policy also does not hide Tasks that the application has provided for their Jump List. This setting does not hide document shortcuts displayed in the Open dialog box. See the \"Hide the dropdown list of recent files\" setting. Note: It is a requirement for third-party applications with Windows 2000 or later certification to adhere to this setting.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoRecentDocsHistory",
-  "Elements": []
-},
-{
-  "File": "WindowsConnectNow.admx",
-  "CategoryName": "WCN_Category",
-  "PolicyName": "WCN_DisableWcnUi_2",
-  "NameSpace": "Microsoft.Policies.WindowsConnectNow",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Prohibit access of the Windows Connect Now wizards",
-  "ExplainText": "This policy setting prohibits access to Windows Connect Now (WCN) wizards. If you enable this policy setting, the wizards are turned off and users have no access to any of the wizard tasks. All the configuration related tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device\" are disabled. If you disable or do not configure this policy setting, users can access the wizard tasks, including \"Set up a wireless router or access point\" and \"Add a wireless device.\" The default for this policy setting allows users to access all WCN wizards.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WCN\\UI"
-  ],
-  "ValueName": "DisableWcnUi",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Hide and disable all items on the desktop](https://www.noverse.dev/policies.html?p=Desktop*NoDesktop) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDesktop` |
+| [Do not keep history of recently opened documents](https://www.noverse.dev/policies.html?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
+| [Prohibit access of the Windows Connect Now wizards](https://www.noverse.dev/policies.html?p=WindowsConnectNow*WCN_DisableWcnUi_2) | `HKLM\Software\Policies\Microsoft\Windows\WCN\UI` | `DisableWcnUi` |
 
 # Taskbar Settings
 
@@ -581,75 +450,14 @@ SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advan
 ```
 Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0, but it grays out & disables the option.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "NewsAndInterests.admx",
-  "CategoryName": "NewsAndInterests",
-  "PolicyName": "AllowNewsAndInterests",
-  "NameSpace": "Microsoft.Policies.NewsAndInterests",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Allow widgets",
-  "ExplainText": "This policy specifies whether the widgets feature is allowed on the device. Widgets will be turned on by default unless you change this in your settings. If you turned this feature on before, it will stay on automatically unless you turn it off.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh"
-  ],
-  "ValueName": "AllowNewsAndInterests",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "NewsAndInterests.admx",
-  "CategoryName": "NewsAndInterests",
-  "PolicyName": "DisableWidgetsOnLockScreen",
-  "NameSpace": "Microsoft.Policies.NewsAndInterests",
-  "Supported": "Windows_11_0_22H2_NOSERVER - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Widgets On Lock Screen",
-  "ExplainText": "This policy specifies whether to disable the Widgets feature on the lock screen. If you disable or do not configure this policy setting, widgets will appear on the lock screen and can be managed in the Windows Settings app. If you enable this policy setting, widgets will not appear on the lock screen.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh"
-  ],
-  "ValueName": "DisableWidgetsOnLockScreen",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "NewsAndInterests.admx",
-  "CategoryName": "NewsAndInterests",
-  "PolicyName": "DisableWidgetsBoard",
-  "NameSpace": "Microsoft.Policies.NewsAndInterests",
-  "Supported": "Windows_11_0_22H2_NOSERVER - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Widgets Board",
-  "ExplainText": "This policy specifies whether to disable the Widgets Board experience. If you disable or do not configure this policy setting, you will be able to invoke the Widgets Board and see its entry point on the taskbar. The Widgets Board experience can be managed in Widgets Settings whose entry-point is located on the Widgets Board. If you enable this policy setting, you will not be able to invoke the Widgets board and its entry point will no longer appear on the taskbar.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Dsh"
-  ],
-  "ValueName": "DisableWidgetsBoard",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HidePeopleBar",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
-  "DisplayName": "Remove the People Bar from the taskbar",
-  "ExplainText": "This policy allows you to remove the People Bar from the taskbar and disables the My People experience. If you enable this policy the people icon will be removed from the taskbar, the corresponding settings toggle is removed from the taskbar settings page, and users will not be able to pin people to the taskbar.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HidePeopleBar",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow widgets](https://www.noverse.dev/policies.html?p=NewsAndInterests*AllowNewsAndInterests) | `HKLM\SOFTWARE\Policies\Microsoft\Dsh` | `AllowNewsAndInterests` |
+| [Disable Widgets On Lock Screen](https://www.noverse.dev/policies.html?p=NewsAndInterests*DisableWidgetsOnLockScreen) | `HKLM\SOFTWARE\Policies\Microsoft\Dsh` | `DisableWidgetsOnLockScreen` |
+| [Disable Widgets Board](https://www.noverse.dev/policies.html?p=NewsAndInterests*DisableWidgetsBoard) | `HKLM\SOFTWARE\Policies\Microsoft\Dsh` | `DisableWidgetsBoard` |
+| [Remove the People Bar from the taskbar](https://www.noverse.dev/policies.html?p=StartMenu*HidePeopleBar) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HidePeopleBar` |
 
 # Accent Color
 
@@ -709,27 +517,11 @@ C:\ProgramData\Microsoft\Default Account Pictures
 `Global Account Picture`:  
 "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Cpls.admx",
-  "CategoryName": "Users",
-  "PolicyName": "UseDefaultTile",
-  "NameSpace": "Microsoft.Policies.ControlPanel2",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Apply the default account picture to all users",
-  "ExplainText": "This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture. One application for this policy setting is to standardize the account pictures to a company logo. Note: The default account picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\user.jpg. The default guest picture is stored at %PROGRAMDATA%\\Microsoft\\User Account Pictures\\guest.jpg. If the default pictures do not exist, an empty frame is displayed. If you enable this policy setting, the default user account picture will display for all users on the system with no customization allowed. If you disable or do not configure this policy setting, users will be able to customize their account pictures.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "UseDefaultTile",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Apply the default account picture to all users](https://www.noverse.dev/policies.html?p=Cpls*UseDefaultTile) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `UseDefaultTile` |
 
 # System Fonts
 
@@ -1101,31 +893,11 @@ Select the amount of recent tabs from apps in the alt+tab menu.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/20tabs.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Multitasking.admx",
-  "CategoryName": "MULTITASKING",
-  "PolicyName": "BrowserAltTabBlowout",
-  "NameSpace": "Microsoft.Policies.Multitasking",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Configure the inclusion of app tabs into Alt-Tab",
-  "ExplainText": "This setting controls the inclusion of app tabs into Alt+Tab. This can be set to show the most recent 3, 5 or 20 tabs, or no tabs from apps. If this is set to show \"Open windows only\", the whole feature will be disabled.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "MultiTaskingAltTabFilter", "Items": [
-        { "DisplayName": "Open windows and 20 most recent tabs in apps", "Data": "1" },
-        { "DisplayName": "Open windows and 5 most recent tabs in apps", "Data": "2" },
-        { "DisplayName": "Open windows and 3 most recent tabs in apps", "Data": "3" },
-        { "DisplayName": "Open windows only", "Data": "4" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Configure the inclusion of app tabs into Alt-Tab](https://www.noverse.dev/policies.html?p=Multitasking*BrowserAltTabBlowout) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `MultiTaskingAltTabFilter` |
 
 The option changes it via `HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced`.
 
@@ -1198,110 +970,17 @@ By adding them, you'll have to click `OK` every time you boot/log in:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_NoLockScreen",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not display the lock screen",
-  "ExplainText": "This policy setting controls whether the lock screen appears for users. If you enable this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see their selected tile after locking their PC. If you disable or do not configure this policy setting, users that are not required to press CTRL + ALT + DEL before signing in will see a lock screen after locking their PC. They must dismiss the lock screen using touch, the keyboard, or by dragging it with the mouse.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "NoLockScreen",
-  "Elements": []
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_NoChangingLockScreen",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Prevent changing lock screen and logon image",
-  "ExplainText": "Prevents users from changing the background image shown when the machine is locked or when on the logon screen. By default, users can change the background image shown when the machine is locked or displaying the logon screen. If you enable this setting, the user will not be able to change their lock screen and logon image, and they will instead see the default image.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "NoChangingLockScreen",
-  "Elements": []
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_AnimateLockScreenBackground",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Prevent lock screen background motion",
-  "ExplainText": "This policy setting controls whether the lock screen image is static or has a subtle panning effect driven by the device's accelerometer output. If you enable this setting, motion will be prevented and the user will see the traditional static lock screen background image. If you disable this setting (and the device has an accelerometer), the user will see the lock screen background pan around a still image as they physically move their device.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "AnimateLockScreenBackground",
-  "Elements": []
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_NoLockScreenSlideshow",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Prevent enabling lock screen slide show",
-  "ExplainText": "Disables the lock screen slide show settings in PC Settings and prevents a slide show from playing on the lock screen. By default, users can enable a slide show that will run after they lock the machine. If you enable this setting, users will no longer be able to modify slide show settings in PC Settings, and no slide show will ever start.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "NoLockScreenSlideshow",
-  "Elements": []
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_NoLockScreenCamera",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Prevent enabling lock screen camera",
-  "ExplainText": "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen. By default, users can enable invocation of an available camera on the lock screen. If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "NoLockScreenCamera",
-  "Elements": []
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_ForceDefaultLockScreen",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Force a specific default lock screen and logon image",
-  "ExplainText": "This setting allows you to force a specific default lock screen and logon image by entering the path (location) of the image file. The same image will be used for both the lock and logon screens. This setting lets you specify the default lock screen and logon image shown when no user is signed in, and also sets the specified image as the default for all users (it replaces the inbox default image). To use this setting, type the fully qualified path and name of the file that stores the default lock screen and logon image. You can type a local path, such as C:\\Windows\\Web\\Screen\\img104.jpg or a UNC path, such as \\\\Server\\Share\\Corp.jpg. This can be used in conjunction with the \"Prevent changing lock screen and logon image\" setting to always force the specified lock screen and logon image to be shown. Note: This setting only applies to Enterprise, Education, and Server SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "Elements": [
-    { "Type": "Text", "ValueName": "LockScreenImage" },
-    { "Type": "Boolean", "ValueName": "LockScreenOverlaysDisabled", "TrueValue": "1", "FalseValue": "0" }
-  ]
-},
-{
-  "File": "Logon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "DisableAcrylicBackgroundOnLogon",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Show clear logon background",
-  "ExplainText": "This policy setting disables the acrylic blur effect on logon background image. If you enable this policy, the logon background image shows without blur. If you disable or do not configure this policy, the logon background image adopts the acrylic blur effect.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "DisableAcrylicBackgroundOnLogon",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not display the lock screen](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreen` |
+| [Prevent changing lock screen and logon image](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoChangingLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingLockScreen` |
+| [Prevent lock screen background motion](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_AnimateLockScreenBackground) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `AnimateLockScreenBackground` |
+| [Prevent enabling lock screen slide show](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenSlideshow) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenSlideshow` |
+| [Prevent enabling lock screen camera](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |
+| [Force a specific default lock screen and logon image](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_ForceDefaultLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `LockScreenImage`<br>`LockScreenOverlaysDisabled` |
+| [Show clear logon background](https://www.noverse.dev/policies.html?p=Logon*DisableAcrylicBackgroundOnLogon) | `HKLM\Software\Policies\Microsoft\Windows\System` | `DisableAcrylicBackgroundOnLogon` |
 
 ## Accounts Captures
 
@@ -1390,92 +1069,15 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscripti
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/mostused.jpg?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "ShowOrHideMostUsedApps",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_10_0_21H2 - At least Windows Server 2016, Windows 10 Version 2106",
-  "DisplayName": "Show or hide \"Most used\" list from Start menu",
-  "ExplainText": "If you enable this policy setting, you can configure Start menu to show or hide the list of user's most used apps, regardless of user settings. Selecting \"Show\" will force the \"Most used\" list to be shown, and user cannot change to hide it using the Settings app. Selecting \"Hide\" will force the \"Most used\" list to be hidden, and user cannot change to show it using the Settings app. Selecting \"Not Configured\", or if you disable or do not configure this policy setting, all will allow users to turn on or off the display of \"Most used\" list using the Settings app. This is default behavior. Note: configuring this policy to \"Show\" or \"Hide\" on supported versions of Windows 10 will supercede any policy setting of \"Remove frequent programs list from the Start Menu\" (which manages same part of Start menu but with fewer options).",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "ShowOrHideMostUsedApps", "Items": [
-        { "DisplayName": "Not Configured", "Data": "0" },
-        { "DisplayName": "Show", "Data": "1" },
-        { "DisplayName": "Hide", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "NoFrequentUsedPrograms",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows7ToXPAndWindows10 - Windows Server 2008, Windows Server 2003, Windows 7, Windows Vista, Windows XP, and Windows 10",
-  "DisplayName": "Remove frequent programs list from the Start Menu",
-  "ExplainText": "If you enable this setting, the frequently used programs list is removed from the Start menu. If you disable this setting or do not configure it, the frequently used programs list remains on the simple Start menu.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoStartMenuMFUprogramsList",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "NoInstrumentation",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "WindowsVistaTo2k - Windows Server 2008, Windows Server 2003, Windows Vista, Windows XP, and Windows 2000",
-  "DisplayName": "Turn off user tracking",
-  "ExplainText": "This policy setting allows you to turn off user tracking. If you enable this policy setting, the system does not track the programs that the user runs, and does not display frequently used programs in the Start Menu. If you disable or do not configure this policy setting, the system tracks the programs that the user runs. The system uses this information to customize Windows features, such as showing frequently used programs in the Start Menu. Also, see these related policy settings: \"Remove frequent programs liist from the Start Menu\" and \"Turn off personalized menus\". This policy setting does not prevent users from pinning programs to the Start Menu or Taskbar. See the \"Remove pinned programs list from the Start Menu\" and \"Do not allow pinning programs to the Taskbar\" policy settings.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoInstrumentation",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecentlyAddedApps",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Remove \"Recently added\" list from Start Menu",
-  "ExplainText": "This policy allows you to prevent the Start Menu from displaying a list of recently installed applications. If you enable this policy, the Start Menu will no longer display the \"Recently added\" list. The corresponding setting will also be disabled in Settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecentlyAddedApps",
-  "Elements": []
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "NoNewAppAlert",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not show the 'new application installed' notification",
-  "ExplainText": "This policy removes the end-user notification for new application associations. These associations are based on file types (e.g. *.txt) or protocols (e.g. http:) If this group policy is enabled, no notifications will be shown. If the group policy is not configured or disabled, notifications will be shown to the end user if a new application has been installed that can handle the file type or protocol association that was invoked.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "NoNewAppAlert",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Show or hide "Most used" list from Start menu](https://www.noverse.dev/policies.html?p=StartMenu*ShowOrHideMostUsedApps) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `ShowOrHideMostUsedApps` |
+| [Remove frequent programs list from the Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*NoFrequentUsedPrograms) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoStartMenuMFUprogramsList` |
+| [Turn off user tracking](https://www.noverse.dev/policies.html?p=StartMenu*NoInstrumentation) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoInstrumentation` |
+| [Remove "Recently added" list from Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecentlyAddedApps) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecentlyAddedApps` |
+| [Do not show the 'new application installed' notification](https://www.noverse.dev/policies.html?p=WindowsExplorer*NoNewAppAlert) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `NoNewAppAlert` |
 
 # Disable Spotlight
 
@@ -1499,130 +1101,17 @@ Disabling it via policies etc. is enough, therefore I won't add them as there's 
 \Registry\User\S-<ID>\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "ConfigureWindowsSpotlight",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Configure Windows spotlight on lock screen",
-  "ExplainText": "This policy setting lets you configure Windows spotlight on the lock screen. If you enable this policy setting, \"Windows spotlight\" will be set as the lock screen provider and users will not be able to modify their lock screen. \"Windows spotlight\" will display daily images from Microsoft on the lock screen. Additionally, if you check the \"Include content from Enterprise spotlight\" checkbox and your organization has setup an Enterprise spotlight content service in Azure, the lock screen will display internal messages and communications configured in that service, when available. If your organization does not have an Enterprise spotlight content service, the checkbox will have no effect. If you disable this policy setting, Windows spotlight will be turned off and users will no longer be able to select it as their lock screen. Users will see the default lock screen image and will be able to select another image, unless you have enabled the \"Prevent changing lock screen image\" policy. If you do not configure this policy, Windows spotlight will be available on the lock screen and will be selected by default, unless you have configured another default lock screen image using the \"Force a specific default lock screen and logon image\" policy. Note: This policy is only available for Enterprise SKUs",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "ConfigureWindowsSpotlight",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "IncludeEnterpriseSpotlight", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "2" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsSpotlightFeatures",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off all Windows spotlight features",
-  "ExplainText": "This policy setting lets you turn off all Windows Spotlight features at once. If you enable this policy setting, Windows spotlight on lock screen, Windows tips, Microsoft consumer features and other related features will be turned off. You should enable this policy setting if your goal is to minimize network traffic from target devices. If you disable or do not configure this policy setting, Windows spotlight features are allowed and may be controlled individually using their corresponding policy settings.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsSpotlightFeatures",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableSpotlightCollectionOnDesktop",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off Spotlight collection on Desktop",
-  "ExplainText": "This policy setting removes the Spotlight collection setting in Personalization, rendering the user unable to select and subsequentyly download daily images from Microsoft to desktop. If you enable this policy, \"Spotlight collection\" will not be available as an option in Personalization settings. If you disable or do not configure this policy, \"Spotlight collection\" will appear as an option in Personalization settings, allowing the user to select \"Spotlight collection\" as the Desktop provider and display daily images from Microsoft on the desktop.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableSpotlightCollectionOnDesktop",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableThirdPartySuggestions",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not suggest third-party content in Windows spotlight",
-  "ExplainText": "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps. If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableThirdPartySuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsSpotlightOnActionCenter",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
-  "DisplayName": "Turn off Windows Spotlight on Action Center",
-  "ExplainText": "If you enable this policy, Windows Spotlight notifications will no longer be shown on Action Center. If you disable or do not configure this policy, Microsoft may display notifications in Action Center that will suggest apps or features to help users be more productive on Windows.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsSpotlightOnActionCenter",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsSpotlightOnSettings",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Turn off Windows Spotlight on Settings",
-  "ExplainText": "If you enable this policy, Windows Spotlight suggestions will no longer be shown in Settings app. If you disable or do not configure this policy, Microsoft may suggest apps or features in Settings app to help users be productive on Windows or their linked phone.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsSpotlightOnSettings",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsSpotlightWindowsWelcomeExperience",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
-  "DisplayName": "Turn off the Windows Welcome Experience",
-  "ExplainText": "This policy setting lets you turn off the Windows Spotlight Windows Welcome experience. This feature helps onboard users to Windows, for instance launching Microsoft Edge with a web page highlighting new features. If you enable this policy, the Windows Welcome Experience will no longer display when there are updates and changes to Windows and its apps. If you disable or do not configure this policy, the Windows Welcome Experience will be launched to help onboard users to Windows telling them about what's new, changed, and suggested.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsSpotlightWindowsWelcomeExperience",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Configure Windows spotlight on lock screen](https://www.noverse.dev/policies.html?p=CloudContent*ConfigureWindowsSpotlight) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `ConfigureWindowsSpotlight`<br>`IncludeEnterpriseSpotlight` |
+| [Turn off all Windows spotlight features](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsSpotlightFeatures) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightFeatures` |
+| [Turn off Spotlight collection on Desktop](https://www.noverse.dev/policies.html?p=CloudContent*DisableSpotlightCollectionOnDesktop) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableSpotlightCollectionOnDesktop` |
+| [Do not suggest third-party content in Windows spotlight](https://www.noverse.dev/policies.html?p=CloudContent*DisableThirdPartySuggestions) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableThirdPartySuggestions` |
+| [Turn off Windows Spotlight on Action Center](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsSpotlightOnActionCenter) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnActionCenter` |
+| [Turn off Windows Spotlight on Settings](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsSpotlightOnSettings) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnSettings` |
+| [Turn off the Windows Welcome Experience](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsSpotlightWindowsWelcomeExperience) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightWindowsWelcomeExperience` |
 
 # PowerShell Colors
 
@@ -1724,27 +1213,11 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel1.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ControlPanel.admx",
-  "CategoryName": "ControlPanel",
-  "PolicyName": "ForceClassicControlPanel",
-  "NameSpace": "Microsoft.Policies.ControlPanel",
-  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
-  "DisplayName": "Always open All Control Panel Items when opening Control Panel",
-  "ExplainText": "This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view. If this policy setting is not configured, the Control Panel opens to the view used in the last Control Panel session. Note: Icon size is dependent upon what the user has set it to in the previous session.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "ForceClassicControlPanel",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Always open All Control Panel Items when opening Control Panel](https://www.noverse.dev/policies.html?p=ControlPanel*ForceClassicControlPanel) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `ForceClassicControlPanel` |
 
 # System Clock Seconds
 

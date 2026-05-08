@@ -1117,68 +1117,13 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserCho
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\AutorunINFLegacyArrival\(Default)	Type: REG_SZ, Length: 30, Data: MSTakeNoAction
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AutoPlay.admx",
-  "CategoryName": "AutoPlay",
-  "PolicyName": "NoAutorun",
-  "NameSpace": "Microsoft.Policies.AutoPlay",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Set the default behavior for AutoRun",
-  "ExplainText": "This policy setting sets the default behavior for Autorun commands. Autorun commands are generally stored in autorun.inf files. They often launch the installation program or other routines. Prior to Windows Vista, when media containing an autorun command is inserted, the system will automatically execute the program without user intervention. This creates a major security concern as code may be executed without user's knowledge. The default behavior starting with Windows Vista is to prompt the user whether autorun command is to be run. The autorun command is represented as a handler in the Autoplay dialog. If you enable this policy setting, an Administrator can change the default Windows Vista or later behavior for autorun to: a) Completely disable autorun commands, or b) Revert back to pre-Windows Vista behavior of automatically executing the autorun command. If you disable or not configure this policy setting, Windows Vista or later will prompt the user whether autorun command is to be run.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "NoAutorun", "Items": [
-        { "DisplayName": "Do not execute any autorun commands", "Data": "1" },
-        { "DisplayName": "Automatically execute autorun commands", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AutoPlay.admx",
-  "CategoryName": "AutoPlay",
-  "PolicyName": "Autorun",
-  "NameSpace": "Microsoft.Policies.AutoPlay",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Turn off Autoplay",
-  "ExplainText": "This policy setting allows you to turn off the Autoplay feature. Autoplay begins reading from a drive as soon as you insert media in the drive. As a result, the setup file of programs and the music on audio media start immediately. Prior to Windows XP SP2, Autoplay is disabled by default on removable drives, such as the floppy disk drive (but not the CD-ROM drive), and on network drives. Starting with Windows XP SP2, Autoplay is enabled for removable drives as well, including Zip drives and some USB mass storage devices. If you enable this policy setting, Autoplay is disabled on CD-ROM and removable media drives, or disabled on all drives. This policy setting disables Autoplay on additional types of drives. You cannot use this setting to enable Autoplay on drives on which it is disabled by default. If you disable or do not configure this policy setting, AutoPlay is enabled. Note: This policy setting appears in both the Computer Configuration and User Configuration folders. If the policy settings conflict, the policy setting in Computer Configuration takes precedence over the policy setting in User Configuration.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer",
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "NoDriveTypeAutoRun", "Items": [
-        { "DisplayName": "CD-ROM and removable media drives", "Data": "181" },
-        { "DisplayName": "All drives", "Data": "255" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AutoPlay.admx",
-  "CategoryName": "AutoPlay",
-  "PolicyName": "NoAutoplayfornonVolume",
-  "NameSpace": "Microsoft.Policies.AutoPlay",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Disallow Autoplay for non-volume devices",
-  "ExplainText": "This policy setting disallows AutoPlay for MTP devices like cameras or phones. If you enable this policy setting, AutoPlay is not allowed for MTP devices like cameras or phones. If you disable or do not configure this policy setting, AutoPlay is enabled for non-volume devices.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "NoAutoplayfornonVolume",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Set the default behavior for AutoRun](https://www.noverse.dev/policies.html?p=AutoPlay*NoAutorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAutorun` |
+| [Turn off Autoplay](https://www.noverse.dev/policies.html?p=AutoPlay*Autorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDriveTypeAutoRun` |
+| [Disallow Autoplay for non-volume devices](https://www.noverse.dev/policies.html?p=AutoPlay*NoAutoplayfornonVolume) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoplayfornonVolume` |
 
 # Disable Touch & Tablet
 
@@ -1506,27 +1451,11 @@ The revert data is based on `W11 LTSC IoT Enterprise 2024` defaults.
 
 `DisableStartupSound` is set to `1` by default (`LogonUI\BootAnimation`).
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Logon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "DisableStartupSound",
-  "NameSpace": "Microsoft.Policies.WindowsLogon",
-  "Supported": "WindowsVistaTo7 - Windows operating systems from Windows Vista through Windows 7",
-  "DisplayName": "Turn off Windows Startup sound",
-  "ExplainText": "This policy is not available in this version of Windows.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "DisableStartupSound",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Windows Startup sound](https://www.noverse.dev/policies.html?p=Logon*DisableStartupSound) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisableStartupSound` |
 
 # Disable Printers
 
@@ -1598,112 +1527,16 @@ Get-Printer
 Remove-Printer -Name "Printer Name"
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "DisableHTTPPrinting_1",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Turn off printing over HTTP",
-  "ExplainText": "This policy setting specifies whether to allow printing over HTTP from this client. Printing over HTTP allows a client to print to printers on the intranet as well as the Internet. Note: This policy setting affects the client side of Internet printing only. It does not prevent this computer from acting as an Internet Printing server and making its shared printers available via HTTP. If you enable this policy setting, it prevents this client from printing to Internet printers over HTTP. If you disable or do not configure this policy setting, users can choose to print to Internet printers over HTTP. Also, see the \"Web-based printing\" policy setting in Computer Configuration/Administrative Templates/Printers.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows NT\\Printers"
-  ],
-  "ValueName": "DisableHTTPPrinting",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "DisableHTTPPrinting_2",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsXPSP2_Or_WindowsNETSP1 - At least Windows Server 2003 operating systems with SP1 or Windows XP Professional with SP2",
-  "DisplayName": "Turn off printing over HTTP",
-  "ExplainText": "This policy setting specifies whether to allow printing over HTTP from this client. Printing over HTTP allows a client to print to printers on the intranet as well as the Internet. Note: This policy setting affects the client side of Internet printing only. It does not prevent this computer from acting as an Internet Printing server and making its shared printers available via HTTP. If you enable this policy setting, it prevents this client from printing to Internet printers over HTTP. If you disable or do not configure this policy setting, users can choose to print to Internet printers over HTTP. Also, see the \"Web-based printing\" policy setting in Computer Configuration/Administrative Templates/Printers.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Printers"
-  ],
-  "ValueName": "DisableHTTPPrinting",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "DisableWebPnPDownload_1",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Turn off downloading of print drivers over HTTP",
-  "ExplainText": "This policy setting specifies whether to allow this client to download print driver packages over HTTP. To set up HTTP printing, non-inbox drivers need to be downloaded over HTTP. Note: This policy setting does not prevent the client from printing to printers on the Intranet or the Internet over HTTP. It only prohibits downloading drivers that are not already installed locally. If you enable this policy setting, print drivers cannot be downloaded over HTTP. If you disable or do not configure this policy setting, users can download print drivers over HTTP.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows NT\\Printers"
-  ],
-  "ValueName": "DisableWebPnPDownload",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "DisableWebPnPDownload_2",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsXPSP2_Or_WindowsNETSP1 - At least Windows Server 2003 operating systems with SP1 or Windows XP Professional with SP2",
-  "DisplayName": "Turn off downloading of print drivers over HTTP",
-  "ExplainText": "This policy setting specifies whether to allow this client to download print driver packages over HTTP. To set up HTTP printing, non-inbox drivers need to be downloaded over HTTP. Note: This policy setting does not prevent the client from printing to printers on the Intranet or the Internet over HTTP. It only prohibits downloading drivers that are not already installed locally. If you enable this policy setting, print drivers cannot be downloaded over HTTP. If you disable or do not configure this policy setting, users can download print drivers over HTTP.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Printers"
-  ],
-  "ValueName": "DisableWebPnPDownload",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Printing.admx",
-  "CategoryName": "CplPrinters",
-  "PolicyName": "NoAddPrinter",
-  "NameSpace": "Microsoft.Policies.Printing",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Prevent addition of printers",
-  "ExplainText": "Prevents users from using familiar methods to add local and network printers. If this policy setting is enabled, it removes the Add Printer option from the Start menu. (To find the Add Printer option, click Start, click Printers, and then click Add Printer.) This setting also removes Add Printer from the Printers folder in Control Panel. Also, users cannot add printers by dragging a printer icon into the Printers folder. If they try, a message appears explaining that the setting prevents the action. However, this setting does not prevent users from using the Add Hardware Wizard to add a printer. Nor does it prevent users from running other programs to add printers. This setting does not delete printers that users have already added. However, if users have not added a printer when this setting is applied, they cannot print. Note: You can use printer permissions to restrict the use of printers without specifying a setting. In the Printers folder, right-click a printer, click Properties, and then click the Security tab. If this policy is disabled, or not configured, users can add printers using the methods described above.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoAddPrinter",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Printing.admx",
-  "CategoryName": "CplPrinters",
-  "PolicyName": "LegacyDefaultPrinterMode",
-  "NameSpace": "Microsoft.Policies.Printing",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Turn off Windows default printer management",
-  "ExplainText": "This preference allows you to change default printer management. If you enable this setting, Windows will not manage the default printer. If you disable this setting, Windows will manage the default printer. If you do not configure this setting, default printer management will not change.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Windows"
-  ],
-  "ValueName": "LegacyDefaultPrinterMode",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off printing over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableHTTPPrinting_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
+| [Turn off printing over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableHTTPPrinting_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
+| [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableWebPnPDownload_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
+| [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableWebPnPDownload_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
+| [Prevent addition of printers](https://www.noverse.dev/policies.html?p=Printing*NoAddPrinter) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAddPrinter` |
+| [Turn off Windows default printer management](https://www.noverse.dev/policies.html?p=Printing*LegacyDefaultPrinterMode) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | `LegacyDefaultPrinterMode` |
 
 # M/K DQS
 

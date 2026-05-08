@@ -34,249 +34,23 @@ The option applies all kind of telemetry related values including all values tha
 
 Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a61919419c94ed24a9b079ee1029f482d29f2/NT/onecore/base/telemetry/permission/product/telemetrypermission.cpp#L106) if `AllowTelemetry` isn't set.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffApplicationImpactTelemetry",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off Application Telemetry",
-  "ExplainText": "The policy controls the state of the Application Telemetry engine in the system. Application Telemetry is a mechanism that tracks anonymous usage of specific Windows system components by applications. Turning Application Telemetry off by selecting \"enable\" will stop the collection of usage data. If the customer Experience Improvement program is turned off, Application Telemetry will be turned off regardless of how this policy is set. Disabling telemetry will take effect on any newly launched applications. To ensure that telemetry collection has stopped for all applications, please reboot your machine.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "AITEnable",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffProgramInventory",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off Inventory Collector",
-  "ExplainText": "This policy setting controls the state of the Inventory Collector. The Inventory Collector inventories applications, files, devices, and drivers on the system and sends the information to Microsoft. This information is used to help diagnose compatibility problems. If you enable this policy setting, the Inventory Collector will be turned off and data will not be sent to Microsoft. Collection of installation data through the Program Compatibility Assistant is also disabled. If you disable or do not configure this policy setting, the Inventory Collector will be turned on. Note: This policy setting has no effect if the Customer Experience Improvement Program is turned off. The Inventory Collector will be off.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableInventory",
-  "Elements": []
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "AllowTelemetry",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Diagnostic Data",
-  "ExplainText": "By configuring this policy setting you can adjust what diagnostic data is collected from Windows. This policy setting also restricts the user from increasing the amount of diagnostic data collection via the Settings app. The diagnostic data collected under this policy impacts the operating system and apps that are considered part of Windows and does not apply to any additional apps installed by your organization. - Diagnostic data off (not recommended). Using this value, no diagnostic data is sent from the device. This value is only supported on Enterprise, Education, and Server editions. - Send required diagnostic data. This is the minimum diagnostic data necessary to keep Windows secure, up to date, and performing as expected. Using this value disables the \"Optional diagnostic data\" control in the Settings app. - Send optional diagnostic data. Additional diagnostic data is collected that helps us to detect, diagnose and fix issues, as well as make product improvements. Required diagnostic data will always be included when you choose to send optional diagnostic data. Optional diagnostic data can also include diagnostic log files and crash dumps. Use the \"Limit Dump Collection\" and the \"Limit Diagnostic Log Collection\" policies for more granular control of what optional diagnostic data is sent. If you disable or do not configure this policy setting, the device will send required diagnostic data and the end user can choose whether to send optional diagnostic data from the Settings app. Note: The \"Configure diagnostic data opt-in settings user interface\" group policy can be used to prevent end users from changing their data collection settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "AllowTelemetry", "Items": [
-        { "DisplayName": "Diagnostic data off (not recommended)", "Data": "0" },
-        { "DisplayName": "Send required diagnostic data", "Data": "1" },
-        { "DisplayName": "Send optional diagnostic data", "Data": "3" }
-      ]
-    }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "DisableEnterpriseAuthProxy",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Configure Authenticated Proxy usage for the Connected User Experience and Telemetry service",
-  "ExplainText": "This policy setting blocks the Connected User Experience and Telemetry service from automatically using an authenticated proxy to send data back to Microsoft on Windows 10. If you disable or do not configure this policy setting, the Connected User Experience and Telemetry service will automatically use an authenticated proxy to send data back to Microsoft. Enabling this policy will block the Connected User Experience and Telemetry service from automatically using an authenticated proxy.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "DisableEnterpriseAuthProxy", "Items": [
-        { "DisplayName": "Enable Authenticated Proxy usage", "Data": "0" },
-        { "DisplayName": "Disable Authenticated Proxy usage", "Data": "1" }
-      ]
-    }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "LimitEnhancedDiagnosticDataWindowsAnalytics",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Limit optional diagnostic data for Desktop Analytics",
-  "ExplainText": "This policy setting, in combination with the \"Allow Diagnostic Data\" policy setting, enables organizations to send the minimum data required by Desktop Analytics. To enable the behavior described above, complete the following steps: 1. Enable this policy setting 2. Set the \"Allow Diagnostic Data\" policy to \"Send optional diagnostic data\" 3. Enable the \"Limit Dump Collection\" policy 4. Enable the \"Limit Diagnostic Log Collection\" policy When these policies are configured, Microsoft will collect only required diagnostic data and the events required by Desktop Analytics, which can be viewed at https://go.microsoft.com/fwlink/?linkid=2116020. If you disable or do not configure this policy setting, diagnostic data collection is determined by the \"Allow Diagnostic Data\" policy setting or by the end user from the Settings app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "LimitEnhancedDiagnosticDataWindowsAnalytics",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LimitEnhancedDiagnosticDataWindowsAnalytics", "Items": [
-        { "DisplayName": "Enable Desktop Analytics collection", "Data": "1" },
-        { "DisplayName": "Disable Desktop Analytics collection", "Data": "0" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "AllowDeviceNameInDiagnosticData",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Allow device name to be sent in Windows diagnostic data",
-  "ExplainText": "This policy allows the device name to be sent to Microsoft as part of Windows diagnostic data. If you disable or do not configure this policy setting, then device name will not be sent to Microsoft as part of Windows diagnostic data.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "AllowDeviceNameInTelemetry",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "ConfigureTelemetryOptInSettingsUx",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Configure diagnostic data opt-in settings user interface",
-  "ExplainText": "This policy setting determines whether an end user can change diagnostic data settings in the Settings app. If you set this policy setting to \"Disable diagnostic data opt-in settings\", diagnostic data settings are disabled in the Settings app. If you don't configure this policy setting, or you set it to \"Enable diagnostic data opt-in settings\", end users can change the device diagnostic settings in the Settings app. Note: To set a limit on the amount of diagnostic data that is sent to Microsoft by your organization, use the \"Allow Diagnostic Data\" policy setting.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DisableTelemetryOptInSettingsUx",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "DisableTelemetryOptInSettingsUx", "Items": [
-        { "DisplayName": "Disable diagnostic data opt-in settings", "Data": "1" },
-        { "DisplayName": "Enable diagnostic data opt-in setings", "Data": "0" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "ConfigureTelemetryOptInChangeNotification",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Configure diagnostic data opt-in change notifications",
-  "ExplainText": "This policy setting controls whether notifications are shown, following a change to diagnostic data opt-in settings, on first logon and when the changes occur in settings. If you set this policy setting to \"Disable diagnostic data change notifications\", diagnostic data opt-in change notifications will not appear. If you set this policy setting to \"Enable diagnostic data change notifications\" or don't configure this policy setting, diagnostic data opt-in change notifications appear at first logon and when the changes occur in Settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DisableTelemetryOptInChangeNotification",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "DisableTelemetryOptInChangeNotification", "Items": [
-        { "DisplayName": "Disable diagnostic data change notifications", "Data": "1" },
-        { "DisplayName": "Enable diagnostic data change notifications", "Data": "0" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "DisableDeviceDelete",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS5 - At least Windows Server 2016, Windows 10 Version 1809",
-  "DisplayName": "Disable deleting diagnostic data",
-  "ExplainText": "This policy setting controls whether the Delete diagnostic data button is enabled in Diagnostic & feedback Settings page. If you enable this policy setting, the Delete diagnostic data button will be disabled in Settings page, preventing the deletion of diagnostic data collected by Microsoft from the device. If you disable or don't configure this policy setting, the Delete diagnostic data button will be enabled in Settings page, which allows people to erase all diagnostic data collected by Microsoft from that device.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DisableDeviceDelete",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "DisableDiagnosticDataViewer",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS5 - At least Windows Server 2016, Windows 10 Version 1809",
-  "DisplayName": "Disable diagnostic data viewer",
-  "ExplainText": "This policy setting controls whether users can enable and launch the Diagnostic Data Viewer from the Diagnostic & feedback Settings page. If you enable this policy setting, the Diagnostic Data Viewer will not be enabled in Settings page, and it will prevent the viewer from showing diagnostic data collected by Microsoft from the device. If you disable or don't configure this policy setting, the Diagnostic Data Viewer will be enabled in Settings page.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DisableDiagnosticDataViewer",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "LimitDiagnosticLogCollection",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Limit Diagnostic Log Collection",
-  "ExplainText": "This policy setting controls whether additional diagnostic logs are collected when more information is needed to troubleshoot a problem on the device. Diagnostic logs are only sent when the device has been configured to send optional diagnostic data. By enabling this policy setting, diagnostic logs will not be collected. If you disable or do not configure this policy setting, we may occasionally collect diagnostic logs if the device has been configured to send optional diagnostic data.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "LimitDiagnosticLogCollection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "LimitDumpCollection",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Limit Dump Collection",
-  "ExplainText": "This policy setting limits the type of dumps that can be collected when more information is needed to troubleshoot a problem. Dumps are only sent when the device has been configured to send optional diagnostic data. By enabling this setting, Windows Error Reporting is limited to sending kernel mini dumps and user mode triage dumps. If you disable or do not configure this policy setting, we may occasionally collect full or heap dumps if the user has opted to send optional diagnostic data.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "LimitDumpCollection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "UserProfiles.admx",
-  "CategoryName": "UserProfiles",
-  "PolicyName": "DisableAdvertisingId",
-  "NameSpace": "Microsoft.Policies.UserProfiles",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Turn off the advertising ID",
-  "ExplainText": "This policy setting turns off the advertising ID, preventing apps from using the ID for experiences across apps. If you enable this policy setting, the advertising ID is turned off. Apps can't use the ID for experiences across apps. If you disable or do not configure this policy setting, users can control whether apps can use the advertising ID for experiences across apps.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AdvertisingInfo"
-  ],
-  "ValueName": "DisabledByGroupPolicy",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Application Telemetry](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffApplicationImpactTelemetry) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `AITEnable` |
+| [Turn off Inventory Collector](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffProgramInventory) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableInventory` |
+| [Allow Diagnostic Data](https://www.noverse.dev/policies.html?p=DataCollection*AllowTelemetry) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection`<br>`HKCU\Software\Policies\Microsoft\Windows\DataCollection` | `AllowTelemetry` |
+| [Configure Authenticated Proxy usage for the Connected User Experience and Telemetry service](https://www.noverse.dev/policies.html?p=DataCollection*DisableEnterpriseAuthProxy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableEnterpriseAuthProxy` |
+| [Limit optional diagnostic data for Desktop Analytics](https://www.noverse.dev/policies.html?p=DataCollection*LimitEnhancedDiagnosticDataWindowsAnalytics) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitEnhancedDiagnosticDataWindowsAnalytics` |
+| [Allow device name to be sent in Windows diagnostic data](https://www.noverse.dev/policies.html?p=DataCollection*AllowDeviceNameInDiagnosticData) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `AllowDeviceNameInTelemetry` |
+| [Configure diagnostic data opt-in settings user interface](https://www.noverse.dev/policies.html?p=DataCollection*ConfigureTelemetryOptInSettingsUx) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableTelemetryOptInSettingsUx` |
+| [Configure diagnostic data opt-in change notifications](https://www.noverse.dev/policies.html?p=DataCollection*ConfigureTelemetryOptInChangeNotification) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableTelemetryOptInChangeNotification` |
+| [Disable deleting diagnostic data](https://www.noverse.dev/policies.html?p=DataCollection*DisableDeviceDelete) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDeviceDelete` |
+| [Disable diagnostic data viewer](https://www.noverse.dev/policies.html?p=DataCollection*DisableDiagnosticDataViewer) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDiagnosticDataViewer` |
+| [Limit Diagnostic Log Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDiagnosticLogCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDiagnosticLogCollection` |
+| [Limit Dump Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDumpCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDumpCollection` |
+| [Turn off the advertising ID](https://www.noverse.dev/policies.html?p=UserProfiles*DisableAdvertisingId) | `HKLM\Software\Policies\Microsoft\Windows\AdvertisingInfo` | `DisabledByGroupPolicy` |
 
 # Disable WER
 
@@ -343,147 +117,18 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DeviceSetup.admx",
-  "CategoryName": "DeviceInstall_Category",
-  "PolicyName": "DeviceInstall_GenericDriverSendToWER",
-  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
-  "Supported": "Windows_10_0_RS3ToVista - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, Windows 7, and Windows Vista only",
-  "DisplayName": "Do not send a Windows error report when a generic driver is installed on a device",
-  "ExplainText": "Windows has a feature that sends \"generic-driver-installed\" reports through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, an error report is not sent when a generic driver is installed. If you disable or do not configure this policy setting, an error report is sent when a generic driver is installed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
-  ],
-  "ValueName": "DisableSendGenericDriverNotFoundToWER",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DeviceSetup.admx",
-  "CategoryName": "DeviceInstall_Category",
-  "PolicyName": "DeviceInstall_RequestAdditionalSoftwareSendToWER",
-  "NameSpace": "Microsoft.Policies.DeviceSoftwareSetup",
-  "Supported": "Windows_10_0_RS3ToWindows7 - Windows Server 2016 Version 1709, Windows 10 Version 1709, Windows Server 2016 Version 1703, Windows 10 Version 1703, Windows 10, Windows 8.1, Windows 8, and Windows 7 only",
-  "DisplayName": "Prevent Windows from sending an error report when a device driver requests additional software during installation",
-  "ExplainText": "Windows has a feature that allows a device driver to request additional software through the Windows Error Reporting infrastructure. This policy allows you to disable the feature. If you enable this policy setting, Windows will not send an error report to request additional software even if this is specified by the device driver. If you disable or do not configure this policy setting, Windows sends an error report when a device driver that requests additional software is installed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DeviceInstall\\Settings"
-  ],
-  "ValueName": "DisableSendRequestAdditionalSoftwareToWER",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerDisable_2",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Disable Windows Error Reporting",
-  "ExplainText": "This policy setting turns off Windows Error Reporting, so that reports are not collected or sent to either Microsoft or internal servers within your organization when software unexpectedly stops working or fails. If you enable this policy setting, Windows Error Reporting does not send any problem information to Microsoft. Additionally, solution information is not available in Security and Maintenance in Control Panel. If you disable or do not configure this policy setting, the Turn off Windows Error Reporting policy setting in Computer Configuration/Administrative Templates/System/Internet Communication Management/Internet Communication settings takes precedence. If Turn off Windows Error Reporting is also either disabled or not configured, user settings in Control Panel for Windows Error Reporting are applied.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "Disabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerNoLogging_1",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Disable logging",
-  "ExplainText": "This policy setting controls whether Windows Error Reporting saves its own events and error messages to the system event log. If you enable this policy setting, Windows Error Reporting events are not recorded in the system event log. If you disable or do not configure this policy setting, Windows Error Reporting events and errors are logged to the system event log, as with other Windows-based programs.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "LoggingDisabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerAutoApproveOSDumps_1",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
-  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "AutoApproveOSDumps",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ErrorReporting.admx",
-  "CategoryName": "CAT_WindowsErrorReporting",
-  "PolicyName": "WerAutoApproveOSDumps_2",
-  "NameSpace": "Microsoft.Policies.WindowsErrorReporting",
-  "Supported": "Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Automatically send memory dumps for OS-generated error reports",
-  "ExplainText": "This policy setting controls whether memory dumps in support of OS-generated error reports can be sent to Microsoft automatically. This policy does not apply to error reports generated by 3rd-party products, or additional data other than memory dumps. If you enable or do not configure this policy setting, any memory dumps generated for error reports by Microsoft Windows are automatically uploaded, without notification to the user. If you disable this policy setting, then all memory dumps are uploaded according to the default consent and notification settings.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Error Reporting"
-  ],
-  "ValueName": "AutoApproveOSDumps",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "TPM.admx",
-  "CategoryName": "DSHACategory",
-  "PolicyName": "OptIntoDSHA_Name",
-  "NameSpace": "Microsoft.Policies.TrustedPlatformModule",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Enable Device Health Attestation Monitoring and Reporting",
-  "ExplainText": "This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\DeviceHealthAttestationService"
-  ],
-  "ValueName": "EnableDeviceHealthAttestationService",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Reliability.admx",
-  "CategoryName": "System",
-  "PolicyName": "EE_EnablePersistentTimeStamp",
-  "NameSpace": "Microsoft.Policies.Reliability",
-  "Supported": "WindowsNET - At least Windows Server 2003",
-  "DisplayName": "Enable Persistent Time Stamp",
-  "ExplainText": "This policy setting allows the system to detect the time of unexpected shutdowns by writing the current time to disk on a schedule controlled by the Timestamp Interval. If you enable this policy setting, you are able to specify how often the Persistent System Timestamp is refreshed and subsequently written to the disk. You can specify the Timestamp Interval in seconds. If you disable this policy setting, the Persistent System Timestamp is turned off and the timing of unexpected shutdowns is not recorded. If you do not configure this policy setting, the Persistent System Timestamp is refreshed according the default, which is every 60 seconds beginning with Windows Server 2003. Note: This feature might interfere with power configuration settings that turn off hard disks after a period of inactivity. These power settings may be accessed in the Power Options Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Reliability"
-  ],
-  "ValueName": "TimeStampEnabled",
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "TimeStampInterval", "MinValue": "1", "MaxValue": "86400" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not send a Windows error report when a generic driver is installed on a device](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceInstall_GenericDriverSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendGenericDriverNotFoundToWER` |
+| [Prevent Windows from sending an error report when a device driver requests additional software during installation](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceInstall_RequestAdditionalSoftwareSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendRequestAdditionalSoftwareToWER` |
+| [Disable Windows Error Reporting](https://www.noverse.dev/policies.html?p=ErrorReporting*WerDisable_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `Disabled` |
+| [Disable logging](https://www.noverse.dev/policies.html?p=ErrorReporting*WerNoLogging_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `LoggingDisabled` |
+| [Automatically send memory dumps for OS-generated error reports](https://www.noverse.dev/policies.html?p=ErrorReporting*WerAutoApproveOSDumps_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
+| [Automatically send memory dumps for OS-generated error reports](https://www.noverse.dev/policies.html?p=ErrorReporting*WerAutoApproveOSDumps_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
+| [Enable Device Health Attestation Monitoring and Reporting](https://www.noverse.dev/policies.html?p=TPM*OptIntoDSHA_Name) | `HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService` | `EnableDeviceHealthAttestationService` |
+| [Enable Persistent Time Stamp](https://www.noverse.dev/policies.html?p=Reliability*EE_EnablePersistentTimeStamp) | `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` | `TimeStampEnabled`<br>`TimeStampInterval` |
 
 # Troubleshooter Preference
 
@@ -521,128 +166,16 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 4
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "MSDT.admx",
-  "CategoryName": "WdiScenarioCategory",
-  "PolicyName": "MsdtSupportProvider",
-  "NameSpace": "Microsoft.Policies.MSDT",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider",
-  "ExplainText": "This policy setting configures Microsoft Support Diagnostic Tool (MSDT) interactive communication with the support provider. MSDT gathers diagnostic data for analysis by support professionals. If you enable this policy setting, users can use MSDT to collect and send diagnostic data to a support professional to resolve a problem. By default, the support provider is set to Microsoft Corporation. If you disable this policy setting, MSDT cannot run in support mode, and no data can be collected or sent to the support provider. If you do not configure this policy setting, MSDT support mode is enabled by default. No reboots or service restarts are required for this policy setting to take effect. Changes take effect immediately.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnosticsProvider\\Policy"
-  ],
-  "ValueName": "DisableQueryRemoteServer",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "sdiageng.admx",
-  "CategoryName": "ScriptedDiagnosticsCategory",
-  "PolicyName": "ScriptedDiagnosticsExecutionPolicy",
-  "NameSpace": "Microsoft.Policies.ScriptedDiagnostics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Troubleshooting: Allow users to access and run Troubleshooting Wizards",
-  "ExplainText": "This policy setting allows users to access and run the troubleshooting tools that are available in the Troubleshooting Control Panel and to run the troubleshooting wizard to troubleshoot problems on their computers. If you enable or do not configure this policy setting, users can access and run the troubleshooting tools from the Troubleshooting Control Panel. If you disable this policy setting, users cannot access or run the troubleshooting tools from the Control Panel. Note that this setting also controls a user's ability to launch standalone troubleshooting packs such as those found in .diagcab files.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnostics"
-  ],
-  "ValueName": "EnableDiagnostics",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "sdiageng.admx",
-  "CategoryName": "ScriptedDiagnosticsCategory",
-  "PolicyName": "BetterWhenConnected",
-  "NameSpace": "Microsoft.Policies.ScriptedDiagnostics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Troubleshooting: Allow users to access online troubleshooting content on Microsoft servers from the Troubleshooting Control Panel (via the Windows Online Troubleshooting Service - WOTS)",
-  "ExplainText": "This policy setting allows users who are connected to the Internet to access and search troubleshooting content that is hosted on Microsoft content servers. Users can access online troubleshooting content from within the Troubleshooting Control Panel UI by clicking \"Yes\" when they are prompted by a message that states, \"Do you want the most up-to-date troubleshooting content?\" If you enable or do not configure this policy setting, users who are connected to the Internet can access and search troubleshooting content that is hosted on Microsoft content servers from within the Troubleshooting Control Panel user interface. If you disable this policy setting, users can only access and search troubleshooting content that is available locally on their computers, even if they are connected to the Internet. They are prevented from connecting to the Microsoft servers that host the Windows Online Troubleshooting Service.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScriptedDiagnosticsProvider\\Policy"
-  ],
-  "ValueName": "EnableQueryRemoteServer",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "MSDT.admx",
-  "CategoryName": "WdiScenarioCategory",
-  "PolicyName": "TroubleshootingAllowRecommendations",
-  "NameSpace": "Microsoft.Policies.MSDT",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Troubleshooting: Allow users to access recommended troubleshooting for known problems",
-  "ExplainText": "This policy setting configures how troubleshooting for known problems can be applied on the device and lets administrators configure how it's applied to their domains/IT environments. Not configuring this policy setting will allow the user to configure how troubleshooting is applied. Enabling this policy allows you to configure how troubleshooting is applied on the user's device. You can select from one of the following values: 0 = Do not allow users, system features, or Microsoft to apply troubleshooting. 1 = Only automatically apply troubleshooting for critical problems by system features and Microsoft. 2 = Automatically apply troubleshooting for critical problems by system features and Microsoft. Notify users when troubleshooting for other problems is available and allow users to choose to apply or ignore. 3 = Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Notify users when troubleshooting has solved a problem. 4 = Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Do not notify users when troubleshooting has solved a problem. 5 = Allow the user to choose their own troubleshooting settings. After setting this policy, you can use the following instructions to check devices in your domain for available troubleshooting from Microsoft: 1. Create a bat script with the following contents: rem The following batch script triggers Recommended Troubleshooting schtasks /run /TN \"\\Microsoft\\Windows\\Diagnosis\\RecommendedTroubleshootingScanner\" 2. To create a new immediate task, navigate to the Group Policy Management Editor > Computer Configuration > Preferences and select Control Panel Settings. 3. Under Control Panel settings, right-click on Scheduled Tasks and select New. Select Immediate Task (At least Windows 7). 4. Provide name and description as appropriate, then under Security Options set the user account to System and select the Run with highest privileges checkbox. 5. In the Actions tab, create a new action, select Start a Program as its type, then enter the file created in step 1. 6. Configure the task to deploy to your domain.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Troubleshooting\\AllowRecommendations"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "TroubleshootingAllowRecommendations", "Items": [
-        { "DisplayName": "Do not allow users, system features, or Microsoft to apply troubleshooting.", "Data": "0" },
-        { "DisplayName": "Only automatically apply troubleshooting for critical problems by system features and Microsoft.", "Data": "1" },
-        { "DisplayName": "Automatically apply troubleshooting for critical problems by system features and Microsoft. Notify users when troubleshooting for other problems is available and allow users to choose to apply or ignore.", "Data": "2" },
-        { "DisplayName": "Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Notify users when troubleshooting has solved a problem.", "Data": "3" },
-        { "DisplayName": "Automatically apply troubleshooting for critical and other problems by system features and Microsoft. Do not notify users when troubleshooting has solved a problem.", "Data": "4" },
-        { "DisplayName": "Allow the user to choose their own troubleshooting settings.", "Data": "5" }
-      ]
-    }
-  ]
-},
-{
-  "File": "sdiagschd.admx",
-  "CategoryName": "ScheduledDiagnosticsCategory",
-  "PolicyName": "ScheduledDiagnosticsExecutionPolicy",
-  "NameSpace": "Microsoft.Policies.ScheduledDiagnostics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Configure Scheduled Maintenance Behavior",
-  "ExplainText": "Determines whether scheduled diagnostics will run to proactively detect and resolve system problems. If you enable this policy setting, you must choose an execution level. If you choose detection and troubleshooting only, Windows will periodically detect and troubleshoot problems. The user will be notified of the problem for interactive resolution. If you choose detection, troubleshooting and resolution, Windows will resolve some of these problems silently without requiring user input. If you disable this policy setting, Windows will not be able to detect, troubleshoot or resolve problems on a scheduled basis. If you do not configure this policy setting, local troubleshooting preferences will take precedence, as configured in the control panel. If no local troubleshooting preference is configured, scheduled diagnostics are enabled for detection, troubleshooting and resolution by default. No reboots or service restarts are required for this policy to take effect: changes take effect immediately. This policy setting will only take effect when the Task Scheduler service is in the running state. When the service is stopped or disabled, scheduled diagnostics will not be executed. The Task Scheduler service can be configured with the Services snap-in to the Microsoft Management Console.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\ScheduledDiagnostics"
-  ],
-  "ValueName": "EnabledExecution",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "EnabledExecutionLevel", "Items": [
-        { "DisplayName": "Troubleshooting Only", "Data": "1" },
-        { "DisplayName": "Regular", "Data": "2" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WDI.admx",
-  "CategoryName": "Troubleshooting",
-  "PolicyName": "WdiDpsScenarioExecutionPolicy",
-  "NameSpace": "Microsoft.Policies.WindowsDiagnostics",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Diagnostics: Configure scenario execution level",
-  "ExplainText": "This policy setting determines the execution level for Diagnostic Policy Service (DPS) scenarios. If you enable this policy setting, you must select an execution level from the drop-down menu. If you select problem detection and troubleshooting only, the DPS will detect problems and attempt to determine their root causes. These root causes will be logged to the event log when detected, but no corrective action will be taken. If you select detection, troubleshooting and resolution, the DPS will attempt to automatically fix problems it detects or indicate to the user that assisted resolution is available. If you disable this policy setting, Windows cannot detect, troubleshoot, or resolve any problems that are handled by the DPS. If you do not configure this policy setting, the DPS enables all scenarios for resolution by default, unless you configure separate scenario-specific policy settings. This policy setting takes precedence over any scenario-specific policy settings when it is enabled or disabled. Scenario-specific policy settings only take effect if this policy setting is not configured. No reboots or service restarts are required for this policy setting to take effect: changes take effect immediately.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WDI"
-  ],
-  "ValueName": "ScenarioExecutionEnabled",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "EnabledScenarioExecutionLevel", "Items": [
-        { "DisplayName": "Detection and Troubleshooting Only", "Data": "1" },
-        { "DisplayName": "Detection, Troubleshooting and Resolution", "Data": "2" }
-      ]
-    },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider](https://www.noverse.dev/policies.html?p=MSDT*MsdtSupportProvider) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy` | `DisableQueryRemoteServer` |
+| [Troubleshooting: Allow users to access and run Troubleshooting Wizards](https://www.noverse.dev/policies.html?p=sdiageng*ScriptedDiagnosticsExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnostics` | `EnableDiagnostics` |
+| [Troubleshooting: Allow users to access online troubleshooting content on Microsoft servers from the Troubleshooting Control Panel (via the Windows Online Troubleshooting Service - WOTS)](https://www.noverse.dev/policies.html?p=sdiageng*BetterWhenConnected) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy` | `EnableQueryRemoteServer` |
+| [Troubleshooting: Allow users to access recommended troubleshooting for known problems](https://www.noverse.dev/policies.html?p=MSDT*TroubleshootingAllowRecommendations) | `HKLM\Software\Policies\Microsoft\Windows\Troubleshooting\AllowRecommendations` | `TroubleshootingAllowRecommendations` |
+| [Configure Scheduled Maintenance Behavior](https://www.noverse.dev/policies.html?p=sdiagschd*ScheduledDiagnosticsExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScheduledDiagnostics` | `EnabledExecution`<br>`EnabledExecutionLevel` |
+| [Diagnostics: Configure scenario execution level](https://www.noverse.dev/policies.html?p=WDI*WdiDpsScenarioExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WDI` | `ScenarioExecutionEnabled`<br>`EnabledScenarioExecutionLevel` |
 
 # Disable Suggestions/Tips/Tricks
 
@@ -680,123 +213,17 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableWindowsConsumerFeatures",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off Microsoft consumer experiences",
-  "ExplainText": "This policy setting turns off experiences that help consumers make the most of their devices and Microsoft account. If you enable this policy setting, users will no longer see personalized recommendations from Microsoft and notifications about their Microsoft account. If you disable or do not configure this policy setting, users may see suggestions from Microsoft and notifications about their Microsoft account. Note: This setting only applies to Enterprise and Education SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableWindowsConsumerFeatures",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableSoftLanding",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not show Windows tips",
-  "ExplainText": "This policy setting prevents Windows tips from being shown to users. If you enable this policy setting, users will no longer see Windows tips. If you disable or do not configure this policy setting, users may see contextual popups explaining how to use Windows. Microsoft uses diagnostic data to determine which tips to show. Note: If you disable or do not configure this policy setting, but enable the \"Computer Configuration\\Administrative Templates\\Windows Components\\Data Collection and Preview Builds\\Allow Telemetry\" policy setting with a level of \"Basic\" or below, users may see a limited set of tips. Also, this setting only applies to Enterprise and Education SKUs.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableSoftLanding",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "CloudContent.admx",
-  "CategoryName": "CloudContent",
-  "PolicyName": "DisableThirdPartySuggestions",
-  "NameSpace": "Microsoft.Policies.CloudContent",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Do not suggest third-party content in Windows spotlight",
-  "ExplainText": "If you enable this policy, Windows spotlight features like lock screen spotlight, suggested apps in Start menu or Windows tips will no longer suggest apps and content from third-party software publishers. Users may still see suggestions and tips to make them more productive with Microsoft features and apps. If you disable or do not configure this policy, Windows spotlight features may suggest apps and content from third-party software publishers in addition to Microsoft apps and content.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\CloudContent"
-  ],
-  "ValueName": "DisableThirdPartySuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ControlPanel.admx",
-  "CategoryName": "ControlPanel",
-  "PolicyName": "AllowOnlineTips",
-  "NameSpace": "Microsoft.Policies.ControlPanel",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Allow Online Tips",
-  "ExplainText": "Enables or disables the retrieval of online tips and help for the Settings app. If disabled, Settings will not contact Microsoft content services to retrieve tips and help content.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "AllowOnlineTips", "TrueValue": "1", "FalseValue": "0" }
-  ]
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecommendedSection",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_11_0_SE - Windows 11 SE",
-  "DisplayName": "Remove Recommended section from Start Menu",
-  "ExplainText": "This policy allows you to prevent the Start Menu from displaying a list of recommended applications and files. If you enable this policy setting, the Start Menu will no longer show the section containing a list of recommended files and apps.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecommendedSection",
-  "Elements": []
-},
-{
-  "File": "StartMenu.admx",
-  "CategoryName": "StartMenu",
-  "PolicyName": "HideRecommendedPersonalizedSites",
-  "NameSpace": "Microsoft.Policies.StartMenu",
-  "Supported": "Windows_11_0_SE - Windows 11 SE",
-  "DisplayName": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
-  "ExplainText": "Remove Personalized Website Recommendations from the Recommended section in the Start Menu",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Explorer",
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "HideRecommendedPersonalizedSites",
-  "Elements": []
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "DisableSearchBoxSuggestions",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off display of recent search entries in the File Explorer search box",
-  "ExplainText": "Disables suggesting recent queries for the Search Box and prevents entries into the Search Box from being stored in the registry for future references. File Explorer shows suggestion pop-ups as users type into the Search Box. These suggestions are based on their past entries into the Search Box. Note: If you enable this policy, File Explorer will not show suggestion pop-ups as users type into the Search Box, and it will not store Search Box entries into the registry for future references. If the user types a property, values that match this property will be shown but no data will be saved in the registry or re-shown on subsequent uses of the search box.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableSearchBoxSuggestions",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Microsoft consumer experiences](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsConsumerFeatures) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsConsumerFeatures` |
+| [Do not show Windows tips](https://www.noverse.dev/policies.html?p=CloudContent*DisableSoftLanding) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableSoftLanding` |
+| [Do not suggest third-party content in Windows spotlight](https://www.noverse.dev/policies.html?p=CloudContent*DisableThirdPartySuggestions) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableThirdPartySuggestions` |
+| [Allow Online Tips](https://www.noverse.dev/policies.html?p=ControlPanel*AllowOnlineTips) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `AllowOnlineTips` |
+| [Remove Recommended section from Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecommendedSection) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedSection` |
+| [Remove Personalized Website Recommendations from the Recommended section in the Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecommendedPersonalizedSites) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedPersonalizedSites` |
+| [Turn off display of recent search entries in the File Explorer search box](https://www.noverse.dev/policies.html?p=WindowsExplorer*DisableSearchBoxSuggestions) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableSearchBoxSuggestions` |
 
 ## Miscellaneous Notes
 
@@ -920,44 +347,12 @@ if ( v6 < 0 )
 }
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WinMaps.admx",
-  "CategoryName": "Maps",
-  "PolicyName": "TurnOffAutoUpdate",
-  "NameSpace": "Microsoft.Policies.WinMaps",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off Automatic Download and Update of Map Data",
-  "ExplainText": "Enables or disables the automatic download and update of map data. If you enable this setting the automatic download and update of map data is turned off. If you disable this setting the automatic download and update of map data is turned on. If you don't configure this setting the automatic download and update of map data is determined by a registry setting that the user can change using Windows Settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps"
-  ],
-  "ValueName": "AutoDownloadAndUpdateMapData",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "WinMaps.admx",
-  "CategoryName": "Maps",
-  "PolicyName": "DisallowUntriggeredNetworkOnSettingsPage",
-  "NameSpace": "Microsoft.Policies.WinMaps",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn off unsolicited network traffic on the Offline Maps settings page",
-  "ExplainText": "This policy setting allows you to turn on or turn off unsolicited network traffic on the Offline Maps page in Settings > System > Offline Maps. If you enable this policy setting, features that generate network traffic on the Offline Maps settings page are turned off. Note: This may turn off the entire settings page. If you disable or do not configure this policy setting, the Offline Maps setting page may generate network traffic.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Maps"
-  ],
-  "ValueName": "AllowUntriggeredNetworkTrafficOnSettingsPage",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Automatic Download and Update of Map Data](https://www.noverse.dev/policies.html?p=WinMaps*TurnOffAutoUpdate) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AutoDownloadAndUpdateMapData` |
+| [Turn off unsolicited network traffic on the Offline Maps settings page](https://www.noverse.dev/policies.html?p=WinMaps*DisallowUntriggeredNetworkOnSettingsPage) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AllowUntriggeredNetworkTrafficOnSettingsPage` |
 
 # Disable Website Access to Language List
 
@@ -1014,27 +409,11 @@ L"WifiLastDisabledNearShare",
 
 - [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableCDP",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Continue experiences on this device",
-  "ExplainText": "This policy setting determines whether the Windows device is allowed to participate in cross-device experiences (continue experiences). If you enable this policy setting, the Windows device is discoverable by other Windows devices that belong to the same user, and can participate in cross-device experiences. If you disable this policy setting, the Windows device is not discoverable by other devices, and cannot participate in cross-device experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableCdp",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Continue experiences on this device](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableCDP) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableCdp` |
 
 # Disable Phone Linking
 
@@ -1054,27 +433,11 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\I
 
 By default resume is enabled, OneDrive is the only app which exists under the "Control which apps can use Resume" on a stock 25H2 installation and can be toggled via `IsOneDriveResumeAllowed` (same key as `IsResumeAllowed`). Disabling resume will disallow all apps to use Resume (doesn't set `IsXResumeAllowed` to `0`).
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableMMX",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Phone-PC linking on this device",
-  "ExplainText": "This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC. If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences. If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableMmx",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Phone-PC linking on this device](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableMMX) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableMmx` |
 
 # Hide Last Logged-In User
 
@@ -1101,27 +464,11 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WinLogon.admx",
-  "CategoryName": "Logon",
-  "PolicyName": "DisplayLastLogonInfoDescription",
-  "NameSpace": "Microsoft.Policies.WindowsLogon2",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Display information about previous logons during user logon",
-  "ExplainText": "This policy setting controls whether or not the system displays information about previous logons and logon failures to the user. For local user accounts and domain user accounts in domains of at least a Windows Server 2008 functional level, if you enable this setting, a message appears after the user logs on that displays the date and time of the last successful logon by that user, the date and time of the last unsuccessful logon attempted with that user name, and the number of unsuccessful logons since the last successful logon by that user. This message must be acknowledged by the user before the user is presented with the Microsoft Windows desktop. For domain user accounts in Windows Server 2003, Windows 2000 native, or Windows 2000 mixed functional level domains, if you enable this setting, a warning message will appear that Windows could not retrieve the information and the user will not be able to log on. Therefore, you should not enable this policy setting if the domain is not at the Windows Server 2008 domain functional level. If you disable or do not configure this setting, messages about the previous logon or logon failures are not displayed.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System"
-  ],
-  "ValueName": "DisplayLastLogonInfo",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Display information about previous logons during user logon](https://www.noverse.dev/policies.html?p=WinLogon*DisplayLastLogonInfoDescription) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisplayLastLogonInfo` |
 
 # Disable Background Apps
 
@@ -1145,30 +492,11 @@ Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (n
 
 When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsRunInBackground",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps run in the background",
-  "ExplainText": "This policy setting specifies whether Windows apps can run in the background. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to run in the background and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsRunInBackground", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Let Windows apps run in the background](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground` |
 
 # Disable App Launch Tracking
 
@@ -1254,93 +582,15 @@ Miscellaneous notes:
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsCopilot",
-  "PolicyName": "TurnOffWindowsCopilot",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Turn off Windows Copilot",
-  "ExplainText": "This policy setting allows you to turn off Windows Copilot. If you enable this policy setting, users will not be able to use Copilot. The Copilot icon will not appear on the taskbar either. If you disable or do not configure this policy setting, users will be able to use Copilot when it's available to them.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsCopilot"
-  ],
-  "ValueName": "TurnOffWindowsCopilot",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsCopilot",
-  "PolicyName": "SetCopilotHardwareKey",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER - At least Windows 11",
-  "DisplayName": "Set Copilot Hardware Key",
-  "ExplainText": "This policy setting determines which app opens when the user presses the Copilot key on their keyboard. If the policy is enabled, the specified app will open when the user presses the Copilot key. Users can change the key assignment in Settings. If the policy is not configured, Copilot will open if it's available in that country or region.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\CopilotKey"
-  ],
-  "Elements": [
-    { "Type": "Text", "ValueName": "SetCopilotHardwareKey" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableImageCreator",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Image Creator",
-  "ExplainText": "This policy setting allows you to control whether Image Creator functionality is disabled in the Windows Paint app. If this policy is enabled, Image Creator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Image Creator functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableImageCreator",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableCocreator",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable Cocreator",
-  "ExplainText": "This policy setting allows you to control whether Cocreator functionality is disabled in the Windows Paint app. If this policy is enabled, Cocreator functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access Cocreator functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableCocreator",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "Paint",
-  "PolicyName": "DisableGenerativeFill",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_22H2 - At least Windows 11 Version 22H2",
-  "DisplayName": "Disable generative fill",
-  "ExplainText": "This policy setting allows you to control whether generative fill functionality is disabled in the Windows Paint app. If this policy is enabled, generative fill functionality will not be accessible in the Paint app. If this policy is disabled or not configured, users will be able to access generative fill functionality.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Paint"
-  ],
-  "ValueName": "DisableGenerativeFill",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Windows Copilot](https://www.noverse.dev/policies.html?p=WindowsCopilot*TurnOffWindowsCopilot) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot` | `TurnOffWindowsCopilot` |
+| [Set Copilot Hardware Key](https://www.noverse.dev/policies.html?p=WindowsCopilot*SetCopilotHardwareKey) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CopilotKey` | `SetCopilotHardwareKey` |
+| [Disable Image Creator](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableImageCreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableImageCreator` |
+| [Disable Cocreator](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableCocreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableCocreator` |
+| [Disable generative fill](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableGenerativeFill) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableGenerativeFill` |
 
 # Disable Recall
 
@@ -1351,63 +601,13 @@ Miscellaneous notes:
 `Disable ClickToDo`:  
 "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsAI",
-  "PolicyName": "DisableAIDataAnalysis",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Turn off saving snapshots for use with Recall",
-  "ExplainText": "This policy setting allows you to determine whether snapshots of the screen can be saved for use with Recall. For managed devices, snapshots for Recall are not enabled by default. IT administrators cannot, on their own, enable saving snapshots on behalf of their users. The choice to enable saving snapshots requires individual user opt-in consent. If the policy is not configured, snapshots won't be saved for use with Recall. If you enable this policy, snapshots won't be saved for use with Recall. If snapshots were previously saved on the device, they will be deleted when this policy is enabled. If you set this policy to disabled, end users will have a choice to save snapshots of their screen and use Recall to find things they've seen on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
-  ],
-  "ValueName": "DisableAIDataAnalysis",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsAI",
-  "PolicyName": "AllowRecallEnablement",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Allow Recall to be enabled",
-  "ExplainText": "This policy setting allows you to determine whether the Recall optional component is available for end users to enable on their device. By default, Recall is disabled for managed commercial devices. Recall isn't available on managed devices by default, and individual users can't enable Recall on their own. If this policy is not configured, end users will have the Recall component in a disabled state. If this policy is disabled, the Recall component will be in disabled state and the bits for Recall will be removed from the device. If snapshots were previously saved on the device, they will be deleted when this policy is disabled. Removing Recall requires a device restart. If the policy is enabled, end users will have Recall available on their device. Depending on the state of the DisableAIDataAnalysis policy (Turn off saving snapshots for use with Recall), end users will be able to choose if they want to save snapshots of their screen and use Recall to find things they've seen on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
-  ],
-  "ValueName": "AllowRecallEnablement",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsCopilot.admx",
-  "CategoryName": "WindowsAI",
-  "PolicyName": "DisableClickToDo",
-  "NameSpace": "Microsoft.Policies.WindowsCopilot",
-  "Supported": "Windows_11_0_NOSERVER_ENTERPRISE_EDUCATION_PRO_SANDBOX - At least Windows 11 Pro, Enterprise, or Education with Windows Sandbox",
-  "DisplayName": "Disable Click to Do",
-  "ExplainText": "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI",
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\WindowsAI"
-  ],
-  "ValueName": "DisableClickToDo",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off saving snapshots for use with Recall](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableAIDataAnalysis) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `DisableAIDataAnalysis` |
+| [Allow Recall to be enabled](https://www.noverse.dev/policies.html?p=WindowsCopilot*AllowRecallEnablement) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `AllowRecallEnablement` |
+| [Disable Click to Do](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableClickToDo) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `DisableClickToDo` |
 
 # Disable Xbox Game Bar
 
@@ -1477,27 +677,11 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 >
 > — Microsoft, [GameBar PresenceWriter](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GameDVR.admx",
-  "CategoryName": "GAMEDVR",
-  "PolicyName": "AllowGameDVR",
-  "NameSpace": "Microsoft.Policies.GameDVR",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Enables or disables Windows Game Recording and Broadcasting",
-  "ExplainText": "Windows Game Recording and Broadcasting. This setting enables or disables the Windows Game Recording and Broadcasting features. If you disable this setting, Windows Game Recording will not be allowed. If the setting is enabled or not configured, then Recording and Broadcasting (streaming) will be allowed.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\GameDVR"
-  ],
-  "ValueName": "AllowGameDVR",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enables or disables Windows Game Recording and Broadcasting](https://www.noverse.dev/policies.html?p=GameDVR*AllowGameDVR) | `HKLM\Software\Policies\Microsoft\Windows\GameDVR` | `AllowGameDVR` |
 
 # Disable Location Access
 
@@ -1522,98 +706,15 @@ There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't se
 <pattern type="Registry">HKLM\Software\Microsoft\Sensors\LocationProvider [CSEnable]</pattern>
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessLocation",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access location",
-  "ExplainText": "This policy setting specifies whether Windows apps can access location. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access location by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access location and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access location and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access location by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessLocation", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "LocationProviderAdm.admx",
-  "CategoryName": "WindowsLocationProvider",
-  "PolicyName": "DisableWindowsLocationProvider_1",
-  "NameSpace": "Microsoft.Policies.Sensors.WindowsLocationProvider",
-  "Supported": "Windows8_Or_Windows_6_3_Only - Windows Server 2012, Windows 8, Windows RT, Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only",
-  "DisplayName": "Turn off Windows Location Provider",
-  "ExplainText": "This policy setting turns off the Windows Location Provider feature for this computer. If you enable this policy setting, the Windows Location Provider feature will be turned off, and all programs on this computer will not be able to use the Windows Location Provider feature. If you disable or do not configure this policy setting, all programs on this computer can use the Windows Location Provider feature.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LocationAndSensors"
-  ],
-  "ValueName": "DisableWindowsLocationProvider",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Sensors.admx",
-  "CategoryName": "LocationAndSensors",
-  "PolicyName": "DisableSensors_2",
-  "NameSpace": "Microsoft.Policies.Sensors",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off sensors",
-  "ExplainText": "This policy setting turns off the sensor feature for this computer. If you enable this policy setting, the sensor feature is turned off, and all programs on this computer cannot use the sensor feature. If you disable or do not configure this policy setting, all programs on this computer can use the sensor feature.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LocationAndSensors"
-  ],
-  "ValueName": "DisableSensors",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Sensors.admx",
-  "CategoryName": "LocationAndSensors",
-  "PolicyName": "DisableLocation_2",
-  "NameSpace": "Microsoft.Policies.Sensors",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off location",
-  "ExplainText": "This policy setting turns off the location feature for this computer. If you enable this policy setting, the location feature is turned off, and all programs on this computer are prevented from using location information from the location feature. If you disable or do not configure this policy setting, all programs on this computer will not be prevented from using location information from the location feature.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LocationAndSensors"
-  ],
-  "ValueName": "DisableLocation",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Sensors.admx",
-  "CategoryName": "LocationAndSensors",
-  "PolicyName": "DisableLocationScripting_2",
-  "NameSpace": "Microsoft.Policies.Sensors",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off location scripting",
-  "ExplainText": "This policy setting turns off scripting for the location feature. If you enable this policy setting, scripts for the location feature will not run. If you disable or do not configure this policy setting, all location scripts will run.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LocationAndSensors"
-  ],
-  "ValueName": "DisableLocationScripting",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Let Windows apps access location](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessLocation) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessLocation` |
+| [Turn off Windows Location Provider](https://www.noverse.dev/policies.html?p=LocationProviderAdm*DisableWindowsLocationProvider_1) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableWindowsLocationProvider` |
+| [Turn off sensors](https://www.noverse.dev/policies.html?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
+| [Turn off location](https://www.noverse.dev/policies.html?p=Sensors*DisableLocation_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableLocation` |
+| [Turn off location scripting](https://www.noverse.dev/policies.html?p=Sensors*DisableLocationScripting_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableLocationScripting` |
 
 # Disable Sensors
 
@@ -1629,27 +730,11 @@ Blocks apps/system from using hardware sensors such as ambient light, orientatio
 
 No other [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) depend on these three services.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Sensors.admx",
-  "CategoryName": "LocationAndSensors",
-  "PolicyName": "DisableSensors_2",
-  "NameSpace": "Microsoft.Policies.Sensors",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off sensors",
-  "ExplainText": "This policy setting turns off the sensor feature for this computer. If you enable this policy setting, the sensor feature is turned off, and all programs on this computer cannot use the sensor feature. If you disable or do not configure this policy setting, all programs on this computer can use the sensor feature.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\LocationAndSensors"
-  ],
-  "ValueName": "DisableSensors",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off sensors](https://www.noverse.dev/policies.html?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
 
 # Disable Windows Insider
 
@@ -1659,27 +744,11 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 
 `AllowBuildPreview` is used up to V1703, I'll still leave it. `Computer Configuration > Administrative Templates > Windows Component > Windows Update > Windows Update for Business : Manage Preview Builds` for W10+ versions.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AllowBuildPreview.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "AllowBuildPreview",
-  "NameSpace": "Microsoft.Policies.AllowBuildPreview",
-  "Supported": "Windows_10_0_UP_TO_RS2 - Windows Server 2016, Windows 10 up to Version 1703",
-  "DisplayName": "Toggle user control over Insider builds",
-  "ExplainText": "This policy setting determines whether users can get preview builds of Windows, by configuring controls in Settings > Update and security > Windows Insider Program. If you enable or do not configure this policy setting, users can download and install preview builds of Windows by configuring Windows Insider Program settings. If you disable this policy setting, Windows Insider Program settings will be unavailable to users through the Settings app. This policy is only supported up to Windows 10, Version 1703. Please use 'Manage preview builds' under 'Windows Update for Business' for newer Windows 10 versions.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\PreviewBuilds"
-  ],
-  "ValueName": "AllowBuildPreview",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Toggle user control over Insider builds](https://www.noverse.dev/policies.html?p=AllowBuildPreview*AllowBuildPreview) | `HKLM\Software\Policies\Microsoft\Windows\PreviewBuilds` | `AllowBuildPreview` |
 
 # Disable PowerShell & .NET Telemetry
 
@@ -1712,78 +781,14 @@ dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveM
 
 Biometric is used for fingerprint, facial recognition, and other biometric authentication methods in Windows Hello and related security features.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Biometrics.admx",
-  "CategoryName": "BiometricsConfiguration",
-  "PolicyName": "Biometrics_EnableBio",
-  "NameSpace": "Microsoft.Policies.Biometrics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Allow the use of biometrics",
-  "ExplainText": "This policy setting allows or prevents the Windows Biometric Service to run on this computer. If you enable or do not configure this policy setting, the Windows Biometric Service is available, and users can run applications that use biometrics on Windows. If you want to enable the ability to log on with biometrics, you must also configure the \"Allow users to log on using biometrics\" policy setting. If you disable this policy setting, the Windows Biometric Service is unavailable, and users cannot use any biometric feature in Windows. Note: Users who log on using biometrics should create a password recovery disk; this will prevent data loss in the event that someone forgets their logon credentials.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Biometrics"
-  ],
-  "ValueName": "Enabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Biometrics.admx",
-  "CategoryName": "BiometricsConfiguration",
-  "PolicyName": "Biometrics_EnableCredProv",
-  "NameSpace": "Microsoft.Policies.Biometrics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Allow users to log on using biometrics",
-  "ExplainText": "This policy setting determines whether users can log on or elevate User Account Control (UAC) permissions using biometrics. By default, local users will be able to log on to the local computer, but the \"Allow domain users to log on using biometrics\" policy setting will need to be enabled for domain users to log on to the domain. If you enable or do not configure this policy setting, all users can log on to a local Windows-based computer and can elevate permissions with UAC using biometrics. If you disable this policy setting, biometrics cannot be used by any users to log on to a local Windows-based computer. Note: Users who log on using biometrics should create a password recovery disk; this will prevent data loss in the event that someone forgets their logon credentials.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Biometrics\\Credential Provider"
-  ],
-  "ValueName": "Enabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Biometrics.admx",
-  "CategoryName": "BiometricsConfiguration",
-  "PolicyName": "Biometrics_EnableDomainCredProv",
-  "NameSpace": "Microsoft.Policies.Biometrics",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Allow domain users to log on using biometrics",
-  "ExplainText": "This policy setting determines whether users with a domain account can log on or elevate User Account Control (UAC) permissions using biometrics. If you enable or do not configure this policy setting, Windows allows domain users to log on to a domain-joined computer using biometrics. If you disable this policy setting, Windows prevents domain users from logging on to a domain-joined computer using biometrics. Note: Prior to Windows 10, not configuring this policy setting would have prevented domain users from using biometrics to log on.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Biometrics\\Credential Provider"
-  ],
-  "ValueName": "Domain Accounts",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Biometrics.admx",
-  "CategoryName": "FaceConfiguration",
-  "PolicyName": "Face_EnhancedAntiSpoofing",
-  "NameSpace": "Microsoft.Policies.Biometrics",
-  "Supported": "Windows_10_0_NOARM - At least Windows Server 2016 or Windows 10",
-  "DisplayName": "Configure enhanced anti-spoofing",
-  "ExplainText": "This policy setting determines whether enhanced anti-spoofing is required for Windows Hello face authentication. If you enable this setting, Windows requires all users on managed devices to use enhanced anti-spoofing for Windows Hello face authentication. This disables Windows Hello face authentication on devices that do not support enhanced anti-spoofing. If you disable or don't configure this setting, Windows doesn't require enhanced anti-spoofing for Windows Hello face authentication. Note that enhanced anti-spoofing for Windows Hello face authentication is not required on unmanaged devices.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Biometrics\\FacialFeatures"
-  ],
-  "ValueName": "EnhancedAntiSpoofing",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow the use of biometrics](https://www.noverse.dev/policies.html?p=Biometrics*Biometrics_EnableBio) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics` | `Enabled` |
+| [Allow users to log on using biometrics](https://www.noverse.dev/policies.html?p=Biometrics*Biometrics_EnableCredProv) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider` | `Enabled` |
+| [Allow domain users to log on using biometrics](https://www.noverse.dev/policies.html?p=Biometrics*Biometrics_EnableDomainCredProv) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider` | `Domain Accounts` |
+| [Configure enhanced anti-spoofing](https://www.noverse.dev/policies.html?p=Biometrics*Face_EnhancedAntiSpoofing) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\FacialFeatures` | `EnhancedAntiSpoofing` |
 
 # Disable Remote Desktop
 
@@ -1800,101 +805,15 @@ Disables remote desktop, remote assistance, RPC traffic, and device redirection.
 `TerminalServer.admx`:  
 `fDisableCdm`: Do not allow drive redirection
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "RemoteAssistance.admx",
-  "CategoryName": "RemoteAssist",
-  "PolicyName": "RA_Logging",
-  "NameSpace": "Microsoft.Policies.RemoteAssistance",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn on session logging",
-  "ExplainText": "This policy setting allows you to turn logging on or off. Log files are located in the user's Documents folder under Remote Assistance. If you enable this policy setting, log files are generated. If you disable this policy setting, log files are not generated. If you do not configure this setting, application-based settings are used.",
-  "KeyPath": [
-    "HKLM\\Software\\policies\\Microsoft\\Windows NT\\Terminal Services"
-  ],
-  "ValueName": "LoggingEnabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "RemoteAssistance.admx",
-  "CategoryName": "RemoteAssist",
-  "PolicyName": "RA_EncryptedTicketOnly",
-  "NameSpace": "Microsoft.Policies.RemoteAssistance",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Allow only Windows Vista or later connections",
-  "ExplainText": "This policy setting enables Remote Assistance invitations to be generated with improved encryption so that only computers running this version (or later versions) of the operating system can connect. This policy setting does not affect Remote Assistance connections that are initiated by instant messaging contacts or the unsolicited Offer Remote Assistance. If you enable this policy setting, only computers running this version (or later versions) of the operating system can connect to this computer. If you disable this policy setting, computers running this version and a previous version of the operating system can connect to this computer. If you do not configure this policy setting, users can configure the setting in System Properties in the Control Panel.",
-  "KeyPath": [
-    "HKLM\\Software\\policies\\Microsoft\\Windows NT\\Terminal Services"
-  ],
-  "ValueName": "CreateEncryptedOnlyTickets",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "RPC.admx",
-  "CategoryName": "Rpc",
-  "PolicyName": "RpcRestrictRemoteClients",
-  "NameSpace": "Microsoft.Policies.RemoteProcedureCalls",
-  "Supported": "WindowsXPSP2 - At least Windows XP Professional with SP2",
-  "DisplayName": "Restrict Unauthenticated RPC clients",
-  "ExplainText": "This policy setting controls how the RPC server runtime handles unauthenticated RPC clients connecting to RPC servers. This policy setting impacts all RPC applications. In a domain environment this policy setting should be used with caution as it can impact a wide range of functionality including group policy processing itself. Reverting a change to this policy setting can require manual intervention on each affected machine. This policy setting should never be applied to a domain controller. If you disable this policy setting, the RPC server runtime uses the value of \"Authenticated\" on Windows Client, and the value of \"None\" on Windows Server versions that support this policy setting. If you do not configure this policy setting, it remains disabled. The RPC server runtime will behave as though it was enabled with the value of \"Authenticated\" used for Windows Client and the value of \"None\" used for Server SKUs that support this policy setting. If you enable this policy setting, it directs the RPC server runtime to restrict unauthenticated RPC clients connecting to RPC servers running on a machine. A client will be considered an authenticated client if it uses a named pipe to communicate with the server or if it uses RPC Security. RPC Interfaces that have specifically requested to be accessible by unauthenticated clients may be exempt from this restriction, depending on the selected value for this policy setting. -- \"None\" allows all RPC clients to connect to RPC Servers running on the machine on which the policy setting is applied. -- \"Authenticated\" allows only authenticated RPC Clients (per the definition above) to connect to RPC Servers running on the machine on which the policy setting is applied. Exemptions are granted to interfaces that have requested them. -- \"Authenticated without exceptions\" allows only authenticated RPC Clients (per the definition above) to connect to RPC Servers running on the machine on which the policy setting is applied. No exceptions are allowed. Note: This policy setting will not be applied until the system is rebooted.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\Rpc"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "RestrictRemoteClients", "Items": [
-        { "DisplayName": "None", "Data": "0" },
-        { "DisplayName": "Authenticated", "Data": "1" },
-        { "DisplayName": "Authenticated without exceptions", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "WirelessDisplay.admx",
-  "CategoryName": "Connect",
-  "PolicyName": "AllowProjectionToPC",
-  "NameSpace": "Microsoft.Policies.Connect",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Don't allow this PC to be projected to",
-  "ExplainText": "This policy setting allows you to turn off projection to a PC. If you turn it on, your PC isn't discoverable and can't be projected to except if the user manually launches the Wireless Display app. If you turn it off or don't configure it, your PC is discoverable and can be projected to above lock screen only. The user has an option to turn it always on or off except for manual launch, too.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Connect"
-  ],
-  "ValueName": "AllowProjectionToPC",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WirelessDisplay.admx",
-  "CategoryName": "Connect",
-  "PolicyName": "RequirePinForPairing",
-  "NameSpace": "Microsoft.Policies.Connect",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Require pin for pairing",
-  "ExplainText": "This policy setting allows you to require a pin for pairing. If you set this to 'Never', a pin isn't required for pairing. If you set this to 'First Time', the pairing ceremony for new devices will always require a PIN. If you set this to 'Always', all pairings will require PIN.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Connect"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "RequirePinForPairing", "Items": [
-        { "DisplayName": "Never", "Data": "0" },
-        { "DisplayName": "First Time", "Data": "1" },
-        { "DisplayName": "Always", "Data": "2" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn on session logging](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Logging) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `LoggingEnabled` |
+| [Allow only Windows Vista or later connections](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_EncryptedTicketOnly) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `CreateEncryptedOnlyTickets` |
+| [Restrict Unauthenticated RPC clients](https://www.noverse.dev/policies.html?p=RPC*RpcRestrictRemoteClients) | `HKLM\Software\Policies\Microsoft\Windows NT\Rpc` | `RestrictRemoteClients` |
+| [Don't allow this PC to be projected to](https://www.noverse.dev/policies.html?p=WirelessDisplay*AllowProjectionToPC) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `AllowProjectionToPC` |
+| [Require pin for pairing](https://www.noverse.dev/policies.html?p=WirelessDisplay*RequirePinForPairing) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `RequirePinForPairing` |
 
 ## Miscellaneous Notes
 
@@ -1971,549 +890,37 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/appaccess.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessAccountInfo",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access account information",
-  "ExplainText": "This policy setting specifies whether Windows apps can access account information. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access account information by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access account information and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access account information and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access account information by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessAccountInfo", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessCalendar",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access the calendar",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the calendar. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the calendar by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the calendar and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the calendar and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the calendar by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessCalendar", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessCallHistory",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access call history",
-  "ExplainText": "This policy setting specifies whether Windows apps can access call history. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access call history by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the call history and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the call history and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the call history by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessCallHistory", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessCamera",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access the camera",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the camera. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the camera by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the camera and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the camera and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the camera by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessCamera", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessContacts",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access contacts",
-  "ExplainText": "This policy setting specifies whether Windows apps can access contacts. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access contacts by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access contacts and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access contacts and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access contacts by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessContacts", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessEmail",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access email",
-  "ExplainText": "This policy setting specifies whether Windows apps can access email. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access email by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access email and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access email and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access email by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessEmail", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessSystemAIModels",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps make use of Text and image generation features of Windows",
-  "ExplainText": "This policy setting specifies whether Windows apps can use Text and image generation features of Windows. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can use Text and image generation by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to use Text and image generation features of Windows and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to use Text and image generation features of Windows and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can use Text and image generation features of Windows by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessSystemAIModels", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessGraphicsCaptureProgrammatic",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps take screenshots of various windows or displays",
-  "ExplainText": "This policy setting specifies whether Windows apps can take screenshots of various windows or displays. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can take screenshots of various windows or displays by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to take screenshots of various windows or displays and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to take screenshots of various windows or displays and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can take screenshots of various windows or displays by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessGraphicsCaptureProgrammatic", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessGraphicsCaptureWithoutBorder",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps turn off the screenshot border",
-  "ExplainText": "This policy setting specifies whether Windows apps can turn off the screenshot border. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can turn off the screenshot border by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to turn off the screenshot border and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to turn off the screenshot border and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can turn off the screenshot border by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessGraphicsCaptureWithoutBorder", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessHumanPresence",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access presence sensing",
-  "ExplainText": "This policy setting specifies whether Windows apps can access presence sensing. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access presence sensing by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access presence sensing and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access presence sensing and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access presence sensing by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessHumanPresence", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessLocation",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access location",
-  "ExplainText": "This policy setting specifies whether Windows apps can access location. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access location by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access location and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access location and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access location by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessLocation", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessMessaging",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access messaging",
-  "ExplainText": "This policy setting specifies whether Windows apps can read or send messages (text or MMS). You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can read or send messages by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps can read or send messages and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps cannot read or send messages and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can read or send messages by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessMessaging", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessMicrophone",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access the microphone",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the microphone. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the microphone by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the microphone and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the microphone and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the microphone by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessMicrophone", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessMotion",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access motion",
-  "ExplainText": "This policy setting specifies whether Windows apps can access motion data. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access motion data by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access motion data and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access motion data and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access motion data by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessMotion", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessNotifications",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access notifications",
-  "ExplainText": "This policy setting specifies whether Windows apps can access notifications. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access notifications by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access notifications and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access notifications and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access notifications by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessNotifications", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessPhone",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps make phone calls",
-  "ExplainText": "This policy setting specifies whether Windows apps can make phone calls. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can make phone calls by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to make phone calls and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to make phone calls and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can make phone calls by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessPhone", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessRadios",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps control radios",
-  "ExplainText": "This policy setting specifies whether Windows apps have access to control radios. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps have access to control radios by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps will have access to control radios and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps will not have access to control radios and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps have access to control radios by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessRadios", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsSyncWithDevices",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps communicate with unpaired devices",
-  "ExplainText": "This policy setting specifies whether Windows apps can communicate with unpaired wireless devices. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can communicate with unpaired wireless devices by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to communicate with unpaired wireless devices and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to communicate with unpaired wireless devices and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can communicate with unpaired wireless devices by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsSyncWithDevices", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessTasks",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access Tasks",
-  "ExplainText": "This policy setting specifies whether Windows apps can access tasks. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access tasks by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access tasks and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access tasks and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access tasks by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessTasks", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessTrustedDevices",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access trusted devices",
-  "ExplainText": "This policy setting specifies whether Windows apps can access trusted devices. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access trusted devices by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access trusted devices and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access trusted devices and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access trusted devices by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessTrustedDevices", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsGetDiagnosticInfo",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
-  "DisplayName": "Let Windows apps access diagnostic information about other apps",
-  "ExplainText": "This policy setting specifies whether Windows apps can get diagnostic information about other Windows apps, including user name. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can get diagnostic information about other apps using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to get diagnostic information about other apps and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to get diagnostic information about other apps and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can get diagnostic information about other apps by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsGetDiagnosticInfo", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessGazeInput",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access an eye tracker device",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the eye tracker. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the eye tracker by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the eye tracker and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the eye tracker and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the eye tracker by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessGazeInput", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsActivateWithVoice",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps activate with voice",
-  "ExplainText": "This policy setting specifies whether Windows apps can be activated by voice. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can be activated with a voice keyword by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to be activated with a voice keyword and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to be activated with a voice keyword and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can be activated with a voice keyword by using Settings > Privacy on the device. This policy is applied to Windows apps and Cortana.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsActivateWithVoice", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsActivateWithVoiceAboveLock",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps activate with voice while the system is locked",
-  "ExplainText": "This policy setting specifies whether Windows apps can be activated by voice while the system is locked. If you choose the \"User is in control\" option, employees in your organization can decide whether users can interact with applications using speech while the system is locked by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, users can interact with applications using speech while the system is locked and employees in your organization cannot change it. If you choose the \"Force Deny\" option, users cannot interact with applications using speech while the system is locked and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether users can interact with applications using speech while the system is locked by using Settings > Privacy on the device. This policy is applied to Windows apps and Cortana. It takes precedence of the \u201cAllow Cortana above lock\u201d policy. This policy is applicable only when \u201cAllow voice activation\u201d policy is configured to allow applications to be activated with voice.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsActivateWithVoiceAboveLock", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessBackgroundSpatialPerception",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access user movements while running in the background",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the movement of the user's head, hands, motion controllers, and other tracked objects, while the apps are running in the background. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the user's movements while the apps are running in the background by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access user movements while the apps are running in the background and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access user movements while the apps are running in the background and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the user's movements while the apps are running in the background by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessBackgroundSpatialPerception", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "UserProfiles.admx",
-  "CategoryName": "UserProfiles",
-  "PolicyName": "UserInfoAccessAction",
-  "NameSpace": "Microsoft.Policies.UserProfiles",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "User management of sharing user name, account picture, and domain information with apps (not desktop apps)",
-  "ExplainText": "This setting prevents users from managing the ability to allow apps to access the user name, account picture, and domain information. If you enable this policy setting, sharing of user name, picture and domain information may be controlled by setting one of the following options: \"Always on\" - users will not be able to change this setting and the user's name and account picture will be shared with apps (not desktop apps). In addition apps (not desktop apps) that have the enterprise authentication capability will also be able to retrieve the user's UPN, SIP/URI, and DNS. \"Always off\" - users will not be able to change this setting and the user's name and account picture will not be shared with apps (not desktop apps). In addition apps (not desktop apps) that have the enterprise authentication capability will not be able to retrieve the user's UPN, SIP/URI, and DNS. Selecting this option may have a negative impact on certain enterprise software and/or line of business apps that depend on the domain information protected by this setting to connect with network resources. If you do not configure or disable this policy the user will have full control over this setting and can turn it off and on. Selecting this option may have a negative impact on certain enterprise software and/or line of business apps that depend on the domain information protected by this setting to connect with network resources if users choose to turn the setting off.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "AllowUserInfoAccess", "Items": [
-        { "DisplayName": "Always on", "Data": "1" },
-        { "DisplayName": "Always off", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "wwansvc.admx",
-  "CategoryName": "CellularDataAccess",
-  "PolicyName": "LetAppsAccessCellularData",
-  "NameSpace": "Microsoft.Policies.WwanSvc",
-  "Supported": "Windows_10_0_RS2 - At least Windows Server 2016, Windows 10 Version 1703",
-  "DisplayName": "Let Windows apps access cellular data",
-  "ExplainText": "This policy setting specifies whether Windows apps can access cellular data. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access cellular data by using Settings > Network - Internet > Cellular on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access cellular data and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access cellular data and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access cellular data by using Settings > Network - Internet > Cellular on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\WwanSvc\\CellularDataAccess"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessCellularData", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Let Windows apps access account information](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessAccountInfo) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessAccountInfo` |
+| [Let Windows apps access the calendar](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCalendar) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCalendar` |
+| [Let Windows apps access call history](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCallHistory) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCallHistory` |
+| [Let Windows apps access the camera](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
+| [Let Windows apps access contacts](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessContacts) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessContacts` |
+| [Let Windows apps access email](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessEmail) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessEmail` |
+| [Let Windows apps make use of Text and image generation features of Windows](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessSystemAIModels) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessSystemAIModels` |
+| [Let Windows apps take screenshots of various windows or displays](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessGraphicsCaptureProgrammatic) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGraphicsCaptureProgrammatic` |
+| [Let Windows apps turn off the screenshot border](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessGraphicsCaptureWithoutBorder) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGraphicsCaptureWithoutBorder` |
+| [Let Windows apps access presence sensing](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessHumanPresence) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessHumanPresence` |
+| [Let Windows apps access location](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessLocation) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessLocation` |
+| [Let Windows apps access messaging](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessMessaging) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMessaging` |
+| [Let Windows apps access the microphone](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessMicrophone) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMicrophone` |
+| [Let Windows apps access motion](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessMotion) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMotion` |
+| [Let Windows apps access notifications](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessNotifications) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessNotifications` |
+| [Let Windows apps make phone calls](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessPhone) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessPhone` |
+| [Let Windows apps control radios](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessRadios) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessRadios` |
+| [Let Windows apps communicate with unpaired devices](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsSyncWithDevices) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsSyncWithDevices` |
+| [Let Windows apps access Tasks](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessTasks) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessTasks` |
+| [Let Windows apps access trusted devices](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessTrustedDevices) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessTrustedDevices` |
+| [Let Windows apps access diagnostic information about other apps](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsGetDiagnosticInfo) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsGetDiagnosticInfo` |
+| [Let Windows apps access an eye tracker device](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessGazeInput) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGazeInput` |
+| [Let Windows apps activate with voice](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsActivateWithVoice) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsActivateWithVoice` |
+| [Let Windows apps activate with voice while the system is locked](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsActivateWithVoiceAboveLock) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsActivateWithVoiceAboveLock` |
+| [Let Windows apps access user movements while running in the background](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessBackgroundSpatialPerception) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessBackgroundSpatialPerception` |
+| [User management of sharing user name, account picture, and domain information with apps (not desktop apps)](https://www.noverse.dev/policies.html?p=UserProfiles*UserInfoAccessAction) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowUserInfoAccess` |
+| [Let Windows apps access cellular data](https://www.noverse.dev/policies.html?p=wwansvc*LetAppsAccessCellularData) | `HKLM\Software\Policies\Microsoft\Windows\WwanSvc\CellularDataAccess` | `LetAppsAccessCellularData` |
 
 # Disable Startup ETS
 
@@ -2563,81 +970,14 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/inking.png?raw=true)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Globalization.admx",
-  "CategoryName": "RegionalOptions",
-  "PolicyName": "AllowInputPersonalization",
-  "NameSpace": "Microsoft.Policies.Globalization",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow users to enable online speech recognition services",
-  "ExplainText": "This policy specifies whether users on the device have the option to enable online speech recognition services. If this policy is enabled or not configured, control is deferred to users, and users may choose whether to enable speech services via settings. If this policy is disabled, speech services will be disabled, and users cannot enable speech services via settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\InputPersonalization"
-  ],
-  "ValueName": "AllowInputPersonalization",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "TextInput.admx",
-  "CategoryName": "TextInput",
-  "PolicyName": "AllowLinguisticDataCollection",
-  "NameSpace": "Microsoft.Policies.TextInput",
-  "Supported": "Windows_10_0_RS4 - At least Windows Server 2016, Windows 10 Version 1803",
-  "DisplayName": "Improve inking and typing recognition",
-  "ExplainText": "This policy setting controls the ability to send inking and typing data to Microsoft to improve the language recognition and suggestion capabilities of apps and services running on Windows.",
-  "KeyPath": [
-    "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\TextInput"
-  ],
-  "ValueName": "AllowLinguisticDataCollection",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsInkWorkspace.admx",
-  "CategoryName": "WindowsInkWorkspace",
-  "PolicyName": "AllowWindowsInkWorkspace",
-  "NameSpace": "Microsoft.Policies.WindowsInkWorkspace",
-  "Supported": "WIN10_RS1 - At least Windows 10 Redstone",
-  "DisplayName": "Allow Windows Ink Workspace",
-  "ExplainText": "Allow Windows Ink Workspace",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\WindowsInkWorkspace"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "AllowWindowsInkWorkspace", "Items": [
-        { "DisplayName": "Disabled", "Data": "0" },
-        { "DisplayName": "On, but disallow access above lock", "Data": "1" },
-        { "DisplayName": "On", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "WindowsInkWorkspace.admx",
-  "CategoryName": "WindowsInkWorkspace",
-  "PolicyName": "AllowSuggestedAppsInWindowsInkWorkspace",
-  "NameSpace": "Microsoft.Policies.WindowsInkWorkspace",
-  "Supported": "WIN10_RS1 - At least Windows 10 Redstone",
-  "DisplayName": "Allow suggested apps in Windows Ink Workspace",
-  "ExplainText": "Allow suggested apps in Windows Ink Workspace",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\WindowsInkWorkspace"
-  ],
-  "ValueName": "AllowSuggestedAppsInWindowsInkWorkspace",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow users to enable online speech recognition services](https://www.noverse.dev/policies.html?p=Globalization*AllowInputPersonalization) | `HKLM\Software\Policies\Microsoft\InputPersonalization` | `AllowInputPersonalization` |
+| [Improve inking and typing recognition](https://www.noverse.dev/policies.html?p=TextInput*AllowLinguisticDataCollection) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\TextInput` | `AllowLinguisticDataCollection` |
+| [Allow Windows Ink Workspace](https://www.noverse.dev/policies.html?p=WindowsInkWorkspace*AllowWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowWindowsInkWorkspace` |
+| [Allow suggested apps in Windows Ink Workspace](https://www.noverse.dev/policies.html?p=WindowsInkWorkspace*AllowSuggestedAppsInWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowSuggestedAppsInWindowsInkWorkspace` |
 
 # Disable Text Input Hosts
 
@@ -2649,27 +989,11 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 [`HasAccepted`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. [`AllowSpeechModelUpdate`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) blocks automatic updates of speech recognition and synthesis models. I found `DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Speech.admx",
-  "CategoryName": "Speech",
-  "PolicyName": "AllowSpeechModelUpdate",
-  "NameSpace": "Microsoft.Policies.Speech",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Automatic Update of Speech Data",
-  "ExplainText": "Specifies whether the device will receive updates to the speech recognition and speech synthesis models. A speech model contains data used by the speech engine to convert audio to text (or vice-versa). The models are periodically updated to improve accuracy and performance. Models are non-executable data files. If enabled (default), the device will periodically check for updated speech models and then download them from a Microsoft service using the Background Internet Transfer Service (BITS).",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Speech"
-  ],
-  "ValueName": "AllowSpeechModelUpdate",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow Automatic Update of Speech Data](https://www.noverse.dev/policies.html?p=Speech*AllowSpeechModelUpdate) | `HKLM\Software\Policies\Microsoft\Speech` | `AllowSpeechModelUpdate` |
 
 # Disable Camera
 
@@ -2683,423 +1007,55 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 `Disable Lock Screen Camera`:  
 "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppPrivacy.admx",
-  "CategoryName": "AppPrivacy",
-  "PolicyName": "LetAppsAccessCamera",
-  "NameSpace": "Microsoft.Policies.AppPrivacy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Let Windows apps access the camera",
-  "ExplainText": "This policy setting specifies whether Windows apps can access the camera. You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting. If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can access the camera by using Settings > Privacy on the device. If you choose the \"Force Allow\" option, Windows apps are allowed to access the camera and employees in your organization cannot change it. If you choose the \"Force Deny\" option, Windows apps are not allowed to access the camera and employees in your organization cannot change it. If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can access the camera by using Settings > Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppPrivacy"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "LetAppsAccessCamera", "Items": [
-        { "DisplayName": "User is in control", "Data": "0" },
-        { "DisplayName": "Force Allow", "Data": "1" },
-        { "DisplayName": "Force Deny", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "Camera.admx",
-  "CategoryName": "L_Camera_GroupPolicyCategory",
-  "PolicyName": "L_AllowCamera",
-  "NameSpace": "Microsoft.Policies.Camera",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Use of Camera",
-  "ExplainText": "This policy setting allow the use of Camera devices on the machine. If you enable or do not configure this policy setting, Camera devices will be enabled. If you disable this property setting, Camera devices will be disabled.",
-  "KeyPath": [
-    "HKLM\\software\\Policies\\Microsoft\\Camera"
-  ],
-  "ValueName": "AllowCamera",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "ControlPanelDisplay.admx",
-  "CategoryName": "Personalization",
-  "PolicyName": "CPL_Personalization_NoLockScreenCamera",
-  "NameSpace": "Microsoft.Policies.ControlPanelDisplay",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Prevent enabling lock screen camera",
-  "ExplainText": "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen. By default, users can enable invocation of an available camera on the lock screen. If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Personalization"
-  ],
-  "ValueName": "NoLockScreenCamera",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Let Windows apps access the camera](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
+| [Allow Use of Camera](https://www.noverse.dev/policies.html?p=Camera*L_AllowCamera) | `HKLM\software\Policies\Microsoft\Camera` | `AllowCamera` |
+| [Prevent enabling lock screen camera](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |
 
 # Disable Synchronization
 
 Disables all kind of synchronization, see policies.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync",
-  "ExplainText": "Prevent syncing to and from this PC. This turns off and disables the \"sync your settings\" switch on the \"sync your settings\" page in PC Settings. If you enable this policy setting, \"sync your settings\" will be turned off, and none of the \"sync your setting\" groups will be synced on this PC. Use the option \"Allow users to turn syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, \"sync your settings\" is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableApplicationSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync app settings",
-  "ExplainText": "Prevent the \"app settings\" group from syncing to and from this PC. This turns off and disables the \"app settings\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"app settings\" group will not be synced. Use the option \"Allow users to turn app settings syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"app settings\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableApplicationSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableApplicationSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableCredentialsSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync passwords",
-  "ExplainText": "Prevent the \"passwords\" group from syncing to and from this PC. This turns off and disables the \"passwords\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"passwords\" group will not be synced. Use the option \"Allow users to turn passwords syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"passwords\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableCredentialsSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableCredentialsSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisablePersonalizationSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync personalize",
-  "ExplainText": "Prevent the \"personalize\" group from syncing to and from this PC. This turns off and disables the \"personalize\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"personalize\" group will not be synced. Use the option \"Allow users to turn personalize syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"personalize\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisablePersonalizationSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisablePersonalizationSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableAppSyncSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Do not sync Apps",
-  "ExplainText": "Prevent the \"AppSync\" group from syncing to and from this PC. This turns off and disables the \"AppSync\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"AppSync\" group will not be synced. Use the option \"Allow users to turn app syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"AppSync\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableAppSyncSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableAppSyncSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableWindowsSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync other Windows settings",
-  "ExplainText": "Prevent the \"Other Windows settings\" group from syncing to and from this PC. This turns off and disables the \"Other Windows settings\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"Other Windows settings\" group will not be synced. Use the option \"Allow users to turn other Windows settings syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"Other Windows settings\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableWindowsSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableWindowsSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableDesktopThemeSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync desktop personalization",
-  "ExplainText": "Prevent the \"desktop personalization\" group from syncing to and from this PC. This turns off and disables the \"desktop personalization\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"desktop personalization\" group will not be synced. Use the option \"Allow users to turn desktop personalization syncing on\" so that syncing it turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"desktop personalization\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableDesktopThemeSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableDesktopThemeSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableWebBrowserSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync browser settings",
-  "ExplainText": "Prevent the \"browser\" group from syncing to and from this PC. This turns off and disables the \"browser\" group on the \"sync your settings\" page in PC settings. The \"browser\" group contains settings and info like history and favorites. If you enable this policy setting, the \"browser\" group, including info like history and favorites, will not be synced. Use the option \"Allow users to turn browser syncing on\" so that syncing is turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"browser\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableWebBrowserSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableWebBrowserSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableSyncOnPaidNetwork",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Do not sync on metered connections",
-  "ExplainText": "Prevent syncing to and from this PC when on metered Internet connections. This turns off and disables \"sync your settings on metered connections\" switch on the \"sync your settings\" page in PC Settings. If you enable this policy setting, syncing on metered connections will be turned off, and no syncing will take place when this PC is on a metered connection. If you do not set or disable this setting, syncing on metered connections is configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableSyncOnPaidNetwork",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "SettingSync.admx",
-  "CategoryName": "SettingSync",
-  "PolicyName": "DisableStartLayoutSettingSync",
-  "NameSpace": "Microsoft.Policies.SettingSync",
-  "Supported": "Windows_6_3 - At least Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1",
-  "DisplayName": "Do not sync start settings",
-  "ExplainText": "Prevent the \"Start layout\" group from syncing to and from this PC. This turns off and disables the \"Start layout\" group on the \"sync your settings\" page in PC settings. If you enable this policy setting, the \"Start layout\" group will not be synced. Use the option \"Allow users to turn start syncing on\" so that syncing is turned off by default but not disabled. If you do not set or disable this setting, syncing of the \"Start layout\" group is on by default and configurable by the user.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\SettingSync"
-  ],
-  "ValueName": "DisableStartLayoutSettingSync",
-  "Elements": [
-    { "Type": "Boolean", "ValueName": "DisableStartLayoutSettingSyncUserOverride", "TrueValue": "0", "FalseValue": "1" },
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not sync](https://www.noverse.dev/policies.html?p=SettingSync*DisableSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableSettingSync`<br>`DisableSettingSyncUserOverride` |
+| [Do not sync app settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableApplicationSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableApplicationSettingSync`<br>`DisableApplicationSettingSyncUserOverride` |
+| [Do not sync passwords](https://www.noverse.dev/policies.html?p=SettingSync*DisableCredentialsSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableCredentialsSettingSync`<br>`DisableCredentialsSettingSyncUserOverride` |
+| [Do not sync personalize](https://www.noverse.dev/policies.html?p=SettingSync*DisablePersonalizationSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisablePersonalizationSettingSync`<br>`DisablePersonalizationSettingSyncUserOverride` |
+| [Do not sync Apps](https://www.noverse.dev/policies.html?p=SettingSync*DisableAppSyncSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableAppSyncSettingSync`<br>`DisableAppSyncSettingSyncUserOverride` |
+| [Do not sync other Windows settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableWindowsSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableWindowsSettingSync`<br>`DisableWindowsSettingSyncUserOverride` |
+| [Do not sync desktop personalization](https://www.noverse.dev/policies.html?p=SettingSync*DisableDesktopThemeSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableDesktopThemeSettingSync`<br>`DisableDesktopThemeSettingSyncUserOverride` |
+| [Do not sync browser settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableWebBrowserSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableWebBrowserSettingSync`<br>`DisableWebBrowserSettingSyncUserOverride` |
+| [Do not sync on metered connections](https://www.noverse.dev/policies.html?p=SettingSync*DisableSyncOnPaidNetwork) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableSyncOnPaidNetwork` |
+| [Do not sync start settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableStartLayoutSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableStartLayoutSettingSync`<br>`DisableStartLayoutSettingSyncUserOverride` |
 
 # Disable Activity History
 
 `EnableActivityFeed` enables or disables publishing and syncing of activities across devices. `PublishUserActivities` allows or blocks local publishing of user activities. `UploadUserActivities` allows or blocks uploading of user activities to the cloud, deletion is not affected.
 
-```json
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableActivityFeed",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Enables Activity Feed",
-  "ExplainText": "This policy setting determines whether ActivityFeed is enabled. If you enable this policy setting, all activity types (as applicable) are allowed to be published and ActivityFeed shall roam these activities across device graph of the user. If you disable this policy setting, activities can't be published and ActivityFeed shall disable cloud sync. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableActivityFeed",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "PublishUserActivities",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow publishing of User Activities",
-  "ExplainText": "This policy setting determines whether User Activities can be published. If you enable this policy setting, activities of type User Activity are allowed to be published. If you disable this policy setting, activities of type User Activity are not allowed to be published. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "PublishUserActivities",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "UploadUserActivities",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow upload of User Activities",
-  "ExplainText": "This policy setting determines whether published User Activities can be uploaded. If you enable this policy setting, activities of type User Activity are allowed to be uploaded. If you disable this policy setting, activities of type User Activity are not allowed to be uploaded. Deletion of activities of type User Activity are independent of this setting. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "UploadUserActivities",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DisableSearchHistory",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Win8Only - Microsoft Windows 8 or later",
-  "DisplayName": "Turn off storage and display of search history",
-  "ExplainText": "This policy setting prevents search queries from being stored in the registry. If you enable this policy setting, search suggestions based on previous searches won't appear in the search pane. Search suggestions provided by apps or by Windows based on local content will still appear. If you disable or do not configure this policy setting, users will get search suggestions based on previous searches in the search pane.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableSearchHistory",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-```
+## Windows Policies
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
-
-```json
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "EnableActivityFeed",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Enables Activity Feed",
-  "ExplainText": "This policy setting determines whether ActivityFeed is enabled. If you enable this policy setting, all activity types (as applicable) are allowed to be published and ActivityFeed shall roam these activities across device graph of the user. If you disable this policy setting, activities can't be published and ActivityFeed shall disable cloud sync. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableActivityFeed",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "PublishUserActivities",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow publishing of User Activities",
-  "ExplainText": "This policy setting determines whether User Activities can be published. If you enable this policy setting, activities of type User Activity are allowed to be published. If you disable this policy setting, activities of type User Activity are not allowed to be published. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "PublishUserActivities",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OSPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "UploadUserActivities",
-  "NameSpace": "Microsoft.Policies.OSPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow upload of User Activities",
-  "ExplainText": "This policy setting determines whether published User Activities can be uploaded. If you enable this policy setting, activities of type User Activity are allowed to be uploaded. If you disable this policy setting, activities of type User Activity are not allowed to be uploaded. Deletion of activities of type User Activity are independent of this setting. Policy change takes effect immediately.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "UploadUserActivities",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "DisableSearchHistory",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Win8Only - Microsoft Windows 8 or later",
-  "DisplayName": "Turn off storage and display of search history",
-  "ExplainText": "This policy setting prevents search queries from being stored in the registry. If you enable this policy setting, search suggestions based on previous searches won't appear in the search pane. Search suggestions provided by apps or by Windows based on local content will still appear. If you disable or do not configure this policy setting, users will get search suggestions based on previous searches in the search pane.",
-  "KeyPath": [
-    "HKCU\\SOFTWARE\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableSearchHistory",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enables Activity Feed](https://www.noverse.dev/policies.html?p=OSPolicy*EnableActivityFeed) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableActivityFeed` |
+| [Allow publishing of User Activities](https://www.noverse.dev/policies.html?p=OSPolicy*PublishUserActivities) | `HKLM\Software\Policies\Microsoft\Windows\System` | `PublishUserActivities` |
+| [Allow upload of User Activities](https://www.noverse.dev/policies.html?p=OSPolicy*UploadUserActivities) | `HKLM\Software\Policies\Microsoft\Windows\System` | `UploadUserActivities` |
+| [Turn off storage and display of search history](https://www.noverse.dev/policies.html?p=Search*DisableSearchHistory) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DisableSearchHistory` |
 
 # Disable File History
 
 "File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "FileHistory.admx",
-  "CategoryName": "FileHistory",
-  "PolicyName": "DisableFileHistory",
-  "NameSpace": "Microsoft.Policies.FileHistory",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Turn off File History",
-  "ExplainText": "This policy setting allows you to turn off File History. If you enable this policy setting, File History cannot be activated to create regular, automatic backups. If you disable or do not configure this policy setting, File History can be activated to create regular, automatic backups.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\FileHistory"
-  ],
-  "ValueName": "Disabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off File History](https://www.noverse.dev/policies.html?p=FileHistory*DisableFileHistory) | `HKLM\Software\Policies\Microsoft\Windows\FileHistory` | `Disabled` |
 
 # Disable MDM Enrollment
 
@@ -3109,50 +1065,12 @@ Disables all kind of synchronization, see policies.
 `AutoEnrollMDM`:  
 "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "MDM.admx",
-  "CategoryName": "MDM",
-  "PolicyName": "MDM_MDM_DisplayName",
-  "NameSpace": "Microsoft.Policies.MDM",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Disable MDM Enrollment",
-  "ExplainText": "This policy setting specifies whether Mobile Device Management (MDM) Enrollment is allowed. When MDM is enabled, it allows the user to have the computer remotely managed by a MDM Server. If you do not configure this policy setting, MDM Enrollment will be enabled. If you enable this policy setting, MDM Enrollment will be disabled for all users. It will not unenroll existing MDM enrollments. If you disable this policy setting, MDM Enrollment will be enabled for all users.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM"
-  ],
-  "ValueName": "DisableRegistration",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "MDM.admx",
-  "CategoryName": "MDM",
-  "PolicyName": "MDM_JoinMDM_DisplayName",
-  "NameSpace": "Microsoft.Policies.MDM",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Enable automatic MDM enrollment using default Azure AD credentials",
-  "ExplainText": "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\CurrentVersion\\MDM"
-  ],
-  "ValueName": "AutoEnrollMDM",
-  "Elements": [
-    { "Type": "Enum", "ValueName": "UseAADCredentialType", "Items": [
-        { "DisplayName": "User Credential", "Data": "1" },
-        { "DisplayName": "Device Credential", "Data": "2" }
-      ]
-    },
-    { "Type": "Text", "ValueName": "MDMApplicationId" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Disable MDM Enrollment](https://www.noverse.dev/policies.html?p=MDM*MDM_MDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `DisableRegistration` |
+| [Enable automatic MDM enrollment using default Azure AD credentials](https://www.noverse.dev/policies.html?p=MDM*MDM_JoinMDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `AutoEnrollMDM`<br>`UseAADCredentialType`<br>`MDMApplicationId` |
 
 # Disable Feedback Prompts
 
@@ -3160,187 +1078,37 @@ Disables all kind of synchronization, see policies.
 
 Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "FeedbackNotifications.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "DoNotShowFeedbackNotifications",
-  "NameSpace": "Microsoft.Policies.FeedbackNotifications",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Do not show feedback notifications",
-  "ExplainText": "This policy setting allows an organization to prevent its devices from showing feedback questions from Microsoft. If you enable this policy setting, users will no longer see feedback notifications through the Windows Feedback app. If you disable or do not configure this policy setting, users may see notifications through the Windows Feedback app asking users for feedback. Note: If you disable or do not configure this policy setting, users can control how often they receive feedback questions.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DoNotShowFeedbackNotifications",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not show feedback notifications](https://www.noverse.dev/policies.html?p=FeedbackNotifications*DoNotShowFeedbackNotifications) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DoNotShowFeedbackNotifications` |
 
 # Disable CEIP
 
 Voluntary program that collects usage data to help improve the quality and performance of its products.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "WinMSG_NoInstrumentation_2",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsXPSP2_Or_WindowsNET - At least Windows Server 2003 operating systems or Windows XP Professional with SP2",
-  "DisplayName": "Turn off the Windows Messenger Customer Experience Improvement Program",
-  "ExplainText": "This policy setting specifies whether Windows Messenger collects anonymous information about how Windows Messenger software and service is used. With the Customer Experience Improvement program, users can allow Microsoft to collect anonymous information about how the product is used. This information is used to improve the product in future releases. If you enable this policy setting, Windows Messenger does not collect usage information, and the user settings to enable the collection of usage information are not shown. If you disable this policy setting, Windows Messenger collects anonymous usage information, and the setting is not shown. If you do not configure this policy setting, users have the choice to opt in and allow information to be collected.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Messenger\\Client"
-  ],
-  "ValueName": "CEIP",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "2" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "ICM.admx",
-  "CategoryName": "InternetManagement_Settings",
-  "PolicyName": "CEIPEnable",
-  "NameSpace": "Microsoft.Policies.InternetCommunicationManagement",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Windows Customer Experience Improvement Program",
-  "ExplainText": "This policy setting turns off the Windows Customer Experience Improvement Program. The Windows Customer Experience Improvement Program collects information about your hardware configuration and how you use our software and services to identify trends and usage patterns. Microsoft will not collect your name, address, or any other personally identifiable information. There are no surveys to complete, no salesperson will call, and you can continue working without interruption. It is simple and user-friendly. If you enable this policy setting, all users are opted out of the Windows Customer Experience Improvement Program. If you disable this policy setting, all users are opted into the Windows Customer Experience Improvement Program. If you do not configure this policy setting, the administrator can use the Problem Reports and Solutions component in Control Panel to enable Windows Customer Experience Improvement Program for all users.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\SQMClient\\Windows"
-  ],
-  "ValueName": "CEIPEnable",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "inetres.admx",
-  "CategoryName": "InternetExplorer",
-  "PolicyName": "SQM_DisableCEIP",
-  "NameSpace": "Microsoft.Policies.InternetExplorer",
-  "Supported": "IE7_NONVISTA - At least Internet Explorer 7.0. Not supported on Windows Vista",
-  "DisplayName": "Prevent participation in the Customer Experience Improvement Program",
-  "ExplainText": "This policy setting prevents the user from participating in the Customer Experience Improvement Program (CEIP). If you enable this policy setting, the user cannot participate in the CEIP, and the Customer Feedback Options command does not appear on the Help menu. If you disable this policy setting, the user must participate in the CEIP, and the Customer Feedback Options command does not appear on the Help menu. If you do not configure this policy setting, the user can choose to participate in the CEIP.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Internet Explorer\\SQM",
-    "HKCU\\Software\\Policies\\Microsoft\\Internet Explorer\\SQM"
-  ],
-  "ValueName": "DisableCustomerImprovementProgram",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off the Windows Messenger Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=ICM*WinMSG_NoInstrumentation_2) | `HKLM\Software\Policies\Microsoft\Messenger\Client` | `CEIP` |
+| [Turn off Windows Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=ICM*CEIPEnable) | `HKLM\Software\Policies\Microsoft\SQMClient\Windows` | `CEIPEnable` |
+| [Prevent participation in the Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=inetres*SQM_DisableCEIP) | `HKLM\Software\Policies\Microsoft\Internet Explorer\SQM`<br>`HKCU\Software\Policies\Microsoft\Internet Explorer\SQM` | `DisableCustomerImprovementProgram` |
 
 # Disable Cortana
 
 "[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AllowCortana",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Cortana",
-  "ExplainText": "This policy setting specifies whether Cortana is allowed on the device. If you enable or don't configure this setting, Cortana will be allowed on the device. If you disable this setting, Cortana will be turned off. When Cortana is off, users will still be able to use search to find things on the device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "AllowCortana",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AllowCortanaAboveLock",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Cortana above lock screen",
-  "ExplainText": "This policy setting determines whether or not the user can interact with Cortana using speech while the system is locked. If you enable or don\u2019t configure this setting, the user can interact with Cortana using speech while the system is locked. If you disable this setting, the system will need to be unlocked for the user to interact with Cortana using speech.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "AllowCortanaAboveLock",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AllowSearchToUseLocation",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow search and Cortana to use location",
-  "ExplainText": "This policy setting specifies whether search and Cortana can provide location aware search and Cortana results. If this is enabled, search and Cortana can access location information.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "ValueName": "AllowSearchToUseLocation",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AllowCloudSearch",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Cloud Search",
-  "ExplainText": "Allow search and Cortana to search cloud sources like OneDrive and SharePoint",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "AllowCloudSearch", "Items": [
-        { "DisplayName": "Disable Cloud Search", "Data": "0" },
-        { "DisplayName": "Enable Cloud Search", "Data": "1" },
-        { "DisplayName": "User Selected", "Data": "2" }
-      ]
-    }
-  ]
-},
-{
-  "File": "Search.admx",
-  "CategoryName": "Search",
-  "PolicyName": "AllowCortanaInAAD",
-  "NameSpace": "FullArmor.Policies.3B9EA2B5_A1D1_4CD5_9EDE_75B22990BC21",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Allow Cortana Page in OOBE on an AAD account",
-  "ExplainText": "Allow the cortana opt-in page during windows setup out of the box experience",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows\\Windows Search\\AllowCortanaInAAD"
-  ],
-  "Elements": [
-    { "Type": "Enum", "ValueName": "AllowCortanaInAADPathOOBE", "Items": [
-        { "DisplayName": "Disable Cortana Page in AAD", "Data": "0" },
-        { "DisplayName": "Enable Cortana Page in AAD", "Data": "1" }
-      ]
-    }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow Cortana](https://www.noverse.dev/policies.html?p=Search*AllowCortana) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCortana` |
+| [Allow Cortana above lock screen](https://www.noverse.dev/policies.html?p=Search*AllowCortanaAboveLock) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCortanaAboveLock` |
+| [Allow search and Cortana to use location](https://www.noverse.dev/policies.html?p=Search*AllowSearchToUseLocation) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowSearchToUseLocation` |
+| [Allow Cloud Search](https://www.noverse.dev/policies.html?p=Search*AllowCloudSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCloudSearch` |
+| [Allow Cortana Page in OOBE on an AAD account](https://www.noverse.dev/policies.html?p=Search*AllowCortanaInAAD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search\AllowCortanaInAAD` | `AllowCortanaInAADPathOOBE` |
 
 ## Miscellaneous Notes
 ```c
@@ -3450,27 +1218,11 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "PolicyPolicies",
-  "PolicyName": "RSoPLogging",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
-  "DisplayName": "Turn off Resultant Set of Policy logging",
-  "ExplainText": "This setting allows you to enable or disable Resultant Set of Policy (RSoP) logging on a client computer. RSoP logs information on Group Policy settings that have been applied to the client. This information includes details such as which Group Policy Objects (GPO) were applied, where they came from, and the client-side extension settings that were included. If you enable this setting, RSoP logging is turned off. If you disable or do not configure this setting, RSoP logging is turned on. By default, RSoP logging is always on. Note: To view the RSoP information logged on a client computer, you can use the RSoP snap-in in the Microsoft Management Console (MMC).",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "RSoPLogging",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Resultant Set of Policy logging](https://www.noverse.dev/policies.html?p=GroupPolicy*RSoPLogging) | `HKLM\Software\Policies\Microsoft\Windows\System` | `RSoPLogging` |
 
 # Disable Desktop Heap Logging
 
@@ -3502,27 +1254,11 @@ __int64 IsDesktopHeapLoggingOn(void)
 | ------ | ------ | ------ |
 | AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft's cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "messaging.admx",
-  "CategoryName": "Messaging_Category",
-  "PolicyName": "AllowMessageSync",
-  "NameSpace": "Microsoft.Policies.Messaging",
-  "Supported": "Windows_10_0_RS3 - At least Windows Server 2016, Windows 10 Version 1709",
-  "DisplayName": "Allow Message Service Cloud Sync",
-  "ExplainText": "This policy setting allows backup and restore of cellular text messages to Microsoft's cloud services.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\Messaging"
-  ],
-  "ValueName": "AllowMessageSync",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow Message Service Cloud Sync](https://www.noverse.dev/policies.html?p=messaging*AllowMessageSync) | `HKLM\Software\Policies\Microsoft\Windows\Messaging` | `AllowMessageSync` |
 
 # Disable CSC
 
@@ -3532,118 +1268,16 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 - [folder-redirection/disable-offline-files-on-folders](https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/disable-offline-files-on-folders#windows-powershell-equivalent-commands) (todo)
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "OfflineFiles.admx",
-  "CategoryName": "Cat_OfflineFiles",
-  "PolicyName": "Pol_Enabled",
-  "NameSpace": "Microsoft.Policies.OfflineFiles",
-  "Supported": "Win2k - At least Windows 2000",
-  "DisplayName": "Allow or Disallow use of the Offline Files feature",
-  "ExplainText": "This policy setting determines whether the Offline Files feature is enabled. Offline Files saves a copy of network files on the user's computer for use when the computer is not connected to the network. If you enable this policy setting, Offline Files is enabled and users cannot disable it. If you disable this policy setting, Offline Files is disabled and users cannot enable it. If you do not configure this policy setting, Offline Files is enabled on Windows client computers, and disabled on computers running Windows Server, unless changed by the user. Note: Changes to this policy setting do not take effect until the affected computer is restarted.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetCache"
-  ],
-  "ValueName": "Enabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OfflineFiles.admx",
-  "CategoryName": "Cat_OfflineFiles",
-  "PolicyName": "Pol_NoReminders_2",
-  "NameSpace": "Microsoft.Policies.OfflineFiles",
-  "Supported": "WindowsPreVista - Windows Server 2003, Windows XP, and Windows 2000 only",
-  "DisplayName": "Turn off reminder balloons",
-  "ExplainText": "Hides or displays reminder balloons, and prevents users from changing the setting. Reminder balloons appear above the Offline Files icon in the notification area to notify users when they have lost the connection to a networked file and are working on a local copy of the file. Users can then decide how to proceed. If you enable this setting, the system hides the reminder balloons, and prevents users from displaying them. If you disable the setting, the system displays the reminder balloons and prevents users from hiding them. If this setting is not configured, reminder balloons are displayed by default when you enable offline files, but users can change the setting. To prevent users from changing the setting while a setting is in effect, the system disables the \"Enable reminders\" option on the Offline Files tab This setting appears in the Computer Configuration and User Configuration folders. If both settings are configured, the setting in Computer Configuration takes precedence over the setting in User Configuration. Tip: To display or hide reminder balloons without establishing a setting, in Windows Explorer, on the Tools menu, click Folder Options, and then click the Offline Files tab. This setting corresponds to the \"Enable reminders\" check box.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetCache"
-  ],
-  "ValueName": "NoReminders",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OfflineFiles.admx",
-  "CategoryName": "Cat_OfflineFiles",
-  "PolicyName": "Pol_SyncAtLogoff_2",
-  "NameSpace": "Microsoft.Policies.OfflineFiles",
-  "Supported": "WindowsPreVista - Windows Server 2003, Windows XP, and Windows 2000 only",
-  "DisplayName": "Synchronize all offline files before logging off",
-  "ExplainText": "Determines whether offline files are fully synchronized when users log off. This setting also disables the \"Synchronize all offline files before logging off\" option on the Offline Files tab. This prevents users from trying to change the option while a setting controls it. If you enable this setting, offline files are fully synchronized. Full synchronization ensures that offline files are complete and current. If you disable this setting, the system only performs a quick synchronization. Quick synchronization ensures that files are complete, but does not ensure that they are current. If you do not configure this setting, the system performs a quick synchronization by default, but users can change this option. This setting appears in the Computer Configuration and User Configuration folders. If both settings are configured, the setting in Computer Configuration takes precedence over the setting in User Configuration. Tip: To change the synchronization method without changing a setting, in Windows Explorer, on the Tools menu, click Folder Options, click the Offline Files tab, and then select the \"Synchronize all offline files before logging off\" option.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetCache"
-  ],
-  "ValueName": "SyncAtLogoff",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OfflineFiles.admx",
-  "CategoryName": "Cat_OfflineFiles",
-  "PolicyName": "Pol_SyncAtLogon_2",
-  "NameSpace": "Microsoft.Policies.OfflineFiles",
-  "Supported": "WindowsPreVista - Windows Server 2003, Windows XP, and Windows 2000 only",
-  "DisplayName": "Synchronize all offline files when logging on",
-  "ExplainText": "Determines whether offline files are fully synchronized when users log on. This setting also disables the \"Synchronize all offline files before logging on\" option on the Offline Files tab. This prevents users from trying to change the option while a setting controls it. If you enable this setting, offline files are fully synchronized at logon. Full synchronization ensures that offline files are complete and current. Enabling this setting automatically enables logon synchronization in Synchronization Manager. If this setting is disabled and Synchronization Manager is configured for logon synchronization, the system performs only a quick synchronization. Quick synchronization ensures that files are complete but does not ensure that they are current. If you do not configure this setting and Synchronization Manager is configured for logon synchronization, the system performs a quick synchronization by default, but users can change this option. This setting appears in the Computer Configuration and User Configuration folders. If both settings are configured, the setting in Computer Configuration takes precedence over the setting in User Configuration. Tip: To change the synchronization method without setting a setting, in Windows Explorer, on the Tools menu, click Folder Options, click the Offline Files tab, and then select the \"Synchronize all offline files before logging on\" option.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetCache"
-  ],
-  "ValueName": "SyncAtLogon",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OfflineFiles.admx",
-  "CategoryName": "Cat_OfflineFiles",
-  "PolicyName": "Pol_BackgroundSyncSettings",
-  "NameSpace": "Microsoft.Policies.OfflineFiles",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Configure Background Sync",
-  "ExplainText": "This policy setting controls when background synchronization occurs while operating in slow-link mode, and applies to any user who logs onto the specified machine while this policy is in effect. To control slow-link mode, use the \"Configure slow-link mode\" policy setting. If you enable this policy setting, you can control when Windows synchronizes in the background while operating in slow-link mode. Use the 'Sync Interval' and 'Sync Variance' values to override the default sync interval and variance settings. Use 'Blockout Start Time' and 'Blockout Duration' to set a period of time where background sync is disabled. Use the 'Maximum Allowed Time Without A Sync' value to ensure that all network folders on the machine are synchronized with the server on a regular basis. You can also configure Background Sync for network shares that are in user selected Work Offline mode. This mode is in effect when a user selects the Work Offline button for a specific share. When selected, all configured settings will apply to shares in user selected Work Offline mode as well. If you disable or do not configure this policy setting, Windows performs a background sync of offline folders in the slow-link mode at a default interval with the start of the sync varying between 0 and 60 additional minutes. In Windows 7 and Windows Server 2008 R2, the default sync interval is 360 minutes. In Windows 8 and Windows Server 2012, the default sync interval is 120 minutes.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetCache"
-  ],
-  "ValueName": "BackgroundSyncEnabled",
-  "Elements": [
-    { "Type": "Decimal", "ValueName": "BackgroundSyncPeriodMin", "MinValue": "1", "MaxValue": "1440" },
-    { "Type": "Decimal", "ValueName": "BackgroundSyncMaxStartMin", "MinValue": "0", "MaxValue": "3600" },
-    { "Type": "Decimal", "ValueName": "BackgroundSyncIgnoreBlockOutAfterMin", "MinValue": "0", "MaxValue": "4294967295" },
-    { "Type": "Decimal", "ValueName": "BackgroundSyncBlockOutStartTime", "MinValue": "0", "MaxValue": "2400" },
-    { "Type": "Decimal", "ValueName": "BackgroundSyncBlockOutDurationMin", "MinValue": "0", "MaxValue": "1440" },
-    { "Type": "Boolean", "ValueName": "BackgroundSyncEnabledForForcedOffline", "TrueValue": "1", "FalseValue": "0" },
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "OfflineFiles.admx",
-  "CategoryName": "Cat_OfflineFiles",
-  "PolicyName": "Pol_WorkOfflineDisabled_2",
-  "NameSpace": "Microsoft.Policies.OfflineFiles",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Remove \"Work offline\" command",
-  "ExplainText": "This policy setting removes the \"Work offline\" command from Explorer, preventing users from manually changing whether Offline Files is in online mode or offline mode. If you enable this policy setting, the \"Work offline\" command is not displayed in File Explorer. If you disable or do not configure this policy setting, the \"Work offline\" command is displayed in File Explorer.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\NetCache"
-  ],
-  "ValueName": "WorkOfflineDisabled",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow or Disallow use of the Offline Files feature](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_Enabled) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `Enabled` |
+| [Turn off reminder balloons](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_NoReminders_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `NoReminders` |
+| [Synchronize all offline files before logging off](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_SyncAtLogoff_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `SyncAtLogoff` |
+| [Synchronize all offline files when logging on](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_SyncAtLogon_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `SyncAtLogon` |
+| [Configure Background Sync](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_BackgroundSyncSettings) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `BackgroundSyncEnabled`<br>`BackgroundSyncPeriodMin`<br>`BackgroundSyncMaxStartMin`<br>`BackgroundSyncIgnoreBlockOutAfterMin`<br>`BackgroundSyncBlockOutStartTime`<br>`BackgroundSyncBlockOutDurationMin`<br>`BackgroundSyncEnabledForForcedOffline` |
+| [Remove "Work offline" command](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_WorkOfflineDisabled_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `WorkOfflineDisabled` |
 
 # Disable Cloud Content Search
 
@@ -3686,27 +1320,11 @@ If you disable or don't configure this policy setting, KMS client activation dat
 
 [`Disable Auto Activation`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)#registry-settings) (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AVSValidationGP.admx",
-  "CategoryName": "SoftwareProtectionPlatform",
-  "PolicyName": "NoAcquireGT",
-  "NameSpace": "Microsoft.Policies.SoftwareProtectionPlatform",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Turn off KMS Client Online AVS Validation",
-  "ExplainText": "This policy setting lets you opt-out of sending KMS client activation data to Microsoft automatically. Enabling this setting prevents this computer from sending data to Microsoft regarding its activation state. If you disable or do not configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates. Policy Options: - Not Configured (default -- data will be automatically sent to Microsoft) - Disabled (data will be automatically sent to Microsoft) - Enabled (data will not be sent to Microsoft)",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows NT\\CurrentVersion\\Software Protection Platform"
-  ],
-  "ValueName": "NoGenTicket",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off KMS Client Online AVS Validation](https://www.noverse.dev/policies.html?p=AVSValidationGP*NoAcquireGT) | `HKLM\Software\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform` | `NoGenTicket` |
 
 # Disable Font Providers
 
@@ -3716,50 +1334,21 @@ If you enable this policy setting, Windows periodically queries an online font p
 
 If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "GroupPolicy.admx",
-  "CategoryName": "NetworkFonts",
-  "PolicyName": "EnableFontProviders",
-  "NameSpace": "Microsoft.Policies.GroupPolicy",
-  "Supported": "Windows_10_0 - At least Windows Server 2016, Windows 10",
-  "DisplayName": "Enable Font Providers",
-  "ExplainText": "This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider. If you enable this policy setting, Windows periodically queries an online font provider to determine whether a new font catalog is available. Windows may also download font data if needed to format or render text. If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts. If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "EnableFontProviders",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enable Font Providers](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableFontProviders) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableFontProviders` |
 
 # Disable Local Security Questions
 
 Prevent the use of security questions for local accounts.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "CredUI.admx",
-  "CategoryName": "CredUI",
-  "PolicyName": "NoLocalPasswordResetQuestions",
-  "NameSpace": "Microsoft.Policies.CredentialsUI",
-  "Supported": "Windows_10_0_RS6 - At least Windows Server 2016, Windows 10 Version 1903",
-  "DisplayName": "Prevent the use of security questions for local accounts",
-  "ExplainText": "If you turn this policy setting on, local users won\u2019t be able to set up and use security questions to reset their passwords.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\System"
-  ],
-  "ValueName": "NoLocalPasswordResetQuestions",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Prevent the use of security questions for local accounts](https://www.noverse.dev/policies.html?p=CredUI*NoLocalPasswordResetQuestions) | `HKLM\Software\Policies\Microsoft\Windows\System` | `NoLocalPasswordResetQuestions` |
 
 # Disable Thumbnail Caching
 
@@ -3767,41 +1356,12 @@ Disables persistent File Explorer thumbnail caching so previews are less likely 
 
 This improves privacy mainly by reducing leftover preview artifacts for images, videos, documents, and other shell items. Microsoft explicitly notes that the thumbnail cache can be read by everyone on shared or security sensitive systems, and the related network folder thumbnail policies note that allowing thumbnail use on network folders can expose computers to security risks.
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "Thumbnails.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "DisableThumbsDBOnNetworkFolders",
-  "NameSpace": "Microsoft.Policies.Thumbnails",
-  "Supported": "MicrosoftWindowsVista_SP1",
-  "DisplayName": "Turn off the caching of thumbnails in hidden thumbs.db files",
-  "ExplainText": "Turns off the caching of thumbnails in hidden thumbs.db files. This policy setting allows you to configure File Explorer to cache thumbnails of items residing in network folders in hidden thumbs.db files. If you enable this policy setting, File Explorer does not create, read from, or write to thumbs.db files. If you disable or do not configure this policy setting, File Explorer creates, reads from, and writes to thumbs.db files.",
-  "KeyPath": [
-    "HKCU\\Software\\Policies\\Microsoft\\Windows\\Explorer"
-  ],
-  "ValueName": "DisableThumbsDBOnNetworkFolders",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "WindowsExplorer.admx",
-  "CategoryName": "WindowsExplorer",
-  "PolicyName": "NoCacheThumbNailPictures",
-  "NameSpace": "Microsoft.Policies.WindowsExplorer",
-  "Supported": "WindowsXP - At least Windows Server 2003 operating systems or Windows XP Professional",
-  "DisplayName": "Turn off caching of thumbnail pictures",
-  "ExplainText": "This policy setting allows you to turn off caching of thumbnail pictures. If you enable this policy setting, thumbnail views are not cached. If you disable or do not configure this policy setting, thumbnail views are cached. Note: For shared corporate workstations or computers where security is a top concern, you should enable this policy setting to turn off the thumbnail view cache, because the thumbnail cache can be read by everyone.",
-  "KeyPath": [
-    "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"
-  ],
-  "ValueName": "NoThumbnailCache",
-  "Elements": []
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off the caching of thumbnails in hidden thumbs.db files](https://www.noverse.dev/policies.html?p=Thumbnails*DisableThumbsDBOnNetworkFolders) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableThumbsDBOnNetworkFolders` |
+| [Turn off caching of thumbnail pictures](https://www.noverse.dev/policies.html?p=WindowsExplorer*NoCacheThumbNailPictures) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoThumbnailCache` |
 
 # Disable Application Compatibility
 
@@ -3822,143 +1382,18 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 //"\\Microsoft\\Windows\\Application Experience\\PcaWallpaperAppDetect",
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffSwitchBack",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off SwitchBack Compatibility Engine",
-  "ExplainText": "The policy controls the state of the Switchback compatibility engine in the system. Switchback is a mechanism that provides generic compatibility mitigations to older applications by providing older behavior to old applications and new behavior to new applications. Switchback is on by default. If you enable this policy setting, Switchback will be turned off. Turning Switchback off may degrade the compatibility of older applications. This option is useful for server administrators who require performance and are aware of compatibility of the applications they are using. If you disable or do not configure this policy setting, the Switchback will be turned on. Please reboot the system after changing the setting to ensure that your system accurately reflects those changes.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "SbEnable",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "0" },
-    { "Type": "DisabledValue", "Data": "1" }
-  ]
-},
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffEngine",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "WindowsNET - At least Windows Server 2003",
-  "DisplayName": "Turn off Application Compatibility Engine",
-  "ExplainText": "This policy controls the state of the application compatibility engine in the system. The engine is part of the loader and looks through a compatibility database every time an application is started on the system. If a match for the application is found it provides either run-time solutions or compatibility fixes, or displays an Application Help message if the application has a know problem. Turning off the application compatibility engine will boost system performance. However, this will degrade the compatibility of many popular legacy applications, and will not block known incompatible applications from installing. (For Instance: This may result in a blue screen if an old anti-virus application is installed.) The Windows Resource Protection and User Account Control features of Windows use the application compatibility engine to provide mitigations for application problems. If the engine is turned off, these mitigations will not be applied to applications and their installers and these applications may fail to install or run properly. This option is useful to server administrators who require faster performance and are aware of the compatibility of the applications they are using. It is particularly useful for a web server where applications may be launched several hundred times a second, and the performance of the loader is essential. NOTE: Many system processes cache the value of this setting for performance reasons. If you make changes to this setting, please reboot to ensure that your system accurately reflects those changes.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableEngine",
-  "Elements": []
-},
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffProgramCompatibilityAssistant_2",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "WindowsVista - At least Windows Vista",
-  "DisplayName": "Turn off Program Compatibility Assistant",
-  "ExplainText": "This policy setting controls the state of the Program Compatibility Assistant (PCA). The PCA monitors applications run by the user. When a potential compatibility issue with an application is detected, the PCA will prompt the user with recommended solutions. To configure the diagnostic settings for the PCA, go to System->Troubleshooting and Diagnostics->Application Compatibility Diagnostics. If you enable this policy setting, the PCA will be turned off. The user will not be presented with solutions to known compatibility issues when running applications. Turning off the PCA can be useful for system administrators who require better performance and are already aware of application compatibility issues. If you disable or do not configure this policy setting, the PCA will be turned on. To configure the diagnostic settings for the PCA, go to System->Troubleshooting and Diagnostics->Application Compatibility Diagnostics. Note: The Diagnostic Policy Service (DPS) and Program Compatibility Assistant Service must be running for the PCA to run. These services can be configured by using the Services snap-in to the Microsoft Management Console.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisablePCA",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "AppDeviceInventory.admx",
-  "CategoryName": "AppDeviceInventory",
-  "PolicyName": "TurnOffInstallTracing",
-  "NameSpace": "Microsoft.Policies.AppDeviceInventory",
-  "Supported": "Windows_11_0_24H2 - At least Windows 11 Version 24H2",
-  "DisplayName": "Turn off Install Tracing",
-  "ExplainText": "This policy controls the state of Install Tracing. Install Tracing is a mechanism that tracks application installs to help diagnose compatibility problems. If you enable this policy, Install Tracing will not be run. If you disable or do not configure this policy, Install Tracing will be turned on.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableInstallTracing",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "AppDeviceInventory.admx",
-  "CategoryName": "AppDeviceInventory",
-  "PolicyName": "TurnOffAPISamping",
-  "NameSpace": "Microsoft.Policies.AppDeviceInventory",
-  "Supported": "Windows_11_0_24H2 - At least Windows 11 Version 24H2",
-  "DisplayName": "Turn off API Sampling",
-  "ExplainText": "This policy controls the state of API Sampling. API Sampling monitors the sampled collection of application programming interfaces used during system runtime to help diagnose compatibility problems. If you enable this policy, API Sampling will not be run. If you disable or do not configure this policy, API Sampling will be turned on.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableAPISamping",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "AppDeviceInventory.admx",
-  "CategoryName": "AppDeviceInventory",
-  "PolicyName": "TurnOffApplicationFootprint",
-  "NameSpace": "Microsoft.Policies.AppDeviceInventory",
-  "Supported": "Windows_11_0_24H2 - At least Windows 11 Version 24H2",
-  "DisplayName": "Turn off Application Footprint",
-  "ExplainText": "This policy controls the state of Application Footprint. Application Footprint monitors the sampled collection of registry and file usage to help diagnose compatibility problems. If you enable this policy, Application Footprint will not be run. If you disable or do not configure this policy, Application Footprint will be turned on.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableApplicationFootprint",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "AppDeviceInventory.admx",
-  "CategoryName": "AppDeviceInventory",
-  "PolicyName": "TurnOffWin32AppBackup",
-  "NameSpace": "Microsoft.Policies.AppDeviceInventory",
-  "Supported": "Windows_11_0_24H2 - At least Windows 11 Version 24H2",
-  "DisplayName": "Turn off compatibility scan for backed up applications",
-  "ExplainText": "This policy controls the state of the compatibility scan for backed up applications. The compatibility scan for backed up applications evaluates for compatibility problems in installed applications. If you enable this policy, the compatibility scan for backed up applications will not be run. If you disable or do not configure this policy, the compatibility scan for backed up applications will be run.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableWin32AppBackup",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "pca.admx",
-  "CategoryName": "PcaScenarioCategory",
-  "PolicyName": "DisablePcaUIPolicy",
-  "NameSpace": "Microsoft.Policies.ApplicationDiagnostics",
-  "Supported": "Windows8 - At least Windows Server 2012, Windows 8 or Windows RT",
-  "DisplayName": "Detect compatibility issues for applications and drivers",
-  "ExplainText": "This policy setting configures the Program Compatibility Assistant (PCA) to diagnose failures with application and driver compatibility. If you enable this policy setting, the PCA is configured to detect failures during application installation, failures during application runtime, and drivers blocked due to compatibility issues. When failures are detected, the PCA will provide options to run the application in a compatibility mode or get help online through a Microsoft website. If you disable this policy setting, the PCA does not detect compatibility issues for applications and drivers. If you do not configure this policy setting, the PCA is configured to detect failures during application installation, failures during application runtime, and drivers blocked due to compatibility issues. Note: This policy setting has no effect if the \"Turn off Program Compatibility Assistant\" policy setting is enabled. The Diagnostic Policy Service (DPS) and Program Compatibility Assistant Service must be running for the PCA to run. These services can be configured by using the Services snap-in to the Microsoft Management Console.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisablePcaUI",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off SwitchBack Compatibility Engine](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffSwitchBack) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `SbEnable` |
+| [Turn off Application Compatibility Engine](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffEngine) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableEngine` |
+| [Turn off Program Compatibility Assistant](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffProgramCompatibilityAssistant_2) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePCA` |
+| [Turn off Install Tracing](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffInstallTracing) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableInstallTracing` |
+| [Turn off API Sampling](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffAPISamping) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableAPISamping` |
+| [Turn off Application Footprint](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffApplicationFootprint) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableApplicationFootprint` |
+| [Turn off compatibility scan for backed up applications](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffWin32AppBackup) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableWin32AppBackup` |
+| [Detect compatibility issues for applications and drivers](https://www.noverse.dev/policies.html?p=pca*DisablePcaUIPolicy) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePcaUI` |
 
 # Disable Census Data Collection
 
@@ -3986,44 +1421,12 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "EnableOneSettingsAuditing",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Enable OneSettings Auditing",
-  "ExplainText": "This policy setting controls whether Windows records attempts to connect with the OneSettings service to the EventLog. If you enable this policy, Windows will record attempts to connect with the OneSettings service to the Microsoft\\Windows\\Privacy-Auditing\\Operational EventLog channel. If you disable or don't configure this policy setting, Windows will not record attempts to connect with the OneSettings service to the EventLog.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "EnableOneSettingsAuditing",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-},
-{
-  "File": "DataCollection.admx",
-  "CategoryName": "DataCollectionAndPreviewBuilds",
-  "PolicyName": "DisableOneSettingsDownloads",
-  "NameSpace": "Microsoft.Policies.DataCollection",
-  "Supported": "Windows_10_0_RS7 - At least Windows Server 2016, Windows 10 Version 1909",
-  "DisplayName": "Disable OneSettings Downloads",
-  "ExplainText": "This policy setting controls whether Windows attempts to connect with the OneSettings service. If you enable this policy, Windows will not attempt to connect with the OneSettings Service. If you disable or don't configure this policy setting, Windows will periodically attempt to connect with the OneSettings service to download configuration settings.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\DataCollection"
-  ],
-  "ValueName": "DisableOneSettingsDownloads",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Enable OneSettings Auditing](https://www.noverse.dev/policies.html?p=DataCollection*EnableOneSettingsAuditing) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `EnableOneSettingsAuditing` |
+| [Disable OneSettings Downloads](https://www.noverse.dev/policies.html?p=DataCollection*DisableOneSettingsDownloads) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableOneSettingsDownloads` |
 
 # Disable F1 Help Key
 
@@ -4042,27 +1445,11 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 
 - You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles."
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "FindMy.admx",
-  "CategoryName": "FindMyDeviceCat",
-  "PolicyName": "FindMy_AllowFindMyDeviceConfig",
-  "NameSpace": "Microsoft.Policies.FindMyDevice",
-  "Supported": "Windows_10_0_NOSERVER - At least Windows 10",
-  "DisplayName": "Turn On/Off Find My Device",
-  "ExplainText": "This policy turns on Find My Device. When Find My Device is on, the device and its location are registered in the cloud so that the device can be located when the user initiates a Find command from account.microsoft.com. On devices that are compatible with active digitizers, enabling Find My Device will also allow the user to view the last location of use of their active digitizer on their device; this location is stored locally on the user's device after each use of their active digitizer. When Find My Device is off, the device and its location are not registered and the Find My Device feature will not work.The user will also not be able to view the location of the last use of their active digitizer on their device.",
-  "KeyPath": [
-    "HKLM\\SOFTWARE\\Policies\\Microsoft\\FindMyDevice"
-  ],
-  "ValueName": "AllowFindMyDevice",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn On/Off Find My Device](https://www.noverse.dev/policies.html?p=FindMy*FindMy_AllowFindMyDeviceConfig) | `HKLM\SOFTWARE\Policies\Microsoft\FindMyDevice` | `AllowFindMyDevice` |
 
 # Disable PSR
 
@@ -4081,27 +1468,11 @@ It is a deprecated feature, as the banner shows:
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
 ```
 
-## [Windows Policies](https://raw.githubusercontent.com/nohuto/admx-parser/refs/heads/main/assets/policies.json)
+## Windows Policies
 
-```json
-{
-  "File": "AppCompat.admx",
-  "CategoryName": "AppCompat",
-  "PolicyName": "AppCompatTurnOffUserActionRecord",
-  "NameSpace": "Microsoft.Policies.ApplicationCompatibility",
-  "Supported": "Windows7 - At least Windows Server 2008 R2 or Windows 7",
-  "DisplayName": "Turn off Steps Recorder",
-  "ExplainText": "This policy setting controls the state of Steps Recorder. Steps Recorder keeps a record of steps taken by the user. The data generated by Steps Recorder can be used in feedback systems such as Windows Error Reporting to help developers understand and fix problems. The data includes user actions such as keyboard input and mouse input, user interface data, and screen shots. Steps Recorder includes an option to turn on and off data collection. If you enable this policy setting, Steps Recorder will be disabled. If you disable or do not configure this policy setting, Steps Recorder will be enabled.",
-  "KeyPath": [
-    "HKLM\\Software\\Policies\\Microsoft\\Windows\\AppCompat"
-  ],
-  "ValueName": "DisableUAR",
-  "Elements": [
-    { "Type": "EnabledValue", "Data": "1" },
-    { "Type": "DisabledValue", "Data": "0" }
-  ]
-}
-```
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Steps Recorder](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffUserActionRecord) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableUAR` |
 
 # Disable WMPlayer Telemetry
 
