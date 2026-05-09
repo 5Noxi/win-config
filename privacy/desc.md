@@ -54,28 +54,27 @@ Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a619194
 
 # Disable WER
 
-[WER](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) (Windows Error Reporting) sends error logs to Microsoft, disabling it keeps error data local.
+> "*Windows Error Reporting (WER) is a sophisticated mechanism that automates the submission of both user-mode process crashes as well as kernel-mode system crashes. Multiple system components have been designed for supporting reports generated when a user-mode process, protected process, trustlet, or the kernel crashes.*
+>
+> *Windows Error Reporting is implemented in multiple components of the OS, mainly because it needs to deal with different kind of crashes:*  
+> *- The Windows Error Reporting Service (WerSvc.dll) is the main service that manages the creation and sending of reports when a user-mode process, protected process, or trustlet crashes.*  
+> *- The Windows Fault Reporting and Secure Fault Reporting (WerFault.exe and WerFaultSecure.exe) are mainly used to acquire a snapshot of the crashing application and start the generation and sending of a report to the Microsoft Online Crash Analysis site (or, if configured, to an internal error reporting server).*  
+> *- The actual generation and transmission of the report is performed by the Windows Error Reporting Dll (Wer.dll). The library includes all the functions used internally by the WER engine and also some exported API that the applications can use to interact with Windows Error Reporting (documented at https://docs.microsoft.com/en-us/windows/win32/api/_wer/ ). Note that some WER APIs are also implemented in Kernelbase.dll and Faultrep.dll.*  
+> *- The Windows User Mode Crash Reporting DLL (Faultrep.dll) contains common WER stub code that is used by system modules (Kernel32.dll, WER service, and so on) when a user-mode application crashes or hangs. It includes services for creating a crash signature and reports a hang to the WER service, managing the correct security context for the report creation and transmission (which includes the creation of the WerFault executable under the correct security token).*
+>
+> — Windows Internals, [E7, P2: 'Windows Error Reporting (WER)'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-WER is implemented by the WerSvc service and Wer.dll/Faultrep.dll, crashed processes connect to the service over an ALPC port to generate reports and dumps. Disabling WER stops that reporting part.
+[Error-Reporting.txt](https://github.com/nohuto/regkit/blob/main/records/Error-Reporting.txt) shows all read values on boot (`\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`).
 
-`\Microsoft\Windows\Windows Error Reporting : QueueReporting` would run `%windir%\system32\wermgr.exe -upload`. `Error-Reporting.txt` shows a trace of `\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`.
+## Services/Tasks
 
-[WER network endpoints](https://learn.microsoft.com/en-us/troubleshoot/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance#configure-network-endpoints-to-be-allowed):
-```
-0.0.0.0 watson.microsoft.com
-0.0.0.0 watson.telemetry.microsoft.com
-0.0.0.0 umwatsonc.events.data.microsoft.com
-0.0.0.0 ceuswatcab01.blob.core.windows.net
-0.0.0.0 ceuswatcab02.blob.core.windows.net
-0.0.0.0 eaus2watcab01.blob.core.windows.net
-0.0.0.0 eaus2watcab02.blob.core.windows.net
-0.0.0.0 weus2watcab01.blob.core.windows.net
-0.0.0.0 weus2watcab02.blob.core.windows.net
-```
-`DisableSendRequestAdditionalSoftwareToWER`: "Prevent Windows from sending an error report when a device driver requests additional software during installation"
-`DisableSendGenericDriverNotFoundToWER`: "Do not send a Windows error report when a generic driver is installed on a device"
+| Task | Description | Action Command |
+| `\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate` | - | - |
+| `\Microsoft\Windows\Windows Error Reporting\QueueReporting` | Windows Error Reporting task to process queued reports. | `%windir%\system32\wermgr.exe -upload` |
 
-- [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
+| Service | Description |
+| `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. |
+| `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
 
 ## Suboption
 
@@ -99,6 +98,8 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 
 ## Miscellaneous Notes
 
+### EnableWerUserReporting
+
 `EnableWerUserReporting`  
 Default: `1` (`DbgkEnableWerUserReporting dd 1`)
 
@@ -106,16 +107,37 @@ Default: `1` (`DbgkEnableWerUserReporting dd 1`)
 "Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
 ```
 
+### AerMultiErrorDisabled
+
 Related to [PCIe advanced error reporting](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-_pci_express_rootport_aer_capability)? Haven't informed myself about it yet, therefore ignore it:
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\PnP\pci : AerMultiErrorDisabled
 ```
 Default is `0`, non zero would enable the behaviour? The value doesn't exist by default.
 
+- [privacy/assets | wer-PciGetSystemWideHackFlagsFromRegistry.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/wer-PciGetSystemWideHackFlagsFromRegistry.c)
+
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : TelemetryErrorDataEnabled
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Memory Management : PeriodicTelemetryReportFrequency
 ```
+
+### [WER Endpoints](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance.md#configure-network-endpoints-to-be-allowed)
+
+- Port used: `443`
+- Protocol used: HTTPS with SSL/TLS using certificate pinning
+
+| Windows versions | Endpoint |
+| --- | --- |
+| All Windows versions | `watson.microsoft.com` |
+| Windows 10, version 1803 or later | `watson.telemetry.microsoft.com` |
+| Windows 10, version 1809 or later | `umwatsonc.events.data.microsoft.com` |
+| Windows 10, version 1809 or later | `ceuswatcab01.blob.core.windows.net` |
+| Windows 10, version 1809 or later | `ceuswatcab02.blob.core.windows.net` |
+| Windows 10, version 1809 or later | `eaus2watcab01.blob.core.windows.net` |
+| Windows 10, version 1809 or later | `eaus2watcab02.blob.core.windows.net` |
+| Windows 10, version 1809 or later | `weus2watcab01.blob.core.windows.net` |
+| Windows 10, version 1809 or later | `weus2watcab02.blob.core.windows.net` |
 
 ## [Windows Policies](https://www.noverse.dev/policies.html)
 
