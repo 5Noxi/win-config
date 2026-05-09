@@ -3314,6 +3314,14 @@ Note that this doesn't show default states, instead it shows several options and
 `{badmemory}` - RAM defects  
 `{hypervisorsettings}` - Hypervisor settings
 
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit4.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit5.png?raw=true)
+
 ## Pseudocode Notes
 
 Personal notes on several features in relation of [HalpMiscGetParameters](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c).
