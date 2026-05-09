@@ -1,10 +1,15 @@
-$nvfolder  = "$env:localappdata\Noverse"
-$gen = Join-Path $nvfolder "HashGen.ps1"
-$local = Join-Path $home "Downloads\HashGen.ps1"
-if (!(Test-Path $nvfolder)) { New-Item -ItemType Directory -Path $nvfolder -Force | Out-Null }
+$ErrorActionPreference = "Stop"
 
-if (Test-Path -LiteralPath $local) {
-    Move-Item -LiteralPath $local -Destination $gen -Force
+$nvfolder = Join-Path $env:LOCALAPPDATA "Noverse"
+$gen = Join-Path $nvfolder "HashGen.ps1"
+$repoLocal = if ($PSScriptRoot) { Join-Path $PSScriptRoot "HashGen.ps1" } else { $null }
+$local = Join-Path $home "Downloads\HashGen.ps1"
+if (!(Test-Path -LiteralPath $nvfolder)) { New-Item -ItemType Directory -Path $nvfolder -Force | Out-Null }
+
+if ($repoLocal -and (Test-Path -LiteralPath $repoLocal) -and ((Resolve-Path -LiteralPath $repoLocal).ProviderPath -ne $gen)) {
+    Copy-Item -LiteralPath $repoLocal -Destination $gen -Force
+} elseif (Test-Path -LiteralPath $local) {
+    Copy-Item -LiteralPath $local -Destination $gen -Force
 } else {
     try {
         Invoke-WebRequest -Uri "https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/misc/assets/HashGen.ps1" -OutFile $gen -UseBasicParsing
@@ -38,14 +43,14 @@ foreach ($entry in @(
         @{Key='MACTripleDES'; Label='MACTripleDES'; Argument='MACTripleDES'},
         @{Key='RIPEMD160'; Label='RIPEMD160'; Argument='RIPEMD160'}
     )) {
-    $entry = Join-Path $shell $entry.Key
-    New-Item -Path $entry -Force | Out-Null
-    Set-ItemProperty -LiteralPath $entry -Name "MUIVerb" -Value $entry.Label
+    $entryPath = Join-Path $shell $entry.Key
+    New-Item -Path $entryPath -Force | Out-Null
+    Set-ItemProperty -LiteralPath $entryPath -Name "MUIVerb" -Value $entry.Label
 
-    $cmdPath = Join-Path $entry "command"
+    $cmdPath = Join-Path $entryPath "command"
     New-Item -Path $cmdPath -Force | Out-Null
-    $command = ('powershell -NoExit -file "{0}" -nvstringin "%1" -Algorithm {1}' -f $gen, $entry.Argument)
-    Set-ItemProperty -LiteralPath $cmdPath -Name "(Default)" -Value $command
+    $command = ('powershell.exe -NoExit -ExecutionPolicy Bypass -File "{0}" -nvstringin "%1" -Algorithm "{1}"' -f $gen, $entry.Argument)
+    Set-Item -LiteralPath $cmdPath -Value $command
 }
 
 foreach ($menu in @(

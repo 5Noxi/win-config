@@ -548,9 +548,12 @@ The purpose of hash values is to provide a cryptographically-secure way to verif
 
 ## Hash Examples
 
-The computed hash depends on the file content, e.g. empty files have the same hash (which means that every change affects the hash - [Avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)):
+The computed hash depends on the file content, e.g. empty files have the same hash (which means that every change affects the hash - [Avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)).
+
+### Scenario 1 (no content)
+
 ```powershell
-# Scenario 1 (no content)
+
 PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse0.txt' -Raw
 PS C:\Users\Nohuxi> # No output, since empty
 
@@ -560,8 +563,11 @@ SHA1: DA39A3EE5E6B4B0D3255BFEF95601890AFD80709
 SHA256: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
 SHA384: 38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBFE76F65FBD51AD2F14898B95B
 SHA512: CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E
+```
 
-# Scenario 2 (added content)
+###  Scenario 2 (added content)
+
+```powershell
 PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse1.txt' -Raw
 1 # Content
 PS C:\Users\Nohuxi>
@@ -573,6 +579,7 @@ SHA256: 6B86B273FF34FCE19D6B804EFF5A3F5747ADA4EAA22F1D49C01E52DDB7875B4B
 SHA384: 47F05D367B0C32E438FB63E6CF4A5F35C2AA2F90DC7543F8A41A0F95CE8A40A313AB5CF36134A2068C4C969CB50DB776
 SHA512: 4DFF4EA340F0A823F15D3F4F01AB62EAE0E5DA579CCB851F8DB9DFE84C58B2B37B89903A740E1EE172DA793A6E79D560E5F7F9BD058A12A280433ED6FA46510A
 ```
+
 As you can see, adding a `1` to the file content has completely changed the hash values. You can try this yourself by editing the paths.
 
 ```powershell
@@ -597,7 +604,7 @@ SHA512("")
 If using win-config, then the toggle automates the (un)installation.
 
 - [`HashGen.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/HashGen.ps1) accepts an optional `-Algorithm` parameter (`All`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `MACTripleDES`, `RIPEMD160`). By default it runs every available algorithm, but you can target a specific hash when invoking it manually. 
-- [`Add-CM.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/.ps1) will add a `Hashes` cascaded option to the context menu of any file/folder (if selecting a folder all files within the folder and every subfolder will get used). `HashGen.ps1` gets used from your `Downloads` folder if present, otherwise `Add-CM.ps1` automatically downloads the latest copy from GitHub. `Add-CM.ps1` copies `HashGen.ps1` into `%LOCALAPPDATA%\Noverse` and adds a *Hashes* entry for files and folders.
+- [`Add-CM.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/Add-CM.ps1) will add a `Hashes` cascaded option to the context menu of any file/folder (if selecting a folder all files within the folder and every subfolder will get used). `HashGen.ps1` gets used from your `Downloads` folder if present, otherwise `Add-CM.ps1` automatically downloads the latest copy from GitHub. `Add-CM.ps1` copies `HashGen.ps1` into `%LOCALAPPDATA%\Noverse` and adds a *Hashes* entry for files and folders.
 
 ## Uninstallation
 

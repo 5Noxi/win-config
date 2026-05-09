@@ -12,12 +12,17 @@
 #
 #    For permissions or inquiries, contact: https://discord.gg/E2ybG4j9jU
 
-param([string]$nvstringin,[ValidateSet('All','MD5','SHA1','SHA256','SHA384','SHA512','MACTripleDES','RIPEMD160')][string]$algorithm = 'All')
-$ErrorActionPreference = "SilentlyContinue"
+param(
+    [string]$nvstringin,
+    [ValidateSet('All','MD5','SHA1','SHA256','SHA384','SHA512','MACTripleDES','RIPEMD160')]
+    [string]$algorithm = 'All'
+)
+
+$ErrorActionPreference = "Stop"
 $ProgressPreference = "SilentlyContinue"
 [console]::Title = "Noverse Hash Generator"
 [console]::BackgroundColor = "Black"
-clear
+Clear-Host
 
 function log{
     param([string]$HighlightMessage, [string]$Message, [string]$Sequence, [ConsoleColor]$TimeColor='DarkGray', [ConsoleColor]$HighlightColor='White', [ConsoleColor]$MessageColor='White', [ConsoleColor]$SequenceColor='White')
@@ -30,9 +35,14 @@ function log{
 }
 
 
-if (-not $nvstringin -and $args.Count -gt 0) { $nvstringin = ($args -join ' ') }
+if ([string]::IsNullOrWhiteSpace($nvstringin) -and $args.Count -gt 0) { $nvstringin = ($args -join ' ') }
+if ([string]::IsNullOrWhiteSpace($nvstringin)) {
+    log "[-]" "No input path was provided." "Use -nvstringin <path>" -HighlightColor Red -SequenceColor DarkGray
+    return
+}
+
 $nvstringin = $nvstringin.Trim().Trim('"')
-try { $nvstringin = (Resolve-Path $nvstringin -ErrorAction Stop).ProviderPath } catch {
+try { $nvstringin = (Resolve-Path -LiteralPath $nvstringin -ErrorAction Stop).ProviderPath } catch {
     log "[-]" "Input path does not exist:" "$nvstringin" -HighlightColor Red -SequenceColor DarkGray
     return
 }
@@ -76,16 +86,16 @@ function gethash {
     return $result
 }
 
-if (!(Test-Path $nvstringin)) {
+if (!(Test-Path -LiteralPath $nvstringin)) {
     log "[-]" "Input path does not exist:" "$nvstringin" -HighlightColor Red -SequenceColor DarkGray
     return
 }
 
-$type = Test-Path $nvstringin -PathType Container
+$type = Test-Path -LiteralPath $nvstringin -PathType Container
 $nvoutdir = if ($type) { $nvstringin } else { Split-Path $nvstringin -Parent }
 $nvout = Join-Path $nvoutdir "Hashes.txt"
 
-$nvin = if ($type) { Get-ChildItem -LiteralPath $nvstringin -File -Recurse } else { Get-Item $nvstringin }
+$nvin = if ($type) { Get-ChildItem -LiteralPath $nvstringin -File -Recurse } else { Get-Item -LiteralPath $nvstringin }
 
 if (!($nvin)) {
     log "[-]" "No file to hash in:" "$nvstringin" -HighlightColor Red -SequenceColor DarkGray
