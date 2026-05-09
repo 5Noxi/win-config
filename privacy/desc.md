@@ -69,14 +69,16 @@ Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a619194
 ## Services/Tasks
 
 | Task | Description | Action Command |
+| --- | --- | --- |
 | `\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate` | - | - |
 | `\Microsoft\Windows\Windows Error Reporting\QueueReporting` | Windows Error Reporting task to process queued reports. | `%windir%\system32\wermgr.exe -upload` |
 
 | Service | Description |
+| --- | --- |
 | `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. |
 | `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
 
-## Suboption
+## Suboptions
 
 `Disable DHA Report`:  
 > "*This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.*"
