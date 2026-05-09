@@ -4468,7 +4468,7 @@ SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\MonitorRemovalRecalcBe
 
 # Reduce Shutdown Time
 
-Forces hung apps and services to terminate faster.
+Forces hung apps and services to terminate faster, see 'Windows Internals' section for details.
 
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control : WaitToKillServiceTimeout
@@ -4482,6 +4482,11 @@ Forces hung apps and services to terminate faster.
 `WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000` (`20` sec))
 
 More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown2.png?raw=true)
 
 # Detailed Verbose Messages
 
