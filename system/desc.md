@@ -970,7 +970,7 @@ Provider: Microsoft.Windows.ResourceManager
 GUID:     {4180C4F7-E238-5519-338F-EC214F0B49AA}
 
 resourceFileName: %SystemRoot%\system32\PsmServiceExtHost.dll
-messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
+messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dllF
 ```
 
 # Kernel Values
@@ -3860,6 +3860,9 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
 | [Turn off toast notifications on the lock screen](https://www.noverse.dev/policies.html?p=WPN*NoLockScreenToastNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotificationOnLockScreen` |
 | [Turn off notifications network usage](https://www.noverse.dev/policies.html?p=WPN*NoCloudNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoCloudApplicationNotification` |
 | [Turn off notification mirroring](https://www.noverse.dev/policies.html?p=WPN*NoNotificationMirroring) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `DisallowNotificationMirroring` |
+| [Show notification bell icon](https://www.noverse.dev/policies.html?p=Taskbar*AlwaysShowNotificationIcon) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `AlwaysShowNotificationIcon` |
+| [Turn off all balloon notifications](https://www.noverse.dev/policies.html?p=Taskbar*TaskbarNoNotification) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `TaskbarNoNotification` |
+| [Turn off feature advertisement balloon notifications](https://www.noverse.dev/policies.html?p=Taskbar*NoBalloonFeatureAdvertisements) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoBalloonFeatureAdvertisements` |
 
 # Optimize File System
 
@@ -4056,23 +4059,23 @@ Disables all kind of accessibility features such as `Voice Access`, `Live Captio
 
 | **Suboption** | **Description** |
 | ---- | ---- |
-| **Disable SafeSearch** | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
-| **Prevent Index on Battery** | Prevents Windows from indexing content while running on battery power, saving system resources. |
-| **Disable Index Usage for System File Search** | Disables the use of the index when searching system files, requiring a full scan each time. |
-| **Find Partial Matches** | Allows partial matches to be found when searching for files, enabling more flexible search results. |
-| **Exclude System Directories** | Excludes system directories from search results, narrowing down the search to user files and folders. |
-| **Exclude Archived Files** | Prevents archived files from being included in search results. |
-| **Disable Natural Language Search** | Disables the use of natural language search, which allows more conversational queries for search results. |
-| **Search Only in Indexed Locations** | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
-| **Exclude System Directories** | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
-| **Exclude Compressed Files** | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
-| **Search Only in Indexed Locations** | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
-| [**Disallow Indexing of Encrypted Items**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#allowindexingencryptedstoresoritems) | This policy setting allows encrypted items to be indexed. |
-| [**Disable Language Detection**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#alwaysuseautolangdetection) | This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. |
-| [**Prevent Querying Index Remotely**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#preventremotequeries) | If enabled, clients will be unable to query this computer's index remotely. Thus, when they're browsing network shares that are stored on this computer, they won't search them using the index. If disabled, client search requests will use this computer's index. |
-| [**Disable Web Results in Search**](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
-| **Disable Search Highlights** | If enabled: "See content suggestions in the search boxi and in search home". |
-| **Disable Web Search** | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
+| Disable SafeSearch | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
+| Prevent Index on Battery | Prevents Windows from indexing content while running on battery power, saving system resources. |
+| Disable Index Usage for System File Search | Disables the use of the index when searching system files, requiring a full scan each time. |
+| Find Partial Matches | Allows partial matches to be found when searching for files, enabling more flexible search results. |
+| Exclude System Directories | Excludes system directories from search results, narrowing down the search to user files and folders. |
+| Exclude Archived Files | Prevents archived files from being included in search results. |
+| Disable Natural Language Search | Disables the use of natural language search, which allows more conversational queries for search results. |
+| Search Only in Indexed Locations | Restricts searches in non-indexed locations to only file names, rather than searching both names and contents. |
+| Exclude System Directories | Excludes system directories (e.g., Windows folders) in search results when searching non-indexed locations. |
+| Exclude Compressed Files | Excludes compressed files (e.g., ZIP, CAB) in search results when searching non-indexed locations. |
+| Search Only in Indexed Locations | Disables: "Ensures that file names and contents are always searched in non-indexed locations, which may take more time." |
+| [Disallow Indexing of Encrypted Items](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#allowindexingencryptedstoresoritems) | This policy setting allows encrypted items to be indexed. |
+| [Disable Language Detection](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#alwaysuseautolangdetection) | This policy setting determines when Windows uses automatic language detection results, and when it relies on indexing history. |
+| [Prevent Querying Index Remotely](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#preventremotequeries) | If enabled, clients will be unable to query this computer's index remotely. Thus, when they're browsing network shares that are stored on this computer, they won't search them using the index. If disabled, client search requests will use this computer's index. |
+| [Disable Web Results in Search](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
+| Disable Search Highlights | If enabled: "See content suggestions in the search boxi and in search home". |
+| Disable Web Search | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
 
 ## Search Indexing
 

@@ -458,6 +458,7 @@ Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0
 | [Disable Widgets On Lock Screen](https://www.noverse.dev/policies.html?p=NewsAndInterests*DisableWidgetsOnLockScreen) | `HKLM\SOFTWARE\Policies\Microsoft\Dsh` | `DisableWidgetsOnLockScreen` |
 | [Disable Widgets Board](https://www.noverse.dev/policies.html?p=NewsAndInterests*DisableWidgetsBoard) | `HKLM\SOFTWARE\Policies\Microsoft\Dsh` | `DisableWidgetsBoard` |
 | [Remove the People Bar from the taskbar](https://www.noverse.dev/policies.html?p=StartMenu*HidePeopleBar) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HidePeopleBar` |
+| [Hide the TaskView button](https://www.noverse.dev/policies.html?p=Taskbar*HideTaskViewButton) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideTaskViewButton` |
 
 # Accent Color
 
