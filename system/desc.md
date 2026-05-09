@@ -970,7 +970,7 @@ Provider: Microsoft.Windows.ResourceManager
 GUID:     {4180C4F7-E238-5519-338F-EC214F0B49AA}
 
 resourceFileName: %SystemRoot%\system32\PsmServiceExtHost.dll
-messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dllF
+messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
 ```
 
 # Kernel Values
