@@ -7,7 +7,7 @@ if (Test-Path -LiteralPath $local) {
     Move-Item -LiteralPath $local -Destination $gen -Force
 } else {
     try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/nohuto/hash-gen/main/HashGen.ps1" -OutFile $gen -UseBasicParsing
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/misc/assets/HashGen.ps1" -OutFile $gen -UseBasicParsing
     } catch {
         throw "Failed to download HashGen.ps1: $($_.Exception.Message)"
     }

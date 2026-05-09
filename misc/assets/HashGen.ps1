@@ -1,5 +1,5 @@
 #    Hash Generator - https://github.com/nohuto/hash-gen
-#    Copyright (C) 2025 Noverse, Nohuto
+#    Copyright (C) 2026 Noverse, Nohuto
 #
 #    This program is proprietary software: you may not copy, redistribute, or modify
 #    it in any way without prior written permission from Noverse.
