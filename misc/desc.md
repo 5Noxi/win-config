@@ -36,7 +36,7 @@ It currently gets most of the information using the [`Get-CimInstance`](https://
 ```powershell
 nvidia-smi -q
 ```
-[`nvfetch-win32cimv2.txt`]((https://github.com/nohuto/win-config/blob/main/misc/assets)) shows class names in the `root\CIMV2` namespace, filtered with `Win32*`.
+[`nvfetch-win32cimv2.txt`](https://github.com/nohuto/win-config/blob/main/misc/assets/nvfetch-win32cimv2.txt) shows class names in the `root\CIMV2` namespace, filtered with `Win32*`.
 
 | **Category** | **Query** | **Fields/Description** |
 | ---- | ---- | ---- |
@@ -531,9 +531,11 @@ HKLM\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\OneDrive
 "The `Get-FileHash` cmdlet computes the hash value for a file by using a specified hash algorithm. A hash value is a unique value that corresponds to the content of the file. Rather than identifying the contents of a file by its file name, extension, or other designation, a hash assigns a unique value to the contents of a file. File names and extensions can be changed without altering the content of the file, and without changing the hash value. Similarly, the file's content can be changed without changing the name or extension. However, changing even a single character in the contents of a file changes the hash value of the file.
 
 The purpose of hash values is to provide a cryptographically-secure way to verify that the contents of a file have not been changed. While some hash algorithms, including MD5 and SHA1, are no longer considered secure against attack, the goal of a secure hash algorithm is to render it impossible to change the contents of a file either by accident, or by malicious or unauthorized attempt and maintain the same hash value. You can also use hash values to determine if two different files have exactly the same content. If the hash values of two files are identical, the contents of the files are also identical."
-- [Get-FileHash | microsoft.powershell.utility](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.5)
+> [Get-FileHash | microsoft.powershell.utility](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.5)
 
 ![](https://github.com/nohuto/hash-gen/blob/main/images/contextmenu.png?raw=true)
+
+## Algorithms
 
 `Get-FileHash -Algorithm` accepts (the script uses the built in .NET hash implementations `System.Security.Cryptography`):
 - [`MD5`](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.md5?view=net-9.0) (`128` Bits)
@@ -544,25 +546,27 @@ The purpose of hash values is to provide a cryptographically-secure way to verif
 - [`MACTripleDES`](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.mactripledes?view=net-9.0)
 - [`RIPEMD160`](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.ripemd160?view=net-9.0)
 
-The computed hash depends on the file content, e.g. empty files have the same hash (which means that every change affects the hash - [Avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)):
-```c
-// Scenario 1 (no content)
-PS C:\Users\Nohuto> Get-Content -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse0.txt' -Raw
-PS C:\Users\Nohuto> // No output, since empty
+## Hash Examples
 
-PS C:\Users\Nohuto> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse0.txt' -Algorithm $_).Hash }
+The computed hash depends on the file content, e.g. empty files have the same hash (which means that every change affects the hash - [Avalanche effect](https://en.wikipedia.org/wiki/Avalanche_effect)):
+```powershell
+# Scenario 1 (no content)
+PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse0.txt' -Raw
+PS C:\Users\Nohuxi> # No output, since empty
+
+PS C:\Users\Nohuxi> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse0.txt' -Algorithm $_).Hash }
 MD5: D41D8CD98F00B204E9800998ECF8427E
 SHA1: DA39A3EE5E6B4B0D3255BFEF95601890AFD80709
 SHA256: E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855
 SHA384: 38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBFE76F65FBD51AD2F14898B95B
 SHA512: CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E
 
-// Scenario 2 (added content)
-PS C:\Users\Nohuto> Get-Content -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse1.txt' -Raw
-1 // Content
-PS C:\Users\Nohuto>
+# Scenario 2 (added content)
+PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse1.txt' -Raw
+1 # Content
+PS C:\Users\Nohuxi>
 
-PS C:\Users\Nohuto> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuto\Desktop\Noverse1.txt' -Algorithm $_).Hash }
+PS C:\Users\Nohuxi> 'MD5','SHA1','SHA256','SHA384','SHA512' | % { '{0}: {1}' -f $_,(Get-FileHash -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse1.txt' -Algorithm $_).Hash }
 MD5: C4CA4238A0B923820DCC509A6F75849B
 SHA1: 356A192B7913B04C54574D18C28D46E6395428AB
 SHA256: 6B86B273FF34FCE19D6B804EFF5A3F5747ADA4EAA22F1D49C01E52DDB7875B4B
@@ -571,7 +575,7 @@ SHA512: 4DFF4EA340F0A823F15D3F4F01AB62EAE0E5DA579CCB851F8DB9DFE84C58B2B37B89903A
 ```
 As you can see, adding a `1` to the file content has completely changed the hash values. You can try this yourself by editing the paths.
 
-```c
+```powershell
 MD5("") 
 0x d41d8cd98f00b204e9800998ecf8427e
 SHA1("")
@@ -583,6 +587,26 @@ SHA384("")
 SHA512("")
 0x cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
 ```
-- [SHA-2 | wikipedia](https://en.wikipedia.org/wiki/SHA-2#Test_vectors)
-- [MD5 | wikipedia](https://en.wikipedia.org/wiki/MD5#MD5_hashes)
-- [SHA-1 | wikipedia](https://en.wikipedia.org/wiki/SHA-1#Example_hashes)
+
+> [SHA-2 | wikipedia](https://en.wikipedia.org/wiki/SHA-2#Test_vectors)  
+> [MD5 | wikipedia](https://en.wikipedia.org/wiki/MD5#MD5_hashes)  
+> [SHA-1 | wikipedia](https://en.wikipedia.org/wiki/SHA-1#Example_hashes)
+
+## Installation
+
+If using win-config, then the toggle automates the (un)installation.
+
+- [`HashGen.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/HashGen.ps1) accepts an optional `-Algorithm` parameter (`All`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `MACTripleDES`, `RIPEMD160`). By default it runs every available algorithm, but you can target a specific hash when invoking it manually. 
+- [`Add-CM.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/.ps1) will add a `Hashes` cascaded option to the context menu of any file/folder (if selecting a folder all files within the folder and every subfolder will get used). `HashGen.ps1` gets used from your `Downloads` folder if present, otherwise `Add-CM.ps1` automatically downloads the latest copy from GitHub. `Add-CM.ps1` copies `HashGen.ps1` into `%LOCALAPPDATA%\Noverse` and adds a *Hashes* entry for files and folders.
+
+## Uninstallation
+
+Remove the content menu entry and `HashGen` with:
+```powershell
+Remove-Item -LiteralPath "HKCU:\Software\Classes\*\shell\Hashes" -Recurse -Force
+Remove-Item -LiteralPath "HKCU:\Software\Classes\Directory\shell\Hashes" -Recurse -Force
+Remove-Item -LiteralPath "HKCU:\Software\Classes\HashGen.ContextMenu" -Recurse -Force
+#Remove-Item -LiteralPath "HKCU:\Software\Classes\*\shell\NV-Hash" -Recurse -Force  # old entry
+#Remove-Item -LiteralPath "HKCU:\Software\Classes\Directory\shell\NV-Hash" -Recurse -Force  # old entry
+Remove-Item -Path "$env:LOCALAPPDATA\Noverse\HashGen.ps1" -Force
+```
