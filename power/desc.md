@@ -1501,7 +1501,7 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
   *(_DWORD *)(v23 + 32) = 0x80000000;
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -1527,7 +1527,7 @@ HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
 HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -1660,7 +1660,7 @@ This policy setting specifies that power management is disabled when the machine
     "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
 ```
 
-## Windows Policies
+## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
