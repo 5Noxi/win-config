@@ -1322,11 +1322,15 @@ The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepI
 
 # Disable Hibernation
 
-Windows uses hibernation to provide a fast startup experience. When available, it's also used on mobile devices to extend the usable battery life of a system by giving a mechanism to save all of the user's state prior to shutting down the system. In a hibernate transition, all the contents of memory are written to a file on the primary system drive, the hibernation file. This preserves the state of the operating system, applications, and devices. In the case where the combined memory footprint consumes all of physical memory, the hibernation file must be large enough to ensure there's space to save all the contents of physical memory. Since data is written to non-volatile storage, DRAM does not need to maintain self-refresh and can be powered off, which means power consumption of hibernation is very low, almost the same as power off.
+Hibernation is Windows S4 power state, it writes the resume state to `Hiberfil.sys` on the system volume, transitions the platform to ACPI S4, and later resumes through Boot Manager and the Windows Resume application (`Winresume.efi`).
 
-The system saves a full memory image to `Hiberfil.sys` for S4 and resumes execution from that image on the next boot. The hibernation file is invalidated after a resume to prevent multiple resume attempts from stale data.
 
-During a full shutdown and boot (S5), the entire user session is torn down and restarted on the next boot. In contrast, during a hibernation (S4), the user session is closed and the user state is saved.
+> "*Windows uses hibernation to provide a fast startup experience. When available, it's also used on mobile devices to extend the usable battery life of a system by giving a mechanism to save all of the user's state prior to shutting down the system. In a hibernate transition, all the contents of memory are written to a file on the primary system drive, the hibernation file. This preserves the state of the operating system, applications, and devices. In the case where the combined memory footprint consumes all of physical memory, the hibernation file must be large enough to ensure there's space to save all the contents of physical memory. Since data is written to non-volatile storage, DRAM does not need to maintain self-refresh and can be powered off, which means power consumption of hibernation is very low, almost the same as power off.*
+> *During a full shutdown and boot (S5), the entire user session is torn down and restarted on the next boot. In contrast, during a hibernation (S4), the user session is closed and the user state is saved.*"
+>
+> — Microsoft, [System power states, Hibernate state: S4](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#hibernate-state-s4)
+
+`powercfg /hibernate off` disables normal hibernation, hybrid sleep, and Fast Startup as a consequence.
 
 ## [Power State Table](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states)
 
@@ -1339,16 +1343,14 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
 | Soft off | *S5* | The system appears to be off. This state is comprised of a full shutdown and boot cycle. | 
 | Mechanical off | *G3* | The system is completely off and consumes no power. The system returns to the working state only after a full reboot. | 
 
-## Registry Value Defaults
+## Registry Values
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "AllowHibernate" = 4294967295; // PopAllowHibernateReg (0xFFFFFFFF) 
     "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile 
     "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile 
-    "HiberbootEnabled" = 0; // PopHiberbootEnabledReg 
     "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default
-    "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
     "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg 
     "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
@@ -1364,9 +1366,66 @@ During a full shutdown and boot (S5), the entire user session is torn down and r
 RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HibernateEnabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-# Reduced HiberFile
+## Disable Hiberboot
 
-Hibernation files are used for hybrid sleep, fast startup, and [standard hibernation](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#hibernate-state-s4). There are two types, differentiated by size, a full and reduced size hibernation file. Only fast startup can use a reduced hibernation file.
+Fast Startup (also called hiberboot or hybrid shutdown) is a shutdown mechamism built on hibernation. It logs off the interactive user sessions first, then hibernates the kernel session and loaded kernel mode drivers. The next boot can skip much of kernel and driver initialization. Restart doesn't use Fast Startup, it performs a full boot cycle so drivers and Windows components are initialized from a new state. For `shutdown.exe`, `/s /t 0` = full shutdown, while `/s /hybrid /t 0` = hybrid shutdown.
+
+Boot Manager uses the `resume`, `resumeobject`, `hiberboot`, `filepath`, and `filedevice` BCD elements ([bcd-edits/#valuedata-list](https://www.noverse.dev/docs/win-config/system/bcd-edits/#valuedata-list)) to locate the Windows Resume application and hibernation file on the next boot.
+
+### Registry Values
+
+All three values exist as shown below. [`PopReadHiberbootPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopReadHiberbootPolicy.c) checks [`PopReadHiberbootGroupPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopReadHiberbootGroupPolicy.c) (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) before the local setting under `Control\\Session Manager\\Power`, but only a nonzero policy value wins. Microsoft documents `Require use of fast startup` as enabled = require Fast Startup/hibernate, disabled or not configured = use the local setting.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
+    "HiberbootEnabled" = 0; // PopHiberbootEnabledReg 
+    "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
+    "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
+    "HiberbootEnabled" = 0; // REG_DWORD, range: 0-1
+
+    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
+    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
+```
+
+```c
+// PopOpenPowerKey.c
+{
+  return PopOpenKey(a1, L"Control\\Session Manager\\Power");
+}
+```
+
+```c
+// PopReadHiberbootPolicy.c
+result = PopOpenPowerKey(&KeyHandle);
+if ( result >= 0 )
+{
+  RtlInitUnicodeString(&DestinationString, L"HiberbootEnabled");
+  if ( ZwQueryValueKey(
+         KeyHandle,
+         &DestinationString,
+         KeyValuePartialInformation,
+         &KeyValueInformation,
+         0x14u,
+         &ResultLength) >= 0 )
+    v1 = BYTE12(KeyValueInformation);
+  result = ZwClose(KeyHandle);
+}
+```
+
+## Reduced HiberFile
+
+Hibernation files are used for hybrid sleep, fast startup, and [standard hibernation](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#hibernate-state-s4). There are two types, a full and reduced size hibernation file, only fast startup can use a reduced hibernation file.
+
+| Hibernation file type | Default size | Supports |
+| --- | --- | --- |
+| Full | 40% of physical memory | hibernate, hybrid sleep, fast startup |
+| Reduced | 20% of physical memory | fast startup |
+
+### Registry Values
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -1393,92 +1452,25 @@ Hibernation files are used for hybrid sleep, fast startup, and [standard hiberna
     "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec
 ```
 
-## PowerCFG Captures & Commands
+### PowerCFG Captures
 
-`powercfg /h /size 0`:
-```c
-RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileSizePercent	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
-```
-`powercfg /h /type full`:
-```c
-RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 2
-```
-`powercfg /h /type reduced`:
-```c
-RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
-```
-
-| Hibernation file type | Default size | Supports |
-| --- | --- | --- |
-| Full | 40% of physical memory | hibernate, hybrid sleep, fast startup |
-| Reduced | 20% of physical memory | fast startup |
-
-To verify or change the type of hibernation file used, run the *powercfg.exe* utility. The following examples demonstrate how.
-
-| Example | Description |
+| Option | Description |
 | --- | --- |
 | `powercfg /a` | **Verify the hibernation file type.** When a full hibernation file is used, the results state that hibernation is an available option. When a reduced hibernation file is used, the results say hibernation is not supported. If the system has no hibernation file at all, the results say hibernation hasn't been enabled. |
 | `powercfg /h /type full` | **Change the hibernation file type to full.** This isn't recommended on systems with less than 32GB of storage. |
 | `powercfg /h /type reduced` | **Change the hibernation file type to reduced.** If the command returns "the parameter is incorrect," see the following example. |
 | `powercfg /h /size 0`<br> `powercfg /h /type reduced` | **Retry changing the hibernation file type to reduced.** If the hibernation file is set to a custom size greater than 40%, you must first set the size of the file to zero. Then retry the reduced configuration. |
 
-# Disable Hiberboot
-
-Fast startup is a type of shutdown that uses a hibernation file to speed up the subsequent boot. During this type of shutdown, the user is logged off before the hibernation file is created. Fast startup allows for a smaller hibernation file, more appropriate for systems with less storage capabilities.
-
-Fast Startup is implemented as a hybrid shutdown that writes a hibernation image after user sessions are closed; Boot Manager uses the hiberboot/hiberfile BCD elements to resume from that image on the next boot.
-
-When using fast startup, the system appears to the user as though a full shutdown (S5) has occurred, even though the system has actually gone through S4. This includes how the system responds to device wake alarms.
-
-Fast startup logs off user sessions, but the contents of kernel (session 0) are written to hard disk. This enables faster boot.
-
-To programmatically initiate a fast startup-style shutdown, call the [InitiateShutdown](https://learn.microsoft.com/en-us/windows/win32/api/winreg/nf-winreg-initiateshutdowna) function with the `SHUTDOWN_HYBRID` flag or the [ExitWindowsEx](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-exitwindowsex) function with the `EWX_HYBRID_SHUTDOWN` flag.
-
-In Windows, fast startup is the default transition when a system shutdown is requested. A full shutdown (S5) occurs when a system restart is requested or when an application calls a shutdown API.
-
-## Registry Values Defaults
-
-All three values exist as shown below. `PopReadHiberbootGroupPolicy` (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) overrides `PopReadHiberbootPolicy` (`Control\\Session Manager\\Power`).
-
 ```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "HiberbootEnabled" = 0; // PopHiberbootEnabledReg 
-    "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
-    "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
+// powercfg /h /size 0
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileSizePercent	SUCCESS	Type: REG_DWORD, Length: 4, Data: 0
 
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
-    "HiberbootEnabled" = 0; // REG_DWORD, range: 0-1
+// powercfg /h /type full
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 2
 
-    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and chaning their data won't affect the boot.
-    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
-    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
-    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
+// powercfg /h /type reduced`
+RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
 ```
-
-```c
-// PopOpenPowerKey
-{
-  return PopOpenKey(a1, L"Control\\Session Manager\\Power");
-}
-
-// PopReadHiberbootPolicy
-result = PopOpenPowerKey(&KeyHandle);
-if ( result >= 0 )
-{
-  RtlInitUnicodeString(&DestinationString, L"HiberbootEnabled");
-  if ( ZwQueryValueKey(
-         KeyHandle,
-         &DestinationString,
-         KeyValuePartialInformation,
-         &KeyValueInformation,
-         0x14u,
-         &ResultLength) >= 0 )
-    v1 = BYTE12(KeyValueInformation);
-  result = ZwClose(KeyHandle);
-}
-```
-
-- [power/assets | hiberboot-PopReadHiberbootGroupPolicy.c](https://github.com/nohuto/win-config/blob/main/power/assets/hiberboot-PopReadHiberbootGroupPolicy.c)
 
 ## DisableIdleStatesAtBoot Notes
 
