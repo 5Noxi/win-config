@@ -1294,16 +1294,16 @@ Everything listed below is based on personal research. Mistakes may exist, but I
 
     // PopOpenPowerKey
     "AwayModeEnabled" = 0; // REG_DWORD, range 0-1
-    "HiberbootEnabled" = 0; // REG_DWORD, range 0-1, PopHiberbootEnabledReg
+    "HiberbootEnabled" = 1; // REG_DWORD, range 0-1
     "KernelResumeIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
     "MaxHuffRatio" = 1; // REG_DWORD, range 1-98
     "MultiPhaseResumeDisabled" = 0; // REG_DWORD, range 0-1
     "SystemPowerPolicy" = "<STRUCT 232 BYTES>"; // REG_BINARY, Size=232
 
-    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and chaning their data won't affect the boot.
-    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
-    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range 0-4294967295
-    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range 0-4294967295FFFFFFFF
+    // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
+    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
 
     // PpmInitIllegalThrottleLogging
     "ProcessorThrottleLogInterval" = 10000; // REG_DWORD, milliseconds, range 0-10000 (values >10000 are clamped to 10000)

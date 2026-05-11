@@ -729,7 +729,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "ActiveIdleThreshold" = 5000000; // PopFxActiveIdleThreshold (0x004C4B40) 
     "ActiveIdleTimeout" = 1000; // PopFxActiveIdleTimeout (0x000003E8) 
     "AllowAudioToEnableExecutionRequiredPowerRequests" = 1; // PopPowerRequestActiveAudioEnablesExecutionRequired 
-    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (4294967295) - REG_DWORD
+    "AllowHibernate" = 4294967295; // PopAllowHibernateReg, REG_DWORD
     "AllowSystemRequiredPowerRequests" = 1; // PopPowerRequestConvertSystemToExecution 
     "AlwaysComputeQosHints" = 0; // PpmPerfAlwaysComputeQosEnabled 
     "BootHeteroPolicyOverride" = 0; // PpmPerfBootHeteroPolicyOverrideEnabled 
@@ -743,14 +743,14 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DirectedDripsAction" = 3; // PopDirectedDripsAction 
     "DirectedDripsDebounceInterval" = 120; // PopDirectedDripsDebounceInterval (0x78) 
     "DirectedDripsDfxEnforcementPolicy" = 1; // PopDirectedDripsDfxEnforcementPolicy 
-    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (4294967295) 
+    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (0xFFFFFFFF)
     "DirectedDripsSurprisePowerOnTimeout" = 5; // PopDirectedDripsSurprisePowerOnTimeoutSeconds 
     "DirectedDripsTimeout" = 300; // PopDirectedDripsTimeout (0x12C) 
     "DirectedDripsWaitWakeTimeout" = 5; // PopDirectedDripsWaitWakeTimeoutSeconds 
     "DirectedFxDefaultTimeout" = 120; // PopFxDirectedFxDefaultTimeout (0x00000078) 
     "DisableDisplayBurstOnPowerSourceChange" = 0; // PopDisableDisplayBurstOnPowerSourceChange 
     "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
-    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (4294967295) 
+    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (0xFFFFFFFF)
     "DisableVsyncLatencyUpdate" = 0; // PpmDisableVsyncLatencyUpdate 
     "DozeDeferralChecksToIgnore" = 0; // PopDozeDeferralChecksToIgnore 
     "DozeDeferralMaxSeconds" = 259200; // PopDozeDeferralMaxSeconds (0x0003F480) 
@@ -760,9 +760,9 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "DripsWatchdogAction" = 198; // PopDripsWatchdogAction (0xC6) 
     "DripsWatchdogDebounceInterval" = 120; // PopDripsWatchdogDebounceInterval (0x78) 
     "DripsWatchdogTimeout" = 300; // PopDripsWatchdogTimeout (0x12C) 
-    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (4294967295) 
-    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile 
-    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (4294967295) 
+    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (0xFFFFFFFF)
+    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile, REG_DWORD
+    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (0xFFFFFFFF)
     "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled 
     "EnforceAusterityMode" = 0; // PopEnforceAusterityMode 
     "EnforceConsoleLockScreenTimeout" = 0; // PopEnforceConsoleLockScreenTimeout 
@@ -770,30 +770,32 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "EventProcessorEnabled" = 1; // PopEventProcessorEnabled 
     "ExitLatencyCheckEnabled" = 0; // PpmExitLatencyCheckEnabled 
     "ExperimentalClusterIdleMitigation" = 0; // PpmIdleClusterIdleMitigation 
-    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile 
+    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile, REG_DWORD
     "FxAccountingTelemetryDisabled" = 0; // PopDiagFxAccountingTelemetryDisabled 
     "FxRuntimeLogNumberEntries" = 64; // PopFxRuntimeLogNumberEntries (0x40) - Changing it to 0 will end up with a BSoD
     "HeteroFavoredCoreRotationTimeoutMs" = 30000; // PpmHeteroFavoredCoreRotationTimeoutMs (0x00007530) 
     "HeteroHgsEePerfHintsIndependentEnabled" = 0; // PpmHeteroHgsEePerfHintsIndependentEnabled 
     "HeteroHgsPlusDisabled" = 0; // PpmHeteroHgsThreadDisabled 
-    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (4294967295) 
-    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (4294967295) 
+    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (0xFFFFFFFF)
+    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (0xFFFFFFFF)
     "HeteroWpsContainmentEnumOverride" = 0; // PpmHeteroWpsContainmentEnumOverride 
     "HeteroWpsWorkloadProminenceCutoff" = 35; // PpmHeteroWpsWorkloadProminenceCutoff (0x23) 
-    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default - REG_DWORD
-    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295)
-    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295)
+    "HiberbootEnabled" = 1; // PopHiberbootEnabledReg 
+    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent, REG_DWORD, 0-39 keeps the type logic, 40-100 uses the percent directly and PopSetHiberFileSize forces a full file
+    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF), DWORD 1 = Reduced, DWORD 2 = Full, only used while HiberFileSizePercent < 40
+    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF), fallback when HiberFileType is unset
     "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
-    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg - REG_DWORD
+    "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg, REG_DWORD
+    "HibernateEnabled" = 1; // that's the value 'powercfg /hibernate off' would set
     "HighPerfDurationBoot" = 90000; // PpmHighPerfDuration (0x00015F90) 
     "HighPerfDurationCSExit" = ?; // unk_140FC337C
     "HighPerfDurationSxExit" = ?; // unk_140FC3380
     "IdleDurationExpirationTimeout" = 4; // PpmIdleDurationExpirationTimeoutMs 
-    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (4294967295) 
+    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (0xFFFFFFFF)
     "IdleStateTimeout" = 500; // PopPepIdleStateTimeout (0x000001F4) 
     "IgnoreCsComplianceCheck" = 0; // PopIgnoreCsComplianceCheck 
-    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (4294967295) 
+    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (0xFFFFFFFF)
     "IpiLastClockOwnerDisable" = 0; // PpmIpiLastClockOwnerDisable 
     "LatencyToleranceDefault" = 100000; // PpmLatencyToleranceLimit (0x000186A0) 
     "LatencyToleranceFSVP" = 20000; // dword_140FC3428 dd 4E20
@@ -810,22 +812,22 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "MultiparkGranularity" = 8; // PpmParkMultiparkGranularity 
     "PdcIdlePhaseDefaultWatchdogTimeoutSeconds" = 30; // PopPdcIdlePhaseDefaultWatchdogTimeoutSeconds (0x0000001E) 
     "PdcOneWayEntry" = 0; // PopPowerAggregatorOneWayEntry 
-    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (4294967295) 
+    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (0xFFFFFFFF)
     "PerfBoostAtGuaranteed" = 0; // PpmPerfBoostAtGuaranteed 
     "PerfCalculateActualUtilization" = 1; // PpmPerfCalculateActualUtilization 
     "PerfCheckTimerImplementation" = 0; // PpmCheckTimerImplementation 
     "PerfIdealAggressiveIncreasePolicyThreshold" = 90; // PpmPerfIdealAggressiveIncreaseThreshold (0x5A) 
     "PerfQueryOnDevicePowerChanges" = 0; // PopFxPerfQueryOnDevicePowerChanges 
     "PerfSingleStepSize" = 5; // PpmPerfSingleStepSize (0x05) 
-    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (4294967295) 
-    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (4294967295) 
+    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (0xFFFFFFFF)
+    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (0xFFFFFFFF)
     "PoFxSystemIrpWaitForReportDevicePowered" = 0; // PopPoFxSystemIrpWaitForReportDevicePoweredReg 
     "PowerActionResumeWatchdogTimeoutDefault" = 300; // PopPowerActionResumingWatchdogTimeoutDefault (0x0000012C) 
     "PowerActionTransitioningWatchdogTimeoutDefault" = 600; // PopPowerActionTransitioningWatchdogTimeoutDefault (0x00000258) 
     "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
     "ProximityEscapeMsec" = 0; // TtmpProximityEscapeMsec 
     "RestrictedStandbyDozeTimeoutSeconds" = 0; // PopPowerAggregatorRestrictedStandbyDozeTimeoutSeconds 
-    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (4294967295) 
+    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (0xFFFFFFFF) 
     "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
     "SleepstudyGlobalBlockerLimit" = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
     "SleepstudyLibraryBlockerLimit" = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
@@ -862,24 +864,25 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "LidNotifyReliable" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
-    "GuardedHost" = ?; // unk_140FC5234
-    "Policy" = 0; // PopHiberForceDisabledReg 
+    "GuardedHost" = 0; // unk_140FC5234, if nonzero, PopHibernateEvaluation treats hibernation as force disabled
+    "Policy" = 0; // PopHiberForceDisabledReg, ^
 
+// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize picks the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
-    "Percent16GBFull" = ?; // unk_140FC36D0 - 28Hex/40Dec?
-    "Percent16GBReduced" = ?; // unk_140FC36CC - 14Hex/20Dec?
-    "Percent1GBFull" = ?; // unk_140FC3670 - 28Hex/40Dec?
-    "Percent1GBReduced" = ?; // unk_140FC366C - 14Hex/20Dec?
-    "Percent2GBFull" = ?; // unk_140FC3688 - 28Hex/40Dec?
-    "Percent2GBReduced" = ?; // unk_140FC3684 - 14Hex/20Dec?
-    "Percent32GBFull" = ?; // unk_140FC36E8 - 28Hex/40Dec?
-    "Percent32GBReduced" = ?; // unk_140FC36E4 - 14Hex/20Dec?
-    "Percent4GBFull" = ?; // unk_140FC36A0 - 28Hex/40Dec?
-    "Percent4GBReduced" = ?; // unk_140FC369C - 14Hex/20Dec?
-    "Percent8GBFull" = ?; // unk_140FC36B8 - 28Hex/40Dec?
-    "Percent8GBReduced" = ?; // unk_140FC36B4 - 14Hex/20Dec?
-    "PercentUnlimitedFull" = ?; // unk_140FC3700 - 28Hex/40Dec?
-    "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec?
+    "Percent16GBFull" = 40; // unk_140FC36D0
+    "Percent16GBReduced" = 20; // unk_140FC36CC
+    "Percent1GBFull" = 40; // unk_140FC3670
+    "Percent1GBReduced" = 20; // unk_140FC366C
+    "Percent2GBFull" = 40; // unk_140FC3688
+    "Percent2GBReduced" = 20; // unk_140FC3684
+    "Percent32GBFull" = 40; // unk_140FC36E8
+    "Percent32GBReduced" = 20; // unk_140FC36E4
+    "Percent4GBFull" = 40; // unk_140FC36A0
+    "Percent4GBReduced" = 20; // unk_140FC369C
+    "Percent8GBFull" = 40; // unk_140FC36B8
+    "Percent8GBReduced" = 20; // unk_140FC36B4
+    "PercentUnlimitedFull" = 40; // unk_140FC3700
+    "PercentUnlimitedReduced" = 20; // unk_140FC36FC
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep";
     "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
@@ -1347,43 +1350,45 @@ Hibernation is Windows S4 power state, it writes the resume state to `Hiberfil.s
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "AllowHibernate" = 4294967295; // PopAllowHibernateReg (0xFFFFFFFF) 
-    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile 
-    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile 
-    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default
+    "AllowHibernate" = 4294967295; // PopAllowHibernateReg, REG_DWORD
+    "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile, REG_DWORD
+    "ForceMinimalHiberFile" = 0; // PopForceMinimalHiberFile, REG_DWORD
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
     "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg 
     "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
-    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (0xFFFFFFFF) 
+    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (0xFFFFFFFF)
+
+    "HibernateEnabled" = 1; // that's the value 'powercfg /hibernate off' would set
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ForceHibernateDisabled";
-    "GuardedHost" = ?; // unk_140FC5234
-    "Policy" = 0; // PopHiberForceDisabledReg 
-```
-
-`powercfg /hibernate off` sets:
-```c
-RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HibernateEnabled	Type: REG_DWORD, Length: 4, Data: 0
+    "GuardedHost" = 0; // unk_140FC5234, if nonzero, PopHibernateEvaluation treats hibernation as force disabled
+    "Policy" = 0; // PopHiberForceDisabledReg, ^
 ```
 
 ## Disable Hiberboot
 
-Fast Startup (also called hiberboot or hybrid shutdown) is a shutdown mechamism built on hibernation. It logs off the interactive user sessions first, then hibernates the kernel session and loaded kernel mode drivers. The next boot can skip much of kernel and driver initialization. Restart doesn't use Fast Startup, it performs a full boot cycle so drivers and Windows components are initialized from a new state. For `shutdown.exe`, `/s /t 0` = full shutdown, while `/s /hybrid /t 0` = hybrid shutdown.
+Fast Startup (also called *hiberboot*/*hybrid shutdown*) is a shutdown mechamism built on hibernation. It logs off the interactive user sessions first, then hibernates the kernel session and loaded kernel mode drivers. The next boot can skip much of kernel and driver initialization. Restart doesn't use Fast Startup, it performs a full boot cycle so drivers and Windows components are initialized from a new state. For `shutdown.exe`, `/s /t 0` = full shutdown, while `/s /hybrid /t 0` = hybrid shutdown.
 
-Boot Manager uses the `resume`, `resumeobject`, `hiberboot`, `filepath`, and `filedevice` BCD elements ([bcd-edits/#valuedata-list](https://www.noverse.dev/docs/win-config/system/bcd-edits/#valuedata-list)) to locate the Windows Resume application and hibernation file on the next boot.
+Boot Manager uses the `resume`, `resumeobject`, `hiberboot`, `filepath`, `filedevice` BCD elements ([bcd-edits/#valuedata-list](https://www.noverse.dev/docs/win-config/system/bcd-edits/#valuedata-list)) to locate the Windows Resume application and hibernation file on the next boot.
+
+> *Fast startup is a type of shutdown that uses a hibernation file to speed up the subsequent boot. During this type of shutdown, the user is logged off before the hibernation file is created. Fast startup allows for a smaller hibernation file, more appropriate for systems with less storage capabilities.*
+> *When using fast startup, the system appears to the user as though a full shutdown (S5) has occurred, even though the system has actually gone through S4. This includes how the system responds to device wake alarms.*
+> *Fast startup logs off user sessions, but the contents of kernel (session 0) are written to hard disk. This enables faster boot.*
+>
+> — Microsoft, [System power states, Fast startup: reduced hibernation file](https://learn.microsoft.com/en-us/windows/win32/power/system-power-states#fast-startup-reduced-hibernation-file)
 
 ### Registry Values
 
-All three values exist as shown below. [`PopReadHiberbootPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopReadHiberbootPolicy.c) checks [`PopReadHiberbootGroupPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopReadHiberbootGroupPolicy.c) (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) before the local setting under `Control\\Session Manager\\Power`, but only a nonzero policy value wins. Microsoft documents `Require use of fast startup` as enabled = require Fast Startup/hibernate, disabled or not configured = use the local setting.
+All three values exist as shown below. [`PopReadHiberbootPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopReadHiberbootPolicy.c) checks [`PopReadHiberbootGroupPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopReadHiberbootGroupPolicy.c) (`\\Registry\\Machine\\Software\\Policies\\Microsoft\\Windows\\System`) before the setting under `Control\\Session Manager\\Power`, but only a nonzero policy value would be preferred.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "HiberbootEnabled" = 0; // PopHiberbootEnabledReg 
+    "HiberbootEnabled" = 1; // PopHiberbootEnabledReg 
     "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
     "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
-    "HiberbootEnabled" = 0; // REG_DWORD, range: 0-1
+    "HiberbootEnabled" = 1; // REG_DWORD, range: 0-1
 
     // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
     "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
@@ -1392,7 +1397,7 @@ All three values exist as shown below. [`PopReadHiberbootPolicy`](https://github
 ```
 
 ```c
-// PopOpenPowerKey.c
+__int64 __fastcall PopOpenPowerKey(__int64 a1)
 {
   return PopOpenKey(a1, L"Control\\Session Manager\\Power");
 }
@@ -1429,27 +1434,28 @@ Hibernation files are used for hybrid sleep, fast startup, and [standard hiberna
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent dd 64h (IDA), but set to 0 by default on LTSC IoT Enterprise 2024 since hibernation is unsupported by default
+    "HiberFileSizePercent" = 100; // PopHiberFileSizePercent, REG_DWORD, 0-39 keeps the type logic, 40-100 uses the percent directly and PopSetHiberFileSize forces a full file
 
-    // DWORD 1 = Reduced, DWORD 2 = Full
+    // DWORD 1 = Reduced, DWORD 2 = Full, only used while HiberFileSizePercent < 40
     "HiberFileType" = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF)
-    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF)
+    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF), fallback when HiberFileType is unset
 
+// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize picks the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
-    "Percent16GBFull" = ?; // unk_140FC36D0 - 28Hex/40Dec
-    "Percent16GBReduced" = ?; // unk_140FC36CC - 14Hex/20Dec
-    "Percent1GBFull" = ?; // unk_140FC3670 - 28Hex/40Dec
-    "Percent1GBReduced" = ?; // unk_140FC366C - 14Hex/20Dec
-    "Percent2GBFull" = ?; // unk_140FC3688 - 28Hex/40Dec
-    "Percent2GBReduced" = ?; // unk_140FC3684 - 14Hex/20Dec
-    "Percent32GBFull" = ?; // unk_140FC36E8 - 28Hex/40Dec
-    "Percent32GBReduced" = ?; // unk_140FC36E4 - 14Hex/20Dec
-    "Percent4GBFull" = ?; // unk_140FC36A0 - 28Hex/40Dec
-    "Percent4GBReduced" = ?; // unk_140FC369C - 14Hex/20Dec
-    "Percent8GBFull" = ?; // unk_140FC36B8 - 28Hex/40Dec
-    "Percent8GBReduced" = ?; // unk_140FC36B4 - 14Hex/20Dec
-    "PercentUnlimitedFull" = ?; // unk_140FC3700 - 28Hex/40Dec
-    "PercentUnlimitedReduced" = ?; // unk_140FC36FC - 14Hex/20Dec
+    "Percent16GBFull" = 40; // unk_140FC36D0
+    "Percent16GBReduced" = 20; // unk_140FC36CC
+    "Percent1GBFull" = 40; // unk_140FC3670
+    "Percent1GBReduced" = 20; // unk_140FC366C
+    "Percent2GBFull" = 40; // unk_140FC3688
+    "Percent2GBReduced" = 20; // unk_140FC3684
+    "Percent32GBFull" = 40; // unk_140FC36E8
+    "Percent32GBReduced" = 20; // unk_140FC36E4
+    "Percent4GBFull" = 40; // unk_140FC36A0
+    "Percent4GBReduced" = 20; // unk_140FC369C
+    "Percent8GBFull" = 40; // unk_140FC36B8
+    "Percent8GBReduced" = 20; // unk_140FC36B4
+    "PercentUnlimitedFull" = 40; // unk_140FC3700
+    "PercentUnlimitedReduced" = 20; // unk_140FC36FC
 ```
 
 ### PowerCFG Captures
