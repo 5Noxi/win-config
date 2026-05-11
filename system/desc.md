@@ -994,7 +994,7 @@ See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/sys
 
 The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal research, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
@@ -1682,7 +1682,7 @@ These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https
 
 The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values/dxgmms2) for all used files.
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal research, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
@@ -2406,7 +2406,7 @@ This option currently includes some speculations and default values. I haven't h
 
 See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal research, mistakes may exist.
 
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm";

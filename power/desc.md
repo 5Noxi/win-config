@@ -355,7 +355,7 @@ A simple example here would be [GetEnhancedVerifierOptions](https://github.com/n
 
 To create this list, I've used many driver pseudocodes (usbhub, winhub, acpi, pci, wdf, hidclass, USBHUB3...), several INF files, and W10 source for comments (which may not be accurate anymore).
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal research, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters";
@@ -721,7 +721,7 @@ Several values are applied, some have been changed, others are default values. T
 
 See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal research, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -850,8 +850,8 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "EnergySaverState" = 2; // 1 = override state (more power savings) if != 1 no override? (WNF_PO_ENERGY_SAVER_OVERRIDE/WNF_SEB_ENERGY_SAVER_STATE_V2), this value is controlled by System > Power: Always use energy saver (1=on, 2=off)
 
     // InitializePowerWatchdogTimeoutDefaults
-    "PowerWatchdogDrvSetMonitorTimeoutMsec" = 10000; // v10[13]
-    "PowerWatchdogDwmSyncFlushTimeoutMsec" = 30000; // v10[10]
+    "PowerWatchdogDrvSetMonitorTimeoutMsec" = 10000;
+    "PowerWatchdogDwmSyncFlushTimeoutMsec" = 30000;
     "PowerWatchdogPoCalloutTimeoutMsec" = 10000;
     "PowerWatchdogPowerOnGdiTimeoutMsec" = 30000;
     "PowerWatchdogRequestQueueTimeoutMsec" = 30000;
@@ -867,7 +867,7 @@ Everything listed below is based on personal research. Mistakes may exist, but I
     "GuardedHost" = 0; // unk_140FC5234, if nonzero, PopHibernateEvaluation treats hibernation as force disabled
     "Policy" = 0; // PopHiberForceDisabledReg, ^
 
-// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize picks the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
+// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize uses the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
     "Percent16GBFull" = 40; // unk_140FC36D0
     "Percent16GBReduced" = 20; // unk_140FC36CC
@@ -944,7 +944,7 @@ You can get a lot of information about data ranges and more from `.inf` files, s
 
 ## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
 
-Everything listed below is based on personal research. Mistakes may exist, but I don't think I've made any.
+Everything listed below is based on personal research, mistakes may exist.
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
