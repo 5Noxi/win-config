@@ -520,17 +520,17 @@ Everything listed below is based on personal research, mistakes may exist.
 
 For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
-Note on some usbflag values ("queried as 4-byte boolean"), `USBHUB3` reads a 4-byte and handles any nonzero value as enabled. The value type is not enforced, so both `REG_DWORD` and `REG_BINARY` should work if they're a 4-byte nonzero value (that's my current assumption). I would personally use `REG_BINARY` instead of `REG_DWORD` for now, as for example `osvc`, `IgnoreHWSerNum`, `ResetOnResume` are `REG_BINARY` ([usb-device-specific-registry-settings.md](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)).
+Note on some usbflag values ("queried as 4 byte bool"), `USBHUB3` reads a 4-byte and handles any nonzero value as enabled. The value type is not enforced, so both `REG_DWORD` and `REG_BINARY` should work if they're a 4-byte nonzero value (that's my current assumption). I would personally use `REG_BINARY` instead of `REG_DWORD` for now, as for example `osvc`, `IgnoreHWSerNum`, `ResetOnResume` are `REG_BINARY` ([usb-device-specific-registry-settings.md](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)).
 
 See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-config/peripheral/usbflags-values/) for notes on `USB_DEVICE_HACKS`/miscellaneous information on values.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags";
     "Allow64KLowOrFullSpeedControlTransfers" = ?; // REG_DWORD, only value 1 enables, 0/other values disable
-    "DisableHCS0Idle" = 0; // REG_DWORD, nonzero disables S0 idle, missing/read failure behaves as 0
+    "DisableHCS0Idle" = 0; // REG_DWORD, nonzero disables S0 idle
     "GenericCompositeUSBDeviceString" = ?; // REG_SZ
-    "SetMultiTTBitDuringConfigureEndpoint" = ?; // REG_DWORD, 1 enables override, 0 disables override
-    "TestRunEsmInWorkItem" = 0; // REG_DWORD, 1 enables test mode bit, 0 clears it
+    "SetMultiTTBitDuringConfigureEndpoint" = ?; // REG_DWORD
+    "TestRunEsmInWorkItem" = 0; // REG_DWORD
 
 // built by HUBREG_OpenCreateUsbflagsDeviceKey
 
@@ -538,17 +538,17 @@ See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-co
     "IgnoreHWSerNum" = ?; // REG_BINARY, Indicates whether the USB driver stack must ignore the serial number of the device.
                           // 0x00: The setting is disabled.
                           // 0x01: Forces the USB driver stack to ignore the serial number of the device. Therefore, the device instance is tied to the port to which the device is attached.
-    "UseWin8DescriptorValidation" = ?; // queried as 4-byte boolean
+    "UseWin8DescriptorValidation" = ?; // queried as 4 byte bool
     "ResetOnResume" = ?; // REG_BINARY, indicates whether the USB driver stack must reset the device when the port resumes from a sleep cycle.
                          // 0x0000: The setting is disabled.
                          // 0x0001: Forces the USB driver stack to reset a device on port resume.
-    "DisableOnSoftRemove" = 1; // queried as 4-byte boolean
-    "RequestConfigDescOnReset" = ?; // queried as 4-byte boolean
-    "DisableRecoveryFromPowerDrain" = ?; // queried as 4-byte boolean
-    "DisableLpm" = ?; // queried as 4-byte boolean. When enabled, link power management is disabled for the device.
+    "DisableOnSoftRemove" = 1; // queried as 4 byte bool
+    "RequestConfigDescOnReset" = ?; // queried as 4 byte bool
+    "DisableRecoveryFromPowerDrain" = ?; // queried as 4 byte bool
+    "DisableLpm" = ?; // queried as 4 byte bool. When enabled, link power management is disabled for the device.
                       // "A link enters a low power state (consuming less power than the working state) only when the downstream device enters the suspended state through the selective suspend mechanism", "After remaining idle for a certain period of time, link partners progressively enter U1 (standby with fast exit) and then U2 (standby with slower exit)"
                       // https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-3-0-lpm-mechanism- https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/u1-and-u2-transitions
-    "SkipBOSDescriptorQuery" = ?; // queried as 4-byte boolean
+    "SkipBOSDescriptorQuery" = ?; // queried as 4 byte bool
     "AlternateSettingFilter" = ?; // REG_BINARY, size must be even and > 0 (data is cached as 16 bit entries "count = byte_size/2")
     "ResetTTOnCancel" = ?; // REG_DWORD
     "NoClearTTBufferOnCancel" = ?; // REG_DWORD, has priority over ResetTTOnCancel
@@ -557,7 +557,7 @@ See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-co
     "osvc" = ?; // REG_BINARY, "Indicates whether the operating system queried the device for Microsoft-defined USB descriptors. If the previously attempted OS descriptor query was successful, the value contains the vendor code from the OS string descriptor."
                 // 0x0000: The device didn't provide a valid response to the Microsoft OS string descriptor request.
                 // 0x01xx: The device provided a valid response to the Microsoft OS string descriptor request, where xx is the bVendorCode contained in the response.
-    "SkipContainerIdQuery" = ?; // queried as 4-byte boolean
+    "SkipContainerIdQuery" = ?; // queried as 4 byte bool
     "MsOs20DescriptorSetInfo" = ?; // queried as 8-byte
 
     //"DontSkipMsOsDescriptor"
