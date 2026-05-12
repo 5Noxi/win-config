@@ -955,7 +955,7 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 ## Registry Values
 
-[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but `USBAUDIO!RegistryGetIdleInfo` only checks that the returned value data length (`4`), see '[Build Differences](https://www.noverse.dev/docs/win-config/power/usb-audio-idle/#build-differences)' section.
+[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) only checks the returned value data length (`4`), see '[Build Differences](https://www.noverse.dev/docs/win-config/power/usb-audio-idle/#build-differences)' section.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\00xx\\PowerSettings";
