@@ -940,14 +940,14 @@ Note that this is based on [binary build version 22631 (23H2)](https://github.co
 
 ## Suboptions
 
-`Disable D3 in Modern Standby` isn't in the power key, but since the first suboption is already related to MS, and creating a new option for that would be too much, I'll add it here for now.
+`Disable D3 in Modern Standby` isn't in the power key, but since the first suboption is already related to ModernStandby, and creating a new option for that would be too much, I'll add it here for now.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
     "StorageD3InModernStandby" = 1; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support
 ```
 
-> "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as “S0 Low Power Idle”. Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, …) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
+> "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as "S0 Low Power Idle". Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, …) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
 >
 > — Microsoft, [Power Management for Storage Hardware Devices, D3 Support](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-intro#d3-support)
 
@@ -1672,19 +1672,13 @@ HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
 
 # Disable Energy Estimation
 
-Not needed, if you disable energy estimation:
-```json
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\EnergyEstimation\\TaggedEnergy": {
-  "DisableTaggedEnergyLogging": { "Type": "REG_DWORD", "Data": 1 },
-  "TelemetryMaxApplication": { "Type": "REG_DWORD", "Data": 0 },
-  "TelemetryMaxTagPerApplication": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
+Energy estimation accounts for estimated power usage, components report modeled energy costs, which are tracked per process and used for battery and standby telemetry.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
-    "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator 
-    "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator 
-    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled
+    "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator, 0 allows WNF_PO_DISCHARGE_ESTIMATE updates, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
+    "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator, 0 clears WNF_PO_CHARGE_ESTIMATE, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
+    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled
 ```
 
 - [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
