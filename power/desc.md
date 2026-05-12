@@ -980,6 +980,8 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 ## Build Differences
 
+Use [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-24H2&module=USBAUDIO&function=RegistryGetIdleInfo.c&mode=side-by-side) for direct comparison.
+
 23H2 (and below) has two timeout values `ConservationIdleTime`/`PerformanceIdleTime`:
 
 ```c
