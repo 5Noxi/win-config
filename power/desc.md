@@ -946,16 +946,16 @@ Note that `IdlePowerState` only has a meaning if timeouts are nonzero, means as 
 
 It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/DeviceStart.c) -> [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) -> [`PoRegisterDeviceForIdleDetection`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PoRegisterDeviceForIdleDetection.c). In 24H2+ it also registers [`PowerSettingCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/USBAUDIO/PowerSettingCallback.c) for `GUID_LOW_POWER_EPOCH`, which is why the additional `CS*` values exist.
 
-> `[in] ConservationIdleTime`
-> Sets the time-out value (in seconds) to apply when the system power policy optimizes for energy conservation. Specify zero to disable idle detection when conservation policy is in effect.
-> `[in] PerformanceIdleTime`
-> Sets the time-out value (in seconds) to apply when the system power policy optimizes for performance. Specify zero to disable idle detection when performance policy is in effect.
+> "*`[in] ConservationIdleTime`*
+> *Sets the time-out value (in seconds) to apply when the system power policy optimizes for energy conservation. Specify zero to disable idle detection when conservation policy is in effect.*
+> *`[in] PerformanceIdleTime`*
+> *Sets the time-out value (in seconds) to apply when the system power policy optimizes for performance. Specify zero to disable idle detection when performance policy is in effect.*"
 >
-> - Microsoft, [`PoRegisterDeviceForIdleDetection`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-poregisterdeviceforidledetection)
+> — Microsoft, [`PoRegisterDeviceForIdleDetection`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-poregisterdeviceforidledetection)
 
 ## Registry Values
 
-[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but `USBAUDIO!RegistryGetIdleInfo` only checks that the returned value data length (`4`), see '[Build Differences]()' section.
+[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but `USBAUDIO!RegistryGetIdleInfo` only checks that the returned value data length (`4`), see '[Build Differences](https://www.noverse.dev/docs/win-config/power/usb-audio-idle/#build-differences)' section.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\00xx\\PowerSettings";
