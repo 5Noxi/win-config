@@ -343,9 +343,9 @@ HKLM\SYSTEM\CurrentControlSet\Services\<ServiceName> // software key - service/d
 
 Not every instance has the same subkeys or values.
 
-I won't add details on the PnP manager here, as that's not the purpose of the repo. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
+I won't add details on the PnP manager here, as that's not the purpose of the option. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
 
----
+### Default Data
 
 One thing to point out here is that there're two APIs which I almost didn't notice. [`IoOpenDeviceRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendeviceregistrykey) & `PLUGPLAY_REGKEY_DEVICE` opens the per-device-instance hardware key in the `Enum` branch (`HKLM\SYSTEM\CCS\Enum\<Enumerator>\<DeviceID>\<InstanceID>\Device Parameters`). [`IoOpenDriverRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendriverregistrykey) opens the per-driver-service key in the `Services` branch (`HKLM\SYSTEM\CCS\Services\<ServiceName>\Parameters`).
 
@@ -937,6 +937,19 @@ Note that this is based on [binary build version 22631 (23H2)](https://github.co
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
+
+## Suboptions
+
+`Disable D3 in Modern Standby` isn't in the power key, but since the first suboption is already related to MS, and creating a new option for that would be too much, I'll add it here for now.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
+    "StorageD3InModernStandby" = 1; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support
+```
+
+> "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as “S0 Low Power Idle”. Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, …) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
+>
+> — Microsoft, [Power Management for Storage Hardware Devices, D3 Support](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-intro#d3-support)
 
 # USB Audio Idle
 
@@ -1672,10 +1685,9 @@ Not needed, if you disable energy estimation:
     "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator 
     "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator 
     "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled
-                                    // If following HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\knobs\Power/Controls/EnergyEstimationEnabled, it should have a range of 0-4294967295
 ```
 
-- [power/assets | energyesti-PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
+- [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/energyesti.png?raw=true)
 
@@ -1683,89 +1695,21 @@ Not needed, if you disable energy estimation:
 
 `Disable Battery Capacity Section` = Disables the battery capacity section on the battery saver page of the system settings app.
 
-# Disable Storage Idle States
+## IdleStatesNumber
 
-Disables idle states for NVMe, SSD, SD, HDD. This is currently more of a possible idea. 
+These values are located in `partmgr.sys` and can be misunderstood. `IdleStatesNumber` just tells `partmgr` how many `IdleState\x` estimation "profiles" to load, example:
 
-If `IdleStatesNumber` is set, the other values are ignored? Let me know if you have a better interpretation.
+- `IdleStatesNumber = 1` -> read only `IdleState\1`
+- `IdleStatesNumber = 3` -> read `IdleState\1`, `IdleState\2`, `IdleState\3`
 
-The values are located in the `EnergyEstimation` (guesses how much power is used over time), so it's probably related to something else. I'll leave it for documentation reasons (and future extended declaration).
-
-- [power/assets | storageidle-PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/nvmeperf-ClassUpdateDynamicRegistrySettings.c)
-
-## Suboption
-
-### Disable HDD Parking
-
-`EnableHDDParking` is set to `1` by default, `EnableDIPM`/`EnableHIPM` are set to `0` by default. I haven't looked further into it and therefore can't say if changing `EnableHDDParking` has any affect at all, since it seems to not be read. I might add more details soon.
-
-HIPM (Host Initiated Link Power Management)/DIPM (Device Initiated Link Power Management) are controlled via the [AHCI Link Power Management - HIPM/DIPM](https://github.com/nohuto/win-config/blob/main/power/assets/power-settings/disk-settings-link-power-management-mode---hipm-dipm.md) (power plan), I haven't checked whenever these values interfer with it or not.
+So these values seem to change the estimated energy *math* part.
 
 ```powershell
-Power Setting GUID: 0b2d69d7-a2a1-449c-9680-f91c70521c60  (AHCI Link Power Management - HIPM/DIPM)
-  Possible Setting Index: 000
-  Possible Setting Friendly Name: Active - Neither Host or Device initiated allowed
-  Possible Setting Index: 001
-  Possible Setting Friendly Name: HIPM - Host initiated allowed only
-  Possible Setting Index: 002
-  Possible Setting Friendly Name: HIPM+DIPM - Both Host and Device initiated allowed
-  Possible Setting Index: 003
-  Possible Setting Friendly Name: DIPM - Device initiated allowed only
-  Possible Setting Index: 004
-  Possible Setting Friendly Name: Lowest - HIPM+DIPM+DEVSLP
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME : IdleStatesNumber
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleExitEnergyMicroJoules
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleExitLatencyMs
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdlePowerMw
+\Registry\Machine\SYSTEM\ControlSet001\Control\Power\EnergyEstimation\Storage\NVME\IdleState\1 : IdleTimeLengthMs
 ```
 
-```c
-Dst[37] = L"EnableHIPM";
-LODWORD(Dst[11]) = 4;
-Dst[38] = &dword_4C134;
-Dst[40] = &dword_4C134;
-Dst[44] = L"EnableDIPM";
-LODWORD(Dst[13]) = 4;
-Dst[45] = &dword_5D0C8;
-Dst[47] = &dword_5D0C8;
-Dst[58] = L"EnableHDDParking";
-LODWORD(Dst[18]) = 4;
-Dst[59] = &dword_4C13C;
-Dst[61] = &dword_4C13C;
-
-dword_5D0CC = 0;
-dword_5D0C8 = 0;
-dword_4C434 = 0;
-dword_4C12C = -1;
-dword_4C138 = -1;
-dword_4C134 = -1;
-dword_4C424 = 16;
-dword_4C420 = 3000;
-dword_5D510 = 1;
-dword_4C13C = 1;
-dword_4C130 = 1;
-dword_4C140 = -1;
-```
-
-- [power/assets | hddpark-amdsbs.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-amdsbs.c)
-- [power/assets | hddpark-DllInitialize.c](https://github.com/nohuto/win-config/blob/main/power/assets/hddpark-DllInitialize.c)
-
-# Disable PM in Standby Mode
-
-This policy setting specifies that power management is disabled when the machine enters connected standby mode.
-- If this policy setting is enabled, Windows Connection Manager doesn't manage adapter radios to reduce power consumption when the machine enters connected standby mode.
-- If this policy setting isn't configured or is disabled, power management is enabled when the machine enters connected standby mode.
-
-## Suboption
-
-`Disable Modern Standby`:
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power"; 
-    "MSDisabled" = 1; // PopModernStandbyDisabled
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\ModernSleep";
-    "EnabledActions" = 0; // PopAggressiveStandbyActionsRegValue 
-    "EnableDsNetRefresh" = 0; // PopEnableDsNetRefresh 
-```
-
-## [Windows Policies](https://www.noverse.dev/policies.html)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Disable power management in connected standby mode](https://www.noverse.dev/policies.html?p=WCM*WCM_DisablePowerManagement) | `HKLM\Software\Policies\Microsoft\Windows\WcmSvc\GroupPolicy` | `fDisablePowerManagement` |
+- [power/assets | PmPowerContextInitialization.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PmPowerContextInitialization.c)

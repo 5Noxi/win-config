@@ -117,14 +117,6 @@ b=0
 a=120
 ```
 
-# Notepad++
-
-You can either change it yourself in:
-```
-HKCR\batfile\shell\edit\command
-```
-or use the option switch, which selects [notepad++](https://notepad-plus-plus.org/downloads/) as default editor.
-
 # StartAllBack Settings
 
 Installation:
@@ -328,7 +320,7 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 
 # System Informer
 
-Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it is recommended to replace it.
+Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it's recommended to replace it.
 
 Enable `Theme support` (dark mode) and disable `Check for updates automatically` with:
 ```powershell
