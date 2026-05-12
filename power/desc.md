@@ -347,7 +347,7 @@ I won't add details on the PnP manager here, as that's not the purpose of the op
 
 ### Default Data
 
-One thing to point out here is that there're two APIs which I almost didn't notice. [`IoOpenDeviceRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendeviceregistrykey) & `PLUGPLAY_REGKEY_DEVICE` opens the per-device-instance hardware key in the `Enum` branch (`HKLM\SYSTEM\CCS\Enum\<Enumerator>\<DeviceID>\<InstanceID>\Device Parameters`). [`IoOpenDriverRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendriverregistrykey) opens the per-driver-service key in the `Services` branch (`HKLM\SYSTEM\CCS\Services\<ServiceName>\Parameters`).
+One thing to point out here is that there're two APIs which I almost didn't notice. [`IoOpenDeviceRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendeviceregistrykey) & `PLUGPLAY_REGKEY_DEVICE` opens the per-device-instance hardware key in the `Enum` branch (`HKLM\SYSTEM\CCS\Enum\<Enumerator>\<DeviceID>\<InstanceID>\Device Parameters`). [`IoOpenDriverRegistryKey`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-ioopendriverregistrykey) opens the per-driver-service key in the `Services` branch (`HKLM\SYSTEM\CCS\Services\<ServiceName>\Parameters`). See [power/assets/pnp](https://github.com/nohuto/win-config/tree/main/power/assets/pnp) for all used functions.
 
 A simple example here would be [GetEnhancedVerifierOptions](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/GetEnhancedVerifierOptions.c) which uses `IoOpenDriverRegistryKey` and as you can see in a boot trace, `EnhancedVerifierOptions` is used in for example `\Registry\Machine\SYSTEM\ControlSet001\Services\PEAUTH\Parameters\Wdf : EnhancedVerifierOptions`.
 
@@ -643,38 +643,6 @@ Everything listed below is based on personal research, mistakes may exist.
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\WUDF\\CompanionConfigurations\\USBXHCI";
     "CompanionServiceList" = ?;
 ```
-
-- [pnp/assets | BthUsb_QuerySelectiveSuspend.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/BthUsb_QuerySelectiveSuspend.c)
-- [pnp/assets | ExpressDownstreamSwitchPortProcessAspmPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressDownstreamSwitchPortProcessAspmPolicy.c)
-- [pnp/assets | ExpressPortFindOptInOptOutPolicy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/ExpressPortFindOptInOptOutPolicy.c)
-- [pnp/assets | FDO_GetIdleSupported.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FDO_GetIdleSupported.c)
-- [pnp/assets | FxPkgPnpSaveState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSaveState.c)
-- [pnp/assets | FxPkgPnpSleepStudyEvaluateParticipation.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/FxPkgPnpSleepStudyEvaluateParticipation.c)
-- [pnp/assets | GetEnhancedVerifierOptions.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/GetEnhancedVerifierOptions.c)
-- [pnp/assets | HidpFdoConfigureIdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpFdoConfigureIdleSettings.c)
-- [pnp/assets | HidpGetComboHardwareIdV2Enabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetComboHardwareIdV2Enabled.c)
-- [pnp/assets | HidpGetPdoReenumerateSelfInterfaceEnabled.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetPdoReenumerateSelfInterfaceEnabled.c)
-- [pnp/assets | HidpGetRetainWWIrpEnabledFromRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetRetainWWIrpEnabledFromRegistry.c)
-- [pnp/assets | HidpGetSessionSecurityState.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpGetSessionSecurityState.c)
-- [pnp/assets | HidpToggleRemoteWakeWorker.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HidpToggleRemoteWakeWorker.c)
-- [pnp/assets | HUBMISC_SetExtPropDescSemaphoreInRegistry.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBMISC_SetExtPropDescSemaphoreInRegistry.c)
-- [pnp/assets | HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryExtPropDescSemaphoreInDeviceHardwareKey.c)
-- [pnp/assets | HUBREG_QueryValuesInDeviceHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInDeviceHardwareKey.c)
-- [pnp/assets | HUBREG_QueryValuesInHubHardwareKey.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_QueryValuesInHubHardwareKey.c)
-- [pnp/assets | HUBREG_SetWinUsbIdleDefaults.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_SetWinUsbIdleDefaults.c)
-- [pnp/assets | HUBREG_UpdateSqmFlags.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/HUBREG_UpdateSqmFlags.c)
-- [pnp/assets | IrqPolicySetDeviceAffinity.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/IrqPolicySetDeviceAffinity.c)
-- [pnp/assets | PciGetDeviceCustomSetting.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSetting.c)
-- [pnp/assets | PciGetDeviceCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceCustomSettings.c)
-- [pnp/assets | PciGetDeviceD0DelayTime.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceD0DelayTime.c)
-- [pnp/assets | PciGetDeviceDpcCustomSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PciGetDeviceDpcCustomSettings.c)
-- [pnp/assets | PcisuppGetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppGetRoutingInfo.c)
-- [pnp/assets | PcisuppSetRoutingInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PcisuppSetRoutingInfo.c)
-- [pnp/assets | PowerPolicySetS0IdleSettings.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/PowerPolicySetS0IdleSettings.c)
-- [pnp/assets | UsbhGetD3Policy.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/UsbhGetD3Policy.c)
-- [pnp/assets | WinUSB_DeterminePowerPolicyOwnership.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_DeterminePowerPolicyOwnership.c)
-- [pnp/assets | WinUSB_GetRegParams.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_GetRegParams.c)
-- [pnp/assets | WinUSB_UpdateSqmInfo.c](https://github.com/nohuto/win-config/tree/main/power/assets/pnp/WinUSB_UpdateSqmInfo.c)
 
 ## MSPower_DeviceEnable
 
