@@ -938,6 +938,128 @@ Note that this is based on [binary build version 22631 (23H2)](https://github.co
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
 
+# USB Audio Idle
+
+It's a mechanism (for audio drivers) for idle detection that switches an audio device between active `D0` and low power sleep (normally `D3`), after the configured timeout expires.
+
+Note that `IdlePowerState` only has a meaning if timeouts are nonzero, means as you can see below `PerformanceIdleTime` is set to `0` by default = stays in D0, only when being on DC (battery) it would enter D3 after 30 seconds. You can see your current device power state (Dx) via [`Device Manager > Sound, video and game controllers > <USB audio device> > Properties > Details > Power data`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-cm_power_data_s) (`PD_MostRecentPowerState`).
+
+It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/DeviceStart.c) -> [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) -> [`PoRegisterDeviceForIdleDetection`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PoRegisterDeviceForIdleDetection.c). In 24H2+ it also registers [`PowerSettingCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/USBAUDIO/PowerSettingCallback.c) for `GUID_LOW_POWER_EPOCH`, which is why the additional `CS*` values exist.
+
+> `[in] ConservationIdleTime`
+> Sets the time-out value (in seconds) to apply when the system power policy optimizes for energy conservation. Specify zero to disable idle detection when conservation policy is in effect.
+> `[in] PerformanceIdleTime`
+> Sets the time-out value (in seconds) to apply when the system power policy optimizes for performance. Specify zero to disable idle detection when performance policy is in effect.
+>
+> - Microsoft, [`PoRegisterDeviceForIdleDetection`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-poregisterdeviceforidledetection)
+
+## Registry Values
+
+[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but `USBAUDIO!RegistryGetIdleInfo` only checks that the returned value data length (`4`), see '[Build Differences]()' section.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\00xx\\PowerSettings";
+    "ConservationIdleTime" = 30; // DC (battery) timeout
+    "PerformanceIdleTime" = 0; // AC timeout
+    "IdlePowerState" = 3; // see below
+    "CSConservationIdleTime" = 30; // 24H2+, see below
+    "CSPerformanceIdleTime" = 30; // 24H2+, ^
+```
+
+`IoOpenDeviceRegistryKey(DeviceObject, 2)` opens the driver specific software key (`2` = `PLUGPLAY_REGKEY_DRIVER`), [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) then opens the `PowerSettings` subkey. [`{4d36e96c-e325-11ce-bfc1-08002be10318}`](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors) is the `Media` device setup class GUID, [`USBAUDIO.sys` is under that `Media` setup class for USB audio devices](https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/supported-usb-classes).
+
+`IdlePowerState` gets "translated" by `USBAUDIO` to (which is why `*a4 = 4` = D3):
+
+| Data | `DEVICE_POWER_STATE` | Meaning |
+| --- | --- | --- |
+| `1` | `2` | `PowerDeviceD1` |
+| `2` | `3` | `PowerDeviceD2` |
+| `3` | `4` | `PowerDeviceD3` |
+| anything else | `1` | `PowerDeviceD0` |
+| missing | `4` | `PowerDeviceD3` |
+
+## Build Differences
+
+23H2 (and below) has two timeout values `ConservationIdleTime`/`PerformanceIdleTime`:
+
+```c
+// RegistryGetIdleInfo
+*a3 = 0; // PerformanceIdleTime
+*a2 = 30; // ConservationIdleTime
+*a4 = 4; // PowerDeviceD3
+
+RtlInitUnicodeString(&ValueName, L"ConservationIdleTime");
+RtlInitUnicodeString(&v11, L"PerformanceIdleTime");
+RtlInitUnicodeString(&v12, L"IdlePowerState");
+
+if ( ZwQueryValueKey(KeyHandle, &ValueName, KeyValuePartialInformation, Pool2, 0x14u, &ResultLength) >= 0
+  && Pool2[2] == 4 ) // DataLength == 4
+{
+  *a2 = Pool2[3];
+}
+```
+
+24H2+ adds another two timeout values for low power epoch:
+
+```c
+// RegistryGetIdleInfo
+*a4 = 0; // PerformanceIdleTime
+*a2 = 30; // ConservationIdleTime
+*a3 = 30; // CSConservationIdleTime
+*v6 = 30; // CSPerformanceIdleTime
+*v8 = 4; // PowerDeviceD3
+
+RtlInitUnicodeString(&ValueName, L"ConservationIdleTime");
+RtlInitUnicodeString(&v15, L"CSConservationIdleTime");
+RtlInitUnicodeString(&v16, L"PerformanceIdleTime");
+RtlInitUnicodeString(&v17, L"CSPerformanceIdleTime");
+RtlInitUnicodeString(&v18, L"IdlePowerState");
+```
+
+`GUID_LOW_POWER_EPOCH` is a power setting GUID, if the callbacks 4 byte value is nonzero, `Context + 1080` becomes `1` and the `CS*` values are used, otherwise the other two are used.
+
+```c
+// DeviceStart
+if ( *((_DWORD *)Context + 270) ) // LOW_POWER_EPOCH stored by PowerSettingCallback
+{
+  v11 = *((_DWORD *)Context + 139); // CSPerformanceIdleTime
+  v12 = *((_DWORD *)Context + 137); // CSConservationIdleTime
+}
+else
+{
+  v11 = *((_DWORD *)Context + 138); // PerformanceIdleTime
+  v12 = *((_DWORD *)Context + 136); // ConservationIdleTime
+}
+*((_QWORD *)Context + 66) = PoRegisterDeviceForIdleDetection(
+                              a1->PhysicalDeviceObject,
+                              v12,
+                              v11,
+                              (DEVICE_POWER_STATE)*((_DWORD *)Context + 135));
+
+PoRegisterPowerSettingCallback( // https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/nf-wdm-poregisterpowersettingcallback
+  a1->PhysicalDeviceObject,
+  &GUID_LOW_POWER_EPOCH,
+  (PPOWER_SETTING_CALLBACK)PowerSettingCallback,
+  a1,
+  (PVOID *)Context + 134);
+```
+
+```c
+// PowerSettingCallback
+if ( *SettingGuid == *(_OWORD *)&GUID_LOW_POWER_EPOCH )
+{
+  if ( (_DWORD)ValueLength == 4 && Value )
+  {
+    *(_DWORD *)(v8 + 1080) = *v6 != 0; // LOW_POWER_EPOCH
+  }
+}
+```
+
+- [11-23H2/USBAUDIO/RegistryGetIdleInfo.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c)
+- [11-24H2/USBAUDIO/RegistryGetIdleInfo.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/USBAUDIO/RegistryGetIdleInfo.c)
+- [11-25H2/USBAUDIO/RegistryGetIdleInfo.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-25H2/USBAUDIO/RegistryGetIdleInfo.c)
+- [11-26H1/USBAUDIO/RegistryGetIdleInfo.c](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-26H1/USBAUDIO/RegistryGetIdleInfo.c)
+
 # Disable NIC Power Savings
 
 You can get a lot of information about data ranges and more from `.inf` files, see examples below.
@@ -1558,24 +1680,6 @@ Not needed, if you disable energy estimation:
 ## Suboption
 
 `Disable Battery Capacity Section` = Disables the battery capacity section on the battery saver page of the system settings app.
-
-# Disable Audio Idle
-
-| Parameter | Description | Default | Type | Notes |
-| --- | --- | --- | --- | --- |
-| `ConservationIdleTime` | Idle timeout for the device, when the system is on battery power. | `0` | REG_BINARY | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `PerformanceIdleTime` | Idle timeout for the device, when the system is on AC power. | `0` | REG_BINARY | `0` disables the inactivity timer for this mode, value is in seconds. |
-| `IdlePowerState` | Specifies the power state that the device will enter, when power is no longer needed. | `3` (D3) | REG_BINARY | Valid values `1 - D1`, `2 - D2`, `3 - D3`. |
-
-I currently disable it, by setting the timeouts to `ff ff ff ff` (`~4.29e9 s ≈ 136 years`) & `IdlePowerState` to `1` (`D1`).
-
-| Category | Class | Class GUID | Description |
-| --- | --- | --- | --- |
-| Multimedia | Media | [4d36e96c-e325-11ce-bfc1-08002be10318](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors) | Includes Audio and DVD multimedia devices, joystick ports, and full-motion video capture devices. |
-
-- [drivers/audio/audio-device-class-inactivity-timer-implementation](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/audio-device-class-inactivity-timer-implementation)
-- [design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/audio-subsystem-power-management-for-modern-standby-platforms)
-- [drivers/audio/portcls-registry-power-settings](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings)
 
 # Disable Storage Idle States
 

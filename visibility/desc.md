@@ -1184,13 +1184,23 @@ PS C:\Users\Nohuto>
 for %%L in ("%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\*.lnk") do powershell -c "$s=New-Object -ComObject WScript.Shell; $lnk=$s.CreateShortcut('%%~fL'); $lnk.TargetPath='%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe'; $lnk.Arguments='-NoLogo'; $lnk.Save()"
 ```
 
-# Disable Theme Mouse Changes
+# Prevent Color/Theme Changes
 
-Prevent Themes from changing the mouse cursor.
+Prevents changing color/appearance, desktop background, desktop icons, start background, themes. It also stops themes from changing mouse pointers and desktop icons.
 
-`Disable Theme Desktop Icons Changes` prevent themes from changing desktop icons.
+Use the suboptions to prevent/allow specific parts.
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/thememouse.png?raw=true)
+## [Windows Policies](https://www.noverse.dev/policies.html)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Prevent changing color and appearance](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoColorAppearanceUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `NoDispAppearancePage` |
+| [Prevent changing desktop background](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoDesktopBackgroundUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop` | `NoChangingWallPaper` |
+| [Prevent changing desktop icons](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoDesktopIconsUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `NoDispBackgroundPage` |
+| [Prevent changing lock screen and logon image](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoChangingLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingLockScreen` |
+| [Prevent changing mouse pointers](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoMousePointersUI) | `HKCU\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingMousePointers` |
+| [Prevent changing start menu background](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoChangingStartMenuBackground) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingStartMenuBackground` |
+| [Prevent changing theme](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_DisableThemeChange) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoThemesTab` |
 
 # Hide Disabled/Disconnected Devices
 
