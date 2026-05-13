@@ -922,7 +922,7 @@ Note that this is based on [binary build version 22631 (23H2)](https://github.co
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
-    "StorageD3InModernStandby" = 1; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support
+    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support
 ```
 
 > "*When the system is not in use, Windows may opportunistically turn off power to some set of devices to conserve energy. In Modern Standby, the system remains in S0. Even while in S0, all peripheral devices may eventually be powered down due to idle timeouts. This state is defined as "S0 Low Power Idle". Once all devices are in a low-power state, even more of the system infrastructure (e.g. busses, timers, …) may be powered down. The general rule of thumb is to place the device in the deepest possible D-state when it is idle, even when the system state is S0. Depending on implementation details of the processor complex and platform design, peripheral devices may be required to go to an F-state, D3 Hot, or D3 Cold (power is cut). To mitigate the need for a function driver to manage these implementation details, drivers should go to the deepest appropriate device state in order to maximize battery life.*"
