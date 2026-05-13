@@ -994,7 +994,9 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "UncachedExtAlignment" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\stornvme\\Parameters";
-    "StorageSupportedFeatures" = 1; // "Support ByPass IO"?
+    "StorageSupportedFeatures" = 1; // "Support ByPassIO"
+                                    // "BypassIO is an optimized I/O path for reading from files. The goal of this path is to reduce the CPU overhead of doing reads, which helps to meet the I/O demands of loading and running next-generation games on Windows. BypassIO is a part of the infrastructure to support DirectStorage on Windows, and is available starting in Windows 11."
+                                    // https://learn.microsoft.com/en-us/windows-hardware/drivers/storage/bypassio
     "DmaRemappingCompatible" = 2; // https://github.com/nohuto/win-config/blob/main/security/desc.md#opt-out-dma-remapping
     "BusType" = ?; // bustype 0x11 is value of BusTypeNVMe
     "BusyPauseTimeInMs" = ?;
@@ -1054,6 +1056,9 @@ This currently includes all values from [`storport.sys`](https://github.com/nohu
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\StorPort\\Verifier";
     "VerifyLevel" = 0; // REG_DWORD, range 0-4294967295
+                       // "The value assigned to this entry will determine which Storport Verification tests will be active. The value 0x1 will give maximum verification."
+                       // "If the VerifyLevel value does not exist, or is equal to 0xFFFFFFFF, Storport Verification will be disabled."
+                       // https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/dv-storport-verification
 
 // miscellaneous values from storport driver
 

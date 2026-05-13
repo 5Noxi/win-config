@@ -1095,7 +1095,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
     "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
     "SplitLargeCaches" = 0; // KiSplitLargeCaches
-    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable, https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs
     "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
     "TimerCheckFlags" = 1; // KeTimerCheckFlags
     "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
@@ -1111,10 +1111,10 @@ Everything listed below is based on personal research, mistakes may exist.
     "AlpcMessageLog" = 0; // AlpcpMessageLogEnabled 
     "AlpcWakePolicy" = 1; // AlpcpWakePolicyDefault 
     "CriticalSectionTimeout" = 2592000; // dword_140FC3204 dd 278D00
-    "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls 
+    "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls, can cause "There was a problem starting PolicyAgentProvider.dll The specified module could not be found" if set to 0xFFFFFFFF (https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/client-installation/client-installation-fails-with-policyagentprovider-dll)
     "Debugger Retries" = 20; // KdpContext (0x14) 
     "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching 
-    "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ?
+    "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ? https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
     "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
     "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
@@ -1150,7 +1150,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "DisableWpbtExecution" = ?; // REG_DWORD
     "RaiseExceptionOnPossibleDeadlock" = ?;
     "ResourcePolicies" = ?;
-    "SafeDllSearchMode" = ?;
+    "SafeDllSearchMode" = ?; // https://learn.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order#standard-search-order-for-unpackaged-apps
     "SafeProcessSearchMode" = ?;
     "SmtDelayBaseYield" = ?;
     "SmtDelayMaxYield" = ?;
@@ -1205,11 +1205,11 @@ Everything listed below is based on personal research, mistakes may exist.
     "PagingFileQuota" = ?; // unk_140FD7DE8
     "PhysicalMemoryMapperEnforcementMode" = 0; // dword_140FC324C dd 0
     "PoolForceFullDecommit" = 0; // PoolForceFullDecommit 
-    "PoolTag" = 0; // MmSpecialPoolTag 
+    "PoolTag" = 0; // MmSpecialPoolTag, https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "PoolTagOverruns" = 1; // MmSpecialPoolCatchOverruns 
     "PoolTagSmallTableSize" = 4097; // PoolTrackTableSize (0x1001) 
     "ProtectNonPagedPool" = 0; // MmProtectFreedNonPagedPool 
-    "RemoteFileDirtyPageThreshold" = 1310720; // CcRemoteFileDPInlineFlushThreshold (0x00140000) 
+    "RemoteFileDirtyPageThreshold" = 1310720; // CcRemoteFileDPInlineFlushThreshold (0x00140000), "This value determines the maximum number of dirty pages in the cache (on a per file basis) for a remote write before an inline flush is performed."
     "SimulateCommitSavings" = 0; // dword_140FC3240 dd 0
     "SoftThrottleDelayInMs" = 0; // CcAzure_SoftThrottleDelayInMs 
     "SoftThrottleLargeWriteAtPct" = 0; // CcAzure_SoftThrottleLargeWriteAtPct 
@@ -1358,7 +1358,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "CallbackMemoryFromPool" = 0; // CmpAllocateCallbackMemoryFromPool 
     "DelayCloseSize" = 2048; // CmpDelayedCloseSize (0x800) 
     "Enabled" = 0; // CmpLKGEnabled 
-    "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing 
+    "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing, https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/system-registry-no-backed-up-regback-folder#more-information
     "FastBoot" = 1; // CmFastBoot 
     "FreezeThawTimeoutInSeconds" = 60; // CmFreezeThawTimeoutInSeconds (0x3C) 
     "RegistryFlushGlobalFlags" = 0; // CmpGlobalFlushControlFlags 
@@ -1819,6 +1819,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "RapidHPDThresholdCount" = 5;
     "RapidHPDTime" = 1000;
 
+    // https://www.noverse.dev/docs/win-config/security/increase-tdr/
     "TdrDdiDelay" = 5;
     "TdrDebugMode" = 2;
     "TdrDelay" = 2;
