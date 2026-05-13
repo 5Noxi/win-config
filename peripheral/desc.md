@@ -2,7 +2,7 @@
 
 ## RawMouseThrottle Details
 
-By default, raw mouse throttling is enabled with `RawMouseThrottleDuration = 8`, which means `~125Hz` for throttled background raw mouse listeners. It's not forced by default (`RawMouseThrottleForced = 0`), so mouse raw input listeners that register with `usUsagePage = 1`, `usUsage = 2` ([0x02, Mouse, HID_USAGE_GENERIC_MOUSE](https://learn.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages#usage-id)), and include `dwFlags = 0x8000` with `0x100` or `0x1000` can bypass background throttling.
+By default, raw mouse throttling is enabled with `RawMouseThrottleDuration = 8`, which means `~125Hz` for throttled background raw mouse listeners. It's not forced by default (`RawMouseThrottleForced = 0`), so mouse raw input listeners that register with `usUsagePage = 1`, `usUsage = 2` ([0x02, Mouse, HID_USAGE_GENERIC_MOUSE](https://learn.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages#usage-id)), and include `dwFlags = 0x8000` with `256` or `0x1000` can bypass background throttling.
 
 Note that is my current interpretation, don't see this as my final answer nor as correct. All used functions are somewhere linked.
 
@@ -115,7 +115,7 @@ if ( !_mm_cvtsi128_si32(_mm_srli_si128(*(__m128i *)RawMouseThrottlingThresholds,
 
 Means `RawMouseThrottleEnabled` = `0` flushes any throttled input for that listener and returns no throttle, `1` = allows later throttle checks to run. `RawMouseThrottleForced` only matters for listeners with the `0x800` flag, `0` makes that case bypass throttling, `1` lets it throttle.
 
-That `0x800` flag isn't related to what device you use, it's set from mouse raw input [registrations](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerrawinputdevices) where [`RAWINPUTDEVICE`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawinputdevice) uses `usUsagePage = 1`, `usUsage = 2` ([0x02, Mouse, HID_USAGE_GENERIC_MOUSE](https://learn.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages#usage-id)), and `dwFlags` has `0x8000` together with `0x100` ("*If set, this enables the caller to receive the input even when the caller is not in the foreground. Note that hwndTarget must be specified.*") or `0x1000` ("*If set, this enables the caller to receive input in the background only if the foreground application does not process it. In other words, if the foreground application is not registered for raw input, then the background application that is registered will receive the input.*").
+That `0x800` flag isn't related to what device you use, it's set from mouse raw input [registrations](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-registerrawinputdevices) where [`RAWINPUTDEVICE`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-rawinputdevice) uses `usUsagePage = 1`, `usUsage = 2` ([0x02, Mouse, HID_USAGE_GENERIC_MOUSE](https://learn.microsoft.com/en-us/windows-hardware/drivers/hid/hid-usages#usage-id)), and `dwFlags` has `0x8000` together with `256` ("*If set, this enables the caller to receive the input even when the caller is not in the foreground. Note that hwndTarget must be specified.*") or `0x1000` ("*If set, this enables the caller to receive input in the background only if the foreground application does not process it. In other words, if the foreground application is not registered for raw input, then the background application that is registered will receive the input.*").
 
 I've checked that the `0x800` behavior is true with two small apps, one registered mouse raw input with `0x8100`, the other with only `0x0100`. By moving both to the background (`RawMouseThrottleDuration = 20`), the `0x8100` app stayed at `~1000 Hz`, while the `0x0100` app dropped to `~60 Hz`. So with `RawMouseThrottleForced = 0`, the forced registration bypassed throttling (I didn't find any app that uses that flag nor are there docs on it, means it's most likely unused).
 
@@ -512,7 +512,7 @@ lkd> dt USBHUB3!_USB_DEVICE_HACKS
    +0x000 ResetOnErrorInD2Resume : Pos 27, 1 Bit
 ```
 
-## Registry Values Details
+## Registry Values
 
 `HUBDSM_QueryingRegistryValuesForDevice` -> `HUBMISC_QueryAndCacheRegistryValuesForDevice` -> `HUBREG_QueryUsbflagsValuesForDevice`
 
@@ -667,7 +667,7 @@ The vendor ID, product ID, and revision number values are obtained from the [USB
 
 For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
-## Registry Values Details
+## Registry Values
 
 ```c
 // HUBREG_QueryGlobalUsb20HardwareLpmSettings
@@ -793,7 +793,7 @@ Stop USB devices when my screen is off to help battery.
 
 For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
-## Registry Values Details
+## Registry Values
 
 ```c
 // HUBREG_QueryGlobalHubValues
@@ -909,7 +909,7 @@ rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Layout Hotkey	Type: REG_SZ,
 
 This option serves as a general values overview for the `stornvme` key. Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation.
 
-## Registry Values Details
+## Registry Values
 
 Most values are read via `ReadMultiSzRegistryValueAndCompareId` using the device id match string `VEN_vvvv&DEV_dddd&REV_rr`, so I currently assume that their type is REG_MULTI_SZ. Several values are set to 0 which sometimes also means "ignore" for example. Note that the information in this list is based on `stornvme.sys` only (if value has comment).
 
@@ -1002,6 +1002,67 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "IoLatencyCap" = ?;
     "IoTimeoutValue" = 10;
     "PnpAsyncNewDevices" = ?;
+```
+
+# StorPort Values
+
+This currently only includes all values from [`storport.sys`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport), see [DllInitialize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/DllInitialize.c) & [sub_1C0042F20](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C0042F20.c) functions. More details on StorPort topic/values may be added soon.
+
+## Registry Values
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\StorPort";
+    "DpcCompletionLimit" = 128; // REG_DWORD, range 0-4294967295
+    "HiberFileHybridPriority" = 65535; // REG_BINARY
+    "HmbAllocationPolicy" = 2; // REG_DWORD, range 0-4294967295, but only 1/2/3 seem to be used other values are invalid
+    "HmbMaximumSizeInBytes" = 67108864; // REG_DWORD, range 0-67108864
+    "MiniportBugActionPolicy" = 1; // REG_DWORD, range 0-2, >=3 replaced with 1
+    "AsyncStart" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "TelemetryPerformanceHighResolutionTimer" = 4294967295; // REG_DWORD, range 0-4294967295
+    "TelemetryPerformanceEnabled" = 4294967295; // REG_DWORD, range 0-4294967295
+    "TelemetryIoSizeDistributionEnabled" = 0; // REG_DWORD, range 0-4294967295, queried only when TelemetryPerformanceEnabled is nonzero
+    "TelemetryPerformancePeriod" = 1; // REG_DWORD, range 1-24 hours, 0 ignored, >=24 clamps to 24
+    "TelemetryErrorDataEnabled" = 4294967295; // REG_DWORD, range 0-4294967295
+    "TelemetryDeviceHealthEnabled" = 4294967295; // REG_DWORD, range 0-4294967295
+    "TelemetryDeviceHealthPeriod" = 1; // REG_DWORD, range 1-24 hours, 0 ignored, >=24 clamps to 24
+    "TelemetryCriticalEventEnabled" = 0; // REG_DWORD, range 0-4294967295
+    "TelemetryCriticalEventMaximum" = 4294967295; // REG_DWORD, range 0-4294967295
+    "ExtendedDSMCommandsSupported" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "FUAEnable" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "QoSFlags" = 0; // REG_DWORD, range 0-4294967295
+    "MaxPreAllocatedIoResourceCount" = 4096; // REG_DWORD, range 1-4294967295, 0 ignored
+    "DFxEnable" = 1; // REG_DWORD, range 0-4294967295 (bool)
+    "OverrideDeviceUniqueIDCapability" = 1; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableRuntimePower" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "ProcsPerGateway" = 8; // REG_DWORD, range 4-16 (capped to maximum processor count?)
+    "MFNDEnable" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "CreateControlObject" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableIEEE1667" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "EnableNativeTcg" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "EnableRegistryWatch" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "LogControlEnable" = 7757; // REG_QWORD, range 0-4294967295, 0 forces LogSize 0
+    "LogSize" = 256; // REG_DWORD, range 0 or 64-393216
+    "DeviceQueueIoWaitThreshold" = 300000000; // REG_QWORD, range 1-4294967295, 0 ignored
+    "HighLatencyIoThreshold" = 300000000; // REG_QWORD, range 1-4294967295, 0 ignored
+    "TelemetryDeviceLogPagesPeriod" = 24; // REG_DWORD, range 1-24 hours, 0 ignored, >=24 clamps to 24
+    "DeviceTelemetryLiveDumpEnable" = 4294967295; // REG_DWORD, range 0-4294967295 (bool)
+    "StorportEtwErrorThrottleLimit" = 60; // REG_DWORD, range 1-4294967295, 0 ignored
+    "StorportEtwWarningThrottleLimit" = 30; // REG_DWORD, range 1-4294967295, 0 ignored
+    "StorportEtwInfoThrottleLimit" = 10; // REG_DWORD, range 1-4294967295, 0 ignored
+    "ReportAllWheaErrorsAsNonFatal" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableExtensionDriver" = 0; // REG_DWORD, range 0-4294967295 (bool)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\StorPort\\Verifier";
+    "VerifyLevel" = 0; // REG_DWORD, range 0-4294967295
+
+// miscellaneous values from storport driver
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
+    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, range 0-4294967295 (bool)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage\\StorageTelemetry";
+    "DeviceDumpLevel" = 2; // REG_DWORD, range 0-4294967295
+    "DeviceDumpMaxSize" = 0; // REG_DWORD, range 0-4294967295
 ```
 
 # Audio Ducking
@@ -1341,7 +1402,7 @@ Disables the device (replace '*Device*' with the device name) from waking the sy
 Default values:
 ```c
 WakeOnInputDeviceTypes = 46
-UnDimOnInputDeviceTypes = -1  // 0xFFFFFFFF
+UnDimOnInputDeviceTypes = -1  // 4294967295
 ```
 
 - [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)

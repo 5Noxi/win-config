@@ -893,7 +893,7 @@ Excludes (deprecated, chimney too):
 "SaOffloadCapacityEnabled" = 0
 ```
 
-## Registry Values Details
+## Registry Values
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
@@ -978,7 +978,7 @@ powercfg /devicequery wake_armed
 `powercfg /devicequery wake_programmable` -> devices that are user-configurable to wake the system from a sleep state  
 `powercfg /devicequery wake_armed` -> currently configured to wake the system from any sleep state
 
-## Registry Values Details
+## Registry Values
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
@@ -1215,7 +1215,7 @@ void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT
 }
 ```
 
-## Registry Values Details
+## Registry Values
 
 `*MaxRssProcessors`:  
 The maximum number of RSS processors.
@@ -1586,7 +1586,7 @@ HKR, "", *VMQVlanFiltering, %REG_SZ%, "1"
 `CL74 FC-FEC/BASE-R`: Selects only BASE-R ability and request capabilities.  
 `No FEC`: Disables FEC.
 
-## Registry Values Details
+## Registry Values
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

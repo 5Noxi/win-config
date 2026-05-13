@@ -982,7 +982,7 @@ messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
 
 Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-## Registry Values Details
+## Registry Values
 
 This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
 
@@ -1676,7 +1676,7 @@ aRegistryMachin_240 = "\\Registry\\Machine\\System\\Select"
 
 Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
-## Registry Values Details
+## Registry Values
 
 These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
 
@@ -2215,7 +2215,7 @@ Update either on 13/05 or 15/05.
 
 This option currently includes some speculations and default values. I haven't had time yet to test the behavior of the changed data.
 
-## Registry Values Details
+## Registry Values
 
 See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from `dwmcore.dll`, `win32full.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
 
@@ -2841,7 +2841,7 @@ BCDEdit is primarily used for boot troubleshooting, recovery, debugging, and sec
 
 BitLocker validates a subset of BCD settings at boot to detect security sensitive changes. The validated set can be extended or reduced via policy, and the hex value of a triggering setting is logged (event ID 523). Friendly names can be listed with `bcdedit /enum all`, but some settings have no friendly name and must be configured by hex. BCD settings are also scoped to specific boot applications (for example, `winload`, `winresume`, `bootmgr`), policy entries can be prefixed with the target application (for example, `winload:nx` or `all:locale`). When secure boot is used for integrity validation, the enhanced BCD validation profile policy is ignored, and secure boot enforces its own BCD rules.
 
-## Registry Values Details
+## Registry Values
 
 ### Key & Value Structure
 

@@ -322,7 +322,7 @@ This currently applies the values for the `USB` enumerator only, since most valu
 
 Disables USB selective suspend, idle states, and related LP features if supported.
 
-## Registry Values Details
+## Registry Values
 
 Windows Plug and Play (PnP) creates a device node (devnode) for each detected device instance ("The PnP manager is the primary component involved in supporting the ability of Windows to recognize and adapt to changing hardware configurations."). In WinDbg (`!devnode`), `InstancePath` assigns to the device instance key under:
 ```c
@@ -364,8 +364,8 @@ Everything listed below is based on personal research, mistakes may exist.
     "ComboHardwareIdV2Enabled" = 0; // REG_DWORD (bool)
     "CyclePortEnabled" = 0; // REG_DWORD (bool)
     "D3ColdReconnectTimeout" = 1000; // REG_DWORD
-    "DefaultIdleTimeout" = 5000/30000; // REG_DWORD, the USBCCID UM driver uses 5sec, devices that support MTP use 30sec? (UsbccidDriver, wpdmtp)
     "DefaultIdleState" = 1; // REG_DWORD (bool), HUBREG_SetWinUsbIdleDefaults writes 1 when queries for DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable all fail
+    "DefaultIdleTimeout" = 5000/30000; // REG_DWORD, the USBCCID UM driver uses 5sec, devices that support MTP use 30sec? (UsbccidDriver, wpdmtp)
     "DeviceIdleEnabled" = 1; // REG_DWORD (bool), ^
     "DeviceIdleIgnoreWakeEnable" = 1; // REG_DWORD (bool), ^
     "DeviceInterfaceGUID" = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults, WinUSB_GetRegParams uses it as fallback when DeviceInterfaceGUIDs is unavailable
@@ -405,14 +405,11 @@ Everything listed below is based on personal research, mistakes may exist.
     "WinUsbPowerPolicyOwnershipDisabled" = 1; // REG_DWORD (bool)
     "WriteReportExSupported" = 1; // REG_DWORD
 
-    "HardResetCount" = ?; // REG_DWORD, "Writes into registry information about how many times this hub has been reset for the lifetime of the devnode. It also writes the invalid port status if that is the reason for hub reset. This infromation will be read by the SQM engine."
-    "HubFWUpdateProtocol" = ?; // REG_DWORD
-    "OvercurrentDetected" = ?; // REG_DWORD (bool)
-    "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
     "AOCID" = ?;
     "AutoplayOnSpecialInterface" = ?;
     "CustomWake" = ?;
     "DefaultSimulatedTarget" = ?;
+    "DeviceDumpVendorGPLogAddress" = ?; // from storport.sys
     "DeviceGroup" = ?;
     "DeviceGroups" = ?;
     "DeviceHandlers" = ?;
@@ -431,11 +428,13 @@ Everything listed below is based on personal research, mistakes may exist.
     "FullPowerDownOnTransientDx" = ?;
     "FunctionDriverOptIn" = ?;
     "HackFlags" = ?;
+    "HardResetCount" = ?; // REG_DWORD, "Writes into registry information about how many times this hub has been reset for the lifetime of the devnode. It also writes the invalid port status if that is the reason for hub reset. This infromation will be read by the SQM engine."
     "HasPhysicalKeys" = ?;
     "HScrollHighResolutionDisable" = ?;
     "HScrollPageOverride" = ?;
     "HScrollScalingFactor" = ?;
     "HScrollUsageOverride" = ?;
+    "HubFWUpdateProtocol" = ?; // REG_DWORD
     "Icons" = ?;
     "IdleSupported" = ?;
     "IdleTimeoutPeriodInMilliSec" = ?;
@@ -449,6 +448,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "NoSoftEject" = ?;
     "NumberOfPairingSlots" = ?;
     "OriginalConfigurationValue" = ?;
+    "OvercurrentDetected" = ?; // REG_DWORD (bool)
     "RootBus" = ?;
     "TargetForcePriorityList" = ?;
     "TargetPriorityList" = ?;
@@ -460,6 +460,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "VScrollHighResolutionDisable" = ?;
     "VScrollPageOverride" = ?;
     "VScrollUsageOverride" = ?;
+    "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
     "WheelScalingFactor" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7";
@@ -604,30 +605,36 @@ Everything listed below is based on personal research, mistakes may exist.
     "DEV_18&FUN_07" = ?;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\StorPort";
-    "AdapterGuid" = ?;
-    "BusSpecificResetTimeout" = ?;
-    "BusyPauseTime" = ?;
-    "BusyRetryCount" = ?;
-    "DisableD3Cold" = ?;
-    "DisableIdlePowerManagement" = ?;
-    "DisableNVMeActiveNamespaceIDListCheck" = ?;
-    "DisableRuntimePowerManagement" = ?;
     "DlrmDisable" = ?;
-    "EnableIdlePowerManagement" = ?;
-    "EnableLogoETW" = ?;
     "EnableNVMeInterface" = ?;
     "FwActivateTimeoutForController" = ?;
-    "IdleTimeoutInMS" = ?;
-    "InitialTimestamp" = ?;
-    "Is1667Device" = ?;
-    "MinimumIdleTimeoutInMS" = ?;
-    "PLDRTimeout" = ?;
-    "PowerCycleCount" = ?;
-    "PowerCycleCountOverride" = ?;
-    "PowerSrbTimeout" = ?;
-    "QueueFullWaitIoPercentage" = ?;
     "TotalSenseDataBytes" = ?;
-    "UseDMAv3" = ?;
+
+    // from storport.sys - https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C00A88F4.c
+    "AdapterGuid" = ; // REG_BINARY, 16 bytes
+    "BusSpecificResetTimeout" = 5; // REG_DWORD, range 1-4294967295, 0 ignored
+    "DisableD3Cold" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableNVMeActiveNamespaceIDListCheck" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DisableRuntimePowerManagement" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "EnableIdlePowerManagement" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "GeneratedID" = ; // REG_BINARY, 16 bytes
+    "IdleTimeoutInMS" = 60000; // REG_DWORD, range 0-4294967295
+    "InitialTimestamp" = ; // REG_QWORD
+    "Is1667Device" = 4294967295; // REG_DWORD, range 0-4294967295
+    "PLDRTimeout" = 10; // REG_DWORD, range 1-4294967295, 0 ignored
+    "PowerCycleCount" = 0; // REG_DWORD, range 0-4294967295, used only when PowerCycleCountOverride doesn't exist
+    "PowerCycleCountOverride" = ; // REG_DWORD, range 0-4294967295
+    "PowerSrbTimeout" = ; // REG_DWORD, range 1-110, >110 clamps to 110, 0 ignored
+    "TotalSenseDataBytes" = 256; // REG_DWORD
+    "UseDMAv3" = 0; // REG_DWORD, range 0-4294967295 (bool)
+
+    // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C00A4268.c
+    "BusyPauseTime" = 250; // REG_DWORD, range 0-4294967295
+    "BusyRetryCount" = 20; // REG_DWORD, range 0-4294967295
+    "DisableIdlePowerManagement" = 0; // REG_DWORD, range 0-4294967295
+    "EnableLogoETW" = 0; // REG_DWORD, range 0-4294967295
+    "MinimumIdleTimeoutInMS" = 4294967295; // REG_DWORD, range 0-4294967295
+    "QueueFullWaitIoPercentage" = 25; // REG_DWORD, range 0-100
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\DMA Management";
     "RemappingFlags" = ?;
@@ -642,6 +649,9 @@ Everything listed below is based on personal research, mistakes may exist.
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\WUDF\\CompanionConfigurations\\USBXHCI";
     "CompanionServiceList" = ?;
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\Disk"; // enumerator is usually SCSI here
+  "UserWriteCacheSetting" = 1; // REG_DWORD, from storport.sys - https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C00633B0.c
 ```
 
 ## MSPower_DeviceEnable
@@ -685,7 +695,7 @@ wmiprvse.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\Class\{4d36e972-e
 
 Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation. No values are applied that apply to other options in this section.
 
-## Registry Values Details
+## Registry Values
 
 See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
 
@@ -711,14 +721,14 @@ Everything listed below is based on personal research, mistakes may exist.
     "DirectedDripsAction" = 3; // PopDirectedDripsAction 
     "DirectedDripsDebounceInterval" = 120; // PopDirectedDripsDebounceInterval (0x78) 
     "DirectedDripsDfxEnforcementPolicy" = 1; // PopDirectedDripsDfxEnforcementPolicy 
-    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (0xFFFFFFFF)
+    "DirectedDripsOverride" = 4294967295; // PopDirectedDripsOverride (4294967295)
     "DirectedDripsSurprisePowerOnTimeout" = 5; // PopDirectedDripsSurprisePowerOnTimeoutSeconds 
     "DirectedDripsTimeout" = 300; // PopDirectedDripsTimeout (0x12C) 
     "DirectedDripsWaitWakeTimeout" = 5; // PopDirectedDripsWaitWakeTimeoutSeconds 
     "DirectedFxDefaultTimeout" = 120; // PopFxDirectedFxDefaultTimeout (0x00000078) 
     "DisableDisplayBurstOnPowerSourceChange" = 0; // PopDisableDisplayBurstOnPowerSourceChange 
     "DisableIdleStatesAtBoot" = 0; // PpmIdleDisableStatesAtBoot 
-    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (0xFFFFFFFF)
+    "DisableInboxPepGeneratedConstraints" = 4294967295; // PopDisableInboxPepGeneratedConstraintsOverride (4294967295)
     "DisableVsyncLatencyUpdate" = 0; // PpmDisableVsyncLatencyUpdate 
     "DozeDeferralChecksToIgnore" = 0; // PopDozeDeferralChecksToIgnore 
     "DozeDeferralMaxSeconds" = 259200; // PopDozeDeferralMaxSeconds (0x0003F480) 
@@ -728,9 +738,9 @@ Everything listed below is based on personal research, mistakes may exist.
     "DripsWatchdogAction" = 198; // PopDripsWatchdogAction (0xC6) 
     "DripsWatchdogDebounceInterval" = 120; // PopDripsWatchdogDebounceInterval (0x78) 
     "DripsWatchdogTimeout" = 300; // PopDripsWatchdogTimeout (0x12C) 
-    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (0xFFFFFFFF)
+    "EnableInputSuppression" = 4294967295; // PopEnableInputSuppressionOverride (4294967295)
     "EnableMinimalHiberFile" = 0; // PopEnableMinimalHiberFile, REG_DWORD
-    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (0xFFFFFFFF)
+    "EnablePowerButtonSuppression" = 4294967295; // PopEnablePowerButtonSuppressionOverride (4294967295)
     "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled 
     "EnforceAusterityMode" = 0; // PopEnforceAusterityMode 
     "EnforceConsoleLockScreenTimeout" = 0; // PopEnforceConsoleLockScreenTimeout 
@@ -744,14 +754,14 @@ Everything listed below is based on personal research, mistakes may exist.
     "HeteroFavoredCoreRotationTimeoutMs" = 30000; // PpmHeteroFavoredCoreRotationTimeoutMs (0x00007530) 
     "HeteroHgsEePerfHintsIndependentEnabled" = 0; // PpmHeteroHgsEePerfHintsIndependentEnabled 
     "HeteroHgsPlusDisabled" = 0; // PpmHeteroHgsThreadDisabled 
-    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (0xFFFFFFFF)
-    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (0xFFFFFFFF)
+    "HeteroMultiClassParkingEnabled" = 4294967295; // PpmHeteroMultiClassParkingRegValue (4294967295)
+    "HeteroMultiCoreClassesEnabled" = 4294967295; // PpmHeteroMultiCoreClassesRegValue (4294967295)
     "HeteroWpsContainmentEnumOverride" = 0; // PpmHeteroWpsContainmentEnumOverride 
     "HeteroWpsWorkloadProminenceCutoff" = 35; // PpmHeteroWpsWorkloadProminenceCutoff (0x23) 
     "HiberbootEnabled" = 1; // PopHiberbootEnabledReg 
     "HiberFileSizePercent" = 100; // PopHiberFileSizePercent, REG_DWORD, 0-39 keeps the type logic, 40-100 uses the percent directly and PopSetHiberFileSize forces a full file
-    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF), DWORD 1 = Reduced, DWORD 2 = Full, only used while HiberFileSizePercent < 40
-    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF), fallback when HiberFileType is unset
+    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295), DWORD 1 = Reduced, DWORD 2 = Full, only used while HiberFileSizePercent < 40
+    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295), fallback when HiberFileType is unset
     "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
     "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg, REG_DWORD
@@ -760,10 +770,10 @@ Everything listed below is based on personal research, mistakes may exist.
     "HighPerfDurationCSExit" = ?; // unk_140FC337C
     "HighPerfDurationSxExit" = ?; // unk_140FC3380
     "IdleDurationExpirationTimeout" = 4; // PpmIdleDurationExpirationTimeoutMs 
-    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (0xFFFFFFFF)
+    "IdleProcessorsRequireQosManagement" = 4294967295; // PpmPerfQosManageIdleProcessors (4294967295)
     "IdleStateTimeout" = 500; // PopPepIdleStateTimeout (0x000001F4) 
     "IgnoreCsComplianceCheck" = 0; // PopIgnoreCsComplianceCheck 
-    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (0xFFFFFFFF)
+    "IgnoreLidStateForInputSuppression" = 4294967295; // PopLidStateForInputSuppressionOverride (4294967295)
     "IpiLastClockOwnerDisable" = 0; // PpmIpiLastClockOwnerDisable 
     "LatencyToleranceDefault" = 100000; // PpmLatencyToleranceLimit (0x000186A0) 
     "LatencyToleranceFSVP" = 20000; // dword_140FC3428 dd 4E20
@@ -780,22 +790,22 @@ Everything listed below is based on personal research, mistakes may exist.
     "MultiparkGranularity" = 8; // PpmParkMultiparkGranularity 
     "PdcIdlePhaseDefaultWatchdogTimeoutSeconds" = 30; // PopPdcIdlePhaseDefaultWatchdogTimeoutSeconds (0x0000001E) 
     "PdcOneWayEntry" = 0; // PopPowerAggregatorOneWayEntry 
-    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (0xFFFFFFFF)
+    "PerfArtificialDomain" = 4294967295; // PpmPerfArtificialDomainSetting (4294967295)
     "PerfBoostAtGuaranteed" = 0; // PpmPerfBoostAtGuaranteed 
     "PerfCalculateActualUtilization" = 1; // PpmPerfCalculateActualUtilization 
     "PerfCheckTimerImplementation" = 0; // PpmCheckTimerImplementation 
     "PerfIdealAggressiveIncreasePolicyThreshold" = 90; // PpmPerfIdealAggressiveIncreaseThreshold (0x5A) 
     "PerfQueryOnDevicePowerChanges" = 0; // PopFxPerfQueryOnDevicePowerChanges 
     "PerfSingleStepSize" = 5; // PpmPerfSingleStepSize (0x05) 
-    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (0xFFFFFFFF)
-    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (0xFFFFFFFF)
+    "PlatformAoAcOverride" = 4294967295; // PopPlatformAoAcOverride (4294967295)
+    "PlatformRoleOverride" = 4294967295; // PopPlatformRoleOverride (4294967295)
     "PoFxSystemIrpWaitForReportDevicePowered" = 0; // PopPoFxSystemIrpWaitForReportDevicePoweredReg 
     "PowerActionResumeWatchdogTimeoutDefault" = 300; // PopPowerActionResumingWatchdogTimeoutDefault (0x0000012C) 
     "PowerActionTransitioningWatchdogTimeoutDefault" = 600; // PopPowerActionTransitioningWatchdogTimeoutDefault (0x00000258) 
     "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
     "ProximityEscapeMsec" = 0; // TtmpProximityEscapeMsec 
     "RestrictedStandbyDozeTimeoutSeconds" = 0; // PopPowerAggregatorRestrictedStandbyDozeTimeoutSeconds 
-    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (0xFFFFFFFF) 
+    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (4294967295) 
     "SleepstudyAccountingEnabled" = 1; // SleepstudyHelperAccountingEnabled 
     "SleepstudyGlobalBlockerLimit" = 3000; // SleepstudyHelperBlockerGlobalLimit (0x0BB8) 
     "SleepstudyLibraryBlockerLimit" = 200; // SleepstudyHelperBlockerLibraryLimit (0xC8) 
@@ -1461,7 +1471,7 @@ Hibernation is Windows S4 power state, it writes the resume state to `Hiberfil.s
     "HibernateChecksummingEnabled" = 1; // PopHiberChecksummingEnabledReg 
     "HibernateEnabledDefault" = 1; // PopHiberEnabledDefaultReg 
     "PromoteHibernateToShutdown" = 0; // PopPromoteHibernateToShutdown 
-    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (0xFFFFFFFF)
+    "SkipHibernateMemoryMapValidation" = 4294967295; // PopEnableHibernateMemoryMapValidationOverride (4294967295)
 
     "HibernateEnabled" = 1; // that's the value 'powercfg /hibernate off' would set
 
@@ -1496,9 +1506,9 @@ All three values exist as shown below. [`PopReadHiberbootPolicy`](https://github
     "HiberbootEnabled" = 1; // REG_DWORD, range: 0-1
 
     // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
-    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
-    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
-    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
+    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-4294967295
+    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-4294967295
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-4294967295FFFFFFFF
 ```
 
 ```c
@@ -1542,8 +1552,8 @@ Hibernation files are used for hybrid sleep, fast startup, and [standard hiberna
     "HiberFileSizePercent" = 100; // PopHiberFileSizePercent, REG_DWORD, 0-39 keeps the type logic, 40-100 uses the percent directly and PopSetHiberFileSize forces a full file
 
     // DWORD 1 = Reduced, DWORD 2 = Full, only used while HiberFileSizePercent < 40
-    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (0xFFFFFFFF)
-    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (0xFFFFFFFF), fallback when HiberFileType is unset
+    "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295)
+    "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295), fallback when HiberFileType is unset
 
 // Percent<MemoryBucket><Type>, PopCalculateHiberFileSize picks the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
