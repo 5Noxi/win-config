@@ -1063,7 +1063,7 @@ HKR, Ndi\Params\WakeUpModeCap\enum,  "2",        0 , %WakeUpMode_Pattern%
 
 # Network Buffers
 
-Configures transmit and receive buffer sizes together, or individually via suboptions. The maximum data differs per adapter/driver, e.g. `4096` may get rejected.
+The `default`/`min`/`max` data differs for users, e.g. if applying `4096` it may get rejected, see `inf` blocks below (this option won't try to apply the maximum size, read descriptions below).
 
 [Transmit Buffers](https://edc.intel.com/content/www/us/en/design/products/ethernet/adapters-and-devices-user-guide/transmit-buffers/):  
 > Defines the number of Transmit Descriptors. Transmit Descriptors are data segments that enable the adapter to track transmit packets in the system memory. Depending on the size of the packet, each transmit packet requires one or more Transmit Descriptors. You might choose to increase the number of Transmit Descriptors if you notice a problem with transmit performance. Increasing the number of Transmit Descriptors can enhance transmit performance. But, Transmit Descriptors consume system memory. If transmit performance is not an issue, use the default setting.
@@ -1110,8 +1110,6 @@ HKR, NDI\Params\*TransmitBuffers,  Base,    0, "10"
 HKR, NDI\Params\*TransmitBuffers,  type,    0, "dword"
 HKR, "", *TransmitBuffers,  %REG_SZ%, "2048"
 ```
-
-Reminder: Each adapter uses it's own default values, means that the `default`/`min`/`max` may be different for you.
 
 # Interrupt Moderation
 

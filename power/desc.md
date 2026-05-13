@@ -921,9 +921,9 @@ Note that this is based on [binary build version 22631 (23H2)](https://github.co
 
 # USB Audio Idle
 
-It's a mechanism (for audio drivers) for idle detection that switches an audio device between active `D0` and low power sleep (normally `D3`), after the configured timeout expires.
+It's a mechanism (for audio drivers) for idle detection that switches an audio device between active `D0` (highest power state) and low power sleep (normally [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3) = *lowest powered device low power state*), after the configured timeout expires.
 
-Note that `IdlePowerState` only has a meaning if timeouts are nonzero, means as you can see below `PerformanceIdleTime` is set to `0` by default = stays in D0, only when being on DC (battery) it would enter D3 after 30 seconds. You can see your current device power state (Dx) via [`Device Manager > Sound, video and game controllers > <USB audio device> > Properties > Details > Power data`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-cm_power_data_s) (`PD_MostRecentPowerState`).
+Note that `IdlePowerState` only has a meaning if timeouts are nonzero, means as you can see below `PerformanceIdleTime` is set to `0` by default = stays in D0, only when being on DC (battery) it would enter [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3) after 30 seconds. You can see your current device power state (Dx) via [`Device Manager > Sound, video and game controllers > <USB audio device> > Properties > Details > Power data`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/wdm/ns-wdm-cm_power_data_s) (`PD_MostRecentPowerState`).
 
 It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/DeviceStart.c) -> [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) -> [`PoRegisterDeviceForIdleDetection`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PoRegisterDeviceForIdleDetection.c). In 24H2+ it also registers [`PowerSettingCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-24H2/USBAUDIO/PowerSettingCallback.c) for `GUID_LOW_POWER_EPOCH`, which is why the additional `CS*` values exist.
 
@@ -949,7 +949,7 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 `IoOpenDeviceRegistryKey(DeviceObject, 2)` opens the driver specific software key (`2` = `PLUGPLAY_REGKEY_DRIVER`), [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) then opens the `PowerSettings` subkey. [`{4d36e96c-e325-11ce-bfc1-08002be10318}`](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors) is the `Media` device setup class GUID, [`USBAUDIO.sys` is under that `Media` setup class for USB audio devices](https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/supported-usb-classes).
 
-`IdlePowerState` gets "translated" by `USBAUDIO` to (which is why `*a4 = 4` = D3):
+`IdlePowerState` gets "translated" by `USBAUDIO` to (which is why `*a4 = 4` = [`D3`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/device-sleeping-states#device-power-state-d3)):
 
 | Data | `DEVICE_POWER_STATE` | Meaning |
 | --- | --- | --- |
