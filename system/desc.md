@@ -984,8 +984,6 @@ Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff]
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
-> *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
->
 > — Microsoft, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
 
 The MMCSS scheduler thread is set to priority `27`, as it must preempt Pro Audio threads so it can lower them to the exhausted category when their guaranteed period is over.
@@ -1110,7 +1108,7 @@ if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
 
 ## NoLazyMode
 
-MMCSS samples CPU idle/starvation state and increases `CiProcessorIdleHistoryBits`, whenever the history reaches `(1 << IdleDetectionCycles) - 1` it enters lazy mode and uses `LazyModeTimeout` for lazy mode sleeps. Any nonzero value would set `CiSchedulerDisallowLazyMode` which skips that.
+MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and increases `CiProcessorIdleHistoryBits`, whenever the history reaches `(1 << IdleDetectionCycles) - 1` it enters lazy mode and uses `LazyModeTimeout` for lazy mode sleeps. Any nonzero value would set `CiSchedulerDisallowLazyMode` which skips that.
 
 ```c
 // CiConfigInitialize
@@ -1269,6 +1267,10 @@ v9 = CiTryIncrementTotalThreadCount((volatile signed __int32 *)(v8 + 92), CiMaxT
 ```
 
 ## Tasks
+
+> *MMCSS uses information stored in the registry to identify supported tasks and determine the relative priority of threads performing these tasks. Each thread that is performing work related to a particular task calls the [AvSetMmMaxThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmmaxthreadcharacteristicsa) or [AvSetMmThreadCharacteristics](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsa) function to inform MMCSS that it is working on that task.*"
+>
+> — Microsoft, [Multimedia Class Scheduler Service](https://learn.microsoft.com/en-us/windows/win32/procthread/multimedia-class-scheduler-service)
 
 Task keys are read only if `SystemResponsiveness != 100` as already shown above. These are the default tasks:
 
