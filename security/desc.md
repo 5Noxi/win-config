@@ -77,6 +77,7 @@ If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/
 | [Hide all notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
 | [Hide non-critical notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
 | [Configure Windows Defender SmartScreen](https://www.noverse.dev/policies.html?p=WindowsExplorer*EnableSmartScreen) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableSmartScreen`<br>`ShellSmartScreenLevel` |
+| [Turn off Microsoft Defender Antivirus](https://www.noverse.dev/policies.html?p=WindowsDefender*DisableAntiSpywareDefender) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender` | `DisableAntiSpyware` |
 
 ## Remove Defender from Image
 
@@ -262,7 +263,7 @@ HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTeleme
 | [Turn off Automatic Download and Install of updates](https://www.noverse.dev/policies.html?p=WindowsStore*DisableAutoInstall) | `HKLM\Software\Policies\Microsoft\WindowsStore` | `AutoDownload` |
 | [Turn off Automatic Download of updates on Win8 machines](https://www.noverse.dev/policies.html?p=WindowsStore*DisableAutoDownloadWin8) | `HKLM\Software\Policies\Microsoft\WindowsStore` | `AutoDownload` |
 | [Configure Automatic Updates](https://www.noverse.dev/policies.html?p=WindowsUpdate*AutoUpdateCfg) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate\AU` | `NoAutoUpdate`<br>`AUOptions`<br>`AutomaticMaintenanceEnabled`<br>`ScheduledInstallDay`<br>`ScheduledInstallTime`<br>`AllowMUUpdateService`<br>`ScheduledInstallEveryWeek`<br>`ScheduledInstallFirstWeek`<br>`ScheduledInstallSecondWeek`<br>`ScheduledInstallThirdWeek`<br>`ScheduledInstallFourthWeek` |
-| [Specify intranet Microsoft update service location](https://www.noverse.dev/policies.html?p=WindowsUpdate*CorpWuURL) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `WUServer`<br>`WUStatusServer`<br>`UpdateServiceUrlAlternate`<br>`FillEmptyContentUrls`<br>`DoNotEnforceEnterpriseTLSCertPinningForUpdateDetection`<br>`SetProxyBehaviorForUpdateDetection` |
+| [Specify intranet Microsoft update service location](https://www.noverse.dev/policies.html?p=WindowsUpdate*CorpWuURL) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate`<br>`HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU` | `WUServer`<br>`WUStatusServer`<br>`UpdateServiceUrlAlternate`<br>`FillEmptyContentUrls`<br>`DoNotEnforceEnterpriseTLSCertPinningForUpdateDetection`<br>`SetProxyBehaviorForUpdateDetection`<br>`UseWUServer` |
 | [Do not connect to any Windows Update Internet locations](https://www.noverse.dev/policies.html?p=WindowsUpdate*DoNotConnectToWindowsUpdateInternetLocations) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DoNotConnectToWindowsUpdateInternetLocations` |
 | [Select the target Feature Update version](https://www.noverse.dev/policies.html?p=WindowsUpdate*TargetReleaseVersion) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `TargetReleaseVersion`<br>`ProductVersion`<br>`TargetReleaseVersionInfo` |
 | [Manage preview builds](https://www.noverse.dev/policies.html?p=WindowsUpdate*ManagePreviewBuilds) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `ManagePreviewBuildsPolicyValue`<br>`BranchReadinessLevel` |
@@ -839,6 +840,12 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 ### [Set-DODownloadMode](https://learn.microsoft.com/en-us/powershell/module/deliveryoptimization/set-dodownloadmode?view=windowsserver2025-ps)
 
 Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
+
+## [Windows Policies](https://www.noverse.dev/policies.html)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Download Mode](https://www.noverse.dev/policies.html?p=DeliveryOptimization*DownloadMode) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization` | `DODownloadMode` |
 
 # Disable System Restore
 

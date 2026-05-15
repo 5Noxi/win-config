@@ -317,6 +317,7 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Do not keep history of recently opened documents](https://www.noverse.dev/policies.html?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
+| [Configures search on the taskbar](https://www.noverse.dev/policies.html?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |
 
 # System Informer
 

@@ -1190,6 +1190,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHa
 | [Set the default behavior for AutoRun](https://www.noverse.dev/policies.html?p=AutoPlay*NoAutorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAutorun` |
 | [Turn off Autoplay](https://www.noverse.dev/policies.html?p=AutoPlay*Autorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDriveTypeAutoRun` |
 | [Disallow Autoplay for non-volume devices](https://www.noverse.dev/policies.html?p=AutoPlay*NoAutoplayfornonVolume) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoplayfornonVolume` |
+| [Prevent AutoPlay from remembering user choices.](https://www.noverse.dev/policies.html?p=AutoPlay*DontSetAutoplayCheckbox) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DontSetAutoplayCheckbox` |
 
 # Disable Touch & Tablet
 
@@ -1336,6 +1337,12 @@ Windows 7/XP:
     "PreventFlicks": { "Type": "REG_DWORD", "Data": 1 }
 }
 ```
+
+## [Windows Policies](https://www.noverse.dev/policies.html)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Tablet PC touch input](https://www.noverse.dev/policies.html?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |
 
 # Disable Bluetooth
 

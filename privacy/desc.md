@@ -50,6 +50,7 @@ Seems to be a [fallback](https://github.com/TechTech512/Win11Src/blob/840a619194
 | [Disable diagnostic data viewer](https://www.noverse.dev/policies.html?p=DataCollection*DisableDiagnosticDataViewer) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDiagnosticDataViewer` |
 | [Limit Diagnostic Log Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDiagnosticLogCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDiagnosticLogCollection` |
 | [Limit Dump Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDumpCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDumpCollection` |
+| [Configure the Commercial ID](https://www.noverse.dev/policies.html?p=DataCollection*CommercialIdPolicy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `CommercialId` |
 | [Turn off the advertising ID](https://www.noverse.dev/policies.html?p=UserProfiles*DisableAdvertisingId) | `HKLM\Software\Policies\Microsoft\Windows\AdvertisingInfo` | `DisabledByGroupPolicy` |
 
 # Disable WER
@@ -140,6 +141,28 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 | Windows 10, version 1809 or later | `eaus2watcab02.blob.core.windows.net` |
 | Windows 10, version 1809 or later | `weus2watcab01.blob.core.windows.net` |
 | Windows 10, version 1809 or later | `weus2watcab02.blob.core.windows.net` |
+
+### [DefaultConsent](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-errorreportingcore-defaultconsent)
+
+`DefaultConsent` specifies in what circumstances the user is asked whether to send an error report.
+
+#### Values
+
+| `0` or `1` | Always ask the user whether to send an error report. This is the default value. |
+| --- | --- |
+| `2` | Ask the user for everything except for basic parameters such as application name, version, and module name that are sent automatically. |
+| `3` | Ask the user for everything except for basic parameters that are likely to be safe, such as application name, version, and module name, and data. Send these items automatically. |
+| `4` | Do not ask the user; send all error reports automatically. |
+
+### [DisableWER](https://learn.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-errorreportingcore-disablewer)
+
+Disables Windows Error Reporting.
+
+#### Values
+
+| `0` | Enables Windows Error Reporting |
+| --- | --- |
+| `1` | Disables Windows Error Reporting |
 
 ## [Windows Policies](https://www.noverse.dev/policies.html)
 
@@ -242,6 +265,8 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Turn off Microsoft consumer experiences](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsConsumerFeatures) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsConsumerFeatures` |
+| [Turn off cloud optimized content](https://www.noverse.dev/policies.html?p=CloudContent*DisableCloudOptimizedContent) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableCloudOptimizedContent` |
+| [Turn off cloud consumer account state content](https://www.noverse.dev/policies.html?p=CloudContent*DisableConsumerAccountStateContent) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableConsumerAccountStateContent` |
 | [Do not show Windows tips](https://www.noverse.dev/policies.html?p=CloudContent*DisableSoftLanding) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableSoftLanding` |
 | [Do not suggest third-party content in Windows spotlight](https://www.noverse.dev/policies.html?p=CloudContent*DisableThirdPartySuggestions) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableThirdPartySuggestions` |
 | [Allow Online Tips](https://www.noverse.dev/policies.html?p=ControlPanel*AllowOnlineTips) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `AllowOnlineTips` |
@@ -493,6 +518,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Display information about previous logons during user logon](https://www.noverse.dev/policies.html?p=WinLogon*DisplayLastLogonInfoDescription) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisplayLastLogonInfo` |
+| [Remove logon hours expiration warnings](https://www.noverse.dev/policies.html?p=WinLogon*LogonHoursNotificationPolicyDescription) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DontDisplayLogonHoursWarnings` |
 
 # Disable Background Apps
 
@@ -520,7 +546,7 @@ When the system is in Modern Standby, desktop apps are suspended and UWP apps ar
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Let Windows apps run in the background](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground` |
+| [Let Windows apps run in the background](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground`<br>`LetAppsRunInBackground_UserInControlOfTheseApps`<br>`LetAppsRunInBackground_ForceAllowTheseApps`<br>`LetAppsRunInBackground_ForceDenyTheseApps` |
 
 # Disable App Launch Tracking
 
@@ -816,85 +842,19 @@ Biometric is used for fingerprint, facial recognition, and other biometric authe
 
 # Disable Remote Desktop
 
-Disables remote desktop, remote assistance, RPC traffic, and device redirection. See [remote desktop FAQs](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-pc-connections-faq) for more information.
-
-`RemoteAssistance.admx`:  
-`CreateEncryptedOnlyTickets`: Allow only Windows Vista or later connections
-`fAllowFullControl` (`0`): Allow helpers to only view the computer
-`LoggingEnabled`: Turn on session logging
-
-`RPC.admx`:  
-`RestrictRemoteClients` (`2`): Authenticated without exceptions
-
-`TerminalServer.admx`:  
-`fDisableCdm`: Do not allow drive redirection
+Disables remote desktop, remote assistance, RPC traffic, and device redirection. See [remote desktop FAQs](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-pc-connections-faq) for more information & [Terminal-Server.txt](https://github.com/nohuto/regkit/blob/main/records/Terminal-Server.txt) for a list of read values on boot (`\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\*` key).
 
 ## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
+| [Configure Solicited Remote Assistance](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Solicit) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `fAllowToGetHelp`<br>`fAllowFullControl` |
+| [Configure Offer Remote Assistance](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Unsolicit) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `fAllowUnsolicited`<br>`fAllowUnsolicitedFullControl` |
 | [Turn on session logging](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Logging) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `LoggingEnabled` |
 | [Allow only Windows Vista or later connections](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_EncryptedTicketOnly) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `CreateEncryptedOnlyTickets` |
 | [Restrict Unauthenticated RPC clients](https://www.noverse.dev/policies.html?p=RPC*RpcRestrictRemoteClients) | `HKLM\Software\Policies\Microsoft\Windows NT\Rpc` | `RestrictRemoteClients` |
 | [Don't allow this PC to be projected to](https://www.noverse.dev/policies.html?p=WirelessDisplay*AllowProjectionToPC) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `AllowProjectionToPC` |
 | [Require pin for pairing](https://www.noverse.dev/policies.html?p=WirelessDisplay*RequirePinForPairing) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `RequirePinForPairing` |
-
-## Miscellaneous Notes
-
-```json
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services": {
-  "fEncryptRPCTraffic": { "Type": "REG_DWORD", "Data": 1 }
-},
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp": {
-  "fLogonDisabled": { "Type": "REG_DWORD", "Data": 1 }
-}
-```
-```powershell
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\WinStations : DWMFRAMEINTERVAL
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : GlassSessionId
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : NotificationTimeOut
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : SnapshotMonitors
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : TSAppCompat
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : TSUserEnabled
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\WinStations : fUseHardwareGPU
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : CaptureStackTrace
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : ContainerMode
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : debug
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugFlags
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugFlagsEx
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : Debuglevel
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : Debuglsm
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebuglsmFlags
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebuglsmLevel
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebuglsmToDebugger
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugMaxFileSize
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : Debugsessionenv
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugsessionenvFlags
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugsessionenvLevel
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugsessionenvToDebugger
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : Debugtermsrv
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugtermsrvFlags
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugtermsrvLevel
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugtermsrvToDebugger
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugToDebugger
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugTS
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : Debugtstheme
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugtsthemeFlags
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugtsthemeLevel
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DebugtsthemeToDebugger
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DelayConMgrTimeout
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DelayReadyEventTimeout
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : DisableEnumUnlock
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : EnableTraceCorrelation
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : fDenyChildConnections
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : fDenyTSConnections
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : LSMBreakOnStart
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : MaxQueuedNotificationEvents
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : StartRCM
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server : TSServerDrainMode
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\WinStations : ConsoleSecurity
-\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\WinStations\CONSOLE : SECURITY
-```
 
 # Deny App Access
 
@@ -999,6 +959,7 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Improve inking and typing recognition](https://www.noverse.dev/policies.html?p=TextInput*AllowLinguisticDataCollection) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\TextInput` | `AllowLinguisticDataCollection` |
+| [Restrict Internet communication](https://www.noverse.dev/policies.html?p=ICM*InternetManagement_RestrictCommunication_2) | `HKLM\Software\Policies\Microsoft\Windows\HandwritingErrorReports`<br>`HKLM\Software\Policies\Microsoft\Windows\TabletPC` | `PreventHandwritingErrorReports`<br>`PreventHandwritingDataSharing` |
 | [Allow Windows Ink Workspace](https://www.noverse.dev/policies.html?p=WindowsInkWorkspace*AllowWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowWindowsInkWorkspace` |
 | [Allow suggested apps in Windows Ink Workspace](https://www.noverse.dev/policies.html?p=WindowsInkWorkspace*AllowSuggestedAppsInWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowSuggestedAppsInWindowsInkWorkspace` |
 

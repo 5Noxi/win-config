@@ -4109,11 +4109,14 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.Sy
 | [Hide all notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
 | [Hide non-critical notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
 | [Turn off tile notifications](https://www.noverse.dev/policies.html?p=WPN*NoTileNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoTileApplicationNotification` |
+| [Turn on multiple expanded toast notifications in action center](https://www.noverse.dev/policies.html?p=WPN*ExpandedToastNotifications) | `HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `EnableExpandedToastNotifications` |
 | [Turn off toast notifications](https://www.noverse.dev/policies.html?p=WPN*NoToastNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotification` |
 | [Turn off toast notifications on the lock screen](https://www.noverse.dev/policies.html?p=WPN*NoLockScreenToastNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotificationOnLockScreen` |
 | [Turn off notifications network usage](https://www.noverse.dev/policies.html?p=WPN*NoCloudNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoCloudApplicationNotification` |
 | [Turn off notification mirroring](https://www.noverse.dev/policies.html?p=WPN*NoNotificationMirroring) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `DisallowNotificationMirroring` |
 | [Show notification bell icon](https://www.noverse.dev/policies.html?p=Taskbar*AlwaysShowNotificationIcon) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `AlwaysShowNotificationIcon` |
+| [Disable showing balloon notifications as toasts.](https://www.noverse.dev/policies.html?p=Taskbar*EnableLegacyBalloonNotifications) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `EnableLegacyBalloonNotifications` |
+| [Turn off notification area cleanup](https://www.noverse.dev/policies.html?p=StartMenu*NoAutoTrayNotify) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoTrayNotify` |
 | [Turn off all balloon notifications](https://www.noverse.dev/policies.html?p=Taskbar*TaskbarNoNotification) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `TaskbarNoNotification` |
 | [Turn off feature advertisement balloon notifications](https://www.noverse.dev/policies.html?p=Taskbar*NoBalloonFeatureAdvertisements) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoBalloonFeatureAdvertisements` |
 
@@ -4350,6 +4353,9 @@ The `WSearch` service is needed for CmdPals `File Search` extension to work.
 | [Don't search the web or display web results in Search](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResults) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWeb` |
 | [Don't search the web or display web results in Search over metered connections](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResultsOnMeteredConnections) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWebOverMeteredConnections` |
 | [Do not allow web search](https://www.noverse.dev/policies.html?p=Search*DisableWebSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableWebSearch` |
+| [Set the SafeSearch setting for Search](https://www.noverse.dev/policies.html?p=Search*SafeSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchSafeSearch` |
+| [Do not allow locations on removable drives to be added to libraries](https://www.noverse.dev/policies.html?p=Search*DisableRemovableDriveIndexing) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableRemovableDriveIndexing` |
+| [Fully disable Search UI](https://www.noverse.dev/policies.html?p=Search*DisableSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableSearch` |
 
 ## Miscellaneous Notes
 
@@ -4783,8 +4789,8 @@ The prefetcher traces roughly the first 10 seconds of app startup and writes tra
 
 ## Value Meanings
 
-- [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
-- [`EnableSuperfetch`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)?redirectedfrom=MSDN) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
+- [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
+- [`EnableSuperfetch`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794183(v=winembedded.60)) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run SuperFetch, a tool that can load application data into memory before it is demanded. SuperFetch improves on Prefetch by monitoring which applications that you use the most and preloading those into system memory.
 - `SfTracingState` belongs to `sftracing.exe`. This file most often belongs to product Office Server Search. This file most often has  description Office Server Search.
 - `EnableBoottrace` is used to trace the startup, `1`= enabled, `0` = disabled.
 
