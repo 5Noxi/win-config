@@ -2588,7 +2588,7 @@ This follows the `EXPERIMENT: MMCSS priority boosting` guide of [Windows Interna
 
 You can also change the relative priority by adding an argument (the number):
 
-```h
+```c
 // avrt.h
 
 typedef enum _AVRT_PRIORITY
