@@ -5,12 +5,6 @@
     <Executeables />
     <Settings>
       <ProfileSetting>
-        <SettingNameInfo> </SettingNameInfo>
-        <SettingID>390467</SettingID>
-        <SettingValue>1</SettingValue>
-        <ValueType>Dword</ValueType>
-      </ProfileSetting>
-      <ProfileSetting>
         <SettingNameInfo>Shader Cache</SettingNameInfo>
         <SettingID>1675263</SettingID>
         <SettingValue>1</SettingValue>

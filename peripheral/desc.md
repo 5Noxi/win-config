@@ -943,7 +943,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "MedPowerResumeLatency" = 4294967295; // REG_MULTI_SZ
     "LowestPowerResumeLatency" = 4294967295; // REG_MULTI_SZ
     "HostMemoryBufferBytes" = 4294967295; // REG_MULTI_SZ
-    "BypassSgl" = 1; // REG_MULTI_SZ, only value bit0 is used
+    "BypassSgl" = 1; // REG_MULTI_SZ, only value bit 0 is used
     "TestMdlDataBufferOffsetInBytes" = 0; // REG_MULTI_SZ
     "UseDumpPointers" = 0; // REG_MULTI_SZ
     "ReservedQueuePairCount" = 0; // REG_MULTI_SZ, valid 1-65535 (check v69-1 <= 0xFFFE)
@@ -953,7 +953,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "IoCompletionCapInDPC" = 100; // REG_MULTI_SZ, if nonzero clamp to 128
     "IoPollingSize" = 0x4000; // REG_MULTI_SZ
     "ErrorEtwThrottleInterval" = 0xD693A400; // REG_MULTI_SZ, if nonzero clamp to max 0xD693A400
-    "ResetEnableMask" = 0; // REG_MULTI_SZ, value bit0/1/2 set internal flags 0x40/0x800/0x1000
+    "ResetEnableMask" = 0; // REG_MULTI_SZ, value bit 0/1/2 set internal flags 0x40/0x800/0x1000
     "ReliabilityDegraded" = 0; // REG_MULTI_SZ
     "ReadOnly" = 0; // REG_MULTI_SZ
     "VolatileMemoryBackupDeviceFailed" = 0; // REG_MULTI_SZ
@@ -1416,19 +1416,19 @@ UnDimOnInputDeviceTypes = -1  // 4294967295
 
 All available flags (`powercfg /devicequery query_flag`):
 
-| `query_flag`             | Description                                                                      |
-| ------------------------ | -------------------------------------------------------------------------------- |
-| `wake_from_S1_supported` | Returns all devices that support waking the system from a light sleep state.     |
-| `wake_from_S2_supported` | Returns all devices that support waking the system from a deeper sleep state.    |
+| `query_flag` | Description |
+| --- | --- |
+| `wake_from_S1_supported` | Returns all devices that support waking the system from a light sleep state. |
+| `wake_from_S2_supported` | Returns all devices that support waking the system from a deeper sleep state. |
 | `wake_from_S3_supported` | Returns all devices that support waking the system from the deepest sleep state. |
-| `wake_from_any`          | Returns all devices that support waking the system from any sleep state.         |
-| `S1_supported`           | Lists devices supporting light sleep.                                            |
-| `S2_supported`           | Lists devices supporting deeper sleep.                                           |
-| `S3_supported`           | Lists devices supporting deepest sleep.                                          |
-| `S4_supported`           | Lists devices supporting hibernation.                                            |
-| `wake_programmable`      | Lists devices that are user-configurable to wake the system from a sleep state.  |
-| `wake_armed`             | Lists devices currently configured to wake the system from any sleep state.      |
-| `all_devices`            | Returns all devices present in the system.                                       |
+| `wake_from_any` | Returns all devices that support waking the system from any sleep state. |
+| `S1_supported` | Lists devices supporting light sleep. |
+| `S2_supported` | Lists devices supporting deeper sleep. |
+| `S3_supported` | Lists devices supporting deepest sleep. |
+| `S4_supported` | Lists devices supporting hibernation. |
+| `wake_programmable` | Lists devices that are user-configurable to wake the system from a sleep state. |
+| `wake_armed` | Lists devices currently configured to wake the system from any sleep state. |
+| `all_devices` | Returns all devices present in the system. |
 
 # Disable Dynamic Lighting
 
