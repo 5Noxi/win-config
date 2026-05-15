@@ -1299,6 +1299,7 @@ Some additional notes:
 - `Clock Rate` range `5000-10000`, default of `10000`
 - `Latency Sensitive` (`REG_SZ`, can be `True`/`False`) also exists (is visible in logging), but I didn't find any point where this is used
 - `Priority When Yielded` (`REG_DWORD`) range `1-19`, default of `16`
+- MS adding "not used" to `GPU Priority`/`SFIO Priority` isn't really accurate, as it's not even possible to "use" them as they don't exist in the driver
 
 ### Boosted/Exhausted Priorities
 
