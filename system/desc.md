@@ -2455,21 +2455,21 @@ The "*10 ms*" in that quote = `SchedulerPeriod = 100000`.
 // SchedulerPeriod = 100000 (default)
 SystemResponsiveness = 10
 exhausted = 100000 * 10 / 100 = 10000 // 1ms
-boosted= 100000 - 10000 = 90000 // 9ms
+boosted = 100000 - 10000 = 90000 // 9ms
 
 SystemResponsiveness = 20
 exhausted = 100000 * 20 / 100 = 20000 // 2ms
-boosted= 100000 - 20000 = 80000 // 8ms
+boosted = 100000 - 20000 = 80000 // 8ms
 
 // SchedulerPeriod = 50000 (min)
 SystemResponsiveness = 20
 exhausted = 50000 * 20 / 100 = 10000 // 1ms
-boosted= 50000 - 10000 = 40000 // 4ms
+boosted = 50000 - 10000 = 40000 // 4ms
 
 // SchedulerPeriod = 1000000 (max)
 SystemResponsiveness = 20
 exhausted = 1000000 * 20 / 100 = 200000 // 20ms
-boosted= 1000000 - 200000 = 800000 // 80ms
+boosted = 1000000 - 200000 = 800000 // 80ms
 ```
 
 ## MaxThreadsPerProcess / MaxThreadsTotal
