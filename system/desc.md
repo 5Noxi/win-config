@@ -835,7 +835,7 @@ WNF = Windows Notification Facility
 >
 > "*The Power Manager and various related components use WNF to signal actions*"
 >
-> - Microsoft, [Windows Internals E7, P2: Chapter 8, System mechanisms](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+> — Microsoft, [Windows Internals E7, P2: Chapter 8, System mechanisms](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 That is why the Game Mode power part uses WNF, it writes `WNF_SEB_GAME_MODE`, and the power/SEB side can get that state and apply the `GameMode` processor power profile.
 
@@ -980,7 +980,7 @@ messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
 
 # MMCSS Values
 
-Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds), means that I haven't looked at live behaviours of values yet (excluding MMCSS Boost section) which will be included somewhat soon.
+Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds), Microsoft docs/Windows Internals, and boot records using different registry values.
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
@@ -1108,7 +1108,11 @@ if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
 
 ## NoLazyMode
 
-MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and increases `CiProcessorIdleHistoryBits`, whenever the history reaches `(1 << IdleDetectionCycles) - 1` it enters lazy mode and uses `LazyModeTimeout` for lazy mode sleeps. Any nonzero value would set `CiSchedulerDisallowLazyMode` which skips that.
+MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and increases `CiProcessorIdleHistoryBits`, whenever the history reaches `(1 << IdleDetectionCycles) - 1` it enters lazy mode and uses `LazyModeTimeout` for lazy mode sleeps.
+
+`NoLazyMode = 1` only disables idle detection, making `IdleDetection` and `IdleDetectionLazy` disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
+
+You can see that in the picture in the [SchedulerPeriod]() section.
 
 ```c
 // CiConfigInitialize
@@ -1124,9 +1128,24 @@ if ( !CiSchedulerDisallowLazyMode )
 }
 ```
 
+### Scheduler_Sleep Reasons
+
+| Reason | Meaning | Duration |
+| --- | --- | --- |
+| `Realtime` | boosted sleep | boosted duration `SchedulerPeriod - (SchedulerPeriod * SystemResponsiveness / 100)` |
+| `SleepResponsiveness` | exhaused sleep | exhausted duration `SchedulerPeriod * SystemResponsiveness / 100` |
+| `SleepRealtimeLazy` | when `CiSchedulerInLazyMode` was already set before the normal boosted sleep | `LazyModeTimeout` |
+| `IdleDetection` | idle history exists but hasn't reached `CiSchedulerIdleCycleBitMask` | `SchedulerPeriod` |
+| `IdleDetectionLazy` | idle history reached `CiSchedulerIdleCycleBitMask` | `LazyModeTimeout` |
+| `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | `4,294,967,295` |
+
 ## IdleDetectionCycles
 
-[`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) compares `CiProcessorIdleHistoryBits` against `CiSchedulerIdleCycleBitMask`, which should mean that larger values need more idle histories before lazy mode can be entered.
+[`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) compares `CiProcessorIdleHistoryBits` against `CiSchedulerIdleCycleBitMask`, so larger values need more idle-detection passes before lazy mode is entered. While the history is nonzero but still below the mask, it logs `IdleDetection` and sleeps for `SchedulerPeriod`. Once the history reaches the mask, it logs `IdleDetectionLazy` and sleeps for `LazyModeTimeout`.
+
+This can be seen in `Scheduler_Sleep` (always `IdleDetectionCycles - 1`, as `IdleDetectionLazy` is only logged on the pass where `CiProcessorIdleHistoryBits` first reaches the full mask):
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/IdleDetectionCycles.png?raw=true)
 
 ```c
 // CiConfigInitialize
@@ -1140,7 +1159,9 @@ CiSchedulerIdleCycleBitMask = (1 << CiSchedulerIdleDetectionCycles) - 1;
 
 ## LazyModeTimeout
 
-Sleep duration used while MMCSS is in lazy mode.
+Sleep duration used when MMCSS is in lazy mode. This can be easily validated using WPR by looking at `IdleDetectionLazy` (or `SleepRealtimeLazy`):
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/IdleDetectionLazy.png?raw=true)
 
 ```c
 // CiConfigInitialize
@@ -1166,7 +1187,11 @@ CiSchedulerSleep(v4, DpcData_high, v2);
 
 ## SchedulerTimerResolution
 
-Clamps the requested yield/deadline times so they aren't shorter than this value, with `SchedulerTimerResolution = 10000` (`1 ms`), a request like `0.5 ms` is raised to `1 ms`, so the deadline/yield part won't schedule the thread back to its higher priority sooner than `1 ms` after the yield request ([`CiSchedulerTaskIndexYield`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerTaskIndexYield.c))? That's just a assumption for now.
+Clamps the requested yield/deadline times so they aren't shorter than this value. With `SchedulerTimerResolution = 10000` (`1 ms`), a request like `0.5 ms` is raised to `1 ms`, so the deadline/yield part won't schedule the thread back to its higher priority sooner than `1 ms` after the yield request.
+
+This is used by [`CiSchedulerTaskIndexYield`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerTaskIndexYield.c), the requested `Duration` and `PreDuration` are raised to `SchedulerTimerResolution` if they're smaller (changed values are logged by `TaskIndex_Yield`).
+
+While doing several captures I didn't see any request below `1 ms` so from my current state I would say that this has no actual use.
 
 > "*MMCSS also supports a feature called deadline scheduling. The idea is that an audio-playing program does not always need the highest priority level in its category. If such a program uses buffering (obtaining audio data from disk or network) and then plays the buffer while building the next buffer, deadline scheduling allows a client thread to indicate a time when it must get the high priority level to avoid glitches, but live with a slightly lower priority (within its category) in the meantime. A thread can use the AvTaskIndexYield function to indicate the next time it must be allowed to run, specifying the time it needs to get the highest priority within its category. Until that time arrives, it gets the lowest priority within its category, potentially freeing more CPU time to the system*"
 >
@@ -1179,6 +1204,15 @@ WPP_MAIN_CB.ActiveThreadCount =
 
 if ( WPP_MAIN_CB.ActiveThreadCount > 0x2710 ) // 0x2710 = 10000
   WPP_MAIN_CB.ActiveThreadCount = 10000; // upper clamp
+```
+
+```c
+// CiSchedulerTaskIndexYield
+if ( a2 < WPP_MAIN_CB.ActiveThreadCount )
+  ActiveThreadCount = WPP_MAIN_CB.ActiveThreadCount;
+
+if ( a3 < WPP_MAIN_CB.ActiveThreadCount )
+  v4 = WPP_MAIN_CB.ActiveThreadCount;
 ```
 
 ## SchedulerPeriod
@@ -1204,12 +1238,16 @@ LODWORD(WPP_MAIN_CB.SecurityDescriptor) =
   SchedulerPeriod - SchedulerPeriod * CiSystemResponsiveness / 100; // boosted duration
 ```
 
-With `SystemResponsiveness = 20` & `SchedulerPeriod = 100000`, this would mean:
+With `SchedulerPeriod = 50000` & `SystemResponsiveness = 30`, this would mean:
 
 ```c
-exhausted duration = 100000 * 20 / 100 = 20000
-boosted duration = 100000 - (100000 * 20 / 100) = 80000
+exhausted duration = 50000 * 30 / 100 = 15000
+boosted duration = 50000 - (50000 * 30 / 100) = 35000
 ```
+
+You can see that split (when `NoLazyMode` is 1) in `Scheduler_Sleep` via `Realtime` (boosted)/`SleepResponsiveness` (exhausted) reasons:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/SchedulerPeriod.png?raw=true)
 
 ### Calculation Examples
 
@@ -1225,6 +1263,7 @@ SystemResponsiveness = 10
 exhausted = 100000 * 10 / 100 = 10000 // 1ms
 boosted = 100000 - 10000 = 90000 // 9ms
 
+// Windows Internals example (both default data)
 SystemResponsiveness = 20
 exhausted = 100000 * 20 / 100 = 20000 // 2ms
 boosted = 100000 - 20000 = 80000 // 8ms
@@ -1281,6 +1320,10 @@ Task keys are read only if `SystemResponsiveness != 100` as already shown above.
 - `Playback`
 - `Pro Audio`
 - `Window Manager`
+
+You can see in `Thread_SetChars` (or `Thread_Join`) which task a thread registered with. I didn't see any app registering with other tasks than `Audio`/`Pro Audio` yet.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/Thread_SetChars.png?raw=true)
 
 ### [Task Values](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#registry-settings)
 
