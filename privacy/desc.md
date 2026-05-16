@@ -64,9 +64,6 @@ Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-ps
 "HKLM\\OFFLINE_AUTH\\Microsoft\\Windows\\CurrentVersion\\Diagnostics\\DiagTrack";
     "DiagTrackAuthorization" = 0; // REG_DWORD
 
-"HKLM\\OFFLINE_AUTH\\Microsoft\\Windows\\CurrentVersion\\DeviceAccess";
-    "ActivePolicyCode" = ?; // REG_SZ
-
 "HKLM\\OFFLINE_AUTH\\Policies\\Microsoft\\Windows\\DataCollection";
     "LimitDumpCollection" = 0; // REG_DWORD
 ```
@@ -79,7 +76,7 @@ Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-ps
 - [`TelGetMaximumAllowedTelemetryLevel`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetMaximumAllowedTelemetryLevel.c)
 - [`TelGetNumericPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetNumericPolicy.c)
 - [`TelGetWerTelemetryMode`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetWerTelemetryMode.c)
--  [`TelpGetTelemetryClientRegPath`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/-TelpGetTelemetryClientRegPath@@YAPEAGXZ.c)
+- [`TelpGetTelemetryClientRegPath`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/-TelpGetTelemetryClientRegPath@@YAPEAGXZ.c)
 - [`TelIsOsInProcessorMode`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelIsOsInProcessorMode.c)
 - [`TelpReadOfflineOsPolicySetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadOfflineOsPolicySetting.c)
 - [`TelGetWerTelemetryModeWinRE`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetWerTelemetryModeWinRE.c)
