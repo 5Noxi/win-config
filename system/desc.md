@@ -1159,7 +1159,7 @@ CiSchedulerIdleCycleBitMask = (1 << CiSchedulerIdleDetectionCycles) - 1;
 
 ## LazyModeTimeout
 
-Sleep duration used when MMCSS is in lazy mode. This can be validated using WPR by looking at `IdleDetectionLazy` (or `SleepRealtimeLazy`):
+Sleep duration used when MMCSS is in lazy mode. This is used for `IdleDetectionLazy` (or `SleepRealtimeLazy`):
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/LazyModeTimeout.png?raw=true)
 
