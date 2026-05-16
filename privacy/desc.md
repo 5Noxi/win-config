@@ -24,6 +24,8 @@ See [`app-tools`](https://www.noverse.dev/docs/app-tools/docs/) ([repo](https://
 
 Prevents sending info about your computer to microsoft, disables the diagnostic log collection, bluetooth ads (`DataCollection.admx`), the inventory collector. It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase. See policy explanations below for more details.
 
+It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#calling-native-tracker---broadband-tracker-of-devices-services-and-operating-systems-)' blocklist via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
+
 ## DiagnosticDataSettings Values
 
 Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/DiagnosticDataSettings) pseudocode (see list below). I've also looked through values within `DiagSvc.dll`/`DiagTrack.dll` but beside `CEIPEnable`/`EnableDiagnostics` they don't include anything interesting.
@@ -82,6 +84,27 @@ Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-ps
 - [`TelpReadOfflineOsPolicySetting`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelpReadOfflineOsPolicySetting.c)
 - [`TelGetWerTelemetryModeWinRE`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/DiagnosticDataSettings/TelGetWerTelemetryModeWinRE.c)
 
+### Boot Capture
+
+See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/23H2.txt) ([24H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/24H2.txt)/[25H2](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/records/25H2.txt) don't include more than that).
+
+```
+\Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection : AllowTelemetry
+\Registry\Machine\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\DataCollection : CommercialId
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowDeviceNameInTelemetry
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry_PolicyManager
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : CommercialId
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : DisableEnterpriseAuthProxy
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : DisableTelemetryOptInChangeNotification
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : LimitDiagnosticLogCollection
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : LimitDumpCollection
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : TelemetryProxyServer
+\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\DataCollection : TelemetryProxyServer_PolicyManager
+\Registry\User\<CURRENT_USER_SID>\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry
+\Registry\User\<CURRENT_USER_SID>\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry_PolicyManager
+```
+
 ## [Windows Policies](https://www.noverse.dev/policies.html)
 
 | Policy | Key Path | Value Name |
@@ -113,7 +136,7 @@ Based on 23H2 [`DiagnosticDataSettings`](https://github.com/nohuto/decompiled-ps
 >
 > — Windows Internals, [E7, P2: 'Windows Error Reporting (WER)'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-[Error-Reporting.txt](https://github.com/nohuto/regkit/blob/main/records/Error-Reporting.txt) shows all read values on boot (`\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`).
+[Error-Reporting.txt](https://github.com/nohuto/regkit/blob/main/records/Error-Reporting.txt) shows all read values on boot (`\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`) / [WER Settings](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) for some details.
 
 ## Services/Tasks
 
