@@ -671,7 +671,7 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 ```c
 // HUBREG_QueryGlobalUsb20HardwareLpmSettings
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\Usb20HardwareLpm"; // g_Usb20HardwareLpmKeyName (aRegistryMachin_8)
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\Usb20HardwareLpm"; // g_Usb20HardwareLpmKeyName
     "Usb20HardwareLpmOverride" = 1; // REG_DWORD, default behavior enabled, 0 disables it
     "Usb20HardwareLpmTimeout" = 2; // REG_DWORD, accepted range 0-255
 
@@ -680,13 +680,13 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "AttemptRecoveryFromUsbPowerDrain" = 0; // REG_DWORD, is used to stop USB devices when your screen is off, obviously only for laptop users
 
 // HUBREG_QueryUsbHardwareVerifierValue
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\HardwareVerifier"; // g_HwVerifierKeyName (aRegistryMachin_7)
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\HardwareVerifier"; // g_HwVerifierKeyName
     "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, first lookup
     "<VID><PID>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, fallback
     "global\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, last fallback
 
 // HUBREG_QueryGlobalUsbLtmSettings
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\UsbLtm"; // g_UsbLtmKeyName (aRegistryMachin_4)
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\UsbLtm"; // g_UsbLtmKeyName
     "UsbLtmEnable" = 0; // REG_DWORD, nonzero enables USB LTM
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USB";
@@ -797,7 +797,7 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 ```c
 // HUBREG_QueryGlobalHubValues
-"HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName (aRegistryMachin_10)
+"HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName
     "DisableSelectiveSuspendUI" = ?; // REG_DWORD
     "MsOsDescriptorMode" = ?; // REG_DWORD, valid values are 0-2
     "EnableDiagnosticMode" = ?; // REG_DWORD, nonzero enables diagnostic mode
