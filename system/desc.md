@@ -1345,7 +1345,17 @@ MMCSS sets the priority of client threads depending on their scheduling category
 
 This follows the `EXPERIMENT: MMCSS priority boosting` guide of [Windows Internals E7, P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), but uses `mmcss_task` instead of Media Player/CPUSTRES.
 
-1. Download [mmcss_task](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss_task.exe), or build it from [source](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss_task):
+Perfmon has a minumum sample rate of 1 second which isn't optimal for looking at priority switches, as the default MMCSS scheduler period is `10 ms` (`SchedulerPeriod = 100000`, means one PerfMon point can cover ~100 MMCSS cycles), which is why I used WPA & MXA to show examples. You can still use it but don't use the graph as "accurate priority changes".
+
+1. Download [mmcss_task](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss_task.exe), or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss_task):
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+
+.\build\Release\mmcss_task.exe
+```
+
 2. Run it with the MMCSS task you want to test, e.g.:
 
 ```powershell
@@ -1377,8 +1387,8 @@ typedef enum _AVRT_PRIORITY
 [MS doc](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadpriority) doesn't define `-2`, SDK does and it works so I'll leave it.
 
 ```powershell
-.\mmcss_task.exe Audio 1
-.\mmcss_task.exe Audio 2
+.\mmcss_task.exe Audio 1 # AVRT_PRIORITY_HIGH
+.\mmcss_task.exe Audio -1 # AVRT_PRIORITY_LOW
 ```
 
 ### Relative Priorities
