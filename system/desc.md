@@ -980,7 +980,7 @@ messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
 
 # MMCSS Values
 
-Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds), WPR (`Microsoft-Windows-MMCSS` provider).
+Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
@@ -1007,7 +1007,7 @@ All values below are read via [`CiConfigReadDWORD`](https://github.com/nohuto/de
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile";
     "SystemResponsiveness" = 100; // clamped to 10-100, 100 disables MMCSS, <10 or >100 = 20
     "NetworkThrottlingIndex" = 10; // 0 = 1, 1-70 stay, 71-0xFFFFFFFE = 70, 0xFFFFFFFF disables NDIS throttle
-    "NoLazyMode" = 0; // nonzero skips lazy mode idle detection
+    "NoLazyMode" = 0; // bool
     "IdleDetectionCycles" = 2; // range 1-31
     "LazyModeTimeout" = 1000000; // 0 replaced with 1000000, no upper clamp?
     "SchedulerTimerResolution" = 10000; // values above 10000 capped to 10000
@@ -1110,9 +1110,9 @@ if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
 
 MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and increases `CiProcessorIdleHistoryBits`, whenever the history reaches `(1 << IdleDetectionCycles) - 1` it enters lazy mode and uses `LazyModeTimeout` for lazy mode sleeps.
 
-`NoLazyMode = 1` only disables idle detection, making `IdleDetection` and `IdleDetectionLazy` disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
+`NoLazyMode = 1` only disables idle detection, causing `IdleDetection` & `IdleDetectionLazy` to disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
 
-You can see that in the picture in the [SchedulerPeriod](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
+You can see that in the picture of the [SchedulerPeriod](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
 
 ```c
 // CiConfigInitialize
