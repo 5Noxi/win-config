@@ -980,7 +980,7 @@ messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
 
 # MMCSS Values
 
-Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds), Microsoft docs/Windows Internals, and boot records using different registry values.
+Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds), WPR (`Microsoft-Windows-MMCSS` provider).
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
@@ -1112,7 +1112,7 @@ MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and i
 
 `NoLazyMode = 1` only disables idle detection, making `IdleDetection` and `IdleDetectionLazy` disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
 
-You can see that in the picture in the [SchedulerPeriod]() section.
+You can see that in the picture in the [SchedulerPeriod](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
 
 ```c
 // CiConfigInitialize
@@ -1141,7 +1141,7 @@ if ( !CiSchedulerDisallowLazyMode )
 
 ## IdleDetectionCycles
 
-[`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) compares `CiProcessorIdleHistoryBits` against `CiSchedulerIdleCycleBitMask`, so larger values need more idle-detection passes before lazy mode is entered. While the history is nonzero but still below the mask, it logs `IdleDetection` and sleeps for `SchedulerPeriod`. Once the history reaches the mask, it logs `IdleDetectionLazy` and sleeps for `LazyModeTimeout`.
+[`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) compares `CiProcessorIdleHistoryBits` against `CiSchedulerIdleCycleBitMask`, so larger values need more idle detection passes before lazy mode can be entered. While the history is nonzero but still below the mask, it logs `IdleDetection` and sleeps for `SchedulerPeriod`. Once the history reaches the mask, it logs `IdleDetectionLazy` and sleeps for `LazyModeTimeout`.
 
 This can be seen in `Scheduler_Sleep` (always `IdleDetectionCycles - 1`, as `IdleDetectionLazy` is only logged on the pass where `CiProcessorIdleHistoryBits` first reaches the full mask):
 
@@ -1159,9 +1159,9 @@ CiSchedulerIdleCycleBitMask = (1 << CiSchedulerIdleDetectionCycles) - 1;
 
 ## LazyModeTimeout
 
-Sleep duration used when MMCSS is in lazy mode. This can be easily validated using WPR by looking at `IdleDetectionLazy` (or `SleepRealtimeLazy`):
+Sleep duration used when MMCSS is in lazy mode. This can be validated using WPR by looking at `IdleDetectionLazy` (or `SleepRealtimeLazy`):
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/IdleDetectionLazy.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/LazyModeTimeout.png?raw=true)
 
 ```c
 // CiConfigInitialize
