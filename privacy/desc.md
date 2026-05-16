@@ -136,6 +136,15 @@ See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/r
 >
 > — Windows Internals, [E7, P2: 'Windows Error Reporting (WER)'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
+[Windows Error Reporting flow](https://learn.microsoft.com/en-us/windows/win32/wer/using-wer#windows-error-reporting-flow-for-crashes-non-response-and-kernel-faults) for crashes, non-response, and kernel faults:
+1. The problem event occurs.
+2. The operating system invokes WER.
+3. WER collects the data, builds a report, and prompts the user for consent (if needed).
+4. WER sends the report to Microsoft (Watson Server) if the user consented.
+5. If the Watson server requests additional data, WER collects the data and prompts the user for consent (if needed).
+6. If the application has registered for recovery and restart, WER executes the registered callback functions while the data is compressed and sent to Microsoft (if the user consented).
+7. If a response to the problem is available from Microsoft, the user is notified.
+
 [Error-Reporting.txt](https://github.com/nohuto/regkit/blob/main/records/Error-Reporting.txt) shows all read values on boot (`\Registry\Machine\SOFTWARE\Microsoft\WINDOWS\Windows Error Reporting`) / [WER Settings](https://learn.microsoft.com/en-us/windows/win32/wer/wer-settings) for some details.
 
 ## Services/Tasks
@@ -174,12 +183,43 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 
 ### EnableWerUserReporting
 
-`EnableWerUserReporting`  
-Default: `1` (`DbgkEnableWerUserReporting dd 1`)
-
-```powershell
-"Session Manager\Kernel","EnableWerUserReporting","0xFFFFF800CF1C335C","0x00000000","0x00000000","0x00000000"
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
+  "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero 32 bit data = enabled
 ```
+
+Used in [DbgkQueueUserExceptionReport](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/DbgkQueueUserExceptionReport.c):
+
+```c
+if ( !DbgkEnableWerUserReporting ) // 0 would block the part below (DbgkUserReportWorkRoutine etc)
+  return 3221226326LL;
+```
+
+The queued work routine is basically a thing for initiating UM (user mode) WER reporting work, some direct callers that I found are:
+- [`SepLogLpacAccessFailure`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/SepLogLpacAccessFailure.c) calls it for LPAC access failures, after ETW tracing and its own `SeLpacEnableWatsonReporting`
+- [`MiForceCrashForInvalidAccess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/MiForceCrashForInvalidAccess.c) can call it for invalid executable memory write handling
+
+### SeLpacEnableWatsonReporting
+
+Note that this is dependent on `EnableWerUserReporting`, means if the value above is `0` this has no effect.
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
+  "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, REG_DWORD, 0 disables, nonzero enables
+```
+
+Used in [SepLogLpacAccessFailure](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/SepLogLpacAccessFailure.c):
+
+```c
+EtwTraceLpacAccessFailure(v4); // always happenes
+
+if ( !SeLpacEnableWatsonReporting )
+  return 3221226326LL; // stop before report
+
+return DbgkQueueUserExceptionReport();
+```
+
+WER replaced Dr. Watson, which was included in Windows XP, but it can still be used (see WER flow [above](https://www.noverse.dev/docs/win-config/privacy/disable-wer/)) "*4. WER sends the report to Microsoft (Watson Server) if the user consented.*".
 
 ### AerMultiErrorDisabled
 
@@ -197,6 +237,8 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 ```
 
 ### [WER Endpoints](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance.md#configure-network-endpoints-to-be-allowed)
+
+See [privacy/disable-general-telemetry](https://www.noverse.dev/docs/win-config/privacy/disable-general-telemetry/) note on the blocklist (which includes these domains).
 
 - Port used: `443`
 - Protocol used: HTTPS with SSL/TLS using certificate pinning

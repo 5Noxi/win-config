@@ -1478,7 +1478,7 @@ Everything listed below is based on personal research, mistakes may exist.
     // Determine what is considered in assessing whether a thread is important.
     "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods
-    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting
+    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero 32 bit data = enabled
     "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
     "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
     "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
@@ -1527,7 +1527,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "SeAllowAllApplicationAceRemoval" = 0; // SepAllowAllApplicationAceRemoval
     "SeAllowSessionImpersonationCapability" = 0; // SepAllowSessionImpersonationCap
     "SeCompatFlags" = 0; // SeCompatFlags
-    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting
+    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, REG_DWORD, 0 disables, nonzero enables
     "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
     "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration
     // This behavior is controlled by the kernel variable KiSerializeTimerExpiration, which is initialized based on a registry setting whose value is different between a server and client installation. By modifying or creating the value SerializeTimerExpiration under HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel other than 0 or 1, serialization can be disabled, enabling timers to be distributed among processors. Deleting the value, or keeping it as 0, allows the kernel to make the decision based on Modern Standby availability, and setting it to 1 permanently enables serialization even on non-Modern Standby systems.
