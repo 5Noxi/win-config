@@ -1068,6 +1068,8 @@ CiSystemResponsiveness = 10 * (value / 10);
 
 ## NetworkThrottlingIndex
 
+When at least one scheduled MMCSS thread (thread that registers with MMCSS task) exists, [`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiNdisThrottle.c) sends the value to NDIS. When the last scheduled MMCSS thread leaves, it would send `-1` to remove the throttle again.
+
 > "*MMCSS functionality does not stop at simple priority boosting, however. Because of the nature of network drivers on Windows and the NDIS stack, DPCs are quite common mechanisms for delaying work after an interrupt has been received from the network card. Because DPCs run at an IRQL level higher than user-mode code, long-running network card driver code can still interrupt media playback—for example, during network transfers or when playing a game.*
 >
 > *MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
@@ -1094,7 +1096,7 @@ else
 }
 ```
 
-Note that [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c) only opens the NDIS part when the value isn't `-1` and MMCSS wasn't disabled by `SystemResponsiveness == 100`.
+Note that [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c) only opens the NDIS part when the value isn't `-1` (`0xFFFFFFFF`) and MMCSS wasn't disabled by `SystemResponsiveness == 100`.
 
 ```c
 // CsInitialize
