@@ -1603,10 +1603,10 @@ Everything listed below is based on personal research, mistakes may exist.
     "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching 
     "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ? https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
-    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
-    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
-    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
-    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
+    "HeapSegmentReserve" = 1048576; // REG_DWORD, range 65536-16580608, 65536 steps
+    "HeapSegmentCommit" = 8192; // REG_DWORD, range 4096-16580608, 4096 steps
+    "HeapDeCommitFreeBlockThreshold" = 4096; // REG_DWORD, range 0-4294967280, 16 steps
+    "HeapDeCommitTotalFreeThreshold" = 65536; // REG_DWORD, range 0-4294967280, 16 steps
     "ImageExecutionOptions" = 0; // ViImageExecutionOptions 
     "InitConsoleFlags" = 0; // InitConsoleFlags 
     "MultiUsersInSessionSupported" = 0; // RtlpMultiUsersInSessionSupported 
@@ -1805,12 +1805,7 @@ Everything listed below is based on personal research, mistakes may exist.
     "PerfEnablePackageIdle" = 0;
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
-    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
-                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
-                    //    if (value & 0x2)                      // low byte, bit 1
-                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
-                    // if the value exists but is stored as REG_NONE (type==0):
-                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global "disable/override"
+  "Enabled"; // REG_DWORD, 0 = disable, nonzero = enable (global)
 
 // Miscellaneous values
 
