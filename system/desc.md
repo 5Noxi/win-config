@@ -3944,13 +3944,29 @@ Local Security Policy:
 
 Windows has two UM (user mode) heap implementations, the older NT heap and the newer Segment Heap. UWP/modern apps and some system processes normally use Segment Heap, while traditional desktop processes keep NT heap behavior (unless opted in via values below for example).
 
+Most normal software in my testing (`Cyberpunk2077.exe`, `ida.exe`, `VSCodium.exe`, `mullvadbrowser.exe`, `Procmon.exe`, `powershell.exe`, `ripgrep.exe`, `steam.exe`) used NT Heap. Segment Heap was used by Windows components/service hosts (`audiodg.exe`, `svchost.exe`, `lsass.exe`, `winlogon.exe`, `dwm.exe`, `ShellExperienceHost.exe`, `sihost.exe`, `WindowsTerminal.exe`) and some VBox processes. Note that one process can use more than one heap type.
+
 It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
+
+## heap_types
+
+[`heap_types.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/heap_types.exe) queries all running processes and lists their heaps as `NT Heap`/`NT Heap (LFH)`/`Segment Heap`. You can either use the [prebuilt binary](https://github.com/nohuto/win-config/blob/main/system/assets/heap_types.exe), or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/heap_types):
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+
+.\build\Release\heap_types.exe
+.\build\Release\heap_types.exe --heaps > heaps.csv
+```
+
+It uses `RtlQueryProcessDebugInformation` for the heap list, then reads the heap frontend type (`_HEAP.FrontEndHeapType` for `LFH`/`Lookaside`) / signature (`_HEAP.SegmentSignature` for `NT Heap`/`Segment Heap`). By default it prints heap type counts, `--heaps` prints process name + PID + heap.
 
 ## Registry Values
 
 These are easier to understand if comparing them to the [`RTL_HEAP_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters) structure, which is why I've added quotes from it to the parts below. The mentioned fallback in that MS doc also match with the default data I've found.
 
-The `HeapSegment*` and `HeapDeCommit*` values are related to NT heaps (heap creation happens in `RtlCreateHeap`), Segment Heap (heap creation starts in [`RtlCreateHeap`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlCreateHeap.c) too but would then call [`RtlpHpHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpHeapCreate.c) which happens before default value loading) part doesn't read them.
+The `HeapSegment*` and `HeapDeCommit*` values are NT heap defaults (heap creation starts in [`RtlCreateHeap`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlCreateHeap.c), the Segment Heap path calls [`RtlpHpHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpHeapCreate.c) before those NT heap defaults are loaded).
 
 ```c
 typedef struct _RTL_HEAP_PARAMETERS {
@@ -4012,7 +4028,7 @@ if ( v9 >= 0xFD0000 )
 >
 > — Microsoft, [RTL_HEAP_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters)
 
-[`PAGE_SIZE` = `4096`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/RtlpExtendHeap.c) bytes, so `PAGE_SIZE * 2` = `8192`.
+[`PAGE_SIZE` = `4096`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntdll/RtlpExtendHeap.c) bytes, so `PAGE_SIZE * 2` = `8192`.
 
 ```c
 // RtlpExtendHeap
@@ -4062,9 +4078,56 @@ if ( result >= 0 && v1 == 4 ) // data length
 }
 ```
 
+#### heap_types Results
+
+`CSRSS port` is a small Windows communication heap used for talking to CSRSS, it stays NT Heap even when the app uses Segment Heap (as [`CsrpConnectToServer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/CsrpConnectToServer.c) creates `HEAP_CLASS_8` on a fixed shared memory, means `HeapBase` =/ NULL).
+
+Some requirements for Segment Heap (in [`RtlCreateHeap`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlCreateHeap.c)) also are that the heap is [`Growable` & `HeapBase` = NULL](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlcreateheap), means that a heap would also use NT heap if this doesn't match (`HEAP_CLASS_7`/`HEAP_CLASS_8` aren't growable + don't have a `HeapBase` of NULL since they use a fixed shared memory).
+
+```c
+#define HEAP_CLASS_0 0x00000000 // Process heap
+#define HEAP_CLASS_1 0x00001000 // Private heap
+#define HEAP_CLASS_2 0x00002000 // Kernel heap
+#define HEAP_CLASS_3 0x00003000 // GDI heap
+#define HEAP_CLASS_4 0x00004000 // User heap
+#define HEAP_CLASS_5 0x00005000 // Console heap
+#define HEAP_CLASS_6 0x00006000 // User desktop heap
+#define HEAP_CLASS_7 0x00007000 // CSR shared heap
+#define HEAP_CLASS_8 0x00008000 // CSR port heap
+```
+
+- [processhacker.sourceforge.io/doc/ntrtl_8h_source](https://processhacker.sourceforge.io/doc/ntrtl_8h_source.html)
+
+Use [heap_types](https://www.noverse.dev/docs/win-config/system/enable-segment-heap/#heap_types) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
+
+```c
+// Enabled = not present
+"mullvadbrowser.exe",9616,1,0x000002184C9F0000,"NT Heap (LFH)","Process","Growable",0x2,1684,499712
+"mullvadbrowser.exe",9616,2,0x000002184C9D0000,"NT Heap (LFH)","Process","Growable",0x2,22,36864
+"mullvadbrowser.exe",9616,3,0x000002184C7D0000,"NT Heap","CSRSS port","-",0x0,3,4096
+"mullvadbrowser.exe",9616,4,0x000002184C9C0000,"NT Heap (LFH)","Private","Growable",0x2,767,618496
+"mullvadbrowser.exe",9968,1,0x0000020A76F40000,"NT Heap (LFH)","Process","Growable",0x2,28427,13340672
+"mullvadbrowser.exe",9968,2,0x0000020A76DF0000,"NT Heap","CSRSS port","-",0x0,3,4096
+"mullvadbrowser.exe",9968,3,0x0000020A77290000,"NT Heap (LFH)","Private","Growable",0x2,919,516096
+"mullvadbrowser.exe",9968,4,0x0000020A00000000,"NT Heap","Private","Growable",0x2,12,8192
+"mullvadbrowser.exe",9968,5,0x0000020A006D0000,"NT Heap","Process","Growable",0x2,3,8192
+"mullvadbrowser.exe",9968,6,0x0000020A46690000,"NT Heap","Process","NoSerialize",0x1,7,16384
+
+// Enabled = 1
+"mullvadbrowser.exe",4436,1,0x00000215201A0000,"Segment Heap","Process","-",0x0,1630,536576
+"mullvadbrowser.exe",4436,2,0x00000215201D0000,"Segment Heap","Process","-",0x0,5,16384
+"mullvadbrowser.exe",4436,3,0x00000215200C0000,"NT Heap","CSRSS port","-",0x0,3,4096
+"mullvadbrowser.exe",4436,4,0x0000021520550000,"Segment Heap","Private","-",0x0,310,262144
+"mullvadbrowser.exe",8352,1,0x00000180998D0000,"Segment Heap","Process","-",0x0,14577,4730880
+"mullvadbrowser.exe",8352,2,0x0000018099800000,"NT Heap","CSRSS port","-",0x0,3,4096
+"mullvadbrowser.exe",8352,3,0x0000018099C50000,"Segment Heap","Private","-",0x0,43,45056
+"mullvadbrowser.exe",8352,4,0x0000018099CC0000,"Segment Heap","Private","-",0x0,12,16384
+"mullvadbrowser.exe",8352,5,0x000001809A710000,"Segment Heap","Process","-",0x0,3,16384
+```
+
 ### FrontEndHeapDebugOptions
 
-IFEO bitfield for one executable, bits `4`/`8` are the "meaningful" ones here which enable/disable Segement Heap (if both bits are set it would end in disable). I didn't search for actual behaviours for the flags beside them, therefore the "meaning" for the other ones is more likely only to show that they exist (for now).
+IFEO bitfield for one executable, bits `2`/`3` are the "meaningful" ones here which enable/disable Segement Heap (if both bits are set it would end in disable). I didn't search for actual behaviours for the flags beside them, therefore the "meaning" for the other ones is more likely only to show that they exist (for now).
 
 ```c
 // LdrpInitializeExecutionOptions
@@ -4091,7 +4154,7 @@ RtlSetLowFragHeapGlobalFlags(v10, *(_DWORD *)(*(_QWORD *)(a2 + 32) + 8LL));
 
 ## Validating Changes
 
-You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example [SI](https://github.com/winsiderss/systeminformer/) (Right Click > Miscellaneous > Heaps).
+You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example [SI](https://github.com/winsiderss/systeminformer/) (Right Click > Miscellaneous > Heaps), it gets the heap list from `RtlQueryProcessDebugInformation`.
 
 `HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `4`:
 
