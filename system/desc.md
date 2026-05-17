@@ -3947,57 +3947,164 @@ Local Security Policy:
 
 # Enable Segment Heap
 
-"With the introduction of Windows 10, Segment Heap, a new native heap implementation was also introduced. It is currently the native heap implementation used in Windows apps (formerly called Modern/Metro apps) and in certain system processes, while the older native heap implementation (NT Heap) is still the default for traditional applications." Allows modern apps to use a more efficient memory allocator. [Windows Internals (E7-P1, Segment heap)](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf): UWP apps default to segment heaps, while desktop apps keep the NT heap for compatibility. Segment heaps separate metadata from user data and can reduce overhead, but they are not compatible with all heap patterns.
+Windows has two UM (user mode) heap implementations, the older NT heap and the newer Segment Heap. UWP/modern apps and some system processes normally use Segment Heap, while traditional desktop processes keep NT heap behavior (unless opted in via values below for example).
 
 It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
 
-## Per Executable / Globally
+## Registry Values
 
-For a specific executeable:
+These are easier to understand if comparing them to the [`RTL_HEAP_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters) structure, which is why I've added quotes from it to the parts below. The mentioned fallback in that MS doc also match with the default data I've found.
+
+The `HeapSegment*` and `HeapDeCommit*` values are related to NT heaps.
+
 ```c
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\<executable>"
-  "FrontEndHeapDebugOptions"; // REG_DWORD, bit 2 (0x4) = disable segment heap, bit 3 (0x8) = enable segment heap
+typedef struct _RTL_HEAP_PARAMETERS {
+  ULONG                    Length;
+  SIZE_T                   SegmentReserve; // 1MB fallback
+  SIZE_T                   SegmentCommit; // PAGE_SIZE * 2 fallback
+  SIZE_T                   DeCommitFreeBlockThreshold; // PAGE_SIZE fallback
+  SIZE_T                   DeCommitTotalFreeThreshold; // 65536 fallback
+  SIZE_T                   MaximumAllocationSize;
+  SIZE_T                   VirtualMemoryThreshold;
+  SIZE_T                   InitialCommit;
+  SIZE_T                   InitialReserve;
+  PRTL_HEAP_COMMIT_ROUTINE CommitRoutine;
+  SIZE_T                   Reserved[2];
+} RTL_HEAP_PARAMETERS, *PRTL_HEAP_PARAMETERS;
 ```
 
-Globally:
 ```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap"
-  "Enabled"; // REG_DWORD, 0 = disable segment heap, nonzero = enable segment heap
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
+    "HeapSegmentReserve" = 1048576; // REG_DWORD, range 65536-16580608, 65536 steps
+    "HeapSegmentCommit" = 8192; // REG_DWORD, range 4096-16580608, 4096 steps
+    "HeapDeCommitFreeBlockThreshold" = 4096; // REG_DWORD, range 0-4294967280, 16 steps
+    "HeapDeCommitTotalFreeThreshold" = 65536; // REG_DWORD, range 0-4294967280, 16 steps
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
+    "Enabled"; // REG_DWORD, 0 = disable, nonzero = enable (global)
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\<executable>";
+    "FrontEndHeapDebugOptions" = 0; // REG_DWORD, see bitfield below
+    "DisableHeapLookaside" = 0; // REG_DWORD (bitfield), looks like a legacy value used to prevent ActivateLowFragmentationHeap (LFH) if 1
+    "GCInterval"; // REG_DWORD, range 0-4294967295 seconds, only used if FrontEndHeapDebugOptions bit 22 is set
 ```
 
-Enabling segment heap globally forces the system to use the newer segmented allocation model, which can end up with errors (`The exception unknown software exception (0xc000000d) occurred in the application at location 0x00007FFF1E13FF03`). It's not recommended to enable it globally.
+Enabling Segment Heap globally [sets the `ntdll` process flag](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpApplySegmentHeapConfigurations.c) before the per process opt in part runs, this can impact traditional desktop processes that weren't intended to use Segment Heap and may cause compatibility errors (it's not recommended to enable it globally).
+
+### HeapSegmentReserve
+
+> "*Segment reserve size, in bytes. If this value is not specified, 1 MB is used.*"
+>
+> — Microsoft, [RTL_HEAP_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters)
+
+Preferred reserve size for a new NT heap segment, the heap compares it with allocation size + `8192`, uses the larger value, then rounds/caps.
+
+`1 MB` = `1048576` bytes (`1024 * 1024`).
+
+```c
+// RtlpExtendHeap
+v8 = a2 + 0x2000; // minimum reserve
+if ( v8 <= *(_QWORD *)(a1 + 160) )
+  v8 = *(_QWORD *)(a1 + 160); // use HeapSegmentReserve if it is larger
+v9 = (v8 + 0xFFFF) & 0xFFFFFFFFFFFF0000uLL; // round up to 65536
+if ( v9 >= 0xFD0000 )
+  v9 = 16580608LL; // cap
+```
+
+### HeapSegmentCommit
+
+> "*Segment commit size, in bytes. If this value is not specified, PAGE_SIZE * 2 is used.*"
+>
+> — Microsoft, [RTL_HEAP_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters)
+
+[`PAGE_SIZE` = `4096`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/RtlpExtendHeap.c) bytes, so `PAGE_SIZE * 2` = `8192`.
+
+```c
+// RtlpExtendHeap
+v11 = a2 + 4096; // minimum commit
+if ( v11 <= *(_QWORD *)(a1 + 168) )
+  v11 = *(_QWORD *)(a1 + 168); // use HeapSegmentCommit if it is larger
+v16[0] = (v11 + 4095) & 0xFFFFFFFFFFFFF000uLL; // round up to 4096
+RtlpHpHeapCheckCommitLimit(v16[0], v12, a1, (unsigned __int64 *)(a1 + 376));
+ZwAllocateVirtualMemory((HANDLE)0xFFFFFFFFFFFFFFFFLL, &BaseAddress, 0LL, v16, 0x1000u, 4u);
+```
+
+### HeapDeCommitFreeBlockThreshold
+
+> "*Decommit free block threshold, in bytes. If this value is not specified, PAGE_SIZE is used.*"
+>
+> — Microsoft, [RTL_HEAP_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters)
+
+```c
+// RtlCreateHeap
+*((_QWORD *)v43 + 22) = v56 >> 4; // store in 16 byte steps
+```
+
+### HeapDeCommitTotalFreeThreshold
+
+> "*Decommit total free threshold, in bytes. If this value is not specified, 65536 is used.*"
+>
+> — Microsoft, [RTL_HEAP_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters)
+
+```c
+// RtlCreateHeap
+*((_QWORD *)v43 + 23) = *(_QWORD *)&v61[0] >> 4; // store in 16 byte steps
+```
+
+### Enabled
+
+Global Segment Heap switch read by [`RtlpHpApplySegmentHeapConfigurations`]((https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpApplySegmentHeapConfigurations.c) during heap manager init, `RtlInitializeHeapManager` uses those flags, `0x10` enables Segment Heap, `8` clears it after the opt in part.
+
+```c
+// RtlpHpApplySegmentHeapConfigurations
+result = NtQueryValueKey();
+if ( result >= 0 && v1 == 4 ) // data length
+{
+  if ( v2 )
+    RtlpLowFragHeapGlobalFlags |= 0x10; // nonzero = enable
+  else
+    RtlpLowFragHeapGlobalFlags |= 8; // zero = disable
+}
+```
+
+### FrontEndHeapDebugOptions
+
+IFEO bitfield for one executable, bits `4`/`8` are the "meaningful" ones here which enable/disable Segement Heap (if both bits are set it would end in disable). I didn't search for actual behaviours for the flags beside them, therefore the "meaning" for the other ones is more likely only to show that they exist (for now).
+
+```c
+// LdrpInitializeExecutionOptions
+RtlQueryApplicationKeyOption(v11, v9, (__int64)L"FrontEndHeapDebugOptions", 4u, (__int64)&v47, 4, v33, 0LL);
+v10 = v47;
+
+// RtlSetLowFragHeapGlobalFlags
+RtlSetLowFragHeapGlobalFlags(v10, *(_DWORD *)(*(_QWORD *)(a2 + 32) + 8LL));
+```
+
+| Bit | Meaning |
+| --- | --- |
+| `0` | LFH global flag `4` |
+| `1` | LFH global flag `2` |
+| `2` | disable Segment Heap (flag `8`) |
+| `3` | enable Segment Heap (flag `16`) |
+| `4` | enables heap stack trace (`RtlpHpStackTraceEnable`) |
+| `5` | `RtlpHpHeapFeatures \|= 4u`? |
+| `6` | `RtlpHpAppCompatFlags \|= 11`? |
+| `7` | `RtlpHpHeapFeatures \|= 8u`? |
+| `8-15` | `RtlpHpLfhContentionLimit = BYTE1(a1)`? |
+| `16-27` | `RtlpHpLfhPerfFlags = HIWORD(a1) & 4095`? |
+| `22` | enables the `GCInterval` override |
 
 ## Validating Changes
 
 You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example [SI](https://github.com/winsiderss/systeminformer/) (Right Click > Miscellaneous > Heaps).
 
-`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x4`:
+`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `4`:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ntheap.png?raw=true)
 
-`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `0x8`:
+`HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\mullvadbrowser.exe`, `FrontEndHeapDebugOptions` = `8`:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segmentheap.png?raw=true)
-
-## Default Values
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager";
-    "HeapDeCommitFreeBlockThreshold" = 4096; // qword_140FC3210 dq 1000
-    "HeapDeCommitTotalFreeThreshold" = 65536; // qword_140FC3218 dq 10000
-    "HeapSegmentCommit" = 8192; // qword_140FC3220 dq 2000
-    "HeapSegmentReserve" = 1048576; // qword_140FC3228 dq 100000
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Segment Heap";
-    "Enabled" = 0; // if present with DataLength==4 and nonzero type:
-                    //    RtlpLowFragHeapGlobalFlags |= 0x10;  // global segment heap enable
-                    //    if (value & 0x2)                      // low byte, bit 1
-                    //        RtlpLowFragHeapGlobalFlags |= 0x20; // extra option ?
-                    // if the value exists but is stored as REG_NONE (type==0):
-                    //    RtlpLowFragHeapGlobalFlags |= 0x8;   // global disable/override
-```
-
-- [system/assets | segment-RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/blob/main/system/assets/segment-RtlpHpApplySegmentHeapConfigurations.c)
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
