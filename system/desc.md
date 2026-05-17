@@ -4048,7 +4048,7 @@ ZwAllocateVirtualMemory((HANDLE)0xFFFFFFFFFFFFFFFFLL, &BaseAddress, 0LL, v16, 0x
 
 ### Enabled
 
-Global Segment Heap switch read by [`RtlpHpApplySegmentHeapConfigurations`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpApplySegmentHeapConfigurations.c) during heap manager init, `RtlInitializeHeapManager` uses those flags, `0x10` enables Segment Heap, `8` clears it after the opt in part.
+Global Segment Heap switch read by [`RtlpHpApplySegmentHeapConfigurations`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpApplySegmentHeapConfigurations.c) during heap manager init, [`RtlInitializeHeapManager`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlInitializeHeapManager.c) uses those flags, `0x10` (`RtlpHpOptIntoSegmentHeap`) enables Segment Heap, `8` clears it after the opt in part.
 
 ```c
 // RtlpHpApplySegmentHeapConfigurations
