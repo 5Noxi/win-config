@@ -3960,7 +3960,7 @@ cmake --build build --config Release
 .\build\Release\heap_types.exe --heaps > heaps.csv
 ```
 
-It uses `RtlQueryProcessDebugInformation` for the heap list, then reads the heap frontend type (`_HEAP.FrontEndHeapType` for `LFH`/`Lookaside`) / signature (`_HEAP.SegmentSignature` for `NT Heap`/`Segment Heap`). By default it prints heap type counts, `--heaps` prints process name + PID + heap.
+It uses `RtlQueryProcessDebugInformation` for the heap list, then reads the heap frontend type (`_HEAP.FrontEndHeapType` for `LFH`/`Lookaside`) / signature (`_HEAP.SegmentSignature` for `NT Heap`/`Segment Heap`). By default it shows heap type counts, `--heaps` shows process name + PID + heap.
 
 ## Registry Values
 
