@@ -1386,7 +1386,7 @@ MMCSS sets the priority of client threads depending on their scheduling category
 >
 > — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-[`mmcss_task`](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss_task) calls [`AvSetMmThreadCharacteristicsW`](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsw) for the used MMCSS task, optionally calls [`AvSetMmThreadPriority`](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadpriority), then keeps the thread busy.
+[`mmcss_task`](https://github.com/nohuto/win-config/blob/main/system/assets/mmcss_task) calls [`AvSetMmThreadCharacteristicsW`](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadcharacteristicsw) for the used MMCSS task, optionally calls [`AvSetMmThreadPriority`](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadpriority), then keeps the thread busy (loop), this also means that the examples below make it easy to see the changes, but when capturing Spotify/audiodg it won't look the same.
 
 This follows the `EXPERIMENT: MMCSS priority boosting` guide of [Windows Internals E7, P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), but uses `mmcss_task` instead of Media Player/CPUSTRES.
 
@@ -1437,6 +1437,8 @@ typedef enum _AVRT_PRIORITY
 ```
 
 ### Relative Priorities
+
+Spotify/audiodg seem to use `AVRT_PRIORITY_HIGH`.
 
 Example using `Scheduling Category = High` and `Priority = 6` (this would normally always use boosted priority of 24):
 
