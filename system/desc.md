@@ -3960,7 +3960,7 @@ cmake --build build --config Release
 .\build\Release\heap_types.exe --heaps > heaps.csv
 ```
 
-It uses `RtlQueryProcessDebugInformation` for the heap list, then reads heap offsets (I've taken the same as System Informer uses here) uses to get `LFH`/`Lookaside` (`FrontEndHeapType`) & `NT Heap`/`Segment Heap` (`SegmentSignature`). By default it shows heap type counts, `--heaps` shows process name + PID + heap.
+It uses `RtlQueryProcessDebugInformation` for the heap list, then reads heap offsets (I've taken the same as [System Informer](https://github.com/JustasMasiulis/processhacker/blob/master/SystemInformer/include/heapstruct.h) uses here) uses to get `LFH`/`Lookaside` (`FrontEndHeapType`) & `NT Heap`/`Segment Heap` (`SegmentSignature`). By default it shows heap type counts, `--heaps` shows process name + PID + heap.
 
 ## Registry Values
 
