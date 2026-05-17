@@ -3950,7 +3950,7 @@ It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/
 
 These are easier to understand if comparing them to the [`RTL_HEAP_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ns-ntifs-rtl_heap_parameters) structure, which is why I've added quotes from it to the parts below. The mentioned fallback in that MS doc also match with the default data I've found.
 
-The `HeapSegment*` and `HeapDeCommit*` values are related to NT heaps.
+The `HeapSegment*` and `HeapDeCommit*` values are related to NT heaps (heap creation happens in `RtlCreateHeap`), Segment Heap (heap creation starts in [`RtlCreateHeap`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlCreateHeap.c) too but would then call [`RtlpHpHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpHeapCreate.c) which happens before default value loading) part doesn't read them.
 
 ```c
 typedef struct _RTL_HEAP_PARAMETERS {
