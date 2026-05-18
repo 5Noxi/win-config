@@ -297,7 +297,7 @@ The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio
 - `Render` = Playback
 - `Capture` = Recording
 
-You can use [`dump-audio-formats.ps1`](https://github.com/nohuto/win-config/blob/main/peripheral/assets/dump-audio-formats.ps1) to read the values listed below from `Render`/`Capture` endpoints & output the sample rate, channel count, bit depth, block align, and byte-rate consistency for each 48 byte `WAVEFORMATEXTENSIBLE` data.
+You can use [`dumpAudioFormats.ps1`](https://github.com/nohuto/win-config/blob/main/peripheral/assets/dumpAudioFormats.ps1) to read the values listed below from `Render`/`Capture` endpoints & output the sample rate, channel count, bit depth, block align, and byte-rate consistency for each 48 byte `WAVEFORMATEXTENSIBLE` data.
 
 ## Registry Values
 

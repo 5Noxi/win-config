@@ -1,9 +1,9 @@
 $ErrorActionPreference = "Stop"
 
 $nvfolder = Join-Path $env:LOCALAPPDATA "Noverse"
-$gen = Join-Path $nvfolder "HashGen.ps1"
-$repoLocal = if ($PSScriptRoot) { Join-Path $PSScriptRoot "HashGen.ps1" } else { $null }
-$local = Join-Path $home "Downloads\HashGen.ps1"
+$gen = Join-Path $nvfolder "hashGen.ps1"
+$repoLocal = if ($PSScriptRoot) { Join-Path $PSScriptRoot "hashGen.ps1" } else { $null }
+$local = Join-Path $home "Downloads\hashGen.ps1"
 if (!(Test-Path -LiteralPath $nvfolder)) { New-Item -ItemType Directory -Path $nvfolder -Force | Out-Null }
 
 if ($repoLocal -and (Test-Path -LiteralPath $repoLocal) -and ((Resolve-Path -LiteralPath $repoLocal).ProviderPath -ne $gen)) {
@@ -12,13 +12,13 @@ if ($repoLocal -and (Test-Path -LiteralPath $repoLocal) -and ((Resolve-Path -Lit
     Copy-Item -LiteralPath $local -Destination $gen -Force
 } else {
     try {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/misc/assets/HashGen.ps1" -OutFile $gen -UseBasicParsing
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/nohuto/win-config/refs/heads/main/misc/assets/hashGen.ps1" -OutFile $gen -UseBasicParsing
     } catch {
-        throw "Failed to download HashGen.ps1: $($_.Exception.Message)"
+        throw "Failed to download hashGen.ps1: $($_.Exception.Message)"
     }
 }
 
-$extended = "HashGen.ContextMenu"
+$extended = "hashGen.ContextMenu"
 $shell = Join-Path "HKCU:\Software\Classes\$extended" "shell"
 
 foreach ($old in @(

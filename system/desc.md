@@ -2911,7 +2911,7 @@ aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\P
 
 # Disable Scheduled Tasks
 
-This list was created using my small [`ScheduledTasksLists.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/ScheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given. See example output of a stock 25H2 installation: [scheduled-tasks.json](https://github.com/nohuto/win-config/blob/main/system/assets/scheduled-tasks.json).
+This list was created using my small [`scheduledTasksLists.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/scheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given. See example output of a stock 25H2 installation: [scheduled-tasks.json](https://github.com/nohuto/win-config/blob/main/system/assets/scheduled-tasks.json).
 
 ## Scheduled Tasks Table
 
@@ -3940,7 +3940,9 @@ Local Security Policy:
 >
 > *When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled.*
 
-# Enable Segment Heap
+# Heap Type
+
+A heap is a memory management structure inside a process thats used for dynamic allocation. When code requests memory through APIs such as `HeapAlloc()` / `RtlAllocateHeap()`, the heap manager finds or creates a block inside the process address space and returns a pointer to it. When the code calls `HeapFree()` / `RtlFreeHeap()`, that block is returned to the heaps internal free space so it can be reused.
 
 Windows has two UM (user mode) heap implementations, the older NT heap and the newer Segment Heap. UWP/modern apps and some system processes normally use Segment Heap, while traditional desktop processes keep NT heap behavior (unless opted in via values below for example).
 
@@ -3948,16 +3950,22 @@ Most normal software in my testing (`Cyberpunk2077.exe`, `ida.exe`, `VSCodium.ex
 
 It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' whenever you want to know more about the differences between NT/Segment Heap.
 
-## heap_types
+## heapType GUI
 
-[`heap_types.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/heap_types.exe) queries all running processes and lists their heaps as `NT Heap`/`NT Heap (LFH)`/`Segment Heap`. You can either use the [prebuilt binary](https://github.com/nohuto/win-config/blob/main/system/assets/heap_types.exe), or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/heap_types):
+[`heapType.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/heapType.ps1) is a small GUI for the values explained below (read everything below/above):
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/heapType.png?raw=true)
+
+## heap_dump
+
+[`heap_dump.exe`](https://github.com/nohuto/win-config/blob/main/system/assets/heap_dump.exe) queries all running processes and lists their heaps as `NT Heap`/`NT Heap (LFH)`/`Segment Heap`. You can either use the [prebuilt binary](https://github.com/nohuto/win-config/blob/main/system/assets/heap_dump.exe), or build it yourself from [source](https://github.com/nohuto/win-config/blob/main/system/assets/heap_dump):
 
 ```powershell
 cmake -S . -B build
 cmake --build build --config Release
 
-.\build\Release\heap_types.exe
-.\build\Release\heap_types.exe --heaps > heaps.csv
+.\build\Release\heap_dump.exe
+.\build\Release\heap_dump.exe --heaps > heaps.csv
 ```
 
 It uses `RtlQueryProcessDebugInformation` for the heap list, then reads heap offsets (I've taken the same as [System Informer](https://github.com/winsiderss/systeminformer/blob/master/SystemInformer/include/heapstruct.h) uses here) uses to get `LFH`/`Lookaside` (`FrontEndHeapType`) & `NT Heap`/`Segment Heap` (`SegmentSignature`). By default it shows heap type counts, `--heaps` shows process name + PID + heap.
@@ -4016,7 +4024,7 @@ Preferred reserve size for a new NT heap segment, the heap compares it with allo
 // RtlpExtendHeap
 v8 = a2 + 0x2000; // minimum reserve
 if ( v8 <= *(_QWORD *)(a1 + 160) )
-  v8 = *(_QWORD *)(a1 + 160); // use HeapSegmentReserve if it is larger
+  v8 = *(_QWORD *)(a1 + 160); // use HeapSegmentReserve if it's larger
 v9 = (v8 + 0xFFFF) & 0xFFFFFFFFFFFF0000uLL; // round up to 65536
 if ( v9 >= 0xFD0000 )
   v9 = 16580608LL; // cap
@@ -4078,7 +4086,7 @@ if ( result >= 0 && v1 == 4 ) // data length
 }
 ```
 
-#### heap_types Results
+#### heap_dump Results
 
 `CSRSS port` is a small Windows communication heap used for talking to CSRSS, it stays NT Heap even when the app uses Segment Heap (as [`CsrpConnectToServer`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/CsrpConnectToServer.c) creates `HEAP_CLASS_8` on a fixed shared memory, means `HeapBase` =/ NULL).
 
@@ -4098,7 +4106,7 @@ Some requirements for Segment Heap (in [`RtlCreateHeap`](https://github.com/nohu
 
 - [processhacker.sourceforge.io/doc/ntrtl_8h_source](https://processhacker.sourceforge.io/doc/ntrtl_8h_source.html)
 
-Use [heap_types](https://www.noverse.dev/docs/win-config/system/enable-segment-heap/#heap_types) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
+Use [heap_dump](https://www.noverse.dev/docs/win-config/system/enable-segment-heap/#heap_dump) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
 
 ```c
 // Enabled = not present

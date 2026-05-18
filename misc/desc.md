@@ -596,17 +596,17 @@ SHA512("")
 
 If using win-config, then the toggle automates the (un)installation.
 
-- [`HashGen.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/HashGen.ps1) accepts an optional `-Algorithm` parameter (`All`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `MACTripleDES`, `RIPEMD160`). By default it runs every available algorithm, but you can target a specific hash when invoking it manually. 
-- [`Add-CM.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/Add-CM.ps1) will add a `Hashes` cascaded option to the context menu of any file/folder (if selecting a folder all files within the folder and every subfolder will get used). `HashGen.ps1` gets used from your `Downloads` folder if present, otherwise `Add-CM.ps1` automatically downloads the latest copy from GitHub. `Add-CM.ps1` copies `HashGen.ps1` into `%LOCALAPPDATA%\Noverse` and adds a *Hashes* entry for files and folders.
+- [`hashGen.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/hashGen.ps1) accepts an optional `-Algorithm` parameter (`All`, `MD5`, `SHA1`, `SHA256`, `SHA384`, `SHA512`, `MACTripleDES`, `RIPEMD160`). By default it runs every available algorithm, but you can target a specific hash when invoking it manually. 
+- [`Add-CM.ps1`](https://github.com/nohuto/win-config/blob/main/misc/assets/Add-CM.ps1) will add a `Hashes` cascaded option to the context menu of any file/folder (if selecting a folder all files within the folder and every subfolder will get used). `hashGen.ps1` gets used from your `Downloads` folder if present, otherwise `Add-CM.ps1` automatically downloads the latest copy from GitHub. `Add-CM.ps1` copies `hashGen.ps1` into `%LOCALAPPDATA%\Noverse` and adds a *Hashes* entry for files and folders.
 
 ## Uninstallation
 
-Remove the content menu entry and `HashGen` with:
+Remove the content menu entry and `hashGen` with:
 ```powershell
 Remove-Item -LiteralPath "HKCU:\Software\Classes\*\shell\Hashes" -Recurse -Force
 Remove-Item -LiteralPath "HKCU:\Software\Classes\Directory\shell\Hashes" -Recurse -Force
-Remove-Item -LiteralPath "HKCU:\Software\Classes\HashGen.ContextMenu" -Recurse -Force
+Remove-Item -LiteralPath "HKCU:\Software\Classes\hashGen.ContextMenu" -Recurse -Force
 #Remove-Item -LiteralPath "HKCU:\Software\Classes\*\shell\NV-Hash" -Recurse -Force  # old entry
 #Remove-Item -LiteralPath "HKCU:\Software\Classes\Directory\shell\NV-Hash" -Recurse -Force  # old entry
-Remove-Item -Path "$env:LOCALAPPDATA\Noverse\HashGen.ps1" -Force
+Remove-Item -Path "$env:LOCALAPPDATA\Noverse\hashGen.ps1" -Force
 ```
