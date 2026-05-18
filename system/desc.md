@@ -2911,7 +2911,7 @@ aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\P
 
 # Heap Type
 
-A heap is a memory management structure inside a process thats used for dynamic allocation. When code requests memory through APIs such as `HeapAlloc()` / `RtlAllocateHeap()`, the heap manager finds or creates a block inside the process address space and returns a pointer to it. When the code calls `HeapFree()` / `RtlFreeHeap()`, that block is returned to the heaps internal free space so it can be reused.
+A heap is a memory management structure inside a process thats used for dynamic allocation. When code requests memory through APIs such as [`HeapAlloc()`](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapalloc) / [`RtlAllocateHeap()`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/nf-ntifs-rtlallocateheap), the heap manager finds or creates a block inside the process address space and returns a pointer to it. When the code calls [`HeapFree()`](https://learn.microsoft.com/en-us/windows/win32/api/heapapi/nf-heapapi-heapfree) / [`RtlFreeHeap()`](https://learn.microsoft.com/en-us/windows/win32/devnotes/rtlfreeheap), that block is returned to the heaps internal free space so it can be reused.
 
 Windows has two UM (user mode) heap implementations, the older NT heap and the newer Segment Heap. UWP/modern apps and some system processes normally use Segment Heap, while traditional desktop processes keep NT heap behavior (unless opted in via values below for example).
 
@@ -3041,7 +3041,7 @@ ZwAllocateVirtualMemory((HANDLE)0xFFFFFFFFFFFFFFFFLL, &BaseAddress, 0LL, v16, 0x
 
 ### Enabled
 
-Global Segment Heap switch read by [`RtlpHpApplySegmentHeapConfigurations`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpApplySegmentHeapConfigurations.c) during heap manager init, [`RtlInitializeHeapManager`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlInitializeHeapManager.c) uses those flags, `0x10` (`RtlpHpOptIntoSegmentHeap`) enables Segment Heap, `8` clears it after the opt in part.
+Global Segment Heap switch read by [`RtlpHpApplySegmentHeapConfigurations`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpApplySegmentHeapConfigurations.c) during heap manager init, [`RtlInitializeHeapManager`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlInitializeHeapManager.c) uses those flags, `0x10` ([`RtlpHpOptIntoSegmentHeap`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpOptIntoSegmentHeap.c)) enables Segment Heap, `8` clears it after the opt in part.
 
 When setting that value to `0` it would "force" NT Heap, means it overrides per process `FrontEndHeapDebugOptions = 8` (segment heap) changes too.
 
@@ -3118,8 +3118,8 @@ RtlSetLowFragHeapGlobalFlags(v10, *(_DWORD *)(*(_QWORD *)(a2 + 32) + 8LL));
 ```
 
 Some notes:
-- enabling bit `4` enables heap stack tracing which allocates via `RtlpHpStackDbAllocRoutine`, `RtlpHpMetadataAlloc`, `RtlpHpMetadataHeapStart`, `RtlpHpMetadataHeapCreate`, `RtlpHpHeapCreate`
-  - `RtlpHpHeapCreate` causes an extra segment heap here
+- enabling bit `4` enables heap stack tracing which allocates via [`RtlpHpStackDbAllocRoutine`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpStackDbAllocRoutine.c), [`RtlpHpMetadataAlloc`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpMetadataAlloc.c), [`RtlpHpMetadataHeapStart`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpMetadataHeapStart.c), [`RtlpHpMetadataHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpMetadataHeapCreate.c), [`RtlpHpHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpHeapCreate.c)
+  - [`RtlpHpHeapCreate`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpHeapCreate.c) causes an extra segment heap here
 - enabling bit `4` & `6` together causes a heap query error
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/RtlpHpStackTraceEnable.png?raw=true)
@@ -3130,7 +3130,7 @@ Some notes:
 | `1` | LFH global flag `2` |
 | `2` | disable Segment Heap (flag `8`) |
 | `3` | enable Segment Heap (flag `16`) |
-| `4` | enables heap stack trace (`RtlpHpStackTraceEnable`) |
+| `4` | enables heap stack trace ([`RtlpHpStackTraceEnable`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntdll/RtlpHpStackTraceEnable.c)) |
 | `5` | `RtlpHpHeapFeatures \|= 4u`? |
 | `6` | `RtlpHpAppCompatFlags \|= 11`? |
 | `7` | `RtlpHpHeapFeatures \|= 8u`? |
