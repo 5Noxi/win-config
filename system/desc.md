@@ -3952,7 +3952,7 @@ It's recommended to read '[W10 Segment Heap Internals](https://www.blackhat.com/
 
 ## heapType GUI
 
-[`heapType.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/heapType.ps1) is a small GUI for the values explained below (read everything below/above):
+[`heapType.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/heapType.ps1) is a small GUI for the values (read everything below/above before using it):
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/heapType.png?raw=true)
 
