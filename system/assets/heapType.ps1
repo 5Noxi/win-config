@@ -173,7 +173,7 @@ function new-nvcheck {
 
     $box = [Windows.Forms.Panel]@{
         Size = [Drawing.Size]::new(13, 13)
-        Location = [Drawing.Point]::new($x, $y + 3)
+        Location = [Drawing.Point]::new($x, $y + 2)
         BackColor = $(if ($checked) { [Drawing.Color]::CornflowerBlue } else { [Drawing.Color]::Transparent })
         BorderStyle = 'FixedSingle'
         Tag = @{ Checked = $checked }
@@ -182,7 +182,7 @@ function new-nvcheck {
         Text = $text
         ForeColor = $white
         BackColor = $gray
-        Location = [Drawing.Point]::new($x + 22, $y)
+        Location = [Drawing.Point]::new($x + 18, $y)
         AutoSize = $true
         Font = $smallf
     }
@@ -341,15 +341,52 @@ function set-frontendcontrols {
     set-nvcheck $lfhperf (((($value -shr 16) -band 4095) -ne 0))
 }
 
+function set-globalmode {
+    param([string]$mode)
+
+    $script:loadingglobal = $true
+    set-nvcheck $globalforceenable ($mode -eq 'enable')
+    set-nvcheck $globalforcedisable ($mode -eq 'disable')
+    set-nvcheck $globaldefault ($mode -eq 'default')
+    $script:loadingglobal = $false
+
+    if ($mode -eq 'enable') {
+        if (set-dword $segmentheapkey 'Enabled' 1) {
+            log '[+]' 'Global Segment Heap force enabled' -HighlightColor Green
+        } else {
+            log '[-]' "Global write failed: $script:lastregistryerror" -HighlightColor Red
+        }
+        return
+    }
+
+    if ($mode -eq 'disable') {
+        if (set-dword $segmentheapkey 'Enabled' 0) {
+            log '[+]' 'Global Segment Heap force disabled' -HighlightColor Green
+        } else {
+            log '[-]' "Global write failed: $script:lastregistryerror" -HighlightColor Red
+        }
+        return
+    }
+
+    remove-value $segmentheapkey 'Enabled'
+    log '[+]' 'Global Segment Heap value removed' -HighlightColor Green
+}
+
 function refresh-global {
     $script:loadingglobal = $true
     $enabled = get-value $segmentheapkey 'Enabled'
     if ($null -eq $enabled) {
-        set-nvcheck $globalenabled $false
+        set-nvcheck $globalforceenable $false
+        set-nvcheck $globalforcedisable $false
+        set-nvcheck $globaldefault $true
     } elseif ($enabled -eq 0) {
-        set-nvcheck $globalenabled $false
+        set-nvcheck $globalforceenable $false
+        set-nvcheck $globalforcedisable $true
+        set-nvcheck $globaldefault $false
     } else {
-        set-nvcheck $globalenabled $true
+        set-nvcheck $globalforceenable $true
+        set-nvcheck $globalforcedisable $false
+        set-nvcheck $globaldefault $false
     }
     $script:loadingglobal = $false
 }
@@ -406,13 +443,17 @@ $nvmain = [Windows.Forms.Form]@{
 
 $globalpanel = new-panel 5 5 360 60 'Global Segment Heap'
 $nvmain.Controls.Add($globalpanel)
-$globalenabled = new-nvcheck $globalpanel 'Enabled (not recommended)' 15 30 $false {
+$globalforceenable = new-nvcheck $globalpanel 'Force Enable' 15 30 $false {
     if ($script:loadingglobal) { return }
-    if (set-dword $segmentheapkey 'Enabled' ($(if (get-nvcheck $globalenabled) { 1 } else { 0 }))) {
-        log '[+]' 'Global Segment Heap value written' -HighlightColor Green
-    } else {
-        log '[-]' "Global write failed: $script:lastregistryerror" -HighlightColor Red
-    }
+    set-globalmode 'enable'
+}
+$globalforcedisable = new-nvcheck $globalpanel 'Force Disable' 120 30 $false {
+    if ($script:loadingglobal) { return }
+    set-globalmode 'disable'
+}
+$globaldefault = new-nvcheck $globalpanel 'Default' 225 30 $false {
+    if ($script:loadingglobal) { return }
+    set-globalmode 'default'
 }
 
 $ntpanel = new-panel 5 70 360 195 'NT Heap Defaults'
