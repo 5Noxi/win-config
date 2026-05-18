@@ -4148,6 +4148,13 @@ v10 = v47;
 RtlSetLowFragHeapGlobalFlags(v10, *(_DWORD *)(*(_QWORD *)(a2 + 32) + 8LL));
 ```
 
+Some notes:
+- enabling bit `4` enables heap stack tracing which allocates via `RtlpHpStackDbAllocRoutine`, `RtlpHpMetadataAlloc`, `RtlpHpMetadataHeapStart`, `RtlpHpMetadataHeapCreate`, `RtlpHpHeapCreate`
+  - `RtlpHpHeapCreate` causes an extra segment heap here
+- enabling bit `4` & `6` together causes a heap query error
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/RtlpHpStackTraceEnable.png?raw=true)
+
 | Bit | Meaning |
 | --- | --- |
 | `0` | LFH global flag `4` |
