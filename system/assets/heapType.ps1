@@ -384,7 +384,12 @@ function refresh-ifeo {
     $gc = get-value $path 'GCInterval'
     if ($null -eq $gc) { $gc = 0 }
     if ($gc -gt [uint32]$gcnum.Maximum) { $gc = [uint32]$gcnum.Maximum }
-    $gcnum.Value = [decimal]$gc
+    $script:loadinggc = $true
+    try {
+        $gcnum.Value = [decimal]$gc
+    } finally {
+        $script:loadinggc = $false
+    }
     log '[+]' "Loaded IFEO for $($exeinput.Text)" -HighlightColor Green
 }
 
@@ -470,7 +475,12 @@ new-button $programpanel 'Remove' 640 32 {
     remove-value $path 'GCInterval'
     set-frontendcontrols 0
     set-nvcheck $disablelookaside $false
-    $gcnum.Value = 0
+    $script:loadinggc = $true
+    try {
+        $gcnum.Value = 0
+    } finally {
+        $script:loadinggc = $false
+    }
     log '[+]' "IFEO values removed for $($exeinput.Text)" -HighlightColor Green
 } 70 | Out-Null
 
@@ -593,13 +603,21 @@ $lfhperf = new-nvcheck $bitpanel 'bits 16-27 - LFH perf' 385 76 $false
 $disablelookaside = new-nvcheck $bitpanel 'DisableHeapLookaside' 15 145 $false
 new-label $bitpanel 'GCInterval seconds' 185 145 125 | Out-Null
 $gcnum = new-number $bitpanel 310 142 0 4294967295 1 0
+$gcnum.Add_ValueChanged({
+    if (!$script:loadinggc) { set-nvcheck $bitchecks[22] $true }
+})
 
 new-button $bitpanel 'NT Heap' 5 179 { set-frontendcontrols 4 } 80 | Out-Null
 new-button $bitpanel 'Segment' 90 179 { set-frontendcontrols 8 } 80 | Out-Null
 new-button $bitpanel 'Clear' 175 179 {
     set-frontendcontrols 0
     set-nvcheck $disablelookaside $false
-    $gcnum.Value = 0
+    $script:loadinggc = $true
+    try {
+        $gcnum.Value = 0
+    } finally {
+        $script:loadinggc = $false
+    }
 } 80 | Out-Null
 new-button $bitpanel 'Apply' 260 179 {
     $path = get-ifeopath
