@@ -516,7 +516,7 @@ lkd> dt USBHUB3!_USB_DEVICE_HACKS
 
 `HUBDSM_QueryingRegistryValuesForDevice` -> `HUBMISC_QueryAndCacheRegistryValuesForDevice` -> `HUBREG_QueryUsbflagsValuesForDevice`
 
-Everything listed below is based on personal research, mistakes may exist.
+Everything listed below is based on personal findings, mistakes may exist.
 
 For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
@@ -1203,7 +1203,7 @@ Get-PnpDevice -PresentOnly:$false | ? FriendlyName -eq 'HID-compliant touch scre
 
 ## Miscellaneous Values
 
-Everything listed below is based on personal research. Mistakes may exist, some parts are speculations. See links below for reference.
+Everything listed below is based on personal findings. Mistakes may exist, some parts are speculations. See links below for reference.
 
 ```c
 "HKLM\\SOFTWARE\\Policies\\Microsoft\\TabletPC";
