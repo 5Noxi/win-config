@@ -4798,6 +4798,32 @@ HKLM\System\CurrentControlSet\Control\GraphicsDrivers\HwSchMode	Type: REG_DWORD,
 
 Will be updated within the next days (date of commit 20.05.2026)
 
+## ResourcePolicyServer
+
+Values found that are `GameDVR` related in `ResourcePolicyServer.dll`:
+
+```c
+GameDVR_DXGIHonorFSEWindowsCompatible
+GameDVR_EFSEFeatureFlags
+GameDVR_FSEBehavior
+GameDVR_FSEBehaviorMode
+GameDVR_HonorUserFSEBehaviorMode
+```
+
+`GameDVR_DSEBehavior` does not exist on the current system.
+
+## Compatibility Flags
+
+The Compatibility UI option `Disable fullscreen optimizations` writes an application compatibility layer value. This can exist per-user or machine-wide.
+
+```c
+// User
+HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe path> = "~ DISABLEDXMAXIMIZEDWINDOWEDMODE"
+
+// Machine
+HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe path> = "~ DISABLEDXMAXIMIZEDWINDOWEDMODE"
+```
+
 # Disable Memory Compression
 
 Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
