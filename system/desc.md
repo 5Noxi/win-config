@@ -1566,7 +1566,7 @@ In [PresentMon](https://github.com/GameTechDev/PresentMon/releases) ([`PresentMo
 | **Presentation surface** | a content placeholder that can be bound to a visual in a visual tree. A presentation surface can have a single displayed buffer at a time. Presentation manager presents will update the buffers for one or more presentation surfaces. |
 | **Presentation** | The concept of showing the results of drawing operations on screen. |
 | **Presentation buffer** | A Direct3D texture that has been associated with a presentation manager, and can therefore be presented by that presentation manager to screen. |
-| **Visual tree** | A tree of visuals that describes an application's layout. The composition swapchain API issues presents to one or more visuals in a visual tree. For more information, see [**Windows.UI.Composition**](/uwp/api/windows.ui.composition) and [**DirectComposition**](/windows/win32/directcomp/directcomposition-portal) API documentation. |
+| **Visual tree** | A tree of visuals that describes an application's layout. The composition swapchain API issues presents to one or more visuals in a visual tree. |
 | **VSync interrupt** | When a GPU displays a present, it issues a VSync interrupt to awaken the CPU to notify it that that present took place. This allows the CPU to update state such as the buffer available events, the present retiring fence, and present statistics. If the GPU supports hardware flip queue, your application can explicitly control which presents should force a VSync interrupt and immediately update state, and which presents should not, allowing for improved power efficiency at the expense of delayed feedback. |
 
 ## Registry Values
@@ -1744,7 +1744,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
 
-See [Multiplane Overlay (MPO)]() for what MPO is.
+See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
 
 | Data | Meaning |
 | --- | --- |
