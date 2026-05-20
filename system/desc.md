@@ -1471,7 +1471,7 @@ DWM = Desktop Window Manager, the component *which allows for compositing visibl
 
 Composition means building the visible frame from multiple inputs (that are visible), so for DWM that can include normal application windows, transparent or rounded window frames, shadows, animations, blur/backdrop effects, etc. DWM decides the order (image below), and presents the result.
 
-So for example when you've a terminal opened on the right (renders through DXGI) and a browser with a video playing on the left (wouldn't show up in [PresentMon](https://github.com/GameTechDev/PresentMon/releases) if on a empty tab as DWM can just reuse the content for the desktop frame), [PresentMon](https://github.com/GameTechDev/PresentMon/releases) can show present events for both processes while both are presenting (the browser video may show `Hardware Composed: Independent Flip` if it can use DirectFlip/iFlip + MPO, the terminal should normally be part of the composed DWM frame and it always shows up cause of the blinking cursor I guess, at least if you have one). If the terminal covers the browser, the browser content is no longer visible, means it no longer needs to be shown as a visible plane/surface which causes it to disappear in [PresentMon](https://github.com/GameTechDev/PresentMon/releases).
+So for example when you've a terminal opened on the right (renders through DXGI) and a browser with a video playing on the left (wouldn't show up in [PresentMon](https://github.com/GameTechDev/PresentMon/releases) if on a empty tab as DWM can just reuse the content for the desktop frame), [PresentMon](https://github.com/GameTechDev/PresentMon/releases) can show present events for both processes while both are presenting (the browser video may show `Hardware Composed: Independent Flip` if it can use DirectFlip/iFlip + MPO, the terminal should normally be part of the composed DWM frame and it always shows up cause of the blinking cursor, I guess). If the terminal covers the browser, the browser content is no longer visible, means it no longer needs to be shown as a visible plane/surface which causes it to disappear in [PresentMon](https://github.com/GameTechDev/PresentMon/releases).
 
 Use [PresentMon](https://github.com/GameTechDev/PresentMon/releases) without process filters to see which processes are actually producing presents and which `PresentMode` is used (only for apps that present through a graphics presentation API, e.g. DXGI, classic Win32/common control apps like my regkit project/System Informer won't show up, as their UI repainting doesn't use an DXGI swapchain).
 
@@ -1523,8 +1523,8 @@ A (DXGI) swapchain buffer that can be flipped directly to the display, simplifie
 
 DirectFlip cases:
 
-> "*1. **DirectFlip**: Your swapchain buffers match the screen dimensions, and your window client region covers the screen. Instead of using the DWM swapchain to display on the screen, the application swapchain is used.*
-> *2. **DirectFlip with panel fitters**: Your window client region covers the screen, and your swapchain buffers are within some hardware-dependent scaling factor (for example, 0.25x to 4x) of the screen. The GPU scanout hardware is used to scale your buffer while sending it to the display.*
+> "*1. **DirectFlip**: Your swapchain buffers match the screen dimensions, and your window client region covers the screen. Instead of using the DWM swapchain to display on the screen, the application swapchain is used.*  
+> *2. **DirectFlip with panel fitters**: Your window client region covers the screen, and your swapchain buffers are within some hardware-dependent scaling factor (for example, 0.25x to 4x) of the screen. The GPU scanout hardware is used to scale your buffer while sending it to the display.*  
 > *3. **DirectFlip with multi-plane overlay (MPO)**: Your swapchain buffers are within some hardware-dependent scaling factor of your window dimensions. The DWM is able to reserve a dedicated hardware scanout plane for your application, which is then scanned out and potentially stretched to an alpha-blended sub-region of the screen.*
 >
 > — Microsoft, [DirectFlip](https://github.com/nohuto/win32/blob/docs/desktop-src/direct3ddxgi/for-best-performance--use-dxgi-flip-model.md#directflip)
@@ -1569,7 +1569,7 @@ In [PresentMon](https://github.com/GameTechDev/PresentMon/releases) ([`PresentMo
 
 ## Registry Values
 
-See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from `dwmcore.dll` ([`CCommonRegistryData::InitializeDWMKeysFromRegistry`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)), `win32kfull.sys`, `dwm.exe`, `dwminit.dll`, `uDWM.dll`).
+See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore) ([`CCommonRegistryData::InitializeDWMKeysFromRegistry`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM)).
 
 Everything listed below is based on personal findings, mistakes may exist.
 
@@ -1612,6 +1612,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "OptimizeForDirtyExpressions" = 1; // REG_DWORD (bool)
     "OverlayMinFPS" = 15; // If this value is present and set to zero, the DWM disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
                           // Practically means that currently only swapchains with a min FPS of 15 would get their (MPO) overlay plane, but since overlay planes aren't unlimited ("MaxPlanes" which is sometimes only 2 and the primary DWM plane is included in there) that shouldn't be lowered
+                          // You can see your MaxPlanes via dxdiag (click "Save All Information" then search for MPO MaxPlanes)
     "RenderThreadTimeoutMilliseconds" = 5000; // REG_DWORD
     "SuperWetEnabled" = 1; // REG_DWORD (bool)
     "SuperWetExtensionTimeMicroseconds" = 1000; // REG_DWORD
