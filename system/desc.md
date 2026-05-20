@@ -1586,8 +1586,9 @@ Everything listed below is based on personal findings, mistakes may exist.
     "CpuClipAreaThreshold" = 20000; // REG_DWORD
     "CpuClipWarpPartitionThreshold" = 1024; // REG_DWORD
     "DisableDrawListCaching" = 0; // REG_DWORD (bool)
-    "DisableProjectedShadows" = 0; // REG_DWORD (bool)
-    "EnableBackdropBlurCaching" = 1; // REG_DWORD (bool)
+    "DisableProjectedShadows" = 0; // REG_DWORD (bool), probably related to https://learn.microsoft.com/en-us/uwp/api/windows.ui.composition.compositionprojectedshadow
+                                   // "Represents a scene-based shadow calculated using the relationship between the light, the visual that casts the shadow,and the visual that receives the shadow, such that the shadow is drawn differently on each receiver."
+    "EnableBackdropBlurCaching" = 1; // REG_DWORD (bool), nonzero allows updating/reusing cached backdrop blur
     "EnableCommonSuperSets" = 1; // REG_DWORD (bool)
     "EnableCpuClipping" = 1; // REG_DWORD (bool)
     "EnableDDisplayScanoutCaching" = 1; // REG_DWORD (bool)
@@ -1623,12 +1624,12 @@ Everything listed below is based on personal findings, mistakes may exist.
     "UseHWDrawListEntriesOnWARP" = 0; // REG_DWORD (bool)
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
-    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000
+    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000, throttles cached backdrop blur invalidation/rebuilds (not used if EnableBackdropBlurCaching = 0)
     "CpuClipFlatteningTolerance" = 0; // REG_DWORD, stored as float(value / 1000)
     "CustomRefreshRateMode" = 0; // REG_DWORD, range 0-2, >2 = default
     "DisableAdvancedDirectFlip" = 0; // REG_DWORD
     "DisableIndependentFlip" = 0; // REG_DWORD (bool)
-    "DisableProjectedShadowsRendering" = 0; // REG_DWORD
+    "DisableProjectedShadowsRendering" = 0; // REG_DWORD, read but seems unused
     "EnableRenderPathTestMode" = ?; // REG_DWORD
     "FlattenVirtualSurfaceEffectInput" = 0; // REG_DWORD (bool)
     "ForceEffectMode" = 0; // REG_DWORD, range 0-2
@@ -1649,11 +1650,17 @@ Everything listed below is based on personal findings, mistakes may exist.
 
     // animation/colorization policy related
     "DefaultColorizationColorState" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x4)
+                                         // "This policy setting controls the default color for window frames when the user does not specify a color. If you enable this policy setting and specify a default color, this color is used in glass window frames, if the user does not specify a color. If you disable or do not configure this policy setting, the default internal color is used, if the user does not specify a color. Note: This policy setting can be used in conjunction with the "Prevent color changes of window frames" setting, to enforce a specific color for window frames that cannot be changed by users."
+                                         // https://www.noverse.dev/policies.html?p=DWM*DwmDefaultColorizationColor_2
     "DisallowAnimations" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x1) which disables DWM window animations (also causes DWM reject live preview / Aero Peek)
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-SetWindowAnimation@CDesktopManager@@SAX_N@Z.c
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-IsLivePreviewAllowed@CDesktopManager@@SA_NXZ.c
-    "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero sets "force disable" flag (not related to window animations like the one above)
-    "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2)
+                              // "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.
+                              // https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_2
+    "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero disables display mode change animations (duplicate/extend/disconnect style monitor change visuals)
+    "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2) which blocks DWM colorization parameter changes
+                                            // This policy setting controls the ability to change the color of window frames. If you enable this policy setting, you prevent users from changing the default window frame color. If you disable or do not configure this policy setting, you allow users to change the default window frame color. Note: This policy setting can be used in conjunction with the "Specify a default color for window frames" policy setting, to enforce a specific color for window frames that cannot be changed by users."
+                                            // https://www.noverse.dev/policies.html?p=DWM*DwmDisallowColorizationColorChanges_1
 
     // uDWM colorization
     "AccentColor" = ?; // REG_DWORD, only read when ColorPrevalence is nonzero
@@ -1665,10 +1672,10 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ColorizationColor" = 0xFF409EFE; // REG_DWORD
     "ColorizationColorBalance" = 27; // REG_DWORD
     "ColorizationGlassAttribute" = 0; // REG_DWORD
-    "DefaultColorizationColorAlpha" = 0; // REG_DWORD
-    "DefaultColorizationColorBlue" = 0; // REG_DWORD
-    "DefaultColorizationColorGreen" = 0; // REG_DWORD
-    "DefaultColorizationColorRed" = 0; // REG_DWORD
+    "DefaultColorizationColorAlpha" = 0; // REG_DWORD (used when DefaultColorizationColorState)
+    "DefaultColorizationColorBlue" = 0; // REG_DWORD ^
+    "DefaultColorizationColorGreen" = 0; // REG_DWORD ^
+    "DefaultColorizationColorRed" = 0; // REG_DWORD ^
     "EnableWindowColorization" = 1; // REG_DWORD
 
     // uDWM compositor
@@ -1689,8 +1696,8 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ResizeTimeoutModern" = 0; // REG_DWORD, only used if 0x8 in EnableResizeOptimization set
 
     // procmon
-    "AnimationAttributionEnabled" = 1; // REG_DWORD
-    "AnimationAttributionHashingEnabled" = 1; // REG_DWORD
+    "AnimationAttributionEnabled" = 1; // REG_DWORD, comment marshaling for composition animation attributions (probably related to MarshalAllDebugInfo)
+    "AnimationAttributionHashingEnabled" = 1; // REG_DWORD, hashes those ^ comments into GUID strings
     "CompositorClockPolicy" = 1; // ?
     "DebugFailFast" = ?;
     "DisableSessionTermination" = 0; // ?
