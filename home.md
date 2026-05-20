@@ -54,4 +54,4 @@ reg add "HKCU\Software\Noverse" /v Theme /t REG_SZ /d "dark" /f // fallback to d
 ## Support
 
 You can reach me either by email or, preferably, via Discord:
-> https://discord.gg/E2ybG4j9jU
+> https://discord.noverse.dev

@@ -1,6 +1,6 @@
 // (C) 2026 Noverse (nohuto). All Rights Reserved.
 // https://github.com/nohuto
-// https://discord.gg/E2ybG4j9jU
+// https://discord.noverse.dev
 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

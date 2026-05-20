@@ -10,7 +10,7 @@
 #    the warranties of merchantability, fitness for a particular purpose, and 
 #    non-infringement.
 #
-#    For permissions or inquiries, contact: https://discord.gg/E2ybG4j9jU
+#    For permissions or inquiries, contact: https://discord.noverse.dev
 
 param(
     [string]$nvstringin,

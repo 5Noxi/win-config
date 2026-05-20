@@ -1,7 +1,7 @@
 # (C) 2026 Noverse. All Rights Reserved.
 # This PY is used for WinConfig
 # https://github.com/nohuto
-# https://discord.gg/E2ybG4j9jU
+# https://discord.noverse.dev
 
 from __future__ import annotations
 import argparse, json, os, re, shutil, subprocess, sys, threading, urllib.request, zipfile

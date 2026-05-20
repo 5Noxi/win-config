@@ -10,7 +10,7 @@
 #    the warranties of merchantability, fitness for a particular purpose, and 
 #    non-infringement.
 #
-#    For permissions or inquiries, contact: https://discord.gg/E2ybG4j9jU
+#    For permissions or inquiries, contact: https://discord.noverse.dev
 
 $nv = "Authored by Noxi-Hu - (C) 2026 Noverse"
 $ErrorActionPreference = "SilentlyContinue"
@@ -52,7 +52,7 @@ function nvmain {
     Write-Host " (optional)" -ForegroundColor DarkGray
     echo ""
     Write-Host " Join the discord server for more:" -NoNewline
-    Write-Host " https://discord.gg/E2ybG4j9jU" -ForegroundColor Blue
+    Write-Host " https://discord.noverse.dev" -ForegroundColor Blue
     echo ""
     Write-Host " [" -NoNewline
     Write-Host "1" -foregroundcolor blue -NoNewline

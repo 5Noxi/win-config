@@ -1,7 +1,7 @@
 # (C) 2026 Noverse. All Rights Reserved.
 # This PS is a part of the WinConfig documentation
 # https://github.com/nohuto
-# https://discord.gg/E2ybG4j9jU
+# https://discord.noverse.dev
 
 Add-Type -TypeDefinition @'
 using System;

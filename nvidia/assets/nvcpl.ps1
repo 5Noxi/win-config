@@ -1,4 +1,4 @@
-# https://discord.gg/E2ybG4j9jU
+# https://discord.noverse.dev
 $ErrorActionPreference = "silentlycontinue"
 Set-Service -Name "NVDisplay.ContainerLocalSystem" -StartupType Disabled
 spsv -Name "NVDisplay.ContainerLocalSystem" -Force

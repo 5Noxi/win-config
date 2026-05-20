@@ -1276,8 +1276,8 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
   "Manufacturer": { "Type": "REG_SZ", "Data": "Noverse" },
   "Model": { "Type": "REG_SZ", "Data": "Windows 11" },
   "SupportHours": { "Type": "REG_SZ", "Data": "24H" },
-  "SupportPhone": { "Type": "REG_SZ", "Data": "noverse@gmail.com" },
-  "SupportURL": { "Type": "REG_SZ", "Data": "https://discord.gg/noverse" }
+  "SupportPhone": { "Type": "REG_SZ", "Data": "noverse@test.dev" },
+  "SupportURL": { "Type": "REG_SZ", "Data": "https://discord.noverse.dev" }
 }
 ```
 

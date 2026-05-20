@@ -1,6 +1,6 @@
 # (C) 2026 Noverse (nohuto). All Rights Reserved.
 # https://github.com/nohuto
-# https://discord.gg/E2ybG4j9jU
+# https://discord.noverse.dev
 
 $base = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio'
 $values = @(
