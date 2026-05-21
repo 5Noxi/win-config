@@ -2,9 +2,9 @@
 
 Note that this is a powerful and highly customizable tool, so you shouldn't go through every section and enable everything. Read the documentation first, as some options may require specific operations before you can use them. Dynamic state detection is strict, if values **A** and **C** are correct but **B** is not, the option is considered **disabled**.
 
-Also note that many options have suboptions that aren't always included in the main option. You can use these to customize the settings if you don't like the default behavior. See `Explorer Options` (Visibility) for an example.
+Also note that many options have suboptions that aren't always included in the main option. You can use these to customize the settings if you don't like the default behavior.
 
-The documentation is based on the GitHub repository and parses it's information out of it. All [`App Tools`](https://github.com/nohuto/app-tools)/[`Game Tools`](https://github.com/nohuto/game-tools) are external PowerShell scripts, same goes for the [`Component Manager`](https://github.com/nohuto/comp-mgr), [`Blocklist Manager`](https://github.com/nohuto/blocklist-mgr) & [`Bitmask Calculator`](https://github.com/nohuto/bitmask-calc).
+External scripts, and project docs include [`App Tools`](https://github.com/nohuto/app-tools), [`Game Tools`](https://github.com/nohuto/game-tools), [`Component Manager`](https://github.com/nohuto/comp-mgr), [`Blocklist Manager`](https://github.com/nohuto/blocklist-mgr), [`Bitmask Calculator`](https://github.com/nohuto/bitmask-calc), [`RegKit`](https://github.com/nohuto/regkit), [`NVFetch`](https://github.com/nohuto/nvfetch), [`Hash Generator`](https://github.com/nohuto/hash-gen), [`NvAPI CLI`](https://github.com/nohuto/nvapi-cli), and [`ADMX Parser`](https://github.com/nohuto/admx-parser).
 
 ## Tool Settings
 
@@ -50,8 +50,3 @@ reg add "HKCU\Software\Noverse" /v Theme /t REG_SZ /d "dark" /f // fallback to d
 | `Ctrl+R` / `F5` | Refresh the active section or rerun the current search |
 | `Ctrl+{num}` | Load the corresponding section (`{num}` = e.g. `1` for the first section) |
 | `Space` / `Enter` | Run the currently focused option card (toggle/execute) |
-
-## Support
-
-You can reach me either by email or, preferably, via Discord:
-> https://discord.noverse.dev
