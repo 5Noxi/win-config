@@ -1614,7 +1614,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "OverlayMinFPS" = 15; // If this value is present and set to zero, the DWM disables its minimum frame rate requirement for assigning DirectX swap chains to overlay planes in hardware that supports overlays. This makes it more likely that a low frame rate swap chain will get assigned and stay assigned to an overlay plane, if available. (https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/dwm/registry-values.md)
                           // Practically means that currently only swapchains with a min FPS of 15 would get their (MPO) overlay plane, but since overlay planes aren't unlimited ("MaxPlanes" which is sometimes only 2 and the primary DWM plane is included in there) that shouldn't be lowered
                           // You can see your MaxPlanes via dxdiag (click "Save All Information" then search for MPO MaxPlanes)
-    "RenderThreadTimeoutMilliseconds" = 5000; // REG_DWORD
+    "RenderThreadTimeoutMilliseconds" = 5000; // REG_DWORD, range 0-4294967295, threshold for the DWM compositor scheduler loop
     "SuperWetEnabled" = 1; // REG_DWORD (bool)
     "SuperWetExtensionTimeMicroseconds" = 1000; // REG_DWORD
     "TelemetryFramesReportPeriodMilliseconds" = 300000; // REG_DWORD
@@ -1760,6 +1760,43 @@ See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dw
 | `4` | Kind of "Force success" for MPO support ([`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c) bypasses support query), this doesn't mean that surfaces get a overlay plane |
 | `5` | Disable MPO ([`COverlayContext::OverlaysEnabled`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-OverlaysEnabled@COverlayContext@@AEBA_NXZ.c) returns false & [`COverlayContext::IsCompatibleOutputScaling`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-IsCompatibleOutputScaling@COverlayContext@@AEAA_NAEBVCMILMatrix@@@Z.c) returns 0 for one "*CompatibleOutputScaling*") |
 | `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? `>= 6` data is probably just invalid. |
+
+### [RenderThreadTimeoutMilliseconds](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/_dynamic_initializer_for__CCommonRegistryData--RenderThreadTimeoutMilliseconds__.c)
+
+It looks like a diagnostic threshold only, which controls when DWM may write the TraceLogging event `SinceWatchdogTimerStarted` (provider `Microsoft.Windows.Dwm.DwmCore`/`{1BF43430-9464-4B83-B7FB-E2638876AEEF}`). Since the default is `5000ms` I guess this is intended to be used as a kind of "compositor thread hang" event? The value [gets read](https://github.com/nohuto/regkit/blob/main/records/Windows-Dwm.txt) but as said, this event should normally not happen & the provider shouldn't run by default (don't see this as my final answer, just as an possible description).
+
+The related thread gets created by [`CConnection::StartCompositionThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-StartCompositionThread@CConnection@@AEAAJH@Z.c), which sets it's description to `DWM Compositor Thread`. The time is from the end of the previous [`CPartitionVerticalBlankScheduler::WaitForWork`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-WaitForWork@CPartitionVerticalBlankScheduler@@AEAAXXZ.c) call to the start of the next one.
+
+```c
+// CPartitionVerticalBlankScheduler::WaitForWork
+v4 = g_renderThreadTick;
+g_renderThreadTick = 0LL;
+if ( v4 )
+{
+  TickCount64 = GetTickCount64();
+  v6 = TickCount64 - v4;
+  if ( TickCount64 - v4 > (unsigned int)CCommonRegistryData::RenderThreadTimeoutMilliseconds // threshold check
+    && !IsDebuggerPresent()
+    && !(unsigned int)IsKernelDebuggerPresent()
+    && (unsigned int)dword_1803E3B40 > 5
+    && (unsigned __int8)tlgKeywordOn(&dword_1803E3B40, 0x400000000000LL) ) // provider/keyword
+  {
+    v32 = v6;
+    si128.m128i_i64[0] = 0x1000000LL;
+    _tlgWriteTemplate<long (_tlgProvider_t const *,void const *,_GUID const *,_GUID const *,unsigned int,_EVENT_DATA_DESCRIPTOR *),&long _tlgWriteTransfer_EventWriteTransfer(_tlgProvider_t const *,void const *,_GUID const *,_GUID const *,unsigned int,_EVENT_DATA_DESCRIPTOR *),_GUID const *,_GUID const *>::Write<_tlgWrapperByVal<8>,_tlgWrapperByVal<4>>(
+      v26,
+      (unsigned int)&unk_18037F354, // TraceLogging metadata, starts with "SinceWatchdogTimerStarted"
+      v27,
+      v28,
+      (__int64)&si128,
+      (__int64)&v32);
+  }
+}
+
+// ...
+
+g_renderThreadTick = GetTickCount64();
+```
 
 ### MsaaQualityMode
 
