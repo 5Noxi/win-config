@@ -1767,6 +1767,8 @@ It looks like a diagnostic threshold only, which controls when DWM may write the
 
 The related thread gets created by [`CConnection::StartCompositionThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-StartCompositionThread@CConnection@@AEAAJH@Z.c), which sets it's description to `DWM Compositor Thread`. The time is from the end of the previous [`CPartitionVerticalBlankScheduler::WaitForWork`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-WaitForWork@CPartitionVerticalBlankScheduler@@AEAAXXZ.c) call to the start of the next one.
 
+![](https://github.com/nohuto/win-config/blob/main/system/images/compositor-thread.png?raw=true)
+
 ```c
 // CPartitionVerticalBlankScheduler::WaitForWork
 v4 = g_renderThreadTick;
