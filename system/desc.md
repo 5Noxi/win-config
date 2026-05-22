@@ -1758,14 +1758,14 @@ if ( RegGetDwmDwordHelper(L"BackdropBlurCachingThrottleMs", &v11, 0LL) )
 {
   v7 = v11;
   if ( v11 > 0x3E8 )
-    v7 = 1000; // clamp to 1000
+    v7 = 1000; // >1000 clamp to 1000
   v2 = g_qpcFrequency.QuadPart * v7;
 }
 else
 {
   v2 = 25 * g_qpcFrequency.QuadPart; // missing = 25ms
 }
-CCommonRegistryData::m_backdropBlurCachingThrottleQPCTimeDelta = v2 / 1000; // range 0-1000
+CCommonRegistryData::m_backdropBlurCachingThrottleQPCTimeDelta = v2 / 1000;
 ```
 
 [`CBackdropVisualImage::ValidateRootAndSourceRectangle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-ValidateRootAndSourceRectangle@CBackdropVisualImage@@QEAAJPEAVCVisual@@AEBV-$TMilRect_@MUMilRec.c) uses it before marking cached targets dirty again:
