@@ -1624,7 +1624,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "UseHWDrawListEntriesOnWARP" = 0; // REG_DWORD (bool)
 
     // dwmcore CCommonRegistryData::InitializeDWMKeysFromRegistry
-    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000, throttles cached backdrop blur invalidation/rebuilds (not used if EnableBackdropBlurCaching = 0)
+    "BackdropBlurCachingThrottleMs" = 25; // REG_DWORD (ms), >1000 = 1000, throttles cached backdrop blur invalidation/rebuilds
     "CpuClipFlatteningTolerance" = 0; // REG_DWORD, stored as float(value / 1000)
     "CustomRefreshRateMode" = 0; // REG_DWORD, range 0-2, >2 = default
     "DisableAdvancedDirectFlip" = 0; // REG_DWORD
@@ -1747,6 +1747,57 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Force10Level9" = 0; // REG_DWORD
     "Force10OnWDDM1_0" = 0; // REG_DWORD
 ```
+
+### BackdropBlurCachingThrottleMs
+
+It's used as a minimum time before cached blur outputs are marked dirty again (see examples below to understand what effect it has).
+
+```c
+// CCommonRegistryData::InitializeDWMKeysFromRegistry
+if ( RegGetDwmDwordHelper(L"BackdropBlurCachingThrottleMs", &v11, 0LL) )
+{
+  v7 = v11;
+  if ( v11 > 0x3E8 )
+    v7 = 1000; // clamp to 1000
+  v2 = g_qpcFrequency.QuadPart * v7;
+}
+else
+{
+  v2 = 25 * g_qpcFrequency.QuadPart; // missing = 25ms
+}
+CCommonRegistryData::m_backdropBlurCachingThrottleQPCTimeDelta = v2 / 1000; // range 0-1000
+```
+
+[`CBackdropVisualImage::ValidateRootAndSourceRectangle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-ValidateRootAndSourceRectangle@CBackdropVisualImage@@QEAAJPEAVCVisual@@AEBV-$TMilRect_@MUMilRec.c) uses it before marking cached targets dirty again:
+
+```c
+// CBackdropVisualImage::ValidateRootAndSourceRectangle
+
+v33 = CCommonRegistryData::m_backdropBlurCachingThrottleQPCTimeDelta & -(__int64)(*((_BYTE *)this + 1912) != 0);
+
+if ( v32 - *((_QWORD *)v34 + 5) > v33 ) // current composition QPC time - cached target update time > throttle
+{
+  CCachedVisualImage::CCachedTarget::MarkDirty(v34); // rebuild afterwards
+  v14 = 1;
+}
+```
+
+#### Examples
+
+You can see the differences by moving a blurry window above a animation, for example. I used a simple [rotating dot]((https://github.com/nohuto/win-config/blob/main/system/assets/rotatingdot.html)).
+
+##### 1000ms
+
+<video controls width="800">
+  <source src="https://raw.githubusercontent.com/" type="video/mp4">
+</video>
+
+
+##### 0ms
+
+<video controls width="800">
+  <source src="https://raw.githubusercontent.com/" type="video/mp4">
+</video>
 
 ### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
 

@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #111;
+    }
+
+    .orbit {
+      width: 200px;
+      height: 200px;
+      border: 1px solid #555;
+      border-radius: 50%;
+      position: relative;
+      animation: spin 2s linear infinite;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      background: rgb(255, 0, 0);
+      border-radius: 50%;
+      position: absolute;
+      top: -8px;
+      left: 92px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="orbit">
+    <div class="dot"></div>
+  </div>
+</body>
+</html>
