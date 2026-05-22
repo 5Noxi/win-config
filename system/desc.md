@@ -1703,19 +1703,24 @@ Everything listed below is based on personal findings, mistakes may exist.
     "DisableSessionTermination" = 0; // ?
     "DisplayChangeTimeoutMs" = 1000; // ?
     "DwmInitSessionActivityId_00000001" = ?; // REG_SZ
-    "EnableMPCPerfCounter" = ?;
     "ForceBasicDisplayAdapterOnDWMRestart" = 0; // ?
     "ForceFullDirtyRendering" = 0; // ?
     "ForceUDwmSoftwareDevice" = ?; // ?
     "MarshalAllDebugInfo" = ?;
-    "MPCInputRouterWaitForDebugger" = ?;
-    "OneCoreNoBootDWM" = 0; // ?
-    "OneCoreNoDWMRawGameController" = ?; // ?
     "ParallelModeRateThreshold" = 119; // ?
     "ShowDirtyRegions" = 0; // ?
     "UseFastestMonitorAsPrimary" = 0; // ?
     "vBlankWaitTimeoutMonitorOffMs" = 250; // ?
     "WarpEnableDebugColor" = 0; // ?
+
+    // ISM
+    "CaptureDisabledFor6dof" = 0; // REG_DWORD (bool)
+    "DisableBloomFor6dof" = 0; // REG_DWORD (bool)
+    "EnableMPCPerfCounter" = 0; // REG_DWORD (bool)
+    "MPCInputRouterWaitForDebugger" = 0; // REG_DWORD (bool)
+    "OneCoreNoBootDWM" = ?; // REG_DWORD
+    "OneCoreNoDWMRawGameController" = 0; // REG_DWORD (bool)
+    "TouchHoverReportThrottleTimeInMs" = 100; // REG_DWORD (ms), no clamp?
 
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\Dwm\\Scene";
     // dwmcore
