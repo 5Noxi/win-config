@@ -1789,14 +1789,14 @@ You can see the differences by moving a blurry window above a animation, for exa
 ##### 1000ms
 
 <video controls width="800">
-  <source src="https://raw.githubusercontent.com/" type="video/mp4">
+  <source src="https://raw.githubusercontent.com/nohuto/win-config/main/system/videos/BackdropBlur1000.mp4" type="video/mp4">
 </video>
 
 
 ##### 0ms
 
 <video controls width="800">
-  <source src="https://raw.githubusercontent.com/" type="video/mp4">
+  <source src="https://raw.githubusercontent.com/nohuto/win-config/main/system/videos/BackdropBlur0.mp4" type="video/mp4">
 </video>
 
 ### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
