@@ -117,7 +117,7 @@ b=0
 a=120
 ```
 
-# StartAllBack Settings
+# StartAllBack Config
 
 Installation:
 ```powershell
@@ -239,7 +239,7 @@ All values `StartAllBack` reads that are located in `HKCU\Software\StartIsBack` 
 
 ## SAB Activation
 
-This is for educational purposes only.
+**This is for educational purposes only.**
 
 Disassemble `StartAllBackX64.dll`, jump to `StartAllBackX64_102` > Edit > Patch program > Change byte
 
