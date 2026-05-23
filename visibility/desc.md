@@ -726,9 +726,9 @@ Disables the preview function for (extensions):
 ```
 3gp aac avi flac m4a m4v mkv mod mov mp3 mp4 mpeg mpg ogg ts vob wav webm wma wmv
 ```
-[`{E357FCCD-A995-4576-B01F-234630154E96}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Thumbnail Provider (Thumbnail image handler)
-[`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Extract Image (Image handler)
-[`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) - Default shell extension handler for thumbnails
+[`{E357FCCD-A995-4576-B01F-234630154E96}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) = Thumbnail Provider (Thumbnail image handler)
+[`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) = Extract Image (Image handler)
+[`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) = Default shell extension handler for thumbnails
 
 ### Enabled
 
@@ -941,11 +941,12 @@ Hides the snap assist flyout that would appear after hovering over the maximize/
 
 ### Miscellaneous Notes
 
-```c
-{018D5C66-4533-4307-9B53-224DE2ED1FE6} = OneDrive
-{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} = Network Sharing Folder
-{031E4825-7B94-4dc3-B131-E946B44C8DD5} = Libraries Folder
+```powershell
+{018D5C66-4533-4307-9B53-224DE2ED1FE6} # OneDrive
+{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} # Network Sharing Folder
+{031E4825-7B94-4dc3-B131-E946B44C8DD5} # Libraries Folder
 ```
+
 ```json
 // LaunchTo:
 // 1 = This PC
@@ -1157,33 +1158,24 @@ Calculate it on your own, by using [bitmask-calc](https://github.com/nohuto/bitm
 ## Miscellaneous Notes
 
 If you've set a custom foreground/background color, they won't override the colors changed within the code, e.g.:
+
 ```powershell
 Write-Host "Noverse"
 ```
--> `Noverse` will have use foreground & background color of `ScreenColors`
+
+`Noverse` will have use foreground & background color of `ScreenColors`
+
 ```powershell
 Write-Host "Noverse" -ForegroundColor Blue
 ```
--> `Noverse` will be blue, `ScreenColors` gets skipped.
+
+`Noverse` will be blue, `ScreenColors` gets skipped.
+
 ```powershell
 [console]::BackgroundColor = 'Black'
 ```
--> If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
 
-The option uses `Black` (background) and `Gray` (foreground), since it is personal preference change it to whatever you want using the information above.
-
-Add the `-NoLogo` parameter to the powershell shortcut in the start menu with the command below. It hides the startup banner:
-```
-Windows PowerShell
-Copyright (C) Microsoft Corporation. All rights reserved.
-
-Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
-
-PS C:\Users\Nohuto>
-```
-```powershell
-for %%L in ("%APPDATA%\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\*.lnk") do powershell -c "$s=New-Object -ComObject WScript.Shell; $lnk=$s.CreateShortcut('%%~fL'); $lnk.TargetPath='%WINDIR%\System32\WindowsPowerShell\v1.0\powershell.exe'; $lnk.Arguments='-NoLogo'; $lnk.Save()"
-```
+If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
 
 # Prevent Color/Theme Changes
 
@@ -1247,7 +1239,7 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 # OEM Information
 
-Set your own support information in `System > About` (or `Control Panel > System and Security > System`. All values are saved in:
+Set your own support information in `System > About` (or `Control Panel > System and Security > System`). All values are saved in:
 ```
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
 ```
