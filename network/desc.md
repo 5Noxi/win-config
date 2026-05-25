@@ -1119,8 +1119,6 @@ HKR, "", *TransmitBuffers,  %REG_SZ%, "2048"
 >
 > — Microsoft, [Performance tuning network adapters](https://learn.microsoft.com/en-us/windows-server/networking/technologies/network-subsystem/net-sub-performance-tuning-nics?tabs=powershell#interrupt-moderation)
 
-Many NICs offer more than on/off, with low/medium/high rates that map to shorter or longer timers to favor latency or reduce interrupts.
-
 ### Data Range
 
 The correct data might be the comment data, if so edit it manually.
