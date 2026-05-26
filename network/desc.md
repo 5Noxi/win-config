@@ -882,88 +882,155 @@ Beginning with Windows 10, version 1803, Wi-Fi Sense is no longer available. The
 | --- | --- | --- |
 | [Allow Windows to automatically connect to suggested open hotspots, to networks shared by contacts, and to hotspots offering paid services](https://www.noverse.dev/policies.html?p=wlansvc*WiFiSense) | `HKLM\Software\Microsoft\wcmsvc\wifinetworkmanager\config` | `AutoConnectAllowedOEM` |
 
-# Enable Offloads
+# Enable Network Offloads
 
-Network offload features transfer processing tasks from the CPU to the network adapter hardware, reducing system overhead and improving overall network performance. Common offload features include TCP checksum offload, Large Send Offload (LSO), and Receive Side Scaling (RSS).
+Since all topics below are well documented by MS, I won't add much details. Click on the title links for more information on each topic. Note that the main option disables PM protocol offloads.
 
-Enabling network adapter offload features is usually beneficial. However, the network adapter might not be powerful enough to handle the offload capabilities with high throughput. For example, consider a network adapter with limited hardware resources. In that case, enabling segmentation offload features might reduce the maximum sustainable throughput of the adapter. However, if the reduced throughput is acceptable, you should enable the segmentation offload features.
+## [NDIS_OFFLOAD_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddndis/ns-ntddndis-_ndis_offload_parameters)
 
-Excludes (deprecated, chimney too):
-```json
-"SaOffloadCapacityEnabled" = 0
+```c
+typedef struct _NDIS_OFFLOAD_PARAMETERS {
+  NDIS_OBJECT_HEADER                 Header;
+  UCHAR                              IPv4Checksum;
+  UCHAR                              TCPIPv4Checksum;
+  UCHAR                              UDPIPv4Checksum;
+  UCHAR                              TCPIPv6Checksum;
+  UCHAR                              UDPIPv6Checksum;
+  UCHAR                              LsoV1;
+  UCHAR                              IPsecV1;
+  UCHAR                              LsoV2IPv4;
+  UCHAR                              LsoV2IPv6;
+  UCHAR                              TcpConnectionIPv4;
+  UCHAR                              TcpConnectionIPv6;
+  ULONG                              Flags;
+  UCHAR                              IPsecV2;
+  UCHAR                              IPsecV2IPv4;
+  struct {
+    UCHAR RscIPv4;
+    UCHAR RscIPv6;
+  };
+  struct {
+    UCHAR EncapsulatedPacketTaskOffload;
+    UCHAR EncapsulationTypes;
+  };
+  union {
+    struct {
+      USHORT VxlanUDPPortNumber;
+    } VxlanParameters;
+    ULONG Value;
+  } EncapsulationProtocolParameters;
+  _ENCAPSULATION_PROTOCOL_PARAMETERS _ENCAPSULATION_PROTOCOL_PARAMETERS;
+  struct {
+    UCHAR IPv4;
+    UCHAR IPv6;
+  } UdpSegmentation;
+  struct {
+    UCHAR Enabled;
+  } UdpRsc;
+} NDIS_OFFLOAD_PARAMETERS, *PNDIS_OFFLOAD_PARAMETERS;
 ```
 
 ## Registry Values
 
-See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+See [task offload registry values](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-registry-values-to-enable-and-disable-task-offloading), [network device INF keywords](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-network-devices), [RSC INF keywords](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-rsc), [URO](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload), [NVGRE task offload keywords](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-nvgre-task-offload), [connection offload registry values](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-registry-values-to-enable-and-disable-connection-offloading), [power management keywords](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-power-management), [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic).
 
 ```c
+"HKLM\\System\\CurrentControlSet\\Services\\TCPIP\\Parameters";
+  "DisableTaskOffload" = 0; // REG_DWORD (bool)
+
+"HKLM\\System\\CurrentControlSet\\Services\\Ipsec";
+  "EnabledOffload" = 1; // REG_DWORD (bool)
+
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-  "*IPChecksumOffloadIPv4" = 3; // range 0-3
-  "*LsoV1IPv4" = 1; // range 0-1
-  "*LsoV2IPv4" = 1; // range 0-1
-  "*LsoV2IPv6" = 1; // range 0-1
-  "*PMARPOffload" = 0; // range 0-1
-  "*PMNSOffload" = 0; // range 0-1
-  "*TCPChecksumOffloadIPv4" = 3; // range 0-3
-  "*TCPChecksumOffloadIPv6" = 3; // range 0-3
-  "*UDPChecksumOffloadIPv4" = 3; // range 0-3
-  "*UDPChecksumOffloadIPv6" = 3; // range 0-3
+  "*IPChecksumOffloadIPv4" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
+  "*TCPChecksumOffloadIPv4" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
+  "*TCPChecksumOffloadIPv6" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
+  "*UDPChecksumOffloadIPv4" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
+  "*UDPChecksumOffloadIPv6" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
+  "*TCPUDPChecksumOffloadIPv4" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
+  "*TCPUDPChecksumOffloadIPv6" = 3; // REG_SZ, 0 disabled, 1 Tx, 2 Rx, 3 Tx/Rx
 
-  "LSOSize" = 64000; // range 1024-64000 - The maximum number of bytes that the TCP/IP stack can pass to an adapter in a single packet.
-  "LSOMinSegment" = 2; // range 2-32 - The minimum number of segments that a large TCP packet must be divisible by, before the transport can offload it to a NIC for segmentation.
-  "LSOTcpOptions" = 1; // range 0-1 - Enables that the miniport driver to segment a large TCP packet whose TCP header contains TCP options.
-  "LSOIpOptions" = 1; // range 0-1 - Enables its NIC to segment a large TCP packet whose IP header contains IP options.
+  "*LsoV1IPv4" = 1; // REG_SZ (bool)
+  "*LsoV2IPv4" = 1; // REG_SZ (bool)
+  "*LsoV2IPv6" = 1; // REG_SZ (bool)
+  "*UsoIPv4" = 1; // REG_SZ (bool)
+  "*UsoIPv6" = 1; // REG_SZ (bool)
 
-  // miscellaneous values, since there's no option to add them I'll add them here for now
-  // https://github.com/nohuto/win-registry/blob/main/records/NIC-Intel-IDA.txt
-  // https://github.com/nohuto/win-registry/blob/main/records/NIC-Intel.txt
-  "*EncapsulatedPacketTaskOffloadVxlan" = 0; // range 0-1
-  "*HeaderDataSplit" = 0; // range 0-1
-  "*VxlanUDPPortNumber" = 4789; // range 1-65535
-  "AdaptiveQHysteresis" = 64; // range 16-1024
-  "AdaptiveQSize" = 128; // range 64-8192
-  "AdaptiveQWorkSet" = 96; // range 32-8192
-  "CheckForHangTime" = 2; // range 0-60
-  "EnableAdaptiveQueuing" = 1; // range 0-1
-  "EnableHWAutonomous" = 0; // range 0-1
-  "EnableRxDescriptorChaining" = 1; // range 0-1
-  "HDSplitAlways" = 0; // range 0-1
-  "HDSplitBufferPad" = 2; // range 0-2
-  "HDSplitLocation" = 2; // range 0-3
-  "HDSplitSize" = 128; // range 128-960
-  "MaxPacketCountPerDPC" = 256; // range 8-65535
-  "MaxPacketCountPerIndicate" = 64; // range 1-65535
-  "MinHardwareOwnedPacketCount" = 32; // range 8-4096
-  "PadReceiveBuffer" = 0; // range 0-1
-  "ReceiveBuffersOverride" = 1; // range 0-1
-  "RegForceRxPathSerialization" = 0; // range 0-1
-  "ResetTest" = 0; // range 0-1
-  "ResetTestTime" = 300; // range 20-604800
-  "RxBufferPad" = 10; // range 0-63
-  "RxDescriptorCountPerTailWrite" = 8; // range 4-4096
-  "SidebandUngateOverride" = 0; // range 0-1
-  "StoreBadPackets" = 0; // range 0-1
+  "*RscIPv4" = 1; // REG_SZ (bool)
+  "*RscIPv6" = 1; // REG_SZ (bool)
+  "*UdpRsc" = 1; // REG_SZ (bool)
+  "ForceRscEnabled" = 0; // REG_SZ (bool)
+  "RscMode" = 1; // REG_SZ, range 0-2
+
+  "*EncapsulatedPacketTaskOffload" = 1; // REG_SZ (bool)
+  "*EncapsulatedPacketTaskOffloadNvgre" = 1; // REG_SZ (bool)
+  "*EncapsulatedPacketTaskOffloadVxlan" = 1; // REG_SZ (bool)
+  "*VxlanUDPPortNumber" = 4789; // REG_SZ, range 1-65535
+
+  "*IPsecOffloadV1IPv4" = 3; // REG_SZ, 0 disabled, 1 AH, 2 ESP, 3 AH/ESP
+  "*IPsecOffloadV2" = 3; // REG_SZ, 0 disabled, 1 AH, 2 ESP, 3 AH/ESP
+  "*IPsecOffloadV2IPv4" = 3; // REG_SZ, 0 disabled, 1 AH, 2 ESP, 3 AH/ESP
+
+  "*TCPConnectionOffloadIPv4" = 1; // REG_SZ (bool)
+  "*TCPConnectionOffloadIPv6" = 1; // REG_SZ (bool)
+
+  "*PMARPOffload" = 1; // REG_SZ (bool)
+  "*PMNSOffload" = 1; // REG_SZ (bool)
+  "*PMWiFiRekeyOffload" = 1; // REG_SZ (bool)
+
+  "SaOffloadCapacityEnabled" = 0; // REG_SZ (bool)
+
+  "LSOSize" = 64000; // range 1024-64000 - "The maximum number of bytes that the TCP/IP stack can pass to an adapter in a single packet."
+  "LSOMinSegment" = 2; // range 2-32 - "The minimum number of segments that a large TCP packet must be divisible by, before the transport can offload it to a NIC for segmentation."
+  "LSOTcpOptions" = 1; // range 0-1 - "Enables that the miniport driver to segment a large TCP packet whose TCP header contains TCP options."
+  "LSOIpOptions" = 1; // range 0-1 - "Enables its NIC to segment a large TCP packet whose IP header contains IP options."
 ```
 
-| Keyword | Description | Default | Minimum | Maximum |
-| --- | --- | --- | --- | --- |
-| [`*IPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Device IPv4 checksum handling (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*TCPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | TCP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*TCPChecksumOffloadIPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | TCP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*UDPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | UDP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*UDPChecksumOffloadIPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | UDP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*LsoV1IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Large Send Offload V1 for IPv4 (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| [`*LsoV2IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Large Send Offload V2 for IPv4 (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| [`*LsoV2IPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | Large Send Offload V2 for IPv6 (0 disabled, 1 enabled) | 1 | 0 | 1 |
-| [`*IPsecOffloadV1IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | IPsec offload V1 for IPv4 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
-| [`*IPsecOffloadV2`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | IPsec offload V2 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
-| [`*IPsecOffloadV2IPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#granular-keywords) | IPsec offload V2 for IPv4 (0 disabled, 1 AH enabled, 2 ESP enabled, 3 AH & ESP enabled) | 3 | 0 | 3 |
-| [`*TCPUDPChecksumOffloadIPv4`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#grouped-keywords) | Combined IP/TCP/UDP checksum offload for IPv4 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*TCPUDPChecksumOffloadIPv6`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/using-registry-values-to-enable-and-disable-task-offloading.md#grouped-keywords) | Combined TCP/UDP checksum offload for IPv6 packets (0 disabled, 1 Tx enabled, 2 Rx enabled, 3 Tx & Rx enabled) | 3 | 0 | 3 |
-| [`*PMARPOffload`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md#power-management-keywords-for-netadaptercx-and-ndis) | A value that describes whether the device should be enabled to offload the Address Resolution Protocol (ARP) when the system enters a sleep state. | 1 | 0 | 1 |
-| [`*PMNSOffload`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md#power-management-keywords-for-netadaptercx-and-ndis) | A value that describes whether the device should be enabled to offload neighbor solicitation (NS) when the system enters a sleep state. | 1 | 0 | 1 |
-| [`*PMWiFiRekeyOffload`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-power-management.md#power-management-keywords-for-netadaptercx-and-ndis) | A value that describes whether the device should be enabled to offload group temporal key (GTK) rekeying for wake-on-wireless-LAN (WOL) when the computer enters a sleep state. | 1 | 0 | 1 |
+### [Checksum Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/offloading-checksum-tasks)
+
+Checksums are small integrity values in packet headers. They let the receiver see whether header or payload data changed while the packet was being carried.
+
+With checksum offload enabled, TCP/IP still prepares the packet, but marks the needed checksum work in the [`NET_BUFFER_LIST`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/net-buffer-list-structure) OOB data so the adapter can finish it. For TCP & UDP, TCP/IP writes the pseudoheader sum first, then the adapter completes the final checksum before sending. If checksum offload is disabled or not supported, TCP/IP completes the checksum work in software before handing the packet to the adapter.
+
+On receive, the adapter can check supported checksums and report whether they passed or failed before handing the packet up to NDIS and TCP/IP. IPv4 has an IP header checksum, while IPv6 doesn't, TCP and UDP checksums still apply to both IPv4 and IPv6 traffic.
+
+### [Large Send Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/offloading-the-segmentation-of-large-tcp-packets)
+
+LSO lets TCP/IP give the adapter one large TCP packet with large send metadata in the [`NET_BUFFER_LIST`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/net-buffer-list-structure), instead of building every MTU (maximum transmission unit) sized packet in software.
+
+The adapter uses that large packet as a template and creates normal TCP packets that fit the network MTU. It copies or adjusts the headers, keeps non final packets at MSS (maximum segment size) payload size, updates TCP sequence numbers and length fields, and calculates checksums for the generated packets.
+
+### [UDP Segmentation Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-segmentation-offload-uso-)
+
+USO applies the same large packet segmentation model to UDP traffic, it requires the application to opt into large UDP sends with [`UDP_SEND_MSG_SIZE`](https://learn.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-wsasetudpsendmessagesize) or [`WSASetUdpSendMessageSize`](https://learn.microsoft.com/en-us/windows/win32/api/ws2tcpip/nf-ws2tcpip-wsasetudpsendmessagesize).
+
+When USO is used, TCP/IP sends one large UDP packet with segmentation metadata. The adapter uses it as a template and creates normal UDP datagrams. USO is independent from UDP checksum offload (so disabling `*UDPChecksumOffloadIPv4` doesn't disable `*UsoIPv4`).
+
+### [Receive Segment Coalescing](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
+
+RSC reduces receive processing for TCP traffic, an RSC capable adapter can combine a valid sequence of TCP segments from the same connection and pass them upward as one larger coalesced unit. This lowers overhead as NDIS & TCP/IP inspect fewer packet indications during high throughput receive traffic.
+
+### [UDP Receive Segment Coalescing Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
+
+URO is the UDP receive side coalescing feature introduced in 24H2 & NDIS 6.89. With URO, a NIC can combine UDP datagrams from the same flow into one logically contiguous receive buffer and indicate it to the networking stack as a single large packet (reducing per packet CPU usage).
+
+NDIS can query URO state through [`OID_TCP_OFFLOAD_CURRENT_CONFIG`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/oid-tcp-offload-current-config) and change it through [`OID_TCP_OFFLOAD_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/oid-tcp-offload-parameters).
+
+### [Encapsulated Packet Task Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-nvgre-task-offload)
+
+Encapsulated packet task offload is used for overlay traffic such as NVGRE or VXLAN, these packets contain an inner packet wrapped in outer tunnel headers, so the adapter needs to understand both layers before it can offload checksum or segmentation work correctly.
+
+### [IPsec Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/using-registry-values-to-enable-and-disable-task-offloading)
+
+IPsec offload lets the adapter handle supported AH and ESP work instead of doing all IPsec processing in software.
+
+### [TCP Connection Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/connection-offload)
+
+TCP connection offload moves supported TCP connection processing to the adapter for IPv4 or IPv6 connections. It's different from packet task offloads, which only move specific per packet work such as checksum calculation or segmentation.
+
+### [PM Protocol Offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-power-management)
+
+Power management protocol offloads keep selected network presence tasks active while the system sleeps. So for example after the system enters sleep, a NIC can remain in a low power listening state. With `*PMARPOffload`, it can answer ARP requests, with `*PMNSOffload`, it can answer IPv6 neighbor solicitation, with `*PMWiFiRekeyOffload`, a WiFi NIC can handle GTK rekeying for wake on wireless LAN.
 
 # Disable WoL
 
@@ -1385,89 +1452,6 @@ HKR, Ndi\params\*JumboPacket\enum,	"2",	0, "%Bytes9014%"
 HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 ```
 `1514` = Disabled.
-
-# Enable RSC/URO
-
-> "*When receiving data, the miniport driver, NDIS, and TCP/IP must all look at each protocol data unit (PDU) header information separately. When large amounts of data are being received, a large amount of overhead is created. Receive segment coalescing (RSC) reduces this overhead by coalescing a sequence of received segments and passing them to the host TCP/IP stack in one operation, so that NDIS and TCP/IP need to only look at one header for the entire sequence.*"
->
-> — Microsoft, [Receive segment coalescing](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/overview-of-receive-segment-coalescing)
-
-> "*Starting in Windows 11, version 24H2, UDP receive segment coalescing offload (URO) enables network interface cards (NICs) to coalesce UDP receive segments. NICs can combine UDP datagrams from the same flow that match a set of rules into a logically contiguous buffer. These combined datagrams are then indicated to the Windows networking stack as a single large packet.*
->
-> *Coalescing UDP datagrams reduces the CPU cost to process packets in high-bandwidth flows, resulting in higher throughput and fewer cycles per byte.*"
->
-> — Microsoft, [UDP receive segment coalescing offload](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/udp-rsc-offload)
-
-## Registry Value Ranges
-
-`"*UdpRsc": { "Type": "REG_SZ", "Data": 1 }` causes high usage of the system idle process for whatever reason, I'll leave it out for now.
-
-See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";
-    "*RSCIPv4" = 0; // range 0-1
-    "*RSCIPv6" = 0; // range 0-1
-    "ForceRscEnabled" = 0; // range 0-1
-    "RscMode" = 1; // range 0-2
-```
-
-```c
-void __fastcall ReceiveSideCoalescing::ReadRegistryParameters(struct ADAPTER_CONTEXT **this)
-{
-  RegistryKey<unsigned char>::Initialize(
-    (enum RegKeyState *)((char *)this + 36),
-    this[1],
-    *((NDIS_HANDLE *)this[1] + 383),
-    (PUCHAR)"*RSCIPv4",
-    0,
-    1u,     // range 0-1
-    0,
-    0,
-    0),
-
-  RegistryKey<unsigned char>::Initialize(
-    (enum RegKeyState *)((char *)this + 44),
-    this[1],
-    *((NDIS_HANDLE *)this[1] + 383),
-    (PUCHAR)"*RSCIPv6",
-    0,
-    1u,     // range 0-1
-    0,
-    0,
-    0),
-
-  RegistryKey<unsigned char>::Initialize(
-    (enum RegKeyState *)(this + 2),
-    this[1],
-    *((NDIS_HANDLE *)this[1] + 383),
-    (PUCHAR)"ForceRscEnabled",
-    0,
-    1u,     // range 0-1
-    0,
-    0,
-    0),
-
-  RegistryKey<enum HdSplitLocation>::Initialize(
-    (enum RegKeyState *)(this + 3),
-    this[1],
-    *((NDIS_HANDLE *)this[1] + 383),
-    (PUCHAR)"RscMode",
-    0,
-    2u,     // range 0-2
-    1u,
-    0,
-    0),
-}
-```
-
----
-
-Miscellaneous notes:
-```c
-"ForceRscEnabled": { "Type": "REG_SZ", "Data": 1 },
-"RscMode": { "Type": "REG_SZ", "Data": 1 },
-```
 
 # Disable VMQ
 
