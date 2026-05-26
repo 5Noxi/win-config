@@ -341,7 +341,7 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainT
 
 # Enable Network Offloads
 
-Since all topics below are well documented by MS, I won't add much details. Click on the title links for more information on each topic. Note that the main option disables PM protocol offloads.
+Since all topics below are well documented by MS, I won't add much details. Click on the title links for more information on each topic. Note that the main option disables PM protocol offloads, all other offload features are used.
 
 ## [NDIS_OFFLOAD_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddndis/ns-ntddndis-_ndis_offload_parameters)
 
