@@ -1,4 +1,4 @@
-# Quantum/Priority Separation
+﻿# Quantum/Priority Separation
 
 A quantum is the amount of time a thread is permitted to run before Windows checks to see whether another thread at the same priority is waiting to run. If a thread completes its quantum and there are no other threads at its priority, Windows permits the thread to run for another quantum.
 
@@ -2266,7 +2266,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "KernelResumeIoCpuTime" = 0; // REG_DWORD, milliseconds, range 0-4294967295
     "MaxHuffRatio" = 1; // REG_DWORD, range 1-98
     "MultiPhaseResumeDisabled" = 0; // REG_DWORD, range 0-1
-    "SystemPowerPolicy" = "<STRUCT 232 BYTES>"; // REG_BINARY, Size=232
+    "SystemPowerPolicy" = "<STRUCT 232 BYTES>"; // REG_BINARY
 
     // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
     "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
@@ -2353,13 +2353,93 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Overrides" = 0;
 ```
 
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+## TimerCheckFlags
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel2.png?raw=true)
+```asm
+INIT:0000000140BA1A70                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
+INIT:0000000140BA1A78                 dq offset aTimercheckflag ; "TimerCheckFlags"
+INIT:0000000140BA1A80                 dq offset KeTimerCheckFlags
+```
 
-## Notes on SerializeTimerExpiration
+`KeTimerCheckFlags` is used by [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c), only bit `0` seems to be meaningful, means any value with that bit set should behave like `1`.
+
+### KeCheckForTimer
+
+[KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) checks active timer tables for a timer object, DPC object, or DPC routine related to the memory range being checked.
+
+```c
+// KeCheckForTimer
+
+result = KeTimerCheckFlags;
+if ( (KeTimerCheckFlags & 1) != 0 ) // bit 0 set, check enabled
+{
+  BugCheckParameter4 = BugCheckParameter3 + a2; // end of the checked range
+  result = KeQueryActiveProcessorCountEx(0xFFFFu); // active processor count
+```
+
+If `KeTimerCheckFlags & 1` isn't set, the function returns without checking timer tables. When enabled, it checks each active processors timer tables for these addresses:
+
+```c
+// KeCheckForTimer
+
+if ( v16 > v15 && v16 < BugCheckParameter4 )
+  KeBugCheckEx(0xC7u, 0LL, v16, BugCheckParameter3, BugCheckParameter4); // timer object (parameter 1 = 0x0)
+
+if ( v17 > v15 && v17 < BugCheckParameter4 )
+  KeBugCheckEx(0xC7u, 1uLL, v17, BugCheckParameter3, BugCheckParameter4); // DPC object (parameter 1 = 0x1)
+
+if ( v18 >= BugCheckParameter3 && v18 < BugCheckParameter4 )
+  KeBugCheckEx(0xC7u, 2uLL, v18, BugCheckParameter3, BugCheckParameter4); // DPC routine (parameter 1 = 0x2)
+```
+
+The second argument to `KeBugCheckEx` = parameter 1 in the `0xC7` ([`TIMER_OR_DPC_INVALID`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)) bugcheck.
+
+#### [TIMER_OR_DPC_INVALID](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)
+
+*The `TIMER_OR_DPC_INVALID` bug check has a value of `0x000000C7`. This is issued if a kernel timer or deferred procedure call (DPC) is found somewhere in memory where it is not permitted. This condition is usually caused by a driver failing to cancel a timer or DPC before freeing the memory where it resides.*
+
+| Parameter 1 | Parameter 2 | Parameter 3 | Parameter 4 | Cause of error |
+| --- | --- | --- | --- | --- |
+| `0x0` | Address of the timer object | Start of memory range being checked | End of memory range being checked | The timer object was found in a block of memory where a timer object is not permitted. . |
+| `0x1` | Address of the DPC object | Start of memory range being checked | End of memory range being checked | The DPC object was found in a block of memory where a DPC object is not permitted. |
+| `0x2` | Address of the DPC routine | Start of memory range being checked | End of memory range being checked | The DPC routine was found in a block of memory where a DPC object is not permitted. |
+| `0x3` | Address of the DPC object | Processor number | Number of processors in the system | The processor number for the DPC object is not correct. |
+| `0x4` | Address of the DPC routine | The thread's APC disable count before the kernel calls the DPC routine | The thread's APC disable count after the DPC routine is called | The thread's APC disable count was changed during DPC routine execution.<br><br>The APC disable count is decremented each time a driver calls **KeEnterCriticalRegion**, **FsRtlEnterFileSystem**, or acquires a mutex.<br><br>The APC disable count is incremented each time a driver calls **KeLeaveCriticalRegion**, **KeReleaseMutex**, or **FsRtlExitFileSystem**. |
+| `0x5` | Address of the DPC routine | The thread's APC disable count before the kernel calls the DPC routine | The thread's APC disable count after the DPC routine is called | The thread's APC disable count was changed during the execution of timer DPC routine.<br><br>The APC disable count is decremented each time a driver calls **KeEnterCriticalRegion**, **FsRtlEnterFileSystem**, or acquires a mutex.<br><br>The APC disable count is incremented each time a driver calls **KeLeaveCriticalRegion**, **KeReleaseMutex**, or **FsRtlExitFileSystem**. |
+
+#### Callers
+
+Pool free checks (in [ExpFreePoolChecks](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExpFreePoolChecks.c) & [ExFreeHeapPool](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExFreeHeapPool.c)) call [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) (only when `ExpPoolFlags & 1` is set?):
+
+```c
+// ExpFreePoolChecks / ExFreeHeapPool
+
+if ( (ExpPoolFlags & 1) != 0 )
+  KeCheckForTimer(BugCheckParameter3);
+```
+
+[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
+
+```c
+// VfMiscKeInitializeTimerEx_Entry (23H2)
+
+if ( (VfRuleClasses & 0x400000) == 0 )
+  return KeCheckForTimer(*(_QWORD *)(a1 + 16), 64LL); // timer object 64 byte range check
+```
+
+```c
+// VfMiscKeInitializeTimerEx_Entry (25H2)
+
+return ViMiscValidateSynchronizationObject(*(_QWORD *)(a1 + 16));
+```
+
+## SerializeTimerExpiration
+
+```asm
+INIT:0000000140BA15F0                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
+INIT:0000000140BA15F8                 dq offset aSerializetimer ; "SerializeTimerExpiration"
+INIT:0000000140BA1600                 dq offset KiSerializeTimerExpiration
+```
 
 `0` = depends on `HalpAcpiAoacCapable`, can end up with `0`/`1`. `HalpSetPlatformFlags` checks if bit 21
 
@@ -2386,6 +2466,12 @@ This isn't complete, it's currently only for the data ranges.
 ![](https://github.com/nohuto/win-config/blob/main/system/images/kernel-ste.png?raw=true)
 
 Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
+
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/kernel2.png?raw=true)
 
 ## RegistryMachin_* Keys
 
