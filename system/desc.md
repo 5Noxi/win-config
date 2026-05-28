@@ -2394,6 +2394,16 @@ if ( v18 >= BugCheckParameter3 && v18 < BugCheckParameter4 )
 
 The second argument to `KeBugCheckEx` = parameter 1 in the `0xC7` ([`TIMER_OR_DPC_INVALID`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)) bugcheck.
 
+```cpp
+VOID KeBugCheckEx(
+  [in] ULONG     BugCheckCode, // 0xC7
+  [in] ULONG_PTR BugCheckParameter1,
+  [in] ULONG_PTR BugCheckParameter2,
+  [in] ULONG_PTR BugCheckParameter3,
+  [in] ULONG_PTR BugCheckParameter4
+);
+```
+
 #### [TIMER_OR_DPC_INVALID](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)
 
 *The `TIMER_OR_DPC_INVALID` bug check has a value of `0x000000C7`. This is issued if a kernel timer or deferred procedure call (DPC) is found somewhere in memory where it is not permitted. This condition is usually caused by a driver failing to cancel a timer or DPC before freeing the memory where it resides.*
