@@ -2363,15 +2363,15 @@ INIT:0000000140BA1A80                 dq offset KeTimerCheckFlags
 
 `KeTimerCheckFlags` is used by [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c), only bit `0` seems to be meaningful, means any value with that bit set should behave like `1`.
 
-### KeCheckForTimer
+### [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c)
 
-[KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) checks active timer tables for a timer object, DPC object, or DPC routine related to the memory range being checked.
+That function checks active timer tables for a timer object/DPC object/DPC routine related to the memory range being checked.
 
 ```c
 // KeCheckForTimer
 
 result = KeTimerCheckFlags;
-if ( (KeTimerCheckFlags & 1) != 0 ) // bit 0 set, check enabled
+if ( (KeTimerCheckFlags & 1) != 0 ) // bit 0 set = check enabled
 {
   BugCheckParameter4 = BugCheckParameter3 + a2; // end of the checked range
   result = KeQueryActiveProcessorCountEx(0xFFFFu); // active processor count
