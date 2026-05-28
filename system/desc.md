@@ -2006,7 +2006,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     // Determine what is considered in assessing whether a thread is important.
     "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods
-    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero 32 bit data = enabled
+    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero = enabled
     "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
     "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
     "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
@@ -2046,7 +2046,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
     "PerfIsoEnabled" = 0; // KiPerfIsoEnabled
     "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
-    "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors
+    "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors, seems unused (but initialized)
     "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
     "RebalanceMinPriority" = 1; // KiRebalanceMinPriority
     "ReservedCpuSets" = 0; // KiReservedCpuSets
