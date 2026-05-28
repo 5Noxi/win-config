@@ -2394,7 +2394,7 @@ if ( v18 >= BugCheckParameter3 && v18 < BugCheckParameter4 )
 
 The second argument to `KeBugCheckEx` = parameter 1 in the `0xC7` ([`TIMER_OR_DPC_INVALID`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)) bugcheck.
 
-```cpp
+```c
 VOID KeBugCheckEx(
   [in] ULONG     BugCheckCode, // 0xC7
   [in] ULONG_PTR BugCheckParameter1,
