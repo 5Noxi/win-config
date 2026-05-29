@@ -1593,22 +1593,26 @@ RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Ty
 RegSetValue	HKLM\System\CurrentControlSet\Control\Power\HiberFileType	SUCCESS	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-## DisableIdleStatesAtBoot Notes
+## DisableIdleStatesAtBoot
 
-Notes on `Disable Idle States At Boot` SUBOPTION (`DisableIdleStatesAtBoot`):
+Notes on `Disable Idle States At Boot` SUBOPTION, data `-1` (`PpmIdleDisableStatesAtBoot dd 0FFFFFFFFh`) = `0`:
 
-The data `-1` (`PpmIdleDisableStatesAtBoot dd 0FFFFFFFFh`) gets handled as `0`
 ```cpp
 if ( PpmIdleDisableStatesAtBoot == -1 )
   PpmIdleDisableStatesAtBoot = 0;
 ```
+
 `0` = skips all PpmInstall*IdleStates disable writes
 `1` = would write disable in `PpmInstallCoordinatedIdleStates`/`PpmInstallPlatformIdleStates`
+
 ```cpp
 if ( PpmIdleDisableStatesAtBoot )
   *(_DWORD *)(v20 + 80) = 0x80000000;
+
 ```
+
 `2` = would do the same as `1` including disable write in `PpmInstallNewIdleStates`
+
 ```cpp
 if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
   *(_DWORD *)(v23 + 32) = 0x80000000;

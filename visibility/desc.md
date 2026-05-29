@@ -179,7 +179,7 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 ## Cursor Previews
 
 | Name | Preview |
-|--|--|
+| --- | --- |
 | Custom colors + dark/light/invert | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/defaults.png?raw=true) |
 | [Simplify Dot](https://vsthemes.org/en/cursors/static/47356-simplify-dot-2.html) (Dark/Light) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/simplify-dot.webp?raw=true) |
 | [Colloid Dark](https://vsthemes.org/en/cursors/black/68372-colloid-dark.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/colloid-dark.webp?raw=true) |

@@ -2443,46 +2443,6 @@ if ( (VfRuleClasses & 0x400000) == 0 )
 return ViMiscValidateSynchronizationObject(*(_QWORD *)(a1 + 16));
 ```
 
-## SerializeTimerExpiration
-
-```asm
-INIT:0000000140BA15F0                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
-INIT:0000000140BA15F8                 dq offset aSerializetimer ; "SerializeTimerExpiration"
-INIT:0000000140BA1600                 dq offset KiSerializeTimerExpiration
-```
-
-`0` = depends on `HalpAcpiAoacCapable`, can end up with `0`/`1`. `HalpSetPlatformFlags` checks if bit 21
-
-```c
-if ( (*(_DWORD *)(a1 + 112) & 0x200000) != 0 )
-  HalpPlatformFlags |= 8u;
-```
-
-is set or not, if set it's `1`, if not `0`.
-
-```
-LOW_POWER_S0_IDLE_CAPABLE Bit offset 21. Indicates that the platform supports low-power idle states within the ACPI S0 system power state that are more energy efficient than any Sx sleep state. If this flag is set, Windows won't try to sleep and resume, but will instead use platform idle states and connected standby.
-```
-
-Means for desktops/servers it's usually `0`, since "S0 Low‑Power Idle/Modern Standby" is more of a laptop/tablet thing.
-
-You can check if the bit is true or false using [iasl & acpidump](https://github.com/acpica/acpica).
-
-`1` = forced on (uses CPU 0 `KiProcessorBlock[0]`)
-`>=2` = forced `0`
-
-This isn't complete, it's currently only for the data ranges.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel-ste.png?raw=true)
-
-Read more about 'Timer expiration' in [Windows Interals E7, P1, P.66f](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
-
-## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel0.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/kernel2.png?raw=true)
-
 ## RegistryMachin_* Keys
 
 These are from `ntoskrnl.exe`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
