@@ -870,19 +870,30 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
 
-## PowerThrottlingOff Details
+## PowerThrottlingOff
 
-```
-Power throttling, introduced in W10 and present in W11, limits CPU usage for background or minimized applications. It reduces the processing power available to these apps while allowing active applications to run normally.
-```
+> "*The Quality of Service (QoS) associated with a thread is used to indicate the desired performance and power efficiency. Each thread is assigned to a QoS level. While scheduling priority remains the main metric by which the system determines which thread to schedule next, QoS can influence core selection and processor power management. On platforms with heterogeneous processors, the QoS of a thread may restrict scheduling to a subset of processors, or indicate a preference for a particular class of processor.*"
+>
+> — Microsoft, [Quality of Service](https://learn.microsoft.com/en-us/windows/win32/procthread/quality-of-service)
 
-When looking into the pseudocode (PopInitializeHeteroProcessors) it shows that if the value is set to nonzero it would:
-- force QoS allow variable `v5` to `0` and stores it in `PpmPerfQosSupportedAndAllowed` at the end
-- passes `v5` (`0`) value into `KeConfigureHeteroProcessors`
-- skips `PpmIdleEnableIdleDurationExpirationTimeout` (`PpmIdleDurationExpirationTimeout = (unsigned int)(10000 * PpmIdleDurationExpirationTimeoutMs);`, `PpmInstallNewIdleStates` can also set `PpmIdleDurationExpirationTimeout`), causing the idle expiration to be off by exiting PoExecuteIdleCheck instantly (otherwise periodic checks would run, see `PoExecuteIdleCheck`)
-
-All of this seems to depend on whenever either
 ```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
+    "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable
+```
+
+See current value using WinDbg:
+
+```c
+dd nt!PpmPerfQosGroupPolicyDisable L1
+```
+
+### Processor QoS
+
+[`PopInitializeHeteroProcessors`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) decides whether PPM (processor power management) QoS is allowed:
+
+```c
+// PopInitializeHeteroProcessors
+
 v4 = 0;
 if ( (PpmBackgroundProfile || PpmEntryLevelPerfProfile || PpmMultimediaQosProfile || PpmPerfAlwaysComputeQosEnabled)
   && PpmPerfSchedulerDirectedPerfStatesSupported
@@ -899,22 +910,66 @@ if ( v4 )
 {
 LABEL_13:
   v5 = 1;
-  if ( !PpmPerfQosGroupPolicyDisable ) // if PowerThrottlingOff = 1, then v5 = 0
+  if ( !PpmPerfQosGroupPolicyDisable ) // leave QoS allowed unless PowerThrottlingOff is nonzero
     goto LABEL_15;
 }
-v5 = 0; // forced 0 if v4 not true
+v5 = 0;
 LABEL_15:
 ```
-or `PpmPerfVmQosSupported` (hypervisor present, HvlIsRootPowerSchedulerQosPresent) are true. If both aren't true, then v5 is already 0 means changing PowerThrottlingOff would have no impact?
 
-On my system both aren't true means that changing the value has no impact as v5 can't be `1` (this is my current interpretation).
-
-Note that this is based on [binary build version 22631 (23H2)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) and isn't complete. I might add more/get better structure into whenever I've time.
+A nonzero `PowerThrottlingOff` forces `v5` ("allow state") to `0`, which gets passed into [`KeConfigureHeteroProcessors`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeConfigureHeteroProcessors.c) and stored in `PpmPerfQosSupportedAndAllowed`.
 
 ```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\PowerThrottling";
-    "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
+db nt!PpmPerfQosSupportedAndAllowed L1
 ```
+
+`v4` gets set when one of `PpmBackgroundProfile`, `PpmEntryLevelPerfProfile`, `PpmMultimediaQosProfile`, `PpmPerfAlwaysComputeQosEnabled`, `PpmPerfSchedulerDirectedPerfStatesSupported` is nonzero & `KeQueryActiveProcessorCountEx(0) >= 2`. It would also get set if `PpmPerfVmQosSupported` is true ([`PpmCheckInitProcessors`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmCheckInitProcessors.c) sets it to `1` when a hypervisor is present and [`HvlIsRootPowerSchedulerQosPresent`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/HvlIsRootPowerSchedulerQosPresent.c) returns true).
+
+```c
+dq nt!PpmBackgroundProfile L1
+dq nt!PpmEntryLevelPerfProfile L1
+dq nt!PpmMultimediaQosProfile L1
+db nt!PpmPerfAlwaysComputeQosEnabled L1
+db nt!PpmPerfSchedulerDirectedPerfStatesSupported L1
+dq nt!KeActiveProcessors+8 L1
+db nt!PpmPerfVmQosSupported L1
+```
+
+I currently don't know if the `KeActiveProcessors` offset is the same for all builds, look at it on your own via:
+
+```c
+uf nt!KeQueryActiveProcessorCountEx
+```
+
+### QoS Policies
+
+[`PpmPerfCalculateQosClassPolicies`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmPerfCalculateQosClassPolicies.c) also uses the value:
+
+```c
+// PpmPerfCalculateQosClassPolicies
+if ( PpmPerfQosGroupPolicyDisable )
+  v16 |= 0x100u; // PowerThrottlingOff on
+```
+
+A nonzero value adds flag `0x100` & skips the remaining policy part for that class.
+
+### Idle Duration Expiration
+
+`v5 = 0` can also prevent one call to [`PpmIdleEnableIdleDurationExpirationTimeout`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleEnableIdleDurationExpirationTimeout.c):
+
+```c
+// PopInitializeHeteroProcessors
+if ( v5 )
+  PpmIdleEnableIdleDurationExpirationTimeout();
+```
+
+That helper sets `PpmIdleDurationExpirationTimeout`, [`PoExecuteIdleCheck`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoExecuteIdleCheck.c) returns instantly when this value is `0` ([`PpmInstallNewIdleStates`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmInstallNewIdleStates.c) could also set it).
+
+```c
+dd nt!PpmIdleDurationExpirationTimeout L1
+```
+
+Everything above is based on 23H2, things changed a bit on 24H2, e.g. `PpmEcoQosProfile`/`PpmUtilityQosProfile` got added, but other parts seem to work the same.
 
 ## Suboptions
 
