@@ -1333,7 +1333,7 @@ I may add more details here soon. RSS is enabled by default, so this is currentl
 
 ## RssReadRegistryParameters
 
-[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/power/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
+[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/network/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
 ```c
 void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
 {

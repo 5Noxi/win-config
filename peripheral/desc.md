@@ -787,7 +787,7 @@ Stop USB devices when my screen is off to help battery.
 ```
 `Bluetooth & devices` > `USB` > `USB battery saver`
 
-- [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/power/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
+- [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
 
 # USBHUB Values
 
@@ -915,7 +915,7 @@ Most values are read via `ReadMultiSzRegistryValueAndCompareId` using the device
 
 [Database-engine/database-file-operations](https://learn.microsoft.com/en-us/troubleshoot/sql/database-engine/database-file-operations/troubleshoot-os-4kb-disk-sector-size?tabs=registry-editor#resolution-steps-for-disk-sector-size-errors-in-sql-server) validates that `ForcedPhysicalSectorSizeInBytes` is a Multi-String value, which confirms a part of my assumption, but I'm still not 100% sure about the rest. Feel free to correct me.
 
-See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettings23H2.c), [GetRegistrySettings24H2.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettings24H2.c), [GetRegistrySettings26H1.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettings26H1.c), [stornvmeGetDynamicRegistrySettings26H1.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/stornvmeGetDynamicRegistrySettings26H1.c), and [GetRegistrySettingsForSpecificKey26H1.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettingsForSpecificKey26H1.c) for details.
+See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettings23H2.c), [GetRegistrySettings24H2.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettings24H2.c), [stornvmeGetDynamicRegistrySettings26H1.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/stornvmeGetDynamicRegistrySettings26H1.c), and [GetRegistrySettingsForSpecificKey26H1.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/stornvme/GetRegistrySettingsForSpecificKey26H1.c) for details.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\stornvme\\Parameters\\Device";
@@ -1722,7 +1722,7 @@ Changing it is one of the best ways to reduce eye stain. Using a warm temperatur
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/monitor2.png?raw=true)
 
 ## **Brightness** - `50-70`  
-Depends on how much light there is in your room. If there's a lot of light, you'll have to increase the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/). If you mainly play in the dark, it's recommended to reduce the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to a level that is comfortable for your eyes. Remember: decreasing it *can* lower the [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) by `50+%` -> known to be phototoxic to your eyes ([retina](https://en.wikipedia.org/wiki/Retina) - light sensitive tissue), therefore lower the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to reduce the intensity of [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/). For your general knowledge, [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) has a short wavelength (~[`450-500`](https://www.livephysics.com/physical-constants/optics-pc/wavelength-colors/)), which means that it carries more energy -> higher impact. Don't dim it too much, or it may end up in worse focus.
+Depends on how much light there is in your room. If there's a lot of light, you'll have to increase the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/). If you mainly play in the dark, it's recommended to reduce the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to a level that is comfortable for your eyes. Remember: decreasing it *can* lower the [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) by `50+%` -> known to be phototoxic to your eyes ([retina](https://en.wikipedia.org/wiki/Retina) - light sensitive tissue), therefore lower the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to reduce the intensity of [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/). For your general knowledge, [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) has a short wavelength (~`450-500`), which means that it carries more energy -> higher impact. Don't dim it too much, or it may end up in worse focus.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/monitor3.png?raw=true)
 

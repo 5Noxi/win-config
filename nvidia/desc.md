@@ -174,7 +174,7 @@ Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/b
 
 ### Optional DDU Cleanup
 
-Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver), enables Safe Boot, and reboots.
+Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.zip) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.ps1), enables Safe Boot, and reboots.
 
 ### Driver Installation
 
@@ -216,7 +216,7 @@ The following includes details of how the panel sets the changes and more, a lot
 
 - 3D Settings
   - [Adjust image settings with preview](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--adjust-image-settings-with-preview)
-  - [Manage 3D settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--manage-3D-settings)
+  - [Manage 3D settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--manage-3d-settings)
   - [Configure Surround, PhysX](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--configure-surround-physx)
 - Display
   - Change resolution
@@ -297,7 +297,7 @@ Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends o
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : HueRegistryKey
 ```
-`HueRegistryKey` controls the `Hue` options, it is a `REG_BINARY` type ([`displayDB.cpp`](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md/blob/main/files/displayDB.cpp)):
+`HueRegistryKey` controls the `Hue` options, it is a `REG_BINARY` type ([`displayDB.cpp`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)):
 ```c
 // 0°
 HKLM\System\CurrentControlSet\Services\nvlddmkm\State\DisplayDatabase\MSI3CB01222_2E_07E4_FF\HueRegistryKey    Type: REG_BINARY, Length: 20, Data: DB 01 00 00 14 00 00 00 10 27 00 00 00 00 00 00

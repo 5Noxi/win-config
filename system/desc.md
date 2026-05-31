@@ -1365,7 +1365,7 @@ boosted = 24 // with relative priority it can be 23-26
 The MMCSS boosts the priority of threads that are working on high-priority multimedia tasks. MMCSS determines the priority of a thread using the following factors:
 
 - The base priority of the task.
-- The *Priority* parameter of the [**AvSetMmThreadPriority**](/windows/desktop/api/Avrt/nf-avrt-avsetmmthreadpriority) function.
+- The *Priority* parameter of the [**AvSetMmThreadPriority**](https://learn.microsoft.com/en-us/windows/win32/api/avrt/nf-avrt-avsetmmthreadpriority) function.
 - Whether the application is in the foreground.
 - How much CPU time is being consumed by the threads in each category.
 
@@ -1482,7 +1482,7 @@ INIT:0000000140BA1690 dq offset KiEnableClockTimerPerCpuTickScheduling
 `SerializeTimerExpiration` decides which processor timer table is used for kernel timer (`KTIMER`) expiration.
 
 - Disabled = current processor uses its own PRCB (processor control block) timer table
-- Enabled = the serialized path uses CPU 0 timer table (`KiProcessorBlock[0]`), while only the current clock owner is allowed to enter expiration handling (this also means that CPU 0 timer table is used, but the expiration code runs on the clock owner (`KiClockTimerOwner`), see [KiDynamicTickDisableReason]())
+- Enabled = the serialized path uses CPU 0 timer table (`KiProcessorBlock[0]`), while only the current clock owner is allowed to enter expiration handling (this also means that CPU 0 timer table is used, but the expiration code runs on the clock owner (`KiClockTimerOwner`), see [KiDynamicTickDisableReason](https://www.noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason))
 
 ```c
 // SerializeTimerExpiration = 1
@@ -2321,7 +2321,7 @@ if ( v32 - *((_QWORD *)v34 + 5) > v33 ) // current composition QPC time - cached
 
 #### Examples
 
-You can see the differences by moving a blurry window above a animation, for example. I used a simple [rotating dot]((https://github.com/nohuto/win-config/blob/main/system/assets/rotatingdot.html)).
+You can see the differences by moving a blurry window above a animation, for example. I used a simple [rotating dot](https://github.com/nohuto/win-config/blob/main/system/assets/rotatingdot.html).
 
 ##### 1000ms
 
@@ -3934,7 +3934,7 @@ Some requirements for Segment Heap (in [`RtlCreateHeap`](https://github.com/nohu
 
 - [processhacker.sourceforge.io/doc/ntrtl_8h_source](https://processhacker.sourceforge.io/doc/ntrtl_8h_source.html)
 
-Use [heap_dump](https://www.noverse.dev/docs/win-config/system/enable-segment-heap/#heap_dump) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
+Use [heap_dump](https://www.noverse.dev/docs/win-config/system/heap-type/#heap_dump) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
 
 ```c
 // Enabled = not present
@@ -4017,7 +4017,7 @@ You can see whenever a program uses 'Segment Heap' or 'NT Heap' via for example 
 
 # Disable Scheduled Tasks
 
-This list was created using my small [`scheduledTasksLists.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/scheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given. See example output of a stock 25H2 installation: [scheduled-tasks.json](https://github.com/nohuto/win-config/blob/main/system/assets/scheduled-tasks.json).
+This list was created using my small [`ScheduledTasksList.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/ScheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given.
 
 ## Scheduled Tasks Table
 
