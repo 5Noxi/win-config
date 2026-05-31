@@ -1575,7 +1575,7 @@ if ( (*(_DWORD *)(a1 + 112) & 0x200000) != 0 ) // 0x200000 = bit 21
 
 ### ActiveTimerTable
 
-Serialized expiration uses core 0 timer table (`KiProcessorBlock[0]`) instead of the current processors timer table ([`KiTimerExpirationDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiTimerExpirationDpc.c) & [`KiCheckForTimerExpiration`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiCheckForTimerExpiration.c) work the same), non serialized uses the current PRCB timer table.
+Serialized expiration uses CPU 0 timer table (`KiProcessorBlock[0]`) instead of the current processors timer table ([`KiTimerExpirationDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiTimerExpirationDpc.c) & [`KiCheckForTimerExpiration`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiCheckForTimerExpiration.c) work the same), non serialized uses the current PRCB timer table.
 
 ```c
 // KiSelectActiveTimerTable
@@ -1693,6 +1693,8 @@ lkd> dx ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner
 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner : 0x0 [Type: unsigned char]
 ```
 
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntickon.png?raw=true" width="48%"> <img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntickoff?raw=true" width="48%">
+
 [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareClockTimerForIdle.c) is that idle part:
 
 ```c
@@ -1741,7 +1743,7 @@ CurrentPrcb->ClockOwner = 0; // clear current PRCB ClockOwner
 // KePrepareClockTimerForIdle
 
 KiClockTimerNextTickTime = InterruptTimePrecise + v25; // global next tick due time
-CurrentPrcb->ClockTimerState.NextTickDueTime = InterruptTimePrecise + v25; // per-PRCB next tick due time
+CurrentPrcb->ClockTimerState.NextTickDueTime = InterruptTimePrecise + v25; // per PRCB next tick due time
 ```
 
 When the system leaves that idle state, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) resumes clock handling, if per CPU clock timers are supported (`KiClockTimerPerCpu`), this can make the selected CPU the clock owner:
@@ -1764,7 +1766,7 @@ if ( *p_Number == FirstSetRightAffinity ) // current CPU is selected clock owner
   {
     if ( KiClockTimerPerCpu )
     {
-      CurrentPrcb->ClockOwner = 1; // mark current PRCB as clock owner
+      CurrentPrcb->ClockOwner = 1; // use current PRCB as clock owner
       LODWORD(KiClockTimerOwner) = v17; // set KiClockTimerOwner to current CPU
       if ( !(unsigned __int8)KiGetPendingTick() )
         off_140C01C90[0]();
@@ -1803,28 +1805,6 @@ db nt!KiDynamicTickInitialized L1
 dd nt!KiDynamicTickDisableReason L1
 ```
 
-Example showing clock owner switches between CPU 0/10 (dynamic tick on):
-
-```c
-lkd> .for (r @$t0 = 0; @$t0 < 10; r @$t0 = @$t0 + 1) { dd nt!KiClockTimerOwner L1; .sleep 10 }
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  0000000a // 10
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  0000000a
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  00000000
-fffff801`2e041ba0  0000000a
-fffff801`2e041ba0  00000000
-```
-
 ## EnablePerCpuClockTickScheduling
 
 `EnablePerCpuClockTickScheduling` controls `KiClockTimerPerCpuTickScheduling`, but only when `KiClockTimerPerCpu` is nonzero.
@@ -1857,7 +1837,7 @@ lkd> dd nt!KiEnableClockTimerPerCpuTickScheduling L1
 fffff801`2e11edc8  00000002
 ```
 
-`KiClockTimerPerCpuTickScheduling` decides whether clock tick scheduling uses global clock state or per-PRCB clock timer state. When it is `0`, it uses global values like `KiClockTimerNextTickTime`/`KeTimeIncrement`/`KiLastRequestedTimeIncrement`; when it is `1`, it uses `CurrentPrcb->ClockTimerState`.
+`KiClockTimerPerCpuTickScheduling` decides whether clock tick scheduling uses global clock state or per PRCB clock timer state. When it is `0`, it uses global values like `KiClockTimerNextTickTime`/`KeTimeIncrement`/`KiLastRequestedTimeIncrement`; when it is `1`, it uses `CurrentPrcb->ClockTimerState`.
 
 Below you can see that with `KiClockTimerPerCpuTickScheduling = 01` each PRCB has its own `NextTickDueTime`/`TimeIncrement`/`LastRequestedTimeIncrement` (not following the global values), and with `00`, PRCB 1 has no own values (uses global) & PRCB 0 has values, which are equal to the global values (these aren't used).
 
@@ -1942,7 +1922,7 @@ CurrentPrcb = KeGetCurrentPrcb();
 v1 = 0LL;
 InterruptTimePrecise = RtlGetInterruptTimePrecise(&v5);
 if ( KiClockTimerPerCpuTickScheduling )
-  NextTickDueTime = CurrentPrcb->ClockTimerState.NextTickDueTime; // per-PRCB next tick due time
+  NextTickDueTime = CurrentPrcb->ClockTimerState.NextTickDueTime; // per PRCB next tick due time
 else
   NextTickDueTime = KiClockTimerNextTickTime; // global next tick due time
 ```
@@ -1964,8 +1944,8 @@ if ( v4 )
 }
 else
 {
-  *a2 = CurrentPrcb->ClockTimerState.TimeIncrement; // per-PRCB current increment
-  result = CurrentPrcb->ClockTimerState.LastRequestedTimeIncrement; // per-PRCB requested increment
+  *a2 = CurrentPrcb->ClockTimerState.TimeIncrement; // per PRCB current increment
+  result = CurrentPrcb->ClockTimerState.LastRequestedTimeIncrement; // per PRCB requested increment
   *a1 = result;
   if ( CurrentPrcb->ClockTimerState.OneShotState == KClockTimerOneShotArmed )
     *a3 = 1;
