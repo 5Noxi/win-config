@@ -1537,7 +1537,7 @@ To read the current value, use:
 dd nt!KiSerializeTimerExpiration L1
 ```
 
-`SerializeTimerExpiration` is checked once on CPU 0 in [`KeInitializeTimerTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitializeTimerTable.c):
+`SerializeTimerExpiration` gets read in [`KeInitializeTimerTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitializeTimerTable.c):
 
 ```c
 // KeInitializeTimerTable
@@ -1620,7 +1620,7 @@ lkd> dt nt!_KTIMER_TABLE_STATE
 
 [`!timer`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-timer) shows where `KTIMER` objects are queued (dumps all the current registered timers), which is another way to see the timer table differences (the code blocks below show snippets from my output, not everything).
 
-With `SerializeTimerExpiration = 1`, all timers are queued under CPU 0:
+With `SerializeTimerExpiration = 1`, all timers (`KTIMER`) are queued under CPU 0:
 
 ```c
 lkd> !timer
@@ -1839,7 +1839,12 @@ fffff801`2e11edc8  00000002
 
 `KiClockTimerPerCpuTickScheduling` decides whether clock tick scheduling uses global clock state or per PRCB clock timer state. When it is `0`, it uses global values like `KiClockTimerNextTickTime`/`KeTimeIncrement`/`KiLastRequestedTimeIncrement`; when it is `1`, it uses `CurrentPrcb->ClockTimerState`.
 
-Below you can see that with `KiClockTimerPerCpuTickScheduling = 01` each PRCB has its own `NextTickDueTime`/`TimeIncrement`/`LastRequestedTimeIncrement` (not following the global values), and with `00`, PRCB 1 has no own values (uses global) & PRCB 0 has values, which are equal to the global values (these aren't used).
+Below you can see that with `KiClockTimerPerCpuTickScheduling = 01` each PRCB has its own `NextTickDueTime`/`TimeIncrement`/`LastRequestedTimeIncrement` (not following the global values), and with `00`, PRCB 1 has no own values (uses global) & PRCB 0 has values, which are equal to the global values (these aren't used), means all use the same values.
+
+- `LastRequestedTimeIncrement` = requested timer interval
+- `TimeIncrement` = actual timer interval used
+
+You can practically see the differences here too by requesting a interval via [`NtSetTimerResolution`](https://ntdoc.m417z.com/ntsettimerresolution).
 
 ```c
 // KiClockTimerPerCpuTickScheduling = 01
@@ -1848,8 +1853,8 @@ fffff804`6bf1ea45  01                                               .
 lkd> dx -r1 ((nt!_KPRCB**)&nt!KiProcessorBlock)[0]->ClockTimerState
 ((nt!_KPRCB**)&nt!KiProcessorBlock)[0]->ClockTimerState                 [Type: _KCLOCK_TIMER_STATE]
     [+0x000] NextTickDueTime  : 0x4dd8e7478 [Type: unsigned __int64]
-    [+0x008] TimeIncrement    : 0x270c [Type: unsigned long]
-    [+0x00c] LastRequestedTimeIncrement : 0x2710 [Type: unsigned long]
+    [+0x008] TimeIncrement    : 0x270c [Type: unsigned long] // 0.9996 ms
+    [+0x00c] LastRequestedTimeIncrement : 0x2710 [Type: unsigned long] // 1 ms
     [+0x010] OneShotState     : KClockTimerOneShotUnarmed (0) [Type: _KCLOCK_TIMER_ONE_SHOT_STATE]
     [+0x014] ExpectedWakeReason : KClockTimerKTimerExpirationPseudoHr (1) [Type: _KCLOCK_TIMER_DEADLINE_TYPE]
     [+0x018] ClockTimerEntries [Type: _KCLOCK_TIMER_DEADLINE_ENTRY [7]]
@@ -1861,8 +1866,8 @@ lkd> dx -r1 ((nt!_KPRCB**)&nt!KiProcessorBlock)[0]->ClockTimerState
 lkd> dx -r1 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockTimerState
 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockTimerState                 [Type: _KCLOCK_TIMER_STATE]
     [+0x000] NextTickDueTime  : 0x12e6147 [Type: unsigned __int64]
-    [+0x008] TimeIncrement    : 0x26259 [Type: unsigned long]
-    [+0x00c] LastRequestedTimeIncrement : 0x2625a [Type: unsigned long]
+    [+0x008] TimeIncrement    : 0x26259 [Type: unsigned long] // 15.6249 ms
+    [+0x00c] LastRequestedTimeIncrement : 0x2625a [Type: unsigned long] // 15.625 ms
     [+0x010] OneShotState     : KClockTimerOneShotUnarmed (0) [Type: _KCLOCK_TIMER_ONE_SHOT_STATE]
     [+0x014] ExpectedWakeReason : KClockTimerQuantumEnd (3) [Type: _KCLOCK_TIMER_DEADLINE_TYPE]
     [+0x018] ClockTimerEntries [Type: _KCLOCK_TIMER_DEADLINE_ENTRY [7]]
@@ -1874,9 +1879,9 @@ lkd> dx -r1 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockTimerState
 lkd> dq nt!KiClockTimerNextTickTime L1
 fffff804`6be41bb0  00000004`e142cb4a
 lkd> dd nt!KeTimeIncrement L1
-fffff804`6bf1eaf8  0000270c
+fffff804`6bf1eaf8  0000270c // 0.9996 ms
 lkd> dd nt!KiLastRequestedTimeIncrement L1
-fffff804`6be41ba8  00002710
+fffff804`6be41ba8  00002710 // 1 ms
 
 // KiClockTimerPerCpuTickScheduling = 00
 lkd> db nt!KiClockTimerPerCpuTickScheduling L1
@@ -1884,8 +1889,8 @@ fffff805`33b1ea45  00                                               .
 lkd> dx -r1 ((nt!_KPRCB**)&nt!KiProcessorBlock)[0]->ClockTimerState
 ((nt!_KPRCB**)&nt!KiProcessorBlock)[0]->ClockTimerState                 [Type: _KCLOCK_TIMER_STATE]
     [+0x000] NextTickDueTime  : 0x55f57b3b [Type: unsigned __int64]
-    [+0x008] TimeIncrement    : 0x270c [Type: unsigned long]
-    [+0x00c] LastRequestedTimeIncrement : 0x2710 [Type: unsigned long]
+    [+0x008] TimeIncrement    : 0x270c [Type: unsigned long] // 0.9996 ms
+    [+0x00c] LastRequestedTimeIncrement : 0x2710 [Type: unsigned long] // 1 ms
     [+0x010] OneShotState     : KClockTimerOneShotUnarmed (0) [Type: _KCLOCK_TIMER_ONE_SHOT_STATE]
     [+0x014] ExpectedWakeReason : KClockTimerKTimerExpirationNonHr (0) [Type: _KCLOCK_TIMER_DEADLINE_TYPE]
     [+0x018] ClockTimerEntries [Type: _KCLOCK_TIMER_DEADLINE_ENTRY [7]]
@@ -1910,9 +1915,9 @@ lkd> dx -r1 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockTimerState
 lkd> dq nt!KiClockTimerNextTickTime L1
 fffff805`33a41bb0  00000000`60cd11f3
 lkd> dd nt!KeTimeIncrement L1
-fffff805`33b1eaf8  0000270c
+fffff804`6bf1eaf8  0000270c // 0.9996 ms
 lkd> dd nt!KiLastRequestedTimeIncrement L1
-fffff805`33a41ba8  00002710
+fffff804`6be41ba8  00002710 // 1 ms
 ```
 
 ```c
@@ -1982,7 +1987,7 @@ if ( !(_BYTE)KiDynamicTickDisableReason && (v23 & 8) == 0 )
 ```c
 // KeInitializeClock
 
-if ( KiClockTimerPerCpu && KiSerializeTimerExpiration ) // SerializeTimerExpiration must be 1 here (as 2 = 0 as shown above)
+if ( KiClockTimerPerCpu && KiSerializeTimerExpiration ) // SerializeTimerExpiration must be 1 here (as >=2 = 0 as shown above)
   KiClockTimerPerCpuTickScheduling = 1; // serialization enables per CPU clock tick scheduling
 if ( KiEnableClockTimerPerCpuTickScheduling && KiClockTimerPerCpu )
   KiClockTimerPerCpuTickScheduling = KiEnableClockTimerPerCpuTickScheduling == 1; // override
@@ -2507,7 +2512,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "CacheErrataOverride" = 0; // KiTLBCOverride
     "CacheIsoBitmap" = 0; // KiCacheIsoBitmap
     "DebuggerIsStallOwner" = 0; // KiDebuggerIsStallOwner (KiSetDebuggerOwner)
-    "DebugPollInterval" = 2000; // KiDebugPollInterval, debugger enabled (KdDebuggerEnabled) timer path uses 10000 * value (KiGetNextTimerExpirationDueTime)
+    "DebugPollInterval" = 2000; // KiDebugPollInterval, if debugger enabled (KdDebuggerEnabled) timer path uses 10000 * value (KiGetNextTimerExpirationDueTime)
     "DefaultDynamicHeteroCpuPolicy" = 3; // KiDefaultDynamicHeteroCpuPolicy, behavior of Dynamic hetero policy All (0) (all available) Large (1) LargeOrIdle (2) Small (3) SmallOrIdle (4) Dynamic (5) (use priority and other metrics to decide) BiasedSmall (6) (use priority and other metrics, but prefer small) BiasedLarge (7).
     "DefaultHeteroCpuPolicy" = 5; // KiDefaultHeteroCpuPolicy
     "DeviceOwnerProtectionDowngradeAllowed" = 0; // SeDeviceOwnerProtectionDowngradeAllowed
