@@ -2046,7 +2046,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
     "PerfIsoEnabled" = 0; // KiPerfIsoEnabled
     "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
-    "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors, seems unused (but initialized)
+    "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors, seems unused (but initialized), was probably used to "power off" processors that are frozen (see windbg !frozen)
     "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
     "RebalanceMinPriority" = 1; // KiRebalanceMinPriority
     "ReservedCpuSets" = 0; // KiReservedCpuSets
@@ -2084,6 +2084,9 @@ Everything listed below is based on personal findings, mistakes may exist.
     "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching
     "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ? https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
+    // lkd> !gflag
+    // Current NtGlobalFlag contents: 0x00000000
+    // Current NtGlobalFlag2 contents: 0x00000000
     "HeapSegmentReserve" = 1048576; // REG_DWORD, range 65536-16580608, 65536 steps
     "HeapSegmentCommit" = 8192; // REG_DWORD, range 4096-16580608, 4096 steps
     "HeapDeCommitFreeBlockThreshold" = 4096; // REG_DWORD, range 0-4294967280, 16 steps

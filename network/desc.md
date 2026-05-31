@@ -1,32 +1,37 @@
 # Encrypted DNS
 
-The DNS server get's applied via registry (tracked while applying it via the settings):
+If you're wondering what `Family`/`Malware`/`Extended` etc. behind the provider names mean, see '[Mullvad](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls#specifications)', '[Quad9](https://docs.quad9.net/services/)', '[AdGuard](https://adguard-dns.io/kb/general/dns-providers/)', '[Cloudflare](https://developers.cloudflare.com/1.1.1.1/setup/)' for details.
+
+The DNS server get's applied via registry (captured while applying it via the settings):
 ```c
 HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\{NetID}\NameServer  Type: REG_SZ, Length: 24, Data: 194.242.2.5
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohTemplate  Type: ad.net/dns-query
 HKLM\System\CurrentControlSet\Services\Dnscache\InterfaceSpecificParameters\{NetID}\DohInterfaceSettings\Doh\194.242.2.5\DohFlags  Type: REG_QWORD, Length: 8, Data: 2
 ```
 
-If you're wondering what `Family`/`Malware`/`Extended` etc. behind the provider names mean, see '[Mullvad](https://mullvad.net/en/help/dns-over-https-and-dns-over-tls#specifications)', '[Quad9](https://docs.quad9.net/services/)', '[AdGuard](https://adguard-dns.io/kb/general/dns-providers/)', '[Cloudflare](https://developers.cloudflare.com/1.1.1.1/setup/)' for details. If you want to use NextDNS, create your own profile [here](https://my.nextdns.io/)
-
-`DohFlags` data meaning:
-- `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO (0x0001)`: If this option is present, then the DNS server that's referenced by this property will load its URI template from the system DNS-over-HTTPS system list. When this option is present, the Template field must be set to NULL. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE option.
-- `DNS_DOH_SERVER_SETTINGS_ENABLE (0x0002)`: If this option is present, then the Template field must point to a valid DNS-over-HTTPS URI template. This option must not be used together with the DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO option.
-- `DNS_DOH_SERVER_SETTINGS_FALLBACK_TO_UDP (0x0004)`: This option indicates that the referenced server may fallback to unsecure name resolution (UDP/TCP) if the DNS-over-HTTPS query failed. This option can be used only in addition to DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO or DNS_DOH_SERVER_SETTINGS_ENABLE.
-- `DNS_DOH_AUTO_UPGRADE_SERVER (0x0008)`: This option allows a DNS server present in an NRPT rule to use the DNS-over-HTTPS template if it has the same IP address as the server referenced by this property. This option can't be used by itself; it must be in addition to DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO or DNS_DOH_SERVER_SETTINGS_ENABLE.
-
 `NetID` is saved in your network adapter GUID key (`{4d36e972-e325-11ce-bfc1-08002be10318}`) named `NetCfgInstanceId`.
 
----
+## [`DNS_DOH_SERVER_SETTINGS`](https://learn.microsoft.com/en-us/windows/win32/api/netioapi/ns-netioapi-dns_doh_server_settings)
 
-| Protocol  | Explanation |
+This is I guess used for the `DohFlags` value.
+
+```cpp
+typedef struct _DNS_DOH_SERVER_SETTINGS {
+#if ...
+  PWSTR   Template;
+#else
+  PWSTR   Template;
+#endif
+  ULONG64 Flags;
+} DNS_DOH_SERVER_SETTINGS;
+```
+
+| Flag | Meaning |
 | --- | --- |
-| Cleartext | Traditional DNS over UDP/TCP 53 with no encryption, so anyone on the path can read or alter your queries. |
-| DoH/3 | DNS sent inside HTTPS using HTTP/3 on port 443, encrypting lookups and making them look like normal web traffic. |
-| DoT | DNS sent over a TLS encrypted connection on port 853, protecting queries in transit at the transport layer. |
-| DoQ | DNS carried over QUIC with built in encryption and faster handshakes, improving reliability. |
-| DNSCrypt | A non IETF protocol that encrypts and authenticates DNS between client and resolver, with more limited ecosystem support. |
-| DoH | DNS sent inside HTTPS (typically HTTP/2) on port 443, providing encrypted lookups that blend in with regular HTTPS traffic. |
+| `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO (0x0001)` | If this option is present, then the DNS server that's referenced by this property will load its URI template from the system DNS-over-HTTPS system list. When this option is present, the Template field must be set to NULL. This option must not be used together with the `DNS_DOH_SERVER_SETTINGS_ENABLE` option. |
+| `DNS_DOH_SERVER_SETTINGS_ENABLE (0x0002)` | If this option is present, then the Template field must point to a valid DNS-over-HTTPS URI template. This option must not be used together with the `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO` option. |
+| `DNS_DOH_SERVER_SETTINGS_FALLBACK_TO_UDP (0x0004)` | This option indicates that the referenced server may fallback to unsecure name resolution (UDP/TCP) if the DNS-over-HTTPS query failed. This option can be used only in addition to `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO` or `DNS_DOH_SERVER_SETTINGS_ENABLE`. |
+| `DNS_DOH_AUTO_UPGRADE_SERVER (0x0008)` | This option allows a DNS server present in an NRPT rule to use the DNS-over-HTTPS template if it has the same IP address as the server referenced by this property. This option can't be used by itself; it must be in addition to `DNS_DOH_SERVER_SETTINGS_ENABLE_AUTO` or `DNS_DOH_SERVER_SETTINGS_ENABLE`. |
 
 ## Providers Compared
 
@@ -45,6 +50,17 @@ Obviously self-host a DNS resolver for the best privacy, so queries stay local.
 ## DNS Explained
 
 DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution). See [DNSimple comics](https://dnsimple.com/comics) for a very simple explanation/[DNSimple glossary](https://support.dnsimple.com/articles/dns-glossary/) and/or [Cloudflare DNS docs](https://www.cloudflare.com/learning/dns/what-is-dns/).
+
+### Protocols
+
+| Protocol  | Explanation |
+| --- | --- |
+| Cleartext | Traditional DNS over UDP/TCP 53 with no encryption, so anyone on the path can read or alter your queries. |
+| DoH/3 | DNS sent inside HTTPS using HTTP/3 on port 443, encrypting lookups and making them look like normal web traffic. |
+| DoT | DNS sent over a TLS encrypted connection on port 853, protecting queries in transit at the transport layer. |
+| DoQ | DNS carried over QUIC with built in encryption and faster handshakes, improving reliability. |
+| DNSCrypt | A non IETF protocol that encrypts and authenticates DNS between client and resolver, with more limited ecosystem support. |
+| DoH | DNS sent inside HTTPS (typically HTTP/2) on port 443, providing encrypted lookups that blend in with regular HTTPS traffic. |
 
 ### Types of DNS servers
 
@@ -343,6 +359,100 @@ HKLM\System\CurrentControlSet\Services\LanmanWorkstation\Parameters\EnablePlainT
 # Enable Network Offloads
 
 Since all topics below are well documented by MS, I won't add much details. Click on the title links for more information on each topic. Note that the main option disables PM protocol offloads, all other offload features are used.
+
+## !ndiskd.netadapter
+
+One way to see the current offload states/capabilities is by using [`!ndiskd.netadapter`](https://learn.microsoft.com/en-us/windows-hardware/drivers/debuggercmds/-ndiskd-netadapter):
+
+```c
+lkd> !ndiskd.netadapter
+    
+    .reload ndis.sys....
+                     Reload succeeded.
+
+    Driver             NetAdapter          Name                                                                     
+    ffffcb06c0111020   ffffcb06c3130030    Intel(R) Ethernet Controller (2) I225-V
+    ffffcb06c1115a70   ffffcb06c312c1a0    VirtualBox Host-Only Ethernet Adapter
+```
+
+Use the `NetAdapter` address of your adapter with the `-offloads` (PM protocol offloads via `-protocoloffloads`) param and you'll see current state/cabability of each.
+
+```c
+lkd> !ndiskd.netadapter ffffcb06c3130030 -offloads
+
+
+TASK OFFLOADS
+
+    Offload type       Current config                         Hardware capability                                   
+    Large Send Offload v1 (LSOv1) with TCP/IPv4
+        Encapsulation  802_3                                  802_3
+        Max size       0n64240                                0n64240
+        Min segments   2                                      2
+        IP options     Yes                                    Yes
+        TCP options    Yes                                    Yes
+
+    Large Send Offload v2 (LSOv2) with TCP/IPv4
+        Encapsulation  802_3                                  802_3
+        Max size       0n64240                                0n64240
+        Min segments   2                                      2
+
+    Large Send Offload v2 (LSOv2) with TCP/IPv6
+        Encapsulation  802_3                                  802_3
+        Max size       0n64240                                0n64240
+        Min segments   2                                      2
+        IP extensions  Yes                                    Yes
+        TCP options    Yes                                    Yes
+
+    Checksum offload with TCP/IPv4 on transmit path
+        Encapsulation  802_3                                  802_3
+        IP checksum    Yes                                    Yes
+        TCP checksum   Yes                                    Yes
+        UDP checksum   Yes                                    Yes
+        IP options     Yes                                    Yes
+        TCP options    Yes                                    Yes
+
+    Checksum offload with TCP/IPv4 on receive path
+        Encapsulation  802_3                                  802_3
+        IP checksum    Yes                                    Yes
+        TCP checksum   Yes                                    Yes
+        UDP checksum   Yes                                    Yes
+        IP options     Yes                                    Yes
+        TCP options    Yes                                    Yes
+
+    Checksum offload with TCP/IPv6 on transmit path
+        Encapsulation  802_3                                  802_3
+        TCP checksum   Yes                                    Yes
+        UDP checksum   Yes                                    Yes
+        IP extensions  Yes                                    Yes
+        TCP options    Yes                                    Yes
+
+    Checksum offload with TCP/IPv6 on receive path
+        Encapsulation  802_3                                  802_3
+        TCP checksum   Yes                                    Yes
+        UDP checksum   Yes                                    Yes
+        IP extensions  Yes                                    Yes
+        TCP options    Yes                                    Yes
+
+    Receive Segment Coalescing (RSC) with TCP/IPv4
+        Enabled        Yes                                    Yes
+
+    Receive Segment Coalescing (RSC) with TCP/IPv6
+        Enabled        Yes                                    Yes
+
+    UDP Segmentation Offload (USO) with UDP/IPv4
+        Encapsulation  802_3                                  802_3
+        Max size       0n64240                                0n64240
+        Min segments   2                                      2
+
+    UDP Segmentation Offload (USO) with UDP/IPv6
+        Encapsulation  802_3                                  802_3
+        Max size       0n64240                                0n64240
+        Min segments   2                                      2
+        IP extensions  Yes                                    Yes
+```
+
+- [OID_TCP_OFFLOAD_CURRENT_CONFIG](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/oid-tcp-offload-current-config)
+- [OID_TCP_OFFLOAD_HARDWARE_CAPABILITIES](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/oid-tcp-offload-hardware-capabilities)
 
 ## [NDIS_OFFLOAD_PARAMETERS](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddndis/ns-ntddndis-_ndis_offload_parameters)
 
