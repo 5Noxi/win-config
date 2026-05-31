@@ -1693,7 +1693,7 @@ lkd> dx ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner
 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->ClockOwner : 0x0 [Type: unsigned char]
 ```
 
-<img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntickon.png?raw=true" width="48%"> <img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntickoff?raw=true" width="48%">
+<img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntickon.png?raw=true" width="48%"> <img src="https://github.com/nohuto/win-config/blob/main/system/images/dyntickoff.png?raw=true" width="48%">
 
 [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareClockTimerForIdle.c) is that idle part:
 
