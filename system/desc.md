@@ -1529,7 +1529,7 @@ lkd> dx -r2 ((nt!_KPRCB**)&nt!KiProcessorBlock)[1]->TimerTable.TableState
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ser1-timer.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ser1-clock.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ser2-timer.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ser3-clock.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ser2-clock.png?raw=true)
 
 To read the current value, use:
 
