@@ -1477,6 +1477,28 @@ INIT:0000000140BA1688 dq offset aEnablepercpucl       ; "EnablePerCpuClockTickSc
 INIT:0000000140BA1690 dq offset KiEnableClockTimerPerCpuTickScheduling
 ```
 
+Everything below is based on 23H2, when comparing it to 25H2, nothing in relation to `SerializeTimerExpiration` changed, but `EnablePerCpuClockTickScheduling` isn't dependend on `SerializeTimerExpiration` anymore.
+
+23H2:
+```c
+// KeInitializeClock
+if ( KiClockTimerPerCpu && KiSerializeTimerExpiration )
+  KiClockTimerPerCpuTickScheduling = 1;
+```
+
+25H2:
+```c
+// KeInitializeClock
+if ( KiClockTimerPerCpu )
+{
+  if ( !KiSerializeTimerExpiration )
+  {
+    // feature reporting
+  }
+  KiClockTimerPerCpuTickScheduling = 1;
+}
+```
+
 ## SerializeTimerExpiration
 
 `SerializeTimerExpiration` decides which processor timer table is used for kernel timer (`KTIMER`) expiration.
