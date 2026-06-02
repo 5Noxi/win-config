@@ -1861,7 +1861,7 @@ lkd> dd nt!KiEnableClockTimerPerCpuTickScheduling L1
 fffff801`2e11edc8  00000002
 ```
 
-`KiClockTimerPerCpuTickScheduling` decides whether clock tick scheduling uses global clock state or per PRCB clock timer state. When it is `0`, it uses global values like `KiClockTimerNextTickTime`/`KeTimeIncrement`/`KiLastRequestedTimeIncrement`; when it is `1`, it uses `CurrentPrcb->ClockTimerState`.
+`KiClockTimerPerCpuTickScheduling` decides whether clock tick scheduling uses global clock state or per PRCB clock timer state. When it is `0`, it uses global values like `KiClockTimerNextTickTime`/`KeTimeIncrement`/`KiLastRequestedTimeIncrement`, when it is `1`, it uses `CurrentPrcb->ClockTimerState`.
 
 Below you can see that with `KiClockTimerPerCpuTickScheduling = 01` each PRCB has its own `NextTickDueTime`/`TimeIncrement`/`LastRequestedTimeIncrement` (not following the global values), and with `00`, PRCB 1 has no own values (uses global) & PRCB 0 has values, which are equal to the global values (these aren't used), means all use the same values.
 
@@ -1964,8 +1964,8 @@ v4 = KiClockTimerPerCpuTickScheduling == 0;
 *a3 = 0;
 if ( v4 )
 {
-  *a2 = KeTimeIncrement; // global current increment
-  *a1 = KiLastRequestedTimeIncrement; // global requested increment
+  *a2 = KeTimeIncrement; // see above
+  *a1 = KiLastRequestedTimeIncrement; // see above
   result = (unsigned __int8)*a3;
   if ( KiClockOwnerOneShotRequestState == 1 )
     result = 1LL;
@@ -1973,8 +1973,8 @@ if ( v4 )
 }
 else
 {
-  *a2 = CurrentPrcb->ClockTimerState.TimeIncrement; // per PRCB current increment
-  result = CurrentPrcb->ClockTimerState.LastRequestedTimeIncrement; // per PRCB requested increment
+  *a2 = CurrentPrcb->ClockTimerState.TimeIncrement;
+  result = CurrentPrcb->ClockTimerState.LastRequestedTimeIncrement;
   *a1 = result;
   if ( CurrentPrcb->ClockTimerState.OneShotState == KClockTimerOneShotArmed )
     *a3 = 1;
