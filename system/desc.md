@@ -1700,7 +1700,7 @@ Total Timers: 301, Maximum List: 6
 
 ### KiDynamicTickDisableReason
 
-`KiClockTimerOwner` moving between CPUs is caused by dynamic tick clock idle/resume. With dynamic tick enabled, it can stop using the periodic clock tick while the system is idle and set the clock timer for the next required due time instead, without it, it would keep using the periodic clock tick.
+`KiClockTimerOwner` moving between CPUs can happen through dynamic tick clock idle/resume. With dynamic tick enabled, it can stop using the periodic clock tick while the system is idle and set the clock timer for the next required due time instead, without it, it keeps using the periodic clock tick (this doesn't mean that `KiClockTimerOwner` changes). Clock owner selection also works a bit different on 23H2 when compared to 25H2, since everything below is based on 23H2 this might not be valid for all W11 builds.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/a-6-clock.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/a-6-timer.png?raw=true)
