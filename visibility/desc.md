@@ -975,7 +975,7 @@ Add a custom text to the sign in screen via:
 ```c
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 // legalnoticecaption -	Type: REG_SZ - Data: Noverse
-// legalnoticetext	- Type: REG_SZ - Data: https://nohuto.github.io
+// legalnoticetext	- Type: REG_SZ - Data: https://noverse.dev
 ```
 By adding them, you'll have to click `OK` every time you boot/log in:
 

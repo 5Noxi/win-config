@@ -356,7 +356,7 @@ Disabling the firewall service (`Disable Services/Driver`) can break:
 
 Disabling UAC stops the prompts for administrative permissions, allowing programs and processes to run with elevated rights without user confirmation.
 
-> *User Account Control (UAC) is meant to enable users to run with standard user rights as opposed to administrative rights. Without administrative rights, users cannot accidentally (or deliberately) modify system settings, malware can’t normally alter system security settings or disable antivirus software, and users can’t compromise the sensitive information of other users on shared computers. Running with standard user rights can thus mitigate the impact of malware and protect sensitive data on shared computers.*
+> *User Account Control (UAC) is meant to enable users to run with standard user rights as opposed to administrative rights. Without administrative rights, users cannot accidentally (or deliberately) modify system settings, malware can't normally alter system security settings or disable antivirus software, and users can't compromise the sensitive information of other users on shared computers. Running with standard user rights can thus mitigate the impact of malware and protect sensitive data on shared computers.*
 > *UAC runs most apps with standard user rights and uses a filtered admin token for administrators, elevating only when needed. Disabling UAC removes this filtered-token model and disables UAC file/registry virtualization (Luafv.sys).*"
 >
 > — Windows Internals, [E7, P1: 'UAC'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
@@ -366,7 +366,7 @@ Disabling UAC stops the prompts for administrative permissions, allowing program
 | --- | --- | --- | --- |
 | Highest position (`Always Notify`) | A UAC elevation prompt appears on the Secure Desktop. | A UAC elevation prompt appears on the Secure Desktop. | This was the Windows Vista behavior. |
 | Second position | UAC elevation occurs automatically with no prompt or notification. | A UAC elevation prompt appears on the Secure Desktop. | Windows default setting. |
-| Third position | UAC elevation occurs automatically with no prompt or notification. | A UAC elevation prompt appears on the user’s normal desktop. | Not recommended. |
+| Third position | UAC elevation occurs automatically with no prompt or notification. | A UAC elevation prompt appears on the user's normal desktop. | Not recommended. |
 | Lowest position (`Never Notify`) | UAC is turned off for administrative users. | UAC is turned off for administrative users. | Not recommended. |
 
 **Table 7-19** UAC registry values
@@ -374,7 +374,7 @@ Disabling UAC stops the prompts for administrative permissions, allowing program
 | --- | --- | --- | --- | --- |
 | Highest position (`Always Notify`) | `2` (display AAC UAC elevation prompt) | `3` (display OTS UAC elevation prompt) | `1` (enabled) | `1` (enabled) |
 | Second position | `5` (display AAC UAC elevation prompt, except for changes to Windows settings) | `3` | `1` | `1` |
-| Third position | `5` | `3` | `1` | `0` (disabled; UAC prompt appears on user’s normal desktop) |
+| Third position | `5` | `3` | `1` | `0` (disabled; UAC prompt appears on user's normal desktop) |
 | Lowest position (`Never Notify`) | `0` | `3` | `0` (disabled; logins to administrative accounts do not create a restricted admin access token) | `0` |
 
 Read more about UAC/file virtualization/(auto-)elevation in [Windows Internals E7, P1 - P.722f. 'User Account Control and virtualization'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf).
