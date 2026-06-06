@@ -2527,7 +2527,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 | Prefix | Component |
 | --- | --- |
-| `Alpcp` | Advanced Local Procedure Calls internal |
+| `Alpcp` | Advanced Local Procedure Calls |
 | `Cc` | Common Cache |
 | `Cm` / `Cmp` | Configuration manager |
 | `Dbgk` | Debugging Framework for user mode |

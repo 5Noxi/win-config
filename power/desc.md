@@ -704,7 +704,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 | Prefix | Component |
 | --- | --- |
 | `PoFx` | Power Framework |
-| `Pop` | Power Manager internal |
+| `Pop` | Power Manager |
 | `Ppm` | Processor Power Manager |
 
 ```c
@@ -1489,7 +1489,7 @@ So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCo
 
 | Prefix | Component |
 | --- | --- |
-| `Pop` | Power Manager internal |
+| `Pop` | Power Manager |
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";

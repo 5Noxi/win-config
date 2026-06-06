@@ -1267,7 +1267,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 
 | Prefix | Component |
 | --- | --- |
-| `Pop` | Power Manager internal |
+| `Pop` | Power Manager |
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
