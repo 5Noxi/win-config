@@ -2525,6 +2525,26 @@ The comments of some values with more details are based on pseudocode, if so I a
 
 Everything listed below is based on personal findings, mistakes may exist.
 
+| Prefix | Component |
+| --- | --- |
+| `Alpcp` | Advanced Local Procedure Calls internal |
+| `Cc` | Common Cache |
+| `Cm` / `Cmp` | Configuration manager |
+| `Dbgk` | Debugging Framework for user mode |
+| `Ex` / `Exp` | Executive support routines |
+| `Hvl` | Hypervisor library |
+| `Io` / `Iop` | I/O manager |
+| `Kd` / `Kdp` | Kernel debugger |
+| `Ke` / `Ki` | Kernel / Kernel internal |
+| `Mm` | Memory manager |
+| `Ob` / `Obp` | Object manager |
+| `Po` / `Pop` | Power manager |
+| `Ppm` | Processor power manager |
+| `Ps` / `Psp` | Process support |
+| `Rtlp` | Run-time library |
+| `Se` / `Sep` | Security Reference Monitor |
+| `Vf` / `Vi` / `Dif*` | Driver Verifier |
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
     "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold, per CPU countdown value. When it reaches 1, it's reloaded and current DPC queue depth is incremented up to DpcQueueDepth ("number of clock ticks before DpcQueueDepth is incremented if DPCs are not pending") (KeAccumulateTicks, KiInitPrcb)
@@ -4477,6 +4497,10 @@ See all object identifiers via `bcdedit /enum all /v` (`identifier`). Note that 
 Here are elements which I tracked via Procmon (taken from default store and the MS documentation - [bcd-settings-and-bitlocker](https://learn.microsoft.com/en-us/windows/security/operating-system-security/data-protection/bitlocker/bcd-settings-and-bitlocker), [bcd-enumerations](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/bcd/bcd-enumerations)).
 
 Note that this doesn't show default states, instead it shows several options and their possible states. And obviously the descriptions are most likely parsed, means that even "useless" descriptions will be included whenever the mentioned MS docs above include them.
+
+| Prefix | Component |
+| --- | --- |
+| `Hal` / `Halp` | Hardware Abstraction Layer |
 
 ```c
 "HKLM\\BCD00000000\\Objects\\{current}\\Elements";

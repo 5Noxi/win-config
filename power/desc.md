@@ -701,6 +701,12 @@ See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/
 
 Everything listed below is based on personal findings, mistakes may exist.
 
+| Prefix | Component |
+| --- | --- |
+| `PoFx` | Power Framework |
+| `Pop` | Power Manager internal |
+| `Ppm` | Processor Power Manager |
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "ActiveIdleLevel" = 1; // PopFxActiveIdleLevel 
@@ -1480,6 +1486,10 @@ else
 So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCoalescing` = `4294967295` should cause the least power saving.
 
 ## Miscellaneous Values
+
+| Prefix | Component |
+| --- | --- |
+| `Pop` | Power Manager internal |
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";

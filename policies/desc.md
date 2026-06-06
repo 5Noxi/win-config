@@ -19,7 +19,7 @@ python admx-parser.py [FLAGS]
 | `--include-obsolete` | Include obsolete/deprecated policies | Off |
 | `--format {json,yaml}` | Output format | `json` |
 | `--compress` | Write minified JSON (ignored for YAML) | Pretty |
-| `--output PATH` | Custom destination file | `Policies.json`/`Policies.yaml` (in current dir) |
+| `--output PATH` | Custom destination file | `policies.json`/`policies.yaml` (in current dir) |
 | `-h, --help` | Shows flags from above | - |
 
 ### Examples

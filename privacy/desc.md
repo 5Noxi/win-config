@@ -180,6 +180,12 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 
 ### EnableWerUserReporting
 
+Note that `Dbgk` prefix = *Debugging Framework for user mode*.
+
+> *Prefix is the internal component that exports the routine, Operation tells what is being done to the object or resource, and Object identifies what is being operated on. For example, ExAllocatePoolWithTag is the executive support routine to allocate from a paged or non-paged pool. KeInitializeThread is the routine that allocates and sets up a kernel thread object.*
+>
+> — Windows Internals, [E7, P1: 'Peering into undocumented interfaces'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
   "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero 32 bit data = enabled
@@ -199,6 +205,10 @@ The queued work routine is basically a thing for initiating UM (user mode) WER r
 ### SeLpacEnableWatsonReporting
 
 Note that this is dependent on `EnableWerUserReporting`, means if the value above is `0` this has no effect.
+
+| Prefix | Component |
+| --- | --- |
+| `Se` | Security Reference Monitor |
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
@@ -1254,6 +1264,10 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 - [privacy/assets | sleepstudy-PoFxInitPowerManagement.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/sleepstudy-PoFxInitPowerManagement.c)
 
 ## Miscellaenous Notes
+
+| Prefix | Component |
+| --- | --- |
+| `Pop` | Power Manager internal |
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
