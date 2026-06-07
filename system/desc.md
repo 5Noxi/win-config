@@ -1002,9 +1002,7 @@ KeSetActualBasePriorityThread(CurrentThread, 27LL); // scheduler thread priority
 You can practically also see the priority of `CiSchedulerThread` using WinDbg:
 
 ```c
-// .data:00000001C0008298 CiSchedulerThread dq 0
-
-lkd> dq fffff800`3aee8298 L1
+lkd> dq mmcss!CiSchedulerThread L1
 fffff800`3aee8298  ffffe409`67145040
 
 lkd> !thread ffffe409`67145040
@@ -1022,12 +1020,6 @@ Win32 Start Address 0xfffff8003aee2e60
 Stack Init fffffa80b5f7fc30 Current fffffa80b5f7f350
 Base fffffa80b5f80000 Limit fffffa80b5f79000 Call 0000000000000000
 Priority 27  BasePriority 27  Priority Floor 27  IoPriority 2  PagePriority 5
-Child-SP          RetAddr               : Args to Child                                                           : Call Site
-fffffa80`b5f7f390 fffff800`0e63fe75     : ffffd000`2a1c0180 00000000`00000000 ffffe409`5d4cf040 00000000`00000000 : nt!KiSwapContext+0x76
-fffffa80`b5f7f4d0 fffff800`0e642037     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : nt!KiSwapThread+0xaa5
-fffffa80`b5f7f620 fffff800`0e643f16     : 00000000`00000000 00000000`00000001 00000000`00000000 00000000`00000000 : nt!KiCommitThreadWait+0x137
-fffffa80`b5f7f6d0 fffff800`3aee1b19     : 00000000`00000000 00000000`00000000 fffffa80`b5f7faf9 00000008`2eff077f : nt!KeWaitForSingleObject+0x256
-fffffa80`b5f7fa70 00000000`00000000     : 00000000`00000000 fffffa80`b5f7faf9 00000008`2eff077f 00000000`00000000 : 0xfffff800`3aee1b19
 ```
 
 ## Registry Values
@@ -1049,7 +1041,35 @@ All values below are read via [`CiConfigReadDWORD`](https://github.com/nohuto/de
 
 ### DriverStart + RVAs
 
-A simple way to read current values is via RVAs (*Relative Virtual Address*, means an address relative to the modules image base), to do so get the `DriverStart` address + the RVA of whatever you want to read.
+Everything below isn't needed when reloading the MMCSS module, simple way:
+
+```c
+lkd> .reload /f mmcss.sys
+lkd> lm m mmcss
+Browse full module list
+start             end                 module name
+fffff801`890e0000 fffff801`890f6000   mmcss      (pdb symbols)          C:\ProgramData\Dbg\sym\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
+lkd> dd mmcss!CiSystemResponsiveness L1
+fffff801`890e82f8  00000014
+lkd> dd mmcss!CiNetworkThrottlingIndex L1
+fffff801`890e81c0  0000000a
+lkd> db mmcss!CiSchedulerDisallowLazyMode L1
+fffff801`890e82d5  00                                               .
+lkd> dd mmcss!CiSchedulerIdleDetectionCycles L1
+fffff801`890e828c  00000002
+lkd> dd mmcss!CiSchedulerLazyModeTimeout L1
+fffff801`890e81c4  000f4240
+lkd> dd mmcss!CiSchedulerTimerResolution L1
+fffff801`890e81c8  00002710
+lkd> dd mmcss!CiSchedulerPeriod L1
+fffff801`890e81cc  000186a0
+lkd> dd mmcss!CiMaxThreadsTotal L1
+fffff801`890e8090  00000100
+lkd> dd mmcss!CiMaxThreadsPerProcess L1
+fffff801`890e8094  00000020
+```
+
+A different way to read current values is via RVAs (*Relative Virtual Address*, means an address relative to the modules image base), to do so get the `DriverStart` address + the RVA of whatever you want to read.
 
 ```c
 lkd> !drvobj MMCSS
@@ -1078,20 +1098,6 @@ Then use the `DriverStart` address + RVA:
 ```c
 lkd> dd 0xfffff800`3aee82F8 L1
 fffff800`3aee82f8  0000000a // 10
-```
-
-It should also work by just reloading the MMCSS module, then using `mmcss+` instead of `DriverEntry`.
-
-```c
-lkd> .reload /f mmcss.sys
-
-lkd> lm m mmcss
-Browse full module list
-start             end                 module name
-fffff800`3aee0000 fffff800`3aef6000   mmcss      (pdb symbols)          C:\ProgramData\Dbg\sym\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
-
-lkd> dd mmcss+82f8 L1
-fffff800`3aee82f8  0000000a
 ```
 
 ## SystemResponsiveness
@@ -1388,7 +1394,7 @@ v9 = CiTryIncrementTotalThreadCount((volatile signed __int32 *)(v8 + 92), CiMaxT
 You can use WinDbg to see the current total:
 
 ```c
-lkd> dd mmcss+82d0 L1 // 82d0 = CiTotalThreads RVA
+lkd> dd mmcss!CiTotalThreads L1
 fffff800`3aee82d0  00000004
 ```
 
