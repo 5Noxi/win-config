@@ -994,10 +994,41 @@ CurrentThread = KeGetCurrentThread();
 CiThreadsMovedUp = 1;
 CiSchedulerThread = CurrentThread;
 CiSchedulerInLazyMode = 0;
-KeSetActualBasePriorityThread(CurrentThread, 27LL); // worker priority
+KeSetActualBasePriorityThread(CurrentThread, 27LL); // scheduler thread priority
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcssprio.png?raw=true)
+
+You can practically also see the priority of `CiSchedulerThread` using WinDbg:
+
+```c
+// .data:00000001C0008298 CiSchedulerThread dq 0
+
+lkd> dq fffff800`3aee8298 L1
+fffff800`3aee8298  ffffe409`67145040
+
+lkd> !thread ffffe409`67145040
+THREAD ffffe40967145040  Cid 0004.0a2c  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT: (Executive) KernelMode Alertable
+    ffffe409634683b0  Timer2SynchronizationObject
+Not impersonating
+DeviceMap                 ffff840575e1a610
+Owning Process            ffffe4095d502080       Image:         System
+Attached Process          N/A            Image:         N/A
+Wait Start TickCount      224914         Ticks: 28 (0:00:00:00.437)
+Context Switch Count      376449         IdealProcessor: 2             
+UserTime                  00:00:00.000
+KernelTime                00:00:00.000
+Win32 Start Address 0xfffff8003aee2e60
+Stack Init fffffa80b5f7fc30 Current fffffa80b5f7f350
+Base fffffa80b5f80000 Limit fffffa80b5f79000 Call 0000000000000000
+Priority 27  BasePriority 27  Priority Floor 27  IoPriority 2  PagePriority 5
+Child-SP          RetAddr               : Args to Child                                                           : Call Site
+fffffa80`b5f7f390 fffff800`0e63fe75     : ffffd000`2a1c0180 00000000`00000000 ffffe409`5d4cf040 00000000`00000000 : nt!KiSwapContext+0x76
+fffffa80`b5f7f4d0 fffff800`0e642037     : 00000000`00000000 00000000`00000000 00000000`00000000 00000000`00000000 : nt!KiSwapThread+0xaa5
+fffffa80`b5f7f620 fffff800`0e643f16     : 00000000`00000000 00000000`00000001 00000000`00000000 00000000`00000000 : nt!KiCommitThreadWait+0x137
+fffffa80`b5f7f6d0 fffff800`3aee1b19     : 00000000`00000000 00000000`00000000 fffffa80`b5f7faf9 00000008`2eff077f : nt!KeWaitForSingleObject+0x256
+fffffa80`b5f7fa70 00000000`00000000     : 00000000`00000000 fffffa80`b5f7faf9 00000008`2eff077f 00000000`00000000 : 0xfffff800`3aee1b19
+```
 
 ## Registry Values
 
@@ -1014,6 +1045,53 @@ All values below are read via [`CiConfigReadDWORD`](https://github.com/nohuto/de
     "SchedulerPeriod" = 100000; // range 50000-1000000
     "MaxThreadsPerProcess" = 32; // range 8-128
     "MaxThreadsTotal" = 256; // range 64-65535
+```
+
+### DriverStart + RVAs
+
+A simple way to read current values is via RVAs (*Relative Virtual Address*, means an address relative to the modules image base), to do so get the `DriverStart` address + the RVA of whatever you want to read.
+
+```c
+lkd> !drvobj MMCSS
+Driver object (ffffe409670c8de0) is for:
+ \Driver\MMCSS
+
+Driver Extension List: (id , addr)
+
+Device Object list:
+ffffe40962b3b6b0
+
+lkd> dt nt!_DRIVER_OBJECT ffffe409670c8de0 DriverStart
+   +0x018 DriverStart : 0xfffff800`3aee0000 Void
+```
+
+So for example you want to read the current value of `CiSystemResponsiveness` (IDA):
+
+```asm
+.data:00000001C00082F8 CiSystemResponsiveness dd 0
+```
+
+Get the current image base from `Edit > Segments > Rebase program` (`0x1C0000000` for me), and subtract it from the address above, means `0x1C00082F8 - 0x1C0000000 = 0x82F8` which is the RVA for `CiSystemResponsiveness`.
+
+Then use the `DriverStart` address + RVA:
+
+```c
+lkd> dd 0xfffff800`3aee82F8 L1
+fffff800`3aee82f8  0000000a // 10
+```
+
+It should also work by just reloading the MMCSS module, then using `mmcss+` instead of `DriverEntry`.
+
+```c
+lkd> .reload /f mmcss.sys
+
+lkd> lm m mmcss
+Browse full module list
+start             end                 module name
+fffff800`3aee0000 fffff800`3aef6000   mmcss      (pdb symbols)          C:\ProgramData\Dbg\sym\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
+
+lkd> dd mmcss+82f8 L1
+fffff800`3aee82f8  0000000a
 ```
 
 ## SystemResponsiveness
@@ -1306,6 +1384,15 @@ v9 = CiTryIncrementTotalThreadCount(&CiTotalThreads, CiMaxThreadsTotal);
 
 v9 = CiTryIncrementTotalThreadCount((volatile signed __int32 *)(v8 + 92), CiMaxThreadsPerProcess);
 ```
+
+You can use WinDbg to see the current total:
+
+```c
+lkd> dd mmcss+82d0 L1 // 82d0 = CiTotalThreads RVA
+fffff800`3aee82d0  00000004
+```
+
+You can also get MMCSS thread counts from processes via WinDbg but thats not as simple which is why I won't add it here.
 
 ## Tasks
 
