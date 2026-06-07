@@ -119,7 +119,7 @@ That `0x800` flag isn't related to what device you use, it's set from mouse raw 
 
 I've checked that the `0x800` behavior is true with two small apps, one registered mouse raw input with `0x8100`, the other with only `0x0100`. By moving both to the background (`RawMouseThrottleDuration = 20`), the `0x8100` app stayed at `~1000 Hz`, while the `0x0100` app dropped to `~60 Hz`. So with `RawMouseThrottleForced = 0`, the forced registration bypassed throttling (I didn't find any app that uses that flag nor are there docs on it, means it's most likely unused).
 
-You can use [riflags](https://www.noverse.dev/docs/win-config/peripheral/mouse-values/#riflags) to see which processes have a mouse registration with `0x8000`. Read through the section for more details.
+You can use [riflags](https://noverse.dev/docs/win-config/peripheral/mouse-values/#riflags) to see which processes have a mouse registration with `0x8000`. Read through the section for more details.
 
 ### Duration / Leeway
 
@@ -522,7 +522,7 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 Note on some usbflag values ("queried as 4 byte bool"), `USBHUB3` reads a 4-byte and handles any nonzero value as enabled. The value type is not enforced, so both `REG_DWORD` and `REG_BINARY` should work if they're a 4-byte nonzero value (that's my current assumption). I would personally use `REG_BINARY` instead of `REG_DWORD` for now, as for example `osvc`, `IgnoreHWSerNum`, `ResetOnResume` are `REG_BINARY` ([usb-device-specific-registry-settings.md](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)).
 
-See [win-config/peripheral/usbflags-values/](https://www.noverse.dev/docs/win-config/peripheral/usbflags-values/) for notes on `USB_DEVICE_HACKS`/miscellaneous information on values.
+See [win-config/peripheral/usbflags-values/](https://noverse.dev/docs/win-config/peripheral/usbflags-values/) for notes on `USB_DEVICE_HACKS`/miscellaneous information on values.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags";
@@ -1008,7 +1008,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 # StorPort Values
 
-This currently includes all values from [`storport.sys`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport) (in relation to that StorPort key, this binary also has some PnP values/other single values, see [pnp-device-values/#default-data](https://www.noverse.dev/docs/win-config/power/pnp-device-values/#default-data)), see [DllInitialize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/DllInitialize.c) & [sub_1C0042F20](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C0042F20.c) functions. More details on StorPort topic/values may be added soon.
+This currently includes all values from [`storport.sys`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport) (in relation to that StorPort key, this binary also has some PnP values/other single values, see [pnp-device-values/#default-data](https://noverse.dev/docs/win-config/power/pnp-device-values/#default-data)), see [DllInitialize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/DllInitialize.c) & [sub_1C0042F20](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C0042F20.c) functions. More details on StorPort topic/values may be added soon.
 
 ## Registry Values
 
@@ -1063,7 +1063,7 @@ This currently includes all values from [`storport.sys`](https://github.com/nohu
 // miscellaneous values from storport driver
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
-    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support - https://www.noverse.dev/docs/win-config/power/power-values/#suboptions
+    "StorageD3InModernStandby" = 4294967295; // REG_DWORD, 0 = Disable D3 support, 1 = Enable D3 support - https://noverse.dev/docs/win-config/power/power-values/#suboptions
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage\\StorageTelemetry";
     "DeviceDumpLevel" = 2; // REG_DWORD, range 0-4294967295
@@ -1183,14 +1183,14 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\UserCho
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\EventHandlersDefaultSelection\AutorunINFLegacyArrival\(Default)	Type: REG_SZ, Length: 30, Data: MSTakeNoAction
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Set the default behavior for AutoRun](https://www.noverse.dev/policies.html?p=AutoPlay*NoAutorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAutorun` |
-| [Turn off Autoplay](https://www.noverse.dev/policies.html?p=AutoPlay*Autorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDriveTypeAutoRun` |
-| [Disallow Autoplay for non-volume devices](https://www.noverse.dev/policies.html?p=AutoPlay*NoAutoplayfornonVolume) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoplayfornonVolume` |
-| [Prevent AutoPlay from remembering user choices.](https://www.noverse.dev/policies.html?p=AutoPlay*DontSetAutoplayCheckbox) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DontSetAutoplayCheckbox` |
+| [Set the default behavior for AutoRun](https://noverse.dev/policies?p=AutoPlay*NoAutorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAutorun` |
+| [Turn off Autoplay](https://noverse.dev/policies?p=AutoPlay*Autorun) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDriveTypeAutoRun` |
+| [Disallow Autoplay for non-volume devices](https://noverse.dev/policies?p=AutoPlay*NoAutoplayfornonVolume) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoplayfornonVolume` |
+| [Prevent AutoPlay from remembering user choices.](https://noverse.dev/policies?p=AutoPlay*DontSetAutoplayCheckbox) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DontSetAutoplayCheckbox` |
 
 # Disable Touch & Tablet
 
@@ -1338,11 +1338,11 @@ Windows 7/XP:
 }
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Tablet PC touch input](https://www.noverse.dev/policies.html?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |
+| [Turn off Tablet PC touch input](https://noverse.dev/policies?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |
 
 # Disable Bluetooth
 
@@ -1522,11 +1522,11 @@ The revert data is based on `W11 LTSC IoT Enterprise 2024` defaults.
 
 `DisableStartupSound` is set to `1` by default (`LogonUI\BootAnimation`).
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Windows Startup sound](https://www.noverse.dev/policies.html?p=Logon*DisableStartupSound) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisableStartupSound` |
+| [Turn off Windows Startup sound](https://noverse.dev/policies?p=Logon*DisableStartupSound) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisableStartupSound` |
 
 # Disable Printers
 
@@ -1598,17 +1598,17 @@ Get-Printer
 Remove-Printer -Name "Printer Name"
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off printing over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableHTTPPrinting_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
-| [Turn off printing over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableHTTPPrinting_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
-| [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableWebPnPDownload_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
-| [Turn off downloading of print drivers over HTTP](https://www.noverse.dev/policies.html?p=ICM*DisableWebPnPDownload_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
-| [Prevent addition of printers](https://www.noverse.dev/policies.html?p=Printing*NoAddPrinter) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAddPrinter` |
-| [Turn off Windows default printer management](https://www.noverse.dev/policies.html?p=Printing*LegacyDefaultPrinterMode) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | `LegacyDefaultPrinterMode` |
-| [Browse the network to find printers](https://www.noverse.dev/policies.html?p=Printing*DownlevelBrowse) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers\Wizard` | `Downlevel Browse` |
+| [Turn off printing over HTTP](https://noverse.dev/policies?p=ICM*DisableHTTPPrinting_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
+| [Turn off printing over HTTP](https://noverse.dev/policies?p=ICM*DisableHTTPPrinting_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableHTTPPrinting` |
+| [Turn off downloading of print drivers over HTTP](https://noverse.dev/policies?p=ICM*DisableWebPnPDownload_1) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
+| [Turn off downloading of print drivers over HTTP](https://noverse.dev/policies?p=ICM*DisableWebPnPDownload_2) | `HKLM\Software\Policies\Microsoft\Windows NT\Printers` | `DisableWebPnPDownload` |
+| [Prevent addition of printers](https://noverse.dev/policies?p=Printing*NoAddPrinter) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoAddPrinter` |
+| [Turn off Windows default printer management](https://noverse.dev/policies?p=Printing*LegacyDefaultPrinterMode) | `HKCU\Software\Microsoft\Windows NT\CurrentVersion\Windows` | `LegacyDefaultPrinterMode` |
+| [Browse the network to find printers](https://noverse.dev/policies?p=Printing*DownlevelBrowse) | `HKCU\Software\Policies\Microsoft\Windows NT\Printers\Wizard` | `Downlevel Browse` |
 
 # M/K DQS
 

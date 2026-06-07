@@ -1,21 +1,21 @@
 # App Configuration
 
-See [`app-tools`](https://www.noverse.dev/docs/app-tools/docs/) ([repo](https://github.com/nohuto/app-tools)) for all guides/assets.
+See [`app-tools`](https://noverse.dev/docs/app-tools/docs/) ([repo](https://github.com/nohuto/app-tools)) for all guides/assets.
 
 ## Guides
 
-- [Brave Configuration (Desktop)](https://www.noverse.dev/docs/app-tools/docs/guides/brave-desktop)
-- [Brave Configuration (iOS)](https://www.noverse.dev/docs/app-tools/docs/guides/brave-ios)
-- [Discord Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/discord)
-- [LGHUB Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/lghub)
+- [Brave Configuration (Desktop)](https://noverse.dev/docs/app-tools/docs/guides/brave-desktop)
+- [Brave Configuration (iOS)](https://noverse.dev/docs/app-tools/docs/guides/brave-ios)
+- [Discord Configuration](https://noverse.dev/docs/app-tools/docs/guides/discord)
+- [LGHUB Configuration](https://noverse.dev/docs/app-tools/docs/guides/lghub)
   - [`LGHUB-Toggle.ps1`](https://github.com/nohuto/app-tools/blob/main/assets/LGHUB-Toggle.ps1) enables/disables `LGHUBUpdaterService`, related Logitech drivers, and the LGHUB startup entry
-- [Mullvad Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/mullvad-desktop)
-- [Spotify Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/spotify)
+- [Mullvad Configuration](https://noverse.dev/docs/app-tools/docs/guides/mullvad-desktop)
+- [Spotify Configuration](https://noverse.dev/docs/app-tools/docs/guides/spotify)
   - [`Spotify-Config.ps1`](https://github.com/nohuto/app-tools/blob/main/assets/Spotify-Config.ps1) edits global/per-user `prefs`, see guide for detailed information
-- [Steam Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/steam)
+- [Steam Configuration](https://noverse.dev/docs/app-tools/docs/guides/steam)
   - [`Steam-Config.ps1`](https://github.com/nohuto/app-tools/blob/main/assets/Steam-Config.ps1) parses `localconfig.vdf`, adds/edits the documented keys/blocks, see guide for detailed information
-- [SteelSeries Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/steelseries)
-- [VSC Configuration](https://www.noverse.dev/docs/app-tools/docs/guides/vsc)
+- [SteelSeries Configuration](https://noverse.dev/docs/app-tools/docs/guides/steelseries)
+- [VSC Configuration](https://noverse.dev/docs/app-tools/docs/guides/vsc)
 
 - [Browser Extensions](https://github.com/nohuto/app-tools/blob/main/extensions.md)
 - [Search Engines](https://github.com/nohuto/app-tools/blob/main/search-engine.md)
@@ -102,24 +102,24 @@ See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/r
 \Registry\User\<CURRENT_USER_SID>\SOFTWARE\Policies\Microsoft\Windows\DataCollection : AllowTelemetry_PolicyManager
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Application Telemetry](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffApplicationImpactTelemetry) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `AITEnable` |
-| [Turn off Inventory Collector](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffProgramInventory) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableInventory` |
-| [Allow Diagnostic Data](https://www.noverse.dev/policies.html?p=DataCollection*AllowTelemetry) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection`<br>`HKCU\Software\Policies\Microsoft\Windows\DataCollection` | `AllowTelemetry` |
-| [Configure Authenticated Proxy usage for the Connected User Experience and Telemetry service](https://www.noverse.dev/policies.html?p=DataCollection*DisableEnterpriseAuthProxy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableEnterpriseAuthProxy` |
-| [Limit optional diagnostic data for Desktop Analytics](https://www.noverse.dev/policies.html?p=DataCollection*LimitEnhancedDiagnosticDataWindowsAnalytics) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitEnhancedDiagnosticDataWindowsAnalytics` |
-| [Allow device name to be sent in Windows diagnostic data](https://www.noverse.dev/policies.html?p=DataCollection*AllowDeviceNameInDiagnosticData) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `AllowDeviceNameInTelemetry` |
-| [Configure diagnostic data opt-in settings user interface](https://www.noverse.dev/policies.html?p=DataCollection*ConfigureTelemetryOptInSettingsUx) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableTelemetryOptInSettingsUx` |
-| [Configure diagnostic data opt-in change notifications](https://www.noverse.dev/policies.html?p=DataCollection*ConfigureTelemetryOptInChangeNotification) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableTelemetryOptInChangeNotification` |
-| [Disable deleting diagnostic data](https://www.noverse.dev/policies.html?p=DataCollection*DisableDeviceDelete) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDeviceDelete` |
-| [Disable diagnostic data viewer](https://www.noverse.dev/policies.html?p=DataCollection*DisableDiagnosticDataViewer) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDiagnosticDataViewer` |
-| [Limit Diagnostic Log Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDiagnosticLogCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDiagnosticLogCollection` |
-| [Limit Dump Collection](https://www.noverse.dev/policies.html?p=DataCollection*LimitDumpCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDumpCollection` |
-| [Configure the Commercial ID](https://www.noverse.dev/policies.html?p=DataCollection*CommercialIdPolicy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `CommercialId` |
-| [Turn off the advertising ID](https://www.noverse.dev/policies.html?p=UserProfiles*DisableAdvertisingId) | `HKLM\Software\Policies\Microsoft\Windows\AdvertisingInfo` | `DisabledByGroupPolicy` |
+| [Turn off Application Telemetry](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffApplicationImpactTelemetry) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `AITEnable` |
+| [Turn off Inventory Collector](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffProgramInventory) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableInventory` |
+| [Allow Diagnostic Data](https://noverse.dev/policies?p=DataCollection*AllowTelemetry) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection`<br>`HKCU\Software\Policies\Microsoft\Windows\DataCollection` | `AllowTelemetry` |
+| [Configure Authenticated Proxy usage for the Connected User Experience and Telemetry service](https://noverse.dev/policies?p=DataCollection*DisableEnterpriseAuthProxy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableEnterpriseAuthProxy` |
+| [Limit optional diagnostic data for Desktop Analytics](https://noverse.dev/policies?p=DataCollection*LimitEnhancedDiagnosticDataWindowsAnalytics) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitEnhancedDiagnosticDataWindowsAnalytics` |
+| [Allow device name to be sent in Windows diagnostic data](https://noverse.dev/policies?p=DataCollection*AllowDeviceNameInDiagnosticData) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `AllowDeviceNameInTelemetry` |
+| [Configure diagnostic data opt-in settings user interface](https://noverse.dev/policies?p=DataCollection*ConfigureTelemetryOptInSettingsUx) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableTelemetryOptInSettingsUx` |
+| [Configure diagnostic data opt-in change notifications](https://noverse.dev/policies?p=DataCollection*ConfigureTelemetryOptInChangeNotification) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableTelemetryOptInChangeNotification` |
+| [Disable deleting diagnostic data](https://noverse.dev/policies?p=DataCollection*DisableDeviceDelete) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDeviceDelete` |
+| [Disable diagnostic data viewer](https://noverse.dev/policies?p=DataCollection*DisableDiagnosticDataViewer) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableDiagnosticDataViewer` |
+| [Limit Diagnostic Log Collection](https://noverse.dev/policies?p=DataCollection*LimitDiagnosticLogCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDiagnosticLogCollection` |
+| [Limit Dump Collection](https://noverse.dev/policies?p=DataCollection*LimitDumpCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDumpCollection` |
+| [Configure the Commercial ID](https://noverse.dev/policies?p=DataCollection*CommercialIdPolicy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `CommercialId` |
+| [Turn off the advertising ID](https://noverse.dev/policies?p=UserProfiles*DisableAdvertisingId) | `HKLM\Software\Policies\Microsoft\Windows\AdvertisingInfo` | `DisabledByGroupPolicy` |
 
 # Disable WER
 
@@ -226,7 +226,7 @@ if ( !SeLpacEnableWatsonReporting )
 return DbgkQueueUserExceptionReport();
 ```
 
-WER replaced Dr. Watson, which was included in Windows XP, but it can still be used (see WER flow [above](https://www.noverse.dev/docs/win-config/privacy/disable-wer/)) "*4. WER sends the report to Microsoft (Watson Server) if the user consented.*".
+WER replaced Dr. Watson, which was included in Windows XP, but it can still be used (see WER flow [above](https://noverse.dev/docs/win-config/privacy/disable-wer/)) "*4. WER sends the report to Microsoft (Watson Server) if the user consented.*".
 
 ### AerMultiErrorDisabled
 
@@ -245,7 +245,7 @@ Default is `0`, non zero would enable the behaviour? The value doesn't exist by 
 
 ### [WER Endpoints](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-client/system-management-components/windows-error-reporting-diagnostics-enablement-guidance.md#configure-network-endpoints-to-be-allowed)
 
-See [privacy/disable-general-telemetry](https://www.noverse.dev/docs/win-config/privacy/disable-general-telemetry/) note on the blocklist (which includes these domains).
+See [privacy/disable-general-telemetry](https://noverse.dev/docs/win-config/privacy/disable-general-telemetry/) note on the blocklist (which includes these domains).
 
 - Port used: `443`
 - Protocol used: HTTPS with SSL/TLS using certificate pinning
@@ -284,18 +284,18 @@ Disables Windows Error Reporting.
 | --- | --- |
 | `1` | Disables Windows Error Reporting |
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Do not send a Windows error report when a generic driver is installed on a device](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceInstall_GenericDriverSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendGenericDriverNotFoundToWER` |
-| [Prevent Windows from sending an error report when a device driver requests additional software during installation](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceInstall_RequestAdditionalSoftwareSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendRequestAdditionalSoftwareToWER` |
-| [Disable Windows Error Reporting](https://www.noverse.dev/policies.html?p=ErrorReporting*WerDisable_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `Disabled` |
-| [Disable logging](https://www.noverse.dev/policies.html?p=ErrorReporting*WerNoLogging_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `LoggingDisabled` |
-| [Automatically send memory dumps for OS-generated error reports](https://www.noverse.dev/policies.html?p=ErrorReporting*WerAutoApproveOSDumps_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
-| [Automatically send memory dumps for OS-generated error reports](https://www.noverse.dev/policies.html?p=ErrorReporting*WerAutoApproveOSDumps_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
-| [Enable Device Health Attestation Monitoring and Reporting](https://www.noverse.dev/policies.html?p=TPM*OptIntoDSHA_Name) | `HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService` | `EnableDeviceHealthAttestationService` |
-| [Enable Persistent Time Stamp](https://www.noverse.dev/policies.html?p=Reliability*EE_EnablePersistentTimeStamp) | `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` | `TimeStampEnabled`<br>`TimeStampInterval` |
+| [Do not send a Windows error report when a generic driver is installed on a device](https://noverse.dev/policies?p=DeviceSetup*DeviceInstall_GenericDriverSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendGenericDriverNotFoundToWER` |
+| [Prevent Windows from sending an error report when a device driver requests additional software during installation](https://noverse.dev/policies?p=DeviceSetup*DeviceInstall_RequestAdditionalSoftwareSendToWER) | `HKLM\Software\Policies\Microsoft\Windows\DeviceInstall\Settings` | `DisableSendRequestAdditionalSoftwareToWER` |
+| [Disable Windows Error Reporting](https://noverse.dev/policies?p=ErrorReporting*WerDisable_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `Disabled` |
+| [Disable logging](https://noverse.dev/policies?p=ErrorReporting*WerNoLogging_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `LoggingDisabled` |
+| [Automatically send memory dumps for OS-generated error reports](https://noverse.dev/policies?p=ErrorReporting*WerAutoApproveOSDumps_1) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
+| [Automatically send memory dumps for OS-generated error reports](https://noverse.dev/policies?p=ErrorReporting*WerAutoApproveOSDumps_2) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting` | `AutoApproveOSDumps` |
+| [Enable Device Health Attestation Monitoring and Reporting](https://noverse.dev/policies?p=TPM*OptIntoDSHA_Name) | `HKLM\Software\Policies\Microsoft\DeviceHealthAttestationService` | `EnableDeviceHealthAttestationService` |
+| [Enable Persistent Time Stamp](https://noverse.dev/policies?p=Reliability*EE_EnablePersistentTimeStamp) | `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` | `TimeStampEnabled`<br>`TimeStampInterval` |
 
 # Troubleshooter Preference
 
@@ -333,16 +333,16 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length: 4, Data: 4
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider](https://www.noverse.dev/policies.html?p=MSDT*MsdtSupportProvider) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy` | `DisableQueryRemoteServer` |
-| [Troubleshooting: Allow users to access and run Troubleshooting Wizards](https://www.noverse.dev/policies.html?p=sdiageng*ScriptedDiagnosticsExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnostics` | `EnableDiagnostics` |
-| [Troubleshooting: Allow users to access online troubleshooting content on Microsoft servers from the Troubleshooting Control Panel (via the Windows Online Troubleshooting Service - WOTS)](https://www.noverse.dev/policies.html?p=sdiageng*BetterWhenConnected) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy` | `EnableQueryRemoteServer` |
-| [Troubleshooting: Allow users to access recommended troubleshooting for known problems](https://www.noverse.dev/policies.html?p=MSDT*TroubleshootingAllowRecommendations) | `HKLM\Software\Policies\Microsoft\Windows\Troubleshooting\AllowRecommendations` | `TroubleshootingAllowRecommendations` |
-| [Configure Scheduled Maintenance Behavior](https://www.noverse.dev/policies.html?p=sdiagschd*ScheduledDiagnosticsExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScheduledDiagnostics` | `EnabledExecution`<br>`EnabledExecutionLevel` |
-| [Diagnostics: Configure scenario execution level](https://www.noverse.dev/policies.html?p=WDI*WdiDpsScenarioExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WDI` | `ScenarioExecutionEnabled`<br>`EnabledScenarioExecutionLevel` |
+| [Microsoft Support Diagnostic Tool: Turn on MSDT interactive communication with support provider](https://noverse.dev/policies?p=MSDT*MsdtSupportProvider) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy` | `DisableQueryRemoteServer` |
+| [Troubleshooting: Allow users to access and run Troubleshooting Wizards](https://noverse.dev/policies?p=sdiageng*ScriptedDiagnosticsExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnostics` | `EnableDiagnostics` |
+| [Troubleshooting: Allow users to access online troubleshooting content on Microsoft servers from the Troubleshooting Control Panel (via the Windows Online Troubleshooting Service - WOTS)](https://noverse.dev/policies?p=sdiageng*BetterWhenConnected) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScriptedDiagnosticsProvider\Policy` | `EnableQueryRemoteServer` |
+| [Troubleshooting: Allow users to access recommended troubleshooting for known problems](https://noverse.dev/policies?p=MSDT*TroubleshootingAllowRecommendations) | `HKLM\Software\Policies\Microsoft\Windows\Troubleshooting\AllowRecommendations` | `TroubleshootingAllowRecommendations` |
+| [Configure Scheduled Maintenance Behavior](https://noverse.dev/policies?p=sdiagschd*ScheduledDiagnosticsExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\ScheduledDiagnostics` | `EnabledExecution`<br>`EnabledExecutionLevel` |
+| [Diagnostics: Configure scenario execution level](https://noverse.dev/policies?p=WDI*WdiDpsScenarioExecutionPolicy) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WDI` | `ScenarioExecutionEnabled`<br>`EnabledScenarioExecutionLevel` |
 
 # Disable Suggestions/Tips/Tricks
 
@@ -380,19 +380,19 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Microsoft consumer experiences](https://www.noverse.dev/policies.html?p=CloudContent*DisableWindowsConsumerFeatures) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsConsumerFeatures` |
-| [Turn off cloud optimized content](https://www.noverse.dev/policies.html?p=CloudContent*DisableCloudOptimizedContent) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableCloudOptimizedContent` |
-| [Turn off cloud consumer account state content](https://www.noverse.dev/policies.html?p=CloudContent*DisableConsumerAccountStateContent) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableConsumerAccountStateContent` |
-| [Do not show Windows tips](https://www.noverse.dev/policies.html?p=CloudContent*DisableSoftLanding) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableSoftLanding` |
-| [Do not suggest third-party content in Windows spotlight](https://www.noverse.dev/policies.html?p=CloudContent*DisableThirdPartySuggestions) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableThirdPartySuggestions` |
-| [Allow Online Tips](https://www.noverse.dev/policies.html?p=ControlPanel*AllowOnlineTips) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `AllowOnlineTips` |
-| [Remove Recommended section from Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecommendedSection) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedSection` |
-| [Remove Personalized Website Recommendations from the Recommended section in the Start Menu](https://www.noverse.dev/policies.html?p=StartMenu*HideRecommendedPersonalizedSites) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedPersonalizedSites` |
-| [Turn off display of recent search entries in the File Explorer search box](https://www.noverse.dev/policies.html?p=WindowsExplorer*DisableSearchBoxSuggestions) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableSearchBoxSuggestions` |
+| [Turn off Microsoft consumer experiences](https://noverse.dev/policies?p=CloudContent*DisableWindowsConsumerFeatures) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsConsumerFeatures` |
+| [Turn off cloud optimized content](https://noverse.dev/policies?p=CloudContent*DisableCloudOptimizedContent) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableCloudOptimizedContent` |
+| [Turn off cloud consumer account state content](https://noverse.dev/policies?p=CloudContent*DisableConsumerAccountStateContent) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableConsumerAccountStateContent` |
+| [Do not show Windows tips](https://noverse.dev/policies?p=CloudContent*DisableSoftLanding) | `HKLM\Software\Policies\Microsoft\Windows\CloudContent` | `DisableSoftLanding` |
+| [Do not suggest third-party content in Windows spotlight](https://noverse.dev/policies?p=CloudContent*DisableThirdPartySuggestions) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableThirdPartySuggestions` |
+| [Allow Online Tips](https://noverse.dev/policies?p=ControlPanel*AllowOnlineTips) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `AllowOnlineTips` |
+| [Remove Recommended section from Start Menu](https://noverse.dev/policies?p=StartMenu*HideRecommendedSection) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedSection` |
+| [Remove Personalized Website Recommendations from the Recommended section in the Start Menu](https://noverse.dev/policies?p=StartMenu*HideRecommendedPersonalizedSites) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecommendedPersonalizedSites` |
+| [Turn off display of recent search entries in the File Explorer search box](https://noverse.dev/policies?p=WindowsExplorer*DisableSearchBoxSuggestions) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableSearchBoxSuggestions` |
 
 ## Miscellaneous Notes
 
@@ -516,12 +516,12 @@ if ( v6 < 0 )
 }
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Automatic Download and Update of Map Data](https://www.noverse.dev/policies.html?p=WinMaps*TurnOffAutoUpdate) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AutoDownloadAndUpdateMapData` |
-| [Turn off unsolicited network traffic on the Offline Maps settings page](https://www.noverse.dev/policies.html?p=WinMaps*DisallowUntriggeredNetworkOnSettingsPage) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AllowUntriggeredNetworkTrafficOnSettingsPage` |
+| [Turn off Automatic Download and Update of Map Data](https://noverse.dev/policies?p=WinMaps*TurnOffAutoUpdate) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AutoDownloadAndUpdateMapData` |
+| [Turn off unsolicited network traffic on the Offline Maps settings page](https://noverse.dev/policies?p=WinMaps*DisallowUntriggeredNetworkOnSettingsPage) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AllowUntriggeredNetworkTrafficOnSettingsPage` |
 
 # Disable Website Access to Language List
 
@@ -578,11 +578,11 @@ L"WifiLastDisabledNearShare",
 
 - [privacy/assets | crossdev-SharedExperiencesSingleton.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crossdev-SharedExperiencesSingleton.c)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Continue experiences on this device](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableCDP) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableCdp` |
+| [Continue experiences on this device](https://noverse.dev/policies?p=GroupPolicy*EnableCDP) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableCdp` |
 
 # Disable Phone Linking
 
@@ -602,11 +602,11 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CrossDeviceResume\Configuration\I
 
 By default resume is enabled, OneDrive is the only app which exists under the "Control which apps can use Resume" on a stock 25H2 installation and can be toggled via `IsOneDriveResumeAllowed` (same key as `IsResumeAllowed`). Disabling resume will disallow all apps to use Resume (doesn't set `IsXResumeAllowed` to `0`).
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Phone-PC linking on this device](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableMMX) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableMmx` |
+| [Phone-PC linking on this device](https://noverse.dev/policies?p=GroupPolicy*EnableMMX) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableMmx` |
 
 # Hide Last Logged-In User
 
@@ -633,12 +633,12 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\DontDisplayUserName	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Display information about previous logons during user logon](https://www.noverse.dev/policies.html?p=WinLogon*DisplayLastLogonInfoDescription) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisplayLastLogonInfo` |
-| [Remove logon hours expiration warnings](https://www.noverse.dev/policies.html?p=WinLogon*LogonHoursNotificationPolicyDescription) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DontDisplayLogonHoursWarnings` |
+| [Display information about previous logons during user logon](https://noverse.dev/policies?p=WinLogon*DisplayLastLogonInfoDescription) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DisplayLastLogonInfo` |
+| [Remove logon hours expiration warnings](https://noverse.dev/policies?p=WinLogon*LogonHoursNotificationPolicyDescription) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `DontDisplayLogonHoursWarnings` |
 
 # Disable Background Apps
 
@@ -662,11 +662,11 @@ Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (n
 
 When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Let Windows apps run in the background](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground`<br>`LetAppsRunInBackground_UserInControlOfTheseApps`<br>`LetAppsRunInBackground_ForceAllowTheseApps`<br>`LetAppsRunInBackground_ForceDenyTheseApps` |
+| [Let Windows apps run in the background](https://noverse.dev/policies?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground`<br>`LetAppsRunInBackground_UserInControlOfTheseApps`<br>`LetAppsRunInBackground_ForceAllowTheseApps`<br>`LetAppsRunInBackground_ForceDenyTheseApps` |
 
 # Disable App Launch Tracking
 
@@ -752,15 +752,15 @@ Miscellaneous notes:
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoInstalledPWAs\CopilotPWAPreinstallCompleted","SUCCESS","Type: REG_DWORD, Length: 4, Data: 1"
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Windows Copilot](https://www.noverse.dev/policies.html?p=WindowsCopilot*TurnOffWindowsCopilot) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot` | `TurnOffWindowsCopilot` |
-| [Set Copilot Hardware Key](https://www.noverse.dev/policies.html?p=WindowsCopilot*SetCopilotHardwareKey) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CopilotKey` | `SetCopilotHardwareKey` |
-| [Disable Image Creator](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableImageCreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableImageCreator` |
-| [Disable Cocreator](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableCocreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableCocreator` |
-| [Disable generative fill](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableGenerativeFill) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableGenerativeFill` |
+| [Turn off Windows Copilot](https://noverse.dev/policies?p=WindowsCopilot*TurnOffWindowsCopilot) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsCopilot` | `TurnOffWindowsCopilot` |
+| [Set Copilot Hardware Key](https://noverse.dev/policies?p=WindowsCopilot*SetCopilotHardwareKey) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CopilotKey` | `SetCopilotHardwareKey` |
+| [Disable Image Creator](https://noverse.dev/policies?p=WindowsCopilot*DisableImageCreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableImageCreator` |
+| [Disable Cocreator](https://noverse.dev/policies?p=WindowsCopilot*DisableCocreator) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableCocreator` |
+| [Disable generative fill](https://noverse.dev/policies?p=WindowsCopilot*DisableGenerativeFill) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Paint` | `DisableGenerativeFill` |
 
 # Disable Recall
 
@@ -771,13 +771,13 @@ Miscellaneous notes:
 `Disable ClickToDo`:  
 "Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off saving snapshots for use with Recall](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableAIDataAnalysis) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `DisableAIDataAnalysis` |
-| [Allow Recall to be enabled](https://www.noverse.dev/policies.html?p=WindowsCopilot*AllowRecallEnablement) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `AllowRecallEnablement` |
-| [Disable Click to Do](https://www.noverse.dev/policies.html?p=WindowsCopilot*DisableClickToDo) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `DisableClickToDo` |
+| [Turn off saving snapshots for use with Recall](https://noverse.dev/policies?p=WindowsCopilot*DisableAIDataAnalysis) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `DisableAIDataAnalysis` |
+| [Allow Recall to be enabled](https://noverse.dev/policies?p=WindowsCopilot*AllowRecallEnablement) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `AllowRecallEnablement` |
+| [Disable Click to Do](https://noverse.dev/policies?p=WindowsCopilot*DisableClickToDo) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsAI`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\WindowsAI` | `DisableClickToDo` |
 
 # Disable Xbox Game Bar
 
@@ -847,11 +847,11 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 >
 > — Microsoft, [GameBar PresenceWriter](https://learn.microsoft.com/en-us/windows/win32/devnotes/gamebar-presencewriter)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enables or disables Windows Game Recording and Broadcasting](https://www.noverse.dev/policies.html?p=GameDVR*AllowGameDVR) | `HKLM\Software\Policies\Microsoft\Windows\GameDVR` | `AllowGameDVR` |
+| [Enables or disables Windows Game Recording and Broadcasting](https://noverse.dev/policies?p=GameDVR*AllowGameDVR) | `HKLM\Software\Policies\Microsoft\Windows\GameDVR` | `AllowGameDVR` |
 
 # Disable Location Access
 
@@ -876,15 +876,15 @@ There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't se
 <pattern type="Registry">HKLM\Software\Microsoft\Sensors\LocationProvider [CSEnable]</pattern>
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Let Windows apps access location](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessLocation) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessLocation` |
-| [Turn off Windows Location Provider](https://www.noverse.dev/policies.html?p=LocationProviderAdm*DisableWindowsLocationProvider_1) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableWindowsLocationProvider` |
-| [Turn off sensors](https://www.noverse.dev/policies.html?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
-| [Turn off location](https://www.noverse.dev/policies.html?p=Sensors*DisableLocation_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableLocation` |
-| [Turn off location scripting](https://www.noverse.dev/policies.html?p=Sensors*DisableLocationScripting_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableLocationScripting` |
+| [Let Windows apps access location](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessLocation) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessLocation` |
+| [Turn off Windows Location Provider](https://noverse.dev/policies?p=LocationProviderAdm*DisableWindowsLocationProvider_1) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableWindowsLocationProvider` |
+| [Turn off sensors](https://noverse.dev/policies?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
+| [Turn off location](https://noverse.dev/policies?p=Sensors*DisableLocation_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableLocation` |
+| [Turn off location scripting](https://noverse.dev/policies?p=Sensors*DisableLocationScripting_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableLocationScripting` |
 
 # Disable Sensors
 
@@ -900,11 +900,11 @@ Blocks apps/system from using hardware sensors such as ambient light, orientatio
 
 No other [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) depend on these three services.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off sensors](https://www.noverse.dev/policies.html?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
+| [Turn off sensors](https://noverse.dev/policies?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
 
 # Disable Windows Insider
 
@@ -914,11 +914,11 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 
 `AllowBuildPreview` is used up to V1703, I'll still leave it. `Computer Configuration > Administrative Templates > Windows Component > Windows Update > Windows Update for Business : Manage Preview Builds` for W10+ versions.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Toggle user control over Insider builds](https://www.noverse.dev/policies.html?p=AllowBuildPreview*AllowBuildPreview) | `HKLM\Software\Policies\Microsoft\Windows\PreviewBuilds` | `AllowBuildPreview` |
+| [Toggle user control over Insider builds](https://noverse.dev/policies?p=AllowBuildPreview*AllowBuildPreview) | `HKLM\Software\Policies\Microsoft\Windows\PreviewBuilds` | `AllowBuildPreview` |
 
 # Disable PowerShell & .NET Telemetry
 
@@ -951,30 +951,30 @@ dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveM
 
 Biometric is used for fingerprint, facial recognition, and other biometric authentication methods in Windows Hello and related security features.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow the use of biometrics](https://www.noverse.dev/policies.html?p=Biometrics*Biometrics_EnableBio) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics` | `Enabled` |
-| [Allow users to log on using biometrics](https://www.noverse.dev/policies.html?p=Biometrics*Biometrics_EnableCredProv) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider` | `Enabled` |
-| [Allow domain users to log on using biometrics](https://www.noverse.dev/policies.html?p=Biometrics*Biometrics_EnableDomainCredProv) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider` | `Domain Accounts` |
-| [Configure enhanced anti-spoofing](https://www.noverse.dev/policies.html?p=Biometrics*Face_EnhancedAntiSpoofing) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\FacialFeatures` | `EnhancedAntiSpoofing` |
+| [Allow the use of biometrics](https://noverse.dev/policies?p=Biometrics*Biometrics_EnableBio) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics` | `Enabled` |
+| [Allow users to log on using biometrics](https://noverse.dev/policies?p=Biometrics*Biometrics_EnableCredProv) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider` | `Enabled` |
+| [Allow domain users to log on using biometrics](https://noverse.dev/policies?p=Biometrics*Biometrics_EnableDomainCredProv) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider` | `Domain Accounts` |
+| [Configure enhanced anti-spoofing](https://noverse.dev/policies?p=Biometrics*Face_EnhancedAntiSpoofing) | `HKLM\SOFTWARE\Policies\Microsoft\Biometrics\FacialFeatures` | `EnhancedAntiSpoofing` |
 
 # Disable Remote Desktop
 
 Disables remote desktop, remote assistance, RPC traffic, and device redirection. See [remote desktop FAQs](https://learn.microsoft.com/en-us/windows-server/remote/remote-desktop-services/remotepc/remote-pc-connections-faq) for more information & [Terminal-Server.txt](https://github.com/nohuto/regkit/blob/main/records/Terminal-Server.txt) for a list of read values on boot (`\Registry\Machine\SYSTEM\ControlSet001\Control\Terminal Server\*` key).
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Configure Solicited Remote Assistance](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Solicit) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `fAllowToGetHelp`<br>`fAllowFullControl` |
-| [Configure Offer Remote Assistance](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Unsolicit) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `fAllowUnsolicited`<br>`fAllowUnsolicitedFullControl` |
-| [Turn on session logging](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_Logging) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `LoggingEnabled` |
-| [Allow only Windows Vista or later connections](https://www.noverse.dev/policies.html?p=RemoteAssistance*RA_EncryptedTicketOnly) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `CreateEncryptedOnlyTickets` |
-| [Restrict Unauthenticated RPC clients](https://www.noverse.dev/policies.html?p=RPC*RpcRestrictRemoteClients) | `HKLM\Software\Policies\Microsoft\Windows NT\Rpc` | `RestrictRemoteClients` |
-| [Don't allow this PC to be projected to](https://www.noverse.dev/policies.html?p=WirelessDisplay*AllowProjectionToPC) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `AllowProjectionToPC` |
-| [Require pin for pairing](https://www.noverse.dev/policies.html?p=WirelessDisplay*RequirePinForPairing) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `RequirePinForPairing` |
+| [Configure Solicited Remote Assistance](https://noverse.dev/policies?p=RemoteAssistance*RA_Solicit) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `fAllowToGetHelp`<br>`fAllowFullControl` |
+| [Configure Offer Remote Assistance](https://noverse.dev/policies?p=RemoteAssistance*RA_Unsolicit) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `fAllowUnsolicited`<br>`fAllowUnsolicitedFullControl` |
+| [Turn on session logging](https://noverse.dev/policies?p=RemoteAssistance*RA_Logging) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `LoggingEnabled` |
+| [Allow only Windows Vista or later connections](https://noverse.dev/policies?p=RemoteAssistance*RA_EncryptedTicketOnly) | `HKLM\Software\policies\Microsoft\Windows NT\Terminal Services` | `CreateEncryptedOnlyTickets` |
+| [Restrict Unauthenticated RPC clients](https://noverse.dev/policies?p=RPC*RpcRestrictRemoteClients) | `HKLM\Software\Policies\Microsoft\Windows NT\Rpc` | `RestrictRemoteClients` |
+| [Don't allow this PC to be projected to](https://noverse.dev/policies?p=WirelessDisplay*AllowProjectionToPC) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `AllowProjectionToPC` |
+| [Require pin for pairing](https://noverse.dev/policies?p=WirelessDisplay*RequirePinForPairing) | `HKLM\Software\Policies\Microsoft\Windows\Connect` | `RequirePinForPairing` |
 
 # Deny App Access
 
@@ -994,37 +994,37 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Capabilit
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/appaccess.png?raw=true)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Let Windows apps access account information](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessAccountInfo) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessAccountInfo` |
-| [Let Windows apps access the calendar](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCalendar) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCalendar` |
-| [Let Windows apps access call history](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCallHistory) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCallHistory` |
-| [Let Windows apps access the camera](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
-| [Let Windows apps access contacts](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessContacts) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessContacts` |
-| [Let Windows apps access email](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessEmail) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessEmail` |
-| [Let Windows apps make use of Text and image generation features of Windows](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessSystemAIModels) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessSystemAIModels` |
-| [Let Windows apps take screenshots of various windows or displays](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessGraphicsCaptureProgrammatic) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGraphicsCaptureProgrammatic` |
-| [Let Windows apps turn off the screenshot border](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessGraphicsCaptureWithoutBorder) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGraphicsCaptureWithoutBorder` |
-| [Let Windows apps access presence sensing](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessHumanPresence) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessHumanPresence` |
-| [Let Windows apps access location](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessLocation) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessLocation` |
-| [Let Windows apps access messaging](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessMessaging) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMessaging` |
-| [Let Windows apps access the microphone](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessMicrophone) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMicrophone` |
-| [Let Windows apps access motion](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessMotion) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMotion` |
-| [Let Windows apps access notifications](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessNotifications) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessNotifications` |
-| [Let Windows apps make phone calls](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessPhone) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessPhone` |
-| [Let Windows apps control radios](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessRadios) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessRadios` |
-| [Let Windows apps communicate with unpaired devices](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsSyncWithDevices) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsSyncWithDevices` |
-| [Let Windows apps access Tasks](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessTasks) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessTasks` |
-| [Let Windows apps access trusted devices](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessTrustedDevices) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessTrustedDevices` |
-| [Let Windows apps access diagnostic information about other apps](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsGetDiagnosticInfo) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsGetDiagnosticInfo` |
-| [Let Windows apps access an eye tracker device](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessGazeInput) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGazeInput` |
-| [Let Windows apps activate with voice](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsActivateWithVoice) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsActivateWithVoice` |
-| [Let Windows apps activate with voice while the system is locked](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsActivateWithVoiceAboveLock) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsActivateWithVoiceAboveLock` |
-| [Let Windows apps access user movements while running in the background](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessBackgroundSpatialPerception) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessBackgroundSpatialPerception` |
-| [User management of sharing user name, account picture, and domain information with apps (not desktop apps)](https://www.noverse.dev/policies.html?p=UserProfiles*UserInfoAccessAction) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowUserInfoAccess` |
-| [Let Windows apps access cellular data](https://www.noverse.dev/policies.html?p=wwansvc*LetAppsAccessCellularData) | `HKLM\Software\Policies\Microsoft\Windows\WwanSvc\CellularDataAccess` | `LetAppsAccessCellularData` |
+| [Let Windows apps access account information](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessAccountInfo) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessAccountInfo` |
+| [Let Windows apps access the calendar](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessCalendar) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCalendar` |
+| [Let Windows apps access call history](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessCallHistory) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCallHistory` |
+| [Let Windows apps access the camera](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
+| [Let Windows apps access contacts](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessContacts) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessContacts` |
+| [Let Windows apps access email](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessEmail) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessEmail` |
+| [Let Windows apps make use of Text and image generation features of Windows](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessSystemAIModels) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessSystemAIModels` |
+| [Let Windows apps take screenshots of various windows or displays](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessGraphicsCaptureProgrammatic) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGraphicsCaptureProgrammatic` |
+| [Let Windows apps turn off the screenshot border](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessGraphicsCaptureWithoutBorder) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGraphicsCaptureWithoutBorder` |
+| [Let Windows apps access presence sensing](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessHumanPresence) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessHumanPresence` |
+| [Let Windows apps access location](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessLocation) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessLocation` |
+| [Let Windows apps access messaging](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessMessaging) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMessaging` |
+| [Let Windows apps access the microphone](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessMicrophone) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMicrophone` |
+| [Let Windows apps access motion](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessMotion) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessMotion` |
+| [Let Windows apps access notifications](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessNotifications) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessNotifications` |
+| [Let Windows apps make phone calls](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessPhone) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessPhone` |
+| [Let Windows apps control radios](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessRadios) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessRadios` |
+| [Let Windows apps communicate with unpaired devices](https://noverse.dev/policies?p=AppPrivacy*LetAppsSyncWithDevices) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsSyncWithDevices` |
+| [Let Windows apps access Tasks](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessTasks) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessTasks` |
+| [Let Windows apps access trusted devices](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessTrustedDevices) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessTrustedDevices` |
+| [Let Windows apps access diagnostic information about other apps](https://noverse.dev/policies?p=AppPrivacy*LetAppsGetDiagnosticInfo) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsGetDiagnosticInfo` |
+| [Let Windows apps access an eye tracker device](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessGazeInput) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessGazeInput` |
+| [Let Windows apps activate with voice](https://noverse.dev/policies?p=AppPrivacy*LetAppsActivateWithVoice) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsActivateWithVoice` |
+| [Let Windows apps activate with voice while the system is locked](https://noverse.dev/policies?p=AppPrivacy*LetAppsActivateWithVoiceAboveLock) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsActivateWithVoiceAboveLock` |
+| [Let Windows apps access user movements while running in the background](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessBackgroundSpatialPerception) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessBackgroundSpatialPerception` |
+| [User management of sharing user name, account picture, and domain information with apps (not desktop apps)](https://noverse.dev/policies?p=UserProfiles*UserInfoAccessAction) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowUserInfoAccess` |
+| [Let Windows apps access cellular data](https://noverse.dev/policies?p=wwansvc*LetAppsAccessCellularData) | `HKLM\Software\Policies\Microsoft\Windows\WwanSvc\CellularDataAccess` | `LetAppsAccessCellularData` |
 
 # Disable Startup ETS
 
@@ -1074,18 +1074,18 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/inking.png?raw=true)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Improve inking and typing recognition](https://www.noverse.dev/policies.html?p=TextInput*AllowLinguisticDataCollection) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\TextInput` | `AllowLinguisticDataCollection` |
-| [Restrict Internet communication](https://www.noverse.dev/policies.html?p=ICM*InternetManagement_RestrictCommunication_2) | `HKLM\Software\Policies\Microsoft\Windows\HandwritingErrorReports`<br>`HKLM\Software\Policies\Microsoft\Windows\TabletPC` | `PreventHandwritingErrorReports`<br>`PreventHandwritingDataSharing` |
-| [Allow Windows Ink Workspace](https://www.noverse.dev/policies.html?p=WindowsInkWorkspace*AllowWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowWindowsInkWorkspace` |
-| [Allow suggested apps in Windows Ink Workspace](https://www.noverse.dev/policies.html?p=WindowsInkWorkspace*AllowSuggestedAppsInWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowSuggestedAppsInWindowsInkWorkspace` |
+| [Improve inking and typing recognition](https://noverse.dev/policies?p=TextInput*AllowLinguisticDataCollection) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\TextInput` | `AllowLinguisticDataCollection` |
+| [Restrict Internet communication](https://noverse.dev/policies?p=ICM*InternetManagement_RestrictCommunication_2) | `HKLM\Software\Policies\Microsoft\Windows\HandwritingErrorReports`<br>`HKLM\Software\Policies\Microsoft\Windows\TabletPC` | `PreventHandwritingErrorReports`<br>`PreventHandwritingDataSharing` |
+| [Allow Windows Ink Workspace](https://noverse.dev/policies?p=WindowsInkWorkspace*AllowWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowWindowsInkWorkspace` |
+| [Allow suggested apps in Windows Ink Workspace](https://noverse.dev/policies?p=WindowsInkWorkspace*AllowSuggestedAppsInWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowSuggestedAppsInWindowsInkWorkspace` |
 
 # Disable Text Input Hosts
 
-`ctfmon.exe` is the classic CTF (Collaborative Translation Framework) loader, it's started for the user at logon by `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`. It seems to handle [IME](https://learn.microsoft.com/en-us/windows/apps/develop/input/input-method-editors) (Input Method Editor) support, language/input profiles, language bar/input indicator, and [keyboard layout switching](https://www.noverse.dev/docs/win-config/peripheral/keyboard-values/).
+`ctfmon.exe` is the classic CTF (Collaborative Translation Framework) loader, it's started for the user at logon by `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`. It seems to handle [IME](https://learn.microsoft.com/en-us/windows/apps/develop/input/input-method-editors) (Input Method Editor) support, language/input profiles, language bar/input indicator, and [keyboard layout switching](https://noverse.dev/docs/win-config/peripheral/keyboard-values/).
 
 `TextInputHost.exe` is the modern text input host (from `MicrosoftWindows.Client.CBS`), it seems to get used (on demand) through the `InputApp` registration when opening modern input parts such as `Win+.`, `Win+V`, touch keyboard, handwriting, voice typing, and so on.
 
@@ -1093,12 +1093,12 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 
 [`HasAccepted`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. [`AllowSpeechModelUpdate`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) blocks automatic updates of speech recognition and synthesis models. I found `DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow users to enable online speech recognition services](https://www.noverse.dev/policies.html?p=Globalization*AllowInputPersonalization) | `HKLM\Software\Policies\Microsoft\InputPersonalization` | `AllowInputPersonalization` |
-| [Allow Automatic Update of Speech Data](https://www.noverse.dev/policies.html?p=Speech*AllowSpeechModelUpdate) | `HKLM\Software\Policies\Microsoft\Speech` | `AllowSpeechModelUpdate` |
+| [Allow users to enable online speech recognition services](https://noverse.dev/policies?p=Globalization*AllowInputPersonalization) | `HKLM\Software\Policies\Microsoft\InputPersonalization` | `AllowInputPersonalization` |
+| [Allow Automatic Update of Speech Data](https://noverse.dev/policies?p=Speech*AllowSpeechModelUpdate) | `HKLM\Software\Policies\Microsoft\Speech` | `AllowSpeechModelUpdate` |
 
 # Disable Camera
 
@@ -1112,55 +1112,55 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 `Disable Lock Screen Camera`:  
 "Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Let Windows apps access the camera](https://www.noverse.dev/policies.html?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
-| [Allow Use of Camera](https://www.noverse.dev/policies.html?p=Camera*L_AllowCamera) | `HKLM\software\Policies\Microsoft\Camera` | `AllowCamera` |
-| [Prevent enabling lock screen camera](https://www.noverse.dev/policies.html?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |
+| [Let Windows apps access the camera](https://noverse.dev/policies?p=AppPrivacy*LetAppsAccessCamera) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsAccessCamera` |
+| [Allow Use of Camera](https://noverse.dev/policies?p=Camera*L_AllowCamera) | `HKLM\software\Policies\Microsoft\Camera` | `AllowCamera` |
+| [Prevent enabling lock screen camera](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |
 
 # Disable Synchronization
 
 Disables all kind of synchronization, see policies.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Do not sync](https://www.noverse.dev/policies.html?p=SettingSync*DisableSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableSettingSync`<br>`DisableSettingSyncUserOverride` |
-| [Do not sync app settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableApplicationSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableApplicationSettingSync`<br>`DisableApplicationSettingSyncUserOverride` |
-| [Do not sync passwords](https://www.noverse.dev/policies.html?p=SettingSync*DisableCredentialsSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableCredentialsSettingSync`<br>`DisableCredentialsSettingSyncUserOverride` |
-| [Do not sync personalize](https://www.noverse.dev/policies.html?p=SettingSync*DisablePersonalizationSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisablePersonalizationSettingSync`<br>`DisablePersonalizationSettingSyncUserOverride` |
-| [Do not sync Apps](https://www.noverse.dev/policies.html?p=SettingSync*DisableAppSyncSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableAppSyncSettingSync`<br>`DisableAppSyncSettingSyncUserOverride` |
-| [Do not sync other Windows settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableWindowsSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableWindowsSettingSync`<br>`DisableWindowsSettingSyncUserOverride` |
-| [Do not sync desktop personalization](https://www.noverse.dev/policies.html?p=SettingSync*DisableDesktopThemeSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableDesktopThemeSettingSync`<br>`DisableDesktopThemeSettingSyncUserOverride` |
-| [Do not sync browser settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableWebBrowserSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableWebBrowserSettingSync`<br>`DisableWebBrowserSettingSyncUserOverride` |
-| [Do not sync on metered connections](https://www.noverse.dev/policies.html?p=SettingSync*DisableSyncOnPaidNetwork) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableSyncOnPaidNetwork` |
-| [Do not sync start settings](https://www.noverse.dev/policies.html?p=SettingSync*DisableStartLayoutSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableStartLayoutSettingSync`<br>`DisableStartLayoutSettingSyncUserOverride` |
+| [Do not sync](https://noverse.dev/policies?p=SettingSync*DisableSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableSettingSync`<br>`DisableSettingSyncUserOverride` |
+| [Do not sync app settings](https://noverse.dev/policies?p=SettingSync*DisableApplicationSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableApplicationSettingSync`<br>`DisableApplicationSettingSyncUserOverride` |
+| [Do not sync passwords](https://noverse.dev/policies?p=SettingSync*DisableCredentialsSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableCredentialsSettingSync`<br>`DisableCredentialsSettingSyncUserOverride` |
+| [Do not sync personalize](https://noverse.dev/policies?p=SettingSync*DisablePersonalizationSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisablePersonalizationSettingSync`<br>`DisablePersonalizationSettingSyncUserOverride` |
+| [Do not sync Apps](https://noverse.dev/policies?p=SettingSync*DisableAppSyncSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableAppSyncSettingSync`<br>`DisableAppSyncSettingSyncUserOverride` |
+| [Do not sync other Windows settings](https://noverse.dev/policies?p=SettingSync*DisableWindowsSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableWindowsSettingSync`<br>`DisableWindowsSettingSyncUserOverride` |
+| [Do not sync desktop personalization](https://noverse.dev/policies?p=SettingSync*DisableDesktopThemeSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableDesktopThemeSettingSync`<br>`DisableDesktopThemeSettingSyncUserOverride` |
+| [Do not sync browser settings](https://noverse.dev/policies?p=SettingSync*DisableWebBrowserSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableWebBrowserSettingSync`<br>`DisableWebBrowserSettingSyncUserOverride` |
+| [Do not sync on metered connections](https://noverse.dev/policies?p=SettingSync*DisableSyncOnPaidNetwork) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableSyncOnPaidNetwork` |
+| [Do not sync start settings](https://noverse.dev/policies?p=SettingSync*DisableStartLayoutSettingSync) | `HKLM\Software\Policies\Microsoft\Windows\SettingSync` | `DisableStartLayoutSettingSync`<br>`DisableStartLayoutSettingSyncUserOverride` |
 
 # Disable Activity History
 
 `EnableActivityFeed` enables or disables publishing and syncing of activities across devices. `PublishUserActivities` allows or blocks local publishing of user activities. `UploadUserActivities` allows or blocks uploading of user activities to the cloud, deletion is not affected.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enables Activity Feed](https://www.noverse.dev/policies.html?p=OSPolicy*EnableActivityFeed) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableActivityFeed` |
-| [Allow publishing of User Activities](https://www.noverse.dev/policies.html?p=OSPolicy*PublishUserActivities) | `HKLM\Software\Policies\Microsoft\Windows\System` | `PublishUserActivities` |
-| [Allow upload of User Activities](https://www.noverse.dev/policies.html?p=OSPolicy*UploadUserActivities) | `HKLM\Software\Policies\Microsoft\Windows\System` | `UploadUserActivities` |
-| [Turn off storage and display of search history](https://www.noverse.dev/policies.html?p=Search*DisableSearchHistory) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DisableSearchHistory` |
+| [Enables Activity Feed](https://noverse.dev/policies?p=OSPolicy*EnableActivityFeed) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableActivityFeed` |
+| [Allow publishing of User Activities](https://noverse.dev/policies?p=OSPolicy*PublishUserActivities) | `HKLM\Software\Policies\Microsoft\Windows\System` | `PublishUserActivities` |
+| [Allow upload of User Activities](https://noverse.dev/policies?p=OSPolicy*UploadUserActivities) | `HKLM\Software\Policies\Microsoft\Windows\System` | `UploadUserActivities` |
+| [Turn off storage and display of search history](https://noverse.dev/policies?p=Search*DisableSearchHistory) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\Explorer` | `DisableSearchHistory` |
 
 # Disable File History
 
 "File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off File History](https://www.noverse.dev/policies.html?p=FileHistory*DisableFileHistory) | `HKLM\Software\Policies\Microsoft\Windows\FileHistory` | `Disabled` |
+| [Turn off File History](https://noverse.dev/policies?p=FileHistory*DisableFileHistory) | `HKLM\Software\Policies\Microsoft\Windows\FileHistory` | `Disabled` |
 
 # Disable MDM Enrollment
 
@@ -1170,12 +1170,12 @@ Disables all kind of synchronization, see policies.
 `AutoEnrollMDM`:  
 "This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Disable MDM Enrollment](https://www.noverse.dev/policies.html?p=MDM*MDM_MDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `DisableRegistration` |
-| [Enable automatic MDM enrollment using default Azure AD credentials](https://www.noverse.dev/policies.html?p=MDM*MDM_JoinMDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `AutoEnrollMDM`<br>`UseAADCredentialType`<br>`MDMApplicationId` |
+| [Disable MDM Enrollment](https://noverse.dev/policies?p=MDM*MDM_MDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `DisableRegistration` |
+| [Enable automatic MDM enrollment using default Azure AD credentials](https://noverse.dev/policies?p=MDM*MDM_JoinMDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `AutoEnrollMDM`<br>`UseAADCredentialType`<br>`MDMApplicationId` |
 
 # Disable Feedback Prompts
 
@@ -1183,37 +1183,37 @@ Disables all kind of synchronization, see policies.
 
 Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Do not show feedback notifications](https://www.noverse.dev/policies.html?p=FeedbackNotifications*DoNotShowFeedbackNotifications) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DoNotShowFeedbackNotifications` |
+| [Do not show feedback notifications](https://noverse.dev/policies?p=FeedbackNotifications*DoNotShowFeedbackNotifications) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DoNotShowFeedbackNotifications` |
 
 # Disable CEIP
 
 Voluntary program that collects usage data to help improve the quality and performance of its products.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off the Windows Messenger Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=ICM*WinMSG_NoInstrumentation_2) | `HKLM\Software\Policies\Microsoft\Messenger\Client` | `CEIP` |
-| [Turn off Windows Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=ICM*CEIPEnable) | `HKLM\Software\Policies\Microsoft\SQMClient\Windows` | `CEIPEnable` |
-| [Prevent participation in the Customer Experience Improvement Program](https://www.noverse.dev/policies.html?p=inetres*SQM_DisableCEIP) | `HKLM\Software\Policies\Microsoft\Internet Explorer\SQM`<br>`HKCU\Software\Policies\Microsoft\Internet Explorer\SQM` | `DisableCustomerImprovementProgram` |
+| [Turn off the Windows Messenger Customer Experience Improvement Program](https://noverse.dev/policies?p=ICM*WinMSG_NoInstrumentation_2) | `HKLM\Software\Policies\Microsoft\Messenger\Client` | `CEIP` |
+| [Turn off Windows Customer Experience Improvement Program](https://noverse.dev/policies?p=ICM*CEIPEnable) | `HKLM\Software\Policies\Microsoft\SQMClient\Windows` | `CEIPEnable` |
+| [Prevent participation in the Customer Experience Improvement Program](https://noverse.dev/policies?p=inetres*SQM_DisableCEIP) | `HKLM\Software\Policies\Microsoft\Internet Explorer\SQM`<br>`HKCU\Software\Policies\Microsoft\Internet Explorer\SQM` | `DisableCustomerImprovementProgram` |
 
 # Disable Cortana
 
 "[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow Cortana](https://www.noverse.dev/policies.html?p=Search*AllowCortana) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCortana` |
-| [Allow Cortana above lock screen](https://www.noverse.dev/policies.html?p=Search*AllowCortanaAboveLock) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCortanaAboveLock` |
-| [Allow search and Cortana to use location](https://www.noverse.dev/policies.html?p=Search*AllowSearchToUseLocation) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowSearchToUseLocation` |
-| [Allow Cloud Search](https://www.noverse.dev/policies.html?p=Search*AllowCloudSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCloudSearch` |
-| [Allow Cortana Page in OOBE on an AAD account](https://www.noverse.dev/policies.html?p=Search*AllowCortanaInAAD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search\AllowCortanaInAAD` | `AllowCortanaInAADPathOOBE` |
+| [Allow Cortana](https://noverse.dev/policies?p=Search*AllowCortana) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCortana` |
+| [Allow Cortana above lock screen](https://noverse.dev/policies?p=Search*AllowCortanaAboveLock) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCortanaAboveLock` |
+| [Allow search and Cortana to use location](https://noverse.dev/policies?p=Search*AllowSearchToUseLocation) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowSearchToUseLocation` |
+| [Allow Cloud Search](https://noverse.dev/policies?p=Search*AllowCloudSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AllowCloudSearch` |
+| [Allow Cortana Page in OOBE on an AAD account](https://noverse.dev/policies?p=Search*AllowCortanaInAAD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search\AllowCortanaInAAD` | `AllowCortanaInAADPathOOBE` |
 
 ## Miscellaneous Notes
 ```c
@@ -1327,11 +1327,11 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Resultant Set of Policy logging](https://www.noverse.dev/policies.html?p=GroupPolicy*RSoPLogging) | `HKLM\Software\Policies\Microsoft\Windows\System` | `RSoPLogging` |
+| [Turn off Resultant Set of Policy logging](https://noverse.dev/policies?p=GroupPolicy*RSoPLogging) | `HKLM\Software\Policies\Microsoft\Windows\System` | `RSoPLogging` |
 
 # Disable Desktop Heap Logging
 
@@ -1363,11 +1363,11 @@ __int64 IsDesktopHeapLoggingOn(void)
 | ------ | ------ | ------ |
 | AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft's cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow Message Service Cloud Sync](https://www.noverse.dev/policies.html?p=messaging*AllowMessageSync) | `HKLM\Software\Policies\Microsoft\Windows\Messaging` | `AllowMessageSync` |
+| [Allow Message Service Cloud Sync](https://noverse.dev/policies?p=messaging*AllowMessageSync) | `HKLM\Software\Policies\Microsoft\Windows\Messaging` | `AllowMessageSync` |
 
 # Disable CSC
 
@@ -1377,16 +1377,16 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 - [folder-redirection/disable-offline-files-on-folders](https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/disable-offline-files-on-folders#windows-powershell-equivalent-commands) (todo)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow or Disallow use of the Offline Files feature](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_Enabled) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `Enabled` |
-| [Turn off reminder balloons](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_NoReminders_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `NoReminders` |
-| [Synchronize all offline files before logging off](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_SyncAtLogoff_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `SyncAtLogoff` |
-| [Synchronize all offline files when logging on](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_SyncAtLogon_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `SyncAtLogon` |
-| [Configure Background Sync](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_BackgroundSyncSettings) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `BackgroundSyncEnabled`<br>`BackgroundSyncPeriodMin`<br>`BackgroundSyncMaxStartMin`<br>`BackgroundSyncIgnoreBlockOutAfterMin`<br>`BackgroundSyncBlockOutStartTime`<br>`BackgroundSyncBlockOutDurationMin`<br>`BackgroundSyncEnabledForForcedOffline` |
-| [Remove "Work offline" command](https://www.noverse.dev/policies.html?p=OfflineFiles*Pol_WorkOfflineDisabled_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `WorkOfflineDisabled` |
+| [Allow or Disallow use of the Offline Files feature](https://noverse.dev/policies?p=OfflineFiles*Pol_Enabled) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `Enabled` |
+| [Turn off reminder balloons](https://noverse.dev/policies?p=OfflineFiles*Pol_NoReminders_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `NoReminders` |
+| [Synchronize all offline files before logging off](https://noverse.dev/policies?p=OfflineFiles*Pol_SyncAtLogoff_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `SyncAtLogoff` |
+| [Synchronize all offline files when logging on](https://noverse.dev/policies?p=OfflineFiles*Pol_SyncAtLogon_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `SyncAtLogon` |
+| [Configure Background Sync](https://noverse.dev/policies?p=OfflineFiles*Pol_BackgroundSyncSettings) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `BackgroundSyncEnabled`<br>`BackgroundSyncPeriodMin`<br>`BackgroundSyncMaxStartMin`<br>`BackgroundSyncIgnoreBlockOutAfterMin`<br>`BackgroundSyncBlockOutStartTime`<br>`BackgroundSyncBlockOutDurationMin`<br>`BackgroundSyncEnabledForForcedOffline` |
+| [Remove "Work offline" command](https://noverse.dev/policies?p=OfflineFiles*Pol_WorkOfflineDisabled_2) | `HKLM\Software\Policies\Microsoft\Windows\NetCache` | `WorkOfflineDisabled` |
 
 # Disable Cloud Content Search
 
@@ -1429,11 +1429,11 @@ If you disable or don't configure this policy setting, KMS client activation dat
 
 [`Disable Auto Activation`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)#registry-settings) (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off KMS Client Online AVS Validation](https://www.noverse.dev/policies.html?p=AVSValidationGP*NoAcquireGT) | `HKLM\Software\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform` | `NoGenTicket` |
+| [Turn off KMS Client Online AVS Validation](https://noverse.dev/policies?p=AVSValidationGP*NoAcquireGT) | `HKLM\Software\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform` | `NoGenTicket` |
 
 # Disable Font Providers
 
@@ -1443,21 +1443,21 @@ If you enable this policy setting, Windows periodically queries an online font p
 
 If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enable Font Providers](https://www.noverse.dev/policies.html?p=GroupPolicy*EnableFontProviders) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableFontProviders` |
+| [Enable Font Providers](https://noverse.dev/policies?p=GroupPolicy*EnableFontProviders) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableFontProviders` |
 
 # Disable Local Security Questions
 
 Prevent the use of security questions for local accounts.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Prevent the use of security questions for local accounts](https://www.noverse.dev/policies.html?p=CredUI*NoLocalPasswordResetQuestions) | `HKLM\Software\Policies\Microsoft\Windows\System` | `NoLocalPasswordResetQuestions` |
+| [Prevent the use of security questions for local accounts](https://noverse.dev/policies?p=CredUI*NoLocalPasswordResetQuestions) | `HKLM\Software\Policies\Microsoft\Windows\System` | `NoLocalPasswordResetQuestions` |
 
 # Disable Thumbnail Caching
 
@@ -1465,12 +1465,12 @@ Disables persistent File Explorer thumbnail caching so previews are less likely 
 
 This improves privacy mainly by reducing leftover preview artifacts for images, videos, documents, and other shell items. Microsoft explicitly notes that the thumbnail cache can be read by everyone on shared or security sensitive systems, and the related network folder thumbnail policies note that allowing thumbnail use on network folders can expose computers to security risks.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off the caching of thumbnails in hidden thumbs.db files](https://www.noverse.dev/policies.html?p=Thumbnails*DisableThumbsDBOnNetworkFolders) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableThumbsDBOnNetworkFolders` |
-| [Turn off caching of thumbnail pictures](https://www.noverse.dev/policies.html?p=WindowsExplorer*NoCacheThumbNailPictures) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoThumbnailCache` |
+| [Turn off the caching of thumbnails in hidden thumbs.db files](https://noverse.dev/policies?p=Thumbnails*DisableThumbsDBOnNetworkFolders) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableThumbsDBOnNetworkFolders` |
+| [Turn off caching of thumbnail pictures](https://noverse.dev/policies?p=WindowsExplorer*NoCacheThumbNailPictures) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoThumbnailCache` |
 
 # Disable Application Compatibility
 
@@ -1491,18 +1491,18 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 //"\\Microsoft\\Windows\\Application Experience\\PcaWallpaperAppDetect",
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off SwitchBack Compatibility Engine](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffSwitchBack) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `SbEnable` |
-| [Turn off Application Compatibility Engine](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffEngine) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableEngine` |
-| [Turn off Program Compatibility Assistant](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffProgramCompatibilityAssistant_2) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePCA` |
-| [Turn off Install Tracing](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffInstallTracing) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableInstallTracing` |
-| [Turn off API Sampling](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffAPISamping) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableAPISamping` |
-| [Turn off Application Footprint](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffApplicationFootprint) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableApplicationFootprint` |
-| [Turn off compatibility scan for backed up applications](https://www.noverse.dev/policies.html?p=AppDeviceInventory*TurnOffWin32AppBackup) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableWin32AppBackup` |
-| [Detect compatibility issues for applications and drivers](https://www.noverse.dev/policies.html?p=pca*DisablePcaUIPolicy) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePcaUI` |
+| [Turn off SwitchBack Compatibility Engine](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffSwitchBack) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `SbEnable` |
+| [Turn off Application Compatibility Engine](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffEngine) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableEngine` |
+| [Turn off Program Compatibility Assistant](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffProgramCompatibilityAssistant_2) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePCA` |
+| [Turn off Install Tracing](https://noverse.dev/policies?p=AppDeviceInventory*TurnOffInstallTracing) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableInstallTracing` |
+| [Turn off API Sampling](https://noverse.dev/policies?p=AppDeviceInventory*TurnOffAPISamping) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableAPISamping` |
+| [Turn off Application Footprint](https://noverse.dev/policies?p=AppDeviceInventory*TurnOffApplicationFootprint) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableApplicationFootprint` |
+| [Turn off compatibility scan for backed up applications](https://noverse.dev/policies?p=AppDeviceInventory*TurnOffWin32AppBackup) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableWin32AppBackup` |
+| [Detect compatibility issues for applications and drivers](https://noverse.dev/policies?p=pca*DisablePcaUIPolicy) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePcaUI` |
 
 # Disable Census Data Collection
 
@@ -1530,12 +1530,12 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 If enabled = "Windows will periodically attempt to connect with the OneSettings service to download configuration settings".
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enable OneSettings Auditing](https://www.noverse.dev/policies.html?p=DataCollection*EnableOneSettingsAuditing) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `EnableOneSettingsAuditing` |
-| [Disable OneSettings Downloads](https://www.noverse.dev/policies.html?p=DataCollection*DisableOneSettingsDownloads) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableOneSettingsDownloads` |
+| [Enable OneSettings Auditing](https://noverse.dev/policies?p=DataCollection*EnableOneSettingsAuditing) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `EnableOneSettingsAuditing` |
+| [Disable OneSettings Downloads](https://noverse.dev/policies?p=DataCollection*DisableOneSettingsDownloads) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DisableOneSettingsDownloads` |
 
 # Disable F1 Help Key
 
@@ -1554,11 +1554,11 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 
 - You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn On/Off Find My Device](https://www.noverse.dev/policies.html?p=FindMy*FindMy_AllowFindMyDeviceConfig) | `HKLM\SOFTWARE\Policies\Microsoft\FindMyDevice` | `AllowFindMyDevice` |
+| [Turn On/Off Find My Device](https://noverse.dev/policies?p=FindMy*FindMy_AllowFindMyDeviceConfig) | `HKLM\SOFTWARE\Policies\Microsoft\FindMyDevice` | `AllowFindMyDevice` |
 
 # Disable PSR
 
@@ -1577,11 +1577,11 @@ It is a deprecated feature, as the banner shows:
 HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Steps Recorder](https://www.noverse.dev/policies.html?p=AppCompat*AppCompatTurnOffUserActionRecord) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableUAR` |
+| [Turn off Steps Recorder](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffUserActionRecord) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableUAR` |
 
 # Disable WMPlayer Telemetry
 

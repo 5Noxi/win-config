@@ -9,9 +9,9 @@ For changelogs, concepts, and other project updates, join the Discord server:
 ## Product
 
 See details about the tool here:
-- https://noverse.dev/product.html
+- https://noverse.dev/product
 
 ## Other Projects
 
 You can find all of my other projects here:
-- https://noverse.dev/projects.html
+- https://noverse.dev/projects

@@ -43,41 +43,41 @@ If using [`native.winoffice.txt`](https://github.com/hagezi/dns-blocklists/blob/
   - `*.config.ecs.gov.teams.microsoft.us` (GCC-H)
   - `*.config.ecs.dod.teams.microsoft.us` (DoD)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Configure Windows Defender SmartScreen](https://www.noverse.dev/policies.html?p=MicrosoftEdge*AllowSmartScreen) | `HKLM\Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter`<br>`HKCU\Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter` | `EnabledV9` |
-| [Configure Windows Defender SmartScreen](https://www.noverse.dev/policies.html?p=SmartScreen*ShellConfigureSmartScreen) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableSmartScreen`<br>`ShellSmartScreenLevel` |
-| [Configure Windows Defender SmartScreen](https://www.noverse.dev/policies.html?p=SmartScreen*EdgeConfigureSmartScreen) | `HKLM\Software\Policies\Microsoft\Edge`<br>`HKCU\Software\Policies\Microsoft\Edge` | `SmartScreenEnabled` |
-| [Service Enabled](https://www.noverse.dev/policies.html?p=WebThreatDefense*ServiceEnabled) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `ServiceEnabled` |
-| [Notify Malicious](https://www.noverse.dev/policies.html?p=WebThreatDefense*NotifyMalicious) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyMalicious` |
-| [Notify Password Reuse](https://www.noverse.dev/policies.html?p=WebThreatDefense*NotifyPasswordReuse) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyPasswordReuse` |
-| [Notify Unsafe App](https://www.noverse.dev/policies.html?p=WebThreatDefense*NotifyUnsafeApp) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyUnsafeApp` |
-| [Automatic Data Collection](https://www.noverse.dev/policies.html?p=WebThreatDefense*AutomaticDataCollection) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `CaptureThreatWindow` |
-| [Configure detection for potentially unwanted applications](https://www.noverse.dev/policies.html?p=WindowsDefender*Root_PUAProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender` | `PUAProtection` |
-| [Turn on behavior monitoring](https://www.noverse.dev/policies.html?p=WindowsDefender*RealtimeProtection_DisableBehaviorMonitoring) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableBehaviorMonitoring` |
-| [Scan all downloaded files and attachments](https://www.noverse.dev/policies.html?p=WindowsDefender*RealtimeProtection_DisableIOAVProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableIOAVProtection` |
-| [Monitor file and program activity on your computer](https://www.noverse.dev/policies.html?p=WindowsDefender*RealtimeProtection_DisableOnAccessProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableOnAccessProtection` |
-| [Turn off real-time protection](https://www.noverse.dev/policies.html?p=WindowsDefender*DisableRealtimeMonitoring) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableRealtimeMonitoring` |
-| [Turn on process scanning whenever real-time protection is enabled](https://www.noverse.dev/policies.html?p=WindowsDefender*RealtimeProtection_DisableScanOnRealtimeEnable) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableScanOnRealtimeEnable` |
-| [Configure Watson events](https://www.noverse.dev/policies.html?p=WindowsDefender*Reporting_DisablegenericrePorts) | `HKLM\Software\Policies\Microsoft\Windows Defender\Reporting` | `DisableGenericRePorts` |
-| [Turn off enhanced notifications](https://www.noverse.dev/policies.html?p=WindowsDefender*Reporting_DisableEnhancedNotifications) | `HKLM\Software\Policies\Microsoft\Windows Defender\Reporting` | `DisableEnhancedNotifications` |
-| [Turn on e-mail scanning](https://www.noverse.dev/policies.html?p=WindowsDefender*Scan_DisableEmailScanning) | `HKLM\Software\Policies\Microsoft\Windows Defender\Scan` | `DisableEmailScanning` |
-| [This settings controls whether Network Protection is allowed to be configured into block or audit mode on Windows Server.](https://www.noverse.dev/policies.html?p=WindowsDefender*AllowNetworkProtectionOnWinServer) | `HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection` | `AllowNetworkProtectionOnWinServer` |
-| [Allow notifications to disable security intelligence based reports to Microsoft MAPS](https://www.noverse.dev/policies.html?p=WindowsDefender*SignatureUpdate_SignatureDisableNotification) | `HKLM\Software\Policies\Microsoft\Windows Defender\Signature Updates` | `SignatureDisableNotification` |
-| [Configure the 'Block at First Sight' feature](https://www.noverse.dev/policies.html?p=WindowsDefender*DisableBlockAtFirstSeen) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `DisableBlockAtFirstSeen` |
-| [Configure local setting override for reporting to Microsoft MAPS](https://www.noverse.dev/policies.html?p=WindowsDefender*Spynet_LocalSettingOverrideSpynetReporting) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `LocalSettingOverrideSpynetReporting` |
-| [Join Microsoft MAPS](https://www.noverse.dev/policies.html?p=WindowsDefender*SpynetReporting) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `SpynetReporting` |
-| [Send file samples when further analysis is required](https://www.noverse.dev/policies.html?p=WindowsDefender*SubmitSamplesConsent) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `SubmitSamplesConsent` |
-| [Select cloud protection level](https://www.noverse.dev/policies.html?p=WindowsDefender*MpEngine_MpCloudBlockLevel) | `HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine` | `MpCloudBlockLevel` |
-| [Configure extended cloud check](https://www.noverse.dev/policies.html?p=WindowsDefender*MpEngine_MpBafsExtendedTimeout) | `HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine` | `MpBafsExtendedTimeout` |
-| [Prevent users and apps from accessing dangerous websites](https://www.noverse.dev/policies.html?p=WindowsDefender*ExploitGuard_EnableNetworkProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection` | `EnableNetworkProtection` |
-| [Configure Controlled folder access](https://www.noverse.dev/policies.html?p=WindowsDefender*ExploitGuard_ControlledFolderAccess_EnableControlledFolderAccess) | `HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access` | `EnableControlledFolderAccess` |
-| [Hide all notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
-| [Hide non-critical notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
-| [Configure Windows Defender SmartScreen](https://www.noverse.dev/policies.html?p=WindowsExplorer*EnableSmartScreen) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableSmartScreen`<br>`ShellSmartScreenLevel` |
-| [Turn off Microsoft Defender Antivirus](https://www.noverse.dev/policies.html?p=WindowsDefender*DisableAntiSpywareDefender) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender` | `DisableAntiSpyware` |
+| [Configure Windows Defender SmartScreen](https://noverse.dev/policies?p=MicrosoftEdge*AllowSmartScreen) | `HKLM\Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter`<br>`HKCU\Software\Policies\Microsoft\MicrosoftEdge\PhishingFilter` | `EnabledV9` |
+| [Configure Windows Defender SmartScreen](https://noverse.dev/policies?p=SmartScreen*ShellConfigureSmartScreen) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableSmartScreen`<br>`ShellSmartScreenLevel` |
+| [Configure Windows Defender SmartScreen](https://noverse.dev/policies?p=SmartScreen*EdgeConfigureSmartScreen) | `HKLM\Software\Policies\Microsoft\Edge`<br>`HKCU\Software\Policies\Microsoft\Edge` | `SmartScreenEnabled` |
+| [Service Enabled](https://noverse.dev/policies?p=WebThreatDefense*ServiceEnabled) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `ServiceEnabled` |
+| [Notify Malicious](https://noverse.dev/policies?p=WebThreatDefense*NotifyMalicious) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyMalicious` |
+| [Notify Password Reuse](https://noverse.dev/policies?p=WebThreatDefense*NotifyPasswordReuse) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyPasswordReuse` |
+| [Notify Unsafe App](https://noverse.dev/policies?p=WebThreatDefense*NotifyUnsafeApp) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyUnsafeApp` |
+| [Automatic Data Collection](https://noverse.dev/policies?p=WebThreatDefense*AutomaticDataCollection) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `CaptureThreatWindow` |
+| [Configure detection for potentially unwanted applications](https://noverse.dev/policies?p=WindowsDefender*Root_PUAProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender` | `PUAProtection` |
+| [Turn on behavior monitoring](https://noverse.dev/policies?p=WindowsDefender*RealtimeProtection_DisableBehaviorMonitoring) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableBehaviorMonitoring` |
+| [Scan all downloaded files and attachments](https://noverse.dev/policies?p=WindowsDefender*RealtimeProtection_DisableIOAVProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableIOAVProtection` |
+| [Monitor file and program activity on your computer](https://noverse.dev/policies?p=WindowsDefender*RealtimeProtection_DisableOnAccessProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableOnAccessProtection` |
+| [Turn off real-time protection](https://noverse.dev/policies?p=WindowsDefender*DisableRealtimeMonitoring) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableRealtimeMonitoring` |
+| [Turn on process scanning whenever real-time protection is enabled](https://noverse.dev/policies?p=WindowsDefender*RealtimeProtection_DisableScanOnRealtimeEnable) | `HKLM\Software\Policies\Microsoft\Windows Defender\Real-Time Protection` | `DisableScanOnRealtimeEnable` |
+| [Configure Watson events](https://noverse.dev/policies?p=WindowsDefender*Reporting_DisablegenericrePorts) | `HKLM\Software\Policies\Microsoft\Windows Defender\Reporting` | `DisableGenericRePorts` |
+| [Turn off enhanced notifications](https://noverse.dev/policies?p=WindowsDefender*Reporting_DisableEnhancedNotifications) | `HKLM\Software\Policies\Microsoft\Windows Defender\Reporting` | `DisableEnhancedNotifications` |
+| [Turn on e-mail scanning](https://noverse.dev/policies?p=WindowsDefender*Scan_DisableEmailScanning) | `HKLM\Software\Policies\Microsoft\Windows Defender\Scan` | `DisableEmailScanning` |
+| [This settings controls whether Network Protection is allowed to be configured into block or audit mode on Windows Server.](https://noverse.dev/policies?p=WindowsDefender*AllowNetworkProtectionOnWinServer) | `HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection` | `AllowNetworkProtectionOnWinServer` |
+| [Allow notifications to disable security intelligence based reports to Microsoft MAPS](https://noverse.dev/policies?p=WindowsDefender*SignatureUpdate_SignatureDisableNotification) | `HKLM\Software\Policies\Microsoft\Windows Defender\Signature Updates` | `SignatureDisableNotification` |
+| [Configure the 'Block at First Sight' feature](https://noverse.dev/policies?p=WindowsDefender*DisableBlockAtFirstSeen) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `DisableBlockAtFirstSeen` |
+| [Configure local setting override for reporting to Microsoft MAPS](https://noverse.dev/policies?p=WindowsDefender*Spynet_LocalSettingOverrideSpynetReporting) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `LocalSettingOverrideSpynetReporting` |
+| [Join Microsoft MAPS](https://noverse.dev/policies?p=WindowsDefender*SpynetReporting) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `SpynetReporting` |
+| [Send file samples when further analysis is required](https://noverse.dev/policies?p=WindowsDefender*SubmitSamplesConsent) | `HKLM\Software\Policies\Microsoft\Windows Defender\Spynet` | `SubmitSamplesConsent` |
+| [Select cloud protection level](https://noverse.dev/policies?p=WindowsDefender*MpEngine_MpCloudBlockLevel) | `HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine` | `MpCloudBlockLevel` |
+| [Configure extended cloud check](https://noverse.dev/policies?p=WindowsDefender*MpEngine_MpBafsExtendedTimeout) | `HKLM\Software\Policies\Microsoft\Windows Defender\MpEngine` | `MpBafsExtendedTimeout` |
+| [Prevent users and apps from accessing dangerous websites](https://noverse.dev/policies?p=WindowsDefender*ExploitGuard_EnableNetworkProtection) | `HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Network Protection` | `EnableNetworkProtection` |
+| [Configure Controlled folder access](https://noverse.dev/policies?p=WindowsDefender*ExploitGuard_ControlledFolderAccess_EnableControlledFolderAccess) | `HKLM\Software\Policies\Microsoft\Windows Defender\Windows Defender Exploit Guard\Controlled Folder Access` | `EnableControlledFolderAccess` |
+| [Hide all notifications](https://noverse.dev/policies?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
+| [Hide non-critical notifications](https://noverse.dev/policies?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
+| [Configure Windows Defender SmartScreen](https://noverse.dev/policies?p=WindowsExplorer*EnableSmartScreen) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableSmartScreen`<br>`ShellSmartScreenLevel` |
+| [Turn off Microsoft Defender Antivirus](https://noverse.dev/policies?p=WindowsDefender*DisableAntiSpywareDefender) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender` | `DisableAntiSpyware` |
 
 ## Remove Defender from Image
 
@@ -249,30 +249,30 @@ HKLM\SOFTWARE\Microsoft\Windows Defender\CoreService\DisableCoreService1DSTeleme
 | `Disable Defender Definition Updates` | Stops Defender definition updates from this update path. Malware detection ages quickly unless another definition source is provided. |
 | `Block MRT via WU` | Stops the MRT (Malicious Software Removal Tool) from being offered through Windows Update. MRT scans and related reporting are unavailable from this channel. |
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Specify search order for device driver source locations](https://www.noverse.dev/policies.html?p=DeviceSetup*DriverSearchPlaces_SearchOrderConfiguration) | `HKLM\Software\Policies\Microsoft\Windows\DriverSearching` | `SearchOrderConfig` |
-| [Prevent automatic download of applications associated with device metadata](https://www.noverse.dev/policies.html?p=DeviceSetup*DeviceMetadata_PreventDeviceMetadataFromNetwork) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Device Metadata` | `PreventDeviceMetadataFromNetwork` |
-| [Turn off Automatic Root Certificates Update](https://www.noverse.dev/policies.html?p=ICM*CertMgr_DisableAutoRootUpdates) | `HKLM\Software\Policies\Microsoft\SystemCertificates\AuthRoot` | `DisableRootAutoUpdate` |
-| [Turn off Windows Update device driver searching](https://www.noverse.dev/policies.html?p=ICM*DriverSearchPlaces_DontSearchWindowsUpdate) | `HKLM\Software\Policies\Microsoft\Windows\DriverSearching` | `DontSearchWindowsUpdate` |
-| [Turn off access to all Windows Update features](https://www.noverse.dev/policies.html?p=ICM*RemoveWindowsUpdate_ICM) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DisableWindowsUpdateAccess` |
-| [Define file shares for downloading security intelligence updates](https://www.noverse.dev/policies.html?p=WindowsDefender*SignatureUpdate_DefinitionUpdateFileSharesSources) | `HKLM\Software\Policies\Microsoft\Windows Defender\Signature Updates` | `DefinitionUpdateFileSharesSources` |
-| [Define the order of sources for downloading security intelligence updates](https://www.noverse.dev/policies.html?p=WindowsDefender*SignatureUpdate_FallbackOrder) | `HKLM\Software\Policies\Microsoft\Windows Defender\Signature Updates` | `FallbackOrder` |
-| [Turn off Automatic Download and Install of updates](https://www.noverse.dev/policies.html?p=WindowsStore*DisableAutoInstall) | `HKLM\Software\Policies\Microsoft\WindowsStore` | `AutoDownload` |
-| [Turn off Automatic Download of updates on Win8 machines](https://www.noverse.dev/policies.html?p=WindowsStore*DisableAutoDownloadWin8) | `HKLM\Software\Policies\Microsoft\WindowsStore` | `AutoDownload` |
-| [Configure Automatic Updates](https://www.noverse.dev/policies.html?p=WindowsUpdate*AutoUpdateCfg) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate\AU` | `NoAutoUpdate`<br>`AUOptions`<br>`AutomaticMaintenanceEnabled`<br>`ScheduledInstallDay`<br>`ScheduledInstallTime`<br>`AllowMUUpdateService`<br>`ScheduledInstallEveryWeek`<br>`ScheduledInstallFirstWeek`<br>`ScheduledInstallSecondWeek`<br>`ScheduledInstallThirdWeek`<br>`ScheduledInstallFourthWeek` |
-| [Specify intranet Microsoft update service location](https://www.noverse.dev/policies.html?p=WindowsUpdate*CorpWuURL) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate`<br>`HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU` | `WUServer`<br>`WUStatusServer`<br>`UpdateServiceUrlAlternate`<br>`FillEmptyContentUrls`<br>`DoNotEnforceEnterpriseTLSCertPinningForUpdateDetection`<br>`SetProxyBehaviorForUpdateDetection`<br>`UseWUServer` |
-| [Do not connect to any Windows Update Internet locations](https://www.noverse.dev/policies.html?p=WindowsUpdate*DoNotConnectToWindowsUpdateInternetLocations) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DoNotConnectToWindowsUpdateInternetLocations` |
-| [Select the target Feature Update version](https://www.noverse.dev/policies.html?p=WindowsUpdate*TargetReleaseVersion) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `TargetReleaseVersion`<br>`ProductVersion`<br>`TargetReleaseVersionInfo` |
-| [Manage preview builds](https://www.noverse.dev/policies.html?p=WindowsUpdate*ManagePreviewBuilds) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `ManagePreviewBuildsPolicyValue`<br>`BranchReadinessLevel` |
-| [Select when Quality Updates are received](https://www.noverse.dev/policies.html?p=WindowsUpdate*DeferQualityUpdates) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DeferQualityUpdates`<br>`DeferQualityUpdatesPeriodInDays`<br>`PauseQualityUpdatesStartTime` |
-| [Do not include drivers with Windows Updates](https://www.noverse.dev/policies.html?p=WindowsUpdate*ExcludeWUDriversInQualityUpdate) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `ExcludeWUDriversInQualityUpdate` |
-| [Remove access to use all Windows Update features](https://www.noverse.dev/policies.html?p=WindowsUpdate*DisableUXWUAccess) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `SetDisableUXWUAccess` |
-| [Remove access to "Pause updates" feature](https://www.noverse.dev/policies.html?p=WindowsUpdate*DisablePauseUXAccess) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `SetDisablePauseUXAccess` |
-| [Enable features introduced via servicing that are off by default](https://www.noverse.dev/policies.html?p=WindowsUpdate*AllowTemporaryEnterpriseFeatureControl) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `AllowTemporaryEnterpriseFeatureControl` |
-| [Enable optional updates](https://www.noverse.dev/policies.html?p=WindowsUpdate*AllowOptionalContent) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `SetAllowOptionalContent`<br>`AllowOptionalContent` |
+| [Specify search order for device driver source locations](https://noverse.dev/policies?p=DeviceSetup*DriverSearchPlaces_SearchOrderConfiguration) | `HKLM\Software\Policies\Microsoft\Windows\DriverSearching` | `SearchOrderConfig` |
+| [Prevent automatic download of applications associated with device metadata](https://noverse.dev/policies?p=DeviceSetup*DeviceMetadata_PreventDeviceMetadataFromNetwork) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Device Metadata` | `PreventDeviceMetadataFromNetwork` |
+| [Turn off Automatic Root Certificates Update](https://noverse.dev/policies?p=ICM*CertMgr_DisableAutoRootUpdates) | `HKLM\Software\Policies\Microsoft\SystemCertificates\AuthRoot` | `DisableRootAutoUpdate` |
+| [Turn off Windows Update device driver searching](https://noverse.dev/policies?p=ICM*DriverSearchPlaces_DontSearchWindowsUpdate) | `HKLM\Software\Policies\Microsoft\Windows\DriverSearching` | `DontSearchWindowsUpdate` |
+| [Turn off access to all Windows Update features](https://noverse.dev/policies?p=ICM*RemoveWindowsUpdate_ICM) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DisableWindowsUpdateAccess` |
+| [Define file shares for downloading security intelligence updates](https://noverse.dev/policies?p=WindowsDefender*SignatureUpdate_DefinitionUpdateFileSharesSources) | `HKLM\Software\Policies\Microsoft\Windows Defender\Signature Updates` | `DefinitionUpdateFileSharesSources` |
+| [Define the order of sources for downloading security intelligence updates](https://noverse.dev/policies?p=WindowsDefender*SignatureUpdate_FallbackOrder) | `HKLM\Software\Policies\Microsoft\Windows Defender\Signature Updates` | `FallbackOrder` |
+| [Turn off Automatic Download and Install of updates](https://noverse.dev/policies?p=WindowsStore*DisableAutoInstall) | `HKLM\Software\Policies\Microsoft\WindowsStore` | `AutoDownload` |
+| [Turn off Automatic Download of updates on Win8 machines](https://noverse.dev/policies?p=WindowsStore*DisableAutoDownloadWin8) | `HKLM\Software\Policies\Microsoft\WindowsStore` | `AutoDownload` |
+| [Configure Automatic Updates](https://noverse.dev/policies?p=WindowsUpdate*AutoUpdateCfg) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate\AU` | `NoAutoUpdate`<br>`AUOptions`<br>`AutomaticMaintenanceEnabled`<br>`ScheduledInstallDay`<br>`ScheduledInstallTime`<br>`AllowMUUpdateService`<br>`ScheduledInstallEveryWeek`<br>`ScheduledInstallFirstWeek`<br>`ScheduledInstallSecondWeek`<br>`ScheduledInstallThirdWeek`<br>`ScheduledInstallFourthWeek` |
+| [Specify intranet Microsoft update service location](https://noverse.dev/policies?p=WindowsUpdate*CorpWuURL) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate`<br>`HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU` | `WUServer`<br>`WUStatusServer`<br>`UpdateServiceUrlAlternate`<br>`FillEmptyContentUrls`<br>`DoNotEnforceEnterpriseTLSCertPinningForUpdateDetection`<br>`SetProxyBehaviorForUpdateDetection`<br>`UseWUServer` |
+| [Do not connect to any Windows Update Internet locations](https://noverse.dev/policies?p=WindowsUpdate*DoNotConnectToWindowsUpdateInternetLocations) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DoNotConnectToWindowsUpdateInternetLocations` |
+| [Select the target Feature Update version](https://noverse.dev/policies?p=WindowsUpdate*TargetReleaseVersion) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `TargetReleaseVersion`<br>`ProductVersion`<br>`TargetReleaseVersionInfo` |
+| [Manage preview builds](https://noverse.dev/policies?p=WindowsUpdate*ManagePreviewBuilds) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `ManagePreviewBuildsPolicyValue`<br>`BranchReadinessLevel` |
+| [Select when Quality Updates are received](https://noverse.dev/policies?p=WindowsUpdate*DeferQualityUpdates) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `DeferQualityUpdates`<br>`DeferQualityUpdatesPeriodInDays`<br>`PauseQualityUpdatesStartTime` |
+| [Do not include drivers with Windows Updates](https://noverse.dev/policies?p=WindowsUpdate*ExcludeWUDriversInQualityUpdate) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `ExcludeWUDriversInQualityUpdate` |
+| [Remove access to use all Windows Update features](https://noverse.dev/policies?p=WindowsUpdate*DisableUXWUAccess) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `SetDisableUXWUAccess` |
+| [Remove access to "Pause updates" feature](https://noverse.dev/policies?p=WindowsUpdate*DisablePauseUXAccess) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `SetDisablePauseUXAccess` |
+| [Enable features introduced via servicing that are off by default](https://noverse.dev/policies?p=WindowsUpdate*AllowTemporaryEnterpriseFeatureControl) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `AllowTemporaryEnterpriseFeatureControl` |
+| [Enable optional updates](https://noverse.dev/policies?p=WindowsUpdate*AllowOptionalContent) | `HKLM\Software\Policies\Microsoft\Windows\WindowsUpdate` | `SetAllowOptionalContent`<br>`AllowOptionalContent` |
 
 # Windows Firewall
 
@@ -498,14 +498,14 @@ See your current execution policies via:
 Get-ExecutionPolicy -List
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn on Script Execution](https://www.noverse.dev/policies.html?p=PowerShellExecutionPolicy*EnableScripts) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell` | `EnableScripts`<br>`ExecutionPolicy` |
-| [Turn on Module Logging](https://www.noverse.dev/policies.html?p=PowerShellExecutionPolicy*EnableModuleLogging) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell\ModuleLogging`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell\ModuleLogging` | `EnableModuleLogging` |
-| [Turn on PowerShell Transcription](https://www.noverse.dev/policies.html?p=PowerShellExecutionPolicy*EnableTranscripting) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell\Transcription`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell\Transcription` | `EnableTranscripting`<br>`OutputDirectory`<br>`EnableInvocationHeader` |
-| [Turn on PowerShell Script Block Logging](https://www.noverse.dev/policies.html?p=PowerShellExecutionPolicy*EnableScriptBlockLogging) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging` | `EnableScriptBlockLogging`<br>`EnableScriptBlockInvocationLogging` |
+| [Turn on Script Execution](https://noverse.dev/policies?p=PowerShellExecutionPolicy*EnableScripts) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell` | `EnableScripts`<br>`ExecutionPolicy` |
+| [Turn on Module Logging](https://noverse.dev/policies?p=PowerShellExecutionPolicy*EnableModuleLogging) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell\ModuleLogging`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell\ModuleLogging` | `EnableModuleLogging` |
+| [Turn on PowerShell Transcription](https://noverse.dev/policies?p=PowerShellExecutionPolicy*EnableTranscripting) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell\Transcription`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell\Transcription` | `EnableTranscripting`<br>`OutputDirectory`<br>`EnableInvocationHeader` |
+| [Turn on PowerShell Script Block Logging](https://noverse.dev/policies?p=PowerShellExecutionPolicy*EnableScriptBlockLogging) | `HKLM\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging`<br>`HKCU\Software\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging` | `EnableScriptBlockLogging`<br>`EnableScriptBlockInvocationLogging` |
 
 # Process Mitigations
 
@@ -779,11 +779,11 @@ Set-VMSecurity -VMName <VMName> -VirtualizationBasedSecurityOptOut $true
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards3.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/security/images/vbs-guards4.png?raw=true)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn On Virtualization Based Security](https://www.noverse.dev/policies.html?p=DeviceGuard*VirtualizationBasedSecurity) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard` | `EnableVirtualizationBasedSecurity`<br>`RequirePlatformSecurityFeatures`<br>`HypervisorEnforcedCodeIntegrity`<br>`HVCIMATRequired`<br>`LsaCfgFlags`<br>`MachineIdentityIsolation`<br>`ConfigureSystemGuardLaunch`<br>`ConfigureKernelShadowStacksLaunch` |
+| [Turn On Virtualization Based Security](https://noverse.dev/policies?p=DeviceGuard*VirtualizationBasedSecurity) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard` | `EnableVirtualizationBasedSecurity`<br>`RequirePlatformSecurityFeatures`<br>`HypervisorEnforcedCodeIntegrity`<br>`HVCIMATRequired`<br>`LsaCfgFlags`<br>`MachineIdentityIsolation`<br>`ConfigureSystemGuardLaunch`<br>`ConfigureKernelShadowStacksLaunch` |
 
 # Disable Bitlocker & EFS
 
@@ -814,11 +814,11 @@ ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
 
 - [Windows API - Error Defines](https://github.com/arizvisa/BugId-mWindowsAPI/blob/904a1c0bd22c019ef6ca8313945fe38f4ca26f30/mDefines/mErrorDefines.py#L1793)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Do not allow encryption on all NTFS volumes](https://www.noverse.dev/policies.html?p=FileSys*DisableEncryption) | `HKLM\System\CurrentControlSet\Policies` | `NtfsDisableEncryption` |
+| [Do not allow encryption on all NTFS volumes](https://noverse.dev/policies?p=FileSys*DisableEncryption) | `HKLM\System\CurrentControlSet\Policies` | `NtfsDisableEncryption` |
 
 # Disable P2P Updates
 
@@ -841,11 +841,11 @@ The option applies `0` = disables peer-to-peer (P2P) caching but still allows De
 
 Microsoft has a cmdlet for it, but seems like they didn't work much on it yet.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Download Mode](https://www.noverse.dev/policies.html?p=DeliveryOptimization*DownloadMode) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization` | `DODownloadMode` |
+| [Download Mode](https://noverse.dev/policies?p=DeliveryOptimization*DownloadMode) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization` | `DODownloadMode` |
 
 # Disable System Restore
 
@@ -857,12 +857,12 @@ Does:
 "wmiprvse.exe", "RegSetValue","HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\RPSessionInterval","Type: REG_DWORD, Length: 4, Data: 0"
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Configuration](https://www.noverse.dev/policies.html?p=SystemRestore*SR_DisableConfig) | `HKLM\Software\Policies\Microsoft\Windows NT\SystemRestore` | `DisableConfig` |
-| [Turn off System Restore](https://www.noverse.dev/policies.html?p=SystemRestore*SR_DisableSR) | `HKLM\Software\Policies\Microsoft\Windows NT\SystemRestore` | `DisableSR` |
+| [Turn off Configuration](https://noverse.dev/policies?p=SystemRestore*SR_DisableConfig) | `HKLM\Software\Policies\Microsoft\Windows NT\SystemRestore` | `DisableConfig` |
+| [Turn off System Restore](https://noverse.dev/policies?p=SystemRestore*SR_DisableSR) | `HKLM\Software\Policies\Microsoft\Windows NT\SystemRestore` | `DisableSR` |
 
 # Disable Downloads Blocking
 
@@ -891,11 +891,11 @@ Unblock-File -Path "C:\Path\Script.ps1" -> File
 dir C:\Path\*Files* | Unblock-File -> Multiple files 
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Do not preserve zone information in file attachments](https://www.noverse.dev/policies.html?p=AttachmentManager*AM_MarkZoneOnSavedAtttachments) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments` | `SaveZoneInformation` |
+| [Do not preserve zone information in file attachments](https://noverse.dev/policies?p=AttachmentManager*AM_MarkZoneOnSavedAtttachments) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments` | `SaveZoneInformation` |
 
 # Disable WPBT
 
@@ -912,12 +912,12 @@ WPBT allows hardware manufacturers to run programs during Windows startup that m
 
 `Disable Picture Password Sign-In`: "This policy setting allows you to control whether a domain user can sign in using a picture password. If you enable this policy setting, a domain user can't set up or sign in with a picture password. If you disable or don't configure this policy setting, a domain user can set up and use a picture password. Note that the user's domain password will be cached in the system vault when using this feature."
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off picture password sign-in](https://www.noverse.dev/policies.html?p=CredentialProviders*BlockDomainPicturePassword) | `HKLM\Software\Policies\Microsoft\Windows\System` | `BlockDomainPicturePassword` |
-| [Do not display the password reveal button](https://www.noverse.dev/policies.html?p=CredUI*DisablePasswordReveal) | `HKLM\Software\Policies\Microsoft\Windows\CredUI`<br>`HKCU\Software\Policies\Microsoft\Windows\CredUI` | `DisablePasswordReveal` |
+| [Turn off picture password sign-in](https://noverse.dev/policies?p=CredentialProviders*BlockDomainPicturePassword) | `HKLM\Software\Policies\Microsoft\Windows\System` | `BlockDomainPicturePassword` |
+| [Do not display the password reveal button](https://noverse.dev/policies?p=CredUI*DisablePasswordReveal) | `HKLM\Software\Policies\Microsoft\Windows\CredUI`<br>`HKCU\Software\Policies\Microsoft\Windows\CredUI` | `DisablePasswordReveal` |
 
 # Disable Legacy TLS/Crypto
 
@@ -990,11 +990,11 @@ Level `5` gets applied.
 
 Controls the Netlogon policy that enables or disables [enhanced domain wide NTLM logs](https://aka.ms/ntlmlogandblock) on domain controllers (includes NTLMv1 usage). Applies to domain controllers only (Windows 11 24H2+). If not configured, domain controllers default to logging these on supported builds.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Log Enhanced Domain-wide NTLM Logs](https://www.noverse.dev/policies.html?p=Netlogon*Netlogon_EnhancedDomainNtlmLogs) | `HKLM\Software\Policies\Microsoft\Netlogon\Parameters` | `EnableEnhancedDomainNtlmLogs` |
+| [Log Enhanced Domain-wide NTLM Logs](https://noverse.dev/policies?p=Netlogon*Netlogon_EnhancedDomainNtlmLogs) | `HKLM\Software\Policies\Microsoft\Netlogon\Parameters` | `EnableEnhancedDomainNtlmLogs` |
 
 # Enable USB Write Protection
 Restricts write access to USB devices (read only). You can also change it with `diskpart`, by selecting the disk with `select disk` and chaning it to read only with `attributes disk set readonly` (revert it with `attributes disk clear readonly`).
@@ -1096,11 +1096,11 @@ Congigure the policy yourself via `Computer Configuration > Windows Settings > S
 
 This policy setting requires the user to enter Microsoft Windows credentials using a trusted path, to prevent a Trojan horse or other types of malicious code from stealing the user's Windows credentials.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Require trusted path for credential entry](https://www.noverse.dev/policies.html?p=CredUI*EnableSecureCredentialPrompting) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\CredUI` | `EnableSecureCredentialPrompting` |
+| [Require trusted path for credential entry](https://noverse.dev/policies?p=CredUI*EnableSecureCredentialPrompting) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\CredUI` | `EnableSecureCredentialPrompting` |
 
 # Enable Dynamic Lock
 
@@ -1117,11 +1117,11 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: R
 HKCU\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\EnableGoodbye	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Configure dynamic lock factors](https://www.noverse.dev/policies.html?p=Passport*MSPassport_UseDynamicLock) | `HKLM\SOFTWARE\Policies\Microsoft\PassportForWork\DynamicLock` | `DynamicLock`<br>`Plugins` |
+| [Configure dynamic lock factors](https://noverse.dev/policies?p=Passport*MSPassport_UseDynamicLock) | `HKLM\SOFTWARE\Policies\Microsoft\PassportForWork\DynamicLock` | `DynamicLock`<br>`Plugins` |
 
 # Sudo
 
@@ -1137,11 +1137,11 @@ Note that sudo uses administrator previledges and doesn't include `TrustedInstal
 | `disableInput` | Runs elevated in the same window but blocks keyboard input while it runs. |
 | `normal` | Runs elevated in the same window with normal input and output behavior. |
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Configure the behavior of the sudo command](https://www.noverse.dev/policies.html?p=Sudo*EnableSudo) | `HKLM\Software\Policies\Microsoft\Windows\Sudo` | `Enabled` |
+| [Configure the behavior of the sudo command](https://noverse.dev/policies?p=Sudo*EnableSudo) | `HKLM\Software\Policies\Microsoft\Windows\Sudo` | `Enabled` |
 
 # Enable Camera OSD Indicator
 

@@ -312,12 +312,12 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 }
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Do not keep history of recently opened documents](https://www.noverse.dev/policies.html?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
-| [Configures search on the taskbar](https://www.noverse.dev/policies.html?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |
+| [Do not keep history of recently opened documents](https://noverse.dev/policies?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
+| [Configures search on the taskbar](https://noverse.dev/policies?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |
 
 # System Informer
 
@@ -509,15 +509,15 @@ HKLM\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\OneDrive
 \\OneDrive*
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Save documents to OneDrive by default](https://www.noverse.dev/policies.html?p=SkyDrive*DisableLibrariesDefaultSaveToOneDrive) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableLibrariesDefaultSaveToOneDrive` |
-| [Prevent the usage of OneDrive for file storage on Windows 8.1](https://www.noverse.dev/policies.html?p=SkyDrive*PreventOnedriveFileSyncForBlue) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableFileSync` |
-| [Prevent the usage of OneDrive for file storage](https://www.noverse.dev/policies.html?p=SkyDrive*PreventOnedriveFileSync) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableFileSyncNGSC` |
-| [Prevent OneDrive files from syncing over metered connections](https://www.noverse.dev/policies.html?p=SkyDrive*PreventOneDriveFileSyncOnMeteredNetwork) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableMeteredNetworkFileSync` |
-| [Prevent OneDrive from generating network traffic until the user signs in to OneDrive](https://www.noverse.dev/policies.html?p=SkyDrive*PreventNetworkTrafficPreUserSignIn) | `HKLM\SOFTWARE\Microsoft\OneDrive` | `PreventNetworkTrafficPreUserSignIn` |
+| [Save documents to OneDrive by default](https://noverse.dev/policies?p=SkyDrive*DisableLibrariesDefaultSaveToOneDrive) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableLibrariesDefaultSaveToOneDrive` |
+| [Prevent the usage of OneDrive for file storage on Windows 8.1](https://noverse.dev/policies?p=SkyDrive*PreventOnedriveFileSyncForBlue) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableFileSync` |
+| [Prevent the usage of OneDrive for file storage](https://noverse.dev/policies?p=SkyDrive*PreventOnedriveFileSync) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableFileSyncNGSC` |
+| [Prevent OneDrive files from syncing over metered connections](https://noverse.dev/policies?p=SkyDrive*PreventOneDriveFileSyncOnMeteredNetwork) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableMeteredNetworkFileSync` |
+| [Prevent OneDrive from generating network traffic until the user signs in to OneDrive](https://noverse.dev/policies?p=SkyDrive*PreventNetworkTrafficPreUserSignIn) | `HKLM\SOFTWARE\Microsoft\OneDrive` | `PreventNetworkTrafficPreUserSignIn` |
 
 # Hash Generator
 

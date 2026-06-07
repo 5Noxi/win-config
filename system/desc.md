@@ -148,7 +148,7 @@ Miscellaneous notes:
 
 # Game Mode
 
-Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [bin-diff](https://www.noverse.dev/bin-diff.html)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.
+Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [bin-diff](https://noverse.dev/bin-diff)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.
 
 It can apply CPU set policy, GPU scheduler/budget policy, optional process priority, optional Game Mode power profile notification, global Game Mode active state, optional expanded resource extension notification. The global state is updated through `WNF_RM_GAME_MODE_ACTIVE` (`RM` prefix in `WNF_RM_GAME_MODE_ACTIVE` = '*Game Mode Resource Manager*').
 
@@ -475,7 +475,7 @@ while ( a2->Flink != a2 ) // a2 = list of processes waiting for policy applicati
 
 [`RmpGameModeAcquireAndApplyRecipientResources`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAcquireAndApplyRecipientResources@@YAXPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_R.c) uses five resource policy entries and calls the apply function for each active entry. 
 
-More detail about them in [CPU set policy](https://www.noverse.dev/docs/win-config/system/game-mode/#cpu-sets), [GPU policy](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget), [power profile state](https://www.noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state), [process priority](https://www.noverse.dev/docs/win-config/system/game-mode/#process-priority-class), [extension state](https://www.noverse.dev/docs/win-config/system/game-mode/#expanded-resource-extension-notification).
+More detail about them in [CPU set policy](https://noverse.dev/docs/win-config/system/game-mode/#cpu-sets), [GPU policy](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget), [power profile state](https://noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state), [process priority](https://noverse.dev/docs/win-config/system/game-mode/#process-priority-class), [extension state](https://noverse.dev/docs/win-config/system/game-mode/#expanded-resource-extension-notification).
 
 ```c
 // RmpGameModeAcquireAndApplyRecipientResources
@@ -510,7 +510,7 @@ LABEL_11:
 
 After primary registration, `twinui.pcshell.dll` stores the registered PID, gets the current non service process list and calls [`ApplyGameRelatedForGameModeProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-ApplyGameRelatedForGameModeProcess@BroadcastDVRComponent@@AEAAXKAEBV-$vector@U-$pair@KVString@I.c). It asks the game manager for related process names, compares process image names, and calls [`ApplyGameRelatedForRelatedProcess`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-ApplyGameRelatedForRelatedProcess@BroadcastDVRComponent@@AEAAXKGK@Z.c) for matches.
 
-See more detail in [Related Processes](https://www.noverse.dev/docs/win-config/system/game-mode/#related-processes).
+See more detail in [Related Processes](https://noverse.dev/docs/win-config/system/game-mode/#related-processes).
 
 ```c
 // BroadcastDVRComponent::EvaluateAppForGameMode
@@ -544,7 +544,7 @@ v14 = RmGameModeUnregisterProcess(v13); // remove process
 
 The service also watches process lifetime with a threadpool wait. When the process terminates, paired auxiliary processes are cleared and the process is removed from Game Mode service state ([`RmpGameModeRecipientProcessTerminationCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeRecipientProcessTerminationCallback@@YAXPEAU_TP_CALLBACK_INSTANCE@@PEAXPEAU_TP_WAIT@.c)). Input focus changes queue the same policy worker so the active Game Mode state can move to another registered primary process ([`RmpSystemNotificationInputFocusChangeCallback`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemNotificationInputFocusChangeCallback@@YAJU_WNF_STATE_NAME@@KPEAU_WNF_TYPE_ID@@PEAXPEBX.c)).
 
-This can be validated using [`gm_effects`](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects) with the `--pid` argument, so you enable Game Mode, start the game, use `--pid` with the PID of the game, move the game to FG/BG. By doing so you'll see that the state changes.
+This can be validated using [`gm_effects`](https://noverse.dev/docs/win-config/system/game-mode#gm_effects) with the `--pid` argument, so you enable Game Mode, start the game, use `--pid` with the PID of the game, move the game to FG/BG. By doing so you'll see that the state changes.
 
 ```ini
 ; not in FG
@@ -635,9 +635,9 @@ Example with a game that sets itself to real time (there're probably any game de
 
 #### FG Boost with Game Mode
 
-Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See [quantum-priority-separation/#bits-01](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#bits-01) for more details on the topic itself. 
+Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See [quantum-priority-separation/#bits-01](https://noverse.dev/docs/win-config/system/quantum-priority-separation/#bits-01) for more details on the topic itself. 
 
-You can test it by following the [watching-the-boost](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
+You can test it by following the [watching-the-boost](https://noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
 
 ```powershell
 $TID = # add TID
@@ -693,7 +693,7 @@ Game Mode can request CPU set allocation and apply CPU set restrictions and defa
 
 I've tried to see differences between on/off within Overwatch/CS2, but `GetProcessDefaultCpuSets` returned `DefaultCpuSetCount=0` even while Game Mode was active. Other games I tested were Forza Horizon 5/Cyberpunk 2077 which don't register with Game Mode at all.
 
-During registration ([9 - Apply Resource Policies](https://www.noverse.dev/docs/win-config/system/game-mode/#9---apply-resource-policies)), [`RmpGameModeAcquireCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAcquireCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_P.c) asks the CPU set manager for a valid allocation, the CPU set manager chooses the actual CPU sets from the request and current system CPU set state, then [`RmpCpuSetManagerApplySystemAllowedMask`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpCpuSetManagerApplySystemAllowedMask@@YAJPEAU_RM_CPU_SET_MANAGER@@@Z.c) can reduce the CPU sets available to general system activity. [`RmpGameModeTryApplyCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c) then applies that allocation to the registered process.
+During registration ([9 - Apply Resource Policies](https://noverse.dev/docs/win-config/system/game-mode/#9---apply-resource-policies)), [`RmpGameModeAcquireCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeAcquireCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_P.c) asks the CPU set manager for a valid allocation, the CPU set manager chooses the actual CPU sets from the request and current system CPU set state, then [`RmpCpuSetManagerApplySystemAllowedMask`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpCpuSetManagerApplySystemAllowedMask@@YAJPEAU_RM_CPU_SET_MANAGER@@@Z.c) can reduce the CPU sets available to general system activity. [`RmpGameModeTryApplyCpuSetAllocation`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyCpuSetAllocation@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c) then applies that allocation to the registered process.
 
 The final calls are [`RmpSystemSetProcessDefaultCpuSets`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemSetProcessDefaultCpuSets@@YAJPEAXPEA_K@Z.c) (preferred selection), [`RmpSystemSetProcessConstrainedCpuSets`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemSetProcessConstrainedCpuSets@@YAJPEAXE@Z.c) (limit to selected CPU sets), [`RmpSystemSetProcessAllowedCpuSets`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpSystemSetProcessAllowedCpuSets@@YAJPEAXPEA_K@Z.c) (updated when the allocation changes).
 
@@ -799,7 +799,7 @@ if ( (unsigned int)result > 8 )
   *v34 = v35; // invalid yield falls back to HKCU value
 ```
 
-The service validates the final request in [`RmpGameModeIsResourceRequestValid`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeIsResourceRequestValid@@YAEPEAU_RM_SERVICE_GLOBALS@@PEAU_RM_GAME_MODE_RESOURCE_REQUE.c) with ranges listed in [7 - Validate in the Service](https://www.noverse.dev/docs/win-config/system/game-mode/#7---validate-in-the-service). The actual graphics update is in [`RmpGameModeTryApplyGraphicsPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyGraphicsPriority@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c), Game Mode saves the original graphics settings during initialization, applies the Game Mode values while active, and restores the saved values when Game Mode is removed.
+The service validates the final request in [`RmpGameModeIsResourceRequestValid`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeIsResourceRequestValid@@YAEPEAU_RM_SERVICE_GLOBALS@@PEAU_RM_GAME_MODE_RESOURCE_REQUE.c) with ranges listed in [7 - Validate in the Service](https://noverse.dev/docs/win-config/system/game-mode/#7---validate-in-the-service). The actual graphics update is in [`RmpGameModeTryApplyGraphicsPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/PsmServiceExtHost/-RmpGameModeTryApplyGraphicsPriority@@YAJPEAU_RM_GAME_MODE_CONTEXT@@PEAU_RM_GAME_MODE_RECIPIENT_.c), Game Mode saves the original graphics settings during initialization, applies the Game Mode values while active, and restores the saved values when Game Mode is removed.
 
 ```c
 // RmpGameModeTryApplyGraphicsPriority
@@ -869,7 +869,7 @@ return NtUpdateWnfStateData(&WNF_SEB_GAME_MODE, &v2, 8LL, 0LL, 0LL, 0, 0);
 
 When enabled, WNF uses low value `3`, when disabled, it uses low value `1`. The high value stays `0xFFFFFFFF` in both cases. The GameMode profile has one processor override `Minimum processor state` = `100%` for AC/DC (note that you won't see the changes via powercfg, as these are profile values not a scheme).
 
-You can use [`gm_effects`](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects) to see what value is set.
+You can use [`gm_effects`](https://noverse.dev/docs/win-config/system/game-mode#gm_effects) to see what value is set.
 
 [`BroadcastDVRComponent::IsUsingPowerProfile`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/twinui-pcshell/-IsUsingPowerProfile@BroadcastDVRComponent@@AEAA_NAEBU_GUID@@@Z.c) checks whether the active power scheme is `GUID_MIN_POWER_SAVINGS` (High Performance), the request builder uses that result as "already using a performance plan". In the default cases, it asks the service for the GameMode power profile only when the current plan isn't High Performance (`GUID_MIN_POWER_SAVINGS` has `PROCTHROTTLEMIN`/`PROCTHROTTLEMIN1` at `100` by default).
 
@@ -962,13 +962,13 @@ else
 ## Summary (& Opinion)
 
 - WU driver updates/automatic restarts/restart notifications shouldn't be enabled, so that behavior doesn't matter.
-- [Process priority class](https://www.noverse.dev/docs/win-config/system/game-mode/#process-priority-class) can prevent a game from setting itself to `REALTIME_PRIORITY_CLASS` as Game Mode would overwrite that with `NORMAL_PRIORITY_CLASS`. If a game doesn't have such issues, the priority classes Game Mode uses are usually similar to what normal games already use.
-- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter (follow [watching-the-boost](https://www.noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) but with the game, as said in the section).
-- I haven't seen any game yet where Game Mode applied [CPU Sets](https://www.noverse.dev/docs/win-config/system/game-mode/#cpu-sets) through `GetProcessDefaultCpuSets`, if Game Mode chose proper CPU set IDs, this could be useful, but I wouldn't trust Microsoft with that.
-- [GPU policy](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling (`D3DKMTSetYieldPercentage`, means when there's a lot of GPU work in the background, see '[GPU yield percentage](https://www.noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget)' description?) or GPU memory issues (if VRAM is kind of used while background processes need GPU memory, e.g. high quality captures?).
-- [Game Mode power profile](https://www.noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme (must be GUID of `GUID_MIN_POWER_SAVINGS`, so not a copied version of it).
+- [Process priority class](https://noverse.dev/docs/win-config/system/game-mode/#process-priority-class) can prevent a game from setting itself to `REALTIME_PRIORITY_CLASS` as Game Mode would overwrite that with `NORMAL_PRIORITY_CLASS`. If a game doesn't have such issues, the priority classes Game Mode uses are usually similar to what normal games already use.
+- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter (follow [watching-the-boost](https://noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) but with the game, as said in the section).
+- I haven't seen any game yet where Game Mode applied [CPU Sets](https://noverse.dev/docs/win-config/system/game-mode/#cpu-sets) through `GetProcessDefaultCpuSets`, if Game Mode chose proper CPU set IDs, this could be useful, but I wouldn't trust Microsoft with that.
+- [GPU policy](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling (`D3DKMTSetYieldPercentage`, means when there's a lot of GPU work in the background, see '[GPU yield percentage](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget)' description?) or GPU memory issues (if VRAM is kind of used while background processes need GPU memory, e.g. high quality captures?).
+- [Game Mode power profile](https://noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme (must be GUID of `GUID_MIN_POWER_SAVINGS`, so not a copied version of it).
 
-FPS testing isn't a good way to decide whether Game Mode has any benefits for you, rather check whether the game registers with Game Mode at all, whether the game already sets priority class correctly itself, whether CPU sets are applied, and if they are applied, which CPU set IDs are used. Use [gm_effects](https://www.noverse.dev/docs/win-config/system/game-mode#gm_effects)/WPR (see below, I'll add more on it soon to see if it's actually useful, since wevtutil doesn't show events)/SI for it.
+FPS testing isn't a good way to decide whether Game Mode has any benefits for you, rather check whether the game registers with Game Mode at all, whether the game already sets priority class correctly itself, whether CPU sets are applied, and if they are applied, which CPU set IDs are used. Use [gm_effects](https://noverse.dev/docs/win-config/system/game-mode#gm_effects)/WPR (see below, I'll add more on it soon to see if it's actually useful, since wevtutil doesn't show events)/SI for it.
 
 ```powershell
 Provider: Microsoft.Windows.ResourceManager
@@ -980,7 +980,7 @@ messageFileName:  %SystemRoot%\system32\PsmServiceExtHost.dll
 
 # MMCSS Values
 
-Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
+Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
@@ -1022,7 +1022,7 @@ If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohu
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
 
-For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that.
+For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that.
 
 > "*Determines the percentage of CPU resources that should be guaranteed to low-priority tasks. For example, if this value is 20, then 20% of CPU resources are reserved for low-priority tasks. Note that values that are not evenly divisible by 10 are rounded down to the nearest multiple of 10. Values below 10 and above 100 are clamped to 20. A value of 100 disables MMCSS (driver returns `STATUS_SERVER_DISABLED`).*"
 >
@@ -1114,7 +1114,7 @@ MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and i
 
 `NoLazyMode = 1` only disables idle detection, causing `IdleDetection` & `IdleDetectionLazy` to disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
 
-You can see that in the picture of the [SchedulerPeriod](https://www.noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
+You can see that in the picture of the [SchedulerPeriod](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
 
 ```c
 // CiConfigInitialize
@@ -1350,7 +1350,7 @@ Some additional notes:
 
 This part `For tasks with a Scheduling Category of High, this value is always treated as 2.` doesn't refer to the exhausted priority, only to the boosted priority. `Priority` gets stored as `prio - 1`, means 2 = 1, 3 = 2 etc., value 1 (which would be 0) gets clamped to 1 when calculating the exhausted priority. This doesn't mean that 1 and 2 are the same (they've the same exhaused priority), but boosted priority still differs.
 
-The boosted priority gets calculated using the `Scheduling Category` and the `Priority` value (after subtraction), so if using category `Medium` + priority of `6` the boosted priority would be `16 + 5 = 21`. If using category `High` and `Priority = 6`, the exhausted priority would be `5`, but the boosted base is forced to `24` (by [`CiConfigTaskPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigTaskPolicy.c)). Relative priority can then move that boosted value within `23-26` (see [relative-priorities](https://www.noverse.dev/docs/win-config/system/mmcss-values/#relative-priorities)), means:
+The boosted priority gets calculated using the `Scheduling Category` and the `Priority` value (after subtraction), so if using category `Medium` + priority of `6` the boosted priority would be `16 + 5 = 21`. If using category `High` and `Priority = 6`, the exhausted priority would be `5`, but the boosted base is forced to `24` (by [`CiConfigTaskPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigTaskPolicy.c)). Relative priority can then move that boosted value within `23-26` (see [relative-priorities](https://noverse.dev/docs/win-config/system/mmcss-values/#relative-priorities)), means:
 
 ```c
 // Low/Medium
@@ -1504,7 +1504,7 @@ if ( KiClockTimerPerCpu )
 `SerializeTimerExpiration` decides which processor timer table is used for kernel timer (`KTIMER`) expiration.
 
 - Disabled = current processor uses its own PRCB (processor control block) timer table
-- Enabled = uses CPU 0 timer table (`KiProcessorBlock[0]`), only the current clock owner is allowed to enter expiration handling (this also means that CPU 0 timer table is used, but the expiration code runs on the clock owner (`KiClockTimerOwner`), see [KiDynamicTickDisableReason](https://www.noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason))
+- Enabled = uses CPU 0 timer table (`KiProcessorBlock[0]`), only the current clock owner is allowed to enter expiration handling (this also means that CPU 0 timer table is used, but the expiration code runs on the clock owner (`KiClockTimerOwner`), see [KiDynamicTickDisableReason](https://noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason))
 
 ```c
 // SerializeTimerExpiration = 1
@@ -2212,16 +2212,16 @@ Everything listed below is based on personal findings, mistakes may exist.
     // animation/colorization policy related
     "DefaultColorizationColorState" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x4)
                                          // "This policy setting controls the default color for window frames when the user does not specify a color. If you enable this policy setting and specify a default color, this color is used in glass window frames, if the user does not specify a color. If you disable or do not configure this policy setting, the default internal color is used, if the user does not specify a color. Note: This policy setting can be used in conjunction with the "Prevent color changes of window frames" setting, to enforce a specific color for window frames that cannot be changed by users."
-                                         // https://www.noverse.dev/policies.html?p=DWM*DwmDefaultColorizationColor_2
+                                         // https://noverse.dev/policies?p=DWM*DwmDefaultColorizationColor_2
     "DisallowAnimations" = 0; // REG_DWORD, nonzero sets bit (policy bit 0x1) which disables DWM window animations (also causes DWM reject live preview / Aero Peek)
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-SetWindowAnimation@CDesktopManager@@SAX_N@Z.c
                               // https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/uDWM/-IsLivePreviewAllowed@CDesktopManager@@SA_NXZ.c
                               // "This policy setting controls the appearance of window animations such as those found when restoring, minimizing, and maximizing windows. If you enable this policy setting, window animations are turned off. If you disable or do not configure this policy setting, window animations are turned on. Changing this policy setting requires a logoff for it to be applied.
-                              // https://www.noverse.dev/policies.html?p=DWM*DwmDisallowAnimations_2
+                              // https://noverse.dev/policies?p=DWM*DwmDisallowAnimations_2
     "ForceDisableModeChangeAnimation" = 0; // REG_DWORD (bool), nonzero disables display mode change animations (duplicate/extend/disconnect style monitor change visuals)
     "DisallowColorizationColorChanges" = 0; // REG_DWORD nonzero sets bit (policy bit 0x2) which blocks DWM colorization parameter changes
                                             // This policy setting controls the ability to change the color of window frames. If you enable this policy setting, you prevent users from changing the default window frame color. If you disable or do not configure this policy setting, you allow users to change the default window frame color. Note: This policy setting can be used in conjunction with the "Specify a default color for window frames" policy setting, to enforce a specific color for window frames that cannot be changed by users."
-                                            // https://www.noverse.dev/policies.html?p=DWM*DwmDisallowColorizationColorChanges_1
+                                            // https://noverse.dev/policies?p=DWM*DwmDisallowColorizationColorChanges_1
 
     // uDWM colorization
     "AccentColor" = ?; // REG_DWORD, only read when ColorPrevalence is nonzero
@@ -2369,7 +2369,7 @@ You can see the differences by moving a blurry window above a animation, for exa
 
 ### [OverlayTestMode](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)
 
-See [Multiplane Overlay (MPO)](https://www.noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
+See [Multiplane Overlay (MPO)](https://noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
 
 | Data | Meaning |
 | --- | --- |
@@ -2587,7 +2587,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     // Policy for dynamic thread that is deemed important but run a short amount of time.
     "DynamicHeteroCpuPolicyMask" = 7; // (foreground status = 1, priority = 2, expected run time = 4)
     // Determine what is considered in assessing whether a thread is important.
-    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling, https://www.noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling
+    "EnablePerCpuClockTickScheduling" = 0; // KiEnableClockTimerPerCpuTickScheduling, https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods, controls how CPU time used by threads etc. get counted?
                                                        // >= 2 = disabled (adds CPU time when clock ticks happen)
                                                        // 0/1/missing = enabled (measure time between accounting points)
@@ -2642,7 +2642,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SeCompatFlags" = 0; // SeCompatFlags
     "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, REG_DWORD, 0 disables, nonzero enables
     "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
-    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://www.noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
+    "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
     "SeTokenDoesNotTrackSessionObject" = 0; // SeTokenDoesNotTrackSessionObject
     "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
     "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
@@ -3015,7 +3015,7 @@ if ( (ExpPoolFlags & 1) != 0 )
   KeCheckForTimer(BugCheckParameter3);
 ```
 
-[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
+[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
 
 ```c
 // VfMiscKeInitializeTimerEx_Entry (23H2)
@@ -3427,7 +3427,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "RapidHPDThresholdCount" = 5;
     "RapidHPDTime" = 1000;
 
-    // https://www.noverse.dev/docs/win-config/security/increase-tdr/
+    // https://noverse.dev/docs/win-config/security/increase-tdr/
     "TdrDdiDelay" = 5;
     "TdrDebugMode" = 2;
     "TdrDelay" = 2;
@@ -3824,7 +3824,7 @@ Windows has two UM (user mode) heap implementations, the older NT heap and the n
 
 Most normal software in my testing (`ida.exe`, `VSCodium.exe`, `mullvadbrowser.exe`, `Procmon.exe`, `powershell.exe`, `ripgrep.exe`, `steam.exe`) used NT Heap. Segment Heap was used by Windows components/service hosts (`audiodg.exe`, `svchost.exe`, `lsass.exe`, `winlogon.exe`, `dwm.exe`, `ShellExperienceHost.exe`, `sihost.exe`, `WindowsTerminal.exe`) and some VBox processes. Note that one process can use more than one heap type.
 
-Changing it to Segment Heap for a game won't impact FPS, rather read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' (or [Windows Internals](https://www.noverse.dev/docs/win-config/system/heap-type/#windows-internals)) to understand differences between NT/Segment Heap.
+Changing it to Segment Heap for a game won't impact FPS, rather read '[W10 Segment Heap Internals](https://www.blackhat.com/docs/us-16/materials/us-16-Yason-Windows-10-Segment-Heap-Internals-wp.pdf)' (or [Windows Internals](https://noverse.dev/docs/win-config/system/heap-type/#windows-internals)) to understand differences between NT/Segment Heap.
 
 ## heapType GUI
 
@@ -3984,7 +3984,7 @@ Some requirements for Segment Heap (in [`RtlCreateHeap`](https://github.com/nohu
 
 - [processhacker.sourceforge.io/doc/ntrtl_8h_source](https://processhacker.sourceforge.io/doc/ntrtl_8h_source.html)
 
-Use [heap_dump](https://www.noverse.dev/docs/win-config/system/heap-type/#heap_dump) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
+Use [heap_dump](https://noverse.dev/docs/win-config/system/heap-type/#heap_dump) to test it with your running processes. If the `Enabled` value is set *kind* of all types (process/private) went to Segement Heap, example:
 
 ```c
 // Enabled = not present
@@ -5244,31 +5244,31 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\windows.im
 HKCU\Software\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.StartupApp\Enabled // Startup App Notification
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off account notifications in Start](https://www.noverse.dev/policies.html?p=AccountNotifications*DisableAccountNotifications) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\AccountNotifications` | `DisableAccountNotifications` |
-| [Turn off access to the Store](https://www.noverse.dev/policies.html?p=ICM*ShellNoUseStoreOpenWith_2) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `NoUseStoreOpenWith` |
-| [Turn off app notifications on the lock screen](https://www.noverse.dev/policies.html?p=Logon*DisableLockScreenAppNotifications) | `HKLM\Software\Policies\Microsoft\Windows\System` | `DisableLockScreenAppNotifications` |
-| [Remove Notifications and Action Center](https://www.noverse.dev/policies.html?p=Taskbar*DisableNotificationCenter) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableNotificationCenter` |
-| [Notify Malicious](https://www.noverse.dev/policies.html?p=WebThreatDefense*NotifyMalicious) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyMalicious` |
-| [Notify Password Reuse](https://www.noverse.dev/policies.html?p=WebThreatDefense*NotifyPasswordReuse) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyPasswordReuse` |
-| [Notify Unsafe App](https://www.noverse.dev/policies.html?p=WebThreatDefense*NotifyUnsafeApp) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyUnsafeApp` |
-| [Turn off enhanced notifications](https://www.noverse.dev/policies.html?p=WindowsDefender*Reporting_DisableEnhancedNotifications) | `HKLM\Software\Policies\Microsoft\Windows Defender\Reporting` | `DisableEnhancedNotifications` |
-| [Hide all notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
-| [Hide non-critical notifications](https://www.noverse.dev/policies.html?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
-| [Turn off tile notifications](https://www.noverse.dev/policies.html?p=WPN*NoTileNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoTileApplicationNotification` |
-| [Turn on multiple expanded toast notifications in action center](https://www.noverse.dev/policies.html?p=WPN*ExpandedToastNotifications) | `HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `EnableExpandedToastNotifications` |
-| [Turn off toast notifications](https://www.noverse.dev/policies.html?p=WPN*NoToastNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotification` |
-| [Turn off toast notifications on the lock screen](https://www.noverse.dev/policies.html?p=WPN*NoLockScreenToastNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotificationOnLockScreen` |
-| [Turn off notifications network usage](https://www.noverse.dev/policies.html?p=WPN*NoCloudNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoCloudApplicationNotification` |
-| [Turn off notification mirroring](https://www.noverse.dev/policies.html?p=WPN*NoNotificationMirroring) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `DisallowNotificationMirroring` |
-| [Show notification bell icon](https://www.noverse.dev/policies.html?p=Taskbar*AlwaysShowNotificationIcon) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `AlwaysShowNotificationIcon` |
-| [Disable showing balloon notifications as toasts.](https://www.noverse.dev/policies.html?p=Taskbar*EnableLegacyBalloonNotifications) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `EnableLegacyBalloonNotifications` |
-| [Turn off notification area cleanup](https://www.noverse.dev/policies.html?p=StartMenu*NoAutoTrayNotify) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoTrayNotify` |
-| [Turn off all balloon notifications](https://www.noverse.dev/policies.html?p=Taskbar*TaskbarNoNotification) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `TaskbarNoNotification` |
-| [Turn off feature advertisement balloon notifications](https://www.noverse.dev/policies.html?p=Taskbar*NoBalloonFeatureAdvertisements) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoBalloonFeatureAdvertisements` |
+| [Turn off account notifications in Start](https://noverse.dev/policies?p=AccountNotifications*DisableAccountNotifications) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\AccountNotifications` | `DisableAccountNotifications` |
+| [Turn off access to the Store](https://noverse.dev/policies?p=ICM*ShellNoUseStoreOpenWith_2) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `NoUseStoreOpenWith` |
+| [Turn off app notifications on the lock screen](https://noverse.dev/policies?p=Logon*DisableLockScreenAppNotifications) | `HKLM\Software\Policies\Microsoft\Windows\System` | `DisableLockScreenAppNotifications` |
+| [Remove Notifications and Action Center](https://noverse.dev/policies?p=Taskbar*DisableNotificationCenter) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `DisableNotificationCenter` |
+| [Notify Malicious](https://noverse.dev/policies?p=WebThreatDefense*NotifyMalicious) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyMalicious` |
+| [Notify Password Reuse](https://noverse.dev/policies?p=WebThreatDefense*NotifyPasswordReuse) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyPasswordReuse` |
+| [Notify Unsafe App](https://noverse.dev/policies?p=WebThreatDefense*NotifyUnsafeApp) | `HKLM\Software\Policies\Microsoft\Windows\WTDS\Components` | `NotifyUnsafeApp` |
+| [Turn off enhanced notifications](https://noverse.dev/policies?p=WindowsDefender*Reporting_DisableEnhancedNotifications) | `HKLM\Software\Policies\Microsoft\Windows Defender\Reporting` | `DisableEnhancedNotifications` |
+| [Hide all notifications](https://noverse.dev/policies?p=WindowsDefenderSecurityCenter*Notifications_DisableNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableNotifications` |
+| [Hide non-critical notifications](https://noverse.dev/policies?p=WindowsDefenderSecurityCenter*Notifications_DisableEnhancedNotifications) | `HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Notifications` | `DisableEnhancedNotifications` |
+| [Turn off tile notifications](https://noverse.dev/policies?p=WPN*NoTileNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoTileApplicationNotification` |
+| [Turn on multiple expanded toast notifications in action center](https://noverse.dev/policies?p=WPN*ExpandedToastNotifications) | `HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `EnableExpandedToastNotifications` |
+| [Turn off toast notifications](https://noverse.dev/policies?p=WPN*NoToastNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications`<br>`HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotification` |
+| [Turn off toast notifications on the lock screen](https://noverse.dev/policies?p=WPN*NoLockScreenToastNotification) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoToastApplicationNotificationOnLockScreen` |
+| [Turn off notifications network usage](https://noverse.dev/policies?p=WPN*NoCloudNotification) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `NoCloudApplicationNotification` |
+| [Turn off notification mirroring](https://noverse.dev/policies?p=WPN*NoNotificationMirroring) | `HKCU\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\PushNotifications` | `DisallowNotificationMirroring` |
+| [Show notification bell icon](https://noverse.dev/policies?p=Taskbar*AlwaysShowNotificationIcon) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `AlwaysShowNotificationIcon` |
+| [Disable showing balloon notifications as toasts.](https://noverse.dev/policies?p=Taskbar*EnableLegacyBalloonNotifications) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `EnableLegacyBalloonNotifications` |
+| [Turn off notification area cleanup](https://noverse.dev/policies?p=StartMenu*NoAutoTrayNotify) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoAutoTrayNotify` |
+| [Turn off all balloon notifications](https://noverse.dev/policies?p=Taskbar*TaskbarNoNotification) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `TaskbarNoNotification` |
+| [Turn off feature advertisement balloon notifications](https://noverse.dev/policies?p=Taskbar*NoBalloonFeatureAdvertisements) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoBalloonFeatureAdvertisements` |
 
 # Optimize File System
 
@@ -5300,11 +5300,11 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 - [system/assets | filesystem-NtfsUpdateDynamicRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/system/assets/filesystem-NtfsUpdateDynamicRegistrySettings.c)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Enable Win32 long paths](https://www.noverse.dev/policies.html?p=FileSys*LongPathsEnabled) | `HKLM\System\CurrentControlSet\Control\FileSystem` | `LongPathsEnabled` |
+| [Enable Win32 long paths](https://noverse.dev/policies?p=FileSys*LongPathsEnabled) | `HKLM\System\CurrentControlSet\Control\FileSystem` | `LongPathsEnabled` |
 
 # Disable Hyper-V
 
@@ -5382,7 +5382,7 @@ return v1;
 
 # Disable Storage Sense
 
-Storage Sense deletes temporary/user files automatically, see [windows policies](https://www.noverse.dev/docs/win-config/system/disable-storage-sense/#windows-policies) for more & [disable-notifications/#registry-values](https://www.noverse.dev/docs/win-config/system/disable-notifications/#registry-values) for storage sense related notification values.
+Storage Sense deletes temporary/user files automatically, see [windows policies](https://noverse.dev/docs/win-config/system/disable-storage-sense/#windows-policies) for more & [disable-notifications/#registry-values](https://noverse.dev/docs/win-config/system/disable-notifications/#registry-values) for storage sense related notification values.
 
 Head over to the `Policies` tab, then `StorageSense` to configure other related policies.
 
@@ -5429,14 +5429,14 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePo
 HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy\512 // Type: REG_DWORD
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow Storage Sense](https://www.noverse.dev/policies.html?p=StorageSense*SS_AllowStorageSenseGlobal) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `AllowStorageSenseGlobal` |
-| [Allow Storage Sense Temporary Files cleanup](https://www.noverse.dev/policies.html?p=StorageSense*SS_AllowStorageSenseTemporaryFilesCleanup) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `AllowStorageSenseTemporaryFilesCleanup` |
-| [Configure Storage Sense Recycle Bin cleanup threshold](https://www.noverse.dev/policies.html?p=StorageSense*SS_ConfigStorageSenseRecycleBinCleanupThreshold) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `ConfigStorageSenseRecycleBinCleanupThreshold` |
-| [Configure Storage Storage Downloads cleanup threshold](https://www.noverse.dev/policies.html?p=StorageSense*SS_ConfigStorageSenseDownloadsCleanupThreshold) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `ConfigStorageSenseDownloadsCleanupThreshold` |
+| [Allow Storage Sense](https://noverse.dev/policies?p=StorageSense*SS_AllowStorageSenseGlobal) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `AllowStorageSenseGlobal` |
+| [Allow Storage Sense Temporary Files cleanup](https://noverse.dev/policies?p=StorageSense*SS_AllowStorageSenseTemporaryFilesCleanup) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `AllowStorageSenseTemporaryFilesCleanup` |
+| [Configure Storage Sense Recycle Bin cleanup threshold](https://noverse.dev/policies?p=StorageSense*SS_ConfigStorageSenseRecycleBinCleanupThreshold) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `ConfigStorageSenseRecycleBinCleanupThreshold` |
+| [Configure Storage Storage Downloads cleanup threshold](https://noverse.dev/policies?p=StorageSense*SS_ConfigStorageSenseDownloadsCleanupThreshold) | `HKLM\Software\Policies\Microsoft\Windows\StorageSense` | `ConfigStorageSenseDownloadsCleanupThreshold` |
 
 # Disable Accessibility Features
 
@@ -5493,19 +5493,19 @@ Instead of using the explorer to search for a file or folder, use [`Everything`]
 
 The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Prevent clients from querying the index remotely](https://www.noverse.dev/policies.html?p=Search*PreventRemoteQueries) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `PreventRemoteQueries` |
-| [Prevent indexing when running on battery power to conserve energy](https://www.noverse.dev/policies.html?p=Search*PreventIndexOnBattery) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `PreventIndexOnBattery` |
-| [Always use automatic language detection when indexing content and properties](https://www.noverse.dev/policies.html?p=Search*AlwaysUseAutoLangDetection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AlwaysUseAutoLangDetection` |
-| [Don't search the web or display web results in Search](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResults) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWeb` |
-| [Don't search the web or display web results in Search over metered connections](https://www.noverse.dev/policies.html?p=Search*DoNotUseWebResultsOnMeteredConnections) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWebOverMeteredConnections` |
-| [Do not allow web search](https://www.noverse.dev/policies.html?p=Search*DisableWebSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableWebSearch` |
-| [Set the SafeSearch setting for Search](https://www.noverse.dev/policies.html?p=Search*SafeSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchSafeSearch` |
-| [Do not allow locations on removable drives to be added to libraries](https://www.noverse.dev/policies.html?p=Search*DisableRemovableDriveIndexing) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableRemovableDriveIndexing` |
-| [Fully disable Search UI](https://www.noverse.dev/policies.html?p=Search*DisableSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableSearch` |
+| [Prevent clients from querying the index remotely](https://noverse.dev/policies?p=Search*PreventRemoteQueries) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `PreventRemoteQueries` |
+| [Prevent indexing when running on battery power to conserve energy](https://noverse.dev/policies?p=Search*PreventIndexOnBattery) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `PreventIndexOnBattery` |
+| [Always use automatic language detection when indexing content and properties](https://noverse.dev/policies?p=Search*AlwaysUseAutoLangDetection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `AlwaysUseAutoLangDetection` |
+| [Don't search the web or display web results in Search](https://noverse.dev/policies?p=Search*DoNotUseWebResults) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWeb` |
+| [Don't search the web or display web results in Search over metered connections](https://noverse.dev/policies?p=Search*DoNotUseWebResultsOnMeteredConnections) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchUseWebOverMeteredConnections` |
+| [Do not allow web search](https://noverse.dev/policies?p=Search*DisableWebSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableWebSearch` |
+| [Set the SafeSearch setting for Search](https://noverse.dev/policies?p=Search*SafeSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchSafeSearch` |
+| [Do not allow locations on removable drives to be added to libraries](https://noverse.dev/policies?p=Search*DisableRemovableDriveIndexing) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableRemovableDriveIndexing` |
+| [Fully disable Search UI](https://noverse.dev/policies?p=Search*DisableSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableSearch` |
 
 ## Miscellaneous Notes
 
@@ -5908,11 +5908,11 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
 >
 > — Windows Security Encyclopedia, [Display highly detailed status messages](https://www.windows-security.org/b74176eebf20a72c6e9cf193ddcedeb7/display-highly-detailed-status-messages)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Display highly detailed status messages](https://www.noverse.dev/policies.html?p=Logon*VerboseStatus) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `VerboseStatus` |
+| [Display highly detailed status messages](https://noverse.dev/policies?p=Logon*VerboseStatus) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `VerboseStatus` |
 
 # Disable JPEG Reduction
 
@@ -5979,14 +5979,14 @@ Miscellaneous notes:
 "HKCU\Software\Microsoft\Clipboard\ShellHotKeyUsed","Length: 16"
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Allow Clipboard synchronization across devices](https://www.noverse.dev/policies.html?p=OSPolicy*AllowCrossDeviceClipboard) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowCrossDeviceClipboard` |
-| [Allow Clipboard History](https://www.noverse.dev/policies.html?p=OSPolicy*AllowClipboardHistory) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowClipboardHistory` |
-| [Do not allow Clipboard redirection](https://www.noverse.dev/policies.html?p=TerminalServer*TS_CLIENT_CLIPBOARD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services` | `fDisableClip` |
-| [Allow clipboard sharing with Windows Sandbox](https://www.noverse.dev/policies.html?p=WindowsSandbox*AllowClipboardRedirection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Sandbox` | `AllowClipboardRedirection` |
+| [Allow Clipboard synchronization across devices](https://noverse.dev/policies?p=OSPolicy*AllowCrossDeviceClipboard) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowCrossDeviceClipboard` |
+| [Allow Clipboard History](https://noverse.dev/policies?p=OSPolicy*AllowClipboardHistory) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowClipboardHistory` |
+| [Do not allow Clipboard redirection](https://noverse.dev/policies?p=TerminalServer*TS_CLIENT_CLIPBOARD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services` | `fDisableClip` |
+| [Allow clipboard sharing with Windows Sandbox](https://noverse.dev/policies?p=WindowsSandbox*AllowClipboardRedirection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Sandbox` | `AllowClipboardRedirection` |
 
 # Enable Detailed BSoD
 
@@ -6067,11 +6067,11 @@ Prevents windows from being minimized or restored when the active window is shak
 
 ![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Aero Shake window minimizing mouse gesture](https://www.noverse.dev/policies.html?p=Desktop*NoWindowMinimizingShortcuts) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoWindowMinimizingShortcuts` |
+| [Turn off Aero Shake window minimizing mouse gesture](https://noverse.dev/policies?p=Desktop*NoWindowMinimizingShortcuts) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoWindowMinimizingShortcuts` |
 
 # App Archive
 
@@ -6090,11 +6090,11 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{I
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Archive infrequently used apps](https://www.noverse.dev/policies.html?p=AppxPackageManager*AllowAutomaticAppArchiving) | `HKLM\Software\Policies\Microsoft\Windows\Appx` | `AllowAutomaticAppArchiving` |
+| [Archive infrequently used apps](https://noverse.dev/policies?p=AppxPackageManager*AllowAutomaticAppArchiving) | `HKLM\Software\Policies\Microsoft\Windows\Appx` | `AllowAutomaticAppArchiving` |
 
 # Disable Mobility Center
 
@@ -6102,8 +6102,8 @@ Note that this is a laptop only feature. The "Mobility Center" is a feature that
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/mobility-center.png?raw=true)
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Windows Mobility Center](https://www.noverse.dev/policies.html?p=MobilePCMobilityCenter*MobilityCenterEnable_2) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\MobilityCenter` | `NoMobilityCenter` |
+| [Turn off Windows Mobility Center](https://noverse.dev/policies?p=MobilePCMobilityCenter*MobilityCenterEnable_2) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\MobilityCenter` | `NoMobilityCenter` |

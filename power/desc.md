@@ -876,7 +876,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
 
-## [PowerThrottlingOff](https://www.noverse.dev/policies.html?p=Power*PowerThrottlingTurnOff)
+## [PowerThrottlingOff](https://noverse.dev/policies?p=Power*PowerThrottlingTurnOff)
 
 > "*The Quality of Service (QoS) associated with a thread is used to indicate the desired performance and power efficiency. Each thread is assigned to a QoS level. While scheduling priority remains the main metric by which the system determines which thread to schedule next, QoS can influence core selection and processor power management. On platforms with heterogeneous processors, the QoS of a thread may restrict scheduling to a subset of processors, or indicate a preference for a particular class of processor.*"
 >
@@ -1007,7 +1007,7 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 ## Registry Values
 
-[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) only checks the returned value data length (`4`), see '[Build Differences](https://www.noverse.dev/docs/win-config/power/usb-audio-idle/#build-differences)' section.
+[INF values](https://learn.microsoft.com/en-us/windows-hardware/drivers/audio/portcls-registry-power-settings) have type `REG_BINARY`, but [`RegistryGetIdleInfo`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBAUDIO/RegistryGetIdleInfo.c) only checks the returned value data length (`4`), see '[Build Differences](https://noverse.dev/docs/win-config/power/usb-audio-idle/#build-differences)' section.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e96c-e325-11ce-bfc1-08002be10318}\\00xx\\PowerSettings";
@@ -1032,7 +1032,7 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 ## Build Differences
 
-Use [bin-diff](https://www.noverse.dev/bin-diff.html?left=11-23H2&right=11-24H2&module=USBAUDIO&function=RegistryGetIdleInfo.c&mode=side-by-side) for direct comparison.
+Use [bin-diff](https://noverse.dev/bin-diff?left=11-23H2&right=11-24H2&module=USBAUDIO&function=RegistryGetIdleInfo.c&mode=side-by-side) for direct comparison.
 
 23H2 (and below) has two timeout values `ConservationIdleTime`/`PerformanceIdleTime`:
 
@@ -1361,7 +1361,7 @@ void InitTimerPowerSaving(void)
 }
 ```
 
-Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within the first W11 builds, see  [bin-diff 2004 & 21H2](https://www.noverse.dev/bin-diff.html?left=2004&right=11-21H2&module=win32kfull&function=-InitTimerPowerSaving%40%40YAXXZ.c&mode=side-by-side) comparision (the value name didn't change).
+Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within the first W11 builds, see  [bin-diff 2004 & 21H2](https://noverse.dev/bin-diff?left=2004&right=11-21H2&module=win32kfull&function=-InitTimerPowerSaving%40%40YAXXZ.c&mode=side-by-side) comparision (the value name didn't change).
 
 ### When TimerPowerSaving Applies
 
@@ -1549,7 +1549,7 @@ Hibernation is Windows S4 power state, it writes the resume state to `Hiberfil.s
 
 Fast Startup (also called *hiberboot*/*hybrid shutdown*) is a shutdown mechamism built on hibernation. It logs off the interactive user sessions first, then hibernates the kernel session and loaded kernel mode drivers. The next boot can skip much of kernel and driver initialization. Restart doesn't use Fast Startup, it performs a full boot cycle so drivers and Windows components are initialized from a new state. For `shutdown.exe`, `/s /t 0` = full shutdown, while `/s /hybrid /t 0` = hybrid shutdown.
 
-Boot Manager uses the `resume`, `resumeobject`, `hiberboot`, `filepath`, `filedevice` BCD elements ([bcd-edits/#valuedata-list](https://www.noverse.dev/docs/win-config/system/bcd-edits/#valuedata-list)) to locate the Windows Resume application and hibernation file on the next boot.
+Boot Manager uses the `resume`, `resumeobject`, `hiberboot`, `filepath`, `filedevice` BCD elements ([bcd-edits/#valuedata-list](https://noverse.dev/docs/win-config/system/bcd-edits/#valuedata-list)) to locate the Windows Resume application and hibernation file on the next boot.
 
 > *Fast startup is a type of shutdown that uses a hibernation file to speed up the subsequent boot. During this type of shutdown, the user is logged off before the hibernation file is created. Fast startup allows for a smaller hibernation file, more appropriate for systems with less storage capabilities.*
 > *When using fast startup, the system appears to the user as though a full shutdown (S5) has occurred, even though the system has actually gone through S4. This includes how the system responds to device wake alarms.*
@@ -1683,11 +1683,11 @@ if ( v20 && PpmIdleDisableStatesAtBoot == 2 )
   *(_DWORD *)(v23 + 32) = 0x80000000;
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Require use of fast startup](https://www.noverse.dev/policies.html?p=WinInit*Hiberboot) | `HKLM\Software\Policies\Microsoft\Windows\System` | `HiberbootEnabled` |
+| [Require use of fast startup](https://noverse.dev/policies?p=WinInit*Hiberboot) | `HKLM\Software\Policies\Microsoft\Windows\System` | `HiberbootEnabled` |
 
 # Remove Power Options
 
@@ -1709,13 +1709,13 @@ HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSignOut
 HKLM\SOFTWARE\Microsoft\PolicyManager\default\Start\HideSwitchAccount
 ```
 
-## [Windows Policies](https://www.noverse.dev/policies.html)
+## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Show lock in the user tile menu](https://www.noverse.dev/policies.html?p=WindowsExplorer*ShowLockOption) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `ShowLockOption` |
-| [Show sleep in the power options menu](https://www.noverse.dev/policies.html?p=WindowsExplorer*ShowSleepOption) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `ShowSleepOption` |
-| [Show hibernate in the power options menu](https://www.noverse.dev/policies.html?p=WindowsExplorer*ShowHibernateOption) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `ShowHibernateOption` |
+| [Show lock in the user tile menu](https://noverse.dev/policies?p=WindowsExplorer*ShowLockOption) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `ShowLockOption` |
+| [Show sleep in the power options menu](https://noverse.dev/policies?p=WindowsExplorer*ShowSleepOption) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `ShowSleepOption` |
+| [Show hibernate in the power options menu](https://noverse.dev/policies?p=WindowsExplorer*ShowHibernateOption) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `ShowHibernateOption` |
 
 # Disable Energy Estimation
 
