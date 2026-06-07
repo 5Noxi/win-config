@@ -1073,16 +1073,22 @@ A different way to read current values is via RVAs (*Relative Virtual Address*, 
 
 ```c
 lkd> !drvobj MMCSS
-Driver object (ffffe409670c8de0) is for:
+Driver object (ffffb68b3754ba70) is for:
  \Driver\MMCSS
 
 Driver Extension List: (id , addr)
 
 Device Object list:
-ffffe40962b3b6b0
+ffffb68b375dfca0  
+lkd> dt nt!_DRIVER_OBJECT ffffb68b3754ba70 DriverStart
+   +0x018 DriverStart : 0xfffff801`890e0000 Void
 
-lkd> dt nt!_DRIVER_OBJECT ffffe409670c8de0 DriverStart
-   +0x018 DriverStart : 0xfffff800`3aee0000 Void
+// or just via lm
+
+lkd> lm m mmcss
+Browse full module list
+start             end                 module name
+fffff801`890e0000 fffff801`890f6000   mmcss      (pdb symbols)          C:\ProgramData\Dbg\sym\mmcss.pdb\9E36707273FDF82AB362DBA6ACCC09671\mmcss.pdb
 ```
 
 So for example you want to read the current value of `CiSystemResponsiveness` (IDA):
@@ -1096,7 +1102,7 @@ Get the current image base from `Edit > Segments > Rebase program` (`0x1C0000000
 Then use the `DriverStart` address + RVA:
 
 ```c
-lkd> dd 0xfffff800`3aee82F8 L1
+lkd> dd 0xfffff801`890e82F8 L1
 fffff800`3aee82f8  0000000a // 10
 ```
 
