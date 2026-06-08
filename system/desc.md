@@ -5530,7 +5530,7 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 > "*The Hyper-V hypervisor (also known as Windows hypervisor) is a type-1 (native or bare-metal) hypervisor: a mini operating system that runs directly on the host's hardware to manage a single root and one or more guest operating systems. Unlike type-2 (or hosted) hypervisors, which run on the base of a conventional OS like normal applications, the Windows hypervisor abstracts the root OS, which knows about the existence of the hypervisor and communicates with it to allow the execution of one or more guest virtual machines.*"
 >
-> — Windows Internals E7 P2, [The Windows hypervisor](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+> — Windows Internals, [E7, P2: 'The Windows hypervisor'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 > "*Many third-party virtualization applications don't work together with Hyper-V. Affected applications include VMware Workstation and VirtualBox. These applications might not start virtual machines, or they may fall back to a slower, emulated mode. Many virtualization applications depend on hardware virtualization extensions that are available on most modern processors. It includes Intel VT-x and AMD-V. Only one software component can use this hardware at a time. The hardware cannot be shared between virtualization applications.*"
 >
@@ -5561,40 +5561,48 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 |  | `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
 |  | `vpci` | Microsoft Hyper-V Virtual PCI Bus |
 
-# Disable Service Splitting
+# Service Splitting
 
-Prevents services running under `svchost.exe` from being split into separate processes, keeping all grouped services within the same instance. This simplifies process management but increases the risk of system instability and reduces service isolation.
+Prevents services hosted by `svchost.exe` from being split into separate host processes. This reduces the amount of `svchost.exe` instances, but also reduces service isolation.
 
-[`Windows Internals 7th Edition, Part 2`](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) (page `467`f.) handpicked snippets (shortened):
-If system physical memory, obtained via [`GlobalMemoryStatusEx`](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-globalmemorystatusex), exceeds the SvcHostSplitThresholdInKB registry value (default is `3.5 GB` on client systems and `3.7 GB` on server systems), Svchost service splitting is enabled.
-
-Service splitting is allowed only if:  
-- Splitting is globally enabled
-- The service is not marked as critical (i.e., it doesn't reboot the machine on failure)
-- The service is hosted in `svchost.exe`
-- `SvcHostSplitDisable` is not set to `1` in the service registry key
-
-Setting `SvcHostSplitDisable` to `0` for a critical service forces it to be split, but this can lead to issues.
-
-Get the current amount of `svchost` process instances with:
-```cmd
-(get-process -Name "svchost" | measure).Count
-```
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostDebug
-\Registry\Machine\SYSTEM\ControlSet001\Control : SvcHostSplitThresholdInKB
-```
-`SvcHostDebug` is set to `0` by default:
 ```c
-v1 = 0;
-if ( !RegistryValueWithFallbackW && Type == 4 )
-    LOBYTE(v1) = Data != 0;
-return v1;
+"HKLM\\SYSTEM\\CurrentControlSet\\Control";
+    "SvcHostSplitThresholdInKB" = 3670016; // REG_DWORD, client default = ~3.5 GB, server default = ~3.7 GB
+    "SvcHostDebug" = 0; // REG_DWORD
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Services\\<service>";
+    "SvcHostSplitDisable" = 0; // REG_DWORD, per service disable
 ```
 
-- [system/assets | servicesplitting-ScReadSCMConfiguration.c](https://github.com/nohuto/win-config/blob/main/system/assets/servicesplitting-ScReadSCMConfiguration.c)
+`SvcHostSplitThresholdInKB` = global memory threshold, during SCM startup, it gets read and compared against total physical memory from `GlobalMemoryStatusEx`. If physical memory is greater than or equal to the threshold, SCM enables the `g_fSplitSvcHost` flag (`0` would prevent splitting). `SvcHostDebug` is a fallback override, which is only read whenever `SvcHostSplitThresholdInKB` didn't enable splitting. If its set to `1` it causes `g_fSplitSvcHost = 1`.
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/servicesplitting1.png?raw=true)
+```c
+// SvcHostSplitThresholdInKB = 3670016
+lkd> dd services!g_fSplitSvcHost L1
+00007ff7`21586374  00000001
+
+// SvcHostSplitThresholdInKB = 4294967295 (4TB)
+lkd> dd services!g_fSplitSvcHost L1
+00007ff7`40976374  00000000
+
+// SvcHostSplitThresholdInKB = 0
+lkd> dd services!g_fSplitSvcHost L1
+00007ff6`5ce06374  00000000
+```
+
+Get the current amount of `svchost.exe` process instances via:
+
+```powershell
+(Get-Process -Name "svchost" | Measure-Object).Count
+```
+
+> "*When the SCM starts, it reads three values from the registry representing the services global commit limits (divided in: low, medium, and hard caps). These values are used by the SCM to send “low resources” messages in case the system runs under low-memory conditions. It then reads the Svchost Service split threshold value from the `HKLM\SYSTEM\CurrentControlSet\Control\SvcHostSplitThresholdInKB` registry value. The value contains the minimum amount of system physical memory (expressed in KB) needed to enable Svchost Service splitting (the default value is 3.5 GB on client systems and around 3.7 GB on server systems). The SCM then obtains the value of the total system physical memory using the GlobalMemoryStatusEx API and compares it with the threshold previously read from the registry. If the total physical memory is above the threshold, it enables Svchost service splitting (by setting an internal global variable). Svchost service splitting, when active, modifies the behavior in which SCM starts the host Svchost process of shared services. As already discussed in the “Service start” section earlier in this chapter, the SCM does not search for an existing image record in its database if service splitting is allowed for a service. This means that, even though a service is marked as sharable, it is started using its private hosting process (and its type is changed to SERVICE_WIN32_OWN_PROCESS). Service splitting is allowed only if the following conditions apply:*
+> *- Svchost Service splitting is globally enabled.*  
+> *- The service is not marked as critical. A service is marked as critical if its next recovery action specifies to reboot the machine (as discussed previously in the “Service failures” section).*  
+> *- The service host process name is Svchost.exe.*  
+> *- Service splitting is not explicitly disabled for the service through the SvcHostSplitDisable registry value in the service control key*  
+>
+> — Windows Internals, [E7, P2: 'Svchost service splitting'](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
