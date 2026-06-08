@@ -3034,7 +3034,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 "HKLM\\System\\CurrentControlSet\\Control\\Processor";
     "AllowGuestPerfStates" = 0;
     "AllowPepPerfStates" = 0;
-    "Capabilities" = 0; // capability mask
+    "Capabilities" = 0; // REG_QWORD
     "DisableAsserts" = 0;
     "Overrides" = 0;
 ```
