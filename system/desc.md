@@ -5563,7 +5563,7 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 # Service Splitting
 
-Prevents services hosted by `svchost.exe` from being split into separate host processes. This reduces the amount of `svchost.exe` instances, but also reduces service isolation.
+Prevents services hosted by `svchost.exe` from being split into separate host processes. This reduces the amount of `svchost.exe` instances, but also reduces service isolation, just be aware of what negative impact grouping has before chaning the option. If you've less than 3.5GB of RAM splitting is disabled by default.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control";
