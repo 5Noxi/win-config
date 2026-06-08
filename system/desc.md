@@ -5585,9 +5585,13 @@ lkd> dd services!g_fSplitSvcHost L1
 lkd> dd services!g_fSplitSvcHost L1
 00007ff7`40976374  00000000
 
-// SvcHostSplitThresholdInKB = 0
+// SvcHostSplitThresholdInKB = 0, SvcHostDebug = 0
 lkd> dd services!g_fSplitSvcHost L1
 00007ff6`5ce06374  00000000
+
+// SvcHostSplitThresholdInKB = 0, SvcHostDebug = 1
+lkd> dd services!g_fSplitSvcHost L1
+00007ff6`820a6374  00000001
 ```
 
 Get the current amount of `svchost.exe` process instances via:
