@@ -3039,6 +3039,127 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Overrides" = 0;
 ```
 
+## Capabilities
+
+`Globals[0]` is the capability mask that shows what the system supports, `qword_1C00124C8` = `Capabilities` value. `Globals[0] &= ~qword_1C00124C8` removes active capability bits which are set in the registry value, so `Capabilities` is a kind of disable mask.
+
+```c
+// ProcLibGlobalInit
+
+GetRegistryQwordValue(v13, v12, &qword_1C00124C8); // Capabilities var
+
+
+if ( qword_1C00124C8 )
+{
+  DisplayPPMFlags(~qword_1C00124C8, 5u);
+  Globals[0] &= ~qword_1C00124C8;
+}
+```
+
+### DisplayPPMFlags
+
+Most masks below are the same for `amdppm`/`intelppm`, the labels are from [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/DisplayPPMFlags.c) WPP metadata extracted via [`tracepdb`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/tracepdb).
+
+| Mask | `DisplayPPMFlags` label |
+| --- | --- |
+| `0x0000000000000001` | ACPI 1.0 C1 |
+| `0x0000000000000002` | ACPI 1.0 C2 |
+| `0x0000000000000004` | ACPI 1.0 C3 |
+| `0x0000000000100000` | ACPI 1.0 IO TStates |
+| `0x0000000000200000` | ACPI 1.0 MP TStates |
+| `0x0000000000000010` | ACPI 2.0+ C1 |
+| `0x0000000000000020` | ACPI 2.0+ C2 |
+| `0x0000000000000040` | ACPI 2.0+ C3 |
+| `0x000000000007F000` | ACPI 2.0+ MWAIT C-States |
+| `0x0000080000000000` | ACPI 2.0+ LPI states IO |
+| `0x0000020000000000` | ACPI 2.0+ LPI states MW |
+| `0x0000040000000000` | ACPI 2.0+ LPI states PSCI |
+| `0x00000E0000000000` | ACPI 2.0+ LPI states |
+| `0x0000000001000000` | ACPI 2.0+ TStates IO |
+| `0x0000000002000000` | ACPI 2.0+ TStates FFH |
+| `0x0000000010000000` | ACPI 2.0+ PStates IO |
+| `0x0000000020000000` | ACPI 2.0+ PStates FFH |
+| `0x0000000040000000` | ACPI 2.0+ PStates XPSS |
+| `0x0000000080000000` | ACPI 2.0+ Legacy PCC |
+| `0x0000000008000000` | ACPI 2.0+ CPC |
+| `0x0000004000000000` | ACPI 2.0+ CPC Interrupt (not used by `amdppm`?) |
+| `0x0000000004000000` | ACPI 2.0+ HW Feedback |
+| `0x0000000100000000` | PEP Mini-PEP Idle |
+| `0x0000000200000000` | PEP Micro-PEP Idle |
+| `0x0000000000000300` | PEP C-State Idle |
+| `0x0000100000000000` | PEP LPI Idle |
+| `0x0000000000000400` | PEP Park pref |
+| `0x0000001000000000` | PEP Perf states |
+| `0x0000010000000000` | PEP Notifications |
+| `0x0000200000000000` | Driver Hidden Processors |
+| `0x0000400000000000` | Driver VM Perf Control (not used by `amdppm`?) |
+| `0x0000000800000000` | Driver Hardware Debug |
+| `0x0000002000000000` | Driver Energy Estimation |
+
+Additional masks I found that aren't in `DisplayPPMFlags`:
+
+| Mask | Meaning |
+| --- | --- |
+| [`0x0000000000800000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/InitAcpiProcessorDomains.c) | ACPI processor domain init |
+| [`0x00000010FF300000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/ValidatePerfDomainSymmetry.c) | performance domain validation/registration |
+| [`0x0000800000000000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/EmiInit.c) | EMI init |
+| [`0x0001000000000000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/intelppm/InitDriver.c) | Energy counter init (not used by `amdppm`?) |
+
+### tracepdb
+
+Short explanation of how to get the `DisplayPPMFlags` labels:
+
+```powershell
+.\tracepdb.exe -f "C:\Symbols\amdppm.pdb\0728D8E84177E8B0FCF8B265B1C92A591\amdppm.pdb" -p "$env:USERPROFILE\Desktop\tmf" -v
+```
+
+In [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/DisplayPPMFlags.c) you can see the many masks + GUIDs + hex numbers, example:
+
+```c
+if ( a2 < 5u
+  || LOWORD(WPP_GLOBAL_Control->DeviceType) )
+{
+  if ( (a1 & 0x2000000000LL) == 0 ) // mask
+    v4 = "Dis";
+  WPP_RECORDER_SF_s(
+    (__int64)WPP_GLOBAL_Control->DeviceExtension,
+    a2,
+    2u,
+    0x64u, // 100
+    (__int64)&WPP_6d86976f8bee3b8eeb87bd96dd02b852_Traceguids, // 6d86976f-8bee-3b8e-eb87-bd96dd02b852.tmf
+    v4);
+}
+```
+
+```tmf
+}
+#typev Unknown_cxx00 100 "%0  Energy Estimation  = %10!s!abled" //   LEVEL=DbgLevel FLAGS=PLATFORMINFO FUNC=DisplayPPMFlags
+{
+```
+
+### Default Data & Globals
+
+See '[DriverStart + RVAs](https://noverse.dev/docs/win-config/system/mmcss-values/#driverstart--rvas)' whenever you want to read the current value on your system (you can get the variable name by looking at callers of `GetRegistryQwordValue` in `amdppm`/`intelppm`).
+
+```c
+lkd> lm m amdppm
+Browse full module list
+start             end                 module name
+fffff801`a9130000 fffff801`a9176000   amdppm     (pdb symbols)          C:\ProgramData\Dbg\sym\amdppm.pdb\0728D8E84177E8B0FCF8B265B1C92A591\amdppm.pdb
+
+// .data:00000001C00124C8 qword_1C00124C8 dq 0
+
+lkd> dq fffff801`a91424c8 L1
+fffff801`a91424c8  00000000`00000000
+```
+
+```c
+// .data:00000001C00124C0 Globals         dq 0
+
+lkd> dq fffff801`a91424c0 L1
+fffff801`a91424c0  0000bb8c`bdd7f677
+```
+
 ## TimerCheckFlags
 
 ```asm
