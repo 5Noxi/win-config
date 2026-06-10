@@ -1499,7 +1499,7 @@ So practically `RITdemonTimerPowerSaveElapse` = `10` & `RITdemonTimerPowerSaveCo
 
 The `CoalescingTimerInterval` value exist (takes a default of `1500` dec, `DeepIoCoalescingEnabled` one is set to `0` by default - both are located in `ntoskrnl.exe`), but doesn't get read on 24H2, the `RITdemonTimerPowerSave...` & `TimerCoalescing` ones get read.
 
-- [power/assets | coalesc-InitTimerCoalescing.c](https://github.com/nohuto/win-config/blob/main/power/assets/coalesc-InitTimerCoalescing.c)
+## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/coalesc.png?raw=true)
 
