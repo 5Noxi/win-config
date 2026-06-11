@@ -2710,7 +2710,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "HgsPlusThreadCreationDefaultClass" = 0; // dword_140FC33E4
     "HotpatchTestMode" = 0; // KeHotpatchTestMode
     "HyperStartDisabled" = 0; // HvlVpStartDisabled
-    "IdealDpcRate" = 20; // KiIdealDpcRate
+    "IdealDpcRate" = 20; // KiIdealDpcRate, "Number of DPCs per clock tick before the maximum DPC queue depth is decremented if DPCs are pending but no interrupt was generated"
     "IdealNodeRandomized" = 1; // PspIdealNodeRandomized
     "InterruptSteeringFlags" = 0; // KiInterruptSteeringFlags
     "LongDpcQueueThreshold" = 3; // KiLongDpcQueueThreshold
@@ -2718,7 +2718,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "MaxDynamicTickDuration" = 8; // KiMaxDynamicTickDurationSize
     "MaximumCooperativeIdleSearchWidth" = 16; // KiMaximumCooperativeIdleSearchWidth
     "MaximumSharedReadyQueueSize" = 260; // KiMaximumSharedReadyQueueSize
-    "MinimumDpcRate" = 3; // KiMinimumDpcRate
+    "MinimumDpcRate" = 3; // KiMinimumDpcRate, "Number of DPCs per clock tick where low DPCs will not cause a local interrupt to be generated"
     "MitigationAuditOptions" = 0; // PspSystemMitigationAuditOptions
     "MitigationOptions" = 0; // PspSystemMitigationOptions
     "ObCaseInsensitive" = 1; // ObpCaseInsensitive
@@ -2746,7 +2746,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SeTokenLeakDiag" = 0; // SeTokenLeakTracking
     "SeTokenSingletonAttributesConfig" = 3; // SepTokenSingletonAttributesConfig
     "SplitLargeCaches" = 0; // KiSplitLargeCaches
-    "ThreadDpcEnable" = 1; // KeThreadDpcEnable, https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs
+    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
     "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
     "TimerCheckFlags" = 1; // KeTimerCheckFlags
     "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
@@ -3249,6 +3249,86 @@ if ( (VfRuleClasses & 0x400000) == 0 )
 
 return ViMiscValidateSynchronizationObject(*(_QWORD *)(a1 + 16));
 ```
+
+## ThreadDpcEnable
+
+Has a default of `1`, and is a kind of bool, `>1` data is probably the same as `1`.
+
+```c
+lkd> dd nt!KeThreadDpcEnable L1
+fffff806`6d11d17c  00000001
+```
+
+> "*A threaded DPC is a DPC that the system executes at IRQL equal to PASSIVE_LEVEL.*
+> *An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long time, every thread will remain paused for an arbitrarily long time. Thus, each ordinary DPC increases system latency, which can hurt the performance of time-sensitive applications, such as audio or video playback.*
+> *Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, you should use threaded DPCs rather than ordinary DPCs—unless a particular DPC must not be preempted, not even by another DPC.*
+>
+> — Microsoft, [Introduction to threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
+
+[`KiInitializeProcessor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiInitializeProcessor.c) initializes per processor threaded DPC:
+
+```c
+// KiInitializeProcessor
+
+if ( KeThreadDpcEnable )
+{
+  KeInitializeGate(a1 + 32320, 0);
+  KiInitializeDpcList((_QWORD *)(a1 + 13168));
+  *(_QWORD *)(a1 + 13184) = 0LL;
+  *(_DWORD *)(a1 + 13192) = 0;
+}
+```
+
+[`KeInitSystem`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KeInitSystem.c) (same for [`KiInitializeDynamicProcessor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiInitializeDynamicProcessor.c)) starts one DPC thread per active processor:
+
+```c
+// KeInitSystem
+
+KiInitializeProcessor(*v13);
+if ( KeThreadDpcEnable )
+{
+  if ( (int)KiStartDpcThread(v14) < 0 )
+    break;
+}
+```
+
+[`KiStartDpcThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiStartDpcThread.c) creates a system thread whose start routine is [`KiExecuteDpc`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiExecuteDpc.c), and that thread raises itself to priority 31 and runs DPC work through [`KiExecuteAllDpcs`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiExecuteAllDpcs.c).
+
+### DpcCount
+
+A simple way to see the amount of DPCs that got executed.
+
+```c
+lkd> dt nt!_KPRCB poi(nt!KiProcessorBlock) DpcData
+   +0x3340 DpcData : [2] _KDPC_DATA
+lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))
+(*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))                 [Type: _KDPC_DATA [2]]
+    [0]              [Type: _KDPC_DATA]
+    [1]              [Type: _KDPC_DATA]
+lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))
+(*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))                 [Type: _KDPC_DATA]
+    [+0x000] DpcList          [Type: _KDPC_LIST]
+    [+0x010] DpcLock          : 0x0 [Type: unsigned __int64]
+    [+0x018] DpcQueueDepth    : 0 [Type: long]
+    [+0x01c] DpcCount         : 0x16c08 [Type: unsigned long] // ordinary DPCs
+    [+0x020] ActiveDpc        : 0x0 [Type: _KDPC *]
+    [+0x028] LongDpcPresent   : 0x0 [Type: unsigned long]
+    [+0x02c] Padding          : 0x0 [Type: unsigned long]
+lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4f0))
+(*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4f0))                 [Type: _KDPC_DATA]
+    [+0x000] DpcList          [Type: _KDPC_LIST]
+    [+0x010] DpcLock          : 0x0 [Type: unsigned __int64]
+    [+0x018] DpcQueueDepth    : 0 [Type: long]
+    [+0x01c] DpcCount         : 0x0 [Type: unsigned long] // threaded DPCs
+    [+0x020] ActiveDpc        : 0x0 [Type: _KDPC *]
+    [+0x028] LongDpcPresent   : 0x0 [Type: unsigned long]
+    [+0x02c] Padding          : 0x0 [Type: unsigned long]
+```
+
+### [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable2.png?raw=true)
 
 ## RegistryMachin_* Keys
 
@@ -6114,10 +6194,11 @@ Forces hung apps and services to terminate faster, see 'Windows Internals' secti
 \Registry\User\S-ID\Control Panel\Desktop : HungAppTimeout
 \Registry\User\S-ID\Control Panel\Desktop : AutoEndTasks
 ```
-`HungAppTimeout`-> `1500` (`1.5` sec; default is `5` sec)
-`WaitToKillTimeout`-> `2500` (`2.5` sec)
-`WaitToKillServiceTimeout`-> `2500` (`2.5` sec; default is `5` sec)
-`WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000` (`20` sec))
+
+- `HungAppTimeout` -> `1500` (`1.5` sec, default is `5` sec)
+- `WaitToKillTimeout` -> `2500` (`2.5` sec)
+- `WaitToKillServiceTimeout` -> `2500` (`2.5` sec, default is `5` sec)
+- `WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000`, `20` sec)
 
 More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
 
