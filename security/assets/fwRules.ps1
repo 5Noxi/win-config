@@ -1,5 +1,5 @@
-# (C) 2026 Noverse. All Rights Reserved.
 # This PS is a part of the WinConfig documentation
+# https://noverse.dev/docs/win-config/security/windows-firewall
 # https://github.com/nohuto
 # https://discord.noverse.dev
 
