@@ -5979,7 +5979,7 @@ SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Se
 
 # Enable FSO
 
-Will be updated within the next days (date of commit 20.05.2026)
+Will be updated within the next weeks (date of commit 20.05.2026)
 
 ## ResourcePolicyServer
 
