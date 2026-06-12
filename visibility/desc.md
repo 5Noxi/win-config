@@ -441,7 +441,7 @@ It changes every setting, which is shown in the `Folder Options` window. Some ar
 
 # Taskbar Settings
 
-Removes the search box, moves the taskbar to the left, removes badges, disables the flashes on the app icons, removes the "Task View" button. (`Personalization > Taskbar`)
+Removes the search box, moves the taskbar to the left, removes badges, disables the flashes on the app icons, removes the "Task View" button (`Personalization > Taskbar`). See details about the `Add 'End Task' to Taskbar Context Menu` option [here](https://www.youtube.com/watch?v=5HWyyNep6t0).
 
 `TaskbarSd` adds/removes the block in the right corner, which shows the desktop (picture).
 
@@ -451,11 +451,14 @@ Removes the search box, moves the taskbar to the left, removes badges, disables 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
   "TaskbarDa": { "Type": "REG_DWORD", "Data": 0, "Elevated": true },
 ```
+
 I removed the value since you can't apply it even with `TrustedInstaller`/`SYSTEM` previledges. Note that the value is still actively used by `SystemSettings`:
+
 ```c
 // Personalization > Taskbar - Widgets (off)
 SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDa	Type: REG_DWORD, Length: 4, Data: 0
 ```
+
 Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0, but it grays out & disables the option.
 
 ## [Windows Policies](https://noverse.dev/policies)
