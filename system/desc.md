@@ -4237,14 +4237,14 @@ Example output:
 // HwSchMode = 2
 \\.\DISPLAY1
   AdapterLuid=00000000:00007552 VidPnSourceId=0 hAdapter=1073741824
-  WDDM_2_9 raw=0x00000006 HWSCH DriverSupportState=2 Enabled=1
-  WDDM_3_0 raw=0x0000000e HWFLIPQUEUE DriverSupportState=2 Enabled=1 DisplayableSupported=1
+  WDDM_2_9 HWSCH DriverSupportState=2 Enabled=1
+  WDDM_3_0 HWFLIPQUEUE DriverSupportState=2 Enabled=1 DisplayableSupported=1
 
 // HwSchMode = 1
 \\.\DISPLAY1
   AdapterLuid=00000000:0000759f VidPnSourceId=0 hAdapter=1073741824
-  WDDM_2_9 raw=0x00000002 HWSCH DriverSupportState=2 Enabled=0
-  WDDM_3_0 raw=0x0000000a HWFLIPQUEUE DriverSupportState=2 Enabled=0 DisplayableSupported=1
+  WDDM_2_9 HWSCH DriverSupportState=2 Enabled=0
+  WDDM_3_0 HWFLIPQUEUE DriverSupportState=2 Enabled=0 DisplayableSupported=1
 ```
 
 ### dxdiag

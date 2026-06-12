@@ -57,13 +57,13 @@ static void query_hwsch(const wchar_t *name, PFN_OPEN open_adapter, PFN_QUERY qu
         printf("  AdapterLuid=%08lx:%08lx VidPnSourceId=%u hAdapter=%u\n",
             (ULONG)open.AdapterLuid.HighPart, open.AdapterLuid.LowPart, open.VidPnSourceId, open.hAdapter);
         if (st29 >= 0)
-            printf("  WDDM_2_9 raw=0x%08x HWSCH DriverSupportState=%u Enabled=%u\n", caps29, caps29 & 3u, (caps29 >> 2) & 1u);
+            printf("  WDDM_2_9 HWSCH DriverSupportState=%u Enabled=%u\n", caps29 & 3u, (caps29 >> 2) & 1u);
         else
             printf("  WDDM_2_9 status=0x%08lx\n", (ULONG)st29);
 
         if (st30 >= 0)
-            printf("  WDDM_3_0 raw=0x%08x HWFLIPQUEUE DriverSupportState=%u Enabled=%u DisplayableSupported=%u\n",
-                caps30, caps30 & 3u, (caps30 >> 2) & 1u, (caps30 >> 3) & 1u);
+            printf("  WDDM_3_0 HWFLIPQUEUE DriverSupportState=%u Enabled=%u DisplayableSupported=%u\n",
+                caps30 & 3u, (caps30 >> 2) & 1u, (caps30 >> 3) & 1u);
         else
             printf("  WDDM_3_0 status=0x%08lx\n", (ULONG)st30);
 
