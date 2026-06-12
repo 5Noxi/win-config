@@ -167,7 +167,10 @@ function disable-existingrules {
   }
 
   if ($PSCmdlet.ShouldProcess("$($rulesToDisable.Count) enabled firewall rules", 'Disable')) {
-      $rulesToDisable | Disable-NetFirewallRule | Out-Null
+      $ruleNames = @($rulesToDisable | Select-Object -ExpandProperty Name -Unique)
+      foreach ($ruleName in $ruleNames) {
+          Disable-NetFirewallRule -Name $ruleName -ErrorAction Stop | Out-Null
+      }
   }
 
   $rulesToDisable | Sort-Object Direction, DisplayGroup, DisplayName | Select-Object Direction, DisplayGroup, Name, DisplayName | Format-Table -AutoSize

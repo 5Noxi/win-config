@@ -32,9 +32,10 @@ Start by downloading & opening [fwRules.ps1](https://github.com/nohuto/win-confi
 
 Then download [System Informer](https://github.com/winsiderss/systeminformer/releases) since that makes the setup/debugging a lot easier. Go into the '*Network*' section which shows all connections/states, find out your first few rules via it:
 
-1. Open all kind of apps which you want to have a network connection (keep it minimal)
-2. Look at the '*Network*' section to see what ports/protocols they use
-3. Add them to `$rules` (I've added some examples to it already, remove them if you don't need them)
+1. Reset your firewall via `.\fwRules.ps1 -reset`
+2. Open all kind of apps which you want to have a network connection (keep it minimal)
+3. Look at the '*Network*' section to see what ports/protocols they use
+4. Add them to `$rules` (I've added some examples to it already, remove them if you don't need them)
 
 For example here you can ignore the lines with `127.0.0.1` LocalAddress, means the `$rule` for it would be (edit `Program`):
 
@@ -89,7 +90,7 @@ Here we can see that we've to allow RemotePort `3724` (outbound, TCP):
 @{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '3724', '1119') },
 ```
 
-#### Protocol Number
+#### Protocol Numbers
 
 | Service | Protocol Number |
 | --- | --- |
