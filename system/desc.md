@@ -4118,7 +4118,7 @@ aRegistryMachin_26 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\T
 
 # HAGS
 
-[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) (*Hardware-accelerated GPU scheduling*) changes who handles high frequency GPU scheduling work, classic WDDM uses a high priority CPU scheduler thread, HAGS offloads much of that scheduling/context switch work to a GPU scheduling processor.
+[HAGS](https://devblogs.microsoft.com/directx/hardware-accelerated-gpu-scheduling/) (*Hardware-accelerated GPU scheduling*) changes who handles high frequency GPU scheduling work, classic WDDM uses a high priority CPU scheduler thread, HAGS offloads much of that scheduling/context switch work to a GPU scheduling processor. Note that `TEAS` in the dropdown = `ThreatExpimentalAsStable`.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/HwQueue.png?raw=true)
 
@@ -4224,7 +4224,7 @@ typedef enum _DXGK_FEATURE_ID
 
 ## D3DKMTQueryAdapterInfo
 
-`query_hwsch.c` calls `D3DKMTQueryAdapterInfo` (`KMTQAITYPE_WDDM_2_9_CAPS`/`KMTQAITYPE_WDDM_3_0_CAPS`) to get the `DriverSupportState`/`Enabled` bits, you can either use the [prebuild binary](), or build it yourself from [source]():
+`query_hwsch.c` calls `D3DKMTQueryAdapterInfo` (`KMTQAITYPE_WDDM_2_9_CAPS`/`KMTQAITYPE_WDDM_3_0_CAPS`) to get the `DriverSupportState`/`Enabled` bits, you can either use the [prebuild binary](https://github.com/nohuto/win-config/blob/main/system/assets/query_hwsch.exe), or build it yourself from [source](https://github.com/nohuto/win-config/tree/main/system/assets/query_hwsch):
 
 ```powershell
 cmake -S . -B build
