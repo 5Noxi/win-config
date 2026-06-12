@@ -4249,7 +4249,7 @@ Example output:
 
 ### dxdiag
 
-You can practically also use dxdiag, but that won't show the support state of e.g. `HWFLIPQUEUE` via:
+You can practically also use dxdiag, but that won't show the enabled bit of e.g. `HWFLIPQUEUE` via:
 
 ```powershell
 dxdiag /t .\dxdiag.txt
