@@ -4,8 +4,54 @@
 # https://discord.noverse.dev
 
 [CmdletBinding(SupportsShouldProcess)]
-param([switch]$apply, [switch]$reset, [switch]$outbound, [string]$managedGroup = 'Noverse Firewall')
+param(
+  [switch]$a,
+  [switch]$r,
+  [switch]$o,
+  [string]$g,
+  [Parameter(ValueFromRemainingArguments = $true)][string[]]$arguments
+)
 $ErrorActionPreference = 'Stop'
+
+$apply = $a.IsPresent
+$reset = $r.IsPresent
+$outbound = $o.IsPresent
+$managedGroup = if ($g) { $g } else { 'Noverse Rules' }
+
+for ($argumentIndex = 0; $argumentIndex -lt $arguments.Count; $argumentIndex++) {
+  $argument = $arguments[$argumentIndex]
+  switch ($argument) {
+      '--apply' { $apply = $true }
+      '--reset' { $reset = $true }
+      '--outbound' { $outbound = $true }
+      '--managed-group' {
+          $argumentIndex++
+          if ($argumentIndex -ge $arguments.Count) { throw '--managed-group requires a value' }
+          $managedGroup = $arguments[$argumentIndex]
+      }
+      default { throw "Unsupported argument: $argument" }
+  }
+}
+
+$rawCommandLine = [Environment]::CommandLine
+if ($rawCommandLine -match '(?<!\S)--apply(?!\S)') { $apply = $true }
+if ($rawCommandLine -match '(?<!\S)--reset(?!\S)') { $reset = $true }
+if ($rawCommandLine -match '(?<!\S)--outbound(?!\S)') { $outbound = $true }
+
+$invocationLine = $MyInvocation.Line
+if ($invocationLine -match '(?<!\S)--apply(?!\S)') { $apply = $true }
+if ($invocationLine -match '(?<!\S)--reset(?!\S)') { $reset = $true }
+if ($invocationLine -match '(?<!\S)--outbound(?!\S)') { $outbound = $true }
+
+$managedGroupMatch = [regex]::Match("$rawCommandLine $invocationLine", '(?<!\S)--managed-group\s+(?:"([^"]+)"|''([^'']+)''|(\S+))')
+if ($managedGroupMatch.Success) {
+  foreach ($managedGroupValue in $managedGroupMatch.Groups[1..3]) {
+      if ($managedGroupValue.Success -and $managedGroupValue.Value) {
+          $managedGroup = $managedGroupValue.Value
+          break
+      }
+  }
+}
 
 # Parameters:
 
@@ -87,10 +133,7 @@ function convertto-stringarray {
 }
 
 function test-rulevaluepattern {
-  param(
-      [object]$value,
-      [object]$pattern
-  )
+  param([object]$value,[object]$pattern)
 
   $patterns = @(convertto-stringarray $pattern)
   if (-not $patterns.Count) { return $true }
@@ -103,10 +146,7 @@ function test-rulevaluepattern {
 }
 
 function test-ruletextpattern {
-  param(
-      [Parameter(Mandatory)][object]$rule,
-      [Parameter(Mandatory)][object]$pattern
-  )
+  param([Parameter(Mandatory)][object]$rule, [Parameter(Mandatory)][object]$pattern)
 
   return (
       (test-rulevaluepattern -value $rule.Name -pattern $pattern) -or
@@ -117,10 +157,7 @@ function test-ruletextpattern {
 }
 
 function test-rulepattern {
-  param(
-      [Parameter(Mandatory)][object]$rule,
-      [Parameter(Mandatory)][object]$pattern
-  )
+  param([Parameter(Mandatory)][object]$rule,[Parameter(Mandatory)][object]$pattern)
 
   if ($pattern -is [string]) {
       return (test-ruletextpattern -rule $rule -pattern $pattern)
@@ -159,6 +196,18 @@ function test-rulematchesdisablepattern {
   return $false
 }
 
+function write-rulelog {
+  param(
+      [Parameter(Mandatory)][object]$rule,
+      [string]$status
+  )
+
+  $name = if ($rule.DisplayName) { $rule.DisplayName } else { $rule.Name }
+  $direction = if ($rule.Direction) { $rule.Direction } else { 'Any' }
+  $action = if ($status) { $status } elseif ($rule.Action -eq 'Allow') { 'allowed' } elseif ($rule.Action -eq 'Block') { 'blocked' } else { $rule.Action }
+  Write-Host "$name | $direction | $action"
+}
+
 function disable-existingrules {
   $rulesToDisable = @(get-enabledfirewallrules | Where-Object { test-rulematchesdisablepattern -rule $_ })
   if (-not $rulesToDisable.Count) {
@@ -166,14 +215,17 @@ function disable-existingrules {
       return
   }
 
-  if ($PSCmdlet.ShouldProcess("$($rulesToDisable.Count) enabled firewall rules", 'Disable')) {
-      $ruleNames = @($rulesToDisable | Select-Object -ExpandProperty Name -Unique)
-      foreach ($ruleName in $ruleNames) {
-          Disable-NetFirewallRule -Name $ruleName -ErrorAction Stop | Out-Null
+  $disabledRuleNames = @{}
+  foreach ($rule in ($rulesToDisable | Sort-Object Direction, DisplayGroup, DisplayName)) {
+      if (-not $disabledRuleNames.ContainsKey($rule.Name)) {
+          if ($PSCmdlet.ShouldProcess($rule.DisplayName, 'Disable firewall rule')) {
+              Disable-NetFirewallRule -Name $rule.Name -ErrorAction Stop | Out-Null
+          }
+          $disabledRuleNames[$rule.Name] = $true
       }
-  }
 
-  $rulesToDisable | Sort-Object Direction, DisplayGroup, DisplayName | Select-Object Direction, DisplayGroup, Name, DisplayName | Format-Table -AutoSize
+      write-rulelog -rule $rule -status 'blocked'
+  }
 }
 
 function remove-managedrules {
@@ -183,8 +235,14 @@ function remove-managedrules {
       return
   }
 
-  if ($PSCmdlet.ShouldProcess("$($existing.Count) managed firewall rules", 'Remove')) {
-      $existing | Remove-NetFirewallRule
+  $removedRuleNames = @{}
+  foreach ($rule in ($existing | Sort-Object Direction, DisplayName)) {
+      if (-not $removedRuleNames.ContainsKey($rule.Name)) {
+          if ($PSCmdlet.ShouldProcess($rule.DisplayName, 'Remove firewall rule')) {
+              Remove-NetFirewallRule -Name $rule.Name -ErrorAction Stop | Out-Null
+          }
+          $removedRuleNames[$rule.Name] = $true
+      }
   }
 }
 
@@ -228,6 +286,7 @@ function add-managedrules {
               if ($PSCmdlet.ShouldProcess($params.DisplayName, 'Create firewall rule')) {
                   New-NetFirewallRule @params | Out-Null
               }
+              write-rulelog -rule $params
           }
           continue
       }
@@ -235,6 +294,7 @@ function add-managedrules {
       if ($PSCmdlet.ShouldProcess($baseParams.DisplayName, 'Create firewall rule')) {
           New-NetFirewallRule @baseParams | Out-Null
       }
+      write-rulelog -rule $baseParams
   }
 }
 
@@ -245,7 +305,7 @@ function set-blockedprofiles {
 }
 
 function set-outboundprofiles {
-  if ($PSCmdlet.ShouldProcess('Domain, Private, Public firewall profiles', 'Allow outbound and block inbound without changing existing rules')) {
+  if ($PSCmdlet.ShouldProcess('Domain, Private, Public firewall profiles', 'Allow outbound and block inbound')) {
       Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Allow -NotifyOnListen False -AllowInboundRules False -AllowLocalFirewallRules True -AllowLocalIPsecRules True -AllowUnicastResponseToMulticast False -EnableStealthModeForIPsec True -LogFileName '%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log' -LogMaxSizeKilobytes 16384 -LogBlocked True -LogIgnored True
   }
 }
@@ -259,9 +319,9 @@ function reset-firewall {
   }
 }
 
-$selectedFlags = @(@($apply, $reset, $outbound) | Where-Object { $_.IsPresent })
+$selectedFlags = @(@($apply, $reset, $outbound) | Where-Object { $_ })
 if ($selectedFlags.Count -ne 1) {
-    throw 'Use one flag (-apply, -reset, -outbound)'
+    throw 'Use one mode: --apply/-a, --reset/-r, or --outbound/-o'
 }
 
 if ($reset) {

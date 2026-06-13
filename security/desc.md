@@ -22,18 +22,23 @@ This is just to understand the `WF.msc` table properly, and to be able to create
 
 ## Setup Guide
 
-Start by downloading & opening [fwRules.ps1](https://github.com/nohuto/win-config/blob/main/security/assets/fwRules.ps1) since you'll have to modify it. WF adds some rules by default for network discovery/delivery optimization/troubleshooting etc., since you may not need many of them, disable them. I've already added kind of all to `$disableExistingRulePatterns`, only leaving some outbound core networking rules, means either leave it, or remove lines.
+Start by downloading & opening [wfRules.ps1](https://github.com/nohuto/win-config/blob/main/security/assets/wfRules.ps1) since you'll have to modify it. WF adds some rules by default for network discovery/delivery optimization/troubleshooting etc., since you may not need many of them, disable them. I've already added kind of all to `$disableExistingRulePatterns`, only leaving some outbound core networking rules, means either leave it, or remove lines.
 
 ```powershell
-.\fwRules.ps1 -reset
-.\fwRules.ps1 -outbound # allows outbound
-.\fwRules.ps1 -apply # disables matching default rules, creates $rules, blocks inbound/outbound
+.\wfRules.ps1 --reset
+.\wfRules.ps1 --outbound # allows outbound
+.\wfRules.ps1 --apply # disables matching default rules, creates $rules, blocks inbound/outbound
+
+.\wfRules.ps1 -r # --reset
+.\wfRules.ps1 -o # --outbound
+.\wfRules.ps1 -a # --apply
 ```
 
 Then download [System Informer](https://github.com/winsiderss/systeminformer/releases) since that makes the setup/debugging a lot easier. Go into the '*Network*' section which shows all connections/states, find out your first few rules via it:
 
-1. Reset your firewall via `.\fwRules.ps1 -reset`
+1. Reset your firewall via `.\wfRules.ps1 --reset`
 2. Open all kind of apps which you want to have a network connection (keep it minimal)
+  - Some apps may show a connection since they for example connect to their servers to check for updates, as it's recommended to download/update your apps via a package manager, they don't need their own allow rules
 3. Look at the '*Network*' section to see what ports/protocols they use
 4. Add them to `$rules` (I've added some examples to it already, remove them if you don't need them)
 
@@ -46,6 +51,15 @@ $rules = @(
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/mullvadWF.png?raw=true)
+
+Second example, as before you can ignore `127.0.0.1` LocalAddress while setting up outbound rules:
+
+```powershell
+@{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '3724', '1119') },
+@{ DisplayName = 'Overwatch UDP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'UDP' }
+```
+
+![](https://github.com/nohuto/win-config/blob/main/security/images/overwatchWF.png?raw=true)
 
 Most apps will work fine with `443` + `TCP`, games often need specific TCP RemotePorts (and obviously UDP). Spotify uses UDP once on startup, means if only allowing TCP for it, then the startup will be slower.
 
@@ -133,6 +147,34 @@ If not using DoH/DoT or unencrypted DNS/ISP DNS:
 ```powershell
 @{ DisplayName = 'DNS Client'; Direction = 'Outbound'; Action = 'Allow'; Program = '%SystemRoot%\System32\svchost.exe'; Service = 'Dnscache'; Protocol = 'UDP'; RemotePort = @('53')<#; RemoteAddress = @('')#> },
 @{ DisplayName = 'DNS Client TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = '%SystemRoot%\System32\svchost.exe'; Service = 'Dnscache'; Protocol = 'TCP'; RemotePort = @('53')<#; RemoteAddress = @('')#> }
+```
+
+### `$rules` Result Example
+
+```powershell
+$rules = @(
+  # Outbound allow
+  @{ DisplayName = 'Cryptographic Services'; Direction = 'Outbound'; Action = 'Allow'; Program = '%SystemRoot%\System32\svchost.exe'; Service = 'CryptSvc'; Protocol = 'TCP'; RemotePort = @('80') },
+  @{ DisplayName = 'DNS Client DoH'; Direction = 'Outbound'; Action = 'Allow'; Program = '%SystemRoot%\System32\svchost.exe'; Service = 'Dnscache'; Protocol = 'TCP'; RemotePort = @('443'); RemoteAddress = @('94.140.14.49', '94.140.14.59') },
+  @{ DisplayName = 'Equibop'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Users\nohuto\AppData\Local\equibop\equibop.exe'; Protocol = 'TCP'; RemotePort = @('443') },
+  @{ DisplayName = 'Git Remote HTTPS'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files\Git\mingw64\libexec\git-core\git-remote-https.exe'; Protocol = 'TCP'; RemotePort = @('443') },
+  @{ DisplayName = 'Mullvad Browser UDP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Users\nohuto\AppData\Local\Mullvad\MullvadBrowser\Release\mullvadbrowser.exe'; Protocol = 'UDP'; RemotePort = @('443') },
+  @{ DisplayName = 'Mullvad Browser'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Users\nohuto\AppData\Local\Mullvad\MullvadBrowser\Release\mullvadbrowser.exe'; Protocol = 'TCP'; RemotePort = @('443') },
+  @{ DisplayName = 'Overwatch TCP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'TCP'; RemotePort = @('443', '3724', '1119') },
+  @{ DisplayName = 'Overwatch UDP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steamapps\common\Overwatch\Overwatch.exe'; Protocol = 'UDP' },
+  @{ DisplayName = 'Spotify UDP'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Users\nohuto\AppData\Roaming\Spotify\Spotify.exe'; Protocol = 'UDP'; RemotePort = @('443') },
+  @{ DisplayName = 'Spotify'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Users\nohuto\AppData\Roaming\Spotify\Spotify.exe'; Protocol = 'TCP'; RemotePort = @('443') },
+  @{ DisplayName = 'Steam'; Direction = 'Outbound'; Action = 'Allow'; Program = 'C:\Program Files (x86)\Steam\steam.exe'; Protocol = 'TCP'; RemotePort = @('443') },
+  @{ DisplayName = 'svchost HTTP/S'; Direction = 'Outbound'; Action = 'Allow'; Program = '%SystemRoot%\System32\svchost.exe'; Protocol = 'TCP'; RemotePort = @('80', '443'); Enabled = 'False' },
+
+  # Outbound block
+  @{ DisplayName = 'FlowLauncher'; Direction = 'Outbound'; Action = 'Block'; Program = 'C:\Users\nohuto\AppData\Local\FlowLauncher\app-*\Flow.Launcher.exe' },
+  @{ DisplayName = 'Steam CEF'; Direction = 'Outbound'; Action = 'Block'; Program = 'C:\Program Files (x86)\Steam\bin\cef\cef.win64\steamwebhelper.exe' },
+
+  # Inbound block
+  @{ DisplayName = 'Spotify'; Direction = 'Inbound'; Action = 'Block'; Program = 'C:\Users\nohuto\AppData\Roaming\Spotify\Spotify.exe' },
+  @{ DisplayName = 'Steam CEF'; Direction = 'Inbound'; Action = 'Block'; Program = 'C:\Program Files (x86)\Steam\bin\cef\cef.win64\steamwebhelper.exe' }
+)
 ```
 
 ## Firewall Captures
@@ -840,19 +882,6 @@ Example paths:
 \Registry\Machine\SYSTEM\ControlSet001\Services\msisadrv\Parameters : DmaRemappingCompatible
 \Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingFlags
 \Registry\Machine\SYSTEM\ControlSet001\Enum\pci\VEN_1022&DEV_1483&SUBSYS_88081043&REV_00\3&11583659&0&09\Device Parameters\DMA Management : RemappingSupported
-```
-
-## EnableNVMeInterface Notes
-
-Since `EnableNVMeInterface` is included in the function, I'll add it here. Default value of `0`, range `0`-`1`? Located in:
-```
-\Registry\Machine\SYSTEM\ControlSet001\Enum\pci\<dev>\<id>\Device Parameters\StorPort : EnableNVMeInterface
-```
-[`DisableNativeNVMeStack`](https://github.com/nohuto/regkit/blob/main/records/StorPort.txt), range `0`-`1`?
-```c
-\Registry\Machine\SYSTEM\ControlSet001\Control\StorPort : DisableNativeNVMeStack
-
-DisableNativeNVMeStack db 0 // default
 ```
 
 # Disable VBS (HVCI)
