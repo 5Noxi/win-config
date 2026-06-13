@@ -3,7 +3,7 @@
 # https://github.com/nohuto
 # https://discord.noverse.dev
 
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding(SupportsShouldProcess, PositionalBinding = $false)]
 param([switch]$a, [switch]$r, [switch]$o, [string]$g, [Parameter(ValueFromRemainingArguments = $true)][string[]]$arguments)
 $ErrorActionPreference = 'Stop'
 
@@ -15,35 +15,15 @@ $managedGroup = if ($g) { $g } else { 'Noverse Rules' }
 for ($argumentIndex = 0; $argumentIndex -lt $arguments.Count; $argumentIndex++) {
   $argument = $arguments[$argumentIndex]
   switch ($argument) {
-      '--apply' { $apply = $true }
-      '--reset' { $reset = $true }
-      '--outbound' { $outbound = $true }
-      '--managed-group' {
-          $argumentIndex++
-          if ($argumentIndex -ge $arguments.Count) { throw '--managed-group requires a value' }
-          $managedGroup = $arguments[$argumentIndex]
-      }
-      default { throw "Unsupported argument: $argument" }
-  }
-}
-
-$rawCommandLine = [Environment]::CommandLine
-if ($rawCommandLine -match '(?<!\S)--apply(?!\S)') { $apply = $true }
-if ($rawCommandLine -match '(?<!\S)--reset(?!\S)') { $reset = $true }
-if ($rawCommandLine -match '(?<!\S)--outbound(?!\S)') { $outbound = $true }
-
-$invocationLine = $MyInvocation.Line
-if ($invocationLine -match '(?<!\S)--apply(?!\S)') { $apply = $true }
-if ($invocationLine -match '(?<!\S)--reset(?!\S)') { $reset = $true }
-if ($invocationLine -match '(?<!\S)--outbound(?!\S)') { $outbound = $true }
-
-$managedGroupMatch = [regex]::Match("$rawCommandLine $invocationLine", '(?<!\S)--managed-group\s+(?:"([^"]+)"|''([^'']+)''|(\S+))')
-if ($managedGroupMatch.Success) {
-  foreach ($managedGroupValue in $managedGroupMatch.Groups[1..3]) {
-      if ($managedGroupValue.Success -and $managedGroupValue.Value) {
-          $managedGroup = $managedGroupValue.Value
-          break
-      }
+    '--apply' { $apply = $true }
+    '--reset' { $reset = $true }
+    '--outbound' { $outbound = $true }
+    '--managed-group' {
+      $argumentIndex++
+      if ($argumentIndex -ge $arguments.Count) { throw '--managed-group requires a value' }
+      $managedGroup = $arguments[$argumentIndex]
+    }
+    default { throw "Unsupported argument: $argument" }
   }
 }
 
@@ -111,7 +91,7 @@ $rules = @(
 )
 
 function get-enabledfirewallrules {
-  Get-NetFirewallRule -PolicyStore ActiveStore -Enabled True -ErrorAction Stop | Where-Object { $_.Direction -in @('Inbound', 'Outbound') }
+  Get-NetFirewallRule -PolicyStore ActiveStore -Enabled True -Direction Inbound,Outbound -ErrorAction Stop
 }
 
 function convertto-stringarray {
@@ -119,8 +99,14 @@ function convertto-stringarray {
 
   if ($null -eq $value) { return @() }
   if ($value -is [System.Array]) {
-      return @($value | ForEach-Object { "$_".Trim() } | Where-Object { $_ })
+    $list = [System.Collections.Generic.List[string]]::new($value.Count)
+    foreach ($item in $value) {
+      $text = "$item".Trim()
+      if ($text) { $list.Add($text) }
+    }
+    return $list.ToArray()
   }
+
   $text = "$value".Trim()
   if (-not $text) { return @() }
   return @($text)
@@ -134,7 +120,7 @@ function test-rulevaluepattern {
 
   $text = if ($null -eq $value) { '' } else { "$value" }
   foreach ($item in $patterns) {
-      if ($text -like $item) { return $true }
+    if ($text -like $item) { return $true }
   }
   return $false
 }
@@ -143,10 +129,10 @@ function test-ruletextpattern {
   param([Parameter(Mandatory)][object]$rule, [Parameter(Mandatory)][object]$pattern)
 
   return (
-      (test-rulevaluepattern -value $rule.Name -pattern $pattern) -or
-      (test-rulevaluepattern -value $rule.DisplayName -pattern $pattern) -or
-      (test-rulevaluepattern -value $rule.DisplayGroup -pattern $pattern) -or
-      (test-rulevaluepattern -value $rule.Group -pattern $pattern)
+    (test-rulevaluepattern -value $rule.Name -pattern $pattern) -or
+    (test-rulevaluepattern -value $rule.DisplayName -pattern $pattern) -or
+    (test-rulevaluepattern -value $rule.DisplayGroup -pattern $pattern) -or
+    (test-rulevaluepattern -value $rule.Group -pattern $pattern)
   )
 }
 
@@ -154,27 +140,34 @@ function test-rulepattern {
   param([Parameter(Mandatory)][object]$rule,[Parameter(Mandatory)][object]$pattern)
 
   if ($pattern -is [string]) {
-      return (test-ruletextpattern -rule $rule -pattern $pattern)
+    return (test-ruletextpattern -rule $rule -pattern $pattern)
   }
 
   if ($pattern -isnot [hashtable]) {
-      throw 'Disable patterns must be strings or hashtables'
+    throw 'Disable patterns must be strings or hashtables'
   }
 
   foreach ($key in $pattern.Keys) {
-      if ($key -eq 'Pattern') {
-          if (-not (test-ruletextpattern -rule $rule -pattern $pattern[$key])) {
-              return $false
-          }
-          continue
+    if ($key -eq 'Pattern') {
+      if (-not (test-ruletextpattern -rule $rule -pattern $pattern[$key])) {
+        return $false
       }
+      continue
+    }
 
-      if ($key -notin @('Name', 'DisplayName', 'DisplayGroup', 'Group', 'Direction', 'Action')) {
-          throw "Unsupported disable pattern key: $key"
-      }
-      if (-not (test-rulevaluepattern -value $rule.$key -pattern $pattern[$key])) {
-          return $false
-      }
+    switch ($key) {
+      'Name' {}
+      'DisplayName' {}
+      'DisplayGroup' {}
+      'Group' {}
+      'Direction' {}
+      'Action' {}
+      default { throw "Unsupported disable pattern key: $key" }
+    }
+
+    if (-not (test-rulevaluepattern -value $rule.$key -pattern $pattern[$key])) {
+      return $false
+    }
   }
   return $true
 }
@@ -183,17 +176,15 @@ function test-rulematchesdisablepattern {
   param([Parameter(Mandatory)][object]$rule)
 
   foreach ($pattern in $disableExistingRulePatterns) {
-      if (test-rulepattern -rule $rule -pattern $pattern) {
-          return $true
-      }
+    if (test-rulepattern -rule $rule -pattern $pattern) { return $true }
   }
   return $false
 }
 
 function write-rulelog {
   param(
-      [Parameter(Mandatory)][object]$rule,
-      [string]$status
+    [Parameter(Mandatory)][object]$rule,
+    [string]$status
   )
 
   $name = if ($rule.DisplayName) { $rule.DisplayName } else { $rule.Name }
@@ -203,40 +194,38 @@ function write-rulelog {
 }
 
 function disable-existingrules {
-  $rulesToDisable = @(get-enabledfirewallrules | Where-Object { test-rulematchesdisablepattern -rule $_ })
-  if (-not $rulesToDisable.Count) {
-      Write-Host 'No enabled firewall rules matched disable patterns'
-      return
+  $disabledRuleNames = @{}
+  $matched = $false
+
+  foreach ($rule in get-enabledfirewallrules) {
+    if (-not (test-rulematchesdisablepattern -rule $rule)) { continue }
+
+    $matched = $true
+    if (-not $disabledRuleNames.ContainsKey($rule.Name)) {
+      if ($PSCmdlet.ShouldProcess($rule.DisplayName, 'Disable firewall rule')) {
+        $null = Disable-NetFirewallRule -Name $rule.Name -ErrorAction Stop
+      }
+      $disabledRuleNames[$rule.Name] = $true
+      write-rulelog -rule $rule -status 'blocked'
+    }
   }
 
-  $disabledRuleNames = @{}
-  foreach ($rule in ($rulesToDisable | Sort-Object Direction, DisplayGroup, DisplayName)) {
-      if (-not $disabledRuleNames.ContainsKey($rule.Name)) {
-          if ($PSCmdlet.ShouldProcess($rule.DisplayName, 'Disable firewall rule')) {
-              Disable-NetFirewallRule -Name $rule.Name -ErrorAction Stop | Out-Null
-          }
-          $disabledRuleNames[$rule.Name] = $true
-      }
-
-      write-rulelog -rule $rule -status 'blocked'
+  if (-not $matched) {
+    Write-Host 'No enabled firewall rules matched disable patterns'
   }
 }
 
 function remove-managedrules {
-  $existing = @(Get-NetFirewallRule -PolicyStore ActiveStore -ErrorAction SilentlyContinue |
-      Where-Object { $_.DisplayGroup -eq $managedGroup -or $_.Group -eq $managedGroup })
-  if (-not $existing.Count) {
-      return
-  }
-
   $removedRuleNames = @{}
-  foreach ($rule in ($existing | Sort-Object Direction, DisplayName)) {
-      if (-not $removedRuleNames.ContainsKey($rule.Name)) {
-          if ($PSCmdlet.ShouldProcess($rule.DisplayName, 'Remove firewall rule')) {
-              Remove-NetFirewallRule -Name $rule.Name -ErrorAction Stop | Out-Null
-          }
-          $removedRuleNames[$rule.Name] = $true
-      }
+  foreach ($rule in Get-NetFirewallRule -PolicyStore PersistentStore -ErrorAction SilentlyContinue) {
+    if (($rule.DisplayGroup -ne $managedGroup -and $rule.Group -ne $managedGroup) -or $removedRuleNames.ContainsKey($rule.Name)) {
+      continue
+    }
+
+    if ($PSCmdlet.ShouldProcess($rule.DisplayName, 'Remove firewall rule')) {
+      $null = Remove-NetFirewallRule -Name $rule.Name -ErrorAction Stop
+    }
+    $removedRuleNames[$rule.Name] = $true
   }
 }
 
@@ -244,88 +233,90 @@ function resolve-ruleprograms {
   param([Parameter(Mandatory)][string]$program)
 
   $expandedProgram = [Environment]::ExpandEnvironmentVariables($program)
-  $wildcardChars = '*?['
-  $hasWildcard = $expandedProgram.IndexOfAny($wildcardChars.ToCharArray()) -ge 0
+  $programs = [System.Collections.Generic.List[string]]::new()
 
-  if ($hasWildcard) {
-      return @(Get-ChildItem -Path $expandedProgram -File -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName)
+  if ([System.Management.Automation.WildcardPattern]::ContainsWildcardCharacters($expandedProgram)) {
+    foreach ($item in Get-ChildItem -Path $expandedProgram -File -ErrorAction SilentlyContinue) {
+      $programs.Add($item.FullName)
+    }
+    return $programs.ToArray()
   }
 
-  if (Test-Path -LiteralPath $expandedProgram) {
-      return @((Resolve-Path -LiteralPath $expandedProgram).Path)
+  if ([System.IO.File]::Exists($expandedProgram)) {
+    $programs.Add([System.IO.Path]::GetFullPath($expandedProgram))
   }
 
-  return @()
+  return $programs.ToArray()
 }
 
 function add-managedrules {
   remove-managedrules
 
   foreach ($rule in $rules) {
-      $baseParams = @{} + $rule
-      if (-not $baseParams.ContainsKey('Group')) { $baseParams.Group = $managedGroup }
-      if (-not $baseParams.ContainsKey('Profile')) { $baseParams.Profile = 'Any' }
-      if (-not $baseParams.ContainsKey('Enabled')) { $baseParams.Enabled = 'True' }
+    $baseParams = $rule.Clone()
+    if (-not $baseParams.ContainsKey('Group')) { $baseParams['Group'] = $managedGroup }
+    if (-not $baseParams.ContainsKey('Profile')) { $baseParams['Profile'] = 'Any' }
+    if (-not $baseParams.ContainsKey('Enabled')) { $baseParams['Enabled'] = 'True' }
 
-      if ($baseParams.ContainsKey('Program')) {
-          $resolvedPrograms = @(resolve-ruleprograms -program $baseParams.Program)
-          if (-not $resolvedPrograms.Count) {
-              Write-Host "Missing EXE: $($baseParams.Program)"
-              continue
-          }
-
-          foreach ($resolvedProgram in $resolvedPrograms) {
-              $params = @{} + $baseParams
-              $params.Program = $resolvedProgram
-              if ($PSCmdlet.ShouldProcess($params.DisplayName, 'Create firewall rule')) {
-                  New-NetFirewallRule @params | Out-Null
-              }
-              write-rulelog -rule $params
-          }
-          continue
+    if ($baseParams.ContainsKey('Program')) {
+      $resolvedPrograms = resolve-ruleprograms -program $baseParams['Program']
+      if (-not $resolvedPrograms.Count) {
+        Write-Host "Missing EXE: $($baseParams['Program'])"
+        continue
       }
 
-      if ($PSCmdlet.ShouldProcess($baseParams.DisplayName, 'Create firewall rule')) {
-          New-NetFirewallRule @baseParams | Out-Null
+      foreach ($resolvedProgram in $resolvedPrograms) {
+        $params = $baseParams.Clone()
+        $params['Program'] = $resolvedProgram
+        if ($PSCmdlet.ShouldProcess($params['DisplayName'], 'Create firewall rule')) {
+          $null = New-NetFirewallRule @params
+        }
+        write-rulelog -rule $params
       }
-      write-rulelog -rule $baseParams
+      continue
+    }
+
+    if ($PSCmdlet.ShouldProcess($baseParams['DisplayName'], 'Create firewall rule')) {
+      $null = New-NetFirewallRule @baseParams
+    }
+    write-rulelog -rule $baseParams
   }
 }
 
 function set-blockedprofiles {
   if ($PSCmdlet.ShouldProcess('Domain, Private, Public firewall profiles', 'Set inbound/outbound block defaults')) {
-      Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -NotifyOnListen False -AllowInboundRules True -AllowLocalFirewallRules True -AllowLocalIPsecRules True -AllowUnicastResponseToMulticast False -EnableStealthModeForIPsec True -LogFileName '%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log' -LogMaxSizeKilobytes 16384 -LogBlocked True -LogIgnored True
+    Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Block -NotifyOnListen False -AllowInboundRules True -AllowLocalFirewallRules True -AllowLocalIPsecRules True -AllowUnicastResponseToMulticast False -EnableStealthModeForIPsec True -LogFileName '%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log' -LogMaxSizeKilobytes 16384 -LogBlocked True -LogIgnored True
   }
 }
 
 function set-outboundprofiles {
   if ($PSCmdlet.ShouldProcess('Domain, Private, Public firewall profiles', 'Allow outbound and block inbound')) {
-      Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Allow -NotifyOnListen False -AllowInboundRules False -AllowLocalFirewallRules True -AllowLocalIPsecRules True -AllowUnicastResponseToMulticast False -EnableStealthModeForIPsec True -LogFileName '%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log' -LogMaxSizeKilobytes 16384 -LogBlocked True -LogIgnored True
+    Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True -DefaultInboundAction Block -DefaultOutboundAction Allow -NotifyOnListen False -AllowInboundRules False -AllowLocalFirewallRules True -AllowLocalIPsecRules True -AllowUnicastResponseToMulticast False -EnableStealthModeForIPsec True -LogFileName '%SystemRoot%\System32\LogFiles\Firewall\pfirewall.log' -LogMaxSizeKilobytes 16384 -LogBlocked True -LogIgnored True
   }
 }
 
 function reset-firewall {
   if ($PSCmdlet.ShouldProcess('Windows Firewall policy', 'Reset to Windows defaults')) {
-      netsh advfirewall reset
-      if ($LASTEXITCODE -ne 0) {
-          throw "netsh advfirewall reset failed with exit code $LASTEXITCODE"
-      }
+    netsh advfirewall reset
+    if ($LASTEXITCODE -ne 0) {
+      throw "netsh advfirewall reset failed with exit code $LASTEXITCODE"
+    }
   }
 }
 
-$selectedFlags = @(@($apply, $reset, $outbound) | Where-Object { $_ })
-if ($selectedFlags.Count -ne 1) {
-    throw 'Use one mode: --apply/-a, --reset/-r, or --outbound/-o'
+$selectedFlagCount = [int]$apply + [int]$reset + [int]$outbound
+if ($selectedFlagCount -ne 1) {
+  throw 'Use one: --apply/-a, --reset/-r, or --outbound/-o'
 }
 
 if ($reset) {
-    reset-firewall
-    return
+  reset-firewall
+  return
 }
 
 if ($outbound) {
-    set-outboundprofiles
-    return
+  set-outboundprofiles
+  return
 }
 
 disable-existingrules
