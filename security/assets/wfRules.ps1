@@ -55,8 +55,8 @@ if ($managedGroupMatch.Success) {
 
 # Parameters:
 
-# Pattern: wildcard against Name/DisplayName/DisplayGroup/Group.
-# Name/DisplayName/DisplayGroup/Group: wildcard match against that exact field.
+# Pattern: wildcard against Name/DisplayName/DisplayGroup/Group
+# Name/DisplayName/DisplayGroup/Group: wildcard match against that field
 # Direction: Inbound, Outbound, both
 # Action: Allow or Block
 
