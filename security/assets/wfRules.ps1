@@ -4,13 +4,7 @@
 # https://discord.noverse.dev
 
 [CmdletBinding(SupportsShouldProcess)]
-param(
-  [switch]$a,
-  [switch]$r,
-  [switch]$o,
-  [string]$g,
-  [Parameter(ValueFromRemainingArguments = $true)][string[]]$arguments
-)
+param([switch]$a, [switch]$r, [switch]$o, [string]$g, [Parameter(ValueFromRemainingArguments = $true)][string[]]$arguments)
 $ErrorActionPreference = 'Stop'
 
 $apply = $a.IsPresent
