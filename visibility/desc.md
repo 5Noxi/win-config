@@ -312,7 +312,7 @@ Obviously, `GetEffectiveCornerStyle` only exists in W11 builds (as you can see i
 
 # Night Light
 
-Uses warmer colors to block blue light, since the data for them is a bit compliated as shown below, I'll support for modifying it in a later WinConfig version.
+Uses warmer colors to block blue light, since the data for them is a bit compliated as shown below, I'll add support for modifying it in a later WinConfig version.
 
 ```powershell
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings : Data # REG_BINARY
@@ -375,7 +375,7 @@ Example data:
 | 70 | `previewColorTemperatureChanges` | bool | Specifies whether blue light reduction color temperature changes should be previewed. | not present |
 | 80 | `darkMode` | bool | Specifies whether app mode should change when blue light reduction is turned on or off. | not present |
 
-`ScheduleTime` has type int8, field `0` is `hour` and field `1` is `minute` (Windows often leaves `minute` out when it is `0`).
+`ScheduleTime` has type int8, field `0` is `hour` and field `1` is `minute` (often leaves `minute` out when it is `0`).
 
 ## [Windows.Data.BlueLightReduction.BlueLightReductionState](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionbluelightreductionstate-structure) structure
 
