@@ -312,7 +312,7 @@ Obviously, `GetEffectiveCornerStyle` only exists in W11 builds (as you can see i
 
 # Night Light
 
-Uses warmer colors to block blue light, since the data for them is a bit compliated as shown below, I'll add support for modifying it in a later WinConfig version.
+Uses warmer colors to block blue light, since the data for them is a bit complicated as shown below, I'll add support for modifying it in a later WinConfig version.
 
 ```powershell
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings : Data # REG_BINARY
@@ -360,7 +360,7 @@ Example data:
 - `01` = value (`true`)
 
 `CF 28 DC 4C` = field 40 (targetColorTemperature)
-- `CF 28` = field 40 + type (BT_INT16)
+- `CF 28` = type (BT_INT16) + field 40
 - `DC 4C` = value (`4910` since it uses BT_INT16)
 
 | Field | Name | Type | Description | Value |
@@ -409,7 +409,6 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\C
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 99 AD B7 D1 06 2A
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 9B AD B7 D1 06 2A
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 9D AD B7 D1 06 2A
-
 
 // System > Display > Night light: Schedule night light
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 50, Data: 43 42 01 00 0A 02 01 00 2A 06 98 88 B7 D1 06 2A
