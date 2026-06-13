@@ -221,7 +221,6 @@ Disabling the firewall service (`Disable Services/Driver`) can break:
 - `winget` / app deployment
 - Windows Sandbox
 - Xbox networking
-- Start menu
 - Modern applications can fail to install or update
 - Activation of Windows via phone
 - Application or OS incompatibilities that depend on Windows Firewall
