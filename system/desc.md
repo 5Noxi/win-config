@@ -1231,6 +1231,29 @@ if ( !CiSchedulerDisallowLazyMode )
 | `IdleDetectionLazy` | idle history reached `CiSchedulerIdleCycleBitMask` | `LazyModeTimeout` |
 | `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | `4,294,967,295` |
 
+```xml
+<bitMap name="wakeupReasonMap">
+  <map value="0x1" message="$(string.map_wakeupReasonMapNewThread)"/>
+  <map value="0x2" message="$(string.map_wakeupReasonMapProcessResume)"/>
+  <map value="0x4" message="$(string.map_wakeupReasonMapProcessSuspend)"/>
+  <map value="0x8" message="$(string.map_wakeupReasonMapExit)"/>
+  <map value="0x10" message="$(string.map_wakeupReasonMapInternalDeadline)"/>
+  <map value="0x20" message="$(string.map_wakeupReasonMapYieldDeadline)"/>
+  <map value="0x80" message="$(string.map_wakeupReasonMapNoClientThreads)"/>
+  <map value="0x8000" message="$(string.map_wakeupReasonMapDeepSleep)"/>
+</bitMap>
+<valueMap name="sleepReasonMap">
+  <map value="0x0" message="$(string.map_sleepReasonMapSleepResponsiveness)"/>
+  <map value="0x1" message="$(string.map_sleepReasonMapRealtime)"/>
+  <map value="0x2" message="$(string.map_sleepReasonMapSleepRealtimeLazy)"/>
+  <map value="0x3" message="$(string.map_sleepReasonMapIdleDetection)"/>
+  <map value="0x4" message="$(string.map_sleepReasonMapIdleDetectionLazy)"/>
+  <map value="0x5" message="$(string.map_sleepReasonMapDeepSleep)"/>
+</valueMap>
+```
+
+- [Manifests-Win10-18990/Microsoft-Windows-MMCSS.xml](https://github.com/repnz/etw-providers-docs/blob/master/Manifests-Win10-18990/Microsoft-Windows-MMCSS.xml)
+
 ## IdleDetectionCycles
 
 [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) compares `CiProcessorIdleHistoryBits` against `CiSchedulerIdleCycleBitMask`, so larger values need more idle detection passes before lazy mode can be entered. While the history is nonzero but still below the mask, it logs `IdleDetection` and sleeps for `SchedulerPeriod`. Once the history reaches the mask, it logs `IdleDetectionLazy` and sleeps for `LazyModeTimeout`.

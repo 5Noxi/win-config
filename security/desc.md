@@ -45,9 +45,7 @@ Then download [System Informer](https://github.com/winsiderss/systeminformer/rel
 For example here you can ignore the lines with `127.0.0.1` LocalAddress, means the `$rule` for it would be (edit `Program`):
 
 ```powershell
-$rules = @(
-  @{ DisplayName = 'Mullvad Browser'; Direction = 'Outbound'; Action = 'Allow'; Program = '..\mullvadbrowser.exe'; Protocol = 'TCP'; RemotePort = @('443') }
-)
+@{ DisplayName = 'Mullvad Browser'; Direction = 'Outbound'; Action = 'Allow'; Program = '..\mullvadbrowser.exe'; Protocol = 'TCP'; RemotePort = @('443') }
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/security/images/mullvadWF.png?raw=true)
@@ -68,7 +66,7 @@ Most apps will work fine with `443` + `TCP`, games often need specific TCP Remot
 After finishing the parts above you might run into scenarios where apps/games won't work as a connection gets blocked. To find out what port/protocol must be added to `$rules`, enable failure logging via:
 
 ```powershell
-auditpol /set /category:"System" /subcategory:"Filtering Platform Connection" /failure:enable # /failure:disable afterwards
+auditpol /set /category:System /subcategory:'Filtering Platform Connection' /failure:enable # /failure:disable afterwards
 ```
 
 Reproduce the same issue, then open `Event Viewer` and go to `Windows Logs > Security`, click on `Filter Current Log` and add event ID [`5157`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-5157) (where `<All Event IDs>` is shown). Press `CTRL + F`, and search for the application name.
