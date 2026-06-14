@@ -6516,9 +6516,19 @@ The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (sy
 
 Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
 
-`SystemSettings > System > Multitasking: Title bar window shake`.
-
 ![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+
+## SystemSettings Captures
+
+```c
+// System > Multitasking: Title bar window shake
+
+// Enabled
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisallowShaking	Type: REG_DWORD, Length: 4, Data: 0
+
+// Disabled
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisallowShaking	Type: REG_DWORD, Length: 4, Data: 1
+```
 
 ## [Windows Policies](https://noverse.dev/policies)
 
