@@ -1049,12 +1049,6 @@ Restarting the explorer is enough to apply the changes.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
 
-# Disable Snap Flyout
-
-Hides the snap assist flyout that would appear after hovering over the maximize/restore down icon:
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/snapflyout.png?raw=true)
-
 # Remove Home & Gallery
 
 ### Home / Galery
