@@ -252,14 +252,12 @@ Located in `HKCU\\Control Panel\\Cursors`:
 Enabling/disabling `Enhance pointer precision` sets:
 ```c
 // Enabled
-HKCU\Control Panel\Mouse\MouseTrails	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseThreshold1	Type: REG_SZ, Length: 4, Data: 6
 HKCU\Control Panel\Mouse\MouseThreshold2	Type: REG_SZ, Length: 6, Data: 10
 HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 1
 //HKCU\Control Panel\Mouse\MouseSensitivity	Type: REG_SZ, Length: 6, Data: 10 // pointer speed, reapplies current active speed
 
 // Disabled
-HKCU\Control Panel\Mouse\MouseTrails	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseThreshold1	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseThreshold2	Type: REG_SZ, Length: 4, Data: 0
 HKCU\Control Panel\Mouse\MouseSpeed	Type: REG_SZ, Length: 4, Data: 0
@@ -1097,19 +1095,30 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/audioducking.png?raw=true)
 
-# Disable Spatial Audio
+# Sound Mode
+
+## Spatial Audio
 
 [Spatial audio](https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/) positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
 
----
+## Mono/Stereo Audio
 
-Miscellaneous [notes](https://github.com/nohuto/regkit/blob/main/records/Audio.txt):
-```json
-"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Audio": {
-  "DisableSpatialOnLowLatency": { "Type": "REG_DWORD", "Data": 1 }
-}
+Mono combines left and right audio channels into one, stereo uses two channels.
+
+![](https://github.com/nohuto/win-config/blob/main/peripheral/images/mono-stereo.jpeg?raw=true)
+
+## SystemSettings Capture
+
+```c
+// System > Sound : Mono audio
+
+// Enabled
+HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
 # Disable AutoPlay/Autorun

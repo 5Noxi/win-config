@@ -405,7 +405,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\C
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 43, Data: 43 42 01 00 0A 02 01 00 2A 06 AF 86 B7 D1 06 2A
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 41, Data: 43 42 01 00 0A 02 01 00 2A 06 B1 86 B7 D1 06 2A
 
-// System > Display > Night light: Strength (0-3)
+// System > Display > Night light: Strength (0-2)
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 99 AD B7 D1 06 2A
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 9B AD B7 D1 06 2A
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 55, Data: 43 42 01 00 0A 02 01 00 2A 06 9D AD B7 D1 06 2A
