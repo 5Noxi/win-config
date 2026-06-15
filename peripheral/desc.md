@@ -903,6 +903,82 @@ rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Hotkey	Type: REG_SZ, Length
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Layout Hotkey	Type: REG_SZ, Length: 4, Data: 3
 ```
 
+# AudioSRV Values
+
+You can find all functions in [decompiled-pseudocode/11-23H2/audiosrv](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv), everything below is currently based on xrefs of `RegGetValueW`. Since the function names often already tell a lot, I've written them down where they're from.
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
+  // DerivePeriodicityForStream
+  "SkipPeriodicityValidation" = 0; // REG_DWORD (bool)
+
+  // CEndpointCharacteristics::DiscoverProcessingModeCharacteristics
+  "ProbeForMinimumPeriod" = 0; // REG_DWORD (bool), nonzero probes when OEM period data is missing
+  "MaxCapturePeriodicityInMs" = 0; // REG_DWORD, 0-4294967295 ms (seems unused)
+
+  // CAudioSrv::Initialize
+  "UseNewStreamManagementCodePath" = 1; // REG_DWORD (bool)
+
+  // CAudioSrv::EndInitialization
+  "EnableCaptureMonitor" = 1; // REG_DWORD (bool), 0 disables stream/capture monitor
+
+  // EffectPolicy::GetAECInsertionPolicy
+  "InboxAECPolicy" = 0; // REG_DWORD, range 0-3
+  "InboxAECPolicyCommsTmp" = 1; // REG_DWORD, range 0-3
+
+  // CEndpointCharacteristicsCache::RuntimeClassInitialize
+  "GlobalDisableThirdPartyEnhancements" = 0; // REG_DWORD (bool), nonzero skips third party driver effect pack configuration
+
+  // wil::details::functor_wrapper_void__lambda_e80bfd59226b44785138f4bfe7079896____::Run
+  "DisableGetMixFormatChange" = 0; // REG_DWORD (bool), nonzero blocks tests/use of an 8 channel mix format?
+
+  // CConstraintModel::Initialize
+  "ConstraintModelTest" = 0; // REG_DWORD (bool), nonzero reads XML from ResourceSettings\\XMLConfig key instead of per device keys
+
+  // CAudioDGProcess::InstantiateADG
+  "EnableProtectedAudioDG" = 0; // REG_DWORD (bool), nonzero uses protected process AudioDG first (fallback to unprotected)
+
+  // CAudioDGProcess::StartADGTerminationTimer
+  "AudioDGInactiveTimeout" = 300; // REG_DWORD, 0-4294967295 sec, inactivity delay before AudioDG termination, 0 schedules instantly
+
+  // CAudioSrv::VAD_AudiosrvServiceStart
+  "AudioHealthMonitorLimit" = 5; // REG_DWORD, 0-4294967295 (hangs), 0 disables monitor, if hang amount is positive it terminates AudioSrv
+  "AudioSrvWatchDogTimerInMs" = 40000; // REG_DWORD, 0-4294967295 ms
+  "RenderStreamVolumeTaperPower" = ?; // REG_SZ
+  "UnrestrictedPerProcessLoopback" = 0xFFFFFFFF; // REG_DWORD (bool)
+
+  // MyServiceInitialization
+  "DevApiIsRunningInVM" = 0; // REG_DWORD (bool)
+
+  // BlockSpatialAudioRegistryGates
+  "DisableSpatialAudioGlobal" = 0; // REG_DWORD (bool)
+  "DisableSpatialAudioPerEndpoint" = 1; // REG_DWORD (bool), nonzero = PKEY_Endpoint_SpatialNotAllowed
+  "DisableSpatialAudioVssFeature" = 0; // REG_DWORD (bool)
+  "SpatialAudioHrtfOnByDefault" = 0; // REG_DWORD (bool)
+
+  // IsSpatialComboEndpointDeterminationDisabled
+  "DisableSpatialOnComboEndpoints" = 1; // REG_DWORD (bool)
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Policy\\Spatial";
+  // AtmosCheck::GetSpatialAudioLicenseGracePeriodInMs
+  "SpatialAudioLicenseCheckStartDelay" = 5; // REG_DWORD, range 1-900000 ms, 0/>900000 = 5 ms
+
+  // IsMultiUserSKU
+  "SpatialAudioLicenseCheckRequiresUserContext" = 0; // REG_DWORD (bool)
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Spatial\\AtmosLicenseDebug";
+  // AtmosCheck::QueryLicenseForSpatialSubtypeAndEndpoint
+  "AudioSrvLicenseResult" = 0; // REG_DWORD, range 2147483648-4294967295, 0-2147483647 do nothing
+  "AudioDGLicenseResult" = 0; // REG_DWORD, range 2147483648-4294967295, ^
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\HoloSI\\Audio";
+  // CMonitorManager::UpdateAudioMirroringEnabled
+  "AudioMirroringEnabled" = 0; // REG_DWORD (bool)
+
+  // CMonitorManager::UpdateRoutedEndpointId
+  "RoutedAudioDevice" = ; // REG_SZ
+```
+
 # StorNVMe Values
 
 This option serves as a general values overview for the `stornvme` key. Several values are applied, some have been changed, others are default values. The applied data is sometimes pure speculation.
@@ -1102,6 +1178,34 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 [Spatial audio](https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/) positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
+
+### Registry Values
+
+See '[AudioSRV Values](https://noverse.dev/docs/win-config/peripheral/audiosrv-values/)' for other related values.
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
+  // BlockSpatialAudioRegistryGates
+  "DisableSpatialAudioGlobal" = 0; // REG_DWORD (bool)
+  "DisableSpatialAudioPerEndpoint" = 1; // REG_DWORD (bool), nonzero = PKEY_Endpoint_SpatialNotAllowed
+  "DisableSpatialAudioVssFeature" = 0; // REG_DWORD (bool)
+  "SpatialAudioHrtfOnByDefault" = 0; // REG_DWORD (bool)
+
+  // IsSpatialComboEndpointDeterminationDisabled
+  "DisableSpatialOnComboEndpoints" = 1; // REG_DWORD (bool)
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Policy\\Spatial";
+  // AtmosCheck::GetSpatialAudioLicenseGracePeriodInMs
+  "SpatialAudioLicenseCheckStartDelay" = 5; // REG_DWORD, range 1-900000 ms, 0/>900000 = 5 ms
+
+  // IsMultiUserSKU
+  "SpatialAudioLicenseCheckRequiresUserContext" = 0; // REG_DWORD (bool)
+```
+
+- [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
+- [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
+- [GetSpatialAudioLicenseGracePeriodInMs](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-GetSpatialAudioLicenseGracePeriodInMs@AtmosCheck@@CAHXZ.c)
+- [IsMultiUserSKU](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-IsMultiUserSKU@@YA_NXZ.c)
 
 ## Mono/Stereo Audio
 
