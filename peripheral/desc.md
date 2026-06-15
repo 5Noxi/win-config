@@ -903,9 +903,77 @@ rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Hotkey	Type: REG_SZ, Length
 rundll32.exe	RegSetValue	HKCU\Keyboard Layout\Toggle\Layout Hotkey	Type: REG_SZ, Length: 4, Data: 3
 ```
 
-# AudioSRV Values
+# Audio Values
 
-You can find all functions in [decompiled-pseudocode/11-23H2/audiosrv](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv), everything below is currently based on xrefs of `RegGetValueW`. Since the function names often already tell a lot, I've written them down where they're from. See a boot capture of `CurrentVersion\\Audio` key [here](https://github.com/nohuto/regkit/blob/main/records/Audio.txt).
+You can find all mentioned functions in [decompiled-pseudocode/11-23H2/audiosrv](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv)/[decompiled-pseudocode/11-23H2/audiodg](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiodg)/[decompiled-pseudocode/11-23H2/AudioSrvPolicyManager](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager), everything below is currently based on xrefs of `RegGetValueW`. Since the function names often already tell a lot, I've written them down where they're from. See a boot capture of `CurrentVersion\\Audio` key [here](https://github.com/nohuto/regkit/blob/main/records/Audio.txt).
+
+The titles below tell what binary I've the values from.
+
+## audiodg.exe
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
+  // AERTMemoryInitOnce
+  "SkipRTHeap" = 1; // REG_DWORD (bool), 0 = RT (realtime) heap, nonzero = normal C++ heap (for AERTAllocate & AERTFree)
+
+  // CEndpointInstance::CreateStreamEndpointInstance
+  "SuppressBridgeTargetGlitchLogging" = 0; // REG_DWORD (bool)
+
+  // CAudioPump::IsTimerRequired
+  "DisablePumpBackupTimer" = ?; // REG_DWORD (bool)
+
+  // _lambda_10c7c3905643286e055343d22ac897fe_::operator()
+  "AudioDgWatchDogTimerInMs" = 0; // REG_DWORD, range 0-4294967295 ms, the read value gets overwritten with 0 and I didn't see any other points where the edited value could be used (?)
+  "UseNewStreamManagementCodePath" = 1; // REG_DWORD (bool)
+
+  // InitializeCpuManager
+  "CpuManagementThresholdHns" = 50000; // REG_DWORD, range 0-4294967295 (100 ns units) means default = 5 ms
+  "CpuManagementAudioReservedCpuMask" = 0; // REG_QWORD, range 0-18446744073709551615 (0 = auto)
+
+  // CRTThreadManager::InitializeRTOperatingMode
+  "RTOperatingMode" = 3; // REG_DWORD, useful range seems 0-4
+                         // 0 uses the shared Audio queue
+                         // 1 uses it plus one MMCSS queue
+                         // 2 creates a base queue plus queues per APO
+                         // 3 uses the shared queue
+                         // 4 creates queues per APO
+
+  // CollectExceptionData
+  "PreventAudioDGCrashOrReportOnAPOException" = 0; // REG_DWORD (bool)
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Parameters";
+  // CAudioPump::Initialize
+  "AudioDGCPUPercentMax" = 40; // REG_DWORD, range 10-90 (percent), allowed pump processing time per audio period
+  "DeadlineDurationThreshold" = 1000; // REG_DWORD, range 0-4294967295 ms (seems unused)
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Policy";
+  // IsSkipAPOFailureCheck
+  "SkipAPOFailureCheck" = 0; // REG_DWORD (bool)
+```
+
+# AudioSrvPolicyManager.dll
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
+  // CProcess::UseOfResourceAllowed
+  "AllowClassicOffload" = 0; // REG_DWORD (bool)
+
+  // GrantExemptionForBCMStartupLatency
+  "DisableExemptionForBCMStartupLatency" = 0; // REG_DWORD (bool), 0 = can skip BeginBCMStartupLatencyGracePeriod, nonzero disables the exemption & starts the grace period
+
+  // CAastPreStartContext::RuntimeClassInitialize
+  "AastRenderDelayInMs" = 0; // REG_DWORD, range 0-4294967295 ms, delays UpdateEndpointVolume
+
+"HKCU\\Software\\Microsoft\\Multimedia\\Audio";
+  // LoadUserSettings
+  "UserDuckingPreference" = 1; // REG_DWORD, range 0-3, >3 = 1
+                               // 0 = -96 dB
+                               // 1 = -18 dB
+                               // 2 = -6 dB
+                               // 3 = 0 dB
+```
+
+## audiosrv.dll
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
@@ -1152,24 +1220,55 @@ This currently includes all values from [`storport.sys`](https://github.com/nohu
 
 Can be disabled manually via `mmsys.cpl > Communications` `Do nothing`.
 
-`Mute all other sounds`:
-```powershell
-RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 0
-```
-`Reduce the volume of other sounds by 80%` (default):
-```powershell
-RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 1
-```
-`Reduce the volume of other sounds by 50%`:
-```powershell
-RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 2
-```
-`Do nothing`:
-```powershell
-RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 3
+## Registry Value
+
+See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/)' for other related values.
+
+```c
+"HKCU\\Software\\Microsoft\\Multimedia\\Audio";
+  // LoadUserSettings
+  "UserDuckingPreference" = 1; // REG_DWORD, range 0-3, >3 = 1
+                               // 0 = -96 dB
+                               // 1 = -18 dB
+                               // 2 = -6 dB
+                               // 3 = 0 dB
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/audioducking.png?raw=true)
+```c
+float __fastcall CDuckingManager::GetdBFromUserPreference(int a1)
+{
+  int v1; // ecx
+
+  if ( !a1 )
+    return FLOAT_N96_0; // 0
+  v1 = a1 - 1;
+  if ( !v1 )
+    return FLOAT_N18_0; // 1
+  if ( v1 == 1 )
+    return FLOAT_N6_0; // 2
+  return 0.0; // 3
+}
+```
+
+- [LoadUserSettings](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager/-LoadUserSettings@@YAXPEAVTSSession@@PEAUHKEY__@@@Z.c)
+
+## MMSYS Capture
+
+Capture of `control mmsys.cpl,,3`.
+
+```c
+// Mute all other sounds
+HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 0
+
+// Reduce the volume of other sounds by 80% (default)
+HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 1
+
+// Reduce the volume of other sounds by 50%
+HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 2
+
+// Do nothing
+HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 3
+```
 
 # Sound Mode
 
@@ -1181,7 +1280,7 @@ RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type:
 
 ### Registry Values
 
-See '[AudioSRV Values](https://noverse.dev/docs/win-config/peripheral/audiosrv-values/)' for other related values.
+See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/)' for other related values.
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
