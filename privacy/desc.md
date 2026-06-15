@@ -528,9 +528,11 @@ if ( v6 < 0 )
 "Sets the HTTP Accept Language from the Language List opt-out setting." Disables [`Let websites provide locally relevant content by accessing my language list`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general).
 
 Using [`Set-WinAcceptLanguageFromLanguageListOptOut`](https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps):
+
 ```powershell
 Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 ```
+
 ```c
 // $True
 "powershell.exe","RegSetValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut","Type: REG_DWORD, Length: 4, Data: 1"
@@ -547,6 +549,7 @@ Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nea
 ## SystemSettings Captures
 
 Changing "Share across devices" option via `SystemSettings`:
+
 ```c
 // Off
 HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\RomeSdkChannelUserAuthzPolicy	Type: REG_DWORD, Length: 4, Data: 0
@@ -647,7 +650,9 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 ```
 Computer Configuration\Administrative Templates\Windows Components\App Privacy
 ```
+
 `Enabled` -> `Deny All changes`:
+
 ```powershell
 mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground	Type: REG_DWORD, Length: 4, Data: 2
 mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy Objects\{5D10D350-8BC7-4D14-9723-C79DF35A74B4}Machine\Software\Policies\Microsoft\Windows\AppPrivacy\LetAppsRunInBackground_UserInControlOfTheseApps	Type: REG_MULTI_SZ, Length: 2, Data: 
@@ -657,10 +662,9 @@ mmc.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\Group Policy 
 
 ## Suboption
 
-`Disable Background Task Host`:  
-Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps.
+### Disable Background Task Host
 
-When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
+Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (notifications, live tiles, background sync). Use only if you do not rely on Store apps. When the system is in Modern Standby, desktop apps are suspended and UWP apps are typically suspended, but background tasks created by UWP apps are allowed to execute. `backgroundTaskHost.exe` is the host for those tasks.
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -682,10 +686,13 @@ When the system is in Modern Standby, desktop apps are suspended and UWP apps ar
 Runs updates and scans daily when your PC is idle, it helps keep your system secure and efficient without affecting performance. Theres no actual reason to disable it, as it doesn't do anything while being active, however if you've any reason for not wanting it to run the tasks while being in idle, toggle the switch.
 
 You can see your current maintenance tasks with:
+
 ```powershell
 Get-ScheduledTask | ? {$_.Settings.MaintenanceSettings}
 ```
+
 `SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance` trace:
+
 ```
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance : Activation Boundary
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance : MaintenanceDisabled
@@ -733,7 +740,9 @@ v16 = L"FailedToGetReason"; // if value is missing
   "CopilotDisabledReason": { "Type": "REG_SZ", "Data": "FeatureIsDisabled" }
 }
 ```
+
 `FeatureIsDisabled` seems to be used by default here (`IsRequiredEdgeBrowserInstalledFailed` exists too):
+
 ```c
 // procmon boot trace (value unset)
 "Explorer.EXE","HKCU\Software\Microsoft\Windows\Shell\Copilot\CopilotDisabledReason","SUCCESS","Type: REG_SZ, Length: 36, Data: FeatureIsDisabled"
@@ -764,12 +773,13 @@ Miscellaneous notes:
 
 # Disable Recall
 
-"Allows you to control whether Windows saves snapshots of the screen and analyzes the user's activity on their device. If you enable this policy setting, Windows will not be able to save snapshots and users won't be able to search for or browse through their historical device activity using Recall. If you disable or do not configure this policy setting, Windows will save snapshots of the screen and users will be able to search for or browse through a timeline of their past activities using Recall." (`WindowsCopilot.admx`)
+> "*Allows you to control whether Windows saves snapshots of the screen and analyzes the user's activity on their device. If you enable this policy setting, Windows will not be able to save snapshots and users won't be able to search for or browse through their historical device activity using Recall. If you disable or do not configure this policy setting, Windows will save snapshots of the screen and users will be able to search for or browse through a timeline of their past activities using Recall.*"
 
 ## Suboption
 
-`Disable ClickToDo`:  
-"Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device."
+### Disable ClickToDo
+
+> "*Click to Do lets people take action on content on their screens. When activated, it takes a screenshot of their screen and analyzes it to present actions. Click to Do ends when they exit it, and it can't take screenshots while closed. Screenshot analysis is always performed locally on their device. By default, Click to Do is enabled for users. This policy setting allows you to determine whether Click to Do is available for users on their device. When the policy is enabled, the Click to Do component and entry points will not be available to users. When the policy is disabled, users will have Click to Do available on their device.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -783,7 +793,7 @@ Miscellaneous notes:
 
 GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, with optional background recording.
 
-## WindowsMediaCapture Settings
+## WindowsMediaCapture Values
 
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR";
@@ -793,44 +803,44 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
     "CustomVideoEncodingHeight" // REG_DWORD
     "CustomVideoEncodingWidth" // REG_DWORD
     "AppCaptureEnabled" // REG_DWORD, bool
-    "HistoricalBufferLength" // REG_DWORD, min 10, if HistoricalBufferLengthUnit==1 max 600, otherwise max is GameDVRUtility::MaxHistoricalBufferLengthInMegabytes()
+    "HistoricalBufferLength" // REG_DWORD
     "HistoricalBufferLengthUnit" // REG_DWORD
     "HistoricalCaptureEnabled" // REG_DWORD, bool
     "HistoricalCaptureOnBatteryAllowed" // REG_DWORD, bool
     "HistoricalCaptureOnWirelessDisplayAllowed" // REG_DWORD, bool
-    "MaximumRecordLength" // REG_QWORD, validated to 300000000-143700000000 (100 ns units)
+    "MaximumRecordLength" // REG_QWORD
     "VideoEncodingBitrateMode" // REG_DWORD
     "VideoEncodingResolutionMode" // REG_DWORD
     "VideoEncodingFrameRateMode" // REG_DWORD
     "EchoCancellationEnabled" // REG_DWORD, bool
     "CursorCaptureEnabled" // REG_DWORD, bool
-    "VKToggleGameBar" // REG_DWORD, ASCII/virtual-key value for the Game Bar key binding
-    "VKMToggleGameBar" // REG_DWORD, 0/1 toggle for whether the Game Bar shortcut is enabled
-    "VKSaveHistoricalVideo" // REG_DWORD, ASCII/virtual-key value for the save historical video key binding
-    "VKMSaveHistoricalVideo" // REG_DWORD, 0/1 toggle for whether the save historical video shortcut is enabled
-    "VKToggleRecording" // REG_DWORD, ASCII/virtual-key value for the recording key binding
-    "VKMToggleRecording" // REG_DWORD, 0/1 toggle for whether the recording shortcut is enabled
-    "VKTakeScreenshot" // REG_DWORD, ASCII/virtual-key value for the screenshot key binding
-    "VKMTakeScreenshot" // REG_DWORD, 0/1 toggle for whether the screenshot shortcut is enabled
-    "VKToggleRecordingIndicator" // REG_DWORD, ASCII/virtual-key value for the recording-indicator key binding
-    "VKMToggleRecordingIndicator" // REG_DWORD, 0/1 toggle for whether the recording-indicator shortcut is enabled
-    "VKToggleMicrophoneCapture" // REG_DWORD, ASCII/virtual-key value for the microphone-capture key binding
-    "VKMToggleMicrophoneCapture" // REG_DWORD, 0/1 toggle for whether the microphone-capture shortcut is enabled
-    "VKToggleCameraCapture" // REG_DWORD, ASCII/virtual-key value for the camera-capture key binding
-    "VKMToggleCameraCapture" // REG_DWORD, 0/1 toggle for whether the camera-capture shortcut is enabled
-    "VKToggleBroadcast" // REG_DWORD, ASCII/virtual-key value for the broadcast key binding
-    "VKMToggleBroadcast" // REG_DWORD, 0/1 toggle for whether the broadcast shortcut is enabled
+    "VKToggleGameBar" // REG_DWORD
+    "VKMToggleGameBar" // REG_DWORD
+    "VKSaveHistoricalVideo" // REG_DWORD
+    "VKMSaveHistoricalVideo" // REG_DWORD
+    "VKToggleRecording" // REG_DWORD
+    "VKMToggleRecording" // REG_DWORD
+    "VKTakeScreenshot" // REG_DWORD
+    "VKMTakeScreenshot" // REG_DWORD
+    "VKToggleRecordingIndicator" // REG_DWORD
+    "VKMToggleRecordingIndicator" // REG_DWORD
+    "VKToggleMicrophoneCapture" // REG_DWORD
+    "VKMToggleMicrophoneCapture" // REG_DWORD
+    "VKToggleCameraCapture" // REG_DWORD
+    "VKMToggleCameraCapture" // REG_DWORD
+    "VKToggleBroadcast" // REG_DWORD
+    "VKMToggleBroadcast" // REG_DWORD
     "MicrophoneCaptureEnabled" // REG_DWORD, bool
-    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
-    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
+    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0
+    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0
 
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppBroadcast\\GlobalSettings";
     "AudioCaptureEnabled" // REG_DWORD, bool
     "MicrophoneCaptureEnabledByDefault" // REG_DWORD, bool
     "EchoCancellationEnabled" // REG_DWORD, bool
     "CursorCaptureEnabled" // REG_DWORD, bool
-    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
-    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0 and stored as gain * 10000
+    "SystemAudioGain" // REG_QWORD, clamped to 0.0-2.0
+    "MicrophoneGain" // REG_QWORD, clamped to 0.0-2.0
     "CameraCaptureEnabledByDefault" // REG_DWORD, bool
     "CameraOverlayLocation" // REG_DWORD
     "CameraOverlaySize" // REG_DWORD
@@ -871,6 +881,7 @@ Disables app access to your location, locating your system will be disabled, geo
 ---
 
 There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't seem to exist anymore.
+
 ```html
 <!-- Help improve Microsoft services by sending some location data when you use location-aware apps -->
 <pattern type="Registry">HKLM\Software\Microsoft\Sensors\LocationProvider [CSEnable]</pattern>
@@ -890,7 +901,7 @@ There's also a value named `CSEnable` which I found in `srms.dat`, it doesn't se
 
 Blocks apps/system from using hardware sensors such as ambient light, orientation, and other motion/position sensors (features like adaptive brightness, auto rotation and sensor based behaviors will no longer work).
 
-"This policy setting turns off the sensor feature for this computer. If you enable this policy setting, the sensor feature is turned off, and all programs on this computer can't use the sensor feature."
+> "*This policy setting turns off the sensor feature for this computer. If you enable this policy setting, the sensor feature is turned off, and all programs on this computer can't use the sensor feature.*"
 
 | Service | Description |
 | ---- | ---- |
@@ -924,25 +935,26 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 
 ### [POWERSHELL_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2)
 
-PowerShell Telemetry:
-"At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session."
+> *"At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session.*"
+
 ```bat
 setx POWERSHELL_TELEMETRY_OPTOUT 1
 ```
 
 ### [DOTNET_CLI_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/dotnet/core/tools/telemetry#how-to-opt-out)
 
-Disable NET Core CLI Telemetry:
-"To opt out after you started the installer: close the installer, set the environment variable, and then run the installer again with that value set."
+> "*To opt out after you started the installer: close the installer, set the environment variable, and then run the installer again with that value set.*"
+
 ```bat
 setx DOTNET_CLI_TELEMETRY_OPTOUT 1
 ```
 
 # Disable Reserved Storage
 
-"Windows reserves `~7 GB` of disk space to ensure updates and system processes run reliably. Temporary files and updates use this reserved area first. If it's full, Windows uses normal disk space or asks for external storage. Size increases with optional features or extra languages. Unused ones can be removed to reduce it."
+> "*Windows reserves `~7 GB` of disk space to ensure updates and system processes run reliably. Temporary files and updates use this reserved area first. If it's full, Windows uses normal disk space or asks for external storage. Size increases with optional features or extra languages. Unused ones can be removed to reduce it.*"
 
 [`Set-WindowsReservedStorageState -State Disabled`](https://learn.microsoft.com/en-us/powershell/module/dism/set-windowsreservedstoragestate?view=windowsserver2025-ps) sets:
+
 ```bat
 dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager\DisableDeletes	Type: REG_DWORD, Length: 4, Data: 1
 ```
@@ -1111,8 +1123,11 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 | `FrameServer` | Enables multiple clients to access video frames from camera devices. |
 | `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
 
-`Disable Lock Screen Camera`:  
-"Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen." (`ControlPanelDisplay.admx`)
+## Suboption
+
+### Disable Lock Screen Camera
+
+> "*Disables the lock screen camera toggle switch in PC Settings and prevents a camera from being invoked on the lock screen.By default, users can enable invocation of an available camera on the lock screen.If you enable this setting, users will no longer be able to enable or disable lock screen camera access in PC Settings, and the camera cannot be invoked on the lock screen.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -1166,11 +1181,11 @@ Disables all kind of synchronization, see policies.
 
 # Disable MDM Enrollment
 
-`DisableRegistration`:  
-"This policy setting specifies whether Mobile Device Management (MDM) Enrollment is allowed. When MDM is enabled, it allows the user to have the computer remotely managed by a MDM Server. If you do not configure this policy setting, MDM Enrollment will be enabled. If you enable this policy setting, MDM Enrollment will be disabled for all users. It will not unenroll existing MDM enrollments.If you disable this policy setting, MDM Enrollment will be enabled for all users."
+`DisableRegistration`:
+> "*This policy setting specifies whether Mobile Device Management (MDM) Enrollment is allowed. When MDM is enabled, it allows the user to have the computer remotely managed by a MDM Server. If you do not configure this policy setting, MDM Enrollment will be enabled. If you enable this policy setting, MDM Enrollment will be disabled for all users. It will not unenroll existing MDM enrollments.If you disable this policy setting, MDM Enrollment will be enabled for all users.*"
 
-`AutoEnrollMDM`:  
-"This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled."
+`AutoEnrollMDM`:
+> "*This policy setting specifies whether to automatically enroll the device to the Mobile Device Management (MDM) service configured in Azure Active Directory (Azure AD). If the enrollment is successful, the device will remotely managed by the MDM service. Important: The device must be registered in Azure AD for enrollment to succeed. If you do not configure this policy setting, automatic MDM enrollment will not be initiated. If you enable this policy setting, a task is created to initiate enrollment of the device to MDM service specified in the Azure AD. If you disable this policy setting, MDM will be unenrolled.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -1181,7 +1196,7 @@ Disables all kind of synchronization, see policies.
 
 # Disable Feedback Prompts
 
-"This policy setting allows an organization to prevent its devices from showing feedback questions from Microsoft.If you enable this policy setting, users will no longer see feedback notifications through the Windows Feedback app.If you disable or do not configure this policy setting, users may see notifications through the Windows Feedback app asking users for feedback.Note: If you disable or do not configure this policy setting, users can control how often they receive feedback questions."
+> "*This policy setting allows an organization to prevent its devices from showing feedback questions from Microsoft.If you enable this policy setting, users will no longer see feedback notifications through the Windows Feedback app.If you disable or do not configure this policy setting, users may see notifications through the Windows Feedback app asking users for feedback.Note: If you disable or do not configure this policy setting, users can control how often they receive feedback questions.*"
 
 Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
 
@@ -1239,6 +1254,7 @@ CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dum
 ```
 
 There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
+
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.New
 \Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.Old
@@ -1282,7 +1298,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
     "SleepStudyDisabled" = 0; // PopSleepStudyDisabled 
 ```
 
-```
+```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0010\3\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDI0030\0\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\ACPI\AMDIF030\0\Device Parameters\Wdf : SleepstudyState
@@ -1311,7 +1327,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_0B05&PID_1939&MI_00\7&40fe908&0&0000\Device Parameters\Wdf : SleepstudyState
 \Registry\Machine\SYSTEM\ControlSet001\Enum\USB\VID_0CF2&PID_A102&MI_00\8&7b0cf2a&0&0000\Device Parameters\Wdf : SleepstudyState
 ```
-```
+```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : EnableNicAutoPowerSaverInSleepStudy
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : EnableNicAutoPowerSaverInSleepStudy
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Power : SleepStudyBufferSizeInMB
@@ -1324,7 +1340,7 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 >
 > — Windows Security Encyclopedia, [Turn off Resultant Set of Policy logging](https://www.windows-security.org/370c915e44b6a75efac0d24669aa9434/turn-off-resultant-set-of-policy-logging)
 
-```
+```powershell
 \Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon : RsopLogging
 \Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
 ```
@@ -1375,7 +1391,7 @@ __int64 IsDesktopHeapLoggingOn(void)
 
 Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, disables `CSC`/`CscService`, disables the two `Offline Files` scheduled tasks (they're disabled by default), and renames `mobsync.exe` to block execution.
 
-"Offline Files (Client-Side Caching, CSC) lets Windows cache files from network shares locally so users can keep working when the network/server is unavailable. Sync Center handles the background sync between the local CSC cache (`%WINDIR%\CSC`) and the share. It's commonly paired with Folder Redirection so "known folders" (e.g., Documents) live on a server but remain available offline, with options like "Always Offline" for performance on slow links. You enable/disable it via Sync Center (Control Panel) or policy. When disabled, Sync Center has nothing to sync."
+> "*Offline Files (Client-Side Caching, CSC) lets Windows cache files from network shares locally so users can keep working when the network/server is unavailable. Sync Center handles the background sync between the local CSC cache (`%WINDIR%\CSC`) and the share. It's commonly paired with Folder Redirection so "known folders" (e.g., Documents) live on a server but remain available offline, with options like "Always Offline" for performance on slow links. You enable/disable it via Sync Center (Control Panel) or policy. When disabled, Sync Center has nothing to sync.*"
 
 - [folder-redirection/disable-offline-files-on-folders](https://learn.microsoft.com/en-us/windows-server/storage/folder-redirection/disable-offline-files-on-folders#windows-powershell-equivalent-commands) (todo)
 
@@ -1392,23 +1408,20 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 # Disable Cloud Content Search
 
-"Cloud Content Search lets Windows Search include results from your signed-in cloud accounts personal Microsoft account (OneDrive, Outlook, Bing) and/or work/school (OneDrive for Business, SharePoint, Outlook) alongside local files. Turn it on per account to get those items and Bing-personalized suggestions, turn it off to keep search limited to local content (and non-personalized web)."
+> "*Cloud Content Search lets Windows Search include results from your signed-in cloud accounts personal Microsoft account (OneDrive, Outlook, Bing) and/or work/school (OneDrive for Business, SharePoint, Outlook) alongside local files. Turn it on per account to get those items and Bing-personalized suggestions, turn it off to keep search limited to local content (and non-personalized web).*"
 
 ![](https://github.com/nohuto/win-config/blob/main/privacy/images/cloudsearch.png?raw=true)
 
 # Microsoft Accounts
 
-"This setting prevents using the Settings app to add a Microsoft account for single sign-on (SSO) authentication for Microsoft services and some background services, or using a Microsoft account for single sign-on to other applications or services.
+> "*This setting prevents using the Settings app to add a Microsoft account for single sign-on (SSO) authentication for Microsoft services and some background services, or using a Microsoft account for single sign-on to other applications or services.*
+>
+> *There are two options if this setting is enabled:*
 
-There are two options if this setting is enabled:
-
-- Users can't add Microsoft accounts means that existing connected accounts can still sign in to the device (and appear on the Sign in screen). However, users cannot use the Settings app to add new connected accounts (or connect local accounts to Microsoft accounts).
-
-- Users can't add or log on with Microsoft accounts means that users cannot add new connected accounts (or connect local accounts to Microsoft accounts) or use existing connected accounts through Settings.
-
-This setting does not affect adding a Microsoft account for application authentication. For example, if this setting is enabled, a user can still provide a Microsoft account for authentication with an application such as Mail, but the user cannot use the Microsoft account for single sign-on authentication for other applications or services (in other words, the user will be prompted to authenticate for other applications or services).
-
-By default, this setting is Not defined."
+> *- Users can't add Microsoft accounts means that existing connected accounts can still sign in to the device (and appear on the Sign in screen). However, users cannot use the Settings app to add new connected accounts (or connect local accounts to Microsoft accounts).*
+> *- Users can't add or log on with Microsoft accounts means that users cannot add new connected accounts (or connect local accounts to Microsoft accounts) or use existing connected accounts through Settings.*
+>
+> *This setting does not affect adding a Microsoft account for application authentication. For example, if this setting is enabled, a user can still provide a Microsoft account for authentication with an application such as Mail, but the user cannot use the Microsoft account for single sign-on authentication for other applications or services (in other words, the user will be prompted to authenticate for other applications or services).*"
 
 ```c
 // This policy is disabled
@@ -1425,9 +1438,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 Friendly name: `Turn off KMS Client Online AVS Validation`
 
-"This policy setting lets you opt-out of sending KMS client activation data to Microsoft automatically. Enabling this setting prevents this computer from sending data to Microsoft regarding its activation state.
-
-If you disable or don't configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates."
+> "*This policy setting lets you opt-out of sending KMS client activation data to Microsoft automatically. Enabling this setting prevents this computer from sending data to Microsoft regarding its activation state. If you disable or don't configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates.*"
 
 [`Disable Auto Activation`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)#registry-settings) (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
 
@@ -1439,11 +1450,7 @@ If you disable or don't configure this policy setting, KMS client activation dat
 
 # Disable Font Providers
 
-"This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider.
-
-If you enable this policy setting, Windows periodically queries an online font provider to determine whether a new font catalog is available. Windows may also download font data if needed to format or render text.
-
-If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts."
+> "*This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider. If you enable this policy setting, Windows periodically queries an online font provider to determine whether a new font catalog is available. Windows may also download font data if needed to format or render text. If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -1516,12 +1523,12 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 
 ## Scheduled Task Actions
 
-`\Microsoft\Windows\Device Information` runs:
+`\Microsoft\Windows\Device Information`:
 ```powershell
 %windir%\system32\devicecensus.exe SystemCxt
 ```
 
-`\Microsoft\Windows\Device Information` runs:
+`\Microsoft\Windows\Device Information`:
 ```powershell
 %windir%\system32\devicecensus.exe UserCxt
 ```
@@ -1544,7 +1551,8 @@ If enabled = "Windows will periodically attempt to connect with the OneSettings 
 Works via killing `HelpPane.exe` (Help and Support Windows desktop application) which was the help component in `W8`/`W8.1`. The executeable still exists but calls to it will either start the `Get Started` application (if user is offline), or opens a browser instance and redirects the browser to an online topic. Note that `HelpPane` still handles the `F1` shortcut.
 
 If the option is disabled, pressing `F1` on your desktop will take you to a search query like:
-```
+
+```powershell
 https://www.bing.com/search?q=how+to+get+help+in+windows+11
 ```
 
@@ -1709,6 +1717,6 @@ Miscellaneous notes:
 // Save network bandwidth by playing video at lower resolution
 "HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
 
-// Process video automatically to enhance it (depends ony our device hardware)
+// Process video automatically to enhance it (depends on your device hardware)
 "HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
 ```

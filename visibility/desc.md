@@ -247,7 +247,7 @@ HKCU\Software\Microsoft\Accessibility\CursorColor = 16760576	// Turquise (0x00FF
 HKCU\Software\Microsoft\Accessibility\CursorColor = 12582656	// Green (0x00BFFF00)
 ```
 
-*Note: when applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).
+When applying these manually via the registry the cursor can be refreshed using [SPI_SETCURSORS](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa), this only works for dark+light+inverted+custom, the color ones build `*_eoa.cur` files as said above which the function doesn't do (which is also kind of why the dropdown doesn't include colored cursors).
 
 # Disable Rounded Corners
 
@@ -491,15 +491,17 @@ See [`darktheme-GetThemeFromUnattendSetup.c`](https://github.com/nohuto/win-conf
 Minimize, Maximize, Taskbar Animations / First Sign-In Animations. These options are also changeable via `SystemPropertiesPerformance` (`WIN + R`) - first three.
 
 `MaxAnimate` doesn't exist, windows only uses `MinAnimate`
+
 ```
-SystemPropertiesAdvanced.exe	RegSetValue	HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate	Type: REG_SZ, Length: 4, Data: 1
-```
-Disable logon animations, which would remove the animation (picture), instead shows the windows default background wallpaper: (first sign-in):
-```
-This policy controls whether users see the first sign-in animation when signing in for the first time, including both the initial setup user and those added later. It also determines if Microsoft account users receive the opt-in prompt for services. If enabled, Microsoft account users see the opt-in prompt and other users see the animation. If disabled, neither the animation nor the opt-in prompt appears. If not configured, the first user sees the animation during setup; later users won't see it if setup was already completed. This policy has no effect on Server editions.
+HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate	Type: REG_SZ, Length: 4, Data: 1
 ```
 
+Disable logon animations, which would remove the animation (picture), instead shows the windows default background wallpaper (first sign-in):
+
+- "*This policy controls whether users see the first sign-in animation when signing in for the first time, including both the initial setup user and those added later. It also determines if Microsoft account users receive the opt-in prompt for services. If enabled, Microsoft account users see the opt-in prompt and other users see the animation. If disabled, neither the animation nor the opt-in prompt appears. If not configured, the first user sees the animation during setup; later users won't see it if setup was already completed. This policy has no effect on Server editions.*"
+
 Second one is used by Windows (`Computer Configuration > Administrative Templates > System > Logon : Show first sign-in animation`), see [visibility/assets | animation-WinMain.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/animation-WinMain.c) for more:
+
 ```c
 CMachine::RegQueryDWORD(
   v62,
@@ -516,6 +518,7 @@ CMachine::RegQueryDWORD(
   1u,
   &v118);
 ```
+
 `AnimationAfterUserOOBE` & `SkipNextFirstLogonAnimation` (`CurrentVersion\Winlogon`) also exist.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/animation.png?raw=true)
@@ -590,11 +593,6 @@ Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0
 | [Hide the TaskView button](https://noverse.dev/policies?p=Taskbar*HideTaskViewButton) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideTaskViewButton` |
 | [Configures search on the taskbar](https://noverse.dev/policies?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |
 
-```
-SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 41, Data: 43 42 01 00 0A 02 01 00 2A 06 B1 80 B7 D1 06 2A
-SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate\Data	Type: REG_BINARY, Length: 43, Data: 43 42 01 00 0A 02 01 00 2A 06 B3 80 B7 D1 06 2A
-```
-
 # Accent Color
 
 This set's the accent color globally and if `AccentColor` (`HKEY_CURRENT_USER\Software\Noverse`) isn't set via the tool settings yet, this will also directly impact the WinConfig colors.
@@ -619,6 +617,7 @@ Something I noticed while creating the option is that procmon doesn't show the a
 ## SystemSettings Captures
 
 Changing the color via `Personalization > Colors` sets:
+
 ```c
 // Nord Theme (#2e3440)
 HKCU\Software\Microsoft\Windows\DWM\ColorizationColor	Type: REG_DWORD, Length: 4, Data: 3291823178
@@ -644,14 +643,16 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-
 # Account Picture
 
 Changes the user account picture via:
+
 ```
 C:\ProgramData\Microsoft\Default Account Pictures
 ```
 
-### Suboption
+## Suboption
 
-`Global Account Picture`:  
-"This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture."
+`Global Account Picture`:
+
+> "*This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -681,6 +682,7 @@ Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % 
 ## Manually Adding Custom Fonts
 
 The option lists the default fonts, add your own custom font via:
+
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
   "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "" },
@@ -705,6 +707,7 @@ The option lists the default fonts, add your own custom font via:
 ```
 
 Revert the changes:
+
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts": {
   "Segoe UI (TrueType)": { "Type": "REG_SZ", "Data": "segoeui.ttf" },
@@ -746,6 +749,7 @@ Edit text sizes via [`TextScaleFactor`](https://learn.microsoft.com/en-us/uwp/ap
     v6 = 100LL; // fallback to 100 if missing or out of range (<100 / >225)
   }
 ```
+
 - [visibility/assets | textsize-TextScaleDialogTemplate.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/textsize-TextScaleDialogTemplate.c)
 
 Applying changes via `Accessibility > Text size`:
@@ -756,6 +760,7 @@ RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: RE
 // 225%
 RegSetValue    HKCU\Software\Microsoft\Accessibility\TextScaleFactor    Type: REG_DWORD, Length: 4, Data: 225
 ```
+
 Depending on the selected size, `CaptionFont`, `SmCaptionFont`, `MenuFont`, `StatusFont`, `MessageFont`, `IconFont` (located in `HKCU\Control Panel\Desktop\WindowMetrics`) will also change. Not every % increase will edit them, I may add exact data soon. Example of `100%`/`225%`:
 
 ```c
@@ -778,13 +783,13 @@ IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00
 
 # Mouse Hover Time
 
-`MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
-
-`MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
+- `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
+- `MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
 
 ## CMenuToolbarBase::_SetTimer
 
 [`SPI_GETMENUSHOWDELAY`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa):
+
 > "*Retrieves the time, in milliseconds, that the system waits before displaying a shortcut menu when the mouse cursor is over a submenu item. The pvParam parameter must point to a DWORD variable that receives the time of the delay.*"
 
 ```c
@@ -849,9 +854,11 @@ The normal menu hover timers use `MenuShowDelay`, some menu timers ignore or ext
 # Disable Audio / Video Preview
 
 Disables the preview function for (extensions):
+
 ```
 3gp aac avi flac m4a m4v mkv mod mov mp3 mp4 mpeg mpg ogg ts vob wav webm wma wmv
 ```
+
 [`{E357FCCD-A995-4576-B01F-234630154E96}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) = Thumbnail Provider (Thumbnail image handler)
 [`{BB2E617C-0920-11D1-9A0B-00C04FC2D6C1}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) = Extract Image (Image handler)
 [`{9DBD2C50-62AD-11D0-B806-00C04FD706EC}`](https://learn.microsoft.com/en-us/windows/win32/shell/handlers#handler-names) = Default shell extension handler for thumbnails
@@ -867,9 +874,10 @@ Disables the preview function for (extensions):
 ---
 
 Hide preview pane:
+
 ```powershell
-"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\Sizer\DetailsContainerSizer","Type: REG_BINARY, Length: 16, Data: 15 01 00 00 00 00 00 00 00 00 00 00 6B 03 00 00"
-"Explorer.EXE","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\DetailsContainer\DetailsContainer","Type: REG_BINARY, Length: 8, Data: 02 00 00 00 02 00 00 00"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\Sizer\DetailsContainerSizer","Type: REG_BINARY, Length: 16, Data: 15 01 00 00 00 00 00 00 00 00 00 00 6B 03 00 00"
+"HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Modules\GlobalSettings\DetailsContainer\DetailsContainer","Type: REG_BINARY, Length: 8, Data: 02 00 00 00 02 00 00 00"
 ```
 
 # Classic Context Menu
@@ -886,9 +894,9 @@ Use it on W11, unless you like the new menu.
 
 # Disable Automatic Folder Type Discovery
 
-"Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders."
+> "*Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders.*"
 
-Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`)
+Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`).
 
 The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
 
@@ -961,18 +969,21 @@ Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you
 # Desktop Icon Spacing
 
 Location:
-```
+
+```csv
 \Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconSpacing
 \Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconVerticalSpacing
 ```
-`IconSpacing` = Horizontal
-`IconVerticalSpacing` = Vertical
+
+- `IconSpacing` = Horizontal
+- `IconVerticalSpacing` = Vertical
 
 Default: `75px` (`-1125`)
 Min: `32px` (`-480`)
 Max: `182px` (`-2730`)
 
 Value gets calculated with:
+
 ```c
 -15*px
 
@@ -1092,11 +1103,13 @@ Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to
 Disables the lock screen (skips the lock screen and go directly to the login screen). See content below for details on the suboptions.
 
 Add a custom text to the sign in screen via:
+
 ```c
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System
 // legalnoticecaption -	Type: REG_SZ - Data: Noverse
 // legalnoticetext	- Type: REG_SZ - Data: https://noverse.dev
 ```
+
 By adding them, you'll have to click `OK` every time you boot/log in:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true)
@@ -1212,9 +1225,8 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscripti
 
 # Disable Spotlight
 
-Spotlight is used to provide new pictures on your lock screen.
+Spotlight is used to provide new pictures on your lock screen. These exist by default on 25H2:
 
-These exist by default on 25H2:
 ```json
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DesktopSpotlight\\Settings": {
   "IsDisabledByCommercialControl": { "Type": "REG_DWORD", "Data": 0 },
@@ -1225,9 +1237,11 @@ These exist by default on 25H2:
   "SpotlightNotOnboardedReason": { "Type": "REG_DWORD", "Data": 4 }
 }
 ```
+
 Disabling it via policies etc. is enough, therefore I won't add them as there's no documentation on them either.
 
-`EnabledState` gets read.
+`EnabledState` value gets read.
+
 ```
 \Registry\User\S-<ID>\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
 ```
@@ -1273,9 +1287,9 @@ Default value is `85` -> `85%` (gets used if value isn't present), clamp range i
 
 Since `powershell.exe` has default color of white (foreground) and blue (background), some may want to change it. If you use Windows Terminal, this option will have no effect.
 
-`ScreenColors` value, located in `HKCU\Console\%WINDIR%_System32_WindowsPowerShell_v1.0_powershell.exe`  
-`0-3` bit = `Foreground color`  
-`4-7` bit = `Background color`
+- `ScreenColors`, located in `HKCU\Console\%WINDIR%_System32_WindowsPowerShell_v1.0_powershell.exe`  
+  - `0-3` bit = `Foreground color`  
+  - `4-7` bit = `Background color`
 
 ### Color Table
 
@@ -1360,7 +1374,7 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 # Force Classic Control Panel
 
-"This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view."
+> "*This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view.*"
 
 ### Icon View
 
@@ -1382,21 +1396,46 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
 
+# PC Name
+
+Query current name via:
+
+```powershell
+$env:COMPUTERNAME # ComputerName
+
+hostname # NV Hostname
+```
+
+## SystemSettings Capture
+
+Same would be written if changed via [`Rename-Computer`](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/rename-computer) cmdlet.
+
+```c
+// System > About : Rename this PC (NOVERSE)
+
+HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\NV Hostname	Type: REG_SZ, Length: 16, Data: NOVERSE
+HKLM\System\CurrentControlSet\Control\ComputerName\ComputerName\ComputerName	Type: REG_SZ, Length: 16, Data: NOVERSE
+```
+
 # OEM Information
 
 Set your own support information in `System > About` (or `Control Panel > System and Security > System`). All values are saved in:
 ```
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation
 ```
+
 You used to change the logo via:
+
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\OEMInformation": {
   "Logo": { "Type": "REG_SZ", "Data": "path\\OEM.bmp" }
 }
 ```
+
 But it seems deprecated (doesn't work for me). Limitation were `120x120` pixels, `.bmp` file & `32-bit` color depth.
 
 Edit registered owner/orga (visible in `winver`) via:
+
 ```json
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion": {
   "RegisteredOwner": { "Type": "REG_SZ", "Data": "Nohuto" },
@@ -1413,7 +1452,7 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
   "Manufacturer": { "Type": "REG_SZ", "Data": "Noverse" },
   "Model": { "Type": "REG_SZ", "Data": "Windows 11" },
   "SupportHours": { "Type": "REG_SZ", "Data": "24H" },
-  "SupportPhone": { "Type": "REG_SZ", "Data": "noverse@test.dev" },
+  "SupportPhone": { "Type": "REG_SZ", "Data": "noverse@example.dev" },
   "SupportURL": { "Type": "REG_SZ", "Data": "https://discord.noverse.dev" }
 }
 ```
@@ -1424,19 +1463,18 @@ Edit miscellaneous things in `winver.exe` using (`basebrd.dll`/`basebrd.dll.mui`
 
 It controls which pages in the windows settings app are visible (blocked pages are removed from view and direct access redirects to the main settings page).
 
+> "*This policy allows an administrator to block a given set of pages from the System Settings app. Blocked pages will not be visible in the app, and if all pages in a category are blocked the category will be hidden as well. Direct navigation to a blocked page via URI, context menu in Explorer or other means will result in the front page of Settings being shown instead.*"
+
+```c
+HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer : SettingsPageVisibility // REG_SZ
 ```
-This policy allows an administrator to block a given set of pages from the System Settings app. Blocked pages will not be visible in the app, and if all pages in a category are blocked the category will be hidden as well. Direct navigation to a blocked page via URI, context menu in Explorer or other means will result in the front page of Settings being shown instead.
-```
-Path (`String Value`):
-```
-HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer : SettingsPageVisibility
-```
-`showonly:` followed by a semicolon separated list of page identifiers to allow
-`hide:` followed by a list of pages to block
+
+- `showonly:` followed by a semicolon separated list of page identifiers to allow
+- `hide:` followed by a list of pages to block
 
 Page identifiers are the part after `ms-settings:` in a settings URI.
 
-### Example:
+### Example
 
 `showonly:bluetooth` only shows the `Bluetooth` page
 `hide:bluetooth;windowsdefender` hides the `Bluetooth` & `Windows Security` pages
