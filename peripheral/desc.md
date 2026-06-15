@@ -933,8 +933,8 @@ The titles below tell what binary I've the values from.
   // CRTThreadManager::InitializeRTOperatingMode
   "RTOperatingMode" = 3; // REG_DWORD, useful range seems 0-4
                          // 0 uses the shared Audio queue
-                         // 1 uses it plus one MMCSS queue
-                         // 2 creates a base queue plus queues per APO
+                         // 1 uses it + one MMCSS queue
+                         // 2 creates a base queue + queues per APO
                          // 3 uses the shared queue
                          // 4 creates queues per APO
 
