@@ -1280,7 +1280,10 @@ HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, 
 
 ## Spatial Audio
 
-[Spatial audio](https://www.dolby.com/experience/home-entertainment/articles/what-is-spatial-audio/) positions sounds in 3D space around you, surround sound mainly anchors audio to speaker directions.
+> "*Microsoft Spatial Sound is Microsoft’s platform-level solution for spatial sound support on Xbox, Windows and HoloLens 2, enabling both surround and elevation (above or below the listener) audio cues. Spatial sound can be leveraged by Windows desktop (Win32) apps as well as Universal Windows Platform (UWP) apps on supported platforms. The spatial sound APIs allow developers to create audio objects that emit audio from positions in 3D space.*"
+>
+> — Microsoft, [Spatial Sound for app developers for Windows, Xbox, and Hololens 2](https://learn.microsoft.com/en-us/windows/win32/coreaudio/spatial-sound)
+
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
 
