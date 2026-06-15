@@ -1310,6 +1310,10 @@ See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/
   "SpatialAudioLicenseCheckRequiresUserContext" = 0; // REG_DWORD (bool)
 ```
 
+Disabling spatial sound via these values would gray out the option in the device properites, but Windows itself doesn't disable/enable it via them.
+
+![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatialsystemsettings.png?raw=true)
+
 - [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
 - [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
 - [GetSpatialAudioLicenseGracePeriodInMs](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-GetSpatialAudioLicenseGracePeriodInMs@AtmosCheck@@CAHXZ.c)
