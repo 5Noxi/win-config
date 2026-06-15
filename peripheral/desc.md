@@ -951,7 +951,7 @@ The titles below tell what binary I've the values from.
   "SkipAPOFailureCheck" = 0; // REG_DWORD (bool)
 ```
 
-# AudioSrvPolicyManager.dll
+## AudioSrvPolicyManager.dll
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
