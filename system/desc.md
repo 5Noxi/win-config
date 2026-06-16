@@ -1657,7 +1657,9 @@ Since many people don't yet know which values exist and what default value they 
 
 ## CmControlVector
 
-`CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM (configuration manager) init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
+CM = configuration manager, which is responsible for implementing and managing the system registry, it loads & manages registry hives, inserts the `\REGISTRY` key object into the namespace and more. See regkits '[Registry fundamentals](https://noverse.dev/docs/regkit/overview/#registry-fundamentals)' documentation for more information on the topic.
+
+`CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
 
 ```c
 struct CM_CONTROL_VECTOR_ENTRY {
@@ -6262,7 +6264,7 @@ The memory manager can be instructed to combine identical pages across the syste
 
 `Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
 
-```c
+```asm
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
 INIT:0000000140B9C348                 dq offset aDisablepagecom ; "DisablePageCombining"
 INIT:0000000140B9C350                 dq offset dword_140D1D1C8
