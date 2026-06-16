@@ -1655,6 +1655,141 @@ aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\P
 
 Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
 
+## CmControlVector
+
+`CmControlVector` is a table used by [`CmpGetSystemControlValues`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/CmpGetSystemControlValues.c) while early CM (configuration manager) init. Each entry is `0x30` bytes (six pointers), this is just a simple way to imagine each block:
+
+```c
+struct CM_CONTROL_VECTOR_ENTRY {
+  PCWSTR KeyPath; // relative to \CurrentControlSet\Control
+  PCWSTR ValueName; // registry value name
+  PVOID  Destination; // kernel global receiving the data
+  PULONG Length; // defaults to 4 bytes when NULL (optional)
+  PULONG Type; // registry type (optional)
+  ULONG_PTR Flags; // checked for ControlSetOverride (optional)
+};
+```
+
+The function first opens the active control set and then the `control` key, means the key paths are relative to `HKLM\SYSTEM\CurrentControlSet\Control`.
+
+```c
+// CmpGetSystemControlValues
+
+RtlInitUnicodeString(&DestinationString, L"current"); // active control set
+ControlSet = CmpFindControlSet((ULONG_PTR)&CmControlHive, v7, (int)&DestinationString, (_BYTE *)&v28 + 1);
+if ( ControlSet == -1 )
+  KeBugCheckEx(0x74u, 1uLL, 2uLL, (ULONG_PTR)&CmControlHive, (ULONG_PTR)&DestinationString);
+
+RtlInitUnicodeString(&DestinationString, L"control"); // "base key" for CmControlVector
+SubKeyByName = CmpFindSubKeyByName((ULONG_PTR)&CmControlHive);
+if ( SubKeyByName == -1 )
+  KeBugCheckEx(0x74u, 1uLL, 3uLL, v10, (ULONG_PTR)&DestinationString);
+```
+
+Table walk related snippets:
+
+```c
+// CmpGetSystemControlValues
+
+v3 = CmControlVector; // first table entry
+
+if ( a3 != 1 || *((_BYTE *)v3 + 40) ) // low byte of Flags
+
+v14 = CmpWalkPath((ULONG_PTR)&CmControlHive, SubKeyByName, *v3); // KeyPath
+
+RtlInitUnicodeString(&DestinationString, v3[1]); // ValueName
+ValueByName = CmpFindValueByName((int)&CmControlHive, v16, (int)&DestinationString);
+
+v21 = (unsigned int *)v3[3]; // Length
+v22 = 4;
+if ( v21 )
+  v22 = *v21;
+
+if ( v13 && !(unsigned __int8)CmpGetBootValueData(0x80000000LL, v24, v3[2], v13) ) // Destination
+
+v26 = v3[4]; // Type
+if ( v26 )
+  *(_DWORD *)v26 = *(_DWORD *)(v24 + 12);
+
+v18 = (unsigned int *)v3[3];
+if ( v18 )
+  *v18 = v13;
+
+v3 += 6; // next entry
+```
+
+### Examples
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Power
+; ValueName = CoalescingTimerInterval
+; Destination = PopCoalescingTimerInterval
+; Length/Type/Flags = 0
+
+INIT:0000000140BA2B20                 dq offset aPower_2        ; "Power"
+INIT:0000000140BA2B28                 dq offset aCoalescingtime ; "CoalescingTimerInterval"
+INIT:0000000140BA2B30                 dq offset PopCoalescingTimerInterval
+INIT:0000000140BA2B38                 dq 3 dup(0)
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power
+; ValueName = SleepStudyDisabled
+; Destination = PopSleepStudyDisabled
+; Length/Type/Flags = 0
+
+INIT:0000000140BA1B00                 dq offset aSessionManager_4 ; "Session Manager\\Power"
+INIT:0000000140BA1B08                 dq offset aSleepstudydisa   ; "SleepStudyDisabled"
+INIT:0000000140BA1B10                 dq offset PopSleepStudyDisabled
+INIT:0000000140BA1B18                 dq 3 dup(0)
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+; ValueName = LargePageDrivers
+; Destination = MmLargePageDriverBuffer
+; Length = MmLargePageDriverBufferLength
+; Type/Flags = 0
+
+INIT:0000000140BA04B0                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
+INIT:0000000140BA04B8                 dq offset aLargepagedrive ; "LargePageDrivers"
+INIT:0000000140BA04C0                 dq offset MmLargePageDriverBuffer
+INIT:0000000140BA04C8                 dq offset MmLargePageDriverBufferLength
+INIT:0000000140BA04D0                 align 20h
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\ProductOptions
+; ValueName = ProductSuite
+; Destination = CmSuiteBuffer
+; Length = CmSuiteBufferLength
+; Type = CmSuiteBufferType
+; Flags = 0
+
+INIT:0000000140BA3870                 dq offset aProductoptions_1 ; "ProductOptions"
+INIT:0000000140BA3878                 dq offset aProductsuite ; "ProductSuite"
+INIT:0000000140BA3880                 dq offset CmSuiteBuffer
+INIT:0000000140BA3888                 dq offset CmSuiteBufferLength
+INIT:0000000140BA3890                 dq offset CmSuiteBufferType
+INIT:0000000140BA3898                 dq 0
+```
+
+```asm
+; KeyPath = HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
+; ValueName = VerifyDrivers
+; Destination = MmVerifyDriverBuffer
+; Length = MmVerifyDriverBufferLength
+; Type = 0
+; Flags = 1
+
+INIT:0000000140BA0960                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
+INIT:0000000140BA0968                 dq offset aVerifydrivers ; "VerifyDrivers"
+INIT:0000000140BA0970                 dq offset MmVerifyDriverBuffer
+INIT:0000000140BA0978                 dq offset MmVerifyDriverBufferLength
+INIT:0000000140BA0980                 dq 0
+INIT:0000000140BA0988                 dq 1
+```
+
 ## Registry Values
 
 This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
