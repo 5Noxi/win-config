@@ -699,13 +699,13 @@ Several values are applied, some have been changed, others are default values. T
 
 See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
 
-Everything listed below is based on personal findings, mistakes may exist.
-
 | Prefix | Component |
 | --- | --- |
 | `PoFx` | Power Framework |
 | `Pop` | Power Manager |
 | `Ppm` | Processor Power Manager |
+
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
@@ -1120,9 +1120,9 @@ You can get a lot of information about data ranges and more from `.inf` files, s
 
 ## [Registry Value](https://github.com/nohuto/regkit/blob/main/records/NIC-Intel.txt) Overview
 
-Everything listed below is based on personal findings, mistakes may exist.
-
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
+
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4D36E972-E325-11CE-BFC1-08002bE10318}\\00XX";

@@ -1653,8 +1653,6 @@ aRegistryMachin_33 = "\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Control\\P
 
 # Kernel Values
 
-Since many people don't yet know which values exist and what default value they have, here's a list. I used [IDA](https://discord.com/channels/836870260715028511/836896618410278952/1492546690413236425), WinDbg, [WinObjEx](https://github.com/hfiref0x/WinObjEx64), [Windows Internals E7 P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf) to create it. Many applied values are defaults, some not. See documentation below for details. The applied data is sometimes pure speculation.
-
 ## CmControlVector
 
 CM = configuration manager, it loads & manages registry hives, inserts the `\REGISTRY` key object into the namespace and more. See regkits '[Registry fundamentals](https://noverse.dev/docs/regkit/overview/#registry-fundamentals)' documentation for more information on the topic.
@@ -1794,17 +1792,7 @@ INIT:0000000140BA0988                 dq 1
 
 ## Registry Values
 
-This contains details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key.
-
-See [session-manager-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/session-manager-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)).
-
-- [session-manager/assets | ProcLibGlobalInit.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/ProcLibGlobalInit.c)
-- [session-manager/assets | GetRegistryQwordValue.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/GetRegistryQwordValue.c)
-- [session-manager/assets | RtlpHpApplySegmentHeapConfigurations.c](https://github.com/nohuto/win-config/tree/main/system/assets/session-manager/RtlpHpApplySegmentHeapConfigurations.c)
-
-The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
-
-Everything listed below is based on personal findings, mistakes may exist.
+This includes details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key. See [nt-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/nt-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
 
 | Prefix | Component |
 | --- | --- |
@@ -1825,6 +1813,8 @@ Everything listed below is based on personal findings, mistakes may exist.
 | `Rtlp` | Run-time library |
 | `Se` / `Sep` | Security Reference Monitor |
 | `Vf` / `Vi` / `Dif*` | Driver Verifier |
+
+Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
