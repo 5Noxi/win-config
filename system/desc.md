@@ -1272,7 +1272,7 @@ In [PresentMon](https://github.com/GameTechDev/PresentMon/releases) ([`PresentMo
 
 ## Registry Values
 
-See [assets/dwm](https://github.com/nohuto/win-config/tree/main/system/assets/dwm) for used snippets (taken from [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore) ([`CCommonRegistryData::InitializeDWMKeysFromRegistry`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-InitializeDWMKeysFromRegistry@CCommonRegistryData@@CAXXZ.c)), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM)).
+Based on pseudocode of [`dwmcore.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwmcore), [`win32kfull.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/win32kfull), [`dwm.exe`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwm), [`dwminit.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dwminit), [`uDWM.dll`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/uDWM).
 
 Everything listed below is based on personal findings, mistakes may exist.
 
@@ -3732,182 +3732,188 @@ Miscellaneous notes:
 
 # DXG Kernel Values
 
-Many applied values are defaults, some not. See documentation below for details.
-
 ## Registry Values
 
-These are default values I found in `dxgkrnl.sys`, see [assets/dxg-values](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values) for pseudocode snippets I used / [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for all values that get read on boot.
-
-The `GraphicsDrivers\Scheduler` / `GraphicsDrivers\MemoryManager` values are from `dxgmms2.sys`, I used the drivers from 23H2/25H2 since they differ at some point. See [dxgmms2](https://github.com/nohuto/win-config/tree/main/system/assets/dxg-values/dxgmms2) for all used files.
-
-Everything listed below is based on personal findings, mistakes may exist.
+Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dxgkrnl)/[`dxgmms2.sys`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/dxgmms2) of 23H2/25H2 as they differ at some point, see [records/Graphics-Drivers.txt](https://github.com/nohuto/regkit/blob/main/records/Graphics-Drivers.txt) for values that get read on boot ([boot capture guide](https://noverse.dev/docs/regkit/guides/wpr-wpa/)). Unless written otherwise, `REG_DWORD` ones accept the full range (`0-4294967295`), same for `REG_QWORD` (`0-18446744073709551615`).
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
-    "MiracastForceDisable" = 2;
-    "MiracastUseIhvDriver" = 2;
+    // GetCabcOptionFromRegistry / TriggerCabcV2Wnf
+    "CABCOption" = 2; // REG_DWORD, if missing + if DisableCABC == 1 its 0, otherwise 2
+    "DisableCABC" = 0; // REG_DWORD (bool), fallback for missing CABCOption
 
-    "ContextNoPatchMode" = 0;
-    "CreateGdiPrimaryOnSlaveGpu" = 0;
-    "CrtcPhaseFrames" = 2;
-    "DeadlockPulse" = 5000;
-    "DeadlockPulseTolerance" = 500;
-    "DeadlockTimeout" = 30000;
-    "DisableBadDriverCheckForHwProtection" = 0; // REG_DWORD
-    "DisableBoostedVSyncVirtualization" = 0; // REG_DWORD
-    "DisableGdiContextGpuVa" = 0;
-    "DisableIndependentVidPnVSync" = 0; // REG_DWORD
-    "DisableMonitoredFenceGpuVa" = 0;
-    "DisableMultiSourceMPOCheck" = 0;
-    "DisableOverlays" = 0;
-    "DisablePagingContextGpuVa" = 0;
-    "DisableSecondaryIFlipSupport" = 0;
-    "DriverManagesResidencyOverride" = 1;
-    "DriverStoreCopyMode" = 1;
-    "EnableBasicRenderGpuPv" = 0;
-    "EnableDecodeMPO" = 1;
-    "EnableFbrValidation" = 1;
-    "EnableMultiPlaneOverlay3DDIs" = 0;
-    "EnableOfferReclaimOnDriver" = 1;
-    "EnablePanelFitterSupport" = 0;
-    "EnableTimedCalls" = 0;
-    "EnableWDDM23Synchronization" = 0;
-    "Force32BitFences" = 0;
-    "ForceDirectFlip" = 0;
-    "ForceEnableDxgMms2" = 0;
-    "ForceExplicitResidencyNotification" = 0; // REG_DWORD
-    "ForceInitPagingProcessVaSpace" = 0;
-    "ForceReplicateGdiContent" = 0;
-    "ForceSecondaryIFlipSupport" = 0;
-    "ForceSecondaryMPOSupport" = 0;
-    "ForceSurpriseRemovalSupport" = 0;
-    "ForceVariableRefresh" = 0;
-    "GdiPhysicalAdapterIndex" = 0;
-    "GpuPriorityChangeMode" = 1;
-    "HighPriorityCompletionMode" = 1;
-    "InitialPagingQueueFenceValue" = 7000;
-    "IoMmuFlags" = 0;
-    "KnownProcessBoostMode" = 1;
-    "LeanMemoryLimit" = ?; // REG_QWORD
-    "NumVirtualFunctions" = 0;
-    "SmallQuantumMode" = 1;
+    // DXGADAPTER::ReadConfig
+    "ContextNoPatchMode" = 0; // REG_DWORD
+    "CreateGdiPrimaryOnSlaveGpu" = 0; // REG_DWORD (bool)
+    "CrtcPhaseFrames" = 2; // REG_DWORD
+    "DeadlockPulse" = 5000; // REG_DWORD
+    "DeadlockPulseTolerance" = 500; // REG_DWORD
+    "DeadlockTimeout" = 30000; // REG_DWORD
+    "DisableBadDriverCheckForHwProtection" = 0; // REG_DWORD (bool)
+    "DisableBoostedVSyncVirtualization" = 0; // REG_DWORD (bool)
+    "DisableGdiContextGpuVa" = 0; // REG_DWORD (bool)
+    "DisableIndependentVidPnVSync" = 0; // REG_DWORD (bool)
+    "DisableMonitoredFenceGpuVa" = 0; // REG_DWORD (bool)
+    "DisableMultiSourceMPOCheck" = 0; // REG_DWORD (bool)
+    "DisableOverlays" = 0; // REG_DWORD (bool)
+    "DisablePagingContextGpuVa" = 0; // REG_DWORD (bool)
+    "DisableSecondaryIFlipSupport" = 0; // REG_DWORD (bool)
+    "DriverManagesResidencyOverride" = 1; // REG_DWORD (bool)
+    "DriverStoreCopyMode" = 1; // REG_DWORD, >1 = 2
+    "EnableDecodeMPO" = 1; // REG_DWORD (bool)
+    "EnableFbrValidation" = 1; // REG_DWORD (bool)
+    "EnableMultiPlaneOverlay3DDIs" = 0; // REG_DWORD (bool)
+    "EnableOfferReclaimOnDriver" = 1; // REG_DWORD (bool)
+    "EnablePanelFitterSupport" = 0; // REG_DWORD (bool)
+    "EnableTimedCalls" = 0; // REG_DWORD (bool)
+    "EnableWDDM23Synchronization" = 0; // REG_DWORD (bool)
+    "Force32BitFences" = 0; // REG_DWORD (bool)
+    "ForceAccessedPhysically" = 0; // REG_DWORD (bool)
+    "ForceDirectFlip" = 0; // REG_DWORD (bool)
+    "ForceEnableDxgMms2" = 0; // REG_DWORD (bool)
+    "ForceExplicitResidencyNotification" = 0; // REG_DWORD (bool)
+    "ForceInitPagingProcessVaSpace" = 0; // REG_DWORD (bool)
+    "ForceReplicateGdiContent" = 0; // REG_DWORD (bool)
+    "ForceSecondaryIFlipSupport" = 0; // REG_DWORD (bool)
+    "ForceSecondaryMPOSupport" = 0; // REG_DWORD (bool)
+    "ForceSurpriseRemovalSupport" = 0; // REG_DWORD (bool)
+    "ForceToMapGpuVa" = 0; // REG_DWORD (bool)
+    "ForceVariableRefresh" = 0; // REG_DWORD (bool)
+    "GdiPhysicalAdapterIndex" = 0; // REG_DWORD
+    "InitialPagingQueueFenceValue" = 7000; // REG_DWORD
+    "IoMmuFlags" = 0; // REG_DWORD
+    "LeanMemoryLimit" = 1395864371; // REG_QWORD
+    "NumVirtualFunctions" = 0; // REG_DWORD
 
-    "DefaultActiveIdleThreshold" = 2000;
-    "DefaultD3TransitionIdleLongTimeThreshold" = 60000;
-    "DefaultD3TransitionIdleShortTimeThreshold" = 10000;
-    "DefaultD3TransitionIdleVeryLongTimeThreshold" = 60000;
-    "DefaultD3TransitionLatencyActivelyUsed" = 80;
-    "DefaultD3TransitionLatencyIdleLongTime" = 140000;
-    "DefaultD3TransitionLatencyIdleMonitorOff" = 250000;
-    "DefaultD3TransitionLatencyIdleNoContext" = 250000;
-    "DefaultD3TransitionLatencyIdleShortTime" = 80000;
-    "DefaultD3TransitionLatencyIdleVeryLongTime" = 200000;
-    "DefaultExpectedResidency" = 2000;
-    "DefaultIdleThresholdIdle0" = 200;
-    "DefaultIdleThresholdIdle0MonitorOff" = 100;
-    "DefaultLatencyToleranceIdle0" = 80;
-    "DefaultLatencyToleranceIdle0MonitorOff" = 2000;
-    "DefaultLatencyToleranceIdle1" = 15000;
-    "DefaultLatencyToleranceIdle1MonitorOff" = 50000;
-    "DefaultLatencyToleranceMemory" = 15000;
-    "DefaultLatencyToleranceMemoryNoContext" = 30000;
-    "DefaultLatencyToleranceNoContext" = 35000;
-    "DefaultLatencyToleranceNoContextMonitorOff" = 100000;
-    "DefaultLatencyToleranceOther" = -1;
-    "DefaultLatencyToleranceTimerPeriod" = 200;
-    "DefaultMemoryRefreshLatencyToleranceActivelyUsed" = 80;
-    "DefaultMemoryRefreshLatencyToleranceIdleShortTime" = 15000;
-    "DefaultMemoryRefreshLatencyToleranceMonitorOff" = 80000;
-    "DefaultMemoryRefreshLatencyToleranceNoContext" = 30000;
-    "DefaultPowerNotRequiredTimeout" = 25000;
-    "DisableDevicePowerRequired" = 0;
-    "DisablePStateManagement" = 0;
-    "EnablePODebounce" = 0;
-    "EnableRuntimePowerManagement" = 1;
-    "lowdebounce" = 3;
-    "MonitorLatencyTolerance" = 300000;
-    "MonitorRefreshLatencyTolerance" = 17000;
-    "uglitch" = 900;
-    "uhigh" = 700;
-    "uideal" = 500;
-    "ulow" = 300;
+    "EnableBasicRenderGpuPv" = 0; // REG_DWORD (bool), 25H2
+    "KnownProcessBoostMode" = 1; // REG_DWORD, 25H2
+    "SmallQuantumMode" = 1; // REG_DWORD, 25H2
+    "HighPriorityCompletionMode" = 1; // REG_DWORD, 25H2
+    "GpuPriorityChangeMode" = 1; // REG_DWORD, 25H2
 
-    "AllowAdvancedEtwLogging" = 0;
-    "DiagnosticsBufferExpansionTime" = 300;
-    "EnableFuzzing" = 0;
-    "EnableHMDTestMode" = 0;
-    "EnableIgnoreWin32ProcessStatus" = 0;
-    "ExternalDiagnosticsBufferMultiplier" = 1;
-    "ExternalDiagnosticsBufferSize" = 16384;
-    "ForceUsb4MonitorSupport" = 0;
-    "InternalDiagnosticsBufferMultiplier" = 2;
-    "InternalDiagnosticsBufferSize" = 65536;
-    "InvestigationDebugParameter" = 0;
-    "MaximumAdapterCount" = 32;
-    "NodeUsageTelemetryTimerInterval" = ?; // REG_DWORD
-    "PreserveFirmwareMode" = 0;
-    "PreventFullscreenWireFormatChange" = 0;
-    "RapidHpdMaxChainInMilliseconds" = 0;
-    "RapidHpdTimeoutInMilliseconds" = 0;
-    "TerminationListSizeLimit" = 67108864;
-    "TreatUsb4MonitorAsNormal" = 0;
-    "Usb4MonitorDpcdDP_IN_Adapter_Number" = 0;
-    "Usb4MonitorDpcdUSB4_Driver_ID" = 0;
-    "Usb4MonitorPowerOnDelayInSeconds" = 0;
-    "Usb4MonitorTargetId" = 0;
-    "ValidateWDDMCaps" = 0;
-    "WDDM2LockManagement" = 1;
+    // DXGADAPTER::InitializePowerManagement
+    "DefaultActiveIdleThreshold" = 2000; // REG_DWORD
+    "DefaultD3TransitionIdleLongTimeThreshold" = 60000; // REG_DWORD
+    "DefaultD3TransitionIdleShortTimeThreshold" = 10000; // REG_DWORD
+    "DefaultD3TransitionIdleVeryLongTimeThreshold" = 60000; // REG_DWORD
+    "DefaultD3TransitionLatencyActivelyUsed" = 80; // REG_DWORD
+    "DefaultD3TransitionLatencyIdleLongTime" = 140000; // REG_DWORD
+    "DefaultD3TransitionLatencyIdleMonitorOff" = 250000; // REG_DWORD
+    "DefaultD3TransitionLatencyIdleNoContext" = 250000; // REG_DWORD
+    "DefaultD3TransitionLatencyIdleShortTime" = 80000; // REG_DWORD
+    "DefaultD3TransitionLatencyIdleVeryLongTime" = 200000; // REG_DWORD
+    "DefaultExpectedResidency" = 2000; // REG_DWORD
+    "DefaultIdleThresholdIdle0" = 200; // REG_DWORD
+    "DefaultIdleThresholdIdle0MonitorOff" = 100; // REG_DWORD
+    "DefaultLatencyToleranceIdle0" = 80; // REG_DWORD
+    "DefaultLatencyToleranceIdle0MonitorOff" = 2000; // REG_DWORD
+    "DefaultLatencyToleranceIdle1" = 15000; // REG_DWORD
+    "DefaultLatencyToleranceIdle1MonitorOff" = 50000; // REG_DWORD
+    "DefaultLatencyToleranceMemory" = 15000; // REG_DWORD
+    "DefaultLatencyToleranceMemoryNoContext" = 30000; // REG_DWORD
+    "DefaultLatencyToleranceNoContext" = 35000; // REG_DWORD
+    "DefaultLatencyToleranceNoContextMonitorOff" = 100000; // REG_DWORD
+    "DefaultLatencyToleranceOther" = 4294967295; // REG_DWORD
+    "DefaultLatencyToleranceTimerPeriod" = 200; // REG_DWORD
+    "DefaultMemoryRefreshLatencyToleranceActivelyUsed" = 80; // REG_DWORD
+    "DefaultMemoryRefreshLatencyToleranceIdleShortTime" = 15000; // REG_DWORD
+    "DefaultMemoryRefreshLatencyToleranceMonitorOff" = 80000; // REG_DWORD
+    "DefaultMemoryRefreshLatencyToleranceNoContext" = 30000; // REG_DWORD
+    "DefaultPowerNotRequiredTimeout" = 25000; // REG_DWORD
+    "DisableDevicePowerRequired" = 0; // REG_DWORD (bool)
+    "DisablePStateManagement" = 0; // REG_DWORD (bool)
+    "EnablePODebounce" = 0; // REG_DWORD (bool)
+    "EnableRuntimePowerManagement" = 1; // REG_DWORD (bool)
+    "lowdebounce" = 3; // REG_DWORD
+    "MonitorLatencyTolerance" = 300000; // REG_DWORD
+    "MonitorRefreshLatencyTolerance" = 17000; // REG_DWORD
+    "uglitch" = 900; // REG_DWORD
+    "uhigh" = 700; // REG_DWORD
+    "uideal" = 500; // REG_DWORD
+    "ulow" = 300; // REG_DWORD
 
-    "DisableVaBackedVm" = 0;
-    "DisableVersionMismatchCheck" = 0;
+    // DXGGLOBAL::Initialize
+    "AllowAdvancedEtwLogging" = 0; // REG_DWORD (bool)
+    "DiagnosticsBufferExpansionTime" = 300; // REG_DWORD
+    "EnableFuzzing" = 0; // REG_DWORD (bool)
+    "EnableHMDTestMode" = 0; // REG_DWORD (bool)
+    "EnableIgnoreWin32ProcessStatus" = 0; // REG_DWORD (bool)
+    "ExternalDiagnosticsBufferMultiplier" = 1; // REG_DWORD
+    "ExternalDiagnosticsBufferSize" = 16384; // REG_DWORD
+    "ForceUsb4MonitorSupport" = 0; // REG_DWORD (bool)
+    "InternalDiagnosticsBufferMultiplier" = 2; // REG_DWORD
+    "InternalDiagnosticsBufferSize" = 65536; // REG_DWORD
+    "InvestigationDebugParameter" = 0; // REG_DWORD
+    "MaximumAdapterCount" = 32; // REG_DWORD
+    "PreserveFirmwareMode" = 0; // REG_DWORD (bool)
+    "PreventFullscreenWireFormatChange" = 0; // REG_DWORD (bool)
+    "RapidHpdMaxChainInMilliseconds" = 0; // REG_DWORD
+    "RapidHpdTimeoutInMilliseconds" = 0; // REG_DWORD
+    "TerminationListSizeLimit" = 67108864; // REG_DWORD
+    "TreatUsb4MonitorAsNormal" = 0; // REG_DWORD (bool)
+    "Usb4MonitorDpcdDP_IN_Adapter_Number" = 0; // REG_DWORD
+    "Usb4MonitorDpcdUSB4_Driver_ID" = 0; // REG_DWORD
+    "Usb4MonitorPowerOnDelayInSeconds" = 0; // REG_DWORD
+    "Usb4MonitorTargetId" = 0; // REG_DWORD
+    "ValidateWDDMCaps" = 0; // REG_DWORD (bool)
+    "WDDM2LockManagement" = 1; // REG_DWORD (bool)
+
+    "NodeUsageTelemetryTimerInterval" = ?; // REG_DWORD, 25H2
+
+    // DpiFdoInitializeFdo
+    "DisableVaBackedVm" = 0; // REG_DWORD (bool)
+    "DisableVersionMismatchCheck" = 0; // REG_DWORD (bool)
     "GpuVirtualizationFlags" = ?; // REG_DWORD
-    "LimitNumberOfVfs" = 0;
-    "VirtualGpuOnly" = 0;
+    "LimitNumberOfVfs" = 0; // REG_DWORD
+    "VirtualGpuOnly" = 0; // REG_DWORD (bool)
 
-    "ForceBddFallbackOnly" = ?;
-    "HwSchMode" = ?;
-    "HwSchOverrideBlockList" = ?;
-    "HwSchTreatExperimentalAsStable" = ?;
-    "MiracastDefaultRtspPort" = ?;
-    "PlatformSupportMiracast" = ?;
-    "SupportMultipleIntegratedDisplays" = ?;
-    "SuspendAdapterTimerPeriod" = ?;
+    // DpiInitializeGlobalState
+    "ForceBddFallbackOnly" = 0; // REG_DWORD (bool), 25H2
+    "MiracastDefaultRtspPort" = 7236; // REG_DWORD, 0 = 7236
+    "PlatformSupportMiracast" = 0; // REG_DWORD (bool)
+    "SupportMultipleIntegratedDisplays" = 0; // REG_DWORD (bool)
+    "SuspendAdapterTimerPeriod" = 500000; // REG_DWORD
 
-    "EnableExperimentalRefreshRates" = 0;
-    "RapidHPDThresholdCount" = 5;
-    "RapidHPDTime" = 1000;
+    // https://noverse.dev/docs/win-config/system/hags/
+    "HwSchMode" = 0; // REG_DWORD, range 0-2, >=3 = 0
+    "HwSchOverrideBlockList" = 1; // REG_DWORD (bool)
+    "HwSchTreatExperimentalAsStable" = 0; // REG_DWORD (bool)
 
-    // https://noverse.dev/docs/win-config/security/increase-tdr/
-    "TdrDdiDelay" = 5;
-    "TdrDebugMode" = 2;
-    "TdrDelay" = 2;
-    "TdrDodPresentDelay" = 2;
-    "TdrDodVSyncDelay" = 2;
-    "TdrLevel" = 3;
-    "TdrLimitCount" = 5;
-    "TdrLimitTime" = 60;
+    // VIDPN_MGR::_ReadConfiguration
+    "EnableExperimentalRefreshRates" = 0; // REG_DWORD (bool), 25H2
+    "RapidHPDThresholdCount" = 5; // REG_DWORD
+    "RapidHPDTime" = 1000; // REG_DWORD
 
-    "DRTTestEnable" = 0; // 1484026436 = Enabled ?
-    "EnableAcmSupportDeveloperPreview" = 0;
-    "ForceEnableDWMClone" = ?; // REG_DWORD, default is adapter capability flag
-    "HybridInternalPanelOverrideEnable" = 0;
-    "IsInternalRelease" = 0;
-    "MultiMonSupport" = 1;
-    "OutputDuplicationSessionApplicationLimit" = 4;
-    "TdrTestMode" = 0;
-    "UnsupportedMonitorModesAllowed" = ?;
+    // TdrInit, https://noverse.dev/docs/win-config/security/increase-tdr/
+    "TdrDdiDelay" = 5; // REG_DWORD, range 1-900
+    "TdrDebugMode" = 2; // REG_DWORD, range 0-3, other = 2
+    "TdrDelay" = 2; // REG_DWORD, range 1-900
+    "TdrDodPresentDelay" = 2; // REG_DWORD, range 1-900
+    "TdrDodVSyncDelay" = 2; // REG_DWORD, range 1-900
+    "TdrLevel" = 3; // REG_DWORD, range 0/1/3, other = 3
+    "TdrLimitCount" = 5; // REG_DWORD, range 1-32
+    "TdrLimitTime" = 60; // REG_DWORD, range 5-3600
 
-    "PageFaultDebugMode" = 1; // REG_DWORD, missing/invalid or >1 -> 1
+    // DpiMiracastGetForcedMode
+    "MiracastForceDisable" = 2; // REG_DWORD
+    "MiracastUseIhvDriver" = 2; // REG_DWORD
 
-    // from procmon boot trace
-    "DisableCABC" = ?;
-    "ForceAccessedPhysically" = ?;
-    "ForceToMapGpuVa" = ?;
-    "WarpOverrideWDDMVersion" = ?;
-    "WarpSupportHybridDiscrete" = ?;
-    "WarpSupportsResourceResidency" = ?;
+    // DxgMonitor::MonitorColorState::OnInitialized, 25H2
+    "DefaultExternalSdrWhiteLevel" = 3000; // REG_DWORD
+    "DefaultIntegratedSdrWhiteLevel" = 1000; // REG_DWORD
 
-    // miscellaneous
+    // misc (single function)
+    "DRTTestEnable" = 0; // REG_DWORD, DxgkpIsDrtEnabled, 1484026436 = enabled?
+    "EnableAcmSupportDeveloperPreview" = 0; // REG_DWORD (bool)
+    "ForceEnableDWMClone" = ?; // REG_DWORD, ADAPTER_DISPLAY::Initialize
+    "HybridInternalPanelOverrideEnable" = 0; // REG_DWORD (bool), DpiHybridInternalPanelOverride
+    "IsInternalRelease" = 0; // REG_DWORD (bool), DriverEntry
+    "MultiMonSupport" = 1; // REG_DWORD (bool), DpiFdoHandleStartDevice
+    "OutputDuplicationSessionApplicationLimit" = 4; // REG_DWORD, OUTPUTDUPL_SESSION_MGR::InitializeMaxActiveOutputDuplApps
+    "PageFaultDebugMode" = 1; // REG_DWORD, VidSchInitializeAdapter, range 0-1, >1 = 1
+    "TdrTestMode" = 0; // REG_DWORD (bool), _TdrIsTestMode
+    "UnsupportedMonitorModesAllowed" = ?; // REG_DWORD (bool), CCD_BTL::CCD_BTL
+
     "CddBootImageMode" = ?;
     "CddBootScreenMode" = ?;
     "DisableLddmSpriteTearDown" = ?;
@@ -3916,102 +3922,114 @@ Everything listed below is based on personal findings, mistakes may exist.
     "DxgKrnlVersion" = ?;
     "MinDxgKrnlVersion" = ?;
 
+    // from procmon boot trace
+    "DispBrokerDebugCtrl" = ?;
+    "WarpOverrideWDDMVersion" = ?;
+    "WarpSupportHybridDiscrete" = ?;
+    "WarpSupportsResourceResidency" = ?;
+
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Scheduler";
-    "AdjustWorkerThreadPriority" = 1; // REG_DWORD
-    "AudioDgAutoBoostPriority" = 24; // REG_DWORD, found in 25H2 (not in 23H2)
-    "AutoSyncToCPUPriority" = 0; // REG_DWORD
+    // VidSchiReadGlobalConfiguration
+    "AdjustWorkerThreadPriority" = 1; // REG_DWORD (bool)
+    "AutoSyncToCPUPriority" = 0; // REG_DWORD (bool)
     "BackgroundProcessMaximumAllowedPreemptionDelay" = 8; // REG_DWORD
-    "CarryOverUsedQuantum" = 0; // REG_DWORD
+    "CarryOverUsedQuantum" = 0; // REG_DWORD (bool)
     "ContextSchedulingPenaltyDelay" = 1000; // REG_DWORD
-    "CountFlipTowardHwLimit" = 0; // REG_DWORD
-    "CountPresentTowardHwLimit" = 0; // REG_DWORD
-    "DdiSuspendMode" = 0; // REG_DWORD, values 0-2, found in 23H2 (not in 25H2)
-    "DebugLargeSmoothenedDuration" = 1; // REG_DWORD, found in 25H2 (not in 23H2)
-    "EnableContextDelay" = 1; // REG_DWORD, found in 23H2 (not in 25H2)
-    "EnableDirectSubmission" = ?; // REG_DWORD, found in 25H2 (not in 23H2), default from adapter cap
-    "EnableFlipImmediateSwFlipQueue" = 1; // REG_DWORD, found in 23H2 (not in 25H2)
-    "EnablePreemption" = 1; // REG_DWORD
-    "FlipDoNotFlipMode" = 0; // REG_DWORD, values 0-2
-    "FlipOverrideMode" = 0; // REG_DWORD, 1 or 2 override device mode
-    "ForceEnableFlipFenceModel" = 0; // REG_DWORD
-    "ForceFlipTrueImmediateMode" = 0; // REG_DWORD, values 0-2
-    "ForegroundPriorityBoost" = 1; // REG_DWORD
-    "FrameServerAutoBoostPriority" = 17; // REG_DWORD, found in 25H2 (not in 23H2)
-    "HistoryLogSize" = 64; // REG_DWORD, clamped 16-0x10000, must be 16, 32, 64, 128, ... (doubling sequence)
-    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD
-    "HwQueuePacketCap" = ?; // REG_DWORD, default from adapter cap, clamped 1-14
-    "HwSchThreadOffloadMode" = 2; // REG_DWORD, found in 25H2 (not in 23H2)
-    "InitDriverFenceId" = 0; // REG_DWORD
-    "LogDriverVSyncCallback" = 0; // REG_DWORD, found in 23H2 (not in 25H2)
-    "MaxFocusGpuQuantumWithoutPresent" = 100; // REG_DWORD, 25H2 default 10 when flag set
+    "CountFlipTowardHwLimit" = 0; // REG_DWORD (bool)
+    "CountPresentTowardHwLimit" = 0; // REG_DWORD (bool)
+    "EnablePreemption" = 1; // REG_DWORD (bool)
+    "FlipDoNotFlipMode" = 0; // REG_DWORD, range 0-2
+    "ForceEnableFlipFenceModel" = 0; // REG_DWORD (bool)
+    "ForceFlipTrueImmediateMode" = 0; // REG_DWORD, range 0-2, other ignored
+    "ForegroundPriorityBoost" = 1; // REG_DWORD (bool)
+    "HistoryLogSize" = 64; // REG_DWORD, range 16-65536 (must be power of two)
+    "HwQueuedRenderPacketGroupLimit" = 2; // REG_DWORD, minimum 1
+    "HwQueuePacketCap" = ?; // REG_DWORD, range 1-14
     "MaximumAllowedPreemptionDelay" = 900; // REG_DWORD
     "MaxYieldInterval" = 16; // REG_DWORD
-    "MinYieldInterval" = 8000; // REG_DWORD, found in 25H2 (not in 23H2)
-    "NpuContextSwitchQuantum" = 30000; // REG_DWORD, found in 25H2 (not in 23H2)
-    "NpuPreemptionQuantum" = 60000; // REG_DWORD, found in 25H2 (not in 23H2)
-    "NumberOfDmaPacketPool" = 20; // REG_DWORD
-    "PerSourceCustomDuration" = ?; // REG_DWORD, default 1 when adapter version >= 2000
-    "PfnCpuOverride" = 0; // REG_DWORD, values 0-3
-    "PreemptionQuantumUnit" = 50000; // REG_DWORD
+    "NumberOfDmaPacketPool" = 20; // REG_DWORD, minimum 16
+    "PerSourceCustomDuration" = ?; // REG_DWORD (bool)
+    "PfnCpuOverride" = 0; // REG_DWORD, range 0-3
+    "PreemptionQuantumUnit" = 50000; // REG_DWORD, minimum 1
     "ProfileLevel" = 2; // REG_DWORD
-    "QuantumUnit" = 25000; // REG_DWORD
-    "QueuedPresentLimit" = 3; // REG_DWORD
-    "VSyncIdleTimeout" = 7; // REG_DWORD, becomes 1 when adapter version >= 1300 and flag set, <1300 min 4
-    "YieldPercentage" = 10; // REG_DWORD, valid 1-0x53 else default 10
+    "QuantumUnit" = 25000; // REG_DWORD, minimum 1
+    "QueuedPresentLimit" = 3; // REG_DWORD, minimum 1
+    "VSyncIdleTimeout" = 7; // REG_DWORD
+    "YieldPercentage" = 10; // REG_DWORD, range 1-84
+
+    "MaxFocusGpuQuantumWithoutPresent" = 100; // REG_DWORD, 25H2
+
+    // VidSchiReadGlobalConfiguration (23H2)
+    "DdiSuspendMode" = 0; // REG_DWORD, valid 0-2
+    "EnableContextDelay" = 1; // REG_DWORD (bool)
+    "EnableFlipImmediateSwFlipQueue" = 1; // REG_DWORD (bool)
+    "InitDriverFenceId" = 0; // REG_DWORD
+    "LogDriverVSyncCallback" = 0; // REG_DWORD (bool)
+
+    // VidSchiReadGlobalConfiguration (25H2)
+    "AudioDgAutoBoostPriority" = 24; // REG_DWORD
+    "DebugLargeSmoothenedDuration" = 1; // REG_DWORD (bool)
+    "EnableDirectSubmission" = ?; // REG_DWORD (bool)
+    "FrameServerAutoBoostPriority" = 17; // REG_DWORD
+    "HwSchThreadOffloadMode" = 2; // REG_DWORD
+    "MinYieldInterval" = 8000; // REG_DWORD
+    "NpuContextSwitchQuantum" = 30000; // REG_DWORD, minimum 1
+    "NpuPreemptionQuantum" = 60000; // REG_DWORD, minimum 1
+
+    // VidSchiReadDeviceConfiguration
+    "FlipOverrideMode" = 0; // REG_DWORD, valid 0-2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MemoryManager";
-    // ReadConfiguration
-    "BugcheckOnApertureCorruption" = 0; // REG_DWORD
-    "CommitProcessHeapOnDemand" = 1; // REG_DWORD
+    // VIDMM_GLOBAL::ReadConfiguration
+    "BugcheckOnApertureCorruption" = 0; // REG_DWORD (bool)
+    "CommitProcessHeapOnDemand" = 1; // REG_DWORD (bool)
     "DirectFlipMemoryRequirement" = 200; // REG_DWORD
-    "DisablePrefetching" = 0; // REG_DWORD
-    "DmaBufferBytesLimitAllDevices" = 0x800000; // REG_DWORD, 0x2000000 if system memory > 0x20000000
-    "DmaBufferListBytesLimitAllDevices" = 0x400000; // REG_DWORD, 0x1000000 if system memory > 0x20000000
+    "DisablePrefetching" = 0; // REG_DWORD, bit 0 only
+    "DmaBufferBytesLimitAllDevices" = 8388608; // REG_DWORD
+    "DmaBufferListBytesLimitAllDevices" = 4194304; // REG_DWORD
     "EventThrottleThreshold" = 300; // REG_DWORD
     "EvictTemporaryPeriod" = 60; // REG_DWORD
     "EvictUnusedPeriod" = 60; // REG_DWORD
     "ExcessiveMemTransferFlipThreshold" = 15; // REG_DWORD
     "ExcessiveMemTransferPenalty" = 5; // REG_DWORD
-    "MaxSegmentSize<0-31>" = 0; // REG_DWORD, if set, aligns to 4K and clamps to 0x800000
     "MemTransferThreshold" = 10; // REG_DWORD
     "NbCddDmaBufferLimitPerDevice" = 4; // REG_DWORD
     "NbDmaBufferLimitCompareWatermark" = 10; // REG_DWORD
-    "NbDmaBufferLimitPerDevice" = 256; // REG_DWORD, 1024 if system memory > 0x20000000
-    "NbPagingHistoryRecords" = 0; // REG_DWORD, 0x40 if internal release
-    "PagesHistory" = 0; // REG_DWORD, max 0x7FFFFFF
-    "PinDWMAllocationBackingStore" = 1; // REG_DWORD
-    "PinnedApertureMemoryLimit" = 40; // REG_DWORD, >= 0x5A -> default 40
-    "PinnedMemoryLimit" = 25; // REG_DWORD, >= 0x5A -> default 25
-    "PrivateHeapPackingBlockSize" = 0x800000; // REG_DWORD
-    "PrivateHeapPackingThreshold" = 0x100000; // REG_DWORD
+    "NbDmaBufferLimitPerDevice" = 256; // REG_DWORD
+    "NbPagingHistoryRecords" = 0; // REG_DWORD
+    "PagesHistory" = 0; // REG_DWORD, final max 134217727
+    "PinDWMAllocationBackingStore" = 1; // REG_DWORD (bool)
+    "PinnedApertureMemoryLimit" = 40; // REG_DWORD, range 0-89, >=90 = 40
+    "PinnedMemoryLimit" = 25; // REG_DWORD, range 0-89, >=90 = 25
+    "PrivateHeapPackingBlockSize" = 8388608; // REG_DWORD
+    "PrivateHeapPackingThreshold" = 1048576; // REG_DWORD
     "ProcessPendingOfferPeriod" = 1; // REG_DWORD
     "ProcessSysmemOfferPeriod" = 8; // REG_DWORD
-    "QuickApertureCorruptionCheck" = 0; // REG_DWORD
-    "RemovePagesFromWorkingSetOnPagingForDwm" = 1; // REG_DWORD
+    "QuickApertureCorruptionCheck" = 0; // REG_DWORD (bool)
+    "RemovePagesFromWorkingSetOnPagingForDwm" = 1; // REG_DWORD, bit 0 only
     "SegmentBalancingPolicy" = 2; // REG_DWORD
     "SegmentCleanupCountThreshold" = 6; // REG_DWORD
     "SegmentCleanupSizeThreshold" = 4096; // REG_DWORD
     "SegmentCleanupTime" = 20; // REG_DWORD
     "SelfRefreshVramForceEvictionTimer" = 900; // REG_DWORD
-    "UseUnreset" = 1; // REG_DWORD
+    "UseUnreset" = 1; // REG_DWORD, bit 0 only
 
-    // unsure about the decomp defaults here
-    "PhysicalHeapHighestAddress" = ?; // REG_QWORD
-    "PhysicalHeapLowestAddress" = ?; // REG_QWORD
-    "PhysicalHeapSize" = ?; // REG_QWORD
+    "PhysicalHeapHighestAddress" = 4294967295; // REG_QWORD
+    "PhysicalHeapLowestAddress" = 0; // REG_QWORD
+    "PhysicalHeapSize" = 0; // REG_QWORD
 
-    // ReadCommitLimitInformation
-    "MinimumSystemMemoryCommitLimit" = 0; // REG_DWORD, MB (<< 20), min 0x4000000
-    "PinnedBackingStoreLimit" = 0; // REG_DWORD, MB (<< 20), 0 -> system memory / 8
-    "SecondaryPartitionCommitLimitPercentage" = 80; // REG_DWORD, clamped to 5-100
-    "SmallSystemMemorySize" = 0; // REG_DWORD, MB (<< 20)
-    "SystemPartitionCommitLimitPercentage" = 50; // REG_DWORD, clamped to 5-100
+    // VIDMM_GLOBAL::ReadCommitLimitInformation
+    "MinimumSystemMemoryCommitLimit" = 0; // REG_DWORD
+    "PinnedBackingStoreLimit" = 0; // REG_DWORD
+    "SecondaryPartitionCommitLimitPercentage" = 80; // REG_DWORD, range 5-100
+    "SmallSystemMemorySize" = 0; // REG_DWORD
+    "SystemPartitionCommitLimitPercentage" = 50; // REG_DWORD, range 5-100
 
-    // ReadWorkingSetConfiguration
+    // VIDMM_GLOBAL::ReadWorkingSetConfiguration
     "WorkingSet.DefaultMaximumPercentile" = 90; // REG_DWORD
     "WorkingSet.DefaultMinimumPercentile" = 65; // REG_DWORD
 
-    // ReadUnusedAllocationConfiguration
+    // VIDMM_GLOBAL::ReadUnusedAllocationConfiguration
     "Unused.EvictApertureOfferHighThreshold" = 30; // REG_DWORD
     "Unused.EvictApertureOfferLowThreshold" = 15; // REG_DWORD
     "Unused.EvictApertureOfferMaximumThreshold" = 30; // REG_DWORD
@@ -4028,170 +4046,194 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Unused.SelfTrimNormalThreshold" = 2; // REG_DWORD
     "UnusedTrimmingPeriod" = 1; // REG_DWORD
 
-    // ReadPreparationPeriodConfiguration
-    "Period.AlwaysForceMemReset" = 1; // REG_DWORD
-    "Period.EvictionThresholdForMemReset" = 32; // REG_DWORD, post query << 20
+    // VIDMM_GLOBAL::ReadPreparationPeriodConfiguration
+    "Period.AlwaysForceMemReset" = 1; // REG_DWORD (bool)
+    "Period.EvictionThresholdForMemReset" = 32; // REG_DWORD
     "Period.MaximumPolicyHeldPeriod" = 64; // REG_DWORD
     "Period.MinimumPolicyHeldPeriod" = 4; // REG_DWORD
-    "Period.NbOfAllocationsThresholdToMRU" = 0x7FFFFFFF; // REG_DWORD
-    "PreparationPeriod" = 1; // REG_DWORD, scaled to 100ns
+    "Period.NbOfAllocationsThresholdToMRU" = 2147483647; // REG_DWORD
+    "PreparationPeriod" = 1; // REG_DWORD
 
-    // ReadHeapConfiguration
+    // VIDMM_GLOBAL::ReadHeapConfiguration
     "DebouncedDecommitAge" = 15; // REG_DWORD
-    "DebouncedPageManagement" = 1; // REG_DWORD
+    "DebouncedPageManagement" = 1; // REG_DWORD (bool)
     "DebouncedUnlockAge" = 15; // REG_DWORD
     "LeanRecycleHeapPackingBlockSize" = 8; // REG_DWORD
     "LeanRecycleHeapPackingThreshold" = 4; // REG_DWORD
     "LeanRecycleHeapPTDBlockSize" = 64; // REG_DWORD
-    "MaximumDecommitDebounce" = 256; // REG_DWORD, 64 if system memory <= 0x53333333
-    "MaximumUnlockDebounce" = 256; // REG_DWORD, 64 if system memory <= 0x53333333
+    "MaximumDecommitDebounce" = 256; // REG_DWORD
+    "MaximumUnlockDebounce" = 256; // REG_DWORD
     "RecycleHeapPackingBlockSize" = 32; // REG_DWORD
     "RecycleHeapPackingThreshold" = 4; // REG_DWORD
     "RecycleHeapPTDBlockSize" = 1024; // REG_DWORD
-    "RecycleHistory" = 0; // REG_DWORD
+    "RecycleHistory" = 0; // REG_DWORD (bool)
     "RecycleHistorySize" = 64; // REG_DWORD
-    "ZeroedRecyclePages" = 1; // REG_DWORD
-    "ZeroPageLockThreshold" = 0x200000; // REG_DWORD, found in 25H2 (not in 23H2)
+    "ZeroedRecyclePages" = 1; // REG_DWORD (bool)
+    "ZeroPageLockThreshold" = 2097152; // REG_DWORD, 25H2
 
-    // ReadPowerConfiguration
-    "MemoryComponentActiveThreshold" = 300; // REG_DWORD, MB (<< 20)
-    "SelfRefreshMemoryEvictionThreshold" = 300; // REG_DWORD, MB (<< 20)
+    // VIDMM_GLOBAL::ReadPowerConfiguration
+    "MemoryComponentActiveThreshold" = 300; // REG_DWORD
+    "SelfRefreshMemoryEvictionThreshold" = 300; // REG_DWORD
 
-    // ReadGpuVaConfiguration
-    "AllocateGpuVaFromHighAddresses" = 0; // REG_DWORD
-    "CompanionContextMaxPendingOperations" = 128; // REG_DWORD, found in 25H2 (not in 23H2)
-    "DisableMakeIoMmuAddressValid" = 0; // REG_DWORD
-    "DisableUncommitGpuVaInPagingProcess" = 0; // REG_DWORD
-    "EnableGpuVaGuardPages" = 0; // REG_DWORD
-    "EnableZeroFlagInPde" = 0; // REG_DWORD
-    "GpuVaFirstValidAddress" = 0x10000; // REG_DWORD, masked to 4K
+    // VIDMM_GLOBAL::ReadGpuVaConfiguration
+    "AllocateGpuVaFromHighAddresses" = 0; // REG_DWORD (bool)
+    "CompanionContextMaxPendingOperations" = 128; // REG_DWORD, max 2147483647, 25H2
+    "DisableMakeIoMmuAddressValid" = 0; // REG_DWORD (bool)
+    "DisableUncommitGpuVaInPagingProcess" = 0; // REG_DWORD (bool)
+    "EnableGpuVaGuardPages" = 0; // REG_DWORD (bool)
+    "EnableZeroFlagInPde" = 0; // REG_DWORD (bool)
+    "GpuVaFirstValidAddress" = 65536; // REG_DWORD
     "PagingProcessVaSpaceBitCount" = 30; // REG_DWORD
 
-    // ReadGpuVaPagingHistoryConfiguration
-    "GpuVaPagingHistoryMask" = 391174; // REG_DWORD, derived, min 0x1000
-    "GpuVaPagingHistorySize" = ?; // REG_DWORD, default 0x40 if system memory > 0x53333333 else 0
+    // VIDMM_GLOBAL::ReadGpuVaPagingHistoryConfiguration
+    "GpuVaPagingHistoryMask" = 391174; // REG_DWORD, 391190 on 25H2?
+    "GpuVaPagingHistorySize" = 0; // REG_DWORD, default 64 on 23H2 / 1024 on 25H2 if system memory > 1395864371
 
-    // ReadPagingConfiguration
-    "BreakOnPagingFailure" = 0; // REG_DWORD
-    "DemotionWithinDeviceEnabled" = 1; // REG_DWORD
+    // VIDMM_GLOBAL::ReadPagingConfiguration
+    "BreakOnPagingFailure" = 0; // REG_DWORD (bool)
+    "DemotionWithinDeviceEnabled" = 1; // REG_DWORD (bool)
     "DeviceResumePeriodMax" = 1000; // REG_DWORD
     "DeviceResumePeriodMin" = 1000; // REG_DWORD
     "DeviceSuspendPeriodMax" = 500; // REG_DWORD
     "DeviceSuspendPeriodMin" = 500; // REG_DWORD
-    "EnableAsyncResidency" = 1; // REG_DWORD
-    "EnablePromotion" = 1; // REG_DWORD, found in 25H2 (not in 23H2)
-    "ForceSynchronousEvict" = 0; // REG_DWORD
-    "ForceUncommitGpuVAOnEvict" = 0; // REG_DWORD
+    "EnableAsyncResidency" = 1; // REG_DWORD (bool)
+    "EnablePromotion" = 1; // REG_DWORD (bool), 25H2
+    "ForceSynchronousEvict" = 0; // REG_DWORD (bool)
+    "ForceUncommitGpuVAOnEvict" = 0; // REG_DWORD (bool)
     "InitialPromotionInterval" = 48; // REG_DWORD
     "MaximumPromotionInterval" = 5000; // REG_DWORD
-    "PagingQueueProcessingPeriodTime" = 50; // REG_DWORD, clamped 16-300
+    "PagingQueueProcessingPeriodTime" = 50; // REG_DWORD, range 16-300
     "PromotionNumberCapPerInterval" = 50; // REG_DWORD
-    "PromotionTargetSizePerInterval" = 0x2000000; // REG_QWORD
-    "TemporaryResourcePolicy" = 0; // REG_DWORD, found in 25H2 (not in 23H2)
-    "TransferFlushThreshold" = 1; // REG_DWORD, MB (<< 20)
+    "PromotionTargetSizePerInterval" = 33554432; // REG_QWORD
+    "TemporaryResourcePolicy" = 0; // REG_DWORD, 25H2
+    "TransferFlushThreshold" = 1; // REG_DWORD
 
-    // ReadTestAndStagingConfiguration
-    "AlwaysDecommitOnOffer" = 0; // REG_DWORD
-    "BudgetThreshold" = 25; // REG_DWORD, clamped to <= 100
-    "DecommitRepurposeMode" = 1; // REG_DWORD, values 0-2 else 0, found in 23H2 (not in 25H2)
-    "DxgMms2OfferReclaim" = 4294967295; // REG_DWORD, allowed 0/1/2/4294967295, others = 0
-    "ExpandTo64KBAllocationSizeThreshold" = 0x400000; // REG_DWORD
-    "LargifyUpgradeThresholdBytes" = 0; // REG_DWORD, found in 25H2 (not in 23H2)
-    "LargifyUpgradeThresholdPercent" = 0; // REG_DWORD, found in 25H2 (not in 23H2)
+    // VIDMM_GLOBAL::ReadTestAndStagingConfiguration
+    "AlwaysDecommitOnOffer" = 0; // REG_DWORD (bool)
+    "BudgetThreshold" = 25; // REG_DWORD, max 100
+    "DecommitRepurposeMode" = 1; // REG_DWORD, valid 0-2, 23H2
+    "DxgMms2OfferReclaim" = 4294967295; // REG_DWORD, uses 0/1/2/4294967295
+    "ExpandTo64KBAllocationSizeThreshold" = 4194304; // REG_DWORD
+    "LargifyUpgradeThresholdBytes" = 0; // REG_DWORD, 25H2
+    "LargifyUpgradeThresholdPercent" = 0; // REG_DWORD, max 100, 25H2
     "LazyDecommitChunkSizeMB" = 32; // REG_DWORD, max 512
-    "PagingQueueFenceIncrement" = 1; // REG_DWORD, 0 = 1, upper bound 0x51EB851
-    "RestrictToPreferredSegment" = 0; // REG_DWORD
-    "Use64KPages" = 0; // REG_DWORD
+    "PagingQueueFenceIncrement" = 1; // REG_DWORD, 0 = 1, max 85899345
+    "RestrictToPreferredSegment" = 0; // REG_DWORD (bool)
+    "Use64KPages" = 0; // REG_DWORD (bool)
 
-    // ReadVPRConfiguration
-    "VPRCapacityRatioDenominator" = 5; // REG_DWORD, if denominator <= numerator or numerator == 0 -> 4/5
+    // VIDMM_GLOBAL::ReadVPRConfiguration
+    "VPRCapacityRatioDenominator" = 5; // REG_DWORD
     "VPRCapacityRatioNumerator" = 1; // REG_DWORD
-    "VPRGrowRatioDenominator" = 5; // REG_DWORD, if denominator <= numerator or numerator == 0 -> 4/5
+    "VPRGrowRatioDenominator" = 5; // REG_DWORD
     "VPRGrowRatioNumerator" = 4; // REG_DWORD
 
-    // ReadBudgetConfiguration
-    "CriticalPeriodicTrimThreshold" = 10; // REG_DWORD
-    "EnableTrimWnfCallback" = 1; // REG_DWORD
-    "ForegroundTrimInterval" = 90000; // REG_DWORD
+    // VIDMM_GLOBAL::ReadBudgetConfiguration
+    "CriticalPeriodicTrimThreshold" = 10; // REG_DWORD, max StartPeriodicTrimThreshold
+    "EnableTrimWnfCallback" = 1; // REG_DWORD (bool)
+    "ForegroundTrimInterval" = 90000; // REG_DWORD, max 1200000
     "GlobalCommitmentBudget" = 0; // REG_QWORD
-    "IdleTrimInterval" = 90000; // REG_DWORD
+    "IdleTrimInterval" = 90000; // REG_DWORD, max 1200000, not less than MaximumTrimInterval
     "L_LocalMemoryBudgetDWMTarget" = 30; // REG_DWORD
-    "L_LocalMemoryBudgetFocusTarget" = 50; // REG_DWORD
+    "L_LocalMemoryBudgetFocusTarget" = 50; // REG_DWORD, range 5-90
     "LNL_LocalMemoryBudgetDWMTarget" = 30; // REG_DWORD
-    "LNL_LocalMemoryBudgetFocusTarget" = 50; // REG_DWORD
+    "LNL_LocalMemoryBudgetFocusTarget" = 50; // REG_DWORD, range 5-90
     "LNL_NonLocalMemoryBudgetDWMTarget" = 30; // REG_DWORD
-    "LNL_NonLocalMemoryBudgetFocusTarget" = 50; // REG_DWORD
-    "MaximumTrimInterval" = 10000; // REG_DWORD
+    "LNL_NonLocalMemoryBudgetFocusTarget" = 50; // REG_DWORD, range 5-90
+    "MaximumTrimInterval" = 10000; // REG_DWORD, range 16-60000
     "MaxProcessBudgetCapBuffer" = 256; // REG_DWORD
     "MaxVideoMemoryFragmentationBuffer" = 512; // REG_DWORD
-    "MinimumTrimInterval" = 2000; // REG_DWORD
-    "ProcessBudgetCapBuffer" = 5; // REG_DWORD
-    "StartPeriodicTrimThreshold" = 40; // REG_DWORD
-    "SystemMemoryFragmentationBuffer" = 5; // REG_DWORD
-    "VideoMemoryFragmentationBuffer" = 10; // REG_DWORD
+    "MinimumTrimInterval" = 2000; // REG_DWORD, clamped to MaximumTrimInterval, min 16
+    "ProcessBudgetCapBuffer" = 5; // REG_DWORD, max 50
+    "StartPeriodicTrimThreshold" = 40; // REG_DWORD, max 100
+    "SystemMemoryFragmentationBuffer" = 5; // REG_DWORD, max 50
+    "VideoMemoryFragmentationBuffer" = 10; // REG_DWORD, max 50
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power";
-    "UseSelfRefreshVRAMInS3" = 1;
+    // DXGADAPTER::InitializePowerManagement
+    "UseSelfRefreshVRAMInS3" = 1; // REG_DWORD (bool)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\BasicDisplay";
-    "BasicDisplayUserNotified" = 0;
+    // NotifyUserMSBDAIfApplicable
+    "BasicDisplayUserNotified" = 0; // REG_DWORD (bool)
 
-    "DisableBasicDisplayFallback" = ?;
-    "EnableBasicDisplayFallback" = ?;
-    "ForcePreserveBootDisplay" = ?;
+    // DpiInitializeGlobalState
+    "DisableBasicDisplayFallback" = 4294967295; // REG_DWORD
+    "EnableBasicDisplayFallback" = 4294967295; // REG_DWORD
+    "ForcePreserveBootDisplay" = 0; // REG_DWORD (bool)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Smm";
-    "DebugMode" = 0;
-    "EnablePageTracking" = 0;
-    "ForceDmaRemapping" = 0;
-    "ForceEnableIommu" = 0;
-    "IdentityMappedPassthrough" = 0;
-    "LogicalAddressMode" = 0;
-    "PreferHighLogicalAddresses" = 0;
+    // SmmQueryRegistry
+    "DebugMode" = 0; // REG_DWORD, bit 0 only
+    "EnablePageTracking" = 0; // REG_DWORD (bool)
+    "ForceDmaRemapping" = 0; // REG_DWORD, bit 0 only
+    "ForceEnableIommu" = 0; // REG_DWORD, valid 0-2
+    "IdentityMappedPassthrough" = 0; // REG_DWORD (bool), 25H2 only
+    "LogicalAddressMode" = 0; // REG_DWORD, valid 0-2
+    "PreferHighLogicalAddresses" = 0; // REG_DWORD, bit 0 only
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DMM";
-    "AssertOnDdiViolation" = 0;
-    "BadMonitorModeDiag" = 2;
+    // VIDPN_MGR::_ReadConfiguration
+    "AssertOnDdiViolation" = 0; // REG_DWORD (bool)
+    "BadMonitorModeDiag" = 2; // REG_DWORD, valid 1-2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\DMM";
-    "EnableVirtualRefreshRateOnExternalMonitor" = 0;
-    "HPDFilterLimit" = 20000000;
-    "LongLinkTrainingTimeout" = 1000;
-    "ModeListCaching" = 1;
-    "SetTimingsFlags" = 0;
-    "ShortLinkTrainingTimeout" = 200;
+    // ADAPTER_DISPLAY::Initialize
+    "EnableVirtualRefreshRateOnExternalMonitor" = 0; // REG_DWORD (bool)
+    "HPDFilterLimit" = 20000000; // REG_DWORD, valid 1000000-100000000
+    "LongLinkTrainingTimeout" = 1000; // REG_DWORD, valid when greater than ShortLinkTrainingTimeout + less than 30000
+    "ModeListCaching" = 1; // REG_DWORD, enabled only if exactly 1
+    "SetTimingsFlags" = 0; // REG_DWORD
+    "ShortLinkTrainingTimeout" = 200; // REG_DWORD, valid when less than LongLinkTrainingTimeout
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Validation";
-    "FailEscapeDDI" = 0;
-    "FailRenderDDI" = 0;
-    "FailReserveGPUVA" = 0;
-    "Level" = 0;
-    "ReportVirtualMachine" = 0;
+    // DXGVALIDATION::InitializeBootSettings
+    "FailEscapeDDI" = 0; // REG_DWORD, only used when Level is nonzero and data exactly 1
+    "FailRenderDDI" = 0; // REG_DWORD, ^
+    "FailReserveGPUVA" = 0; // REG_DWORD, ^
+    "ReportVirtualMachine" = 0; // REG_DWORD, ^
+    "Level" = 0; // REG_DWORD, max 2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\MonitorDataStore\\MONITOR-ID"
-    "AdvancedColorEnabled" = 0;
-    "AutoColorManagementEnabled" = 0;
-    "AutoColorManagementSupported" = ?; // REG_DWORD, bool?
-    "DockedOrientation" = ?;
-    "EnableBoostRefreshRateByDefault" = ?;
-    "EnableIntegratedPanelAcmByDefault" = 0;
-    "EnableIntegratedPanelHdrByDefault" = 0;
-    "HDREnabled" = 0;
-    "MicrosoftApprovedAcmSupport" = 0;
-    "MonitorOrientation" = ?;
-    "OverrideWCGCapabilities" = ?;
-    "PreferredScaleFactor" = ?;
-    "SDRWhiteLevel" = ?;
-    "VMSDisabled" = ?;
+    // DXGMONITOR::_RetrieveMonitorConfigurationFromMonitorStore
+    "DockedOrientation" = 0; // REG_DWORD, valid 0-3
+    "EnableBoostRefreshRateByDefault" = 0; // REG_DWORD (bool)
+    "MonitorOrientation" = 4294967295; // REG_DWORD, default depends on monitor
 
-// the 3 keys below are based on a testing system monitor, therefore the defaults will be different for you
+    // DXGMONITOR::_InitializeMonitorWithDriver
+    "EnableIntegratedPanelBoostRefreshRateByDefault" = 0; // REG_DWORD (bool), 25H2
+    "PreferredScaleFactor" = 0; // REG_DWORD, 0 = no per monitor override
+    "VMSDisabled" = 0; // REG_DWORD (bool)
 
-"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration"; // from LGPE
-    "DefaultCloneResolutionSetting" = 0; // range 0 (default), 1 (internal), 2 (external), "Set Cloned Monitor Preferred Resolution Source", "Enabling this policy allows to override the default behavior when connecting an additional monitor. It allows control over whether a cloned display prioritizes the internal or external monitor i.e. setting its preferred resolution source. Internal sets the resolution of the main display as the source on both screens. External sets the resolution of the connected (external) display as the source on both screens. Default uses the system's default behavior determined by Windows Settings." This policy is supported on 24H2+
+    // DxgMonitor::MonitorColorState::OnInitialized
+    "AdvancedColorEnabled" = 0; // REG_DWORD (bool), 25H2 uses that as fallback
+    "AutoColorManagementEnabled" = 0; // REG_DWORD (bool), 25H2
+    "AutoColorManagementSupported" = 0; // REG_DWORD (bool)
+    "HDREnabled" = 0; // REG_DWORD (bool), 25H2
+    "SDRWhiteLevel" = 1000; // REG_DWORD, internal default 1000, external 3000
 
-"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration\\<CONFIG_ID>";
-    "SetId" = ?; // REG_SZ
-    "Timestamp" = ?; // REG_QWORD
+    // DxgMonitor::MonitorColorState::OnFunctionDriverArrival
+    "EnableIntegratedPanelAcmByDefault" = 0; // REG_DWORD (bool)
+    "EnableIntegratedPanelHdrByDefault" = 0; // REG_DWORD (bool)
+    "MicrosoftApprovedAcmSupport" = 0; // REG_DWORD (bool)
+
+    // DxgMonitor::MonitorColorState::WcgDriverCapsSet
+    "OverrideWCGCapabilities" = 0; // REG_DWORD (bool)
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration"; // https://noverse.dev/policies?p=Display*DisplaySetClonePreferredResolutionSource
+    "DefaultCloneResolutionSetting" = 0; // "Set Cloned Monitor Preferred Resolution Source"
+                                         // 0 = Default
+                                         // 1 = Internal
+                                         // 2 = External
+                                         // https://noverse.dev/policies?p=Display*DisplaySetClonePreferredResolutionSource
+    "DefaultTopologySetting" = 0; // "Configure Multiple Display Mode"
+                                  // 0 = Default
+                                  // 1 = Internal Only
+                                  // 2 = External Only
+                                  // 3 = Clone
+                                  // 4 = Extend
+                                  // https://noverse.dev/policies?p=Display*DisplayConfigureMultipleDisplayMode
+
+// the keys below are based on a testing monitor, therefore the defaults will be different depending on the monitor
 
 "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Configuration\\<CONFIG_ID>\\00\\00";
     "ActiveSize.cx" = ?; // REG_DWORD, horizontal pixels
@@ -4228,6 +4270,14 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PrimSurfSize.cx" = ?; // REG_DWORD
     "PrimSurfSize.cy" = ?; // REG_DWORD
     "Stride" = ?; // REG_DWORD
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Connectivity\\<CONFIG_ID>";
+    // CCD_STORE::CONNECTED_SET_DESCRIPTOR::SetRecentTopologySetId
+    "Recent" = ?; // REG_SZ, persisted CCD set id for recent topology; no synthesized default
+
+"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\MONITOR-ID";
+    // DpiPersistence::ReadDpiFromRegistry
+    "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 ```
 
 ## RegistryMachin_* Keys
@@ -5917,9 +5967,9 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DITest	Type: RE
 
 Small documentation on several values the option applies, see links below for more details.
 
-### [Registry Values](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt)
+### Registry Values
 
-This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) boot trace for more.
+This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/blob/main/records/FileSystem.txt) for all values that get read on boot ([boot capture guide](https://noverse.dev/docs/regkit/guides/wpr-wpa/)).
 
 | Value | Description |
 | ----- | ------------ |
