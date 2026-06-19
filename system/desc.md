@@ -6113,6 +6113,76 @@ Disables all kind of accessibility features such as `Voice Access`, `Live Captio
 | On-Screen Keyboard | Tyoe using the mouse or another pointing device such as a joystick by selecting keys from a picture of a keyboard. |
 | [Accessibility Insights Telemetry](https://github.com/microsoft/accessibility-insights-windows/blob/main/docs/TelemetryOverview.md#control-of-telemery) | "Accessibility Insights for Windows uses telemetry to better understand what features are most helpful to users, as well as to help identify potential issues that users are experiencing." |
 
+## SystemSettings Captures
+
+Not complete yet, will be extended over time.
+
+```c
+// Accessibility > Visual effects
+
+  // Always show scrollbars
+  // Enabled
+  HKCU\Control Panel\Accessibility\DynamicScrollbars	Type: REG_DWORD, Length: 4, Data: 0
+  // Disabled
+  HKCU\Control Panel\Accessibility\DynamicScrollbars	Type: REG_DWORD, Length: 4, Data: 1
+
+  // Transparency effects
+  // Enabled
+  HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\EnableTransparency	Type: REG_DWORD, Length: 4, Data: 1
+  // Disabled
+  HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize\EnableTransparency	Type: REG_DWORD, Length: 4, Data: 0
+
+  // Animation effects (https://noverse.dev/docs/win-config/visibility/optimize-visual-effects/#userpreferencesmask)
+  // Enabled
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 92 12 07 80 10 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 96 12 07 80 10 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 9E 12 07 80 10 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 9E 16 07 80 10 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 9E 1E 07 80 10 00 00 00
+  HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate	Type: REG_SZ, Length: 4, Data: 1
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 9E 1E 07 80 12 00 00 00
+  // Disabled
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 9C 1E 07 80 12 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 98 1E 07 80 12 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 90 1E 07 80 12 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 90 1A 07 80 12 00 00 00
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 90 12 07 80 12 00 00 00
+  HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate	Type: REG_SZ, Length: 4, Data: 0
+  HKCU\Control Panel\Desktop\UserPreferencesMask	Type: REG_BINARY, Length: 8, Data: 90 12 07 80 10 00 00 00
+
+  // Dismiss notifications after this amount of time
+  // 5 seconds
+  HKCU\Control Panel\Accessibility\MessageDuration	Type: REG_DWORD, Length: 4, Data: 5
+  // 5 minutes
+  HKCU\Control Panel\Accessibility\MessageDuration	Type: REG_DWORD, Length: 4, Data: 300
+
+// Accessibility > Mouse pointer and touch
+
+  // Size
+  // 1
+  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 1
+  // 2
+  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 2
+
+  // Touch indicator
+  // Enabled
+  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 1
+  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 31
+    // Make the circle darker and larger
+    SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 2
+  // Disabled
+  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 0
+  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 2
+
+// Accessibility > Text cursor
+
+  // Text cursor indicator
+  // Enabled
+  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 32, Data: cursorindicator
+  // Disabled
+  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 2, Data: 
+```
+
 # Disable Windows Search
 
 ## Suboptions
