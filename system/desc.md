@@ -3609,10 +3609,10 @@ if ( v3 >= 2 )
 PsPrioritySeparation = v3;
 ```
 
-`00` = `0`: no foreground quantum advantage, foreground priority adds `+0` in boost part ("*The threads of foreground processes get the same amount of processor time as the threads of background processes and as the threads of processes with a priority class of Idle.*")  
-`01` = `1`: foreground priority adds `+1` ("*2:1. The threads of foreground processes get twice the processor time as the threads of background processes each time they are scheduled for the processor.*")  
-`10` = `2`: foreground priority adds `+2` ("*3:1. The threads of foreground processes get three times the processor time as the threads of background processes each time they are scheduled for the processor.*")  
-`11` = `2`: same behavior as `10` because of the clamp.
+- `00` = `0`: no foreground quantum advantage, foreground priority adds `+0` in boost part ("*The threads of foreground processes get the same amount of processor time as the threads of background processes and as the threads of processes with a priority class of Idle.*")
+- `01` = `1`: foreground priority adds `+1` ("*2:1. The threads of foreground processes get twice the processor time as the threads of background processes each time they are scheduled for the processor.*")
+- `10` = `2`: foreground priority adds `+2` ("*3:1. The threads of foreground processes get three times the processor time as the threads of background processes each time they are scheduled for the processor.*")
+- `11` = `2`: same behavior as `10` because of the clamp
 
 ### Watching the Boost
 
@@ -3664,10 +3664,10 @@ if ( !IsThisAnNtAsSystem )
 v8 = (char *)v7;
 ```
 
-`00` (`0x0`): server selects fixed table, client selects variable table.  
-`01` (`0x4`): forces PspVariableQuantums.  
-`10` (`0x8`): forces PspFixedQuantums.  
-`11` (`0xC`): same as `00`.
+- `00` (`0x0`): server selects fixed table, client selects variable table
+- `01` (`0x4`): forces PspVariableQuantums
+- `10` (`0x8`): forces PspFixedQuantums
+- `11` (`0xC`): same as `00`
 
 ## Bits 4/5
 
@@ -3696,10 +3696,10 @@ LABEL_9:
   result = v8[2];
 ```
 
-`00` (`0x0`): server `goto LABEL_22` (longer intervals), client `goto LABEL_9` (shorter intervals).  
-`01` (`0x10`): longer intervals.  
-`10` (`0x20`): goes directly to `LABEL_9` = shorter intervals.  
-`11` (`0x30`): falls to `LABEL_8`, so same behavior as `00`.
+- `00` (`0x0`): server `goto LABEL_22` (longer intervals), client `goto LABEL_9` (shorter intervals)
+- `01` (`0x10`): longer intervals
+- `10` (`0x20`): goes directly to `LABEL_9` = shorter intervals
+- `11` (`0x30`): falls to `LABEL_8`, so same behavior as `00`
 
 Note that everything above is based on 23H2 and is not complete yet.
 
@@ -3893,6 +3893,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "TdrLevel" = 3; // REG_DWORD, range 0/1/3, other = 3
     "TdrLimitCount" = 5; // REG_DWORD, range 1-32
     "TdrLimitTime" = 60; // REG_DWORD, range 5-3600
+    "TdrTestMode" = ?; // reserved?
 
     // DpiMiracastGetForcedMode
     "MiracastForceDisable" = 2; // REG_DWORD

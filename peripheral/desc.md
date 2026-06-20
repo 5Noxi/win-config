@@ -524,30 +524,28 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags";
-    "Allow64KLowOrFullSpeedControlTransfers" = ?; // REG_DWORD, only value 1 enables, 0/other values disable
-    "DisableHCS0Idle" = 0; // REG_DWORD, nonzero disables S0 idle
+    "Allow64KLowOrFullSpeedControlTransfers" = ?; // REG_DWORD, only exactly 1 enables
+    "DisableHCS0Idle" = 0; // REG_DWORD
     "GenericCompositeUSBDeviceString" = ?; // REG_SZ
     "SetMultiTTBitDuringConfigureEndpoint" = ?; // REG_DWORD
     "TestRunEsmInWorkItem" = 0; // REG_DWORD
-
-// built by HUBREG_OpenCreateUsbflagsDeviceKey
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usbflags\\<vvvvpppprrrr>";
     "IgnoreHWSerNum" = ?; // REG_BINARY, Indicates whether the USB driver stack must ignore the serial number of the device.
                           // 0x00: The setting is disabled.
                           // 0x01: Forces the USB driver stack to ignore the serial number of the device. Therefore, the device instance is tied to the port to which the device is attached.
-    "UseWin8DescriptorValidation" = ?; // queried as 4 byte bool
+    "UseWin8DescriptorValidation" = ?;
     "ResetOnResume" = ?; // REG_BINARY, indicates whether the USB driver stack must reset the device when the port resumes from a sleep cycle.
                          // 0x0000: The setting is disabled.
                          // 0x0001: Forces the USB driver stack to reset a device on port resume.
-    "DisableOnSoftRemove" = 1; // queried as 4 byte bool
-    "RequestConfigDescOnReset" = ?; // queried as 4 byte bool
-    "DisableRecoveryFromPowerDrain" = ?; // queried as 4 byte bool
-    "DisableLpm" = ?; // queried as 4 byte bool. When enabled, link power management is disabled for the device.
+    "DisableOnSoftRemove" = 1;
+    "RequestConfigDescOnReset" = ?;
+    "DisableRecoveryFromPowerDrain" = ?;
+    "DisableLpm" = ?; // When enabled LPM (link power management) is disabled for the device.
                       // "A link enters a low power state (consuming less power than the working state) only when the downstream device enters the suspended state through the selective suspend mechanism", "After remaining idle for a certain period of time, link partners progressively enter U1 (standby with fast exit) and then U2 (standby with slower exit)"
                       // https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-3-0-lpm-mechanism- https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/u1-and-u2-transitions
-    "SkipBOSDescriptorQuery" = ?; // queried as 4 byte bool
-    "AlternateSettingFilter" = ?; // REG_BINARY, size must be even and > 0 (data is cached as 16 bit entries "count = byte_size/2")
+    "SkipBOSDescriptorQuery" = ?;
+    "AlternateSettingFilter" = ?; // REG_BINARY
     "ResetTTOnCancel" = ?; // REG_DWORD
     "NoClearTTBufferOnCancel" = ?; // REG_DWORD, has priority over ResetTTOnCancel
     "PowerUpDelay" = ?; // REG_DWORD?
@@ -555,8 +553,8 @@ Everything listed below is based on personal findings, mistakes may exist.
     "osvc" = ?; // REG_BINARY, "Indicates whether the operating system queried the device for Microsoft-defined USB descriptors. If the previously attempted OS descriptor query was successful, the value contains the vendor code from the OS string descriptor."
                 // 0x0000: The device didn't provide a valid response to the Microsoft OS string descriptor request.
                 // 0x01xx: The device provided a valid response to the Microsoft OS string descriptor request, where xx is the bVendorCode contained in the response.
-    "SkipContainerIdQuery" = ?; // queried as 4 byte bool
-    "MsOs20DescriptorSetInfo" = ?; // queried as 8-byte
+    "SkipContainerIdQuery" = ?;
+    "MsOs20DescriptorSetInfo" = ?;
 
     //"DontSkipMsOsDescriptor"
     //"IgnoreBOSDescriptorValidationFailure"
@@ -670,8 +668,8 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 ```c
 // HUBREG_QueryGlobalUsb20HardwareLpmSettings
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\Usb20HardwareLpm"; // g_Usb20HardwareLpmKeyName
-    "Usb20HardwareLpmOverride" = 1; // REG_DWORD, default behavior enabled, 0 disables it
-    "Usb20HardwareLpmTimeout" = 2; // REG_DWORD, accepted range 0-255
+    "Usb20HardwareLpmOverride" = 1; // REG_DWORD
+    "Usb20HardwareLpmTimeout" = 2; // REG_DWORD, range 0-255
 
 // HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\AutomaticSurpriseRemoval"; // g_UsbAutomaticSurpriseRemovalKeyName (aRegistryMachin_6)
@@ -679,41 +677,41 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 // HUBREG_QueryUsbHardwareVerifierValue
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\HardwareVerifier"; // g_HwVerifierKeyName
-    "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, first lookup
+    "<VID><PID><REV>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, first query
     "<VID><PID>\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, fallback
     "global\\usbUpto20|usb2X|usb30\\device" = ?; // REG_DWORD, last fallback
 
 // HUBREG_QueryGlobalUsbLtmSettings
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\usb\\UsbLtm"; // g_UsbLtmKeyName
-    "UsbLtmEnable" = 0; // REG_DWORD, nonzero enables USB LTM
+    "UsbLtmEnable" = 0; // REG_DWORD
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\USB";
-    "DualRoleFeaturesTestOverride" = ?; // REG_DWORD, queried from GetPersistedKeyPath
+    "DualRoleFeaturesTestOverride" = ?; // REG_DWORD
     "UcmIsPresent" = ?; // REG_DWORD
 
 // these are taken from the W10 source, they seem to exist on latest builds (they do exist in usbport.sys on 23H2)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usb";
-    "debuglevel" = 0; // REG_DWORD, default to 1/2 when DEBUG1/DEBUG2 builds, higher numbers enable more logs
+    "debuglevel" = 0; // REG_DWORD
     "debuglogmask" = 0xFFFFFFFE; // REG_DWORD, bitmask for log categories
-    "debuglogenable" = 1; // REG_DWORD (bool), enables debug log output
-    "debugcatc" = 0; // REG_DWORD (bool), enables CATC analyzer trigger
-    "DisableSelectiveSuspend" = 0; // REG_DWORD (bool), global disable for selective suspend (GlobalUsbhubLegacyValues?)
-    "DisableCcDetect" = 0; // REG_DWORD (bool), global disable for CC detection
+    "debuglogenable" = 1; // REG_DWORD (bool)
+    "debugcatc" = 0; // REG_DWORD (bool)
+    "DisableSelectiveSuspend" = 0; // REG_DWORD (bool)
+    "DisableCcDetect" = 0; // REG_DWORD (bool
     "EnPMDebug" = 0; // REG_DWORD (bool), for debugging power management
-    "ForceHcD3NoWakeArm" = 0 // REG_DWORD (bool), prevents wake-arming when forcing HC to D3
-    "EnableDCA" = 0 // REG_DWORD (bool), enables direct controller access (HCT diagnostics)
-    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI (HCT compatibility)
+    "ForceHcD3NoWakeArm" = 0 // REG_DWORD (bool)
+    "EnableDCA" = 0 // REG_DWORD (bool), direct controller access
+    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI
 
 // "This class is reserved for USB host controllers and USB hubs", I'll add them here as they're also in usbport.sys and also taken from the W10 source
 
 "HKLM\\System\\CurrentControlSet\\Control\\Class\\{36FC9E60-C465-11CF-8056-444553540000}\\<instance>";
-    "HcFlavor" = ? // REG_DWORD, auto detect
-    "TotalBusBandwidth" = ? // REG_DWORD, calculated from miniport registration (bits/ms), overrides bus bandwidth accounting
-    "HcDisableAllSelectiveSuspend" = 0 (non-IA64), 1 (IA64); // REG_DWORD, nonzero disables selective suspend
+    "HcFlavor" = ? // REG_DWORD
+    "TotalBusBandwidth" = ? // REG_DWORD
+    "HcDisableAllSelectiveSuspend" = 0 (non-IA64), 1 (IA64); // REG_DWORD
     "CommonBuffer2GBLimit" = 0; // REG_DWORD, when nonzero, forces common buffers below 2GB ("Limit common buffer allocations for the miniport to the physical address range below 2GB.  Only bits 0 through 30 of the physical address can be set.  Bit 31 of the physical address cannot be set.")
     "ForceHCResetOnResume" = 0; // REG_DWORD, forces controller reset on resume
-    "FastResumeEnable" = 0; // REG_DWORD, enables fast S0 resume
+    "FastResumeEnable" = 0; // REG_DWORD, fast S0 resume
 
     //HcDisableSelectiveSuspend
 
@@ -797,10 +795,10 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 // HUBREG_QueryGlobalHubValues
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\USBHUB\\hubg"; // g_HubGlobalKeyName
     "DisableSelectiveSuspendUI" = ?; // REG_DWORD
-    "MsOsDescriptorMode" = ?; // REG_DWORD, valid values are 0-2
-    "EnableDiagnosticMode" = ?; // REG_DWORD, nonzero enables diagnostic mode
-    "DisableOnSoftRemove" = 1; // REG_DWORD, default behavior enabled, 0 disables it
-    "DisableUxdSupport" = ?; // REG_DWORD, nonzero disables UXD support
+    "MsOsDescriptorMode" = ?; // REG_DWORD, range 0-2
+    "EnableDiagnosticMode" = ?; // REG_DWORD
+    "DisableOnSoftRemove" = 1; // REG_DWORD
+    "DisableUxdSupport" = ?; // REG_DWORD
     "EnableExtendedValidation" = ?; // REG_DWORD
     "WakeOnConnectUI" = ?; // REG_DWORD, nonzero enables wake on connect UI ("This controls the UI check box 'Allow this device to wake the system'. Essentially this is control for the wake on connect feature.")
     "PreventDebounceTimeForSuperSpeedDevices" = ?; // REG_DWORD, nonzero enables extra debounce handling ("Checks if we need to give extra time to SuperSpeed devices before talking to them")
@@ -822,10 +820,10 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 // HUBREG_QueryGlobalUxdSettings (the defaults were taken from the W10 source)
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\policy"; // g_UxdGlobalSettingsKey (aRegistryMachin_12)
-    "UxdGlobalDeleteOnShutdown" = 0; // REG_DWORD, nonzero enables delete on shutdown
-    "UxdGlobalDeleteOnReload" = 0; // REG_DWORD, nonzero enables delete on reload
-    "UxdGlobalDeleteOnDisconnect" = 0; // REG_DWORD, nonzero enables delete on disconnect
-    "UxdGlobalEnable" = 0; // REG_DWORD, nonzero enables UXD globally
+    "UxdGlobalDeleteOnShutdown" = 0; // REG_DWORD
+    "UxdGlobalDeleteOnReload" = 0; // REG_DWORD
+    "UxdGlobalDeleteOnDisconnect" = 0; // REG_DWORD
+    "UxdGlobalEnable" = 0; // REG_DWORD
 
 // HUBREG_QueryUxdDeviceKey / HUBREG_DeleteUxdDeviceKey
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\devices"; // g_UxdDeviceSettingsKey (aRegistryMachin_5)

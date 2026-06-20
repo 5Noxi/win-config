@@ -1174,9 +1174,11 @@ Disabling TDR removes a valuable layer of protection, so it is generally recomme
 | TdrDodPresentDelay | `TdrDodPresentDelay` | `2` seconds (min 1, max 900) | Extra time for display-only drivers to report an async present before a TDR is triggered.                 |
 | TdrDodVSyncDelay   | `TdrDodVSyncDelay`   | `2` seconds (min 1, max 900) | Time the VSync watchdog waits for VSync from a display-only driver before triggering TDR.                 |
 
-## Pseudocode Snippets
+## TdrInit (dxgkrnl)
 
 ```c
+// TdrInit
+
 if ( v0 < 0 )
 {
   v13 = 3; // TdrLevel
@@ -1209,8 +1211,6 @@ if (dword_1C015B874 != v15) {
     WdLogGlobalForLineNumber = 2387;
 }
 ```
-
-- [security/assets | TdrInit.c](https://github.com/nohuto/win-config/blob/main/security/assets/TdrInit.c)
 
 ## NVLDDMKM TDR
 
