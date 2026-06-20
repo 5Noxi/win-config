@@ -1154,76 +1154,57 @@ Rather leave USB connection error notifications enabled, unless there's a specif
 
 # Increase TDR
 
-> "*TDR stands for Timeout Detection and Recovery. This is a feature of the Windows operating system which detects response problems from a graphics card, and recovers to a functional desktop by resetting the card. If the operating system does not receive a response from a graphics card within a certain amount of time (default is 2 seconds), the operating system resets the graphics card.*"
->
-> — NVIDIA Docs, [Timeout Detection & Recovery](https://docs.nvidia.com/gameworks/content/developertools/desktop/timeout_detection_recovery.htm)
-
 Disabling TDR removes a valuable layer of protection, so it is generally recommended that you keep it enabled.
+
+> "*TDR is a feature in Windows that detects when the graphics card takes longer than expected to complete an operation. It then resets the graphics card to prevent the entire system from becoming unresponsive.*
+>
+> *One of the most common stability problems in graphics occurs when a computer appears to "hang" or be completely "frozen" while it's actually processing an end-user command or operation. Many users wait a few seconds and then decide to reboot the computer. The frozen appearance of the computer frequently occurs because the GPU is busy processing intensive graphical operations, typically during game play, and hence doesn't update the display screen. TDRs enable the operating system to detect that the UI isn't responsive.*"
+>
+> — Microsoft, [WDDM support for timeout detection and recovery (TDR)](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/timeout-detection-and-recovery)
+
+![](https://github.com/nohuto/win-config/blob/main/security/images/tdr-process.jpg?raw=true)
 
 ### [Registry Values](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/display/tdr-registry-keys.md)
 
-| Registry value     | Value name           | Default data                 | Description                                                                                               |
-| ------------------ | -------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------- |
-| TdrLevel           | `TdrLevel`           | `3` (TdrLevelRecover)        | Controls the GPU timeout behavior. `0` = disabled, `1` = bugcheck, `2` = recover to VGA (not implemented) `3` = reset/recover (Windows default). |
-| TdrDelay           | `TdrDelay`           | `2` seconds                  | Timeout threshold before Windows starts TDR handling. Longer value = GPU gets more time. |
-| TdrDdiDelay        | `TdrDdiDelay`        | `5` seconds                  | Extra time for driver/user-mode threads to exit after a timeout before VIDEO_TDR_FAILURE (0x116). |
-| TdrDebugMode       | `TdrDebugMode`       | `2`                          | TDR debug control: `0` break, `1` ignore, `2` recover (default), `3` always recover.                      |
-| TdrLimitTime       | `TdrLimitTime`       | `60` seconds (doc) / `5` driver?                 | Time window to count repeated TDRs before forcing a crash. Works with `TdrLimitCount`.                    |
-| TdrLimitCount      | `TdrLimitCount`      | `5`                          | Max number of TDRs allowed within `TdrLimitTime` before Windows stops recovering and bugchecks.           |
-| TdrTestMode        | `TdrTestMode`        | -                            | Reserved/test entry, not for normal use.                                                                  |
-| TdrDodPresentDelay | `TdrDodPresentDelay` | `2` seconds (min 1, max 900) | Extra time for display-only drivers to report an async present before a TDR is triggered.                 |
-| TdrDodVSyncDelay   | `TdrDodVSyncDelay`   | `2` seconds (min 1, max 900) | Time the VSync watchdog waits for VSync from a display-only driver before triggering TDR.                 |
-
-## TdrInit (dxgkrnl)
-
 ```c
-// TdrInit
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers"
+    "TdrLevel" = 3; // REG_DWORD, 0/1/3, other = 3
+    // "Specifies the initial level of recovery."
+    // 0 (TdrLevelOff) = Detection disabled
+    // 1 (TdrLevelBugcheck) = Bug check on detected timeout, for example, no recovery
+    // 2 (TdrLevelRecoverVGA) = Recover to VGA (not implemented)
+    // 3 (TdrLevelRecover) = Recover on timeout (default value)
 
-if ( v0 < 0 )
-{
-  v13 = 3; // TdrLevel
-  v8 = 2; // TdrDelay
-  v9 = 2; // TdrDodPresentDelay
-  v10 = 2; // TdrDodVSyncDelay
-  v11 = 5; // TdrDdiDelay
-  v12 = 2; // TdrDebugMode
-  WdLogSingleEntry1(3LL, v0);
-  WdLogGlobalForLineNumber = 2211;
-}
+    "TdrDelay" = 2; // REG_DWORD, range 1-900
+    // "Specifies the number of seconds that the GPU can delay the preempt request from the GPU scheduler. TdrDelay is effectively the timeout threshold."
 
-v67 = L"TdrLimitTime";
-v66 = 288;
-v68 = &v15;
-v6 = v15;
-v7 = 3600LL;
-if (v15 <= 0xE10) { // 3600
-  if (v15 < 5)
-    v6 = 5; // set to 5 minimum
-  else
-    v6 = v15;
-  dword_1C015B874 = v6;
-} else {
-  dword_1C015B874 = 3600; // clamp max
-}
+    "TdrDdiDelay" = 5; // REG_DWORD, range 1-900
+    // "Specifies the number of seconds that the OS allows threads to leave the driver. After the specified time, the OS bug-checks the computer with the code VIDEO_TDR_FAILURE (0x116)."
 
-if (dword_1C015B874 != v15) {
-    WdLogSingleEntry2(3LL, v15, (unsigned int)dword_1C015B874);
-    WdLogGlobalForLineNumber = 2387;
-}
+    "TdrDebugMode" = 2; // REG_DWORD, range 0-3, other = 2
+    // "Specifies the debugging-related behavior of the TDR process. The default value is TDR_DEBUG_MODE_RECOVER_NO_PROMPT, which indicates not to break into the debugger."
+    // 0 = Break to kernel debugger before the recovery to allow investigation of the timeout.
+    // 1 = Ignore any timeout.
+    // 2 = Recover without breaking into the debugger (default value).
+    // 3 = Recover even if some recovery conditions aren't met (for example, recover on consecutive timeouts).
+
+    "TdrLimitTime" = 60; // REG_DWORD, range 5-3600
+    // "Specifies the default time within which a specific number of TDRs (specified by the TdrLimitCount key) are allowed without crashing the computer."
+
+    "TdrLimitCount" = 5; // REG_DWORD, range 1-32
+    // "Specifies the default number of TDRs (0x117) that the system allows during the time specified by the TdrLimitTime key without crashing the computer."
+
+    // _TdrIsTestMode
+    "TdrTestMode" = 0; // REG_DWORD (bool)
+    // "Reserved. Don't use."
+
+    // TdrInit
+    "TdrDodPresentDelay" = 2; // REG_DWORD, range 1-900
+    // "Specifies the number of seconds allowed for the kernel-mode display-only driver's (KMDOD) DxgkDdiPresentDisplayOnly function to complete an asynchronous present by reporting progress to pfnPresentDisplayOnlyProgress (which is passed in the DXGKARG_PRESENT_DISPLAYONLY structure)."
+
+    "TdrDodVSyncDelay" = 2; // REG_DWORD, range 1-900
+    // "Specifies the number of seconds the V-sync watchdog waits for a V-sync signal to be reported before triggering a TDR in a KMDOD."
 ```
-
-## NVLDDMKM TDR
-
-Notes to the values located in:
-```
-\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrDdiDelay
-\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrDelay
-\Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : TdrLevel
-```
-
-`TdrDdiDelay` used alongside TdrDelay to determine the WDDM timeout. RM reads `TdrDdiDelay`, subtracts 1, and caps `TdrDelay` to that override. If `TdrDdiDelay` is absent, `tdrDdiOverride = 4`. `TdrDelay` shows the WDDM timeout duration (seconds). RM clamps to >= 2 and <= (TdrDdiDelay - 1), then converts to microseconds. Default when missing is `1.8` seconds. `TdrLevel` = WDDM TDR behavior (documented in CUDA WDDM code).
-
-Note that this information is based on a 4 year old documentation and may not be accurate anymore.
 
 # Password Age
 
