@@ -4445,11 +4445,11 @@ These are related to (dxgmms2) scheduler [hardware queue](https://learn.microsof
 
 `HwSchThreadOffloadMode` decides where staged [hardware queues](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-hardware-queue) are getting handled.
 
-- `0`/`>=3` handles all staged queues directly through `ProcessHwQueue` on current caller
+- `0`/`>=3` handles all staged queues through `ProcessHwQueue` on current caller
 - `1` moves (offloads) all staged HW queues to the scheduler list and wakes the scheduler thread (`VidSchiWorkerThread`)
 - `2` (default) only moves queues marked with `VIDSCH_HW_QUEUE`, others get handled by `ProcessHwQueue`
 
-`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in 23H2 and previous builds, means it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
+`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in [23H2 and previous builds](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=dxgmms2&function=VidSchiReadGlobalConfiguration.c&mode=side-by-side), means it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
 
 ```c
 // HwQueueStagingList::ProcessHwQueues
