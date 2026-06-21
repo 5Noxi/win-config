@@ -4449,7 +4449,7 @@ These are related to (dxgmms2) scheduler [hardware queue](https://learn.microsof
 - `1` moves (offloads) all staged HW queues to the scheduler list and wakes the scheduler thread (`VidSchiWorkerThread`)
 - `2` (default) only moves queues marked with `VIDSCH_HW_QUEUE`, others get handled by `ProcessHwQueue`
 
-`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in 23H2 and previous builds, it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
+`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in 23H2 and previous builds, means it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
 
 ```c
 // HwQueueStagingList::ProcessHwQueues
