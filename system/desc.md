@@ -4282,6 +4282,32 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 ```
 
+## DisableVersionMismatchCheck
+
+Controls whether the display driver's INF & KMD (`.sys`) versions get compared and if they match. `0` (default) = compare versions, nonzero = skip. See the current `.inf` file name via:
+
+```powershell
+Get-PnpDevice -Class Display -PresentOnly | Get-PnpDeviceProperty -KeyName DEVPKEY_Device_DriverInfPath | Select-Object -ExpandProperty Data
+```
+
+```inf
+; C:\Windows\INF\oem23.inf
+
+[Version]
+Signature   = "$Windows NT$"
+Provider    = %NVIDIA%
+ClassGUID   = {4D36E968-E325-11CE-BFC1-08002BE10318}
+Class       = Display
+DriverVer   = 05/19/2026, 32.0.16.1047
+PnpLockdown = 1
+CatalogFile = NV_DISP.CAT
+[nv_CplInstaller]
+Default_addreg = nv_CplInstaller_addreg
+Default_copyfiles = nv_CplInstaller_copyfiles
+```
+
+`nvlddmkm.sys` = version `32.0.16.1047`, means the version matches. An mismatch fails adapter initialization with `STATUS_DEVICE_CONFIGURATION_ERROR` (`0xC0000182`) and records a live dump. There're some allowed mismatched, e.g. both major versions are below `21`, 
+
 ## RegistryMachin_* Keys
 
 These are from `dxgkrnl.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
