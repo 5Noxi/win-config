@@ -977,9 +977,9 @@ dd nt!PpmIdleDurationExpirationTimeout L1
 
 Everything above is based on 23H2, things changed a bit on 24H2, e.g. `PpmEcoQosProfile`/`PpmUtilityQosProfile` got added, but other parts seem to work the same.
 
-## Suboptions
+## [StorageD3InModernStandby](https://learn.microsoft.com/en-us/windows-hardware/design/component-guidelines/power-management-for-storage-hardware-devices-intro#d3-support)
 
-`Disable D3 in Modern Standby` isn't in the power key, but since the first suboption is already related to ModernStandby, and creating a new option for that would be too much, I'll add it here for now.
+Used in the `Disable D3 in Modern Standby` suboption, the value isn't in the power key, but since the first suboption is already related to ModernStandby, and creating a new option for that would be too much, I'll add it here for now.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Storage";
