@@ -3826,7 +3826,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DisableMultiSourceMPOCheck" = 0; // REG_DWORD (bool)
     "DisableOverlays" = 0; // REG_DWORD (bool)
     "DisablePagingContextGpuVa" = 0; // REG_DWORD (bool)
-    "DisableSecondaryIFlipSupport" = 0; // REG_DWORD (bool)
+    "DisableSecondaryIFlipSupport" = 0; // REG_DWORD (bool), secondary = secondary display
     "DriverManagesResidencyOverride" = 1; // REG_DWORD (bool)
     "DriverStoreCopyMode" = 1; // REG_DWORD, >1 = 2
     "EnableDecodeMPO" = 1; // REG_DWORD (bool)
@@ -3844,8 +3844,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "ForceExplicitResidencyNotification" = 0; // REG_DWORD (bool)
     "ForceInitPagingProcessVaSpace" = 0; // REG_DWORD (bool)
     "ForceReplicateGdiContent" = 0; // REG_DWORD (bool)
-    "ForceSecondaryIFlipSupport" = 0; // REG_DWORD (bool)
-    "ForceSecondaryMPOSupport" = 0; // REG_DWORD (bool)
+    "ForceSecondaryIFlipSupport" = 0; // REG_DWORD (bool), secondary = secondary display
+    "ForceSecondaryMPOSupport" = 0; // REG_DWORD (bool), secondary = secondary display
     "ForceSurpriseRemovalSupport" = 0; // REG_DWORD (bool)
     "ForceToMapGpuVa" = 0; // REG_DWORD (bool)
     "ForceVariableRefresh" = 0; // REG_DWORD (bool)
