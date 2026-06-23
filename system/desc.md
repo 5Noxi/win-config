@@ -4425,7 +4425,7 @@ v112[157] = &v62; // value data
 }
 ```
 
-## DisableVersionMismatchCheck
+### DisableVersionMismatchCheck
 
 Controls whether the display driver's INF & KMD (`.sys`) versions get compared and if they match. `0` (default) = compare versions, nonzero = skip. See the current `.inf` file name via:
 
