@@ -3858,7 +3858,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "ValidateWDDMCaps" = 0; // REG_DWORD (bool)
     "WDDM2LockManagement" = 1; // REG_DWORD (bool)
 
-    "NodeUsageTelemetryTimerInterval" = ?; // REG_DWORD, 25H2
+    "NodeUsageTelemetryTimerInterval" = 86400; // REG_DWORD, 25H2
 
     // DpiFdoInitializeFdo
     "DisableVaBackedVm" = 0; // REG_DWORD (bool)
@@ -3905,7 +3905,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     // misc (single function)
     "DRTTestEnable" = 0; // REG_DWORD, DxgkpIsDrtEnabled, 1484026436 = enabled?
     "EnableAcmSupportDeveloperPreview" = 0; // REG_DWORD (bool)
-    "ForceEnableDWMClone" = ?; // REG_DWORD, ADAPTER_DISPLAY::Initialize
+    "ForceEnableDWMClone" = ?; // REG_DWORD, ADAPTER_DISPLAY::Initialize (default depends on VirtualModeSupport, see DXGK_DISPLAY_DRIVERCAPS_EXTENSION in WDK)
     "HybridInternalPanelOverrideEnable" = 0; // REG_DWORD (bool), DpiHybridInternalPanelOverride
     "IsInternalRelease" = 0; // REG_DWORD (bool), DriverEntry
     "MultiMonSupport" = 1; // REG_DWORD (bool), DpiFdoHandleStartDevice
@@ -4273,24 +4273,46 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "PrimSurfSize.cy" = ?; // REG_DWORD
     "Stride" = ?; // REG_DWORD
 
-"HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\Connectivity\\<CONFIG_ID>";
-    // CCD_STORE::CONNECTED_SET_DESCRIPTOR::SetRecentTopologySetId
-    "Recent" = ?; // REG_SZ, persisted CCD set id for recent topology; no synthesized default
-
 "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\MONITOR-ID";
     // DpiPersistence::ReadDpiFromRegistry
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 ```
+
+### DisableOverlays
+
+Any nonzero data disables dxgkrnl [MPO support](https://noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for the adapter, so DWM/apps fall back to [composed](https://noverse.dev/docs/win-config/system/dwm-values/#present-modes) or non MPO presentation modes, `0` allows MPO support.
+
+```c
+// DisableOverlays = 0
+brave.exe[8984]:
+    000001EA9107F050 (DXGI): SyncInterval=1 Flags=256 CPU=16.623ms (60.2 fps) Display=16.676ms (60.0 fps) GPU=16.622ms Latency=22.396ms Hardware Composed: Independent Flip
+
+// DisableOverlays = 1
+brave.exe[7444]:
+    000002CDD6A4F050 (DXGI): SyncInterval=1 Flags=256 CPU=16.696ms (59.9 fps) Display=19.413ms (51.6 fps) GPU=3.510ms Latency=23.017ms Composed: Flip
+```
+
+```c
+// DXGADAPTER::ReadConfig
+
+v61 = 0;
+v123 = L"DisableOverlays";
+v124 = &v61;
+
+if ( v61 )
+  *((_BYTE *)this + 2756) = 0;
+
+// ADAPTER_RENDER::IsMultiPlaneOverlaySupported
+return *(_BYTE *)(*((_QWORD *)this + 2) + 2756LL);
+```
+
+That value is also kind of related to DWM's [`OverlayTestMode`](https://noverse.dev/docs/win-config/system/dwm-values/#overlaytestmode), `OverlayTestMode = 5` disables DWM's overlay use in `dwmcore`, while `DisableOverlays = 1` disables MPO support in `dxgkrnl` (both can prevent `Hardware Composed: Independent Flip`).
 
 ### ForceDirectFlip
 
 Placeholder
 
 ### ForceEnableDxgMms2
-
-Placeholder
-
-### ForceEnableDWMClone
 
 Placeholder
 
