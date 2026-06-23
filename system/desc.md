@@ -3824,6 +3824,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DisableIndependentVidPnVSync" = 0; // REG_DWORD (bool)
     "DisableMonitoredFenceGpuVa" = 0; // REG_DWORD (bool)
     "DisableMultiSourceMPOCheck" = 0; // REG_DWORD (bool)
+                                      // From my understaning, if this is set to 0 it would let dxgkrnl mark an supported MPO layout as TryAgain (DXGK_CHECK_MULTIPLANE_OVERLAY_SUPPORT_RETURN_INFO) when multiple unsynced outputs change at once, so DWM retries later (1 skips that)
     "DisableOverlays" = 0; // REG_DWORD (bool)
     "DisablePagingContextGpuVa" = 0; // REG_DWORD (bool)
     "DisableSecondaryIFlipSupport" = 0; // REG_DWORD (bool), secondary = secondary display
