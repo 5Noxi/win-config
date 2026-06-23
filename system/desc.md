@@ -1540,7 +1540,7 @@ brave.exe[4584]:
 | `5` | Disable MPO ([`COverlayContext::OverlaysEnabled`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-OverlaysEnabled@COverlayContext@@AEBA_NXZ.c) returns false & [`COverlayContext::IsCompatibleOutputScaling`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-IsCompatibleOutputScaling@COverlayContext@@AEAA_NAEBVCMILMatrix@@@Z.c) returns 0 for one "*CompatibleOutputScaling*") |
 | `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? Using `6` does allow MPO + uses the "*OverlayColor*", so it's the same as `1-3` after all.  |
 
-#### GetSwapChainOverlayColor
+#### [GetSwapChainOverlayColor](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor%40CDrawingContext%40%40AEBA-AU_D3DCOLORVALUE%40%40PEAVISwapChainRealization%40%40PEB.c)
 
 The mentioned "*OverlayColor*" are overlay debug rectrangles from DWM, there are 4 different colors that DWM can use (red, yellow, orange, cyan):
 
@@ -1587,7 +1587,7 @@ else
 retstr->g = 1.0;
 ```
 
-Example:
+Example (screenshot APIs don't capture the overlay color which is why I've used my phone):
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/debugcolor.jpg?raw=true)
 
@@ -3838,7 +3838,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "EnableWDDM23Synchronization" = 0; // REG_DWORD (bool)
     "Force32BitFences" = 0; // REG_DWORD (bool)
     "ForceAccessedPhysically" = 0; // REG_DWORD (bool)
-    "ForceDirectFlip" = 0; // REG_DWORD (bool)
+    "ForceDirectFlip" = 0; // REG_DWORD (bool), if enabled it forces SupportDirectFlip (D3DKMDT_PREEMPTION_CAPS) to return true, which would for example skip such requirements (which would happen if SupportDirectFlip is false)
+                           // "Driver reports SupportMultiPlaneOverlay cap but DirectFlip is not supported." (DXGADAPTER::Initialize)
     "ForceEnableDxgMms2" = 0; // REG_DWORD (bool)
     "ForceExplicitResidencyNotification" = 0; // REG_DWORD (bool)
     "ForceInitPagingProcessVaSpace" = 0; // REG_DWORD (bool)
@@ -4376,14 +4377,6 @@ return *(_BYTE *)(*((_QWORD *)this + 2) + 2756LL);
 ```
 
 That value is also kind of related to DWM's [`OverlayTestMode`](https://noverse.dev/docs/win-config/system/dwm-values/#overlaytestmode), `OverlayTestMode = 5` disables DWM's overlay use in `dwmcore`, while `DisableOverlays = 1` disables MPO support in `dxgkrnl` (both can prevent `Hardware Composed: Independent Flip`).
-
-### ForceDirectFlip
-
-Placeholder
-
-### ForceEnableDxgMms2
-
-Placeholder
 
 ### ForegroundPriorityBoost
 
