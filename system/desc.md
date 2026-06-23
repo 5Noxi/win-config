@@ -3821,10 +3821,10 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DisableBadDriverCheckForHwProtection" = 0; // REG_DWORD (bool)
     "DisableBoostedVSyncVirtualization" = 0; // REG_DWORD (bool)
     "DisableGdiContextGpuVa" = 0; // REG_DWORD (bool)
-    "DisableIndependentVidPnVSync" = 0; // REG_DWORD (bool)
+    "DisableIndependentVidPnVSync" = 0; // REG_DWORD (bool), VidPn = video present network
     "DisableMonitoredFenceGpuVa" = 0; // REG_DWORD (bool)
     "DisableMultiSourceMPOCheck" = 0; // REG_DWORD (bool)
-                                      // From my understaning, if this is set to 0 it would let dxgkrnl mark an supported MPO layout as TryAgain (DXGK_CHECK_MULTIPLANE_OVERLAY_SUPPORT_RETURN_INFO) when multiple unsynced outputs change at once, so DWM retries later (1 skips that)
+                                      // From my understaning, if this is set to 0 it would let dxgkrnl mark an supported MPO layout as TryAgain (DXGK_CHECK_MULTIPLANE_OVERLAY_SUPPORT_RETURN_INFO, d3dkmddi.h WDK) when multiple unsynced outputs change at once, so DWM retries later (1 skips that)
     "DisableOverlays" = 0; // REG_DWORD (bool)
     "DisablePagingContextGpuVa" = 0; // REG_DWORD (bool)
     "DisableSecondaryIFlipSupport" = 0; // REG_DWORD (bool), secondary = secondary display
@@ -3907,7 +3907,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "AllowAdvancedEtwLogging" = 0; // REG_DWORD (bool)
     "DiagnosticsBufferExpansionTime" = 300; // REG_DWORD
     "EnableFuzzing" = 0; // REG_DWORD (bool)
-    "EnableHMDTestMode" = 0; // REG_DWORD (bool)
+    "EnableHMDTestMode" = 0; // REG_DWORD (bool), HMD = head mounted display
     "EnableIgnoreWin32ProcessStatus" = 0; // REG_DWORD (bool)
     "ExternalDiagnosticsBufferMultiplier" = 1; // REG_DWORD
     "ExternalDiagnosticsBufferSize" = 16384; // REG_DWORD
@@ -3942,6 +3942,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "ForceBddFallbackOnly" = 0; // REG_DWORD (bool), 25H2
     "MiracastDefaultRtspPort" = 7236; // REG_DWORD, 0 = 7236
     "PlatformSupportMiracast" = 0; // REG_DWORD (bool)
+                                   // "Miracast enables seamless display of multimedia content — including high-resolution pictures, high-definition video content, live television shows and sports, and other copy-protected premium content — between Wi-Fi devices, even if a Wi-Fi network is not available."
+                                   // https://learn.microsoft.com/en-us/windows-hardware/drivers/display/wireless-displays--miracast-
     "SupportMultipleIntegratedDisplays" = 0; // REG_DWORD (bool)
     "SuspendAdapterTimerPeriod" = 500000; // REG_DWORD
 
@@ -3967,6 +3969,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
     // DpiMiracastGetForcedMode
     "MiracastForceDisable" = 2; // REG_DWORD
+                                // 0/>=2 = allow miracast
+                                // 1 = force disable miracast
     "MiracastUseIhvDriver" = 2; // REG_DWORD
 
     // DxgMonitor::MonitorColorState::OnInitialized, 25H2
