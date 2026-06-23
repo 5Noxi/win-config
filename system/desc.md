@@ -1513,14 +1513,83 @@ You can see the differences by moving a blurry window above a animation, for exa
 
 See [Multiplane Overlay (MPO)](https://noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for what MPO is.
 
+```c
+// OverlayTestMode = 0
+brave.exe[5508]:
+    000001C2D33F0050 (DXGI): SyncInterval=1 Flags=256 CPU=16.715ms (59.9 fps) Display=16.675ms (60.0 fps) GPU=16.714ms Latency=22.490ms Hardware Composed: Independent Flip
+
+// OverlayTestMode = 3
+brave.exe[6944]:
+    000001DD865B2050 (DXGI): SyncInterval=1 Flags=256 CPU=16.636ms (60.2 fps) Display=16.675ms (60.0 fps) GPU=16.635ms Latency=22.392ms Hardware Composed: Independent Flip
+
+// OverlayTestMode = 5
+brave.exe[4556]:
+    000002AFEE8B3050 (DXGI): SyncInterval=1 Flags=256 CPU=16.643ms (60.1 fps) Display=17.046ms (58.7 fps) GPU=3.548ms Latency=22.678ms Composed: Flip
+
+// OverlayTestMode = 6
+brave.exe[4584]:
+    00000218E3C90050 (DXGI): SyncInterval=1 Flags=256 CPU=38.330ms (26.1 fps) Display=43.594ms (23.0 fps) GPU=38.078ms Latency=44.017ms Hardware Composed: Independent Flip
+```
+
 | Data | Meaning |
 | --- | --- |
 | missing | No override of `m_dwOverlayTestMode`, I guess that's the same as `0` |
-| `0` | Allows MPO and no "*OverlayColor*" ([`CDrawingContext::GetSwapChainOverlayColor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor@CDrawingContext@@AEBA-AU_D3DCOLORVALUE@@PEAVISwapChainRealization@@PEB.c) returns zero if value is `0`), I've no idea what that color is used for at the moment |
+| `0` | Allows MPO and no "*OverlayColor*" ([`CDrawingContext::GetSwapChainOverlayColor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor@CDrawingContext@@AEBA-AU_D3DCOLORVALUE@@PEAVISwapChainRealization@@PEB.c) returns zero if value is `0`) |
 | `1-3` | Allows MPO + "*OverlayColor*" is enabled as the value is nonzero |
 | `4` | Kind of "Force success" for MPO support ([`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c) bypasses support query), this doesn't mean that surfaces get a overlay plane |
 | `5` | Disable MPO ([`COverlayContext::OverlaysEnabled`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-OverlaysEnabled@COverlayContext@@AEBA_NXZ.c) returns false & [`COverlayContext::IsCompatibleOutputScaling`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-IsCompatibleOutputScaling@COverlayContext@@AEAA_NAEBVCMILMatrix@@@Z.c) returns 0 for one "*CompatibleOutputScaling*") |
-| `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? `>= 6` data is probably just invalid. |
+| `>=6` | Would go into `>=4` part in [`COverlayContext::CheckMultiPlaneOverlaySupport`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-CheckMultiPlaneOverlaySupport@COverlayContext@@CA_NAEBV-$span@PEAVCOverlayContext@@$0-0@gsl@@AE.c), but only exactly `4` has the this force success case? Using `6` does allow MPO + uses the "*OverlayColor*", so it's the same as `1-3` after all.  |
+
+#### GetSwapChainOverlayColor
+
+The mentioned "*OverlayColor*" are overlay debug rectrangles from DWM, there are 4 different colors that DWM can use (red, yellow, orange, cyan):
+
+```c
+// CDrawingContext::GetSwapChainOverlayColor
+
+v4 = CCommonRegistryData::m_dwOverlayTestMode == 0;
+*(_OWORD *)&retstr->r = 0LL; // transparent
+if ( v4 )
+  return retstr; // OverlayTestMode = 0
+
+if ( (*(unsigned __int8 (__fastcall **)(const struct IBitmapResource *))(*(_QWORD *)a4 + 56LL))(a4) )
+{
+  retstr->g = 0.0;
+  retstr->b = 0.0;
+  retstr->r = 1.0;
+  retstr->a = 0.5; // red
+  goto LABEL_12;
+}
+
+if ( v9(v8 + 8, &GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6, &v14) < 0 )
+{
+  v11 = *(_BYTE *)(*((_QWORD *)this + 6) + 11297LL);
+  retstr->a = 0.5;
+
+  if ( v11 )
+  {
+    retstr->r = 1.0;
+    retstr->g = 0.77999997;
+    retstr->b = 0.055; // orange
+    goto LABEL_12;
+  }
+
+  retstr->r = 0.0;
+  retstr->b = 1.0; // cyan
+}
+else
+{
+  retstr->b = 0.0;
+  retstr->r = 1.0;
+  retstr->a = 0.5; // yellow
+}
+
+retstr->g = 1.0;
+```
+
+Example:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/debugcolor.jpg?raw=true)
 
 ### [RenderThreadTimeoutMilliseconds](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/_dynamic_initializer_for__CCommonRegistryData--RenderThreadTimeoutMilliseconds__.c)
 
