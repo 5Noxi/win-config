@@ -4282,19 +4282,19 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 ```
 
-## ForceDirectFlip
+### ForceDirectFlip
 
 Placeholder
 
-## ForceEnableDxgMms2
+### ForceEnableDxgMms2
 
 Placeholder
 
-## ForceEnableDWMClone
+### ForceEnableDWMClone
 
 Placeholder
 
-## ForegroundPriorityBoost
+### ForegroundPriorityBoost
 
 Gives foreground graphics contexts with a priority below `16` a minimum GPU scheduling priority of `16`, means when the GPU is busy, their queued GPU work can run before work with a lower scheduling priority.
 

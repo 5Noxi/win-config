@@ -451,7 +451,7 @@ The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio
 
 # USBFlags Values
 
-Value names in [`usbflags-HUBREG_QueryUsbflagsValuesForDevice.c`](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c) are mostly UNICODE_STRING globals, the names below are resolved from `dq offset ... ; "Name"`. The usbflags device key base path is `HKLM\SYSTEM\CurrentControlSet\Control\usbflags` (from `LRegistryMachineSystemCurrentControlSetControlusbflags` in `HUBREG_OpenCreateUsbflagsDeviceKey`).
+Value names in [`HUBREG_QueryUsbflagsValuesForDevice.c`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBHUB3/HUBREG_QueryUsbflagsValuesForDevice.c) are mostly UNICODE_STRING globals, the names below are resolved from `dq offset ; "Name"`. The usbflags device key base path is `HKLM\SYSTEM\CurrentControlSet\Control\usbflags` (from `LRegistryMachineSystemCurrentControlSetControlusbflags` in `HUBREG_OpenCreateUsbflagsDeviceKey`).
 
 ## USB_DEVICE_HACKS
 
@@ -576,19 +576,6 @@ Everything listed below is based on personal findings, mistakes may exist.
     //"EnablePLDRDuringCyclePort"
     //"ResetOnErrorInD2Resume"
 ```
-
-- [peripheral/assets | HUBDSM_QueryingRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBDSM_QueryingRegistryValuesForDevice.c)
-- [peripheral/assets | HUBMISC_QueryAndCacheRegistryValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBMISC_QueryAndCacheRegistryValuesForDevice.c)
-- [peripheral/assets | HUBREG_OpenCreateUsbflagsDeviceKey.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_OpenCreateUsbflagsDeviceKey.c)
-- [peripheral/assets | HUBREG_QueryUsbflagsValuesForDevice.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsValuesForDevice.c)
-- [peripheral/assets | HUBREG_QueryHubErrataFlags.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryHubErrataFlags.c)
-- [peripheral/assets | HUBREG_QueryUsbflagsAlternateSettingFilter.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/HUBREG_QueryUsbflagsAlternateSettingFilter.c)
-- [peripheral/assets | RegQueryGenericCompositeUSBDeviceString.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/RegQueryGenericCompositeUSBDeviceString.c)
-- [peripheral/assets | GetConfigValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/GetConfigValue.c)
-- [peripheral/assets | Controller_IsRegKeySetToDisableS0Idle.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_IsRegKeySetToDisableS0Idle.c)
-- [peripheral/assets | Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateRegistryOverrideForSetMultiTTBitFlag.c)
-- [peripheral/assets | Controller_PopulateTestRegistrySettings.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Controller_PopulateTestRegistrySettings.c)
-- [peripheral/assets | Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbflags/Registry_InitializeAllow64KLowOrFullSpeedControlTransfersFlag.c)
 
 ## RegistryMachin_* Keys
 
@@ -720,14 +707,6 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
     "BootPathSurpriseRemovalCount" = ?;
 ```
 
-- [peripheral/assets | GetPersistedKeyPath.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/GetPersistedKeyPath.c)
-- [peripheral/assets | HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
-- [peripheral/assets | HUBREG_QueryGlobalUsb20HardwareLpmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsb20HardwareLpmSettings.c)
-- [peripheral/assets | HUBREG_QueryGlobalUsbLtmSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryGlobalUsbLtmSettings.c)
-- [peripheral/assets | HUBREG_QueryUsbHardwareVerifierValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/HUBREG_QueryUsbHardwareVerifierValue.c)
-- [peripheral/assets | ReadManifestAssignedValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/ReadManifestAssignedValue.c)
-- [peripheral/assets | UsbDualRoleFeaturesQueryLocalMachine.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usb/UsbDualRoleFeaturesQueryLocalMachine.c)
-
 ## RegistryMachin_* Keys
 
 These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
@@ -776,14 +755,12 @@ aRegistryMachin_1 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\us
 
 ## Miscellaneous Notes
 
-`AttemptRecoveryFromUsbPowerDrain` is used to stop USB devices when your screen is off, obviously only for laptop users.
+[`AttemptRecoveryFromUsbPowerDrain`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBHUB3/HUBREG_OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c) is used to stop USB devices when your screen is off, obviously only for laptop users.
 
 ```
 Stop USB devices when my screen is off to help battery.
 ```
 `Bluetooth & devices` > `USB` > `USB battery saver`
-
-- [power/assets | usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/usbbattery-OpenQueryAttemptRecoveryFromUsbPowerDrainValue.c)
 
 # USBHUB Values
 
@@ -833,12 +810,6 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usbhub\\uxd_control\\pnp"; // g_UxdGuidSettingsKey (aRegistryMachin_3)
     "{GUID}" = ?; // value name from RtlStringFromGUID
 ```
-
-- [peripheral/assets | HUBREG_QueryUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryUxdDeviceKey.c)
-- [peripheral/assets | HUBREG_DeleteUxdDeviceKey.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_DeleteUxdDeviceKey.c)
-- [peripheral/assets | HUBREG_QueryGlobalUxdSettings.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalUxdSettings.c)
-- [peripheral/assets | HUBREG_QueryGlobalHubValues.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_QueryGlobalHubValues.c)
-- [peripheral/assets | HUBREG_GetUxdPnpValue.c](https://github.com/nohuto/win-config/tree/main/peripheral/assets/usbhub/HUBREG_GetUxdPnpValue.c)
 
 ## RegistryMachin_* Keys
 
@@ -1612,11 +1583,13 @@ powercfg /devicedisablewake device
 ```
 Disables the device (replace '*Device*' with the device name) from waking the system from any sleep state. 
 
-[`WakeOnInputDeviceTypes`](https://github.com/nohuto/regkit/blob/main/records/Input.txt) probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
+[`WakeOnInputDeviceTypes`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-UpdateWakeOnInputDeviceTypesFromRegistry%40CInputGlobals%40%40QEAAXXZ.c) probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
+
 ```
 \Registry\Machine\SYSTEM\INPUT : UnDimOnInputDeviceTypes
 \Registry\Machine\SYSTEM\INPUT : WakeOnInputDeviceTypes
 ```
+
 `UnDimOnInputDeviceTypes` probably refers to any dimmed elemets (pure speculation)? Disabling it wouldn't make sense. Values named `ButtonsAsVKeys` & `HardwareButtonsAsVKeys` may exist in `SYSTEM\\INPUT\\BUTTONS`, but I haven't looked further into it.
 
 Default values:
@@ -1624,8 +1597,6 @@ Default values:
 WakeOnInputDeviceTypes = 46
 UnDimOnInputDeviceTypes = -1  // 4294967295
 ```
-
-- [peripheral/assets | wakedev-WakeOnInputDeviceTypes.c](https://github.com/nohuto/win-config/blob/main/peripheral/assets/wakedev-WakeOnInputDeviceTypes.c)
 
 ## query_flag
 
@@ -1842,12 +1813,12 @@ HKR,,"MouseDataQueueSize",0x00010003,100
 >
 > — Microsoft KB Archive, [MouseDataQueueSize](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
 
-## [MouseDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-MouConfiguration.c)
+## [MouseDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mouclass/MouConfiguration.c)
 
-- not present = default `100` -> final `2400`
-- present and `0` = forced to `100` -> final `2400`
-- present and `1-0x0AAAAAAA` -> final `24 * raw`
-- present and `> 0x0AAAAAAA` -> final `2400`
+- not present = default `100` -> `2400`
+- present and `0` = forced to `100` -> `2400`
+- present and `1-0x0AAAAAAA` -> `24 * raw`
+- present and `> 0x0AAAAAAA` -> `2400`
 
 ```c
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = 100; // default
@@ -1872,12 +1843,12 @@ LABEL_10:
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = v11;
 ```
 
-## [KeyboardDataQueueSize](https://github.com/nohuto/win-config/blob/main/peripheral/assets/mkdata-KbdConfiguration.c)
+## [KeyboardDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/kbdclass/KbdConfiguration.c)
 
-- not present = default `100` -> final `1200`
-- present and `0` = forced to `100` -> final `1200`
-- present and `1-0x15555555` -> final `12 * raw`
-- present and `> 0x15555555` -> final `1200`
+- not present = default `100` -> `1200`
+- present and `0` = forced to `100` -> `1200`
+- present and `1-0x15555555` -> `12 * raw`
+- present and `> 0x15555555` -> `1200`
 
 ```c
 dword_1C000A234 = 100; // default
