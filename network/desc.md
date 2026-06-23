@@ -740,7 +740,7 @@ When enabled on TX side, the following capabilities are not be supported:
 
 ### Setup Information
 
-```inf
+```c
 HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
 HKR, Ndi\params\*NdisPoll,       Type,                 0, "enum"
 HKR, Ndi\params\*NdisPoll,       Default,              0, "1"
@@ -765,7 +765,7 @@ This feature allows packet burst handling, while avoiding packet drops that may 
 ```
 
 | Data | Meaning |
-| :----: | ---- |
+| ---- | ---- |
 | 0 | Disabled (default) |
 | 1 | Enables packet burst buffering using threaded DPC |
 | 2 | Enables packet burst buffering using polling |
@@ -779,7 +779,7 @@ Sets the completion methods of the receive packets, and it affects network throu
 
 ### Setup Information
 
-```inf
+```c
 HKR, NDI\Params\RecvCompletionMethod,  ParamDesc, 0, "%RecvCompletionMethod%"
 HKR, NDI\Params\RecvCompletionMethod,  Type,  0, "enum"
 HKR, NDI\Params\RecvCompletionMethod,  Default, 0, "1"
@@ -865,7 +865,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 ## Setup Information
 
 Intel driver example:
-```inf
+```c
 HKR, Ndi\params\*SpeedDuplex,                           ParamDesc,              0, %SpeedDuplex%
 HKR, Ndi\params\*SpeedDuplex,                           default,                0, "0"
 HKR, Ndi\params\*SpeedDuplex,                           type,                   0, "enum"
@@ -1132,7 +1132,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 ### Setup Information
 
 `Disable Wait for Link`:
-```inf
+```c
 , Wait for Link
 HKR, Ndi\Params\WaitAutoNegComplete,            ParamDesc,              0, %WaitAutoNegComplete%
 HKR, Ndi\Params\WaitAutoNegComplete,            default,                0, "2"
@@ -1142,7 +1142,7 @@ HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "2",                    0, %Auto
 HKR, Ndi\Params\WaitAutoNegComplete,            type,                   0, "enum"
 ```
 
-```inf
+```c
 HKR, Ndi\Params\*WakeOnMagicPacket,		ParamDesc,	0, 	%MagicPacket%
 HKR, Ndi\Params\*WakeOnMagicPacket,		Type,		0, 	"enum"
 HKR, Ndi\Params\*WakeOnMagicPacket\enum,	"1",		0, 	%Enabled%
@@ -1211,7 +1211,7 @@ The `default`/`min`/`max` data differs for users, e.g. if applying `4096` it may
 
 ## Setup Information
 
-```inf
+```c
 , *TransmitBuffers
 HKR, Ndi\params\*TransmitBuffers,               ParamDesc,              0, %TransmitBuffers%
 HKR, Ndi\params\*TransmitBuffers,               default,                0, "512"
@@ -1274,7 +1274,7 @@ ITR = Interrupt Throttle Rate.
 ## Setup Information
 
 Data/default is driver specific.
-```inf
+```c
 ;  Interrupt Throttle Rate
 HKR, Ndi\Params\ITR,                                    ParamDesc,              0, %InterruptThrottleRate%
 HKR, Ndi\Params\ITR,                                    default,                0, "65535"
@@ -1450,7 +1450,7 @@ The following events are logged:
 
 ## Setup Information
 
-```inf
+```c
 ,Log Link State Event
 HKR,Ndi\Params\LogLinkStateEvent,                       ParamDesc,              0, %LogLinkState%
 HKR,Ndi\Params\LogLinkStateEvent,                       Type,                   0, "enum"
@@ -1485,7 +1485,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ## Setup Information
 
-```inf
+```c
 , *FlowControl
 HKR, Ndi\Params\*FlowControl,                   ParamDesc,              0, %FlowControl%
 HKR, Ndi\Params\*FlowControl,                   default,                0, "3"
@@ -1514,7 +1514,7 @@ As the name says ("Jumbo"), it is used for big packets, you won't use this featu
 
 ## Setup Information
 
-```inf
+```c
 HKR, Ndi\params\*JumboPacket,	ParamDesc,	0, %JumboPacket%
 HKR, Ndi\params\*JumboPacket,	Type,		0, "enum"
 HKR, Ndi\params\*JumboPacket\enum,	"0",	0, "%Bytes1514%"
@@ -1557,7 +1557,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```inf
+```c
 ; Mellanox
 ; mlx4eth NT specific
 HKR, Ndi\Params\*VMQ,  ParamDesc, 0, "%VMQ%"
@@ -1597,7 +1597,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```inf
+```c
 , SRIOV Default switch registry keys.
 ,
 HKR, NicSwitches\0, *SwitchId,   %REG_DWORD%, 0
@@ -1663,7 +1663,7 @@ RegistryKey<enum HdSplitLocation>::Initialize(
 
 ### Setup Information
 
-```inf
+```c
 HKR, Ndi\Params\FecMode,                         ParamDesc,              0, %FecMode%
 HKR, Ndi\Params\FecMode,                         default,                0, "0"
 HKR, Ndi\Params\FecMode,                         min,                    0, "0"
@@ -1758,7 +1758,7 @@ This should only be enabled, if needed. The text above is just a personal assump
 
 ## Setup Information
 
-```inf
+```c
 ; Legacy Switch Compatibility Mode
 HKR, Ndi\params\LinkNegotiationProcess,                 ParamDesc,              0, %LinkNegotiationProcess%
 HKR, Ndi\params\LinkNegotiationProcess,                 default,                0, "1"

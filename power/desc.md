@@ -1159,7 +1159,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ### Setup Information
 
-```inf
+```c
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,type,         ,enum
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,default,      ,0

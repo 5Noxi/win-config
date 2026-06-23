@@ -1344,7 +1344,7 @@ AutoPlay is a feature that detects the type of content on newly inserted media o
 Disabling `ShellHWDetection` causes CmdPal to not start directly after boot for whatever reason, which is why I added a suboption to enable the service.
 
 Example `autorun.inf` content:
-```inf
+```c
 [autorun]
 open=Launch.exe
 icon=Launch.exe
@@ -1822,7 +1822,7 @@ Remove-Printer -Name "Printer Name"
 
 The value exists by default and is set to `100` decimal (`64` hex). Reducing it doesn't "reduce your latency", leave it default. E.g. setting it to `1` (MouseDataQueueSize) = queue size is 24 bytes (1 mouse packet) = one packet can be buffered, so bursts are much more likely to be dropped = worse. Decreasing it for saving memory is also very minimal, therefore there's no reason I could currently think of for decreasing it below 100.
 
-```inf
+```c
 ; keyboard.inf
 [KbdClass.HW]
 AddReg = KbdClass_HW_AddReg

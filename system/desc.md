@@ -4282,6 +4282,18 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 ```
 
+## ForceDirectFlip
+
+Placeholder
+
+## ForceEnableDxgMms2
+
+Placeholder
+
+## ForceEnableDWMClone
+
+Placeholder
+
 ## ForegroundPriorityBoost
 
 Gives foreground graphics contexts with a priority below `16` a minimum GPU scheduling priority of `16`, means when the GPU is busy, their queued GPU work can run before work with a lower scheduling priority.
@@ -4337,8 +4349,8 @@ Controls whether the display driver's INF & KMD (`.sys`) versions get compared a
 Get-PnpDevice -Class Display -PresentOnly | Get-PnpDeviceProperty -KeyName DEVPKEY_Device_DriverInfPath | Select-Object -ExpandProperty Data
 ```
 
-```inf
-; C:\Windows\INF\oem23.inf
+```c
+// C:\Windows\INF\oem23.inf
 
 [Version]
 Signature   = "$Windows NT$"
@@ -4353,7 +4365,7 @@ Default_addreg = nv_CplInstaller_addreg
 Default_copyfiles = nv_CplInstaller_copyfiles
 ```
 
-`nvlddmkm.sys` = version `32.0.16.1047`, means the version matches. An mismatch fails adapter initialization with `STATUS_DEVICE_CONFIGURATION_ERROR` (`0xC0000182`) and records a live dump. There're some allowed mismatched, e.g. both major versions are below `21`, 
+`nvlddmkm.sys` = version `32.0.16.1047`, means the version matches. An mismatch fails adapter initialization with `STATUS_DEVICE_CONFIGURATION_ERROR` (`0xC0000182`) and records a live dump. There're some allowed mismatched, e.g. both major versions are below `21`.
 
 ## RegistryMachin_* Keys
 
