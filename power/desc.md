@@ -1421,6 +1421,11 @@ So this TimerPowerSave part only applies when [`SetTimerCoalescingTolerance`](ht
 ### Default Data
 
 ```c
+lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveCoalescing L1
+fffffa1a`ab689210  02932e00 // 43200000
+```
+
+```c
 // ConfigureRITDelayableTimers
 v2 = InternalSetTimer(
         0,
@@ -1484,9 +1489,9 @@ else
 #### RITdemonTimerPowerSaveCoalescing
 
 - Default = `43200000`
-- No direct min/max clamp (means `0-0xFFFFFFFF`)
+- No min/max clamp (means `0-0xFFFFFFFF`)
 - `0xFFFFFFFF` (`-1`) disables coalescing here, as it always clears bit `0x200`, means no coalescing value is written
-- `0` could also disable coalescing, but only when the thread has bit `0x800000000` set in `GetAppCompatFlags2QuadWord` (saved in THREADINFO), I wasn't able to read that bit via WinDbg since `!pte win32kbase!gptiRit` shows "not valid", so I can't really tell when that bit gets set
+- `0` could also disable coalescing, but only when the thread has bit `0x800000000` set in `GetAppCompatFlags2QuadWord` (saved in THREADINFO), I wasn't able to read that bit via WinDbg since `!pte win32kbase!gptiRit` shows "not valid", so I can't really tell whenever that bit gets set
 
 ## Miscellaneous Values
 
