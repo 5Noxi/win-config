@@ -4239,6 +4239,10 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "SelfRefreshVramForceEvictionTimerDC" = 900; // REG_DWORD, 25H2
     "Supports64KBPages" = 0; // REG_DWORD (bool)
 
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\XXXX\\DxgkSettings";
+    // DXGADAPTER::InitializePowerManagement, adapter override (for GraphicsDrivers\\Power value) when version < 2400 (2.4) which was used in W10 1803
+    "UseSelfRefreshVRAMInS3" = 1; // REG_DWORD (bool)
+
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\MultiScreen";
     // IsMultiScreenClonedByDefault
     "ClonedByDefault" = 0; // REG_DWORD (bool)
