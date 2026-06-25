@@ -1421,7 +1421,8 @@ So this TimerPowerSave part only applies when [`SetTimerCoalescingTolerance`](ht
 ### Default Data
 
 ```c
-lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveElapse L1 // wasn't able to read that
+lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveElapse L1
+fffff11d`f1289214  02932e00 // 43200000
 
 lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveCoalescing L1
 fffffa1a`ab689210  02932e00 // 43200000
@@ -1493,7 +1494,34 @@ else
 - Default = `43200000`
 - No min/max clamp (means `0-0xFFFFFFFF`)
 - `0xFFFFFFFF` (`-1`) disables coalescing here, as it always clears bit `0x200`, means no coalescing value is written
-- `0` could also disable coalescing, but only when the thread has bit `0x800000000` set in `GetAppCompatFlags2QuadWord` (saved in THREADINFO), I wasn't able to read that bit via WinDbg since `!pte win32kbase!gptiRit` shows "not valid", so I can't really tell whenever that bit gets set
+- `0` could also disable coalescing, but only when the thread has bit `0x800000000` set in `GetAppCompatFlags2QuadWord` (saved in THREADINFO)
+
+You can dump the bit via WinDbg:
+
+```c
+lkd> !process 0 0 csrss.exe
+PROCESS ffffdb8b6da2f080
+    SessionId: 0  Cid: 02e4    Peb: f56fc32000  ParentCid: 02b8
+    DirBase: 10a790000  ObjectTable: ffffb587a746dc40  HandleCount: 299.
+    Image: csrss.exe
+
+PROCESS ffffdb8b6ec33140
+    SessionId: 1  Cid: 036c    Peb: 83046d0000  ParentCid: 035c
+    DirBase: 10ffb9000  ObjectTable: ffffb587aa7a2c40  HandleCount: 454.
+    Image: csrss.exe
+
+lkd> .process /p /r ffffdb8b6ec33140
+Implicit process is now ffffdb8b`6ec33140
+Loading User Symbols
+.......................
+lkd> dq win32kbase!gptiRit L1
+fffff11d`f0e94028  ffffb587`aa7b9010
+lkd> r @$t0 = poi(win32kbase!gptiRit)
+lkd> dq @$t0+0x288 L1
+ffffb587`aa7b9298  00000000`00000000
+lkd> ? poi(@$t0+0x288) & 0x800000000 // tagTHREADINFO offset
+Evaluate expression: 0 = 00000000`00000000 // not set
+```
 
 ## Miscellaneous Values
 
