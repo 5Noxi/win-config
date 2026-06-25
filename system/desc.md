@@ -4219,7 +4219,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     // DpiPersistence::ReadDpiFromRegistry
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
 
-// miscellaneous values that I found while looking through xrefs of RtlQueryRegistryValuesEx within dxgkrnl/dxgmms2
+// miscellaneous PnP key values that I found while looking through xrefs of RtlQueryRegistryValuesEx within dxgkrnl/dxgmms2
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\XXXX";
     // DpiReadPnpRegistryValue
@@ -4242,40 +4242,6 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\XXXX\\DxgkSettings";
     // DXGADAPTER::InitializePowerManagement, adapter override (for GraphicsDrivers\\Power value) when version < 2400 (2.4) which was used in W10 1803
     "UseSelfRefreshVRAMInS3" = 1; // REG_DWORD (bool)
-
-"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\MultiScreen";
-    // IsMultiScreenClonedByDefault
-    "ClonedByDefault" = 0; // REG_DWORD (bool)
-
-"HKLM\\SOFTWARE\\Microsoft\\Shell\\Docking";
-    // DefaultMultiScreenConfig::DisjointExperienceConfig
-    "EnabledForTest" = 0; // REG_DWORD (bool)
-    "UnsupportedLanguage" = 0; // REG_DWORD (bool)
-
-"HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\Experience";
-    // OutputDuplIsAllowedByMdmPolicy
-    "AllowScreenCapture" = 1; // REG_DWORD (bool)
-
-"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Theme";
-    // DpiInternal::CalcDpiOverride
-    "UserPreferenceWidth" = 0; // REG_DWORD
-
-"HKCU\\PhysicalDisplaySizeOverride";
-    // GetPhysicalDisplaySizeOverride
-    "Width" = 0; // REG_DWORD
-    "Height" = 0; // REG_DWORD
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\IDConfigDB\\CurrentDockInfo";
-    // DpGetDeviceInformation
-    "DockingState" = 0; // REG_DWORD
-
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services";
-    // DXGSESSIONDATA::DXGSESSIONDATA
-    "bEnumerateHWBeforeSW" = 0; // REG_DWORD (bool)
-
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations";
-    // DXGSESSIONDATA::DXGSESSIONDATA fallback
-    "fUseHardwareGPU" = 0; // REG_DWORD (bool)
 ```
 
 ### DisableOverlays
