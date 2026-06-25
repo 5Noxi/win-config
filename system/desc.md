@@ -3683,7 +3683,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DriverManagesResidencyOverride" = 1; // REG_DWORD (bool)
     "DriverStoreCopyMode" = 1; // REG_DWORD, >1 = 2
     "EnableDecodeMPO" = 1; // REG_DWORD (bool)
-    "EnableFbrValidation" = 1; // REG_DWORD (bool)
+    "EnableFbrValidation" = 1; // REG_DWORD (bool), Fbr = Front buffer rendering
     "EnableMultiPlaneOverlay3DDIs" = 0; // REG_DWORD (bool)
     "EnableOfferReclaimOnDriver" = 1; // REG_DWORD (bool)
     "EnablePanelFitterSupport" = 0; // REG_DWORD (bool)
@@ -3787,6 +3787,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DisableVaBackedVm" = 0; // REG_DWORD (bool)
     "DisableVersionMismatchCheck" = 0; // REG_DWORD (bool)
     "GpuVirtualizationFlags" = ?; // REG_DWORD
+    "DisableContainerSessionVersionCheck" = 0; // REG_DWORD (bool)
     "LimitNumberOfVfs" = 0; // REG_DWORD
     "VirtualGpuOnly" = 0; // REG_DWORD (bool)
 
@@ -3831,7 +3832,10 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
     // misc (single function)
     "DRTTestEnable" = 0; // REG_DWORD, DxgkpIsDrtEnabled, 1484026436 = enabled?
-    "EnableAcmSupportDeveloperPreview" = 0; // REG_DWORD (bool)
+    "DisableAutoAcpiPostDeivce" = 0; // REG_DWORD (bool), DpiFdoDetectPostDevice, typo?
+    "DxgEnableDesktopDuplicationDiagnostics" = 1; // REG_DWORD (bool), OUTPUTDUPL_MGR::IsDiagRegKeyEnabled
+    "EnableAcmSupportDeveloperPreview" = 0; // REG_DWORD (bool), Acm = AutoColorManagement
+    "EnableManualBrightnessMode" = 0; // REG_DWORD (bool), DpiBrightnessEscape
     "ForceEnableDWMClone" = ?; // REG_DWORD, ADAPTER_DISPLAY::Initialize (default depends on VirtualModeSupport, see DXGK_DISPLAY_DRIVERCAPS_EXTENSION in WDK)
     "HybridInternalPanelOverrideEnable" = 0; // REG_DWORD (bool), DpiHybridInternalPanelOverride
     "IsInternalRelease" = 0; // REG_DWORD (bool), DriverEntry
@@ -3946,6 +3950,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "PhysicalHeapHighestAddress" = 4294967295; // REG_QWORD
     "PhysicalHeapLowestAddress" = 0; // REG_QWORD
     "PhysicalHeapSize" = 0; // REG_QWORD
+
+    "MaxSegmentSize" = 0; // REG_DWORD, dynamic name (MaxSegmentSize<0-31>), nonzero rounded to 4KB & min 8MB
 
     // VIDMM_GLOBAL::ReadCommitLimitInformation
     "MinimumSystemMemoryCommitLimit" = 0; // REG_DWORD
@@ -4077,6 +4083,10 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "SystemMemoryFragmentationBuffer" = 5; // REG_DWORD, max 50
     "VideoMemoryFragmentationBuffer" = 10; // REG_DWORD, max 50
 
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Paravirtualization";
+    // DXGVIRTUALGPUMANAGER_PARAV::CreateVirtualGpu
+    "GuestIoSpaceSizeInMb" = ?; // REG_DWORD, 23H2 default 1, 25H2 default 8192
+
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Power";
     // DXGADAPTER::InitializePowerManagement
     "UseSelfRefreshVRAMInS3" = 1; // REG_DWORD (bool)
@@ -4089,6 +4099,11 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "DisableBasicDisplayFallback" = 4294967295; // REG_DWORD
     "EnableBasicDisplayFallback" = 4294967295; // REG_DWORD
     "ForcePreserveBootDisplay" = 0; // REG_DWORD (bool)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Mdm";
+    // DISPLAY_MUX_MGR::Init, 25H2
+    "EnableMdmExperimentalDynamicFeature" = 0; // REG_DWORD (bool)
+    "EnableMdmExperimentalStaticFeature" = 0; // REG_DWORD (bool)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers\\Smm";
     // SmmQueryRegistry
@@ -4140,7 +4155,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "HDREnabled" = 0; // REG_DWORD (bool), 25H2
     "SDRWhiteLevel" = 1000; // REG_DWORD, internal default 1000, external 3000
 
-    // DxgMonitor::MonitorColorState::OnFunctionDriverArrival
+    // DxgMonitor::MonitorColorState::OnFunctionDriverArrival, Acm = AutoColorManagement
     "EnableIntegratedPanelAcmByDefault" = 0; // REG_DWORD (bool)
     "EnableIntegratedPanelHdrByDefault" = 0; // REG_DWORD (bool)
     "MicrosoftApprovedAcmSupport" = 0; // REG_DWORD (bool)
@@ -4203,6 +4218,60 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 "HKLM\\System\\CurrentControlSet\\Control\\GraphicsDrivers\\ScaleFactors\\MONITOR-ID";
     // DpiPersistence::ReadDpiFromRegistry
     "DpiValue" = 0; // REG_DWORD, https://noverse.dev/docs/win-config/system/display-scaling/
+
+// miscellaneous values that I found while looking through xrefs of RtlQueryRegistryValuesEx within dxgkrnl/dxgmms2
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\XXXX";
+    // DpiReadPnpRegistryValue
+    "AllowUnspecifiedHSync" = 0; // REG_DWORD (bool)
+    "AllowUnspecifiedPixelRate" = 0; // REG_DWORD (bool)
+    "AllowUnspecifiedVSync" = 0; // REG_DWORD (bool)
+    "DisableNonPOSTDevice" = 0; // REG_DWORD (bool)
+    "EnableVirtualTopologySupport" = 0; // REG_DWORD (bool)
+    "ForceDualViewBehavior" = 0; // REG_DWORD (bool)
+    "NeedToSuspendVidSchBeforeSetGammaRamp" = ?; // REG_DWORD (bool)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\XXXX\\MemoryManager";
+    // VIDMM_GLOBAL::ReadPhysicalAdapterConfiguration
+    "MaxLocalSegmentSize" = 0; // REG_DWORD (MB)
+    "MaxNonLocalSegmentSize" = 0; // REG_DWORD (MB)
+    "SelfRefreshVramForceEvictionTimerAC" = 900; // REG_DWORD, 25H2
+    "SelfRefreshVramForceEvictionTimerDC" = 900; // REG_DWORD, 25H2
+    "Supports64KBPages" = 0; // REG_DWORD (bool)
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\MultiScreen";
+    // IsMultiScreenClonedByDefault
+    "ClonedByDefault" = 0; // REG_DWORD (bool)
+
+"HKLM\\SOFTWARE\\Microsoft\\Shell\\Docking";
+    // DefaultMultiScreenConfig::DisjointExperienceConfig
+    "EnabledForTest" = 0; // REG_DWORD (bool)
+    "UnsupportedLanguage" = 0; // REG_DWORD (bool)
+
+"HKLM\\SOFTWARE\\Microsoft\\PolicyManager\\current\\Experience";
+    // OutputDuplIsAllowedByMdmPolicy
+    "AllowScreenCapture" = 1; // REG_DWORD (bool)
+
+"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\Theme";
+    // DpiInternal::CalcDpiOverride
+    "UserPreferenceWidth" = 0; // REG_DWORD
+
+"HKCU\\PhysicalDisplaySizeOverride";
+    // GetPhysicalDisplaySizeOverride
+    "Width" = 0; // REG_DWORD
+    "Height" = 0; // REG_DWORD
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\IDConfigDB\\CurrentDockInfo";
+    // DpGetDeviceInformation
+    "DockingState" = 0; // REG_DWORD
+
+"HKLM\\SOFTWARE\\Policies\\Microsoft\\Windows NT\\Terminal Services";
+    // DXGSESSIONDATA::DXGSESSIONDATA
+    "bEnumerateHWBeforeSW" = 0; // REG_DWORD (bool)
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations";
+    // DXGSESSIONDATA::DXGSESSIONDATA fallback
+    "fUseHardwareGPU" = 0; // REG_DWORD (bool)
 ```
 
 ### DisableOverlays
