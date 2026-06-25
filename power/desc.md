@@ -1421,6 +1421,8 @@ So this TimerPowerSave part only applies when [`SetTimerCoalescingTolerance`](ht
 ### Default Data
 
 ```c
+lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveElapse L1 // wasn't able to read that
+
 lkd> dd win32kfull!gdwRITdaemonTimerPowerSaveCoalescing L1
 fffffa1a`ab689210  02932e00 // 43200000
 ```
