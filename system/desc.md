@@ -1196,6 +1196,12 @@ Means the app renders into buffers, presents one of those buffers, the surface i
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/buffers-surfaces-and-presents.png?raw=true)
 
+#### DXGI Flip Model Swapchain
+
+Another different example including more params, see '[Swap Chain Parameters](https://www.intel.com/content/www/us/en/developer/articles/code-sample/sample-application-for-direct3d-12-flip-model-swap-chains.html)' for details on the parameters.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/intel-presentation.png?raw=true)
+
 ### Direct Scanout
 
 Means that presented content can be scanned out by the display hardware without first being rendered into DWMs composed desktop frame.
@@ -1545,7 +1551,15 @@ brave.exe[4584]:
 
 #### [GetSwapChainOverlayColor](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dwmcore/-GetSwapChainOverlayColor%40CDrawingContext%40%40AEBA-AU_D3DCOLORVALUE%40%40PEAVISwapChainRealization%40%40PEB.c)
 
-The mentioned "*OverlayColor*" are overlay debug rectrangles from DWM, there are 4 different colors that DWM can use (red, yellow, orange, cyan):
+The mentioned "*OverlayColor*" are overlay debug rectrangles from DWM, there are 4 different colors that DWM can use (red, yellow, orange, cyan). These colors aren't related to present modes, and I can't really tell their actual meaning yet, here's my current findings:
+
+- Transparent = DWM draws no color
+- Red = `IBitmapResource::IsWhitePixelInTopLeft()` = true
+- Yellow = `swapChain->QueryInterface(GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6)` succeeds + swap chain has advanced DirectFlip
+- Cyan = `swapChain->QueryInterface(GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6)` fails + no advanced DirectFlip
+- Orange = `swapChain->QueryInterface(GUID_51e2a1f0_4a0d_4788_800f_3cee7a2512a6)` fails (similar to cyan but it has an extra flag?)
+
+"Advanced DirectFlip" isn't the same as DirectFlip described at the beginning.
 
 ```c
 // CDrawingContext::GetSwapChainOverlayColor
