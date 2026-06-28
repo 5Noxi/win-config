@@ -1230,7 +1230,7 @@ if ( !v2 || !PspUseJobSchedulingClasses )
   return *((_BYTE *)&PspForegroundQuantum + (PsPrioritySeparation & (unsigned int)-(a2 != 0))); // a2 == 0 uses index 0
 ```
 
-The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`5.208 ms` per QU on 23H2, `0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU]()'.
+The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`5.208 ms` per QU on 23H2, `0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
 
 | Quantum table | Index `0` | Index `1` | Index `2` |
 | --- | ---: | ---: | ---: |
@@ -1370,7 +1370,7 @@ Note that I've done that test on 23H2, and it *seems* to be fixed on 25H2 (haven
 >
 > — Windows Internals, [E7, P1: 'Quantum'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-The client default of two clock intervals is the background (index `0`) value, see '[Index Table]()'. The quote above is valid on 23H2, but with `ShortThreadQuantum` on 24H2, it makes each unit six times smaller (`clock interval / 18` instead of `clock interval / 3`) and adds a per thread `BamQosLevel` override (see '[QoS Quantum Override]()').
+The client default of two clock intervals is the background (index `0`) value, see '[Index Table](https://noverse.dev/docs/win-config/system/priority-separation/#index-table)'. The quote above is valid on 23H2, but with `ShortThreadQuantum` on 24H2, it makes each unit six times smaller (`clock interval / 18` instead of `clock interval / 3`) and adds a per thread `BamQosLevel` override (see '[QoS Quantum Override (`BamQosLevel`)](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel)').
 
 ### Threads QuantumReset
 
@@ -1455,11 +1455,11 @@ LABEL_7:
 KiVariableQuantumEnabled = 1; // 01/client default
 ```
 
-See '[QoS Quantum Override (`BamQosLevel`)]()' to understand what `KiVariableQuantumEnabled` is used for.
+See '[QoS Quantum Override (`BamQosLevel`)](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel)' to understand what `KiVariableQuantumEnabled` is used for.
 
 ### Long/Short Interval (`5:4`)
 
-Each table has six bytes, the first three are the short entries, the last three are the long entries, see '[Index Table]()' for the length differences.
+Each table has six bytes, the first three are the short entries, the last three are the long entries, see '[Index Table](https://noverse.dev/docs/win-config/system/priority-separation/#index-table)' for the length differences.
 
 | Bits `5:4` | Meaning |
 | --- | --- |
@@ -3902,9 +3902,9 @@ Example with a game that sets itself to real time (there're probably any game de
 
 #### FG Boost with Game Mode
 
-Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See [quantum-priority-separation/#bits-01](https://noverse.dev/docs/win-config/system/quantum-priority-separation/#bits-01) for more details on the topic itself. 
+Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See '[PsPrioritySeparation (`1:0`)](https://noverse.dev/docs/win-config/system/priority-separation/#pspriorityseparation-10)' for more details on the topic itself. 
 
-You can test it by following the [watching-the-boost](https://noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
+You can test it by following the '[Watching the FG Priority Boost](https://noverse.dev/docs/win-config/system/priority-separation/#watching-the-fg-priority-boost)' guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
 
 ```powershell
 $TID = # add TID
@@ -4230,7 +4230,7 @@ else
 
 - WU driver updates/automatic restarts/restart notifications shouldn't be enabled, so that behavior doesn't matter.
 - [Process priority class](https://noverse.dev/docs/win-config/system/game-mode/#process-priority-class) can prevent a game from setting itself to `REALTIME_PRIORITY_CLASS` as Game Mode would overwrite that with `NORMAL_PRIORITY_CLASS`. If a game doesn't have such issues, the priority classes Game Mode uses are usually similar to what normal games already use.
-- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter (follow [watching-the-boost](https://noverse.dev/docs/win-config/system/quantum-priority-separation/#watching-the-boost) but with the game, as said in the section).
+- Game Mode prevents the FG boost from happening (tested on 23H2), if you don't use `PsPrioritySeparation` FG boost (`1`/`2`), then this doesn't matter (follow '[Watching the FG Priority Boost](https://noverse.dev/docs/win-config/system/priority-separation/#watching-the-fg-priority-boost)' but with the game, as said in the section).
 - I haven't seen any game yet where Game Mode applied [CPU Sets](https://noverse.dev/docs/win-config/system/game-mode/#cpu-sets) through `GetProcessDefaultCpuSets`, if Game Mode chose proper CPU set IDs, this could be useful, but I wouldn't trust Microsoft with that.
 - [GPU policy](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget) should only be noticeable if the system has GPU scheduling (`D3DKMTSetYieldPercentage`, means when there's a lot of GPU work in the background, see '[GPU yield percentage](https://noverse.dev/docs/win-config/system/game-mode/#gpu-scheduler--gpu-memory-budget)' description?) or GPU memory issues (if VRAM is kind of used while background processes need GPU memory, e.g. high quality captures?).
 - [Game Mode power profile](https://noverse.dev/docs/win-config/system/game-mode/#game-mode-power-profile-wnf-state) doesn't seem to have any effect when the active scheme is already `GUID_MIN_POWER_SAVINGS` or a modified version of that scheme (must be GUID of `GUID_MIN_POWER_SAVINGS`, so not a copied version of it).
