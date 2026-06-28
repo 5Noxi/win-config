@@ -2525,7 +2525,7 @@ Everything listed below is based on personal findings, mistakes may exist.
                                                        // 0/1/missing = enabled (measure time between accounting points)
     "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero = enabled
     "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
-    "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy
+    "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy, https://noverse.dev/docs/win-config/system/priority-separation/#forceforegroundboostdecay
     "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
     "ForceParkingRequested" = 1; // KiForceParkingConfiguration
     "GlobalTimerResolutionRequests" = 0; // KiGlobalTimerResolutionRequests
