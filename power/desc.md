@@ -1143,7 +1143,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "PowerThrottlingOff" = 0; // PpmPerfQosGroupPolicyDisable 
 ```
 
-## [PowerThrottlingOff](https://noverse.dev/policies?p=Power*PowerThrottlingTurnOff)
+### [PowerThrottlingOff](https://noverse.dev/policies?p=Power*PowerThrottlingTurnOff)
 
 > "*The Quality of Service (QoS) associated with a thread is used to indicate the desired performance and power efficiency. Each thread is assigned to a QoS level. While scheduling priority remains the main metric by which the system determines which thread to schedule next, QoS can influence core selection and processor power management. On platforms with heterogeneous processors, the QoS of a thread may restrict scheduling to a subset of processors, or indicate a preference for a particular class of processor.*"
 >
@@ -1160,7 +1160,7 @@ See current value using WinDbg:
 dd nt!PpmPerfQosGroupPolicyDisable L1
 ```
 
-### Processor QoS
+#### Processor QoS
 
 [`PopInitializeHeteroProcessors`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PopInitializeHeteroProcessors.c) decides whether PPM (processor power management) QoS is allowed:
 
@@ -1214,7 +1214,7 @@ I currently don't know if the `KeActiveProcessors` offset is the same for all bu
 uf nt!KeQueryActiveProcessorCountEx
 ```
 
-### QoS Policies
+#### QoS Policies
 
 [`PpmPerfCalculateQosClassPolicies`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmPerfCalculateQosClassPolicies.c) also uses the value:
 
@@ -1226,7 +1226,7 @@ if ( PpmPerfQosGroupPolicyDisable )
 
 A nonzero value adds flag `0x100` & skips the remaining policy part for that class.
 
-### Idle Duration Expiration
+#### Idle Duration Expiration
 
 `v5 = 0` can also prevent one call to [`PpmIdleEnableIdleDurationExpirationTimeout`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleEnableIdleDurationExpirationTimeout.c):
 
