@@ -1,169 +1,3 @@
-# Desktop Wallpaper
-
-This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
-
-### Asia
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Asia.png?raw=true)
-
-### Austria
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Austria.png?raw=true)
-
-### Beach
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true)
-
-### Blue Flowers
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true)
-
-### Bones
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
-
-### Castle
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Castle.png?raw=true)
-
-### Cat
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true)
-
-### City
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
-
-### Dark Sunset
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
-
-### Field Sunset
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
-
-### Flowers
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
-
-### Flowers Sunset
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
-
-### Golden Hour
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
-
-### Heaven
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true)
-
-### Lake
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Lake.png?raw=true)
-
-### Mac
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true)
-
-### Magic Forest
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Magic-Forest.png?raw=true)
-
-### Man Landscape
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
-
-### Meadow Sunset
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true)
-
-### Moon
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true)
-
-### Moon Castle
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Castle.png?raw=true)
-
-### Moon Rose
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Rose.png?raw=true)
-
-### Mountains
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true)
-
-### Plants Room
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true)
-
-### Pokemon
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Pokemon.png?raw=true)
-
-### Rain
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true)
-
-### Sea
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
-
-### Sea Road
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true)
-
-### Shop
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true)
-
-### Stars
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars.png?raw=true)
-
-### Stars Lake 1
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-1.png?raw=true)
-
-### Stars Lake 2
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-2.png?raw=true)
-
-### Stars Lake 3
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-3.png?raw=true)
-
-### Sunset
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sunset.png?raw=true)
-
-### Village
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true)
-
-### Witcher Landscape
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
-
-### Workplace
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
-
-### World
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
-
-### Zelda
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Desktop Wallpaper](https://noverse.dev/policies?p=Desktop*Wallpaper) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `Wallpaper`<br>`WallpaperStyle` |
-
 # Explorer Options
 
 It changes every setting which is shown in the `Folder Options` window. Some are personal preference, see suboptions below for customization.
@@ -405,6 +239,172 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties
 | [Hide and disable all items on the desktop](https://noverse.dev/policies?p=Desktop*NoDesktop) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoDesktop` |
 | [Do not keep history of recently opened documents](https://noverse.dev/policies?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
 | [Prohibit access of the Windows Connect Now wizards](https://noverse.dev/policies?p=WindowsConnectNow*WCN_DisableWcnUi_2) | `HKLM\Software\Policies\Microsoft\Windows\WCN\UI` | `DisableWcnUi` |
+
+# Desktop Wallpaper
+
+This is a collection of some wallpapers that I've found over time. Added for people who may never have spent time changing their background, or for anyone else. Head over to [visibility/desc.md#desktop-wallpaper](https://github.com/nohuto/win-config/blob/main/visibility/desc.md#desktop-wallpaper), if you want to see the wallpapers in a seperate window.
+
+### Asia
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Asia.png?raw=true)
+
+### Austria
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Austria.png?raw=true)
+
+### Beach
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Beach.png?raw=true)
+
+### Blue Flowers
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Blue-Flowers.png?raw=true)
+
+### Bones
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Bones.png?raw=true)
+
+### Castle
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Castle.png?raw=true)
+
+### Cat
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cat.png?raw=true)
+
+### City
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
+
+### Dark Sunset
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
+
+### Field Sunset
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
+
+### Flowers
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
+
+### Flowers Sunset
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
+
+### Golden Hour
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Golden-Hour.png?raw=true)
+
+### Heaven
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Heaven.png?raw=true)
+
+### Lake
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Lake.png?raw=true)
+
+### Mac
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mac.png?raw=true)
+
+### Magic Forest
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Magic-Forest.png?raw=true)
+
+### Man Landscape
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Man-Landscape.png?raw=true)
+
+### Meadow Sunset
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Meadow-Sunset.png?raw=true)
+
+### Moon
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon.png?raw=true)
+
+### Moon Castle
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Castle.png?raw=true)
+
+### Moon Rose
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Moon-Rose.png?raw=true)
+
+### Mountains
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Mountains.png?raw=true)
+
+### Plants Room
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Plants-Room.png?raw=true)
+
+### Pokemon
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Pokemon.png?raw=true)
+
+### Rain
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true)
+
+### Sea
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
+
+### Sea Road
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true)
+
+### Shop
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Shop.png?raw=true)
+
+### Stars
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars.png?raw=true)
+
+### Stars Lake 1
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-1.png?raw=true)
+
+### Stars Lake 2
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-2.png?raw=true)
+
+### Stars Lake 3
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Stars-Lake-3.png?raw=true)
+
+### Sunset
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sunset.png?raw=true)
+
+### Village
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true)
+
+### Witcher Landscape
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Witcher-Landscape.png?raw=true)
+
+### Workplace
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Workplace.png?raw=true)
+
+### World
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/World.png?raw=true)
+
+### Zelda
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
+
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Desktop Wallpaper](https://noverse.dev/policies?p=Desktop*Wallpaper) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `Wallpaper`<br>`WallpaperStyle` |
 
 # Pointer Style
 
