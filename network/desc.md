@@ -749,7 +749,7 @@ That guide ([WinOF-2 v23.7](https://docs.nvidia.com/nvidia-winof-2-documentation
 
 ## [AsyncReceiveIndicate](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf) (Packet Burst Handling)
 
-This feature allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
+This feature (used by mlx driver) allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
 
 | Data | Meaning |
 | ---- | ---- |
