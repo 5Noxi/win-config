@@ -1380,6 +1380,7 @@ The client default of two clock intervals is the background (index `0`) value, s
 You can display the current `QuantumReset` of threads via `dt _KTHREAD <thread address> QuantumReset`, I've used `0x18` while running the commands below.
 
 ```c
+// 0x18
 lkd> db PspForegroundQuantum L3
 fffff805`45954bec  24 24 24                                         $$$
 
@@ -1400,7 +1401,36 @@ PROCESS ffff8084c5d5f080
 
 lkd> dt _KTHREAD ffff8084c125d080 QuantumReset
    +0x28b QuantumReset : 0x24 '$'
+
+// 0x2 (default)
+lkd> db PspForegroundQuantum L3
+fffff800`56354bec  06 0c 12                                         ...
+
+lkd> !process 0 4 CPUSTRES.exe
+PROCESS ffffd687c63fb380
+    SessionId: 1  Cid: 09d4    Peb: 011dd000  ParentCid: 0fd0
+    DirBase: 7862de000  ObjectTable: ffffe6886846cc40  HandleCount: 197.
+    Image: CPUSTRES.EXE
+
+        THREAD ffffd687c48a8080  Cid 09d4.1ad4  Teb: 00000000011df000 Win32Thread: ffffd687c6c95ed0 WAIT
+        THREAD ffffd687c5949080  Cid 09d4.195c  Teb: 00000000011e3000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd687c2269140  Cid 09d4.19a4  Teb: 00000000011e7000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd687c43460c0  Cid 09d4.1a28  Teb: 00000000011eb000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd687c43350c0  Cid 09d4.13d0  Teb: 00000000011ef000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd687c70020c0  Cid 09d4.1018  Teb: 00000000011f3000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd687c6e75080  Cid 09d4.1b18  Teb: 00000000011f7000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffffd687c4f8f080  Cid 09d4.1b34  Teb: 00000000011fb000 Win32Thread: 0000000000000000 WAIT
+
+lkd> dt _KTHREAD ffffd687c48a8080 QuantumReset
+nt!_KTHREAD
+   +0x28b QuantumReset : 0x6 '' // BG
+
+lkd> .sleep 0n3000; dt _KTHREAD ffffd687c48a8080 QuantumReset
+nt!_KTHREAD
+   +0x28b QuantumReset : 0x12 '' // FG
 ```
+
+This is also a practical example of "*BG (background) processes use index `0`, FG processes use the index from `PsPrioritySeparation`*" ([Index Table](https://noverse.dev/docs/win-config/system/priority-separation/#index-table)). 
 
 ### Variable/Fixed Quantum (`3:2`)
 
