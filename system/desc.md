@@ -4871,6 +4871,39 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "UseSelfRefreshVRAMInS3" = 1; // REG_DWORD (bool)
 ```
 
+### EnablePreemption
+
+With [GPU preemption](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-preemption) the video scheduler can interrupt the context executing on a GPU engine, run another context, and later resume the interrupted work (context here = GPU command stream & execution state). The scheduler requests such an interrupt using a preemption packet, the [black packet](https://learn.microsoft.com/en-us/windows-hardware/drivers/display/gpu-hardware-queue#types-of-dma-packets) is a such a preemption packet:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/gpu-preemption.png?raw=true)
+
+[`VidSchiReadGlobalConfiguration`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dxgmms2/VidSchiReadGlobalConfiguration.c) stores any nonzero data as bit `0`:
+
+```c
+// VidSchiReadGlobalConfiguration
+
+v59 = 1; // default
+v112[23] = L"EnablePreemption";
+v112[24] = &v59;
+
+*(_DWORD *)(a1 + 2536) = (v62 != 0 ? 0x400 : 0) | (v61 != 0 ? 0x100 : 0) | (v60 != 0 ? 0x10 : 0) | (v59 != 0) | (v58 != 0 ? 4 : 0) | (v57 != 0 ? 2 : 0) | *(_DWORD *)(a1 + 2536) & 0xFFFFFAE8;
+// v59 != 0 sets bit 0
+```
+
+[`VidSchiCheckPreemptionPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dxgmms2/VidSchiCheckPreemptionPolicy.c) reads that bit when deciding whether the context should preempt the running one. If disabled, [`VidSchiSubmitPreemptionCommand`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/dxgmms2/VidSchiSubmitPreemptionCommand.c) isn't called, means it can't interrupt the current work so other contexts have to wait.
+
+You can read bit `0` via (the offsets will very likely be different for you):
+
+```c
+lkd> .reload /f dxgkrnl.sys
+lkd> r @$t0 = poi(dxgkrnl+0x140aa8) // DXGGLOBAL::m_pGlobal
+lkd> r @$t1 = poi(@$t0+0x300) // DXGADAPTER
+lkd> r @$t2 = poi(@$t1+0xb70) // ADAPTER_RENDER
+lkd> r @$t3 = poi(@$t2+0x2e8) // VIDSCH_GLOBAL
+lkd> .printf "EnablePreemption=%u\n", dwo(@$t3+0x9e8)&1
+EnablePreemption=1
+```
+
 ### DisableOverlays
 
 Any nonzero data disables dxgkrnl [MPO support](https://noverse.dev/docs/win-config/system/dwm-values/#multiplane-overlay-mpo) for the adapter, so DWM/apps fall back to [composed](https://noverse.dev/docs/win-config/system/dwm-values/#present-modes) or non MPO presentation modes, `0` allows MPO support.
