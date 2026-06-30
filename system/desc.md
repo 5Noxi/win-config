@@ -1233,7 +1233,7 @@ if ( !v2 || !PspUseJobSchedulingClasses )
   return *((_BYTE *)&PspForegroundQuantum + (PsPrioritySeparation & (unsigned int)-(a2 != 0))); // a2 == 0 uses index 0
 ```
 
-The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`5.208 ms` per QU on 23H2, `0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
+The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`~5.208 ms` per QU on 23H2, `~0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
 
 | Quantum table | Index `0` | Index `1` | Index `2` |
 | --- | ---: | ---: | ---: |
@@ -1607,7 +1607,7 @@ CP  F/M/S Manufacturer  MHz PRCB Signature    MSR 8B Signature Features Architec
 11 25,33,2 AuthenticAMD 3700 000000000a201213                   3c3b3dff 0
 ```
 
-Then combine that MHz value with the decimal `KeMaximumIncrement` (same as clockres '*Maximum timer interval*') value. `KeMaximumIncrement` is measured in 100ns units, means `0x2625A` is `156250` (`15.625 ms`), one QU is therefore `15.625 / 3 = 5.208 ms`.
+Then combine that MHz value with the decimal `KeMaximumIncrement` (same as clockres '*Maximum timer interval*') value. `KeMaximumIncrement` is measured in 100ns units, means `0x2625A` is `156250` (`15.625 ms`), one QU is therefore `15.625 / 3 = ~5.208 ms`.
 
 ```c
 lkd> dd KeMaximumIncrement L1
@@ -7110,9 +7110,9 @@ PSComputerName               :
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress1.png?raw=true)
 
 # Disable Page Combining
 
