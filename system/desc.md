@@ -1216,6 +1216,9 @@ fffff801`2611ec7c  00000001 // 0x19 (01)
 
 lkd> dd PsPrioritySeparation L1
 fffff802`6b91ec7c  00000002 // 0x1A (10)
+
+lkd> dd PsPrioritySeparation L1
+fffff801`2971ec7c  00000002 // 0x1B (11)
 ```
 
 ### Index Table
