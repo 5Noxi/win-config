@@ -713,32 +713,21 @@ RegistryKey<unsigned char>::Initialize(
 
 # NDIS Poll Mode
 
-`Threaded DPC + Adaptive` = NDIS poll mode disabled, aptive receive completion method, packet burst buffering via threaded DPC.  
-`NDIS Poll Mode` = Packet burst handing disabled (unsupported), NDIS poll mode enabled.
-
-## NDIS Poll Mode
-
 > "*NDIS Poll Mode is an OS controlled polling execution model that drives the network interface datapath.*
 >
-> *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*"
+> *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*
 >
-> — Microsoft, [NDIS poll mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
+> *NDIS Poll Mode moves the complexity of scheduling decisions away from NIC drivers and into NDIS, where NDIS sets work limits per iteration. To achieve this Poll Mode provides:*
+> *- A mechanism for the OS to exert back pressure on the NIC.*
+> *- A mechanism for the OS to finely control interrupts.*
+>
+> *NDIS Poll Mode is available to NDIS 6.85 and later miniport drivers.*
+>
+> > — Microsoft, [NDIS Poll Mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
 
-When enabled on RX side, the following capabilities are not be supported:
-- AsyncReceiveIndicate
-- Receive side Threaded DPC
-- Force low resource indication
+## MS INF
 
-When enabled on TX side, the following capabilities are not be supported:
-- Transmit side Threaded DPC
-- TxMaxPostSendsCoalescing is limited to 32
-
-| Value | Data | Comments |
-| ---- | ---- | ---- |
-| RecvCompletionMethod | Set to 4 to register and use Ndis Poll Mode | Default is 1 (Adaptive) |
-| SendCompletionMethod | Set to 2 to register and use Ndis Poll Mode | Default is 1 (Interrupt) |
-
-### Setup Information
+`*NdisPoll` is a MS INF keyword for enabling/disabling NDIS Poll Mode support:
 
 ```c
 HKR, Ndi\params\*NdisPoll,       ParamDesc,            0, "Ndis Poll Mode"
@@ -749,20 +738,18 @@ HKR, Ndi\params\*NdisPoll\enum,  "0",                  0, "Disabled"
 HKR, Ndi\params\*NdisPoll\enum,  "1",                  0, "Enabled"
 ```
 
-Note: `*NdisPoll` is available to NDIS 6.85 and later miniport drivers.
+## [NVIDIA WinOF-2](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf)
+
+That guide ([WinOF-2 v23.7](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf)) uses the values to register and use NDIS Poll Mode, it depends on your driver version whenever they're accepted (e.g. `mlx5.sys` `2.53.23539` has a range of `0-3` for `RecvCompletionMethod`, `4` would be invalid causing it to fallback to the default (`1`)).
+
+| Side | Value | Default |
+| ---- | ---- | ---- |
+| Receive | `RecvCompletionMethod = 4` | `1` (Adaptive) |
+| Transmit | `SendCompletionMethod = 2` | `1` (Interrupt) |
 
 ## [AsyncReceiveIndicate](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf) (Packet Burst Handling)
 
 This feature allows packet burst handling, while avoiding packet drops that may occur when a large amount of packets is sent in a short period of time.
-
-> "*A threaded DPC is a DPC that the system executes at `IRQL = PASSIVE_LEVEL`. An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long period time, every thread will remain paused for an arbitrarily long period of time. Thus, each ordinary DPC increases the system latency, which can damage the performance of time-sensitive applications, such as audio or video playback. Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, the user should use threaded DPCs rather than ordinary DPCs, unless a particular DPC must not be preempted, even by another DPC.*"
->
-> — Microsoft, [Threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
-
-```c
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
-    "ThreadDpcEnable" = 1; // KeThreadDpcEnable
-```
 
 | Data | Meaning |
 | ---- | ---- |
@@ -772,10 +759,11 @@ This feature allows packet burst handling, while avoiding packet drops that may 
 
 ## [Receive Completion Method](https://docs.nvidia.com/nvidia-winof-2-documentation-v23-7.pdf)
 
-Sets the completion methods of the receive packets, and it affects network throughput and CPU utilization. The supported methods are:
+`RecvCompletionMethod` selects how the Mellanox (NVIDIA) driver handles receive completions:
 
-- Polling - increases the CPU utilization, because the system polls the received rings for incoming packets; however, it may increase the network bandwidth since the incoming packet is handled faster.
-- Adaptive - combines the interrupt and polling methods dynamically, depending on traffic type and network usage.
+- `0` (`Polling`) polls the receive ring until the configured `ThreadPoll` count is reached without receiving a packet, then stops polling and rearms the interrupt (`CRxQueue::PollFunction`)
+- `1` (`Adaptive`, default) combines interrupts and polling according to traffic and network use
+- `4` registers and uses NDIS Poll Mode (on WinOF-2 drivers that support it)
 
 ### Setup Information
 
@@ -786,7 +774,6 @@ HKR, NDI\Params\RecvCompletionMethod,  Default, 0, "1"
 HKR, NDI\Params\RecvCompletionMethod,  Optional, 0, "0"
 HKR, NDI\Params\RecvCompletionMethod\enum,  "0", 0, "%Polling%"
 HKR, NDI\Params\RecvCompletionMethod\enum,  "1", 0, "%Adaptive%"
-HKR, NDI\Params\RecvCompletionMethod\enum,  "2", 0x00000004 , ""
 HKR, "", RecvCompletionMethod, 0, "1"
 ```
 
