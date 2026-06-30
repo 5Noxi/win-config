@@ -721,9 +721,9 @@ RegistryKey<unsigned char>::Initialize(
 > *- A mechanism for the OS to exert back pressure on the NIC.*
 > *- A mechanism for the OS to finely control interrupts.*
 >
-> *NDIS Poll Mode is available to NDIS 6.85 and later miniport drivers.*
+> *NDIS Poll Mode is available to NDIS 6.85 and later miniport drivers.*"
 >
-> > — Microsoft, [NDIS Poll Mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
+> — Microsoft, [NDIS Poll Mode](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/ndis-poll-mode)
 
 ## MS INF
 
