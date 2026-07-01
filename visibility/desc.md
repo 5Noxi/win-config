@@ -1749,8 +1749,14 @@ See a list of all categories of `ms-settings` URIs [here](https://learn.microsof
 
 ### Example Value
 
+This is what the option currently uses, whenever you want to add/remove a section, edit the value.
+
 ```bat
-hide:sync;signinoptions-launchfaceenrollment;signinoptions-launchfingerprintenrollment;maps;maps-downloadmaps;mobile-devices;family-group;deviceusage;findmydevice
+hide:home;recovery;troubleshoot;activation;network-dialup;deviceusage;maps;emailandaccounts;otherusers;sync;family-group;workplace;speech;findmydevice;windowsdefender
 ```
 
-It depends on the user what he wants to see and what not, so I won't add a switch for it.
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Settings Page Visibility](https://noverse.dev/policies?p=ControlPanel*SettingsPageVisibility) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` <br> `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `SettingsPageVisibility` |
