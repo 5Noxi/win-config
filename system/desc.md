@@ -2556,7 +2556,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "EnableTickAccumulationFromAccountingPeriods" = 0; // KiEnableTickAccumulationFromAccountingPeriods, controls how CPU time used by threads etc. get counted?
                                                        // >= 2 = disabled (adds CPU time when clock ticks happen)
                                                        // 0/1/missing = enabled (measure time between accounting points)
-    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, REG_DWORD, range 0 = disabled, any nonzero = enabled
+    "EnableWerUserReporting" = 1; // DbgkEnableWerUserReporting, https://noverse.dev/docs/win-config/privacy/disable-wer/#enableweruserreporting
     "ForceBugcheckForDpcWatchdog" = 0; // KiForceBugcheckForDpcWatchdog
     "ForceForegroundBoostDecay" = 0; // KiSchedulerForegroundBoostDecayPolicy, https://noverse.dev/docs/win-config/system/priority-separation/#forceforegroundboostdecay
     "ForceIdleGracePeriod" = 5; // KiForceIdleGracePeriodInSec
@@ -2575,7 +2575,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "HgsPlusMinimumScoreDifferenceForSwap" = 25; // dword_140FC33E8
     "HgsPlusThreadCreationDefaultClass" = 0; // dword_140FC33E4
     "HotpatchTestMode" = 0; // KeHotpatchTestMode
-    "HyperStartDisabled" = 0; // HvlVpStartDisabled
+    "HyperStartDisabled" = 0; // HvlVpStartDisabled, Hvl = Hypervisor library
     "IdealDpcRate" = 20; // KiIdealDpcRate, "Number of DPCs per clock tick before the maximum DPC queue depth is decremented if DPCs are pending but no interrupt was generated"
     "IdealNodeRandomized" = 1; // PspIdealNodeRandomized
     "InterruptSteeringFlags" = 0; // KiInterruptSteeringFlags
@@ -2605,7 +2605,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SeAllowAllApplicationAceRemoval" = 0; // SepAllowAllApplicationAceRemoval
     "SeAllowSessionImpersonationCapability" = 0; // SepAllowSessionImpersonationCap
     "SeCompatFlags" = 0; // SeCompatFlags
-    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, REG_DWORD, 0 disables, nonzero enables
+    "SeLpacEnableWatsonReporting" = 0; // SeLpacEnableWatsonReporting, https://noverse.dev/docs/win-config/privacy/disable-wer/#selpacenablewatsonreporting
     "SeLpacEnableWatsonThrottling" = 1; // SeLpacEnableWatsonThrottling
     "SerializeTimerExpiration" = 1; // KiSerializeTimerExpiration, https://noverse.dev/docs/win-config/system/timer-expiration/#serializetimerexpiration
     "SeTokenDoesNotTrackSessionObject" = 0; // SeTokenDoesNotTrackSessionObject
@@ -2614,7 +2614,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SplitLargeCaches" = 0; // KiSplitLargeCaches
     "ThreadDpcEnable" = 1; // KeThreadDpcEnable
     "ThreadReadyCount" = 1; // KiNormalPriorityBoostMaximumThreadReadyCount
-    "TimerCheckFlags" = 1; // KeTimerCheckFlags
+    "TimerCheckFlags" = 1; // REG_DWORD, KeTimerCheckFlags
     "VerifierDpcScalingFactor" = 1; // KeVerifierDpcScalingFactor
     "VirtualHeteroHysteresis" = 4294967295; // PpmPerfQosTransitionHysteresisOverride
     "VpThreadSystemWorkPriority" = 30; // KiVpThreadSystemWorkPriority
@@ -2646,7 +2646,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ObjectSecurityMode" = 1; // ObpObjectSecurityMode
     "PowerPolicySimulate" = 0; // PopSimulate
     "ProtectionMode" = 1; // ObpProtectionMode, REG_DWORD
-    "ResourceCheckFlags" = 3; // ExResourceCheckFlags
+    "ResourceCheckFlags" = 3; // REG_DWORD, ExResourceCheckFlags
     "ResourceEnforceOwnerTransfer" = 0; // ExpResourceEnforceOwnerTransfer
     "ResourceTimeoutCount" = 45; // ExResourceTimeoutCount
     "SkipRegistryInit" = 0; // CmNtSkipRegistryInit
@@ -2821,9 +2821,9 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SystemPowerPolicy" = "<STRUCT 232 BYTES>"; // REG_BINARY
 
     // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
-    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
-    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-0xFFFFFFFF
-    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-0xFFFFFFFFFFFFFFFF
+    "HybridBootAnimationTime" = 1601; // REG_DWORD (ms), range 0-0xFFFFFFFF
+    "HiberIoCpuTime" = 0; // REG_DWORD (ms), range 0-0xFFFFFFFF
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range 0-0xFFFFFFFFFFFFFFFF
 
     // PpmInitIllegalThrottleLogging
     "ProcessorThrottleLogInterval" = 10000; // REG_DWORD, milliseconds, range 0-10000 (values >10000 are clamped to 10000)
@@ -2905,7 +2905,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Overrides" = 0;
 ```
 
-## Capabilities
+### Capabilities
 
 `Globals[0]` is the capability mask that shows what the system supports, `qword_1C00124C8` = `Capabilities` value. `Globals[0] &= ~qword_1C00124C8` removes active capability bits which are set in the registry value, so `Capabilities` is a kind of disable mask.
 
@@ -2922,7 +2922,7 @@ if ( qword_1C00124C8 )
 }
 ```
 
-### DisplayPPMFlags
+#### DisplayPPMFlags
 
 Most masks below are the same for `amdppm`/`intelppm`, the labels are from [`DisplayPPMFlags`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/DisplayPPMFlags.c) WPP metadata extracted via [`tracepdb`](https://learn.microsoft.com/en-us/windows-hardware/drivers/devtest/tracepdb).
 
@@ -2971,7 +2971,7 @@ Additional masks I found that aren't in `DisplayPPMFlags`:
 | [`0x0000800000000000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/amdppm/EmiInit.c) | EMI init |
 | [`0x0001000000000000`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/intelppm/InitDriver.c) | Energy counter init (not used by `amdppm`?) |
 
-### tracepdb
+#### tracepdb
 
 Short explanation of how to get the `DisplayPPMFlags` labels:
 
@@ -3003,7 +3003,7 @@ if ( a2 < 5u
 {
 ```
 
-### Default Data & Globals
+#### Default Data & Globals
 
 See '[DriverStart + RVAs](https://noverse.dev/docs/win-config/system/mmcss-values/#driverstart--rvas)' whenever you want to read the current value on your system (you can get the variable name by looking at callers of `GetRegistryQwordValue` in `amdppm`/`intelppm`).
 
@@ -3026,7 +3026,7 @@ lkd> dq fffff801`a91424c0 L1
 fffff801`a91424c0  0000bb8c`bdd7f677
 ```
 
-## TimerCheckFlags
+### TimerCheckFlags
 
 ```asm
 INIT:0000000140BA1A70                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
@@ -3036,7 +3036,7 @@ INIT:0000000140BA1A80                 dq offset KeTimerCheckFlags
 
 `KeTimerCheckFlags` is used by [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c), only bit `0` seems to be meaningful, means any value with that bit set should behave like `1`.
 
-### [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c)
+#### [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c)
 
 That function checks active timer tables for a timer object/DPC object/DPC routine related to the memory range being checked.
 
@@ -3077,7 +3077,7 @@ VOID KeBugCheckEx(
 );
 ```
 
-#### [TIMER_OR_DPC_INVALID](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)
+##### [TIMER_OR_DPC_INVALID](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debugger/bug-check-0xc7--timer-or-dpc-invalid.md)
 
 *The `TIMER_OR_DPC_INVALID` bug check has a value of `0x000000C7`. This is issued if a kernel timer or deferred procedure call (DPC) is found somewhere in memory where it is not permitted. This condition is usually caused by a driver failing to cancel a timer or DPC before freeing the memory where it resides.*
 
@@ -3090,7 +3090,7 @@ VOID KeBugCheckEx(
 | `0x4` | Address of the DPC routine | The thread's APC disable count before the kernel calls the DPC routine | The thread's APC disable count after the DPC routine is called | The thread's APC disable count was changed during DPC routine execution.<br><br>The APC disable count is decremented each time a driver calls **KeEnterCriticalRegion**, **FsRtlEnterFileSystem**, or acquires a mutex.<br><br>The APC disable count is incremented each time a driver calls **KeLeaveCriticalRegion**, **KeReleaseMutex**, or **FsRtlExitFileSystem**. |
 | `0x5` | Address of the DPC routine | The thread's APC disable count before the kernel calls the DPC routine | The thread's APC disable count after the DPC routine is called | The thread's APC disable count was changed during the execution of timer DPC routine.<br><br>The APC disable count is decremented each time a driver calls **KeEnterCriticalRegion**, **FsRtlEnterFileSystem**, or acquires a mutex.<br><br>The APC disable count is incremented each time a driver calls **KeLeaveCriticalRegion**, **KeReleaseMutex**, or **FsRtlExitFileSystem**. |
 
-#### Callers
+##### Callers
 
 Pool free checks (in [ExpFreePoolChecks](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExpFreePoolChecks.c) & [ExFreeHeapPool](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExFreeHeapPool.c)) call [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) (only when `ExpPoolFlags & 1` is set?):
 
@@ -3116,7 +3116,58 @@ if ( (VfRuleClasses & 0x400000) == 0 )
 return ViMiscValidateSynchronizationObject(*(_QWORD *)(a1 + 16));
 ```
 
-## ThreadDpcEnable
+### ResourceCheckFlags
+
+`ResourceCheckFlags` is related to [`TimerCheckFlags`](https://noverse.dev/docs/win-config/system/kernel-values/#timercheckflags) as both control checks for kernel objects left inside pool memory being freed, they're independent of each other as they use different `ExpPoolFlags` bits. Note that this check only runs on a single processor system.
+
+| Data | Meaning |
+| --- | --- |
+| `0` (or any even value) | `ERESOURCE` check disabled |
+| `3` (or any odd value) | `ERESOURCE` check enabled |
+
+Only bit `0` of the value is read which is why any even/odd value would work.
+
+```c
+// ExpFreePoolChecks / ExFreeHeapPool
+
+if ( (ExpPoolFlags & 1) != 0 )
+  KeCheckForTimer(BugCheckParameter3); // TimerCheckFlags (timer/DPC check)
+if ( (ExpPoolFlags & 4) != 0 )
+  ExpCheckForResource(BugCheckParameter3, a3); // ResourceCheckFlags (ERESOURCE check)
+```
+
+[ExpCheckForResource](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/ExpCheckForResource.c) checks whether the freed range contains an `ERESOURCE` still linked in `ExpSystemResourcesList`, means `ExDeleteResourceLite` wasn't called before freeing its memory.
+
+```c
+// ExpCheckForResource
+
+if ( ((MmVerifierData & 0x800) == 0
+   || (MmVerifierData & 0x10) == 0
+   || !(unsigned int)VfCheckForResource((ULONG_PTR)a1, a2))
+  && (unsigned int)KeNumberProcessors_0 <= 1 // limited to one processor
+  && (ExResourceCheckFlags & 1) != 0 ) // bit 0 enables check
+{
+  v4 = ExAcquireSpinLockShared(&ExpResourceSpinLock);
+  v5 = (__int64 *)ExpSystemResourcesList;
+  v6 = v4;
+  while ( v5 != &ExpSystemResourcesList )
+  {
+    if ( v5 >= a1 && v5 < (__int64 *)((char *)a1 + a2) ) // listed ERESOURCE inside freed range
+    {
+      DbgPrintEx(
+        0,
+        0,
+        "EX: ExFreePool( %p, %Ix ) contains an ERESOURCE structure that has not been ExDeleteResourced\n",
+        a1,
+        a2);
+      __debugbreak();
+    }
+    v5 = (__int64 *)*v5;
+  }
+}
+```
+
+### ThreadDpcEnable
 
 Has a default of `1`, and is a kind of bool, `>1` data is probably the same as `1`.
 
@@ -3160,7 +3211,7 @@ if ( KeThreadDpcEnable )
 
 [`KiStartDpcThread`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiStartDpcThread.c) creates a system thread whose start routine is [`KiExecuteDpc`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiExecuteDpc.c), and that thread raises itself to priority 31 and runs DPC work through [`KiExecuteAllDpcs`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiExecuteAllDpcs.c).
 
-### DpcCount
+#### DpcCount
 
 A simple way to see the amount of DPCs that got executed.
 
@@ -3191,7 +3242,7 @@ lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4f
     [+0x02c] Padding          : 0x0 [Type: unsigned long]
 ```
 
-### [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+#### [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/threaddpcenable2.png?raw=true)
@@ -4339,6 +4390,7 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "KnownProcessBoostMode" = 1; // REG_DWORD, 25H2
     "SmallQuantumMode" = 1; // REG_DWORD, 25H2, 0 = disabled, 1 = auto (if GPU is MCDM adapter enabled), 2 = force enable
                             // related to VidSch scheduling quanta for GPU contexts
+                            // pnputil /enum-devices /class ComputeAccelerator
     "HighPriorityCompletionMode" = 1; // REG_DWORD, 25H2
     "GpuPriorityChangeMode" = 1; // REG_DWORD, 25H2
 
