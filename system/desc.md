@@ -2630,7 +2630,10 @@ Everything listed below is based on personal findings, mistakes may exist.
     "CriticalSectionTimeout" = 2592000; // dword_140FC3204
     "CWDIllegalInDLLSearch" = 0; // PspCurDirDevicesSkippedForDlls, can cause "There was a problem starting PolicyAgentProvider.dll The specified module could not be found" if set to 0xFFFFFFFF (https://learn.microsoft.com/en-us/troubleshoot/mem/configmgr/client-installation/client-installation-fails-with-policyagentprovider-dll)
     "Debugger Retries" = 20; // KdpContext
+    "DebuggerMaxModuleMsgs" = 500; // DbgkpMaxModuleMsgs, 0 is changed to 500 by DbgkpInitializePhase0
     "DisableIFEOCaching" = 0; // RtlpDisableIFEOCaching
+    "ErrorPortCommTimeout" = 10000; // DbgkErrorPortCommTimeout
+    "ErrorPortStartTimeout" = 15000; // DbgkErrorPortStartTimeout
     "GlobalFlag" = 0; // CmNtGlobalFlag <> 0x7061006c ? https://learn.microsoft.com/en-us/windows-hardware/drivers/debugger/gflags-details
     "GlobalFlag2" = 0; // CmNtGlobalFlag2 <> 0x6c642e30 ?
     // lkd> !gflag
@@ -2644,6 +2647,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "InitConsoleFlags" = 0; // InitConsoleFlags
     "MultiUsersInSessionSupported" = 0; // RtlpMultiUsersInSessionSupported
     "ObjectSecurityMode" = 1; // ObpObjectSecurityMode
+    "PowerSimulateHiberBugcheck" = 4294967295; // PopSimulateHiberBugcheck
     "PowerPolicySimulate" = 0; // PopSimulate
     "ProtectionMode" = 1; // ObpProtectionMode, REG_DWORD
     "ResourceCheckFlags" = 3; // REG_DWORD, ExResourceCheckFlags
@@ -2710,6 +2714,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ForceValidateIo" = 0; // dword_140FC31F0
     "HighMemoryThreshold" = 0; // qword_140FC3238
     "KernelPadSectionsOverride" = 0; // dword_140FC3248
+    "LargePageDrivers" = ?; // MmLargePageDriverBuffer, maximum length 1024 bytes
     "LargeWriteSize" = 0; // CcAzure_LargeWriteSize
     "LazyWriterPercentageOfNumProcs" = 0; // CcAzure_LazyWriterPercentageOfNumProcs
     "LowMemoryThreshold" = 0; // qword_140FC3230
@@ -2752,6 +2757,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "VerifierIrpTimeout" = 0; // VfWdIrpTimeoutMsec
     "VerifierNewRuleWorkaround" = 0; // VerifierNewRuleWorkaround
     "VerifierOptions" = 0; // VfOptionFlags
+    "VerifierPoolTracesLength" = 0; // VfPoolTracesLength
     "VerifierRandomTargets" = 0; // VfRandomVerifiedDrivers
     "VerifierSettingState" = 0; // VfRuleClasses
     "VerifierSettingStateSize" = 4294967295; // VfRuleClassesSize
@@ -2793,6 +2799,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Executive";
     "AdditionalCriticalWorkerThreads" = 0; // ExpAdditionalCriticalWorkerThreads
     "AdditionalDelayedWorkerThreads" = 0; // ExpAdditionalDelayedWorkerThreads
+    "CoverageMaxPagedPool" = 4194304; // ExCovMaxPagedPoolToUse
     "ForceEnableMutantAutoboost" = 0; // ExpForceEnableMutantAutoboost
     "KernelWorkerTestFlags" = 0; // ExpWorkerQueueTestFlags
     "MaximumKernelWorkerThreads" = 4096; // ExpMaximumKernelWorkerThreads
@@ -2854,7 +2861,7 @@ Everything listed below is based on personal findings, mistakes may exist.
     "Bias" = 480; // ExpAltTimeZoneBias
     "RealTimeIsUniversal" = 0; // ExpRealTimeIsUniversal
 
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\I/O System";
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\I/O System";
     "DisableDiskCounters" = 0; // PsDisableDiskCounters
     "IoAllowLoadCrashDumpDriver" = 0; // IopAllowLoadCrashDumpDriver
     "IoBlockLegacyFsFilters" = 0; // IopBlockLegacyFsFilters
@@ -2867,12 +2874,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "MediumIrpStackLocations" = 2; // IopMediumIrpStackLocations
     "RequireDeviceAccessCheck" = 1; // IopRequireDeviceAccessCheck
 
-"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Configuration Manager";
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Configuration Manager";
     "BugcheckRecoveryEnabled" = 0; // CmBugcheckRecoveryEnabled
     "CallbackMemoryFromPerProcLookaside" = 1; // CmpAllocateCallbackMemoryFromPerProcLookaside
     "CallbackMemoryFromPool" = 0; // CmpAllocateCallbackMemoryFromPool
     "DelayCloseSize" = 2048; // CmpDelayedCloseSize
-    "Enabled" = 0; // CmpLKGEnabled
     "EnablePeriodicBackup" = 0; // CmpDoIdleProcessing, https://learn.microsoft.com/en-us/troubleshoot/windows-client/installing-updates-features-roles/system-registry-no-backed-up-regback-folder#more-information
     "FastBoot" = 1; // CmFastBoot
     "FreezeThawTimeoutInSeconds" = 60; // CmFreezeThawTimeoutInSeconds
@@ -2888,6 +2894,12 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SystemHiveLimitSize" = 1610612736; // CmSystemHiveLimitSize
     "VirtualizationEnabled" = 1; // CmVEEnabled
     "VolatileBoot" = 0; // CmpVolatileBoot
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Configuration Manager\\LastKnownGood";
+    "Enabled" = 0; // CmpLKGEnabled
+
+"HKLM\\SYSTEM\\CurrentControlSet\\Control\\QoS";
+    "StorageBaseIOSize" = 8192; // IopDiskIoAttributionBaseIoSize
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\StateSeparation\\Policy";
     "AllHivesVolatile" = 0; // CmStateSeparationAllHivesVolatile
