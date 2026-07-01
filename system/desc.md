@@ -1827,11 +1827,11 @@ Means that presented content can be scanned out by the display hardware without 
 
 #### Multiplane Overlay (MPO)
 
-Used when DWM can place an app/video surface on a dedicated hardware overlay plane instead of adding it into the normal composed desktop frame.
+Used when DWM can place an app/video surface on a dedicated hardware overlay plane instead of adding it into the composed desktop frame.
 
 > "*A type of display hardware that is able to show multiple planes shown over top of one another. Presents from the presentation manager can be displayed as part of a plane in an MPO configuration to avoid needing to copy the presentation buffer into the backbuffer that DWM sends to the display hardware."*
 
-Means that with MPO, DWM still manages the window surface, but instead of blending that surface into the normal composed desktop frame, it can assign it to a hardware overlay plane. The DWM composed desktop is normally the primary plane, while MPO planes are extra hardware planes (there's also a limit of `MaxPlanes` which is why reducing `OverlayMinFPS` shouldn't be done). The final image is then created by the display hardware combining those planes, and if the display hardware handles that plane composition incorrectly, such "artifacts" can appear.
+Means that with MPO, DWM still manages the window surface, but instead of blending that surface into the composed desktop frame, it can assign it to a hardware overlay plane. The DWM composed desktop is normally the primary plane, while MPO planes are extra hardware planes (there's also a limit of `MaxPlanes` which is why reducing `OverlayMinFPS` shouldn't be done). The final image is then created by the display hardware combining those planes, and if the display hardware handles that plane composition incorrectly, such "artifacts" can appear.
 
 Wether an app uses MPO it usually shows as `Hardware Composed: Independent Flip`, so for example a browser playing video can show this, as the video/app surface can be placed on an overlay plane and the display hardware combines it with the DWM desktop plane. A fullscreen game for example may show `Hardware: Independent Flip` (even with MPO enabled), as it doesn't need an extra overlay plane (see DirectFlip cases below).
 
@@ -7020,6 +7020,14 @@ Not complete yet, will be extended over time.
 
 # Disable Windows Search
 
+Windows search provides content indexing, property caching, and search results for files, e-mail, and other content. Instead of using the explorer/windows start menu to search for a file/folder/app, use [`Everything`](https://www.voidtools.com/downloads/) for searching for files/folders and [SAB](https://www.startallback.com/) ([manual SAB activation](https://noverse.dev/docs/win-config/misc/startallback-config/#sab-activation)) as start menu. Note that enabling this option breaks the start menu, and apps like e.g. CmdPal (PowerToys) do need the `WSearch` service for the `File Search` extension to work.
+
+## Search Indexing
+
+[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
+
 ## Suboptions
 
 | **Suboption** | **Description** |
@@ -7041,16 +7049,6 @@ Not complete yet, will be extended over time.
 | [Disable Web Results in Search](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
 | Disable Search Highlights | If enabled: "See content suggestions in the search boxi and in search home". |
 | Disable Web Search | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
-
-## Search Indexing
-
-[Search indexing](https://learn.microsoft.com/en-us/windows/win32/search/-search-indexing-process-overview) builds a database of file names, properties, and contents to speed up searches, runs as `SearchIndexer.exe`, updates automatically. Disabling it slows down searches, but as shows below you should use everything anyway. Additionally you can disable content and property indexing per drive, by right clicking on the drive, then unticking the box as shown in the picture.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/searchindex.png?raw=true)
-
-Instead of using the explorer to search for a file or folder, use [`Everything`](https://www.voidtools.com/downloads/), it's a lot faster.
-
-The `WSearch` service is needed for CmdPals `File Search` extension to work.
 
 ## [Windows Policies](https://noverse.dev/policies)
 
