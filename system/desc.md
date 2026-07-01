@@ -3032,6 +3032,7 @@ fffff801`a91424c0  0000bb8c`bdd7f677
 INIT:0000000140BA1A70                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
 INIT:0000000140BA1A78                 dq offset aTimercheckflag ; "TimerCheckFlags"
 INIT:0000000140BA1A80                 dq offset KeTimerCheckFlags
+INIT:0000000140BA1A88                 align 20h
 ```
 
 `KeTimerCheckFlags` is used by [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c), only bit `0` seems to be meaningful, means any value with that bit set should behave like `1`.
@@ -3118,6 +3119,13 @@ return ViMiscValidateSynchronizationObject(*(_QWORD *)(a1 + 16));
 
 ### ResourceCheckFlags
 
+```asm
+INIT:0000000140BA36C0                 dq offset aSessionManager_11 ; "Session Manager"
+INIT:0000000140BA36C8                 dq offset aResourcecheckf ; "ResourceCheckFlags"
+INIT:0000000140BA36D0                 dq offset ExResourceCheckFlags
+INIT:0000000140BA36D8                 dq 3 dup(0)
+```
+
 `ResourceCheckFlags` is related to [`TimerCheckFlags`](https://noverse.dev/docs/win-config/system/kernel-values/#timercheckflags) as both control checks for kernel objects left inside pool memory being freed, they're independent of each other as they use different `ExpPoolFlags` bits. Note that this check only runs on a single processor system.
 
 | Data | Meaning |
@@ -3168,6 +3176,13 @@ if ( ((MmVerifierData & 0x800) == 0
 ```
 
 ### ThreadDpcEnable
+
+```asm
+INIT:0000000140BA14A0                 dq offset aSessionManager_5 ; "Session Manager\\Kernel"
+INIT:0000000140BA14A8                 dq offset aThreaddpcenabl ; "ThreadDpcEnable"
+INIT:0000000140BA14B0                 dq offset KeThreadDpcEnable
+INIT:0000000140BA14B8                 dq 3 dup(0)
+```
 
 Has a default of `1`, and is a kind of bool, `>1` data is probably the same as `1`.
 
