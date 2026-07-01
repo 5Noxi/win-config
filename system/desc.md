@@ -4337,7 +4337,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
     "EnableBasicRenderGpuPv" = 0; // REG_DWORD (bool), 25H2
     "KnownProcessBoostMode" = 1; // REG_DWORD, 25H2
-    "SmallQuantumMode" = 1; // REG_DWORD, 25H2
+    "SmallQuantumMode" = 1; // REG_DWORD, 25H2, 0 = disabled, 1 = auto (if GPU is MCDM adapter enabled), 2 = force enable
+                            // related to VidSch scheduling quanta for GPU contexts
     "HighPriorityCompletionMode" = 1; // REG_DWORD, 25H2
     "GpuPriorityChangeMode" = 1; // REG_DWORD, 25H2
 
@@ -4509,9 +4510,9 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
     "NumberOfDmaPacketPool" = 20; // REG_DWORD, minimum 16
     "PerSourceCustomDuration" = ?; // REG_DWORD (bool)
     "PfnCpuOverride" = 0; // REG_DWORD, range 0-3
-    "PreemptionQuantumUnit" = 50000; // REG_DWORD, minimum 1
+    "PreemptionQuantumUnit" = 50000; // REG_DWORD, minimum 1 (only used if SmallQuantumMode = 0 (or 1 when GPU isn't MCDM adapter))
     "ProfileLevel" = 2; // REG_DWORD
-    "QuantumUnit" = 25000; // REG_DWORD, minimum 1
+    "QuantumUnit" = 25000; // REG_DWORD, minimum 1 (only used if SmallQuantumMode = 0 (or 1 when GPU isn't MCDM adapter))
     "QueuedPresentLimit" = 3; // REG_DWORD, minimum 1
     "VSyncIdleTimeout" = 7; // REG_DWORD
     "YieldPercentage" = 10; // REG_DWORD, range 1-84
@@ -4533,8 +4534,8 @@ Based on pseudocode of [`dxgkrnl.sys`](https://github.com/nohuto/decompiled-pseu
 
     "HwSchThreadOffloadMode" = 2; // REG_DWORD, 24H2+
     "MinYieldInterval" = 8000; // REG_DWORD
-    "NpuContextSwitchQuantum" = 30000; // REG_DWORD, minimum 1
-    "NpuPreemptionQuantum" = 60000; // REG_DWORD, minimum 1
+    "NpuContextSwitchQuantum" = 30000; // REG_DWORD, minimum 1 (only used if SmallQuantumMode = 2 (or 1 when GPU is MCDM adapter))
+    "NpuPreemptionQuantum" = 60000; // REG_DWORD, minimum 1 (only used if SmallQuantumMode = 2 (or 1 when GPU is MCDM adapter))
 
     // VidSchiReadDeviceConfiguration
     "FlipOverrideMode" = 0; // REG_DWORD, range 0-2
