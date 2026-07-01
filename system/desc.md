@@ -3144,7 +3144,7 @@ if ( (ExpPoolFlags & 4) != 0 )
 if ( ((MmVerifierData & 0x800) == 0
    || (MmVerifierData & 0x10) == 0
    || !(unsigned int)VfCheckForResource((ULONG_PTR)a1, a2))
-  && (unsigned int)KeNumberProcessors_0 <= 1 // limited to one processor
+  && (unsigned int)KeNumberProcessors_0 <= 1 // one processor
   && (ExResourceCheckFlags & 1) != 0 ) // bit 0 enables check
 {
   v4 = ExAcquireSpinLockShared(&ExpResourceSpinLock);
