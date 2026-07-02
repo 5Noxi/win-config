@@ -284,6 +284,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
 
+### Fishing Frogs
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Fishing-Frogs.png?raw=true)
+
 ### Flowers
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers.png?raw=true)
@@ -347,6 +351,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 ### Rain
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Rain.png?raw=true)
+
+### Relax Landscape
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Relax-Landscape.png?raw=true)
 
 ### Sea
 
