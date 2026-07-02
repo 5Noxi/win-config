@@ -1252,10 +1252,10 @@ Client uses variable + short ("*Performance Options: Programs*) and server fixed
 
 ```c
 // Background services
-SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 24
+SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 24 // 0x18
 
 // Programs
-SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 38
+SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 38 // 0x26
 ```
 
 #### Default Bitmasks
@@ -1263,6 +1263,19 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 ![](https://github.com/nohuto/win-config/blob/main/system/images/0x2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/0x26.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/0x18.png?raw=true)
+
+To see whenever your current build is a client/server, use:
+
+```powershell
+(Get-CimInstance Win32_OperatingSystem).ProductType
+```
+
+- `0` = Unknown
+- `1` = WorkStation (client)
+- `2` = DomainController
+- `3` = Server
+
+Or display it directly via reading `MmIsThisAnNtAsSystem`, see '[Long/Short Interval (`5:4`)](https://noverse.dev/docs/win-config/system/priority-separation/#longshort-interval-54)' section.
 
 ### FG Priority Boost
 
