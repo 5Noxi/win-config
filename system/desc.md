@@ -1187,6 +1187,8 @@ INIT:0000000140BA3E58                 dq 3 dup(0)
 
 See '[CmControlVector](https://noverse.dev/docs/win-config/system/kernel-values/#cmcontrolvector)' if you don't understand the comments.
 
+Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whenever you want to get/read hex/dec values.
+
 ## PsPrioritySeparation (`1:0`)
 
 The priority applies to dynamic priorities below the RT (real time) range and is capped at priority `15`, disabling dynamic priority boosts for a thread/process would also prevent this FG boost. The quantum unit change is obviously only visible when the variable table is used, as all three in a fixed table are the same, so changing the low bits doesn't change its quantum. [`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) clamps the field and saves it in `PsPrioritySeparation`:
@@ -1247,6 +1249,20 @@ The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`~5.208
 | Fixed long (`ShortThreadQuantum`) | `36` QU (`31.250 ms`) | `36` QU (`31.250 ms`) | `36` QU (`31.250 ms`) |
 
 Client uses variable + short ("*Performance Options: Programs*) and server fixed + long ("*Performance Options: Background services*") by default.
+
+```c
+// Background services
+SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 24
+
+// Programs
+SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 38
+```
+
+#### Default Bitmasks
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/0x2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/0x26.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/0x18.png?raw=true)
 
 ### FG Priority Boost
 
