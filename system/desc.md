@@ -7272,7 +7272,7 @@ Page combining spots identical RAM pages across processes and merges them into a
 >
 > — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-`Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value on recent builds, so it's most likely deprecated.
+`Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value, note that the value still is used in `MiCombineIdenticalPages`.
 
 ```asm
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
