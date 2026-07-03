@@ -7589,8 +7589,6 @@ Enables detailed messages at restart, shut down, sign out, and sign in, which ca
 
 Prefetcher features are used to speed up the boot process and application startup by preloading data (shouldn't be disabled). Read through the pictures for more detailed information.
 
-The prefetcher traces roughly the first 10 seconds of app startup and writes trace files to `%SystemRoot%\\Prefetch`. The Superfetch service consumes those traces and issues clustered reads on subsequent starts. `EnablePrefetcher` controls the boot/app prefetch modes.
-
 ## Value Meanings
 
 - [`EnablePrefetcher`](https://learn.microsoft.com/en-us/previous-versions/windows/embedded/ff794235(v=winembedded.60)) is a setting in the File-Based Write Filter (FBWF) and Enhanced Write Filter with HORM (EWF) packages. It specifies how to run Prefetch, a tool that can load application data into memory before it is demanded.
