@@ -1277,6 +1277,16 @@ To see whenever your current build is a client/server, use:
 
 Or display it directly via reading [`MmIsThisAnNtAsSystem`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-mmisthisanntassystem), see '[Long/Short Interval (`5:4`)](https://noverse.dev/docs/win-config/system/priority-separation/#longshort-interval-54)' section.
 
+Or via the `ProductType` value:
+
+```c
+// WinNT = Windows client
+// LanmanNT = Windows server (domain controller)
+// ServerNT = Windows server (server only)
+
+HKLM\SYSTEM\CurrentControlSet\Control\ProductOptions : ProductType
+```
+
 ### FG Priority Boost
 
 [`KiApplyForegroundBoostThread`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiApplyForegroundBoostThread.c) shows the calculation, add `PsPrioritySeparation` to the base priority & cap the dynamic priority at `15`.
