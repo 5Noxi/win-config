@@ -6867,7 +6867,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DITest	Type: RE
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DITest	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-# Optimize File System
+# File System Values
 
 Small documentation on several values the option applies, see links below for more details.
 
