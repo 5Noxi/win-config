@@ -1275,7 +1275,7 @@ To see whenever your current build is a client/server, use:
 - `2` = DomainController
 - `3` = Server
 
-Or display it directly via reading `MmIsThisAnNtAsSystem`, see '[Long/Short Interval (`5:4`)](https://noverse.dev/docs/win-config/system/priority-separation/#longshort-interval-54)' section.
+Or display it directly via reading [`MmIsThisAnNtAsSystem`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-mmisthisanntassystem), see '[Long/Short Interval (`5:4`)](https://noverse.dev/docs/win-config/system/priority-separation/#longshort-interval-54)' section.
 
 ### FG Priority Boost
 
@@ -1554,7 +1554,7 @@ PspForegroundQuantum = *(_WORD *)v8;
 result = v8[2]; // copy selected three entries
 ```
 
-Whenever using `00`/`11`, you can display the state of `MmIsThisAnNtAsSystem` (which is a bool as shown below) via:
+Whenever using `00`/`11`, you can display the state of [`MmIsThisAnNtAsSystem`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-mmisthisanntassystem) (which is a bool as shown below) via:
 
 ```c
 lkd> u nt!MmIsThisAnNtAsSystem L2
