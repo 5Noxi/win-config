@@ -812,42 +812,11 @@ Values below are based on `RegGetValueW`/`SHRegGetDWORD`/`SHRegGetUSDWORDW` xref
 
 # Disable Animations
 
-Minimize, Maximize, Taskbar Animations / First Sign-In Animations. These options are also changeable via `SystemPropertiesPerformance` (`WIN + R`) - first three.
+Minimize, maximize, taskbar animations / first sign-in animations etc.
 
-`MaxAnimate` doesn't exist, windows only uses `MinAnimate`
-
-```
-HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate	Type: REG_SZ, Length: 4, Data: 1
-```
-
-Disable logon animations, which would remove the animation (picture), instead shows the windows default background wallpaper (first sign-in):
-
-- "*This policy controls whether users see the first sign-in animation when signing in for the first time, including both the initial setup user and those added later. It also determines if Microsoft account users receive the opt-in prompt for services. If enabled, Microsoft account users see the opt-in prompt and other users see the animation. If disabled, neither the animation nor the opt-in prompt appears. If not configured, the first user sees the animation during setup; later users won't see it if setup was already completed. This policy has no effect on Server editions.*"
-
-Second one is used by Windows (`Computer Configuration > Administrative Templates > System > Logon : Show first sign-in animation`), see [visibility/assets | animation-WinMain.c](https://github.com/nohuto/win-config/blob/main/visibility/assets/animation-WinMain.c) for more:
-
-```c
-CMachine::RegQueryDWORD(
-  v62,
-  L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon",
-  L"EnableFirstLogonAnimation",
-  0,
-  &v117);
-v118 = 1;
-
-CMachine::RegQueryDWORD(
-  v63,
-  L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-  L"EnableFirstLogonAnimation",
-  1u,
-  &v118);
-```
-
-`AnimationAfterUserOOBE` & `SkipNextFirstLogonAnimation` (`CurrentVersion\Winlogon`) also exist.
+First sign-in animation:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/animation.png?raw=true)
-
-`ForceDisableModeChangeAnimation` got added in [22621.3807/22631.3807](https://blogs.windows.com/windows-insider/2024/06/13/releasing-windows-11-builds-22621-3807-and-22631-3807-to-the-release-preview-channel/) and is used for "When you set its value to 1 (or a non-zero number), it turns off the display mode change animation. If the value is 0 or the key does not exist, the animation is set to on."
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -860,19 +829,11 @@ CMachine::RegQueryDWORD(
 
 # Taskbar Settings
 
-Removes the search box, moves the taskbar to the left, removes badges, disables the flashes on the app icons, removes the "Task View" button (`Personalization > Taskbar`). See details about the `Add 'End Task' to Taskbar Context Menu` option [here](https://www.youtube.com/watch?v=5HWyyNep6t0).
-
-`TaskbarSd` adds/removes the block in the right corner, which shows the desktop (picture).
+Removes the search box, moves the taskbar to the left, removes badges, disables the flashes on the app icons, removes the "Task View" button (`Personalization > Taskbar`). See details about the `Add 'End Task' to Taskbar Context Menu` option [here](https://www.youtube.com/watch?v=5HWyyNep6t0). `TaskbarSd` adds/removes the block in the right corner, which shows the desktop (picture).
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskbar.png?raw=true)
 
-```json
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-  "TaskbarDa": { "Type": "REG_DWORD", "Data": 0, "Elevated": true },
-```
-
-I removed the value since you can't apply it even with `TrustedInstaller`/`SYSTEM` previledges. Note that the value is still actively used by `SystemSettings`:
-
+I removed `TaskbarDa` since you can't apply it even with `TrustedInstaller`/`SYSTEM` previledges, note that the value is still actively used by `SystemSettings`:
 
 ```c
 // Personalization > Taskbar - Widgets (off)
@@ -1482,26 +1443,14 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscripti
 
 # Disable Spotlight
 
-Spotlight is used to provide new pictures on your lock screen. These exist by default on 25H2:
+> "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*
+> *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*
+> *- Suggestions, fun facts, tips: recommendations on how to enhance the user's productivity of Microsoft products. They're displayed in different locations, such as the lock screen, the background, the taskbar, or the Get Started app*
+> *- Organizational messages: messages from your organization, which can be displayed in the lock screen, taskbar, the notification area, or the Get Started app*"
+>
+> — Microsoft, [Configure Windows spotlight](https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11)
 
-```json
-"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\DesktopSpotlight\\Settings": {
-  "IsDisabledByCommercialControl": { "Type": "REG_DWORD", "Data": 0 },
-  "IsRestoreLogon": { "Type": "REG_DWORD", "Data": 0 },
-  "OneTimeUpgrade": { "Type": "REG_DWORD", "Data": 0 },
-  "PeriodicUpgrade": { "Type": "REG_QWORD", "Data": 134118152903943918 },
-  "SpotlightDisabledReason": { "Type": "REG_DWORD", "Data": 100 },
-  "SpotlightNotOnboardedReason": { "Type": "REG_DWORD", "Data": 4 }
-}
-```
-
-Disabling it via policies etc. is enough, therefore I won't add them as there's no documentation on them either.
-
-`EnabledState` value gets read.
-
-```
-\Registry\User\S-<ID>\SOFTWARE\Microsoft\WINDOWS\CurrentVersion\DesktopSpotlight\Settings : EnabledState
-```
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/lockscreen-spotlight.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 
