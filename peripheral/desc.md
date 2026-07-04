@@ -1573,32 +1573,31 @@ The `Clean` option removes non present devices (`-PresentOnly:$false`/`Status -e
 
 # Disable Wake on Input
 
+- [`powercfg /devicequery wake_programmable`](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a) -> devices that are user-configurable to wake the system from a sleep state
+- [`powercfg /devicequery wake_armed`](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a) -> currently configured to wake the system from any sleep state
+
 ```bat
 powercfg /devicequery wake_programmable
 powercfg /devicequery wake_armed
 ```
-[`powercfg /devicequery wake_programmable`](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a) -> devices that are user-configurable to wake the system from a sleep state
-[`powercfg /devicequery wake_armed`](https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options#availablesleepstates-or-a) -> currently configured to wake the system from any sleep state
 
-```bat
-powercfg /devicedisablewake device
-```
-Disables the device (replace '*Device*' with the device name) from waking the system from any sleep state. 
+## Registry Values
 
-[`WakeOnInputDeviceTypes`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-UpdateWakeOnInputDeviceTypesFromRegistry%40CInputGlobals%40%40QEAAXXZ.c) probably handles wake on input behavior for all input devices - each bit represents a input device type? Since `\SYSTEM\INPUT` only queries two values I'll add the second on in here.
+See '[PnP Device Values](https://noverse.dev/docs/win-config/power/pnp-device-values/#registry-values)' for more.
 
-```
-\Registry\Machine\SYSTEM\INPUT : UnDimOnInputDeviceTypes
-\Registry\Machine\SYSTEM\INPUT : WakeOnInputDeviceTypes
-```
-
-`UnDimOnInputDeviceTypes` probably refers to any dimmed elemets (pure speculation)? Disabling it wouldn't make sense. Values named `ButtonsAsVKeys` & `HardwareButtonsAsVKeys` may exist in `SYSTEM\\INPUT\\BUTTONS`, but I haven't looked further into it.
-
-Default values:
 ```c
-WakeOnInputDeviceTypes = 46
-UnDimOnInputDeviceTypes = -1  // 4294967295
+"HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters";
+    "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
+    "SystemWakeEnabled" = 1; // REG_DWORD (bool), INF default (UsbccidDriver.inf, wudfusbcciddriver.inf)
+    "WaitWakeEnabled" = ?
+    "SuppressInputInCS" = 0; // REG_DWORD (bool), clears WakeScreenOnInputSupport when enabled?
+    "WakeScreenOnInputSupport" = 1; // REG_DWORD (bool)
+    "WakeScreenOnInputTimeout" = ?; // REG_DWORD, queried only when WakeScreenOnInputSupport is enabled
 ```
+
+### WakeOnInputDeviceTypes
+
+[`WakeOnInputDeviceTypes`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kbase/-UpdateWakeOnInputDeviceTypesFromRegistry%40CInputGlobals%40%40QEAAXXZ.c) (`\Registry\Machine\SYSTEM\INPUT`) probably handles wake on input behavior for all input devices, each bit represents a input device type?
 
 ## query_flag
 

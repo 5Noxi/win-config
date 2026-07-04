@@ -269,16 +269,6 @@ Adds a `Import` option when right clicking on `.pow` files.
 
 You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/assets/NV-IMOD.exe) from my repository, I packed it into one package since some may not have python installed on their system.
 
-## xHCI Interrupt Moderation Notes
-
-Interrupt Moderation (IMOD) is the pacing logic inside an xHCI controller that decides how quickly hardware interrupts are sent up to the CPU. Every time the host controller has new events to report, it can either raise an interrupt immediately or wait for a programmable delay. IMOD is that programmable timer, you choose an interval value, the controller loads a counter, and no second interrupt is allowed until the counter has expired and the Event Handler is ready again.
-
-Note that everything written below is based on the [`eXtensible Host Controller Interfact for Universal Serial Bus`](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf) document. See pages `289f.`, `295`, `383`, `388`, `425`, `426`.
-
-`HCSPARAMS1` (Base + 0x04) reports the number of interrupters (`MaxIntrs`). Each *Interrupter Register Set* has its own moderation and the range is 0x1-0x400, so the field must be non zero for a usable controller. The *Runtime Register Base* address equals the *Operational Base* plus the *Runtime Register Space Offset* (`RTSOFF`). `RTSOFF` is at Base + 0x18 and bits [31:5] provide the aligned offset (bits [4:0] are reserved). Every *Interrupter Register Set* has 32 bytes starting at Runtime Base + 0x20. `IMAN` is at `Runtime Base + 0x20 + 32*n`, `IMOD` at `+0x24 + 32*n`, followed by the *Event Ring* registers (`ERSTSZ`, `ERSTBA`, `ERDP`).
-
-When a TRB event triggers the Interrupt Pending (`IP`) flag, host notification is throttled according to the Interrupter's Moderation (`IMOD`) register. `IMOD` combines the Interrupt Moderation Interval (`IMODI`) and the Interrupt Moderation Counter (`IMODC`). Software programs `IMODI` in 250 ns units, the hardware copies it into `IMODC`, counts down, and only raises the interrupt once the counter reaches zero and the *Event Handler Busy* (`EHB`) flag has been cleared. `interrupts/sec = 1 / (250 ns * IMODI)` and `inter-interrupt interval = 250 ns * (interrupts/sec)^-1`. "Recommended tuning values" are 0x28B-0x15CC with a default of 0x4000 (~1ms). For example, `IMODI = 512` guarantees at least 128 us between interrupts, so the maximum rate stays under 8kHz. Writing `IMODI = 0` disables throttling and interrupts are delivered immediately once `EHB` is clear and the *Event Ring* is non empty. Blocking Event handling ensures `IPE` (an internal flag) and `EHB` cooperate with `IMODC`. A new interrupt is prevented until `IMODC` reaches zero, `IPE` is asserted, and `EHB` is cleared, when those conditions hold, the counter reloads from `IMODI` so the pacing cycle repeats.
-
 ## Bit Descriptions
 
 ### Interrupter Moderation Register (IMOD)

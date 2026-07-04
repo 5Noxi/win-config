@@ -1,6 +1,6 @@
 # Explorer Options
 
-It changes every setting which is shown in the `Folder Options` window. Some are personal preference, see suboptions below for customization.
+It changes every setting which is shown in the `Folder Options` window. Some are personal preference, see suboptions below for customization, and configurations that aren't made in the main option.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
 
@@ -231,13 +231,6 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties
 // Disabled
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties\UnindexedLocations\SearchOnly Type: REG_DWORD, Length: 4, Data: 1
 ```
-
-# Remove Quick Access
-
-Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to `This PC`.
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/quickaccess.png?raw=true)
-
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -999,6 +992,24 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-1-5-21-1713887642-2553820887-3827158055-1000\AnyoneRead\Colors\AccentColor	Type: REG_DWORD, Length: 4, Data: 4292114432
 ```
 
+## Prevent Color/Theme Changes
+
+Prevents changing color/appearance, desktop background, desktop icons, start background, themes. It also stops themes from changing mouse pointers and desktop icons.
+
+Use the suboptions to prevent/allow specific parts.
+
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Prevent changing color and appearance](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoColorAppearanceUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `NoDispAppearancePage` |
+| [Prevent changing desktop background](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoDesktopBackgroundUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop` | `NoChangingWallPaper` |
+| [Prevent changing desktop icons](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoDesktopIconsUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `NoDispBackgroundPage` |
+| [Prevent changing lock screen and logon image](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoChangingLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingLockScreen` |
+| [Prevent changing mouse pointers](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoMousePointersUI) | `HKCU\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingMousePointers` |
+| [Prevent changing start menu background](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoChangingStartMenuBackground) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingStartMenuBackground` |
+| [Prevent changing theme](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_DisableThemeChange) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoThemesTab` |
+
 # Account Picture
 
 Changes the user account picture via:
@@ -1250,14 +1261,6 @@ Use it on W11, unless you like the new menu.
 ### After
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
-
-# Disable Automatic Folder Type Discovery
-
-> "*Folder discovery is a feature that customizes the view settings of folders based on their content. For example, a folder with images might display thumbnails, while a folder with documents might show a list view. While this can be useful, it can also be frustrating if you prefer a uniform view for all folders.*"
-
-Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), `NotSpecified` sets the template to `General Items`. The other templates would be `Documents`, `Music`, `Videos` (folder: `Properties > Customize > Optimize this folder for:`).
-
-The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
 
 # Hide Shortcut Icon
 
@@ -1573,24 +1576,6 @@ Write-Host "Noverse" -ForegroundColor Blue
 
 If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
 
-# Prevent Color/Theme Changes
-
-Prevents changing color/appearance, desktop background, desktop icons, start background, themes. It also stops themes from changing mouse pointers and desktop icons.
-
-Use the suboptions to prevent/allow specific parts.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Prevent changing color and appearance](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoColorAppearanceUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `NoDispAppearancePage` |
-| [Prevent changing desktop background](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoDesktopBackgroundUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop` | `NoChangingWallPaper` |
-| [Prevent changing desktop icons](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoDesktopIconsUI) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\System` | `NoDispBackgroundPage` |
-| [Prevent changing lock screen and logon image](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoChangingLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingLockScreen` |
-| [Prevent changing mouse pointers](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoMousePointersUI) | `HKCU\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingMousePointers` |
-| [Prevent changing start menu background](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoChangingStartMenuBackground) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingStartMenuBackground` |
-| [Prevent changing theme](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_DisableThemeChange) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoThemesTab` |
-
 # Hide Disabled/Disconnected Devices
 
 Hides disabled/disconnected devices in the `mmsys.cpl` window.
@@ -1626,27 +1611,6 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Always open All Control Panel Items when opening Control Panel](https://noverse.dev/policies?p=ControlPanel*ForceClassicControlPanel) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `ForceClassicControlPanel` |
-
-# PC Name
-
-Query current name via:
-
-```powershell
-$env:COMPUTERNAME # ComputerName
-
-hostname # NV Hostname
-```
-
-## SystemSettings Capture
-
-Same would be written if changed via [`Rename-Computer`](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/rename-computer) cmdlet.
-
-```c
-// System > About : Rename this PC (NOVERSE)
-
-HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\NV Hostname	Type: REG_SZ, Length: 16, Data: NOVERSE
-HKLM\System\CurrentControlSet\Control\ComputerName\ComputerName\ComputerName	Type: REG_SZ, Length: 16, Data: NOVERSE
-```
 
 # OEM Information
 
