@@ -172,10 +172,11 @@ See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/r
 
 ## Suboptions
 
-`Disable DHA Report`:  
+### DHA Report
+
 > "*This group policy enables Device Health Attestation reporting (DHA-report) on supported devices. It enables supported devices to send Device Health Attestation related information (device boot logs, PCR values, TPM certificate, etc.) to Device Health Attestation Service (DHA-Service) every time a device starts. Device Health Attestation Service validates the security state and health of the devices, and makes the findings accessible to enterprise administrators via a cloud based reporting portal. This policy is independent of DHA reports that are initiated by device manageability solutions (like MDM or SCCM), and will not interfere with their workflows.*"
 
-`Disable Persistent System Timestamp`:
+### Persistent System Timestamp
 
 Disables the Reliability policy that periodically writes the current system time to disk. Windows uses that persistent timestamp as a "last known alive" time so Reliability Monitor / WER can estimate when an unexpected shutdown, power loss, hard reset, or crash happened (see policies below).
 
@@ -189,6 +190,31 @@ if ( !RegQueryValueExW(hKey[0], "TimeStampInterval", 0LL, 0LL, (LPBYTE)&v4, &cbD
 `TimeStampInterval` under `HKLM\Software\Policies\Microsoft\Windows NT\Reliability` is in seconds, the value under `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Reliability` is read as minutes and multiplied by 60.
 
 - [privacy/assets | timestamp-OsEventsTimestampInterval.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/timestamp-OsEventsTimestampInterval.c)
+
+### Crash Dumps
+
+Disables the crash dump, logging. Not all values may be read on your system.
+
+#### [Data Meaning](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery)
+
+```c
+CrashDumpEnabled REG_DWORD 0x0 = None
+CrashDumpEnabled REG_DWORD 0x1 = Complete memory dump
+CrashDumpEnabled REG_DWORD 0x2 = Kernel memory dump
+CrashDumpEnabled REG_DWORD 0x3 = Small memory dump (64 KB)
+CrashDumpEnabled REG_DWORD 0x7 = Automatic memory dump
+CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dump
+```
+
+There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.New
+\Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.Old
+```
+
+- [privacy/assets | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp.c)
+- [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
 
 ## Miscellaneous Notes
 
@@ -537,25 +563,6 @@ if ( v6 < 0 )
 | [Turn off Automatic Download and Update of Map Data](https://noverse.dev/policies?p=WinMaps*TurnOffAutoUpdate) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AutoDownloadAndUpdateMapData` |
 | [Turn off unsolicited network traffic on the Offline Maps settings page](https://noverse.dev/policies?p=WinMaps*DisallowUntriggeredNetworkOnSettingsPage) | `HKLM\Software\Policies\Microsoft\Windows\Maps` | `AllowUntriggeredNetworkTrafficOnSettingsPage` |
 
-# Disable Website Access to Language List
-
-"Sets the HTTP Accept Language from the Language List opt-out setting." Disables [`Let websites provide locally relevant content by accessing my language list`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general).
-
-Using [`Set-WinAcceptLanguageFromLanguageListOptOut`](https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps):
-
-```powershell
-Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
-```
-
-```c
-// $True
-"powershell.exe","RegSetValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut","Type: REG_DWORD, Length: 4, Data: 1"
-"powershell.exe","RegDeleteValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage",""
-// $False
-"powershell.exe","RegDeleteValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut",""
-"powershell.exe","RegSetValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage","Type: REG_SZ, Length: 54, Data: en-US;q=0.7,en;q=0.3"
-```
-
 # Disable Cross-Device Experiences
 
 Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).
@@ -659,7 +666,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 # Disable Background Apps
 
-Note that whenever you use this option while having UWP apps, it'll break notifications, background sync, etc.
+Note that whenever you use this option while having UWP apps, it'll break notifications, background sync, etc., also *some apps, including Cortana and Search, might not function as expected if you set 'Let apps run in the background' to 'Force Deny'*.
 
 > *This policy setting specifies whether Windows apps can run in the background.*
 >
@@ -699,6 +706,43 @@ Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (n
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Let Windows apps run in the background](https://noverse.dev/policies?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground`<br>`LetAppsRunInBackground_UserInControlOfTheseApps`<br>`LetAppsRunInBackground_ForceAllowTheseApps`<br>`LetAppsRunInBackground_ForceDenyTheseApps` |
+
+# Disable Apps for Websites
+
+Prevents websites from opening their associated apps through HTTP or HTTPS links, keeping those links in the default browser instead.
+
+> "*This policy setting determines whether Windows supports web-to-app linking with app URI handlers.*
+>
+> *Enabling this policy setting enables web-to-app linking so that apps can be launched with a http(s) URI.*
+>
+> *Disabling this policy disables web-to-app linking and http(s) URIs will be opened in the default browser instead of launching the associated app.*
+>
+> *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*
+
+## Website Access to Language List
+
+"Sets the HTTP Accept Language from the Language List opt-out setting." Disables [`Let websites provide locally relevant content by accessing my language list`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general).
+
+Using [`Set-WinAcceptLanguageFromLanguageListOptOut`](https://learn.microsoft.com/en-us/powershell/module/international/set-winacceptlanguagefromlanguagelistoptout?view=windowsserver2025-ps):
+
+```powershell
+Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
+```
+
+```c
+// $True
+"powershell.exe","RegSetValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut","Type: REG_DWORD, Length: 4, Data: 1"
+"powershell.exe","RegDeleteValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage",""
+// $False
+"powershell.exe","RegDeleteValue","HKCU\Control Panel\International\User Profile\HttpAcceptLanguageOptOut",""
+"powershell.exe","RegSetValue","HKCU\Software\Microsoft\Internet Explorer\International\AcceptLanguage","Type: REG_SZ, Length: 54, Data: en-US;q=0.7,en;q=0.3"
+```
+
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Configure web-to-app linking with app URI handlers](https://noverse.dev/policies?p=GroupPolicy*EnableAppUriHandlers) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableAppUriHandlers` |
 
 # Disable Auto Maintenance
 
@@ -1188,31 +1232,6 @@ Means whenever you've DRM protected files, don't enable this option.
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Prevent Windows Media DRM Internet Access](https://noverse.dev/policies?p=WindowsMediaDRM*DisableOnline) | `HKLM\Software\Policies\Microsoft\WMDRM` | `DisableOnline` |
-
-# Disable Crash Dumps
-
-Disables the crash dump, logging. Not all values may be read on your system.
-
-### [Data Meaning](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/memory-dump-file-options#registry-values-for-startup-and-recovery)
-
-```c
-CrashDumpEnabled REG_DWORD 0x0 = None
-CrashDumpEnabled REG_DWORD 0x1 = Complete memory dump
-CrashDumpEnabled REG_DWORD 0x2 = Kernel memory dump
-CrashDumpEnabled REG_DWORD 0x3 = Small memory dump (64 KB)
-CrashDumpEnabled REG_DWORD 0x7 = Automatic memory dump
-CrashDumpEnabled REG_DWORD 0x1 and FilterPages REG_DWORD 0x1 = Active memory dump
-```
-
-There're two values named [`CrashDumpEnabled.New`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt) & [`CrashDumpEnabled.Old`](https://github.com/nohuto/regkit/blob/main/records/CrashControl.txt), I haven't looked into them yet, see this as note for future reference.
-
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.New
-\Registry\Machine\SYSTEM\ControlSet001\Control\CrashControl : CrashDumpEnabled.Old
-```
-
-- [privacy/assets | crashdmp.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp.c)
-- [privacy/assets | crashdmp-SecureDump_PrepareForInit.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/crashdmp-SecureDump_PrepareForInit.c)
 
 # Disable Sleep Study
 

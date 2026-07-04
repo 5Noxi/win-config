@@ -879,7 +879,7 @@ I removed the value since you can't apply it even with `TrustedInstaller`/`SYSTE
 SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDa	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0, but it grays out & disables the option.
+Disallowing it via the `AllowNewsAndInterests` policy (`EnableFeeds` policy isn't used anymore) won't set `TaskbarDa` to 0, but it grays out & disables the option.
 
 ## Suboptions
 
