@@ -5616,123 +5616,256 @@ This list was created using my small [`ScheduledTasksList.ps1`](https://github.c
 
 ## Scheduled Tasks Table
 
-| Option Name | Task | Description | Action Command |
-| --- | --- | --- | --- |
-| CEIP | `\Microsoft\Windows\Autochk\Proxy` | This task collects and uploads autochk SQM data if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\rundll32.exe /d acproxy.dll,PerformAutochkOperations` |
-|  | `\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip` | The USB CEIP (Customer Experience Improvement Program) task collects Universal Serial Bus related statistics and information about your machine and sends it to the Windows Device Connectivity engineering group at Microsoft.  The information received is used to help improve the reliability, stability, and overall functionality of USB in Windows.  If the user has not consented to participate in Windows CEIP, this task does not do anything. | `ClassId:{C27F6B1D-FE0B-45E4-9257-38799FA69BC8}` |
-|  | `\Microsoft\Windows\Customer Experience Improvement Program\Consolidator` | If the user has consented to participate in the Windows Customer Experience Improvement Program, this job collects and sends usage data to Microsoft. | `%WINDIR%\System32\wsqmcons.exe` |
-|  | `\Microsoft\Windows\Customer Experience Improvement Program\Uploader` | - | - |
-|  | `\Microsoft\Windows\Customer Experience Improvement Program\Server\ServerCeipAssistant` | - | - |
-|  | `\Microsoft\Windows\Customer Experience Improvement Program\Server\ServerRoleUsageCollector` | - | - |
-| Error Reporting | `\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate` | - | - |
-|  | `\Microsoft\Windows\Windows Error Reporting\QueueReporting` | Windows Error Reporting task to process queued reports. | `%windir%\system32\wermgr.exe -upload` |
-| Offline Files | `\Microsoft\Windows\Offline Files\Background Synchronization` | This task controls periodic background synchronization of Offline Files when the user is working in an offline mode. | `ClassId:{FA3F3DD9-4C1A-456B-A8FA-C76EF3ED83B8}` |
-|  | `\Microsoft\Windows\Offline Files\Logon Synchronization` | This task initiates synchronization of Offline Files when a user logs onto the system. | `ClassId:{FA3F3DD9-4C1A-456B-A8FA-C76EF3ED83B8}` |
-| Printing | `\Microsoft\Windows\Printing\PrintJobCleanupTask` | - | `ClassId:{8ABCE260-32B6-476C-AE13-B34D0C91292D}` |
-|  | `\Microsoft\Windows\Printing\PrinterCleanupTask` | - | `ClassId:{C56F065E-DE49-4E42-BE7C-305C45609D25}` |
-|  | `\Microsoft\Windows\Printing\EduPrintProv` | - | `%windir%\system32\eduprintprov.exe` |
-| Wi-Fi Service | `\Microsoft\Windows\WCM\WiFiTask` | Background task for performing per user and web interactions | `%WINDIR%\System32\WiFiTask.exe` |
-|  | `\Microsoft\Windows\WlanSvc\CDSSync` | - | `ClassId:{B0D2B535-12E1-439F-86B3-BADA289510F0}` |
-|  | `\Microsoft\Windows\WwanSvc\NotificationTask` | Background task for performing per user and web interactions | `%WINDIR%\System32\WiFiTask.exe wwan` |
-|  | `\Microsoft\Windows\WwanSvc\OobeDiscovery` | - | `ClassId:{C93CF9D5-031B-4AAA-AB0B-EF802347B381}` |
-|  | `\Microsoft\Windows\WlanSvc\MoProfileManagement` | - | `ClassId:{085EDA12-CF4A-4944-8222-8ADCADE137CB}` |
-| Office Telemetry | `\Microsoft\Office\OfficeTelemetryAgentFallBack` | - | - |
-|  | `\Microsoft\Office\OfficeTelemetryAgentFallBack2016` | - | - |
-|  | `\Microsoft\Office\OfficeTelemetryAgentLogOn` | - | - |
-|  | `\Microsoft\Office\OfficeTelemetryAgentLogOn2016` | - | - |
-| NVIDIA Telemetry | `NvTmRep_*` | Sends data at 12:25PM daily | - |
-|  | `NvTmRepOnLogon*` | Sends data on logon | - |
-|  | `NvTmMon_*` | Sends data on logon, then in a 1H interval | - |
-| Feedback | `\Microsoft\Windows\Feedback\Siuf\DmClient` | Update SIUF strings | `%windir%\system32\dmclient.exe` |
-|  | `\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload` | Update SIUF strings | `%windir%\system32\dmclient.exe utcwnf` |
-| Application Experience | `\Microsoft\Windows\Application Experience\MareBackup` | Gathers Win32 application data for App Backup scenario | `%windir%\system32\compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventoryW invsvc ; %windir%\system32\compattelrunner.exe -m:appraiser.dll -f:DoScheduledTelemetryRun ; %windir%\system32\compattelrunner.exe -m:aemarebackup.dll -f:BackupMareData` |
-|  | `\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser` | Collects program telemetry information if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\sc.exe start InventorySvc` |
-|  | `\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser Exp` | Collects program telemetry information if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\compattelrunner.exe -m:appraiser.dll -f:DoScheduledTelemetryRun express` |
-|  | `\Microsoft\Windows\Application Experience\PcaPatchDbTask` | Updates compatibility database | `%windir%\system32\rundll32.exe %windir%\system32\PcaSvc.dll,PcaPatchSdbTask` |
-|  | `\Microsoft\Windows\Application Experience\SdbinstMergeDbTask` | Merges shim databases that are pending merge. | `%windir%\system32\sdbinst.exe -mm` |
-|  | `\Microsoft\Windows\Application Experience\StartupAppTask` | Scans startup entries and raises notification to the user if there are too many startup entries. | `%windir%\system32\rundll32.exe Startupscan.dll,SusRunTask` |
-| Maintenance | `\Microsoft\Windows\ApplicationData\DsSvcCleanup` | Performs maintenance for the Data Sharing Service. | `%windir%\system32\dstokenclean.exe` |
-|  | `\Microsoft\Windows\CloudExperienceHost\CreateObjectTask` | - | `ClassId:{E4544ABA-62BF-4C54-AAB2-EC246342626C}` |
-|  | `\Microsoft\Windows\Defrag\ScheduledDefrag` | This task optimizes local storage drives. | `%windir%\system32\defrag.exe -c -h -o -$` |
-|  | `\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner` | Check for recommended troubleshooting from Microsoft | `ClassId:{AD08DCC2-4E35-4486-9D49-547CBD30942D}` |
-|  | `\Microsoft\Windows\Diagnosis\Scheduled` | The Windows Scheduled Maintenance Task performs periodic maintenance of the computer system by fixing problems automatically or reporting them through Security and Maintenance. | `ClassId:{C1F85EF8-BCC2-4606-BB39-70C523715EB3}` |
-|  | `\Microsoft\Windows\Diagnosis\UnexpectedCodePath` | - | - |
-|  | `\Microsoft\Windows\DiskCleanup\SilentCleanup` | Maintenance task used by the system to launch a silent auto disk cleanup when running low on free disk space. | `%windir%\system32\cleanmgr.exe /autocleanstoragesense /d %systemdrive%` |
-|  | `\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector` | The Windows Disk Diagnostic reports general disk and system information to Microsoft for users participating in the Customer Experience Program. | `%windir%\system32\rundll32.exe dfdts.dll,DfdGetDefaultPolicyAndSMART` |
-|  | `\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver` | The Microsoft-Windows-DiskDiagnosticResolver warns users about faults reported by hard disks that support the Self Monitoring and Reporting Technology (S.M.A.R.T.) standard. This task is triggered automatically by the Diagnostic Policy Service when a S.M.A.R.T. fault is detected. | `%windir%\system32\DFDWiz.exe` |
-|  | `\Microsoft\Windows\DiskFootprint\Diagnostics` | - | `%windir%\system32\disksnapshot.exe -z` |
-|  | `\Microsoft\Windows\DiskFootprint\StorageSense` | - | `ClassId:{AB2A519B-03B0-43CE-940A-A73DF850B49A}` |
-|  | `\Microsoft\Windows\Speech\SpeechModelDownloadTask` | - | `%windir%\system32\speech_onecore\common\SpeechModelDownload.exe` |
-|  | `\Microsoft\Windows\Sysmain\ResPriStaticDbSync` | Reserved Priority static db sync maintenance task | `ClassId:{297EE78C-BA95-4E94-81D3-D6E7F089C7B5}` |
-|  | `\Microsoft\Windows\Sysmain\WsSwapAssessmentTask` | Working set swap assessment maintenance task | `%windir%\system32\rundll32.exe sysmain.dll,PfSvWsSwapAssessmentTask` |
-|  | `\Microsoft\Windows\UNP\RunUpdateNotificationMgr` | - | - |
-|  | `\Microsoft\Windows\BrokerInfrastructure\BgTaskRegistrationMaintenanceTask` | Maintains registrations for background tasks for Universal Windows Platform applications. | `ClassId:{E984D939-0E00-4DD9-AC3A-7ACA04745521}` |
-|  | `\Microsoft\Windows\capabilityaccessmanager\maintenancetasks` | Capability Access Manager Maintenance Tasks | `%windir%\system32\rundll32.exe %windir%\system32\CapabilityAccessManager.dll,CapabilityAccessManagerDoStoreMaintenance` |
-| Census | `\Microsoft\Windows\Device Information\Device User` | - | `%windir%\system32\devicecensus.exe UserCxt` |
-|  | `\Microsoft\Windows\Device Information\Device` | - | `%windir%\system32\devicecensus.exe SystemCxt` |
-| Update Service | `\Microsoft\Windows\InstallService\ScanForUpdates` | - | `ClassId:{A558C6A5-B42B-4C98-B610-BF9559143139}` |
-|  | `\Microsoft\Windows\InstallService\ScanForUpdatesAsUser` | - | `ClassId:{DDAFAEA2-8842-4E96-BADE-D44A8D676FDB}` |
-|  | `\Microsoft\Windows\InstallService\SmartRetry` | - | `ClassId:{F3A219C3-2698-4CBF-9C07-037EDB8E72E6}` |
-|  | `\Microsoft\Windows\InstallService\WakeUpAndContinueUpdates` | - | `ClassId:{0DC331EE-8438-49D5-A721-E10B937CE459}` |
-|  | `\Microsoft\Windows\InstallService\WakeUpAndScanForUpdates` | - | `ClassId:{D5A04D91-6FE6-4FE4-A98A-FEB4500C5AF7}` |
-| Localization | `\Microsoft\Windows\International\Synchronize Language Settings` | Synchronize User Language Settings from other devices. | `ClassId:{10D62541-90D0-42FE-848C-0DBC1AC42EDA}` |
-|  | `\Microsoft\Windows\LanguageComponentsInstaller\Installation` | Install language components that match the user's language list. | `ClassId:{6F58F65F-EC0E-4ACA-99FE-FC5A1A25E4BE}` |
-|  | `\Microsoft\Windows\LanguageComponentsInstaller\ReconcileLanguageResources` | Install language components that match the user's language list. | `ClassId:{D0582E3B-3126-4CAA-9155-AC37C912A489}` |
-|  | `\Microsoft\Windows\LanguageComponentsInstaller\Uninstallation` | Uninstall language components that are not in any user's language list. | `ClassId:{6F58F65F-EC0E-4ACA-99FE-FC5A1A25E4BE}` |
-| Maps | `\Microsoft\Windows\Maps\MapsUpdateTask` | This task checks for updates to maps which you have downloaded for offline use. Disabling this task will prevent Windows from notifying you of updated maps. | `ClassId:{B9033E87-33CF-4D77-BC9B-895AFBBA72E4}` |
-|  | `\Microsoft\Windows\Maps\MapsToastTask` | This task shows various Map related toasts | `ClassId:{9885AEF2-BD9F-41E0-B15E-B3141395E803}` |
-| Sleep Study | `\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem` | This task analyzes the system looking for conditions that may cause high energy use. | `ClassId:{927EA2AF-1C54-43D5-825E-0074CE028EEE}` |
-| Time Sync | `\Microsoft\Windows\Time Synchronization\ForceSynchronizeTime` | This task performs time synchronization. | `ClassId:{A31AD6C2-FF4C-43D4-8E90-7101023096F9}` |
-|  | `\Microsoft\Windows\Time Synchronization\SynchronizeTime` | Maintains date and time synchronization on all clients and servers in the network. If this service is stopped, date and time synchronization will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. | `%windir%\system32\sc.exe start w32time task_started` |
-| Miscellaneous | `\Microsoft\Windows\Registry\RegIdleBackup` | Registry Idle Backup Task | `ClassId:{CA767AA8-9157-4604-B64B-40747123D5F2}` |
-|  | `\Microsoft\Windows\RetailDemo\CleanupOfflineContent` | Auto cleanup RetailDemo Offline content | `ClassId:{61F77D5E-AFE9-400B-A5E6-E9E80FC8E601}` |
-| WU | `\Microsoft\Windows\UpdateOrchestrator\Report policies` | - | `%WINDIR%\system32\usoclient.exe ReportPolicies` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\Schedule Maintenance Work` | - | `%WINDIR%\system32\usoclient.exe StartMaintenanceWork` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\Schedule Scan` | - | `%WINDIR%\system32\usoclient.exe StartScan` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\Schedule Scan Static Task` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartScan` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\Schedule Wake To Work` | - | `%WINDIR%\system32\usoclient.exe StartWork` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\Schedule Work` | - | `%WINDIR%\system32\usoclient.exe StartWork` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\Start Oobe Expedite Work` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartWork` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScan_LicenseAccepted` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartOobeAppsScan` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScanAfterUpdate` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartOobeAppsScanAfterUpdate` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\USO_UxBroker` | This task triggers a system reboot following update installation. | `%WINDIR%\system32\MusNotification.exe` |
-|  | `\Microsoft\Windows\UpdateOrchestrator\UUS Failover Task` | - | `%windir%\System32\MLEngineStub.exe HandleUusFailoverEvaluationSignalFromWnf` |
-|  | `\Microsoft\Windows\WindowsUpdate\Scheduled Start` | This task is used to start the Windows Update service when needed to perform scheduled operations such as scans. | `%WINDIR%\System32\sc.exe start wuauserv` |
-|  | `\Microsoft\Windows\WindowsUpdate\Refresh Group Policy Cache` | This task is used to refresh group policy cache in Windows Update | `ClassId:{07369A67-07A6-4608-ABEA-379491CB7C46}` |
-| BitLocker | `\Microsoft\Windows\BitLocker\BitLocker Encrypt All Drives` | - | `ClassId:{61BCD1B9-340C-40EC-9D41-D7F1C0632F05}` |
-|  | `\Microsoft\Windows\BitLocker\BitLocker MDM Policy Refresh` | - | - |
-| Microsoft Account | `\Microsoft\Windows\AccountHealth\RecoverabilityToastTask` | AccountHealth Task Handler evaluates the state of a Microsoft Account and takes any necessary repair action | `ClassId:{B7F5B442-EBF8-46CD-9F0B-D8E45ED43492}` |
-| Chkdsk | `\Microsoft\Windows\Chkdsk\ProactiveScan` | NTFS Volume Health Scan | `ClassId:{CF4270F5-2E43-4468-83B3-A8C45BB33EA1}` |
-|  | `\Microsoft\Windows\Chkdsk\SyspartRepair` | - | `%windir%\system32\bcdboot.exe %windir% /sysrepair` |
-| OneSettings | `\Microsoft\Windows\Flighting\OneSettings\RefreshCache` | Task periodically refreshing data for OneSettings clients. | `ClassId:{E07647F7-AED2-48D9-9720-939BC24A8A3C}` |
-| Location Notification | `\Microsoft\Windows\Location\WindowsActionDialog` | Location Notification | `%windir%\System32\WindowsActionDialog.exe` |
-| Memory Diagnostic | `\Microsoft\Windows\MemoryDiagnostic\AutomaticOfflineMemoryDiagnostic` | Schedules an offline memory diagnostic in response to system events. | `ClassId:{44F6C389-604A-4363-B09A-F38DA08E6079}` |
-|  | `\Microsoft\Windows\MemoryDiagnostic\ProcessMemoryDiagnosticEvents` | Schedules a memory diagnostic in response to system events. | `ClassId:{8168E74A-B39F-46D8-ADCD-7BED477B80A3}` |
-|  | `\Microsoft\Windows\MemoryDiagnostic\RunFullMemoryDiagnostic` | Detects and mitigates problems in physical memory (RAM). | `ClassId:{8168E74A-B39F-46D8-ADCD-7BED477B80A3}` |
-| Remote Assistance | `\Microsoft\Windows\RemoteAssistance\RemoteAssistanceTask` | Checks group policy for changes relevant to Remote Assistance | `%windir%\system32\RAServer.exe /offerraupdate` |
-| SR | `\Microsoft\Windows\SystemRestore\SR` | This task creates regular system protection points. | `%windir%\system32\srtasks.exe ExecuteScheduledSPPCreation` |
-| Windows Defender | `\Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance` | Periodic maintenance task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe -IdleTask -TaskName WdCacheMaintenance` |
-|  | `\Microsoft\Windows\Windows Defender\Windows Defender Cleanup` | Periodic cleanup task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe -IdleTask -TaskName WdCleanup` |
-|  | `\Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan` | Periodic scan task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe Scan -ScheduleJob -ScanTrigger 55 -IdleScheduledJob` |
-|  | `\Microsoft\Windows\Windows Defender\Windows Defender Verification` | Periodic verification task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe -IdleTask -TaskName WdVerification` |
-| AI | `\Microsoft\Windows\WindowsAI\Recall\InitialConfiguration` | - | `ClassId:{709FD5EF-7296-4154-BD3A-E9830FCFA60A}` |
-|  | `\Microsoft\Windows\WindowsAI\Recall\PolicyConfiguration` | - | `ClassId:{0BE6820D-B667-4CB6-931B-C153A77DA895}` |
-|  | `\Microsoft\Windows\WindowsAI\Settings\InitialConfiguration` | - | `ClassId:{2886E5FB-4F01-4A89-9A0E-5D6A9C8048AC}` |
-| Work Folders | `\Microsoft\Windows\Work Folders\Work Folders Logon Synchronization` | This task initiates synchronization of Work Folders partnerships when a user logs onto the system. | `ClassId:{97D47D56-3777-49FB-8E8F-90D7E30E1A1E}` |
-|  | `\Microsoft\Windows\Work Folders\Work Folders Maintenance Work` | This task initiates maintenance work required for on-going good performance of data synchronization of Work Folders partnerships. | `ClassId:{63260BCE-A3FB-4A34-AA51-D4D8E877B62B}` |
+### CEIP
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Autochk\Proxy` | This task collects and uploads autochk SQM data if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\rundll32.exe /d acproxy.dll,PerformAutochkOperations` |
+| `\Microsoft\Windows\Customer Experience Improvement Program\UsbCeip` | The USB CEIP (Customer Experience Improvement Program) task collects Universal Serial Bus related statistics and information about your machine and sends it to the Windows Device Connectivity engineering group at Microsoft.  The information received is used to help improve the reliability, stability, and overall functionality of USB in Windows.  If the user has not consented to participate in Windows CEIP, this task does not do anything. | `ClassId:{C27F6B1D-FE0B-45E4-9257-38799FA69BC8}` |
+| `\Microsoft\Windows\Customer Experience Improvement Program\Consolidator` | If the user has consented to participate in the Windows Customer Experience Improvement Program, this job collects and sends usage data to Microsoft. | `%WINDIR%\System32\wsqmcons.exe` |
+| `\Microsoft\Windows\Customer Experience Improvement Program\Uploader` | - | - |
+| `\Microsoft\Windows\Customer Experience Improvement Program\Server\ServerCeipAssistant` | - | - |
+| `\Microsoft\Windows\Customer Experience Improvement Program\Server\ServerRoleUsageCollector` | - | - |
+
+### Error Reporting
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\ErrorDetails\EnableErrorDetailsUpdate` | - | - |
+| `\Microsoft\Windows\Windows Error Reporting\QueueReporting` | Windows Error Reporting task to process queued reports. | `%windir%\system32\wermgr.exe -upload` |
+
+### Offline Files
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Offline Files\Background Synchronization` | This task controls periodic background synchronization of Offline Files when the user is working in an offline mode. | `ClassId:{FA3F3DD9-4C1A-456B-A8FA-C76EF3ED83B8}` |
+| `\Microsoft\Windows\Offline Files\Logon Synchronization` | This task initiates synchronization of Offline Files when a user logs onto the system. | `ClassId:{FA3F3DD9-4C1A-456B-A8FA-C76EF3ED83B8}` |
+
+### Printing
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Printing\PrintJobCleanupTask` | - | `ClassId:{8ABCE260-32B6-476C-AE13-B34D0C91292D}` |
+| `\Microsoft\Windows\Printing\PrinterCleanupTask` | - | `ClassId:{C56F065E-DE49-4E42-BE7C-305C45609D25}` |
+| `\Microsoft\Windows\Printing\EduPrintProv` | - | `%windir%\system32\eduprintprov.exe` |
+
+### Wi-Fi Service
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\WCM\WiFiTask` | Background task for performing per user and web interactions | `%WINDIR%\System32\WiFiTask.exe` |
+| `\Microsoft\Windows\WlanSvc\CDSSync` | - | `ClassId:{B0D2B535-12E1-439F-86B3-BADA289510F0}` |
+| `\Microsoft\Windows\WwanSvc\NotificationTask` | Background task for performing per user and web interactions | `%WINDIR%\System32\WiFiTask.exe wwan` |
+| `\Microsoft\Windows\WwanSvc\OobeDiscovery` | - | `ClassId:{C93CF9D5-031B-4AAA-AB0B-EF802347B381}` |
+| `\Microsoft\Windows\WlanSvc\MoProfileManagement` | - | `ClassId:{085EDA12-CF4A-4944-8222-8ADCADE137CB}` |
+
+### Office Telemetry
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Office\OfficeTelemetryAgentFallBack` | - | - |
+| `\Microsoft\Office\OfficeTelemetryAgentFallBack2016` | - | - |
+| `\Microsoft\Office\OfficeTelemetryAgentLogOn` | - | - |
+| `\Microsoft\Office\OfficeTelemetryAgentLogOn2016` | - | - |
+
+### NVIDIA Telemetry
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `NvTmRep_*` | Sends data at 12:25PM daily | - |
+| `NvTmRepOnLogon*` | Sends data on logon | - |
+| `NvTmMon_*` | Sends data on logon, then in a 1H interval | - |
+
+### Feedback
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Feedback\Siuf\DmClient` | Update SIUF strings | `%windir%\system32\dmclient.exe` |
+| `\Microsoft\Windows\Feedback\Siuf\DmClientOnScenarioDownload` | Update SIUF strings | `%windir%\system32\dmclient.exe utcwnf` |
+
+### Application Experience
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Application Experience\MareBackup` | Gathers Win32 application data for App Backup scenario | `%windir%\system32\compattelrunner.exe -m:aeinv.dll -f:UpdateSoftwareInventoryW invsvc ; %windir%\system32\compattelrunner.exe -m:appraiser.dll -f:DoScheduledTelemetryRun ; %windir%\system32\compattelrunner.exe -m:aemarebackup.dll -f:BackupMareData` |
+| `\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser` | Collects program telemetry information if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\sc.exe start InventorySvc` |
+| `\Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser Exp` | Collects program telemetry information if opted-in to the Microsoft Customer Experience Improvement Program. | `%windir%\system32\compattelrunner.exe -m:appraiser.dll -f:DoScheduledTelemetryRun express` |
+| `\Microsoft\Windows\Application Experience\PcaPatchDbTask` | Updates compatibility database | `%windir%\system32\rundll32.exe %windir%\system32\PcaSvc.dll,PcaPatchSdbTask` |
+| `\Microsoft\Windows\Application Experience\SdbinstMergeDbTask` | Merges shim databases that are pending merge. | `%windir%\system32\sdbinst.exe -mm` |
+| `\Microsoft\Windows\Application Experience\StartupAppTask` | Scans startup entries and raises notification to the user if there are too many startup entries. | `%windir%\system32\rundll32.exe Startupscan.dll,SusRunTask` |
+
+### Maintenance
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\ApplicationData\DsSvcCleanup` | Performs maintenance for the Data Sharing Service. | `%windir%\system32\dstokenclean.exe` |
+| `\Microsoft\Windows\CloudExperienceHost\CreateObjectTask` | - | `ClassId:{E4544ABA-62BF-4C54-AAB2-EC246342626C}` |
+| `\Microsoft\Windows\Defrag\ScheduledDefrag` | This task optimizes local storage drives. | `%windir%\system32\defrag.exe -c -h -o -$` |
+| `\Microsoft\Windows\Diagnosis\RecommendedTroubleshootingScanner` | Check for recommended troubleshooting from Microsoft | `ClassId:{AD08DCC2-4E35-4486-9D49-547CBD30942D}` |
+| `\Microsoft\Windows\Diagnosis\Scheduled` | The Windows Scheduled Maintenance Task performs periodic maintenance of the computer system by fixing problems automatically or reporting them through Security and Maintenance. | `ClassId:{C1F85EF8-BCC2-4606-BB39-70C523715EB3}` |
+| `\Microsoft\Windows\Diagnosis\UnexpectedCodePath` | - | - |
+| `\Microsoft\Windows\DiskCleanup\SilentCleanup` | Maintenance task used by the system to launch a silent auto disk cleanup when running low on free disk space. | `%windir%\system32\cleanmgr.exe /autocleanstoragesense /d %systemdrive%` |
+| `\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector` | The Windows Disk Diagnostic reports general disk and system information to Microsoft for users participating in the Customer Experience Program. | `%windir%\system32\rundll32.exe dfdts.dll,DfdGetDefaultPolicyAndSMART` |
+| `\Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticResolver` | The Microsoft-Windows-DiskDiagnosticResolver warns users about faults reported by hard disks that support the Self Monitoring and Reporting Technology (S.M.A.R.T.) standard. This task is triggered automatically by the Diagnostic Policy Service when a S.M.A.R.T. fault is detected. | `%windir%\system32\DFDWiz.exe` |
+| `\Microsoft\Windows\DiskFootprint\Diagnostics` | - | `%windir%\system32\disksnapshot.exe -z` |
+| `\Microsoft\Windows\DiskFootprint\StorageSense` | - | `ClassId:{AB2A519B-03B0-43CE-940A-A73DF850B49A}` |
+| `\Microsoft\Windows\Speech\SpeechModelDownloadTask` | - | `%windir%\system32\speech_onecore\common\SpeechModelDownload.exe` |
+| `\Microsoft\Windows\Sysmain\ResPriStaticDbSync` | Reserved Priority static db sync maintenance task | `ClassId:{297EE78C-BA95-4E94-81D3-D6E7F089C7B5}` |
+| `\Microsoft\Windows\Sysmain\WsSwapAssessmentTask` | Working set swap assessment maintenance task | `%windir%\system32\rundll32.exe sysmain.dll,PfSvWsSwapAssessmentTask` |
+| `\Microsoft\Windows\UNP\RunUpdateNotificationMgr` | - | - |
+| `\Microsoft\Windows\BrokerInfrastructure\BgTaskRegistrationMaintenanceTask` | Maintains registrations for background tasks for Universal Windows Platform applications. | `ClassId:{E984D939-0E00-4DD9-AC3A-7ACA04745521}` |
+| `\Microsoft\Windows\capabilityaccessmanager\maintenancetasks` | Capability Access Manager Maintenance Tasks | `%windir%\system32\rundll32.exe %windir%\system32\CapabilityAccessManager.dll,CapabilityAccessManagerDoStoreMaintenance` |
+
+### Census
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Device Information\Device User` | - | `%windir%\system32\devicecensus.exe UserCxt` |
+| `\Microsoft\Windows\Device Information\Device` | - | `%windir%\system32\devicecensus.exe SystemCxt` |
+
+### Update Service
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\InstallService\ScanForUpdates` | - | `ClassId:{A558C6A5-B42B-4C98-B610-BF9559143139}` |
+| `\Microsoft\Windows\InstallService\ScanForUpdatesAsUser` | - | `ClassId:{DDAFAEA2-8842-4E96-BADE-D44A8D676FDB}` |
+| `\Microsoft\Windows\InstallService\SmartRetry` | - | `ClassId:{F3A219C3-2698-4CBF-9C07-037EDB8E72E6}` |
+| `\Microsoft\Windows\InstallService\WakeUpAndContinueUpdates` | - | `ClassId:{0DC331EE-8438-49D5-A721-E10B937CE459}` |
+| `\Microsoft\Windows\InstallService\WakeUpAndScanForUpdates` | - | `ClassId:{D5A04D91-6FE6-4FE4-A98A-FEB4500C5AF7}` |
+
+### Localization
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\International\Synchronize Language Settings` | Synchronize User Language Settings from other devices. | `ClassId:{10D62541-90D0-42FE-848C-0DBC1AC42EDA}` |
+| `\Microsoft\Windows\LanguageComponentsInstaller\Installation` | Install language components that match the user's language list. | `ClassId:{6F58F65F-EC0E-4ACA-99FE-FC5A1A25E4BE}` |
+| `\Microsoft\Windows\LanguageComponentsInstaller\ReconcileLanguageResources` | Install language components that match the user's language list. | `ClassId:{D0582E3B-3126-4CAA-9155-AC37C912A489}` |
+| `\Microsoft\Windows\LanguageComponentsInstaller\Uninstallation` | Uninstall language components that are not in any user's language list. | `ClassId:{6F58F65F-EC0E-4ACA-99FE-FC5A1A25E4BE}` |
+
+### Maps
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Maps\MapsUpdateTask` | This task checks for updates to maps which you have downloaded for offline use. Disabling this task will prevent Windows from notifying you of updated maps. | `ClassId:{B9033E87-33CF-4D77-BC9B-895AFBBA72E4}` |
+| `\Microsoft\Windows\Maps\MapsToastTask` | This task shows various Map related toasts | `ClassId:{9885AEF2-BD9F-41E0-B15E-B3141395E803}` |
+
+### Sleep Study
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem` | This task analyzes the system looking for conditions that may cause high energy use. | `ClassId:{927EA2AF-1C54-43D5-825E-0074CE028EEE}` |
+
+### Time Sync
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Time Synchronization\ForceSynchronizeTime` | This task performs time synchronization. | `ClassId:{A31AD6C2-FF4C-43D4-8E90-7101023096F9}` |
+| `\Microsoft\Windows\Time Synchronization\SynchronizeTime` | Maintains date and time synchronization on all clients and servers in the network. If this service is stopped, date and time synchronization will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. | `%windir%\system32\sc.exe start w32time task_started` |
+
+### Miscellaneous
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Registry\RegIdleBackup` | Registry Idle Backup Task | `ClassId:{CA767AA8-9157-4604-B64B-40747123D5F2}` |
+| `\Microsoft\Windows\RetailDemo\CleanupOfflineContent` | Auto cleanup RetailDemo Offline content | `ClassId:{61F77D5E-AFE9-400B-A5E6-E9E80FC8E601}` |
+
+### WU
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\UpdateOrchestrator\Report policies` | - | `%WINDIR%\system32\usoclient.exe ReportPolicies` |
+| `\Microsoft\Windows\UpdateOrchestrator\Schedule Maintenance Work` | - | `%WINDIR%\system32\usoclient.exe StartMaintenanceWork` |
+| `\Microsoft\Windows\UpdateOrchestrator\Schedule Scan` | - | `%WINDIR%\system32\usoclient.exe StartScan` |
+| `\Microsoft\Windows\UpdateOrchestrator\Schedule Scan Static Task` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartScan` |
+| `\Microsoft\Windows\UpdateOrchestrator\Schedule Wake To Work` | - | `%WINDIR%\system32\usoclient.exe StartWork` |
+| `\Microsoft\Windows\UpdateOrchestrator\Schedule Work` | - | `%WINDIR%\system32\usoclient.exe StartWork` |
+| `\Microsoft\Windows\UpdateOrchestrator\Start Oobe Expedite Work` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartWork` |
+| `\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScan_LicenseAccepted` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartOobeAppsScan` |
+| `\Microsoft\Windows\UpdateOrchestrator\StartOobeAppsScanAfterUpdate` | This task performs a scheduled Windows Update scan. | `%WINDIR%\system32\usoclient.exe StartOobeAppsScanAfterUpdate` |
+| `\Microsoft\Windows\UpdateOrchestrator\USO_UxBroker` | This task triggers a system reboot following update installation. | `%WINDIR%\system32\MusNotification.exe` |
+| `\Microsoft\Windows\UpdateOrchestrator\UUS Failover Task` | - | `%windir%\System32\MLEngineStub.exe HandleUusFailoverEvaluationSignalFromWnf` |
+| `\Microsoft\Windows\WindowsUpdate\Scheduled Start` | This task is used to start the Windows Update service when needed to perform scheduled operations such as scans. | `%WINDIR%\System32\sc.exe start wuauserv` |
+| `\Microsoft\Windows\WindowsUpdate\Refresh Group Policy Cache` | This task is used to refresh group policy cache in Windows Update | `ClassId:{07369A67-07A6-4608-ABEA-379491CB7C46}` |
+
+### BitLocker
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\BitLocker\BitLocker Encrypt All Drives` | - | `ClassId:{61BCD1B9-340C-40EC-9D41-D7F1C0632F05}` |
+| `\Microsoft\Windows\BitLocker\BitLocker MDM Policy Refresh` | - | - |
+
+### Microsoft Account
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\AccountHealth\RecoverabilityToastTask` | AccountHealth Task Handler evaluates the state of a Microsoft Account and takes any necessary repair action | `ClassId:{B7F5B442-EBF8-46CD-9F0B-D8E45ED43492}` |
+
+### Chkdsk
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Chkdsk\ProactiveScan` | NTFS Volume Health Scan | `ClassId:{CF4270F5-2E43-4468-83B3-A8C45BB33EA1}` |
+| `\Microsoft\Windows\Chkdsk\SyspartRepair` | - | `%windir%\system32\bcdboot.exe %windir% /sysrepair` |
+
+### OneSettings
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Flighting\OneSettings\RefreshCache` | Task periodically refreshing data for OneSettings clients. | `ClassId:{E07647F7-AED2-48D9-9720-939BC24A8A3C}` |
+
+### Location Notification
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Location\WindowsActionDialog` | Location Notification | `%windir%\System32\WindowsActionDialog.exe` |
+
+### Memory Diagnostic
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\MemoryDiagnostic\AutomaticOfflineMemoryDiagnostic` | Schedules an offline memory diagnostic in response to system events. | `ClassId:{44F6C389-604A-4363-B09A-F38DA08E6079}` |
+| `\Microsoft\Windows\MemoryDiagnostic\ProcessMemoryDiagnosticEvents` | Schedules a memory diagnostic in response to system events. | `ClassId:{8168E74A-B39F-46D8-ADCD-7BED477B80A3}` |
+| `\Microsoft\Windows\MemoryDiagnostic\RunFullMemoryDiagnostic` | Detects and mitigates problems in physical memory (RAM). | `ClassId:{8168E74A-B39F-46D8-ADCD-7BED477B80A3}` |
+
+### Remote Assistance
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\RemoteAssistance\RemoteAssistanceTask` | Checks group policy for changes relevant to Remote Assistance | `%windir%\system32\RAServer.exe /offerraupdate` |
+
+### SR
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\SystemRestore\SR` | This task creates regular system protection points. | `%windir%\system32\srtasks.exe ExecuteScheduledSPPCreation` |
+
+### Windows Defender
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Windows Defender\Windows Defender Cache Maintenance` | Periodic maintenance task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe -IdleTask -TaskName WdCacheMaintenance` |
+| `\Microsoft\Windows\Windows Defender\Windows Defender Cleanup` | Periodic cleanup task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe -IdleTask -TaskName WdCleanup` |
+| `\Microsoft\Windows\Windows Defender\Windows Defender Scheduled Scan` | Periodic scan task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe Scan -ScheduleJob -ScanTrigger 55 -IdleScheduledJob` |
+| `\Microsoft\Windows\Windows Defender\Windows Defender Verification` | Periodic verification task. | `C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.25110.6-0\MpCmdRun.exe -IdleTask -TaskName WdVerification` |
+
+### AI
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\WindowsAI\Recall\InitialConfiguration` | - | `ClassId:{709FD5EF-7296-4154-BD3A-E9830FCFA60A}` |
+| `\Microsoft\Windows\WindowsAI\Recall\PolicyConfiguration` | - | `ClassId:{0BE6820D-B667-4CB6-931B-C153A77DA895}` |
+| `\Microsoft\Windows\WindowsAI\Settings\InitialConfiguration` | - | `ClassId:{2886E5FB-4F01-4A89-9A0E-5D6A9C8048AC}` |
+
+### Work Folders
+
+| Task | Description | Action Command |
+| --- | --- | --- |
+| `\Microsoft\Windows\Work Folders\Work Folders Logon Synchronization` | This task initiates synchronization of Work Folders partnerships when a user logs onto the system. | `ClassId:{97D47D56-3777-49FB-8E8F-90D7E30E1A1E}` |
+| `\Microsoft\Windows\Work Folders\Work Folders Maintenance Work` | This task initiates maintenance work required for on-going good performance of data synchronization of Work Folders partnerships. | `ClassId:{63260BCE-A3FB-4A34-AA51-D4D8E877B62B}` |
 
 # Disable Services/Drivers
 
 I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features won't start automatically anyway. You can use the suboptions if you want to disable services/drivers (e.g. *"Autoplay Service, Bluetooth Services, Camera Services, File/Printer Sharing Services, Printer Services, Store Services"*) for a **specific** reason (note that this may cause broken functionalities). Disabling/enabling features via other options (e.g WER, Windows Search, Clipboard) includes changing service/driver `Start` data/setting policies etc, instead of only changing services/drivers state, so again, rather leave the suboptions alone.
-
-## Internals 'Windows services'
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/services1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/services2.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/services3.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/services4.png?raw=true)
-
-Read more about it in [Windows Internals E7, P2](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf) 'Windows services (P.426-474) section.
 
 ## Service/Driver Table
 
@@ -5740,278 +5873,665 @@ The suboptions probably overlap the documentation. If so, you can open the [page
 
 See [services](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt) for reference, these files were generated on a stock `W11 IoT Enterprise LTSC` installation via [serviwin](https://www.nirsoft.net/utils/serviwin.html).
 
-| Option Name | Service/Driver | Description |
-| --- | --- | --- |
-| Activity Moderation | `bam` | Controls activity of background applications |
-| Autoplay | `ShellHWDetection` | *Disabling causes CmdPal to not start directly after boot for whatever reason.* -Provides notifications for AutoPlay hardware events. |
-| Beep | `Beep` | Legacy PC speaker/tone driver. It provides simple beeps for apps that call the Windows Beep API. |
-| Biometrics | `WbioSrvc` | The Windows biometric service gives client applications the ability to capture, compare, manipulate, and store biometric data without gaining direct access to any biometric hardware or samples. The service is hosted in a privileged SVCHOST process. |
-| Bluetooth | `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
-|  | `BluetoothUserService_*` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
-|  | `BluetoothUserService` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
-|  | `BthA2dp` | Microsoft Bluetooth A2dp driver |
-|  | `BthAvctpSvc` | This is Audio Video Control Transport Protocol service |
-|  | `BthEnum` | Bluetooth Enumerator Service |
-|  | `BthHFEnum` | Microsoft Bluetooth Hands-Free Profile driver |
-|  | `BthLEEnum` | Bluetooth Low Energy Driver |
-|  | `BthMini` | Bluetooth Radio Driver |
-|  | `BTHMODEM` | Bluetooth Modem Communications Driver |
-|  | `BTHPORT` | Bluetooth Port Driver |
-|  | `bthserv` | The Bluetooth service supports discovery and association of remote Bluetooth devices. Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated. |
-|  | `BTHUSB` | Bluetooth Radio USB Driver |
-|  | `DeviceAssociationBrokerSvc` | Enables apps to pair devices |
-|  | `DeviceAssociationService` | Enables pairing between the system and wired or wireless devices. |
-|  | `Microsoft_Bluetooth_AvrcpTransport` | Microsoft Bluetooth Avrcp Transport Driver |
-|  | `RFCOMM` | Bluetooth Device (RFCOMM Protocol TDI) |
-| Broadcasts | `BcastDVRUserService` | This user service is used for Game Recordings and Live Broadcasts |
-|  | `CaptureService_*` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
-|  | `AJRouter` | Routes AllJoyn messages for the local AllJoyn clients. If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run. |
-|  | `CaptureService` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
-|  | `CDPSvc` | This service is used for Connected Devices Platform scenarios |
-|  | `CDPUserSvc` | This user service is used for Connected Devices Platform scenarios |
-|  | `DevicePickerUserSvc` | This user service is used for managing the Miracast, DLNA, and DIAL UI |
-|  | `DevicesFlowUserSvc` | Allows ConnectUX and PC Settings to Connect and Pair with WiFi displays and Bluetooth devices. |
-|  | `NcbService` | Brokers connections that allow packaged Microsoft Store apps to receive notifications from the internet. |
-|  | `NcdAutoSetup` | Network Connected Devices Auto-Setup service monitors and installs qualified devices that connect to a qualified network. Stopping or disabling this service will prevent Windows from discovering and installing qualified network connected devices automatically. Users can still manually add network connected devices to a PC through the user interface. |
-|  | `p2pimsvc` | Provides identity services for the Peer Name Resolution Protocol (PNRP) and Peer-to-Peer Grouping services. If disabled, the Peer Name Resolution Protocol (PNRP) and Peer-to-Peer Grouping services may not function, and some applications, such as HomeGroup and Remote Assistance, may not function correctly. |
-|  | `p2psvc` | Enables multi-party communication using Peer-to-Peer Grouping. If disabled, some applications, such as HomeGroup, may not function. |
-|  | `PNRPAutoReg` | This service publishes a machine name using the Peer Name Resolution Protocol. Configuration is managed via the netsh context `p2p pnrp peer`. |
-|  | `PNRPsvc` | Enables serverless peer name resolution over the Internet using the Peer Name Resolution Protocol (PNRP). If disabled, some peer-to-peer and collaborative applications, such as Remote Assistance, may not function. |
-| Camera | `FrameServer` | Enables multiple clients to access video frames from camera devices. |
-|  | `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
-|  | `StiSvc` | Provides image acquisition services for scanners and cameras |
-| CDROM | `cdrom` | CD-ROM Driver |
-| Clipboard | `cbdhsvc` | This user service is used for Clipboard scenarios |
-| Cloud Filter | `CldFlt` | Cloud Files Mini Filter Driver |
-| DHCP | `Dhcp` | Registers and updates IP addresses and DNS records for this computer. If this service is stopped, this computer will not receive dynamic IP addresses and DNS updates. If this service is disabled, any services that explicitly depend on it will fail to start. |
-| Diagnostics | `DusmSvc` | Network data usage, data limit, restrict background data, metered networks. |
-|  | `DPS` | The Diagnostic Policy Service enables problem detection, troubleshooting and resolution for Windows components. If this service is stopped, diagnostics will no longer function. |
-|  | `diagsvc` | Executes diagnostic actions for troubleshooting support |
-|  | `WdiServiceHost` | The Diagnostic Service Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local Service context. If this service is stopped, any diagnostics that depend on it will no longer function. |
-|  | `WdiSystemHost` | The Diagnostic System Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local System context. If this service is stopped, any diagnostics that depend on it will no longer function. |
-|  | `TroubleshootingSvc` | Enables automatic mitigation for known problems by applying recommended troubleshooting. If stopped, your device will not get recommended troubleshooting for problems on your device. |
-| Domain/RPC | `Netlogon` | Maintains a secure channel between this computer and the domain controller for authenticating users and services. If this service is stopped, the computer may not authenticate users and services and the domain controller cannot register DNS records. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `MsRPC` | MsRPC |
-|  | `RpcLocator` | In Windows 2003 and earlier versions of Windows, the Remote Procedure Call (RPC) Locator service manages the RPC name service database. In Windows Vista and later versions of Windows, this service does not provide any functionality and is present for application compatibility. |
-| Edge | `MicrosoftEdgeElevationService` | Provides elevated privileges for Microsoft Edge. |
-|  | `edgeupdate` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
-|  | `edgeupdatem` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
-| File/Printer Sharing | `LanmanServer` | Supports file, print, and named-pipe sharing over the network for this computer. If this service is stopped, these functions will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `LanmanWorkstation` | Creates and maintains client network connections to remote servers using the SMB protocol. If this service is stopped, these connections will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `CSC` | Allows network files to be used while the local computer is offline. |
-|  | `CscService` | The Offline Files service performs maintenance activities on the Offline Files cache, responds to user logon and logoff events, implements the internals of the public API, and dispatches interesting events to those interested in Offline Files activities and changes in cache state. |
-|  | `Dfsc` | Client driver for access to DFS Namespaces |
-|  | `MRxDAV` | Network Redirector that provides WebDAV file access for the WebClient service |
-|  | `mrxsmb` | Implements the framework for the SMB filesystem redirector |
-|  | `mrxsmb20` | Implements the SMB 2.0 protocol, which provides connectivity to network resources on Windows Vista and later servers |
-|  | `P9Rdr` | Plan 9 Redirector Driver |
-|  | `P9RdrService` | Enables trigger-starting plan9 file servers. |
-|  | `rdbss` | Provides the framework for network mini-redirectors |
-|  | `TrkWks` | Maintains links between NTFS files within a computer or across computers in a network. |
-|  | `WebClient` | Enables Windows-based programs to create, access, and modify Internet-based files. If this service is stopped, these functions will not be available. If this service is disabled, any services that explicitly depend on it will fail to start. |
-| GameInput | `GameInputSvc` | Enables keyboards, mice, gamepads, and other input devices to be used with the GameInput API. |
-| HyperV | `bttflt` | Microsoft Hyper-V VHDPMEM BTT Filter |
-|  | `gencounter` | Microsoft Hyper-V Generation Counter |
-|  | `hvcrash` | Hyper-V Crashdump |
-|  | `HvHost` | Provides an interface for the Hyper-V hypervisor to provide per-partition performance counters to the host operating system. |
-|  | `hvservice` | Microsoft Hypervisor Service Driver |
-|  | `hyperkbd` | Microsoft VMBus Synthetic Keyboard Driver |
-|  | `HyperVideo` | Microsoft VMBus Video Device Miniport Driver |
-|  | `storflt` | Microsoft Hyper-V Storage Accelerator |
-|  | `Vid` | Microsoft Hyper-V Virtualization Infrastructure Driver |
-|  | `vmbus` | Virtual Machine Bus |
-|  | `vmgid` | Microsoft Hyper-V Guest Infrastructure Driver |
-|  | `vmicguestinterface` | Provides an interface for the Hyper-V host to interact with specific services running inside the virtual machine. |
-|  | `vmicheartbeat` | Monitors the state of this virtual machine by reporting a heartbeat at regular intervals. This service helps you identify running virtual machines that have stopped responding. |
-|  | `vmickvpexchange` | Provides a mechanism to exchange data between the virtual machine and the operating system running on the physical computer. |
-|  | `vmicrdv` | Provides a platform for communication between the virtual machine and the operating system running on the physical computer. |
-|  | `vmicshutdown` | Provides a mechanism to shut down the operating system of this virtual machine from the management interfaces on the physical computer. |
-|  | `vmictimesync` | Synchronizes the system time of this virtual machine with the system time of the physical computer. |
-|  | `vmicvmsession` | Provides a mechanism to manage virtual machine with PowerShell via VM session without a virtual network. |
-|  | `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
-|  | `vpci` | Microsoft Hyper-V Virtual PCI Bus |
-| IPv6 | `Tcpip6` | @todo.dll,-100;Microsoft IPv6 Protocol Driver |
-|  | `IpxlatCfgSvc` | Configures and enables translation from v4 to v6 and vice versa |
-| IP Helper | `iphlpsvc` | Provides tunnel connectivity using IPv6 transition technologies (6to4, ISATAP, Port Proxy, and Teredo), and IP-HTTPS. If this service is stopped, the computer will not have the enhanced connectivity benefits that these technologies offer. |
-| Kernel Debug Network | `kdnic` | Microsoft Kernel Debugger Network Miniport |
-| Location | `lfsvc` | This service monitors the current location of the system and manages geofences (a geographical location with associated events). If you turn off this service, applications will be unable to use or receive notifications for geolocation or geofences. |
-| Maps Manager | `MapsBroker` | Windows service for application access to downloaded maps. This service is started on-demand by application accessing downloaded maps. Disabling this service will prevent apps from accessing maps. |
-| Network Discovery | `fdPHost` | The FDPHOST service hosts the Function Discovery (FD) network discovery providers. These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services Discovery (WS-D) protocol. Stopping or disabling the FDPHOST service will disable network discovery for these protocols when using FD. When this service is unavailable, network services using FD and relying on these discovery protocols will be unable to find network devices or resources. |
-|  | `FDResPub` | Publishes this computer and resources attached to this computer so they can be discovered over the network. If this service is stopped, network resources will no longer be published and they will not be discovered by other computers on the network. |
-|  | `SSDPSRV` | Discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices. Also announces SSDP devices and services running on the local computer. If this service is stopped, SSDP-based devices will not be discovered. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `upnphost` | Allows UPnP devices to be hosted on this computer. If this service is stopped, any hosted UPnP devices will stop functioning and no additional hosted devices can be added. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `MsLldp` | Microsoft Link-Layer Discovery Protocol Driver |
-|  | `rspndr` | Link-Layer Topology Discovery Responder |
-|  | `lltdio` | Link-Layer Topology Discovery Mapper I/O Driver |
-|  | `lltdsvc` | Creates a Network Map, consisting of PC and device topology (connectivity) information, and metadata describing each PC and device. If this service is disabled, the Network Map will not function properly. |
-| Office | `ClickToRunSvc` | - |
-| Telephony | `PhoneSvc` | Manages the telephony state on the device |
-|  | `TapiSrv` | Provides Telephony API (TAPI) support for programs that control telephony devices on the local computer and, through the LAN, on servers that are also running the service. |
-| Radio Management | `RmSvc` | Radio Management and Airplane Mode Service. |
-| Parental Control | `WpcMonSvc` | Enforces parental controls for child accounts in Windows. If this service is stopped or disabled, parental controls may not be enforced. |
-| Printer | `McpManagementService` | Universal Print Management Service |
-|  | `PrintDeviceConfigurationService` | The Print Device Configuration Service manages the installation of IPP and UP printers. If this service is stopped, any printer installations that are in-progress may be canceled. |
-|  | `PrintNotify` | This service opens custom printer dialog boxes and handles notifications from a remote print server or a printer. If you turn off this service, you wont be able to see printer extensions or notifications. |
-|  | `PrintScanBrokerService` | Provides support for secure privileged operations needed by low priv spooler. |
-|  | `PrintWorkflowUserSvc` | Provides support for Print Workflow applications. If you turn off this service, you may not be able to print successfully. |
-|  | `Spooler` | This service spools print jobs and handles interaction with the printer. If you turn off this service, you won't be able to print or see your printers. |
-|  | `usbprint` | Microsoft USB PRINTER Class |
-| Recovery / Backup | `CloudBackupRestoreSvc` | Monitors the system for changes in application and setting states and performs cloud backup and restore operations when required. |
-|  | `SDRSVC` | Provides Windows Backup and Restore capabilities. |
-|  | `swprv` | Manages software-based volume shadow copies taken by the Volume Shadow Copy service. If this service is stopped, software-based volume shadow copies cannot be managed. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `VSS` | Manages and implements Volume Shadow Copies used for backup and other purposes. If this service is stopped, shadow copies will be unavailable for backup and the backup may fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `wbengine` | The WBENGINE service is used by Windows Backup to perform backup and recovery operations. If this service is stopped by a user, it may cause the currently running backup or recovery operation to fail. Disabling this service may disable backup and recovery operations using Windows Backup on this computer. |
-| Remote Desktop | `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
-|  | `TermService` | Allows users to connect interactively to a remote computer. Remote Desktop and Remote Desktop Session Host Server depend on this service. To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item. |
-|  | `UmRdpService` | Allows the redirection of Printers/Drives/Ports for RDP connections |
-|  | `rdpbus` | Remote Desktop Device Redirector Bus Driver |
-|  | `RDPDR` | Remote Desktop Device Redirector Driver |
-|  | `terminpt` | Microsoft Remote Desktop Input Driver |
-|  | `TsUsbFlt` | Remote Desktop USB Hub Class Filter Driver |
-|  | `TsUsbGD` | Remote Desktop Generic USB Device |
-|  | `tsusbhub` | Remote Desktop USB Hub |
-| Sensor | `SensorDataService` | Delivers data from a variety of sensors |
-|  | `SensrSvc` | Monitors various sensors in order to expose data and adapt to system and user state. If this service is stopped or disabled, the display brightness will not adapt to lighting conditions. Stopping this service may affect other system functionality and features as well. |
-|  | `SensorService` | A service for sensors that manages different sensors' functionality. Manages Simple Device Orientation (SDO) and History for sensors. Loads the SDO sensor that reports device orientation changes. If this service is stopped or disabled, the SDO sensor will not be loaded and so auto-rotation will not occur. History collection from Sensors will also be stopped. |
-|  | `perceptionsimulation` | Enables spatial perception simulation, virtual camera management and spatial input simulation. |
-|  | `spectrum` | Enables spatial perception, spatial input, and holographic rendering. |
-|  | `VacSvc` | Hosts spatial analysis for Mixed Reality audio simulation. |
-| Sign-In Assistant | `wlidsvc` | Enables user sign-in through Microsoft account identity services. If this service is stopped, users will not be able to logon to the computer with their Microsoft account. |
-|  | `NaturalAuthentication` | Signal aggregator service, that evaluates signals based on time, network, geolocation, bluetooth and cdf factors. Supported features are Device Unlock, Dynamic Lock and Dynamo MDM policies |
-|  | `NgcCtnrSvc` | Manages local user identity keys used to authenticate user to identity providers as well as TPM virtual smart cards. If this service is disabled, local user identity keys and TPM virtual smart cards will not be accessible. It is recommended that you do not reconfigure this service. |
-|  | `NgcSvc` | Provides process isolation for cryptographic keys used to authenticate to a user's associated identity providers. If this service is disabled, all uses and management of these keys will not be available, which includes machine logon and single-sign on for apps and websites. This service starts and stops automatically. It is recommended that you do not reconfigure this service. |
-| Smart Card | `SCardSvr` | Manages access to smart cards read by this computer. If this service is stopped, this computer will be unable to read smart cards. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
-|  | `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
-|  | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
-| SysMain | `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)) |
-| Microsoft Store | `AppXSvc` | *Disabling breaks CmdPal and other store applications.* - Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
-|  | `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
-|  | `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
-|  | `InstallService` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled then installations will not function properly. |
-|  | `LicenseManager` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled then content acquired through the Microsoft Store will not function properly. |
-|  | `PushToInstall` | Provides infrastructure support for the Microsoft Store. This service is started automatically and if disabled then remote installations will not function properly. |
-| TCP/IP NetBIOS Helper | `lmhosts` | Provides support for the NetBIOS over TCP/IP (NetBT) service and NetBIOS name resolution for clients on the network, therefore enabling users to share files, print, and log on to the network. If this service is stopped, these functions might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
-| Telemetry | `DiagTrack` | The Connected User Experiences and Telemetry service enables features that support in-application and connected user experiences. Additionally, this service manages the event driven collection and transmission of diagnostic and usage information (used to improve the experience and quality of the Windows Platform) when the diagnostics and usage privacy option settings are enabled under Feedback and Diagnostics. |
-|  | `dmwappushservice` | Routes Wireless Application Protocol (WAP) Push messages received by the device and synchronizes Device Management sessions |
-|  | `Ndu` | This service provides network data usage monitoring functionality |
-|  | `InventorySvc` | This service performs background system inventory, compatibility appraisal, and maintenance used by numerous system components. |
-|  | `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA). PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
-|  | `wuqisvc` | A Microsoft service producing summary facts and insights related to usage and quality of experience. Facts are used to automate on-device self-healing and other optional workflows, such as Personalized offers. |
-| Themes | `Themes` | Provides user experience theme management. |
-| Time | `autotimesvc` | This service sets time based on NITZ messages from a Mobile Network |
-|  | `tzautoupdate` | Automatically sets the system time zone. |
-| Trusted Runtime | `WindowsTrustedRT` | Windows Trusted Runtime Interface Driver |
-|  | `WindowsTrustedRTProxy` | Windows Trusted Runtime Service Proxy Driver |
-|  | `PEAUTH` | Protected Environment Authentication and Authorization Export Driver |
-| UAC | `luafv` | Virtualizes file write failures to per-user locations. |
-| User Data & Sync Platform | `UnistoreSvc` | Handles storage of structured user data, including contact info, calendars, messages, and other content. If you stop or disable this service, apps that use this data might not work correctly. |
-|  | `UserDataSvc` | Provides apps access to structured user data, including contact info, calendars, messages, and other content. If you stop or disable this service, apps that use this data might not work correctly. |
-|  | `ConsentUxUserSvc` | Allows the system to request user consent to allow apps to access sensitive resources and information such as the device's location |
-|  | `MessagingService` | Service supporting text messaging and related functionality. |
-|  | `PimIndexMaintenanceSvc` | Indexes contact data for fast contact searching. If you stop or disable this service, contacts might be missing from your search results. |
-| Virtual Bus | `CompositeBus` | Multi-Transport Composite Bus Enumerator |
-|  | `umbus` | User-Mode Bus Enumerator |
-|  | `vdrvroot` | Virtual Drive Root Enumerator |
-|  | `NdisVirtualBus` | Microsoft Virtual Network Adapter Enumerator |
-| WER | `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. |
-|  | `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
-| Wi-Fi | `WlanSvc` | The WLANSVC service provides the logic required to configure, discover, connect to, and disconnect from a wireless local area network (WLAN) as defined by IEEE 802.11 standards. It also contains the logic to turn your computer into a software access point so that other devices or computers can connect to your computer wirelessly using a WLAN adapter that can support this. Stopping or disabling the WLANSVC service will make all WLAN adapters on your computer inaccessible from the Windows networking UI. It is strongly recommended that you have the WLANSVC service running if your computer has a WLAN adapter. |
-|  | `vwififlt` | Virtual WiFi Filter Driver |
-|  | `wcncsvc` | WCNCSVC hosts the Windows Connect Now Configuration which is Microsoft's Implementation of Wireless Protected Setup (WPS) protocol. This is used to configure Wireless LAN settings for an Access Point (AP) or a Wireless Device. The service is started programmatically as needed. |
-|  | `WFDSConMgrSvc` | Manages connections to wireless services, including wireless display and docking. |
-|  | `NativeWifiP` | NativeWiFi Filter |
-|  | `Wificx` | Wifi Network Adapter Class Extension |
-| Windows Defender | `WinDefend` | Helps protect users from malware and other potentially unwanted software |
-|  | `MsSecCore` | Microsoft Security Core Boot Driver |
-|  | `wscsvc` | The WSCSVC (Windows Security Center) service monitors and reports security health settings on the computer.  The health settings include firewall (on/off), antivirus (on/off/out of date), antispyware (on/off/out of date), Windows Update (automatically/manually download and install updates), User Account Control (on/off), and Internet settings (recommended/not recommended). The service provides COM APIs for independent software vendors to register and record the state of their products to the Security Center service.  The Security and Maintenance UI uses the service to provide systray alerts and a graphical view of the security health states in the Security and Maintenance control panel.  Network Access Protection (NAP) uses the service to report the security health states of clients to the NAP Network Policy Server to make network quarantine decisions.  The service also has a public API that allows external consumers to programmatically retrieve the aggregated security health state of the system. |
-|  | `WdFilter` | Microsoft Defender Antivirus On-Access Malware Protection Mini-Filter Driver |
-|  | `WdBoot` | Microsoft Defender Antivirus Boot Driver |
-|  | `WdNisSvc` | Helps guard against intrusion attempts targeting known and newly discovered vulnerabilities in network protocols |
-|  | `WdNisDrv` | Helps guard against intrusion attempts targeting known and newly discovered vulnerabilities in network protocols |
-|  | `SecurityHealthService` | Windows Security Service handles unified device protection and health information |
-|  | `Sense` | Windows Defender Advanced Threat Protection service helps protect against advanced threats by monitoring and reporting security events that happen on the computer. |
-|  | `MDCoreSvc` | Monitors the availability, health, and performance of various security components |
-| Windows Insider | `wisvc` | Provides infrastructure support for the Windows Insider Program. This service must remain enabled for the Windows Insider Program to work. |
-| Windows Search | `WSearch` | Provides content indexing, property caching, and search results for files, e-mail, and other content. |
-| Windows Update | `WaaSMedicSvc` | Repairs damaged Windows Update components so that the computer can keep getting updates. |
-|  | `UsoSvc` | Manages Windows Updates. If stopped, your devices will not be able to download and install the latest updates. |
-|  | `wuauserv` | Enables the detection, download, and installation of updates for Windows and other programs. If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature, and programs will not be able to use the Windows Update Agent (WUA) API. |
-| Xbox | `XboxGipSvc` | This service manages connected Xbox Accessories. |
-|  | `xboxgip` | Xbox Game Input Protocol Driver |
-|  | `XblAuthManager` | Provides authentication and authorization services for interacting with Xbox Live. If this service is stopped, some applications may not operate correctly. |
-|  | `XblGameSave` | This service syncs save data for Xbox Live save enabled games. If this service is stopped, game save data will not upload to or download from Xbox Live. |
-|  | `XboxNetApiSvc` | This service supports the Windows.Networking.XboxLive application programming interface. |
-| VBox | `VBoxNetAdp` | VirtualBox NDIS 6.0 Host-Only Network Adapter Driver |
-|  | `VBoxNetLwf` | VirtualBox NDIS 6.0 Lightweight Filter Driver  |
-|  | `VBoxSup` | VirtualBox Support Driver |
-|  | `VBoxUSBMon` | VirtualBox USB Monitor Driver |
-|  | `VBoxSDS` | Used as a COM server for VirtualBox API. VirtualBox Global Interface. |
-| VPN/RAS Services | `RemoteAccess` | Offers routing services to businesses in local area and wide area network environments. |
-|  | `wanarp` | Remote Access IP ARP Driver |
-|  | `wanarpv6` | Remote Access IPv6 ARP Driver |
-|  | `RasMan` | Manages dial-up and virtual private network (VPN) connections from this computer to the Internet or other remote networks. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `RasAuto` | Creates a connection to a remote network whenever a program references a remote DNS or NetBIOS name or address. |
-|  | `PptpMiniport` | WAN Miniport (PPTP) |
-|  | `RasAgileVpn` | WAN Miniport (IKEv2) |
-|  | `Rasl2tp` | WAN Miniport (L2TP) |
-|  | `RasSstp` | WAN Miniport (SSTP) |
-|  | `SstpSvc` | Provides support for the Secure Socket Tunneling Protocol (SSTP) to connect to remote computers using VPN. If this service is disabled, users will not be able to use SSTP to access remote servers. |
-|  | `RasAcd` | Remote Access Auto Connection Driver |
-| Media Sharing / Portable Devices | `WMPNetworkSvc` | Shares Windows Media Player libraries to other networked players and media devices using Universal Plug and Play |
-|  | `WPDBusEnum` | Enforces group policy for removable mass-storage devices. Enables applications such as Windows Media Player and Image Import Wizard to transfer and synchronize content using removable mass-storage devices. |
-| BranchCache | `PeerDistSvc` | This service caches network content from peers on the local subnet. |
-| QoS/AV Streaming (qWave) | `QWAVE` | Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV) streaming applications on IP home networks. qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS) for AV applications. It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization. |
-|  | `QWAVEdrv` | Quality Windows Audio/Video Experience component driver |
-| NFC/Payments | `SEMgrSvc` | Manages payments and Near Field Communication (NFC) based secure elements. |
-| Optimize Drives | `defragsvc` | Helps the computer run more efficiently by optimizing files on storage drives. |
-| Mobile Hotspot / ICS Service | `icssvc` | Provides the ability to share a cellular data connection with another device. |
-|  | `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing |
-|  | `SharedAccess` | Provides network address translation, addressing, name resolution and/or intrusion prevention services for a home or small office network. |
-| Network Capture Driver | `NdisCap` | Microsoft NDIS Capture |
-| Container File System Drivers | `CimFS` | - |
-|  | `wcifs` | Provides a virtual filesystem view for processes running within Windows Containers |
-| Consumer IR Driver | `circlass` | Consumer IR Class Driver for eHome |
-| iSCSI Driver | `msisadrv` | Disabling breaks laptop keyboards. |
-| NetBIOS Driver | `NetBIOS` | NetBIOS Interface |
-|  | `NetBT` | This service implements NetBios over TCP/IP. |
-| Epic Games | `EpicGamesUpdater` | - |
-|  | `EpicOnlineServices` | - |
-| Logitech | `LGHUBUpdaterService` | LGHUB Updater Service |
-|  | `logi_joy_bus_enum` | Logitech G HUB Virtual Bus Enumerator Driver |
-|  | `logi_joy_vir_hid` | Logitech G HUB Virtual HID Device Driver |
-|  | `logi_lamparray_service` | Provides HID LampArray Lighting support to Logitech devices. |
-| SteelSeries | `SteelSeries_Sonar_VAD` | SteelSeries Sonar Driver |
-|  | `SteelSeriesGGUpdateServiceProxy` | Launches the SteelSeries Update Service. |
-|  | `ssdevfactory` | SteelSeries Device Factory Service |
-| NVIDIA Container | `NVDisplay.ContainerLocalSystem` | Container service for NVIDIA root features, required for NVCPL to work. |
-| Everything | `Everything (1.5a)` | Provides NTFS indexing, ReFS indexing and USN Journal services to the Everything search client. |
-|  | `Everything` | ^ |
-| App Deployment | `AppMgmt` | Processes installation, removal, and enumeration requests for software deployed through Group Policy. If the service is disabled, users will be unable to install, remove, or enumerate software deployed through Group Policy. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `AxInstSV` | Provides User Account Control validation for the installation of ActiveX controls from the Internet and enables management of ActiveX control installation based on Group Policy settings. This service is started on demand and if disabled the installation of ActiveX controls will behave according to default browser settings. |
-|  | `BITS` | Transfers files in the background using idle network bandwidth. If the service is disabled, then any applications that depend on BITS, such as Windows Update or MSN Explorer, will be unable to automatically download programs and other information. |
-|  | `EntAppSvc` | Enables enterprise application management. |
-| Network Authentication | `dot3svc` | The Wired AutoConfig (DOT3SVC) service is responsible for performing IEEE 802.1X authentication on Ethernet interfaces. If your current wired network deployment enforces 802.1X authentication, the DOT3SVC service should be configured to run for establishing Layer 2 connectivity and/or providing access to network resources. Wired networks that do not enforce 802.1X authentication are unaffected by the DOT3SVC service. |
-|  | `EapHost` | The Extensible Authentication Protocol (EAP) service provides network authentication in such scenarios as 802.1x wired and wireless, VPN, and Network Access Protection (NAP). EAP also provides application programming interfaces (APIs) that are used by network access clients, including wireless and VPN clients, during the authentication process. If you disable this service, this computer is prevented from accessing networks that require EAP authentication. |
-| Network Profile & Connectivity UX | `NcaSvc` | Provides DirectAccess status notification for UI components |
-|  | `NlaSvc` | Collects and stores configuration information for the network and notifies programs when this information is modified. If this service is stopped, configuration information might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `Wcmsvc` | Makes automatic connect and disconnect decisions based on the network connectivity options currently available to the PC and enables management of network connectivity based on Group Policy settings. |
-| Enterprise Transaction & Storage | `MSDTC` | Coordinates transactions that span multiple resource managers, such as databases, message queues, and file systems. If this service is stopped, these transactions will fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `MSiSCSI` | Manages Internet SCSI (iSCSI) sessions from this computer to remote iSCSI target devices. If this service is stopped, this computer will not be able to login or access iSCSI targets. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `smphost` | Host service for the Microsoft Storage Spaces management provider. If this service is stopped or disabled, Storage Spaces cannot be managed. |
-| Management / Encryption Broker | `SNMPTRAP` | Receives trap messages generated by local or remote Simple Network Management Protocol (SNMP) agents and forwards the messages to SNMP management programs running on this computer. If this service is stopped, SNMP-based programs on this computer will not receive SNMP trap messages. If this service is disabled, any services that explicitly depend on it will fail to start. |
-|  | `WEPHOSTSVC` | Windows Encryption Provider Host Service brokers encryption related functionalities from 3rd Party Encryption Providers to processes that need to evaluate and apply EAS policies. Stopping this will compromise EAS compliancy checks that have been established by the connected Mail Accounts |
-| Demo / Shared Device | `RetailDemo` | The Retail Demo service controls device activity while the device is in retail demo mode. |
-|  | `shpamsvc` | Manages profiles and accounts on a SharedPC configured device |
-| Graphics Compatibility | `WarpJITSvc` | Enables JIT compilation support in d3d10warp.dll for processes in which code generation is disabled. |
-| Mobile Broadband | `wlpasvc` | This service provides profile management for subscriber identity modules |
-|  | `WwanSvc` | This service manages mobile broadband (GSM & CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices. |
-| Miscellaneous | `WalletService` | Hosts objects used by clients of the wallet |
-|  | `PenService` | Part of Windows Ink Services Platform Tablet Input Subsystem and is used to implement Microsoft Tablet PC functionality.  |
-|  | `buttonconverter` | Service for Portable Device Control devices |
-|  | `SmsRouter` | Routes messages based on rules to appropriate clients. |
+### Activity Moderation
 
-Disabling `fvevol` (BitLocker Drive Encryption Filter Driver) / `rdyboost` (ReadyBoost) (rdyboost.sys) = `INACCESSIBLE_BOOT_DEVICE` BSoD.
+| Service/Driver | Description |
+| --- | --- |
+| `bam` | Controls activity of background applications |
+
+### Autoplay
+
+| Service/Driver | Description |
+| --- | --- |
+| `ShellHWDetection` | *Disabling causes CmdPal to not start directly after boot for whatever reason.* -Provides notifications for AutoPlay hardware events. |
+
+### Beep
+
+| Service/Driver | Description |
+| --- | --- |
+| `Beep` | Legacy PC speaker/tone driver. It provides simple beeps for apps that call the Windows Beep API. |
+
+### Biometrics
+
+| Service/Driver | Description |
+| --- | --- |
+| `WbioSrvc` | The Windows biometric service gives client applications the ability to capture, compare, manipulate, and store biometric data without gaining direct access to any biometric hardware or samples. The service is hosted in a privileged SVCHOST process. |
+
+### Bluetooth
+
+| Service/Driver | Description |
+| --- | --- |
+| `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
+| `BluetoothUserService_*` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
+| `BluetoothUserService` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
+| `BthA2dp` | Microsoft Bluetooth A2dp driver |
+| `BthAvctpSvc` | This is Audio Video Control Transport Protocol service |
+| `BthEnum` | Bluetooth Enumerator Service |
+| `BthHFEnum` | Microsoft Bluetooth Hands-Free Profile driver |
+| `BthLEEnum` | Bluetooth Low Energy Driver |
+| `BthMini` | Bluetooth Radio Driver |
+| `BTHMODEM` | Bluetooth Modem Communications Driver |
+| `BTHPORT` | Bluetooth Port Driver |
+| `bthserv` | The Bluetooth service supports discovery and association of remote Bluetooth devices. Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated. |
+| `BTHUSB` | Bluetooth Radio USB Driver |
+| `DeviceAssociationBrokerSvc` | Enables apps to pair devices |
+| `DeviceAssociationService` | Enables pairing between the system and wired or wireless devices. |
+| `Microsoft_Bluetooth_AvrcpTransport` | Microsoft Bluetooth Avrcp Transport Driver |
+| `RFCOMM` | Bluetooth Device (RFCOMM Protocol TDI) |
+
+### Broadcasts
+
+| Service/Driver | Description |
+| --- | --- |
+| `BcastDVRUserService` | This user service is used for Game Recordings and Live Broadcasts |
+| `CaptureService_*` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
+| `AJRouter` | Routes AllJoyn messages for the local AllJoyn clients. If this service is stopped the AllJoyn clients that do not have their own bundled routers will be unable to run. |
+| `CaptureService` | Enables optional screen capture functionality for applications that call the Windows.Graphics.Capture API. |
+| `CDPSvc` | This service is used for Connected Devices Platform scenarios |
+| `CDPUserSvc` | This user service is used for Connected Devices Platform scenarios |
+| `DevicePickerUserSvc` | This user service is used for managing the Miracast, DLNA, and DIAL UI |
+| `DevicesFlowUserSvc` | Allows ConnectUX and PC Settings to Connect and Pair with WiFi displays and Bluetooth devices. |
+| `NcbService` | Brokers connections that allow packaged Microsoft Store apps to receive notifications from the internet. |
+| `NcdAutoSetup` | Network Connected Devices Auto-Setup service monitors and installs qualified devices that connect to a qualified network. Stopping or disabling this service will prevent Windows from discovering and installing qualified network connected devices automatically. Users can still manually add network connected devices to a PC through the user interface. |
+| `p2pimsvc` | Provides identity services for the Peer Name Resolution Protocol (PNRP) and Peer-to-Peer Grouping services. If disabled, the Peer Name Resolution Protocol (PNRP) and Peer-to-Peer Grouping services may not function, and some applications, such as HomeGroup and Remote Assistance, may not function correctly. |
+| `p2psvc` | Enables multi-party communication using Peer-to-Peer Grouping. If disabled, some applications, such as HomeGroup, may not function. |
+| `PNRPAutoReg` | This service publishes a machine name using the Peer Name Resolution Protocol. Configuration is managed via the netsh context `p2p pnrp peer`. |
+| `PNRPsvc` | Enables serverless peer name resolution over the Internet using the Peer Name Resolution Protocol (PNRP). If disabled, some peer-to-peer and collaborative applications, such as Remote Assistance, may not function. |
+
+### Camera
+
+| Service/Driver | Description |
+| --- | --- |
+| `FrameServer` | Enables multiple clients to access video frames from camera devices. |
+| `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. |
+| `StiSvc` | Provides image acquisition services for scanners and cameras |
+
+### CDROM
+
+| Service/Driver | Description |
+| --- | --- |
+| `cdrom` | CD-ROM Driver |
+
+### Clipboard
+
+| Service/Driver | Description |
+| --- | --- |
+| `cbdhsvc` | This user service is used for Clipboard scenarios |
+
+### Cloud Filter
+
+| Service/Driver | Description |
+| --- | --- |
+| `CldFlt` | Cloud Files Mini Filter Driver |
+
+### DHCP
+
+| Service/Driver | Description |
+| --- | --- |
+| `Dhcp` | Registers and updates IP addresses and DNS records for this computer. If this service is stopped, this computer will not receive dynamic IP addresses and DNS updates. If this service is disabled, any services that explicitly depend on it will fail to start. |
+
+### Diagnostics
+
+| Service/Driver | Description |
+| --- | --- |
+| `DusmSvc` | Network data usage, data limit, restrict background data, metered networks. |
+| `DPS` | The Diagnostic Policy Service enables problem detection, troubleshooting and resolution for Windows components. If this service is stopped, diagnostics will no longer function. |
+| `diagsvc` | Executes diagnostic actions for troubleshooting support |
+| `WdiServiceHost` | The Diagnostic Service Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local Service context. If this service is stopped, any diagnostics that depend on it will no longer function. |
+| `WdiSystemHost` | The Diagnostic System Host is used by the Diagnostic Policy Service to host diagnostics that need to run in a Local System context. If this service is stopped, any diagnostics that depend on it will no longer function. |
+| `TroubleshootingSvc` | Enables automatic mitigation for known problems by applying recommended troubleshooting. If stopped, your device will not get recommended troubleshooting for problems on your device. |
+
+### Domain/RPC
+
+| Service/Driver | Description |
+| --- | --- |
+| `Netlogon` | Maintains a secure channel between this computer and the domain controller for authenticating users and services. If this service is stopped, the computer may not authenticate users and services and the domain controller cannot register DNS records. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `MsRPC` | MsRPC |
+| `RpcLocator` | In Windows 2003 and earlier versions of Windows, the Remote Procedure Call (RPC) Locator service manages the RPC name service database. In Windows Vista and later versions of Windows, this service does not provide any functionality and is present for application compatibility. |
+
+### Edge
+
+| Service/Driver | Description |
+| --- | --- |
+| `MicrosoftEdgeElevationService` | Provides elevated privileges for Microsoft Edge. |
+| `edgeupdate` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
+| `edgeupdatem` | Keeps your Microsoft software up to date. If this service is disabled or stopped, your Microsoft software will not be kept up to date, meaning security vulnerabilities that may arise cannot be fixed and features may not work. This service uninstalls itself when there is no Microsoft software using it. |
+
+### File/Printer Sharing
+
+| Service/Driver | Description |
+| --- | --- |
+| `LanmanServer` | Supports file, print, and named-pipe sharing over the network for this computer. If this service is stopped, these functions will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `LanmanWorkstation` | Creates and maintains client network connections to remote servers using the SMB protocol. If this service is stopped, these connections will be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `CSC` | Allows network files to be used while the local computer is offline. |
+| `CscService` | The Offline Files service performs maintenance activities on the Offline Files cache, responds to user logon and logoff events, implements the internals of the public API, and dispatches interesting events to those interested in Offline Files activities and changes in cache state. |
+| `Dfsc` | Client driver for access to DFS Namespaces |
+| `MRxDAV` | Network Redirector that provides WebDAV file access for the WebClient service |
+| `mrxsmb` | Implements the framework for the SMB filesystem redirector |
+| `mrxsmb20` | Implements the SMB 2.0 protocol, which provides connectivity to network resources on Windows Vista and later servers |
+| `P9Rdr` | Plan 9 Redirector Driver |
+| `P9RdrService` | Enables trigger-starting plan9 file servers. |
+| `rdbss` | Provides the framework for network mini-redirectors |
+| `TrkWks` | Maintains links between NTFS files within a computer or across computers in a network. |
+| `WebClient` | Enables Windows-based programs to create, access, and modify Internet-based files. If this service is stopped, these functions will not be available. If this service is disabled, any services that explicitly depend on it will fail to start. |
+
+### GameInput
+
+| Service/Driver | Description |
+| --- | --- |
+| `GameInputSvc` | Enables keyboards, mice, gamepads, and other input devices to be used with the GameInput API. |
+
+### HyperV
+
+| Service/Driver | Description |
+| --- | --- |
+| `bttflt` | Microsoft Hyper-V VHDPMEM BTT Filter |
+| `gencounter` | Microsoft Hyper-V Generation Counter |
+| `hvcrash` | Hyper-V Crashdump |
+| `HvHost` | Provides an interface for the Hyper-V hypervisor to provide per-partition performance counters to the host operating system. |
+| `hvservice` | Microsoft Hypervisor Service Driver |
+| `hyperkbd` | Microsoft VMBus Synthetic Keyboard Driver |
+| `HyperVideo` | Microsoft VMBus Video Device Miniport Driver |
+| `storflt` | Microsoft Hyper-V Storage Accelerator |
+| `Vid` | Microsoft Hyper-V Virtualization Infrastructure Driver |
+| `vmbus` | Virtual Machine Bus |
+| `vmgid` | Microsoft Hyper-V Guest Infrastructure Driver |
+| `vmicguestinterface` | Provides an interface for the Hyper-V host to interact with specific services running inside the virtual machine. |
+| `vmicheartbeat` | Monitors the state of this virtual machine by reporting a heartbeat at regular intervals. This service helps you identify running virtual machines that have stopped responding. |
+| `vmickvpexchange` | Provides a mechanism to exchange data between the virtual machine and the operating system running on the physical computer. |
+| `vmicrdv` | Provides a platform for communication between the virtual machine and the operating system running on the physical computer. |
+| `vmicshutdown` | Provides a mechanism to shut down the operating system of this virtual machine from the management interfaces on the physical computer. |
+| `vmictimesync` | Synchronizes the system time of this virtual machine with the system time of the physical computer. |
+| `vmicvmsession` | Provides a mechanism to manage virtual machine with PowerShell via VM session without a virtual network. |
+| `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
+| `vpci` | Microsoft Hyper-V Virtual PCI Bus |
+
+### IPv6
+
+| Service/Driver | Description |
+| --- | --- |
+| `Tcpip6` | @todo.dll,-100;Microsoft IPv6 Protocol Driver |
+| `IpxlatCfgSvc` | Configures and enables translation from v4 to v6 and vice versa |
+
+### IP Helper
+
+| Service/Driver | Description |
+| --- | --- |
+| `iphlpsvc` | Provides tunnel connectivity using IPv6 transition technologies (6to4, ISATAP, Port Proxy, and Teredo), and IP-HTTPS. If this service is stopped, the computer will not have the enhanced connectivity benefits that these technologies offer. |
+
+### Kernel Debug Network
+
+| Service/Driver | Description |
+| --- | --- |
+| `kdnic` | Microsoft Kernel Debugger Network Miniport |
+
+### Location
+
+| Service/Driver | Description |
+| --- | --- |
+| `lfsvc` | This service monitors the current location of the system and manages geofences (a geographical location with associated events). If you turn off this service, applications will be unable to use or receive notifications for geolocation or geofences. |
+
+### Maps Manager
+
+| Service/Driver | Description |
+| --- | --- |
+| `MapsBroker` | Windows service for application access to downloaded maps. This service is started on-demand by application accessing downloaded maps. Disabling this service will prevent apps from accessing maps. |
+
+### Network Discovery
+
+| Service/Driver | Description |
+| --- | --- |
+| `fdPHost` | The FDPHOST service hosts the Function Discovery (FD) network discovery providers. These FD providers supply network discovery services for the Simple Services Discovery Protocol (SSDP) and Web Services Discovery (WS-D) protocol. Stopping or disabling the FDPHOST service will disable network discovery for these protocols when using FD. When this service is unavailable, network services using FD and relying on these discovery protocols will be unable to find network devices or resources. |
+| `FDResPub` | Publishes this computer and resources attached to this computer so they can be discovered over the network. If this service is stopped, network resources will no longer be published and they will not be discovered by other computers on the network. |
+| `SSDPSRV` | Discovers networked devices and services that use the SSDP discovery protocol, such as UPnP devices. Also announces SSDP devices and services running on the local computer. If this service is stopped, SSDP-based devices will not be discovered. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `upnphost` | Allows UPnP devices to be hosted on this computer. If this service is stopped, any hosted UPnP devices will stop functioning and no additional hosted devices can be added. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `MsLldp` | Microsoft Link-Layer Discovery Protocol Driver |
+| `rspndr` | Link-Layer Topology Discovery Responder |
+| `lltdio` | Link-Layer Topology Discovery Mapper I/O Driver |
+| `lltdsvc` | Creates a Network Map, consisting of PC and device topology (connectivity) information, and metadata describing each PC and device. If this service is disabled, the Network Map will not function properly. |
+
+### Office
+
+| Service/Driver | Description |
+| --- | --- |
+| `ClickToRunSvc` | - |
+
+### Telephony
+
+| Service/Driver | Description |
+| --- | --- |
+| `PhoneSvc` | Manages the telephony state on the device |
+| `TapiSrv` | Provides Telephony API (TAPI) support for programs that control telephony devices on the local computer and, through the LAN, on servers that are also running the service. |
+
+### Radio Management
+
+| Service/Driver | Description |
+| --- | --- |
+| `RmSvc` | Radio Management and Airplane Mode Service. |
+
+### Parental Control
+
+| Service/Driver | Description |
+| --- | --- |
+| `WpcMonSvc` | Enforces parental controls for child accounts in Windows. If this service is stopped or disabled, parental controls may not be enforced. |
+
+### Printer
+
+| Service/Driver | Description |
+| --- | --- |
+| `McpManagementService` | Universal Print Management Service |
+| `PrintDeviceConfigurationService` | The Print Device Configuration Service manages the installation of IPP and UP printers. If this service is stopped, any printer installations that are in-progress may be canceled. |
+| `PrintNotify` | This service opens custom printer dialog boxes and handles notifications from a remote print server or a printer. If you turn off this service, you wont be able to see printer extensions or notifications. |
+| `PrintScanBrokerService` | Provides support for secure privileged operations needed by low priv spooler. |
+| `PrintWorkflowUserSvc` | Provides support for Print Workflow applications. If you turn off this service, you may not be able to print successfully. |
+| `Spooler` | This service spools print jobs and handles interaction with the printer. If you turn off this service, you won't be able to print or see your printers. |
+| `usbprint` | Microsoft USB PRINTER Class |
+
+### Recovery / Backup
+
+| Service/Driver | Description |
+| --- | --- |
+| `CloudBackupRestoreSvc` | Monitors the system for changes in application and setting states and performs cloud backup and restore operations when required. |
+| `SDRSVC` | Provides Windows Backup and Restore capabilities. |
+| `swprv` | Manages software-based volume shadow copies taken by the Volume Shadow Copy service. If this service is stopped, software-based volume shadow copies cannot be managed. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `VSS` | Manages and implements Volume Shadow Copies used for backup and other purposes. If this service is stopped, shadow copies will be unavailable for backup and the backup may fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `wbengine` | The WBENGINE service is used by Windows Backup to perform backup and recovery operations. If this service is stopped by a user, it may cause the currently running backup or recovery operation to fail. Disabling this service may disable backup and recovery operations using Windows Backup on this computer. |
+
+### Remote Desktop
+
+| Service/Driver | Description |
+| --- | --- |
+| `SessionEnv` | Remote Desktop Configuration service (RDCS) is responsible for all Remote Desktop Services and Remote Desktop related configuration and session maintenance activities that require SYSTEM context. These include per-session temporary folders, RD themes, and RD certificates. |
+| `TermService` | Allows users to connect interactively to a remote computer. Remote Desktop and Remote Desktop Session Host Server depend on this service. To prevent remote use of this computer, clear the checkboxes on the Remote tab of the System properties control panel item. |
+| `UmRdpService` | Allows the redirection of Printers/Drives/Ports for RDP connections |
+| `rdpbus` | Remote Desktop Device Redirector Bus Driver |
+| `RDPDR` | Remote Desktop Device Redirector Driver |
+| `terminpt` | Microsoft Remote Desktop Input Driver |
+| `TsUsbFlt` | Remote Desktop USB Hub Class Filter Driver |
+| `TsUsbGD` | Remote Desktop Generic USB Device |
+| `tsusbhub` | Remote Desktop USB Hub |
+
+### Sensor
+
+| Service/Driver | Description |
+| --- | --- |
+| `SensorDataService` | Delivers data from a variety of sensors |
+| `SensrSvc` | Monitors various sensors in order to expose data and adapt to system and user state. If this service is stopped or disabled, the display brightness will not adapt to lighting conditions. Stopping this service may affect other system functionality and features as well. |
+| `SensorService` | A service for sensors that manages different sensors' functionality. Manages Simple Device Orientation (SDO) and History for sensors. Loads the SDO sensor that reports device orientation changes. If this service is stopped or disabled, the SDO sensor will not be loaded and so auto-rotation will not occur. History collection from Sensors will also be stopped. |
+| `perceptionsimulation` | Enables spatial perception simulation, virtual camera management and spatial input simulation. |
+| `spectrum` | Enables spatial perception, spatial input, and holographic rendering. |
+| `VacSvc` | Hosts spatial analysis for Mixed Reality audio simulation. |
+
+### Sign-In Assistant
+
+| Service/Driver | Description |
+| --- | --- |
+| `wlidsvc` | Enables user sign-in through Microsoft account identity services. If this service is stopped, users will not be able to logon to the computer with their Microsoft account. |
+| `NaturalAuthentication` | Signal aggregator service, that evaluates signals based on time, network, geolocation, bluetooth and cdf factors. Supported features are Device Unlock, Dynamic Lock and Dynamo MDM policies |
+| `NgcCtnrSvc` | Manages local user identity keys used to authenticate user to identity providers as well as TPM virtual smart cards. If this service is disabled, local user identity keys and TPM virtual smart cards will not be accessible. It is recommended that you do not reconfigure this service. |
+| `NgcSvc` | Provides process isolation for cryptographic keys used to authenticate to a user's associated identity providers. If this service is disabled, all uses and management of these keys will not be available, which includes machine logon and single-sign on for apps and websites. This service starts and stops automatically. It is recommended that you do not reconfigure this service. |
+
+### Smart Card
+
+| Service/Driver | Description |
+| --- | --- |
+| `SCardSvr` | Manages access to smart cards read by this computer. If this service is stopped, this computer will be unable to read smart cards. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `ScDeviceEnum` | Creates software device nodes for all smart card readers accessible to a given session. If this service is disabled, WinRT APIs will not be able to enumerate smart card readers. |
+| `SCPolicySvc` | Allows the system to be configured to lock the user desktop upon smart card removal. |
+| `scfilter` | Smart card reader filter driver enabling smart card PnP. |
+
+### SysMain
+
+| Service/Driver | Description |
+| --- | --- |
+| `SysMain` | SysMain (Superfetch) records app usage patterns, builds prefetch metadata (layout.ini), and warms the cache by preloading files/pages to cut boot and app startup latency; it also drives prefetcher behavior via EnablePrefetcher settings. ([Windows Internals, E7-P1](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)) |
+
+### Microsoft Store
+
+| Service/Driver | Description |
+| --- | --- |
+| `AppXSvc` | *Disabling breaks CmdPal and other store applications.* - Provides infrastructure support for deploying Store applications. This service is started on demand and if disabled Store applications will not be deployed to the system, and may not function properly. |
+| `camsvc` | Provides facilities for managing UWP apps access to app capabilities as well as checking an app's access to specific app capabilities |
+| `ClipSVC` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled applications bought using the Microsoft Store will not behave correctly. |
+| `InstallService` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled then installations will not function properly. |
+| `LicenseManager` | Provides infrastructure support for the Microsoft Store. This service is started on demand and if disabled then content acquired through the Microsoft Store will not function properly. |
+| `PushToInstall` | Provides infrastructure support for the Microsoft Store. This service is started automatically and if disabled then remote installations will not function properly. |
+
+### TCP/IP NetBIOS Helper
+
+| Service/Driver | Description |
+| --- | --- |
+| `lmhosts` | Provides support for the NetBIOS over TCP/IP (NetBT) service and NetBIOS name resolution for clients on the network, therefore enabling users to share files, print, and log on to the network. If this service is stopped, these functions might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+
+### Telemetry
+
+| Service/Driver | Description |
+| --- | --- |
+| `DiagTrack` | The Connected User Experiences and Telemetry service enables features that support in-application and connected user experiences. Additionally, this service manages the event driven collection and transmission of diagnostic and usage information (used to improve the experience and quality of the Windows Platform) when the diagnostics and usage privacy option settings are enabled under Feedback and Diagnostics. |
+| `dmwappushservice` | Routes Wireless Application Protocol (WAP) Push messages received by the device and synchronizes Device Management sessions |
+| `Ndu` | This service provides network data usage monitoring functionality |
+| `InventorySvc` | This service performs background system inventory, compatibility appraisal, and maintenance used by numerous system components. |
+| `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA). PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
+| `wuqisvc` | A Microsoft service producing summary facts and insights related to usage and quality of experience. Facts are used to automate on-device self-healing and other optional workflows, such as Personalized offers. |
+
+### Themes
+
+| Service/Driver | Description |
+| --- | --- |
+| `Themes` | Provides user experience theme management. |
+
+### Time
+
+| Service/Driver | Description |
+| --- | --- |
+| `autotimesvc` | This service sets time based on NITZ messages from a Mobile Network |
+| `tzautoupdate` | Automatically sets the system time zone. |
+
+### Trusted Runtime
+
+| Service/Driver | Description |
+| --- | --- |
+| `WindowsTrustedRT` | Windows Trusted Runtime Interface Driver |
+| `WindowsTrustedRTProxy` | Windows Trusted Runtime Service Proxy Driver |
+| `PEAUTH` | Protected Environment Authentication and Authorization Export Driver |
+
+### UAC
+
+| Service/Driver | Description |
+| --- | --- |
+| `luafv` | Virtualizes file write failures to per-user locations. |
+
+### User Data & Sync Platform
+
+| Service/Driver | Description |
+| --- | --- |
+| `UnistoreSvc` | Handles storage of structured user data, including contact info, calendars, messages, and other content. If you stop or disable this service, apps that use this data might not work correctly. |
+| `UserDataSvc` | Provides apps access to structured user data, including contact info, calendars, messages, and other content. If you stop or disable this service, apps that use this data might not work correctly. |
+| `ConsentUxUserSvc` | Allows the system to request user consent to allow apps to access sensitive resources and information such as the device's location |
+| `MessagingService` | Service supporting text messaging and related functionality. |
+| `PimIndexMaintenanceSvc` | Indexes contact data for fast contact searching. If you stop or disable this service, contacts might be missing from your search results. |
+
+### Virtual Bus
+
+| Service/Driver | Description |
+| --- | --- |
+| `CompositeBus` | Multi-Transport Composite Bus Enumerator |
+| `umbus` | User-Mode Bus Enumerator |
+| `vdrvroot` | Virtual Drive Root Enumerator |
+| `NdisVirtualBus` | Microsoft Virtual Network Adapter Enumerator |
+
+### WER
+
+| Service/Driver | Description |
+| --- | --- |
+| `WerSvc` | Allows errors to be reported when programs stop working or responding and allows existing solutions to be delivered. Also allows logs to be generated for diagnostic and repair services. If this service is stopped, error reporting might not work correctly and results of diagnostic services and repairs might not be displayed. |
+| `wercplsupport` | This service provides support for viewing, sending and deletion of system-level problem reports for the Problem Reports control panel. |
+
+### Wi-Fi
+
+| Service/Driver | Description |
+| --- | --- |
+| `WlanSvc` | The WLANSVC service provides the logic required to configure, discover, connect to, and disconnect from a wireless local area network (WLAN) as defined by IEEE 802.11 standards. It also contains the logic to turn your computer into a software access point so that other devices or computers can connect to your computer wirelessly using a WLAN adapter that can support this. Stopping or disabling the WLANSVC service will make all WLAN adapters on your computer inaccessible from the Windows networking UI. It is strongly recommended that you have the WLANSVC service running if your computer has a WLAN adapter. |
+| `vwififlt` | Virtual WiFi Filter Driver |
+| `wcncsvc` | WCNCSVC hosts the Windows Connect Now Configuration which is Microsoft's Implementation of Wireless Protected Setup (WPS) protocol. This is used to configure Wireless LAN settings for an Access Point (AP) or a Wireless Device. The service is started programmatically as needed. |
+| `WFDSConMgrSvc` | Manages connections to wireless services, including wireless display and docking. |
+| `NativeWifiP` | NativeWiFi Filter |
+| `Wificx` | Wifi Network Adapter Class Extension |
+
+### Windows Defender
+
+| Service/Driver | Description |
+| --- | --- |
+| `WinDefend` | Helps protect users from malware and other potentially unwanted software |
+| `MsSecCore` | Microsoft Security Core Boot Driver |
+| `wscsvc` | The WSCSVC (Windows Security Center) service monitors and reports security health settings on the computer.  The health settings include firewall (on/off), antivirus (on/off/out of date), antispyware (on/off/out of date), Windows Update (automatically/manually download and install updates), User Account Control (on/off), and Internet settings (recommended/not recommended). The service provides COM APIs for independent software vendors to register and record the state of their products to the Security Center service.  The Security and Maintenance UI uses the service to provide systray alerts and a graphical view of the security health states in the Security and Maintenance control panel.  Network Access Protection (NAP) uses the service to report the security health states of clients to the NAP Network Policy Server to make network quarantine decisions.  The service also has a public API that allows external consumers to programmatically retrieve the aggregated security health state of the system. |
+| `WdFilter` | Microsoft Defender Antivirus On-Access Malware Protection Mini-Filter Driver |
+| `WdBoot` | Microsoft Defender Antivirus Boot Driver |
+| `WdNisSvc` | Helps guard against intrusion attempts targeting known and newly discovered vulnerabilities in network protocols |
+| `WdNisDrv` | Helps guard against intrusion attempts targeting known and newly discovered vulnerabilities in network protocols |
+| `SecurityHealthService` | Windows Security Service handles unified device protection and health information |
+| `Sense` | Windows Defender Advanced Threat Protection service helps protect against advanced threats by monitoring and reporting security events that happen on the computer. |
+| `MDCoreSvc` | Monitors the availability, health, and performance of various security components |
+
+### Windows Insider
+
+| Service/Driver | Description |
+| --- | --- |
+| `wisvc` | Provides infrastructure support for the Windows Insider Program. This service must remain enabled for the Windows Insider Program to work. |
+
+### Windows Search
+
+| Service/Driver | Description |
+| --- | --- |
+| `WSearch` | Provides content indexing, property caching, and search results for files, e-mail, and other content. |
+
+### Windows Update
+
+| Service/Driver | Description |
+| --- | --- |
+| `WaaSMedicSvc` | Repairs damaged Windows Update components so that the computer can keep getting updates. |
+| `UsoSvc` | Manages Windows Updates. If stopped, your devices will not be able to download and install the latest updates. |
+| `wuauserv` | Enables the detection, download, and installation of updates for Windows and other programs. If this service is disabled, users of this computer will not be able to use Windows Update or its automatic updating feature, and programs will not be able to use the Windows Update Agent (WUA) API. |
+
+### Xbox
+
+| Service/Driver | Description |
+| --- | --- |
+| `XboxGipSvc` | This service manages connected Xbox Accessories. |
+| `xboxgip` | Xbox Game Input Protocol Driver |
+| `XblAuthManager` | Provides authentication and authorization services for interacting with Xbox Live. If this service is stopped, some applications may not operate correctly. |
+| `XblGameSave` | This service syncs save data for Xbox Live save enabled games. If this service is stopped, game save data will not upload to or download from Xbox Live. |
+| `XboxNetApiSvc` | This service supports the Windows.Networking.XboxLive application programming interface. |
+
+### VBox
+
+| Service/Driver | Description |
+| --- | --- |
+| `VBoxNetAdp` | VirtualBox NDIS 6.0 Host-Only Network Adapter Driver |
+| `VBoxNetLwf` | VirtualBox NDIS 6.0 Lightweight Filter Driver  |
+| `VBoxSup` | VirtualBox Support Driver |
+| `VBoxUSBMon` | VirtualBox USB Monitor Driver |
+| `VBoxSDS` | Used as a COM server for VirtualBox API. VirtualBox Global Interface. |
+
+### VPN/RAS Services
+
+| Service/Driver | Description |
+| --- | --- |
+| `RemoteAccess` | Offers routing services to businesses in local area and wide area network environments. |
+| `wanarp` | Remote Access IP ARP Driver |
+| `wanarpv6` | Remote Access IPv6 ARP Driver |
+| `RasMan` | Manages dial-up and virtual private network (VPN) connections from this computer to the Internet or other remote networks. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `RasAuto` | Creates a connection to a remote network whenever a program references a remote DNS or NetBIOS name or address. |
+| `PptpMiniport` | WAN Miniport (PPTP) |
+| `RasAgileVpn` | WAN Miniport (IKEv2) |
+| `Rasl2tp` | WAN Miniport (L2TP) |
+| `RasSstp` | WAN Miniport (SSTP) |
+| `SstpSvc` | Provides support for the Secure Socket Tunneling Protocol (SSTP) to connect to remote computers using VPN. If this service is disabled, users will not be able to use SSTP to access remote servers. |
+| `RasAcd` | Remote Access Auto Connection Driver |
+
+### Media Sharing / Portable Devices
+
+| Service/Driver | Description |
+| --- | --- |
+| `WMPNetworkSvc` | Shares Windows Media Player libraries to other networked players and media devices using Universal Plug and Play |
+| `WPDBusEnum` | Enforces group policy for removable mass-storage devices. Enables applications such as Windows Media Player and Image Import Wizard to transfer and synchronize content using removable mass-storage devices. |
+
+### BranchCache
+
+| Service/Driver | Description |
+| --- | --- |
+| `PeerDistSvc` | This service caches network content from peers on the local subnet. |
+
+### QoS/AV Streaming (qWave)
+
+| Service/Driver | Description |
+| --- | --- |
+| `QWAVE` | Quality Windows Audio Video Experience (qWave) is a networking platform for Audio Video (AV) streaming applications on IP home networks. qWave enhances AV streaming performance and reliability by ensuring network quality-of-service (QoS) for AV applications. It provides mechanisms for admission control, run time monitoring and enforcement, application feedback, and traffic prioritization. |
+| `QWAVEdrv` | Quality Windows Audio/Video Experience component driver |
+
+### NFC/Payments
+
+| Service/Driver | Description |
+| --- | --- |
+| `SEMgrSvc` | Manages payments and Near Field Communication (NFC) based secure elements. |
+
+### Optimize Drives
+
+| Service/Driver | Description |
+| --- | --- |
+| `defragsvc` | Helps the computer run more efficiently by optimizing files on storage drives. |
+
+### Mobile Hotspot / ICS Service
+
+| Service/Driver | Description |
+| --- | --- |
+| `icssvc` | Provides the ability to share a cellular data connection with another device. |
+| `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing |
+| `SharedAccess` | Provides network address translation, addressing, name resolution and/or intrusion prevention services for a home or small office network. |
+
+### Network Capture Driver
+
+| Service/Driver | Description |
+| --- | --- |
+| `NdisCap` | Microsoft NDIS Capture |
+
+### Container File System Drivers
+
+| Service/Driver | Description |
+| --- | --- |
+| `CimFS` | - |
+| `wcifs` | Provides a virtual filesystem view for processes running within Windows Containers |
+
+### Consumer IR Driver
+
+| Service/Driver | Description |
+| --- | --- |
+| `circlass` | Consumer IR Class Driver for eHome |
+
+### iSCSI Driver
+
+| Service/Driver | Description |
+| --- | --- |
+| `msisadrv` | Disabling breaks laptop keyboards. |
+
+### NetBIOS Driver
+
+| Service/Driver | Description |
+| --- | --- |
+| `NetBIOS` | NetBIOS Interface |
+| `NetBT` | This service implements NetBios over TCP/IP. |
+
+### Epic Games
+
+| Service/Driver | Description |
+| --- | --- |
+| `EpicGamesUpdater` | - |
+| `EpicOnlineServices` | - |
+
+### Logitech
+
+| Service/Driver | Description |
+| --- | --- |
+| `LGHUBUpdaterService` | LGHUB Updater Service |
+| `logi_joy_bus_enum` | Logitech G HUB Virtual Bus Enumerator Driver |
+| `logi_joy_vir_hid` | Logitech G HUB Virtual HID Device Driver |
+| `logi_lamparray_service` | Provides HID LampArray Lighting support to Logitech devices. |
+
+### SteelSeries
+
+| Service/Driver | Description |
+| --- | --- |
+| `SteelSeries_Sonar_VAD` | SteelSeries Sonar Driver |
+| `SteelSeriesGGUpdateServiceProxy` | Launches the SteelSeries Update Service. |
+| `ssdevfactory` | SteelSeries Device Factory Service |
+
+### NVIDIA Container
+
+| Service/Driver | Description |
+| --- | --- |
+| `NVDisplay.ContainerLocalSystem` | Container service for NVIDIA root features, required for NVCPL to work. |
+
+### Everything
+
+| Service/Driver | Description |
+| --- | --- |
+| `Everything (1.5a)` | Provides NTFS indexing, ReFS indexing and USN Journal services to the Everything search client. |
+| `Everything` | ^ |
+
+### App Deployment
+
+| Service/Driver | Description |
+| --- | --- |
+| `AppMgmt` | Processes installation, removal, and enumeration requests for software deployed through Group Policy. If the service is disabled, users will be unable to install, remove, or enumerate software deployed through Group Policy. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `AxInstSV` | Provides User Account Control validation for the installation of ActiveX controls from the Internet and enables management of ActiveX control installation based on Group Policy settings. This service is started on demand and if disabled the installation of ActiveX controls will behave according to default browser settings. |
+| `BITS` | Transfers files in the background using idle network bandwidth. If the service is disabled, then any applications that depend on BITS, such as Windows Update or MSN Explorer, will be unable to automatically download programs and other information. |
+| `EntAppSvc` | Enables enterprise application management. |
+
+### Network Authentication
+
+| Service/Driver | Description |
+| --- | --- |
+| `dot3svc` | The Wired AutoConfig (DOT3SVC) service is responsible for performing IEEE 802.1X authentication on Ethernet interfaces. If your current wired network deployment enforces 802.1X authentication, the DOT3SVC service should be configured to run for establishing Layer 2 connectivity and/or providing access to network resources. Wired networks that do not enforce 802.1X authentication are unaffected by the DOT3SVC service. |
+| `EapHost` | The Extensible Authentication Protocol (EAP) service provides network authentication in such scenarios as 802.1x wired and wireless, VPN, and Network Access Protection (NAP). EAP also provides application programming interfaces (APIs) that are used by network access clients, including wireless and VPN clients, during the authentication process. If you disable this service, this computer is prevented from accessing networks that require EAP authentication. |
+
+### Network Profile & Connectivity UX
+
+| Service/Driver | Description |
+| --- | --- |
+| `NcaSvc` | Provides DirectAccess status notification for UI components |
+| `NlaSvc` | Collects and stores configuration information for the network and notifies programs when this information is modified. If this service is stopped, configuration information might be unavailable. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `Wcmsvc` | Makes automatic connect and disconnect decisions based on the network connectivity options currently available to the PC and enables management of network connectivity based on Group Policy settings. |
+
+### Enterprise Transaction & Storage
+
+| Service/Driver | Description |
+| --- | --- |
+| `MSDTC` | Coordinates transactions that span multiple resource managers, such as databases, message queues, and file systems. If this service is stopped, these transactions will fail. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `MSiSCSI` | Manages Internet SCSI (iSCSI) sessions from this computer to remote iSCSI target devices. If this service is stopped, this computer will not be able to login or access iSCSI targets. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `smphost` | Host service for the Microsoft Storage Spaces management provider. If this service is stopped or disabled, Storage Spaces cannot be managed. |
+
+### Management / Encryption Broker
+
+| Service/Driver | Description |
+| --- | --- |
+| `SNMPTRAP` | Receives trap messages generated by local or remote Simple Network Management Protocol (SNMP) agents and forwards the messages to SNMP management programs running on this computer. If this service is stopped, SNMP-based programs on this computer will not receive SNMP trap messages. If this service is disabled, any services that explicitly depend on it will fail to start. |
+| `WEPHOSTSVC` | Windows Encryption Provider Host Service brokers encryption related functionalities from 3rd Party Encryption Providers to processes that need to evaluate and apply EAS policies. Stopping this will compromise EAS compliancy checks that have been established by the connected Mail Accounts |
+
+### Demo / Shared Device
+
+| Service/Driver | Description |
+| --- | --- |
+| `RetailDemo` | The Retail Demo service controls device activity while the device is in retail demo mode. |
+| `shpamsvc` | Manages profiles and accounts on a SharedPC configured device |
+
+### Graphics Compatibility
+
+| Service/Driver | Description |
+| --- | --- |
+| `WarpJITSvc` | Enables JIT compilation support in d3d10warp.dll for processes in which code generation is disabled. |
+
+### Mobile Broadband
+
+| Service/Driver | Description |
+| --- | --- |
+| `wlpasvc` | This service provides profile management for subscriber identity modules |
+| `WwanSvc` | This service manages mobile broadband (GSM & CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices. |
+
+### Miscellaneous
+
+| Service/Driver | Description |
+| --- | --- |
+| `WalletService` | Hosts objects used by clients of the wallet |
+| `PenService` | Part of Windows Ink Services Platform Tablet Input Subsystem and is used to implement Microsoft Tablet PC functionality.  |
+| `buttonconverter` | Service for Portable Device Control devices |
+| `SmsRouter` | Routes messages based on rules to appropriate clients. |
+
+## [Windows Internals](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/services1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/services2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/services3.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/services4.png?raw=true)
 
 # BCD Edits
 
@@ -6618,30 +7138,17 @@ ramdisksdipath          \Recovery\WindowsRE\boot.sdi
 
 # Page File
 
-Several notes I took while reading through [`Windows Internals Part 1, Edition 7`](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), everything written below is based on it.
-
-**You should calculate it while daily workload, or your peak value won't be accurate.**
-
-Paging files are configured via `System > Advanced system settings > Performance > Advanced > Virtual memory`, but they are only one component of virtual memory. Even with no paging file, every process still uses virtual address space managed by the memory manager. Private pages must always live somewhere. RAM holds them while they are in use, and paging files act as disk backed storage so the memory manager can reclaim physical pages when demand grows.
-
-Windows tracks private committed memory as the "commit charge" and enforces a "commit limit" equal to available RAM plus the total size of all paging files. This ensures Windows never promises more pageable storage than it can keep either in memory or in paging files. When commit charge climbs toward the limit, the modified page writer (`MiModifiedPageWriter`) flushes dirty pages to paging files so their physical frames can be reused. If the limit is reached and paging files can't grow, further private allocations fail until memory is freed. Task manager's performance tab/process explorer's system information window/system informers system information display current commit, the commit limit, and the peak value so you can see how much paging file space recent workloads required.
-
-Size calculation if leaving it system managed and RAM as base would be if RAM <= 1 GB, then size = 1 GB. If RAM > 1 GB, then add 1/8 GB for every extra gigabyte of RAM, up to a maximum of 32 GB.
-
-## How the option calculates it
-
-If peak commit is below physical memory, no paging file would have been necessary (the option won't set it to 0, if you do there's literally nowhere to place additional committed pages, so allocations fail and you can even hit a bugcheck). If it exceeds RAM, the difference is the minimum disk backed capacity needed so the commit limit (RAM + paging files) stays above demand. Reads `\Process(_Total)\Page File Bytes Peak`, computes the Smss RAM baseline (`1 GB + 1/8 GB per extra GB of RAM`, capped at 32 GB), and checks whether `peak – RAM` is positive. If the workload never exceeded RAM, it keeps the Smss baseline. Otherwise, it uses the excess value (and currently a safety buffer of 10%, clamped to 1GB if RAM is >= 10 GB).
+Will be updated soon, date of commit `04.07.2026`.
 
 ## Clearing Page File on Shutdown
 
-Paging files can contain fragments of process or kernel data. Enabling the option mitigates offline data exposure at the cost of longer shutdowns.
+Paging files can contain fragments of process or kernel data, enabling the option mitigates offline data exposure at the cost of longer shutdowns.
 
-Local Security Policy: 
-> *This security setting determines whether the virtual memory pagefile is cleared when the system is shut down.*
+> "*This security setting determines whether the virtual memory pagefile is cleared when the system is shut down.*
 >
 > *Virtual memory support uses a system pagefile to swap pages of memory to disk when they are not used. On a running system, this pagefile is opened exclusively by the operating system, and it is well protected. However, systems that are configured to allow booting to other operating systems might have to make sure that the system pagefile is wiped clean when this system shuts down. This ensures that sensitive information from process memory that might go into the pagefile is not available to an unauthorized user who manages to directly access the pagefile.*
 >
-> *When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled.*
+> *When this policy is enabled, it causes the system pagefile to be cleared upon clean shutdown. If you enable this security option, the hibernation file (hiberfil.sys) is also zeroed out when hibernation is disabled.*"
 
 # Disable Notifications
 
@@ -6827,6 +7334,30 @@ Hides the snap assist flyout that would appear after hovering over the maximize/
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/snapflyout.png?raw=true)
 
+### Window Shake
+
+Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
+
+![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+
+#### SystemSettings Captures
+
+```c
+// System > Multitasking: Title bar window shake
+
+// Enabled
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisallowShaking	Type: REG_DWORD, Length: 4, Data: 0
+
+// Disabled
+HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisallowShaking	Type: REG_DWORD, Length: 4, Data: 1
+```
+
+#### [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Turn off Aero Shake window minimizing mouse gesture](https://noverse.dev/policies?p=Desktop*NoWindowMinimizingShortcuts) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoWindowMinimizingShortcuts` |
+
 ## SystemSettings Captures
 
 ```c
@@ -6915,28 +7446,30 @@ This list isn't complete yet, see [FileSystem](https://github.com/nohuto/regkit/
 
 ## Service/Driver Table
 
-| Option Name | Service/Driver | Description |
-| --- | --- | --- |
-| HyperV | `bttflt` | Microsoft Hyper-V VHDPMEM BTT Filter |
-|  | `gencounter` | Microsoft Hyper-V Generation Counter |
-|  | `hvcrash` | Hyper-V Crashdump |
-|  | `HvHost` | Provides an interface for the Hyper-V hypervisor to provide per-partition performance counters to the host operating system. |
-|  | `hvservice` | Microsoft Hypervisor Service Driver |
-|  | `hyperkbd` | Microsoft VMBus Synthetic Keyboard Driver |
-|  | `HyperVideo` | Microsoft VMBus Video Device Miniport Driver |
-|  | `storflt` | Microsoft Hyper-V Storage Accelerator |
-|  | `Vid` | Microsoft Hyper-V Virtualization Infrastructure Driver |
-|  | `vmbus` | Virtual Machine Bus |
-|  | `vmgid` | Microsoft Hyper-V Guest Infrastructure Driver |
-|  | `vmicguestinterface` | Provides an interface for the Hyper-V host to interact with specific services running inside the virtual machine. |
-|  | `vmicheartbeat` | Monitors the state of this virtual machine by reporting a heartbeat at regular intervals. This service helps you identify running virtual machines that have stopped responding. |
-|  | `vmickvpexchange` | Provides a mechanism to exchange data between the virtual machine and the operating system running on the physical computer. |
-|  | `vmicrdv` | Provides a platform for communication between the virtual machine and the operating system running on the physical computer. |
-|  | `vmicshutdown` | Provides a mechanism to shut down the operating system of this virtual machine from the management interfaces on the physical computer. |
-|  | `vmictimesync` | Synchronizes the system time of this virtual machine with the system time of the physical computer. |
-|  | `vmicvmsession` | Provides a mechanism to manage virtual machine with PowerShell via VM session without a virtual network. |
-|  | `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
-|  | `vpci` | Microsoft Hyper-V Virtual PCI Bus |
+### HyperV
+
+| Service/Driver | Description |
+| --- | --- |
+| `bttflt` | Microsoft Hyper-V VHDPMEM BTT Filter |
+| `gencounter` | Microsoft Hyper-V Generation Counter |
+| `hvcrash` | Hyper-V Crashdump |
+| `HvHost` | Provides an interface for the Hyper-V hypervisor to provide per-partition performance counters to the host operating system. |
+| `hvservice` | Microsoft Hypervisor Service Driver |
+| `hyperkbd` | Microsoft VMBus Synthetic Keyboard Driver |
+| `HyperVideo` | Microsoft VMBus Video Device Miniport Driver |
+| `storflt` | Microsoft Hyper-V Storage Accelerator |
+| `Vid` | Microsoft Hyper-V Virtualization Infrastructure Driver |
+| `vmbus` | Virtual Machine Bus |
+| `vmgid` | Microsoft Hyper-V Guest Infrastructure Driver |
+| `vmicguestinterface` | Provides an interface for the Hyper-V host to interact with specific services running inside the virtual machine. |
+| `vmicheartbeat` | Monitors the state of this virtual machine by reporting a heartbeat at regular intervals. This service helps you identify running virtual machines that have stopped responding. |
+| `vmickvpexchange` | Provides a mechanism to exchange data between the virtual machine and the operating system running on the physical computer. |
+| `vmicrdv` | Provides a platform for communication between the virtual machine and the operating system running on the physical computer. |
+| `vmicshutdown` | Provides a mechanism to shut down the operating system of this virtual machine from the management interfaces on the physical computer. |
+| `vmictimesync` | Synchronizes the system time of this virtual machine with the system time of the physical computer. |
+| `vmicvmsession` | Provides a mechanism to manage virtual machine with PowerShell via VM session without a virtual network. |
+| `vmicvss` | Coordinates the communications that are required to use Volume Shadow Copy Service to back up applications and data on this virtual machine from the operating system on the physical computer. |
+| `vpci` | Microsoft Hyper-V Virtual PCI Bus |
 
 # Service Splitting
 
@@ -7149,7 +7682,7 @@ Windows search provides content indexing, property caching, and search results f
 
 ## Suboptions
 
-| **Suboption** | **Description** |
+| Suboption | Description |
 | ---- | ---- |
 | Disable SafeSearch | Disables the SafeSearch filter for web search, preventing strict filtering of search results. |
 | Prevent Index on Battery | Prevents Windows from indexing content while running on battery power, saving system resources. |
@@ -7168,6 +7701,11 @@ Windows search provides content indexing, property caching, and search results f
 | [Disable Web Results in Search](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-search#donotusewebresults) | This policy setting allows you to control whether or not Search can perform queries on the web, and if the web results are displayed in Search. |
 | Disable Search Highlights | If enabled: "See content suggestions in the search boxi and in search home". |
 | Disable Web Search | If disabled: "removes the option of searching the Web from Windows Desktop Search". |
+| Hide Most Used Apps | ![](https://github.com/nohuto/win-config/blob/main/system/images/mostused.jpg?raw=true) |
+| Hide Recently Added Apps | |
+| Hide Frequently Used Apps | |
+| Hide New App Notifications | |
+| Start Layout | ![](https://github.com/nohuto/win-config/blob/main/system/images/start-layout.png?raw=true) |
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -7182,6 +7720,11 @@ Windows search provides content indexing, property caching, and search results f
 | [Set the SafeSearch setting for Search](https://noverse.dev/policies?p=Search*SafeSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `ConnectedSearchSafeSearch` |
 | [Do not allow locations on removable drives to be added to libraries](https://noverse.dev/policies?p=Search*DisableRemovableDriveIndexing) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableRemovableDriveIndexing` |
 | [Fully disable Search UI](https://noverse.dev/policies?p=Search*DisableSearch) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search` | `DisableSearch` |
+| [Show or hide "Most used" list from Start menu](https://noverse.dev/policies?p=StartMenu*ShowOrHideMostUsedApps) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `ShowOrHideMostUsedApps` |
+| [Remove frequent programs list from the Start Menu](https://noverse.dev/policies?p=StartMenu*NoFrequentUsedPrograms) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoStartMenuMFUprogramsList` |
+| [Turn off user tracking](https://noverse.dev/policies?p=StartMenu*NoInstrumentation) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoInstrumentation` |
+| [Remove "Recently added" list from Start Menu](https://noverse.dev/policies?p=StartMenu*HideRecentlyAddedApps) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecentlyAddedApps` |
+| [Do not show the 'new application installed' notification](https://noverse.dev/policies?p=WindowsExplorer*NoNewAppAlert) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `NoNewAppAlert` |
 
 ## Miscellaneous Notes
 
@@ -7304,7 +7847,7 @@ PSComputerName               :
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb3.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/pagecomb4.png?raw=true)
 
-# SCM Autostart Delay
+# SCM AutoStartDelay
 
 Windows marks some services as delayed autostart to reduce boot contention. The Service Control Manager (SCM) waits before starting those services, the default delay is 120 seconds as shown below.
 
@@ -7567,17 +8110,43 @@ More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAp
 ![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown2.png?raw=true)
 
-# Detailed Verbose Messages
+# Detailed Status Messages
 
-Enables detailed messages at restart, shut down, sign out, and sign in, which can be helpful.
+Enables detailed messages at restart, shut down, sign out, and sign in, e.g.: "*RPCSS is starting...*" or "*Waiting for machine group policies to finish...*".
 
-> "*If verbose logging isn't enabled, you'll still receive normal status messages such as "Applying your personal settings..." or "Applying computer settings..." when you start up, shut down, log on, or log off from the computer. However, if verbose logging is enabled, you'll receive additional information, such as "RPCSS is starting" or "Waiting for machine group policies to finish....".*"
+> "*This policy setting directs the system to display highly detailed status messages.*
 >
-> — Microsoft, [Verbose startup, shutdown, logon, and logoff status messages](https://learn.microsoft.com/en-us/troubleshoot/windows-server/performance/enable-verbose-startup-shutdown-logon-logoff-status-messages)
-
-> "*This policy setting directs the system to display highly detailed status messages.This policy setting is designed for advanced users who require this information.If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system. If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes. Note: This policy setting is ignored if the \"Remove Boot/Shutdown/Logon/Logoff status messages" policy setting is enabled.*"
+> *This policy setting is designed for advanced users who require this information.*
 >
-> — Windows Security Encyclopedia, [Display highly detailed status messages](https://www.windows-security.org/b74176eebf20a72c6e9cf193ddcedeb7/display-highly-detailed-status-messages)
+> *If you enable this policy setting, the system displays status messages that reflect each step in the process of starting, shutting down, logging on, or logging off the system.*
+>
+> *If you disable or do not configure this policy setting, only the default status messages are displayed to the user during these processes.*
+>
+> *Note: This policy setting is ignored if the ""Remove Boot/Shutdown/Logon/Logoff status messages"" policy setting is enabled.*
+
+If this option is disabled you'll still see normal messages like "*Applying your personal settings...*" or "*Applying computer settings...*".
+
+## Suboptions
+
+### Detailed BSoD
+
+As the value name already says (`DisplayParameters`) it will just show additional paramters on the top left.
+
+#### Enabled
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.png?raw=true)
+
+#### Disabled
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.png?raw=true)
+
+Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0`, to prevent auto restarting.
+
+### BsOD Smiley
+
+Hides the smiley which is shown on the BsOD screen:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/BSOD-smiley.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -7642,19 +8211,6 @@ Miscellaneous notes:
 | [Do not allow Clipboard redirection](https://noverse.dev/policies?p=TerminalServer*TS_CLIENT_CLIPBOARD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services` | `fDisableClip` |
 | [Allow clipboard sharing with Windows Sandbox](https://noverse.dev/policies?p=WindowsSandbox*AllowClipboardRedirection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Sandbox` | `AllowClipboardRedirection` |
 
-# Enable Detailed BSoD
-
-| Aspect                    | New BSoD (Windows 8/10/11)                      | Old BSoD (Windows 7/classic)                                                      |
-| ------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------- |
-| Main look                 | Big blue screen, sad face, simple text, QR code | Plain blue text screen, no icons                                                  |
-| Stop code shown           | e.g. CRITICAL_PROCESS_DIED                      | e.g. STOP 0x0000007E                                                              |
-| Hex parameters            | Hidden                                          | Shown: (0x00000000, 0x00000000...)                                                |
-| Faulty driver/module name | Hidden                                          | Often shown (e.g. nvlddmkm.sys)                                                   |
-| Extra help                | QR code + link                                  | Text-only advice                                                                  |
-| Purpose                   | Less scary, easier to tell support the code     | See the actual debug information                                                  |
-
-Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0` ("The option specifies that Windows automatically restarts your computer").
-
 # Disable Autoruns
 
 The `Open` buttons downloads & executes [`Autoruns`](https://learn.microsoft.com/en-us/sysinternals/downloads/autoruns). It's recommended to disable all kind of autoruns in the `Logon` section that you don't need, examples:
@@ -7680,30 +8236,30 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Run
 HKLM\Software\Microsoft\Windows\CurrentVersion\Run
 ```
 
-# Disable Window Shake
+## Suboption
 
-Prevents windows from being minimized or restored when the active window is shaken back and forth with the mouse.
+### App Archive
 
-![](https://www.techjunkie.com/wp-content/uploads/2018/10/windows-aero-shake-example.gif)
+"Automatically archive your infrequently used apps to save storage and internet bandwidth. Your files and data will still be saved, and the app's full version will be restored on your next use if it's still available."
 
-## SystemSettings Captures
+If enabled, the system will periodically check for such infrequently used apps. By default app archiving is turned on.
 
+#### SystemSettings Records
+
+Toggling the option via `Apps > Advanced app settings`:
 ```c
-// System > Multitasking: Title bar window shake
+// On
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 1
 
-// Enabled
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisallowShaking	Type: REG_DWORD, Length: 4, Data: 0
-
-// Disabled
-HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\DisallowShaking	Type: REG_DWORD, Length: 4, Data: 1
+// Off
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## [Windows Policies](https://noverse.dev/policies)
+#### [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Turn off Aero Shake window minimizing mouse gesture](https://noverse.dev/policies?p=Desktop*NoWindowMinimizingShortcuts) | `HKCU\Software\Policies\Microsoft\Windows\Explorer` | `NoWindowMinimizingShortcuts` |
-
+| [Archive infrequently used apps](https://noverse.dev/policies?p=AppxPackageManager*AllowAutomaticAppArchiving) | `HKLM\Software\Policies\Microsoft\Windows\Appx` | `AllowAutomaticAppArchiving` |
 
 # Export Explorer/Taskbar Pins
 
@@ -7737,38 +8293,3 @@ xcopy ".\TaskBar" "%appdata%\Microsoft\Internet Explorer\Quick Launch\User Pinne
 ```
 
 The option gets current values of `Favorites` (taskbar pins) & `UIOrderList` (system tray icons) and copies all necessary files to `$home\Desktop` (edit `$dest` & `$bat` to whatever you want).
-
-# App Archive
-
-"Automatically archive your infrequently used apps to save storage and internet bandwidth. Your files and data will still be saved, and the app's full version will be restored on your next use if it's still available."
-
-If enabled, the system will periodically check for such infrequently used apps. By default app archiving is turned on.
-
-## SystemSettings Records
-
-Toggling the option via `Apps > Advanced app settings`:
-```c
-// On
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 1
-
-// Off
-HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\InstallService\Stubification\S-{ID}\EnableAppOffloading    Type: REG_DWORD, Length: 4, Data: 0
-```
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Archive infrequently used apps](https://noverse.dev/policies?p=AppxPackageManager*AllowAutomaticAppArchiving) | `HKLM\Software\Policies\Microsoft\Windows\Appx` | `AllowAutomaticAppArchiving` |
-
-# Disable Mobility Center
-
-Note that this is a laptop only feature. The "Mobility Center" is a feature that includes controls for screen brightness, power options, volume, battery status, wireless network status, external display settings, and more.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/mobility-center.png?raw=true)
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Turn off Windows Mobility Center](https://noverse.dev/policies?p=MobilePCMobilityCenter*MobilityCenterEnable_2) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\MobilityCenter` | `NoMobilityCenter` |

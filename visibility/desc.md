@@ -232,6 +232,13 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Search\PrimaryProperties\UnindexedLocations\SearchOnly Type: REG_DWORD, Length: 4, Data: 1
 ```
 
+# Remove Quick Access
+
+Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to `This PC`.
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/quickaccess.png?raw=true)
+
+
 ## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
@@ -407,6 +414,31 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 ### Zelda
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Zelda.png?raw=true)
+
+## JPEG Reduction
+
+Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the suboption.
+
+### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
+
+```c
+if ( (int)SHRegGetDWORD(
+            HKEY_CURRENT_USER,
+            L"Control Panel\\Desktop",
+            L"JPEGImportQuality",
+            (unsigned int *)&v38) < 0 )
+{
+  v17 = FLOAT_85_0;
+}
+else
+{
+  v17 = fmaxf((float)(int)v38, 60.0);
+  if ( v17 > 100.0 )
+    v17 = FLOAT_100_0;
+}
+```
+
+Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -677,7 +709,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\C
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.settings\windows.data.bluelightreduction.settings\Data	Type: REG_BINARY, Length: 52, Data: 43 42 01 00 0A 02 01 00 2A 06 AE 88 B7 D1 06 2A
 ```
 
-# Optimize Visual Effects
+# Minimal Visual Effects
 
 Disables all kind of animations, while leaving font smoothing + window content while dragging + thumbnails instead of icons enabled.
 
@@ -855,6 +887,59 @@ SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advan
 ```
 
 Disallowing it via the `AllowNewsAndInterests` policy won't set `TaskbarDa` to 0, but it grays out & disables the option.
+
+## Suboptions
+
+### Hide Language Bar
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
+
+#### Text Services and Input Languages Captures
+
+`Time & language > Typing > Advanced keyboard settings > Language bar options`:
+```c
+// Floating On Desktop
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 0
+
+// Hidden
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 3
+
+// Docked in the taskbar
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 4
+```
+
+`Show the Language bar as transparent when inactive`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 64
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 255
+```
+
+`Show additional Language bar icons in the taskbar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+`Show text labels on the Language bar`:
+```c
+// Enabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
+```
+
+### System Clock Seconds
+
+"*Uses more power*" (in relation to laptops).
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -1174,51 +1259,6 @@ Removing the `Bags` & `BagMRU` key resets all folder settings (view, size,...), 
 
 The revert may not work correctly yet, as it only creates the `Bags`/`BagsMRU` keys.
 
-# Hide Language Bar
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/languagebar.png?raw=true)
-
-## Text Services and Input Languages Captures
-
-`Time & language > Typing > Advanced keyboard settings > Language bar options`:
-```c
-// Floating On Desktop
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 0
-
-// Hidden
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 3
-
-// Docked in the taskbar
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ShowStatus	Type: REG_DWORD, Length: 4, Data: 4
-```
-
-`Show the Language bar as transparent when inactive`:
-```c
-// Enabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 64
-
-// Disabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Transparency	Type: REG_DWORD, Length: 4, Data: 255
-```
-
-`Show additional Language bar icons in the taskbar`:
-```c
-// Enabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\ExtraIconsOnMinimized	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-`Show text labels on the Language bar`:
-```c
-// Enabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-RegSetValue	HKCU\Software\Microsoft\CTF\LangBar\Label	Type: REG_DWORD, Length: 4, Data: 0
-```
-
 # Hide Shortcut Icon
 
 Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by replacing the shortcut `.ico` with a [blank image](https://github.com/nohuto/Files/releases/download/miscellaneous/Blank.ico).
@@ -1334,44 +1374,6 @@ Restarting the explorer is enough to apply the changes.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskswitchold.png?raw=true)
 
-# Remove Home & Gallery
-
-### Home / Galery
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/homegal.png?raw=true)
-
-### Network Sharing Folder (Suboption)
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/homenet.png?raw=true)
-
-### Miscellaneous Notes
-
-```powershell
-{018D5C66-4533-4307-9B53-224DE2ED1FE6} # OneDrive
-{F02C1A0D-BE21-4350-88B0-7367FC96EF3C} # Network Sharing Folder
-{031E4825-7B94-4dc3-B131-E946B44C8DD5} # Libraries Folder
-```
-
-```json
-// LaunchTo:
-// 1 = This PC
-// 2 = Home (default)
-// 3 = Downloads
-// 4 = OneDrive
-"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced": {
-  "LaunchTo": { "Type": "REG_DWORD", "Data": 1 }
-},
-"HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer": {
-  "HubMode": { "Type": "REG_DWORD", "Data": 1 }
-}
-```
-
-# Remove Quick Access
-
-Removes the `Quick access` in the File Explorer & sets `Open File Exporer to` to `This PC`.
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/quickaccess.png?raw=true)
-
 # Hide Lock Screen
 
 Disables the lock screen (skips the lock screen and go directly to the login screen). See content below for details on the suboptions.
@@ -1483,20 +1485,6 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscribed
 HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions\338387\SubscriptionContext	Type: REG_SZ, Length: 20, Data: sc-mode=1
 ```
 
-# Hide Most Used Apps
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/mostused.jpg?raw=true)
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Show or hide "Most used" list from Start menu](https://noverse.dev/policies?p=StartMenu*ShowOrHideMostUsedApps) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `ShowOrHideMostUsedApps` |
-| [Remove frequent programs list from the Start Menu](https://noverse.dev/policies?p=StartMenu*NoFrequentUsedPrograms) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoStartMenuMFUprogramsList` |
-| [Turn off user tracking](https://noverse.dev/policies?p=StartMenu*NoInstrumentation) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoInstrumentation` |
-| [Remove "Recently added" list from Start Menu](https://noverse.dev/policies?p=StartMenu*HideRecentlyAddedApps) | `HKLM\Software\Policies\Microsoft\Windows\Explorer`<br>`HKCU\Software\Policies\Microsoft\Windows\Explorer` | `HideRecentlyAddedApps` |
-| [Do not show the 'new application installed' notification](https://noverse.dev/policies?p=WindowsExplorer*NoNewAppAlert) | `HKLM\Software\Policies\Microsoft\Windows\Explorer` | `NoNewAppAlert` |
-
 # Disable Spotlight
 
 Spotlight is used to provide new pictures on your lock screen. These exist by default on 25H2:
@@ -1531,31 +1519,6 @@ Disabling it via policies etc. is enough, therefore I won't add them as there's 
 | [Turn off Windows Spotlight on Action Center](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightOnActionCenter) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnActionCenter` |
 | [Turn off Windows Spotlight on Settings](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightOnSettings) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnSettings` |
 | [Turn off the Windows Welcome Experience](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightWindowsWelcomeExperience) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightWindowsWelcomeExperience` |
-
-# Disable JPEG Reduction
-
-Windows reduces the quality of JPEG images you set as the desktop background to `85%` by default, you can set it to `100%` via the option switch.
-
-### [TranscodeImage](https://github.com/nohuto/win-config/blob/main/system/assets/jpeg-TranscodeImage.c)
-
-```c
-if ( (int)SHRegGetDWORD(
-            HKEY_CURRENT_USER,
-            L"Control Panel\\Desktop",
-            L"JPEGImportQuality",
-            (unsigned int *)&v38) < 0 )
-{
-  v17 = FLOAT_85_0;
-}
-else
-{
-  v17 = fmaxf((float)(int)v38, 60.0);
-  if ( v17 > 100.0 )
-    v17 = FLOAT_100_0;
-}
-```
-
-Default value is `85` -> `85%` (gets used if value isn't present), clamp range is `60-100`, if set above `100` it gets clamped to `100`, if set below `60`, it gets clamped to `60`.
 
 # PowerShell Colors
 
@@ -1663,12 +1626,6 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Always open All Control Panel Items when opening Control Panel](https://noverse.dev/policies?p=ControlPanel*ForceClassicControlPanel) | `HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `ForceClassicControlPanel` |
-
-# System Clock Seconds
-
-"Uses more power" (in relation to laptops).
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/clock.png?raw=true)
 
 # PC Name
 
