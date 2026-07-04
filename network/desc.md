@@ -606,7 +606,7 @@ LLTDIO and Responder are network protocol drivers used for Link Layer Topology D
 
 The [Link Layer Discovery Protocol (LLDP)](https://en.wikipedia.org/wiki/Link_Layer_Discovery_Protocol) is a vendor neutral link layer protocol used by network devices for advertising their identity, capabilities, and neighbors on a local area network based on IEEE 802 technology, principally wired Ethernet. LLDP performs functions similar to several proprietary protocols, such as CDP, FDP, NDP and LLTD.
 
-## NetFirewallRule Capture
+### NetFirewallRule Capture
 
 Disable network discovery (includes LLTDIO, Rspndr, LLTD), by pasting the desired command into `powershell`:
 ```powershell
@@ -1012,7 +1012,7 @@ Disabling `NetbiosOptions` via network center:
 RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
 ```
 
-## Protocols Notes
+### Protocols Notes
 
 | Protocol | Purpose | How it works | Notes |
 | -------- | ------- | ------------ | ----- |
@@ -1049,7 +1049,7 @@ Recommended by Microsoft: `0x20` (Prefer IPv4 over IPv6)
 |Re-enable IPv6 on all tunnel interfaces|Binary xxx xxx0|
 |Re-enable IPv6 on nontunnel interfaces and on IPv6 tunnel interfaces|Binary xxx0 xxx0|
 
-## [How to calculate the registry value](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md#how-to-calculate-the-registry-value)
+## [Value Calculation](https://github.com/MicrosoftDocs/SupportArticles-docs/blob/main/support/windows-server/networking/configure-ipv6-in-windows.md#how-to-calculate-the-registry-value)
 
 Windows use bitmasks to check the `DisabledComponents` values and determine whether a component should be disabled.
 
@@ -1319,26 +1319,6 @@ Task offloading has to be enabled, or RSS won't work (`DisableTaskOffload`).
 
 I may add more details here soon. RSS is enabled by default, so this is currently more of a placeholder containing the official documentation (see links below), disabling the option therefore won't "disable" RSS, it only removes the created values.
 
-## RssReadRegistryParameters
-
-[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/network/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
-```c
-void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
-{
-  v5 = L"*RSS";
-  v13 = L"*RssBaseProcNumber";
-  v21 = L"*MaxRssProcessors";
-  v29 = L"*NumaNodeId";
-  v37 = L"DisablePortScaling";
-  v45 = L"ManyCoreScaling";
-  v52 = L"*NumRssQueues";
-  v60 = L"NumRssQueuesPerVPort";
-  v69 = L"EnableLHRssWA";
-  v77 = L"ReceiveScalingMode";
-  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
-}
-```
-
 ## Registry Values
 
 `*MaxRssProcessors`:  
@@ -1406,6 +1386,26 @@ Enables strict argument validation for upper layer testing. Set along with the R
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\Parameters : RssBaseCpu
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : MaxNumRssCpus
 \Registry\Machine\SYSTEM\ControlSet001\Services\NDIS\SharedState : RssBaseCpu
+```
+
+### RssReadRegistryParameters
+
+[`RSS::RssReadRegistryParameters`](https://github.com/nohuto/win-config/blob/main/network/assets/intel-nic/RSS_RssReadRegistryParameters.c) shows miscellaneous values which are related to RSS, see [intelnet6x.c](https://github.com/nohuto/win-config/blob/main/power/assets/intelnet6x.c) for reference:
+```c
+void __fastcall RSS::RssReadRegistryParameters(RSS *this, struct ADAPTER_CONTEXT *a2, void *a3)
+{
+  v5 = L"*RSS";
+  v13 = L"*RssBaseProcNumber";
+  v21 = L"*MaxRssProcessors";
+  v29 = L"*NumaNodeId";
+  v37 = L"DisablePortScaling";
+  v45 = L"ManyCoreScaling";
+  v52 = L"*NumRssQueues";
+  v60 = L"NumRssQueuesPerVPort";
+  v69 = L"EnableLHRssWA";
+  v77 = L"ReceiveScalingMode";
+  REGISTRY::RegReadRegTable(v3, a2, a3, (struct REGTABLE_ENTRY *)&v4, 0xAu);
+}
 ```
 
 # Disable ICS / Mobile Hotspot
@@ -1518,7 +1518,7 @@ HKR, Ndi\params\*JumboPacket,	Default,	0, "0"
 
 It depends on your adapter/driver if VMQ is enabled/disabled by default:
 
-## [Registry Values Details](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md)
+## [Registry Values](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/network/standardized-inf-keywords-for-vmq.md)
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 
@@ -1565,7 +1565,7 @@ HKR, "", *VMQ, %REG_SZ%, "1"
 
 It depends on your adapter/driver if SR-IOV is enabled/disabled by default:
 
-## [Registry Values Details](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov)
+## [Registry Values](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/standardized-inf-keywords-for-sr-iov)
 
 See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/network/assets/intel-nic) for reference.
 

@@ -443,7 +443,7 @@ Default value is `85` -> `85%` (gets used if value isn't present), clamp range i
 
 Windows has four main pointer style modes in `SystemSettings Accessibility > Mouse pointer and touch`: `White`, `Black`, `Inverted`, and `Custom color`. The first three are controlled by `CursorType`, custom colors switch `CursorType` to `6` and store the selected color in `CursorColor`. That color is stored as a Win32 [`COLORREF`](https://learn.microsoft.com/en-us/windows/win32/gdi/colorref), so the DWORD uses the `0x00bbggrr` layout instead of a plain RGB hex string. Standard styles point to system cursor files under `%SystemRoot%\cursors\...`, while custom colors point to generated per user cursor files under `%LOCALAPPDATA%\Microsoft\Windows\Cursors\*_eoa.cur`.
 
-## Installing Custom Cursors
+### Installing Custom Cursors
 
 If you want a full custom cursor pack instead of Windows built in white, black, inverted, or recolored accessibility cursors, you can install one from diffrenrent sources such as [vsthemes.org](https://vsthemes.org/en/cursors/).
 
@@ -451,7 +451,7 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 2. Copy the pack files into `%SystemRoot%\Cursors\<Pack Name>` if you want to keep them in the standard system cursor location
 3. Open `main.cpl`, go to the `Pointers` tab, select a cursor role, click `Browse`, and pick the downloaded `.cur` or `.ani` file
 
-## Cursor Previews
+#### Cursor Previews
 
 | Name | Preview |
 | --- | --- |
@@ -463,7 +463,7 @@ If you want a full custom cursor pack instead of Windows built in white, black, 
 | [Capitaine](https://vsthemes.org/en/cursors/black/27320-capitaine.html) (Dark, White, Gruvbox, Gruvbox White, Nord, Nord White, Palenight, Palenight White) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/capitaine.webp?raw=true) |
 | [Skyrim](https://vsthemes.org/en/cursors/games/45588-the-elder-scrolls-5-skyrim.html) | ![](https://github.com/nohuto/win-config/blob/main/visibility/images/cursors/skyrim.webp?raw=true) |
 
-## Pointer Style Captures
+### Pointer Style Captures
 
 ```c
 // Main style
@@ -594,7 +594,7 @@ HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\C
 HKCU\Software\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate: Data # REG_BINARY
 ```
 
-## [Windows.Data.BlueLightReduction.Settings](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionsettings-structure) structure
+## [BlueLightReduction.Settings](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionsettings-structure) structure
 
 The data itself is [Microsoft Bond Compact Binary](https://microsoft.github.io/bond/reference/cpp/compact__binary_8h_source.html), `43 42 01 00` prefix means `CB` (compact binary) version `1`.
 
@@ -652,7 +652,7 @@ Example data:
 
 `ScheduleTime` has type int8, field `0` is `hour` and field `1` is `minute` (often leaves `minute` out when it is `0`).
 
-## [Windows.Data.BlueLightReduction.BlueLightReductionState](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionbluelightreductionstate-structure) structure
+## [BlueLightReduction.BlueLightReductionState](https://github.com/MicrosoftDocs/windows-dev-docs/edit/docs/hub/apps/develop/settings/settings-common.md#type-windowsdatabluelightreductionbluelightreductionstate-structure) structure
 
 Example data:
 
@@ -735,7 +735,7 @@ Anything written as "- *text*" behind the linked name equals the source where th
 | 39 | `0x00000080` in high dword | [Suppress/apply global input-settings updates on focus/delegation changes (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/EditionKeyboardInputDelegationChanged.c) |
 | 41 | `0x00000200` in high dword | [Pen button yield / pen quick-launch hotkey (untested)](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/-NotifyISMPenButtonYieldSettingChange@@YAXXZ.c) |
 
-## Font Smoothing
+### Font Smoothing
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/visual1.jpg?raw=true)
 
@@ -792,11 +792,11 @@ Values below are based on `RegGetValueW`/`SHRegGetDWORD`/`SHRegGetUSDWORDW` xref
   "TextScaleFactor" = 100; // REG_DWORD, range 0-4294967295 (percent)
 ```
 
-## Light Theme
+### Light Theme
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme1.png?raw=true)
 
-## Dark Theme
+### Dark Theme
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true)
 
@@ -981,7 +981,7 @@ C:\ProgramData\Microsoft\Default Account Pictures
 
 ## Suboption
 
-`Global Account Picture`:
+### Global Account Picture
 
 > "*This policy setting allows an administrator to standardize the account pictures for all users on a system to the default account picture.*"
 
@@ -1010,7 +1010,7 @@ Add-Type -AssemblyName System.Drawing;[System.Drawing.FontFamily]::Families | % 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/font1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/font2.png?raw=true)
 
-## Manually Adding Custom Fonts
+### Manually Adding Custom Fonts
 
 The option lists the default fonts, add your own custom font via:
 
@@ -1117,7 +1117,7 @@ IconFont    Type: REG_BINARY, Length: 92, Data: E5 FF FF FF 00 00 00 00 00 00 00
 - `MouseHoverTime` controls how long the mouse must stay still over something before Windows treats it as a hover.
 - `MenuShowDelay` controls the menu hover delay, mainly how long shell menus wait before opening a submenu while the pointer is on a menu entry.
 
-## CMenuToolbarBase::_SetTimer
+### CMenuToolbarBase::_SetTimer
 
 [`SPI_GETMENUSHOWDELAY`](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-systemparametersinfoa):
 
@@ -1346,19 +1346,7 @@ By adding them, you'll have to click `OK` every time you boot/log in:
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/legalnotice.png?raw=true)
 
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Do not display the lock screen](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreen` |
-| [Prevent changing lock screen and logon image](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoChangingLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingLockScreen` |
-| [Prevent lock screen background motion](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_AnimateLockScreenBackground) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `AnimateLockScreenBackground` |
-| [Prevent enabling lock screen slide show](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenSlideshow) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenSlideshow` |
-| [Prevent enabling lock screen camera](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |
-| [Force a specific default lock screen and logon image](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_ForceDefaultLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `LockScreenImage`<br>`LockScreenOverlaysDisabled` |
-| [Show clear logon background](https://noverse.dev/policies?p=Logon*DisableAcrylicBackgroundOnLogon) | `HKLM\Software\Policies\Microsoft\Windows\System` | `DisableAcrylicBackgroundOnLogon` |
-
-## Accounts Captures
+### Accounts Captures
 
 `Accounts > Sign-in options` - `Automatically save my restartable apps and restart them when I sign back in`:
 ```c
@@ -1378,7 +1366,7 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-{ID}\An
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\SystemProtectedUserData\S-{ID}\AnyoneRead\Logon\ShowEmail	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
-## Personalization Captures
+### Personalization Captures
 
 `Personalization > Lock screen` - `Personalize your lock screen`:
 ```c
@@ -1440,6 +1428,18 @@ HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Authentication\LogonUI\Creative\S
 HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\SubscribedContent-338387Enabled	Type: REG_DWORD, Length: 4, Data: 1
 HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager\Subscriptions\338387\SubscriptionContext	Type: REG_SZ, Length: 20, Data: sc-mode=1
 ```
+
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Do not display the lock screen](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreen` |
+| [Prevent changing lock screen and logon image](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoChangingLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoChangingLockScreen` |
+| [Prevent lock screen background motion](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_AnimateLockScreenBackground) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `AnimateLockScreenBackground` |
+| [Prevent enabling lock screen slide show](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenSlideshow) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenSlideshow` |
+| [Prevent enabling lock screen camera](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_NoLockScreenCamera) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `NoLockScreenCamera` |
+| [Force a specific default lock screen and logon image](https://noverse.dev/policies?p=ControlPanelDisplay*CPL_Personalization_ForceDefaultLockScreen) | `HKLM\Software\Policies\Microsoft\Windows\Personalization` | `LockScreenImage`<br>`LockScreenOverlaysDisabled` |
+| [Show clear logon background](https://noverse.dev/policies?p=Logon*DisableAcrylicBackgroundOnLogon) | `HKLM\Software\Policies\Microsoft\Windows\System` | `DisableAcrylicBackgroundOnLogon` |
 
 # PowerShell Colors
 

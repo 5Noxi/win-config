@@ -356,7 +356,7 @@ It's set to `Ask me before running` by default.
 
 These get disabled in the `Don't run any` option.
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 `System > Troubleshoot` - `Recommended troubleshooter preferences`:
 ```c
@@ -388,7 +388,7 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 
 Disables all kind of suggestions, in start, text suggestions (multilingual...), in the timeline, content (also includes disabling spotlight, see below). `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
 
-## SubscribedContent IDs
+### SubscribedContent IDs
 
 Since the `SubscribedContent-*` values aren't documented literally anywhere I've tried to get some information to see which exist and what they do. You can find information on them in `ContentDeliveryManager.Utilities.dll`, see [contentdelivery.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/contentdelivery.c) for machine code snippets that include these information.
 
@@ -420,7 +420,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
-## Windows Spotlight
+### Windows Spotlight
 
 > "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*
 > *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*
@@ -429,7 +429,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 >
 > — Microsoft, [Configure Windows spotlight](https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11)
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/lockscreen-spotlight.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/privacy/images/lockscreen-spotlight.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -601,7 +601,7 @@ Stops Windows from correcting the system clock through network time sources (the
 
 Disables Cross-Device experiences (allows you to use `Share Across Devices`/`Nearby Sharing` functionalities) & share accross devices. With `Share across devices`, you can continue app experiences on other devices connected to your account (set to `My device only` by default).
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 Changing "Share across devices" option via `SystemSettings`:
 
@@ -646,7 +646,7 @@ L"WifiLastDisabledNearShare",
 
 > "*This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC.If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences.If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences.If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*"
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 This option will also disable resume ("Start something on one device and continue on this PC") - `System Settings > Apps > Resume`.
 
@@ -753,7 +753,9 @@ Prevents websites from opening their associated apps through HTTP or HTTPS links
 >
 > *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*"
 
-## Website Access to Language List
+## Suboption
+
+### Website Access to Language List
 
 "Sets the HTTP Accept Language from the Language List opt-out setting." Disables [`Let websites provide locally relevant content by accessing my language list`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#181-general).
 
@@ -903,7 +905,7 @@ Miscellaneous notes:
 
 GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, with optional background recording.
 
-## WindowsMediaCapture Values
+### WindowsMediaCapture Values
 
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR";
@@ -961,7 +963,7 @@ GameDVR is a built-in gameplay capture (Xbox Game Bar) for clips/screenshots, wi
 - [privacy/assets | gamebar-WindowsMediaCaptureIAppBroadcastGlobalSettings.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/gamebar-WindowsMediaCaptureIAppBroadcastGlobalSettings.c) (`HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\AppBroadcast\\GlobalSettings`)
 - [settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts](https://github.com/MicrosoftDocs/windows-dev-docs/blob/docs/hub/apps/develop/settings/settings-windows-11.md#gaming-game-bar-game-mode-gaming-shortcuts)
 
-## Game Bar Precense Writer
+### Game Bar Precense Writer
 
 > "*Game Bar Presence Writer is a component that is notified when a game's "presence" state (i.e. is a game running in the foreground) changes. This functionality is available in Windows 10 and later operating systems. By default, the existing Game Bar Presence Writer will set a user's Xbox Live presence state for a running game if the Xbox App is installed, the user is signed into their Xbox account, and the user has enabled Xbox Live presence to be set when they run a game on their PC. It is possible for Windows Application developers to override this default behavior with their own implementation.*"
 >
@@ -1385,7 +1387,6 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 > "*This setting prevents using the Settings app to add a Microsoft account for single sign-on (SSO) authentication for Microsoft services and some background services, or using a Microsoft account for single sign-on to other applications or services.*
 >
 > *There are two options if this setting is enabled:*
-
 > *- Users can't add Microsoft accounts means that existing connected accounts can still sign in to the device (and appear on the Sign in screen). However, users cannot use the Settings app to add new connected accounts (or connect local accounts to Microsoft accounts).*
 > *- Users can't add or log on with Microsoft accounts means that users cannot add new connected accounts (or connect local accounts to Microsoft accounts) or use existing connected accounts through Settings.*
 >
@@ -1485,7 +1486,6 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 > "*Find My Device is a feature that can help you locate your Windows 10 or Windows 11 device if it's lost or stolen. To use this feature, sign in to your device with a Microsoft account and make sure you're an administrator on it. This feature works when location is turned on for your device, even if other users on the device have turned off location settings for their apps. Any time you attempt to locate the device, users using the device will see a notification in the notification area.*
 >
 > *- This setting works for any Windows device, such as a PC, laptop, Surface, or Surface Pen. It needs to be turned on before you can use it.* 
->
 > *- You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
@@ -1502,23 +1502,7 @@ WMPlayer (Windows Media Player) sends player usage data by default, if using the
 
 Note: I gathered all registry values via the legacy WMPlayer.
 
-## Suboptions
-
-| Option | Description |
-| ---- | ---- |
-| `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
-| `Prevent Send User ID` | Prevents sending a unique player ID to content providers. |
-| `Disable Metadata Retrieval` | Disables displaying media information from the internet and updating music files by retrieving media info from the internet. |
-| `Prevent Usage Rights Download` | Prevents downloading usage rights automatically when playing or syncing a file. |
-| `Prevent Auto Clock` | Prevents setting the clock on devices automatically. |
-| `Max Connection Speed` | Selects the `LAN (10 Mbps or more)` connection speed, which is the highest available. |
-| `Prevent Frame Dropping` | Prevents dropping frames in order to keep audio and video synchronized. |
-| `Disable Video Smoothing` | Disables the `Use video smoothing` option.|
-| `Disable Multicast Streams` | Disallows the player from receiving multicast streams. |
-| `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
-| `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
-
-## setup_wm Capture
+### setup_wm Capture
 
 Registry values `setup_wm.exe` creates on first start, if unticking all options:
 ```powershell
@@ -1608,16 +1592,31 @@ HKCU\Software\Microsoft\MediaPlayer\Preferences\WebScriptCommandsEnabled	Type: R
 HKCU\Software\Microsoft\MediaPlayer\Preferences\WebStreamsEnabled	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
----
+## Suboptions
 
-Miscellaneous notes:
+| Option | Description |
+| ---- | ---- |
+| `Disable History` | Disables storing and displaying a list of recent/frequently played music, videos, pictures, playlists (`UsageLoggerCategories` disables "Save recently used to the Jumplist instead of frequently used"). |
+| `Prevent Send User ID` | Prevents sending a unique player ID to content providers. |
+| `Disable Metadata Retrieval` | Disables displaying media information from the internet and updating music files by retrieving media info from the internet. |
+| `Prevent Usage Rights Download` | Prevents downloading usage rights automatically when playing or syncing a file. |
+| `Prevent Auto Clock` | Prevents setting the clock on devices automatically. |
+| `Max Connection Speed` | Selects the `LAN (10 Mbps or more)` connection speed, which is the highest available. |
+| `Prevent Frame Dropping` | Prevents dropping frames in order to keep audio and video synchronized. |
+| `Disable Video Smoothing` | Disables the `Use video smoothing` option.|
+| `Disable Multicast Streams` | Disallows the player from receiving multicast streams. |
+| `Enable Screensaver` | Allows the screen saver to stay enabled during playback. |
+| `Prevent Internet Connection` | Disables the `Connect to the Internet (overrides other commands)` option. |
+
+
+## Miscellaneous Notes
 
 ```c
 // Apps > Video playback
 
 // Save network bandwidth by playing video at lower resolution
-"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "AllowLowResolution" = 0; // DWORD. 0 = Off (default), 1 = On
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\VideoSettings": "AllowLowResolution" = 0 // DWORD. 0 = Off (default), 1 = On
 
 // Process video automatically to enhance it (depends on your device hardware)
-"HKCU\Software\Microsoft\Windows\CurrentVersion\VideoSettings"; "EnableAutoEnhanceDuringPlayback" = 0; // DWORD, 0 = Off, 1 = On
+"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\VideoSettings": "EnableAutoEnhanceDuringPlayback" = 0 // DWORD, 0 = Off, 1 = On
 ```

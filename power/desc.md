@@ -1287,7 +1287,7 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 | anything else | `1` | `PowerDeviceD0` |
 | missing | `4` | `PowerDeviceD3` |
 
-## Build Differences
+### Build Differences
 
 Use [bin-diff](https://noverse.dev/bin-diff?left=11-23H2&right=11-24H2&module=USBAUDIO&function=RegistryGetIdleInfo.c&mode=side-by-side) for direct comparison.
 
@@ -1762,7 +1762,9 @@ Energy estimation accounts for estimated power usage, components report modeled 
 
 ## Suboption
 
-`Disable Battery Capacity Section` = Disables the battery capacity section on the battery saver page of the system settings app.
+### Battery Capacity Section
+
+Disables the battery capacity section on the battery saver page of the system settings app.
 
 ## IdleStatesNumber
 

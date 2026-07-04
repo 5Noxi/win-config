@@ -432,6 +432,67 @@ For general playback, `44.1` kHz or `48` kHz with `16` or `24` bit depth is norm
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/samplerate.png?raw=true)
 
+# Sound Mode
+
+## Spatial Audio
+
+> "*Microsoft Spatial Sound is Microsoft’s platform-level solution for spatial sound support on Xbox, Windows and HoloLens 2, enabling both surround and elevation (above or below the listener) audio cues. Spatial sound can be leveraged by Windows desktop (Win32) apps as well as Universal Windows Platform (UWP) apps on supported platforms. The spatial sound APIs allow developers to create audio objects that emit audio from positions in 3D space.*"
+>
+> — Microsoft, [Spatial Sound for app developers for Windows, Xbox, and Hololens 2](https://learn.microsoft.com/en-us/windows/win32/coreaudio/spatial-sound)
+
+
+![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
+
+### Registry Values
+
+See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/)' for other related values.
+
+```c
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
+  // BlockSpatialAudioRegistryGates
+  "DisableSpatialAudioGlobal" = 0; // REG_DWORD (bool)
+  "DisableSpatialAudioPerEndpoint" = 1; // REG_DWORD (bool), nonzero = PKEY_Endpoint_SpatialNotAllowed
+  "DisableSpatialAudioVssFeature" = 0; // REG_DWORD (bool)
+  "SpatialAudioHrtfOnByDefault" = 0; // REG_DWORD (bool)
+
+  // IsSpatialComboEndpointDeterminationDisabled
+  "DisableSpatialOnComboEndpoints" = 1; // REG_DWORD (bool)
+
+"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Policy\\Spatial";
+  // AtmosCheck::GetSpatialAudioLicenseGracePeriodInMs
+  "SpatialAudioLicenseCheckStartDelay" = 5; // REG_DWORD, range 1-900000 ms, 0/>900000 = 5 ms
+
+  // IsMultiUserSKU
+  "SpatialAudioLicenseCheckRequiresUserContext" = 0; // REG_DWORD (bool)
+```
+
+Disabling spatial sound via these values would gray out the option in the device properites, but Windows itself doesn't disable/enable it via them.
+
+![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatialsystemsettings.png?raw=true)
+
+- [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
+- [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
+- [GetSpatialAudioLicenseGracePeriodInMs](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-GetSpatialAudioLicenseGracePeriodInMs@AtmosCheck@@CAHXZ.c)
+- [IsMultiUserSKU](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-IsMultiUserSKU@@YA_NXZ.c)
+
+## Mono/Stereo Audio
+
+Mono combines left and right audio channels into one, stereo uses two channels.
+
+![](https://github.com/nohuto/win-config/blob/main/peripheral/images/mono-stereo.jpg?raw=true)
+
+## SystemSettings Capture
+
+```c
+// System > Sound : Mono audio
+
+// Enabled
+HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 1
+
+// Disabled
+HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 0
+```
+
 # Disable Audio Enhancements
 
 Audio enhancements are software based sound processing features that change or improve how playback or microphone audio sounds on a device. In general, they are used to improve clarity, balance volume, reduce noise, boost certain frequencies, or simulate spatial/surround effects, depending on the device and driver, but they can also cause audio issues etc., which is why you may want to disable them.
@@ -454,63 +515,6 @@ The structure is `HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio
 # USBFlags Values
 
 Value names in [`HUBREG_QueryUsbflagsValuesForDevice.c`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/USBHUB3/HUBREG_QueryUsbflagsValuesForDevice.c) are mostly UNICODE_STRING globals, the names below are resolved from `dq offset ; "Name"`. The usbflags device key base path is `HKLM\SYSTEM\CurrentControlSet\Control\usbflags` (from `LRegistryMachineSystemCurrentControlSetControlusbflags` in `HUBREG_OpenCreateUsbflagsDeviceKey`).
-
-## USB_DEVICE_HACKS
-
-You can use [`!usb3kd.device_info`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debuggercmds/-usb3kd-device-info.md) to get more information on a USB device in the USB 3.0 tree, example:
-```c
-lkd> !usb3.usb_tree
-
-4) !device_info 0xffffb009127ca1f0, !devstack ffffb009127e1d80
-    Current Device State: ConfiguredInD0
-    Desc: USB Receiver
-    USB\VID_046D&PID_C547&REV_0402 Logitech Inc.
-    !ucx_device 0xffffb009127cad00 !xhci_deviceslots 0xffffb0090bc17db0 1 !xhci_info 0xffffb0090bc17db0
-
-lkd> !usb3kd.device_info 0xffffb009127ca1f0
-
-U1Timeout: 0, U2Timeout: 0
-DeviceFlags: DeviceIsComposite MsOsDescriptorNotSupported UsbWakeupSupport 
-DeviceStateFlags: DeviceAttachSuccessful DeviceIsKnown ConfigurationIsValid ConfigDescIsValid 
-                  DeviceStarted InstallMSOSExtEventProcessed IsNative 
-DeviceHackFlags: DisableOnSoftRemove DisableLpm
-```
-The `DisableLpm` DeviceHackFlags exists if the value is set (DisableLPM).
-
-You can see existing `_USB_DEVICE_HACKS` using the dt command:
-```c
-lkd> .load usb3kd
-lkd> dt USBHUB3!_USB_DEVICE_HACKS
-   +0x000 AsUlong32        : Uint4B
-   +0x000 DisableSerialNumber : Pos 0, 1 Bit
-   +0x000 DontSkipMsOsDescriptor : Pos 1, 1 Bit
-   +0x000 ResetOnResumeSx  : Pos 2, 1 Bit
-   +0x000 DisableOnSoftRemove : Pos 3, 1 Bit
-   +0x000 RequestConfigDescOnReset : Pos 4, 1 Bit
-   +0x000 SkipContainerIdQuery : Pos 5, 1 Bit
-   +0x000 IgnoreBOSDescriptorValidationFailure : Pos 6, 1 Bit
-   +0x000 DisableLpm       : Pos 7, 1 Bit
-   +0x000 SkipSetSel       : Pos 8, 1 Bit
-   +0x000 ResetOnResumeInSuperSpeed : Pos 9, 1 Bit
-   +0x000 AllowInvalidPipeHandles : Pos 10, 1 Bit
-   +0x000 DisableUASP      : Pos 11, 1 Bit
-   +0x000 SkipSetIsochDelay : Pos 12, 1 Bit
-   +0x000 ResetOnResumeS0  : Pos 13, 1 Bit
-   +0x000 DisableHotReset  : Pos 14, 1 Bit
-   +0x000 SkipBOSDescriptorQuery : Pos 15, 1 Bit
-   +0x000 NonFunctional    : Pos 16, 1 Bit
-   +0x000 DisableUsb20HardwareLpm : Pos 17, 1 Bit
-   +0x000 DisableRemoteWakeForUsb20HardwareLpm : Pos 18, 1 Bit
-   +0x000 DisableSuperSpeed : Pos 19, 1 Bit
-   +0x000 IncompatibleWithWindows : Pos 20, 1 Bit
-   +0x000 UseWin8DescriptorValidation : Pos 21, 1 Bit
-   +0x000 DisableFastEnumeration : Pos 22, 1 Bit
-   +0x000 DisableRecoveryFromPowerDrain : Pos 23, 1 Bit
-   +0x000 AddControllerSuffixedCompatIdToAudioDevices : Pos 24, 1 Bit
-   +0x000 AddMausbSuffixToHardwareId : Pos 25, 1 Bit
-   +0x000 EnablePLDRDuringCyclePort : Pos 26, 1 Bit
-   +0x000 ResetOnErrorInD2Resume : Pos 27, 1 Bit
-```
 
 ## Registry Values
 
@@ -579,7 +583,88 @@ Everything listed below is based on personal findings, mistakes may exist.
     //"ResetOnErrorInD2Resume"
 ```
 
-## RegistryMachin_* Keys
+### USB_DEVICE_HACKS
+
+You can use [`!usb3kd.device_info`](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/debuggercmds/-usb3kd-device-info.md) to get more information on a USB device in the USB 3.0 tree, example:
+
+```c
+lkd> !usb3.usb_tree
+
+4) !device_info 0xffffb009127ca1f0, !devstack ffffb009127e1d80
+    Current Device State: ConfiguredInD0
+    Desc: USB Receiver
+    USB\VID_046D&PID_C547&REV_0402 Logitech Inc.
+    !ucx_device 0xffffb009127cad00 !xhci_deviceslots 0xffffb0090bc17db0 1 !xhci_info 0xffffb0090bc17db0
+
+lkd> !usb3kd.device_info 0xffffb009127ca1f0
+
+U1Timeout: 0, U2Timeout: 0
+DeviceFlags: DeviceIsComposite MsOsDescriptorNotSupported UsbWakeupSupport 
+DeviceStateFlags: DeviceAttachSuccessful DeviceIsKnown ConfigurationIsValid ConfigDescIsValid 
+                  DeviceStarted InstallMSOSExtEventProcessed IsNative 
+DeviceHackFlags: DisableOnSoftRemove DisableLpm
+```
+The `DisableLpm` DeviceHackFlags exists if the value is set (DisableLPM).
+
+You can see existing `_USB_DEVICE_HACKS` using the dt command:
+```c
+lkd> .load usb3kd
+lkd> dt USBHUB3!_USB_DEVICE_HACKS
+   +0x000 AsUlong32        : Uint4B
+   +0x000 DisableSerialNumber : Pos 0, 1 Bit
+   +0x000 DontSkipMsOsDescriptor : Pos 1, 1 Bit
+   +0x000 ResetOnResumeSx  : Pos 2, 1 Bit
+   +0x000 DisableOnSoftRemove : Pos 3, 1 Bit
+   +0x000 RequestConfigDescOnReset : Pos 4, 1 Bit
+   +0x000 SkipContainerIdQuery : Pos 5, 1 Bit
+   +0x000 IgnoreBOSDescriptorValidationFailure : Pos 6, 1 Bit
+   +0x000 DisableLpm       : Pos 7, 1 Bit
+   +0x000 SkipSetSel       : Pos 8, 1 Bit
+   +0x000 ResetOnResumeInSuperSpeed : Pos 9, 1 Bit
+   +0x000 AllowInvalidPipeHandles : Pos 10, 1 Bit
+   +0x000 DisableUASP      : Pos 11, 1 Bit
+   +0x000 SkipSetIsochDelay : Pos 12, 1 Bit
+   +0x000 ResetOnResumeS0  : Pos 13, 1 Bit
+   +0x000 DisableHotReset  : Pos 14, 1 Bit
+   +0x000 SkipBOSDescriptorQuery : Pos 15, 1 Bit
+   +0x000 NonFunctional    : Pos 16, 1 Bit
+   +0x000 DisableUsb20HardwareLpm : Pos 17, 1 Bit
+   +0x000 DisableRemoteWakeForUsb20HardwareLpm : Pos 18, 1 Bit
+   +0x000 DisableSuperSpeed : Pos 19, 1 Bit
+   +0x000 IncompatibleWithWindows : Pos 20, 1 Bit
+   +0x000 UseWin8DescriptorValidation : Pos 21, 1 Bit
+   +0x000 DisableFastEnumeration : Pos 22, 1 Bit
+   +0x000 DisableRecoveryFromPowerDrain : Pos 23, 1 Bit
+   +0x000 AddControllerSuffixedCompatIdToAudioDevices : Pos 24, 1 Bit
+   +0x000 AddMausbSuffixToHardwareId : Pos 25, 1 Bit
+   +0x000 EnablePLDRDuringCyclePort : Pos 26, 1 Bit
+   +0x000 ResetOnErrorInD2Resume : Pos 27, 1 Bit
+```
+
+### [Subkey Structure](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)
+
+The subkeys in `usbflags` always have a length of 12, build in such a structure `vvvvpppprrrr`:
+- **vvvv** is a 4-digit hexadecimal number that identifies the vendor
+- **pppp** is a 4-digit hexadecimal number that identifies the product
+- **rrrr** is a 4-digit hexadecimal number that contains the revision number of the device
+
+The vendor ID, product ID, and revision number values are obtained from the [USB device descriptor](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-descriptors.md). The USB_DEVICE_DESCRIPTOR structure describes a device descriptor.
+
+| Registry entry | Description | Possible values |
+|---|---|---|
+| **osvc**<br><br>REG_BINARY | Indicates whether the operating system queried the device for [Microsoft-defined USB descriptors](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/microsoft-defined-usb-descriptors.md). If the previously attempted OS descriptor query was successful, the value contains the vendor code from the OS string descriptor. | <ul><li>0x0000: The device didn't provide a valid response to the Microsoft OS string descriptor request.</li><li>0x01xx: The device provided a valid response to the Microsoft OS string descriptor request, where xx is the **bVendorCode** contained in the response.</li></ul> |
+| **IgnoreHWSerNum**<br><br>REG_BINARY | Indicates whether the USB driver stack must ignore the serial number of the device. | <ul><li>0x00: The setting is disabled.</li><li>0x01: Forces the USB driver stack to ignore the serial number of the device. Therefore, the device instance is tied to the port to which the device is attached.</li></ul> |
+| **ResetOnResume**<br><br>REG_BINARY | Indicates whether the USB driver stack must reset the device when the port resumes from a sleep cycle. | <ul><li>0x0000: The setting is disabled.</li><li>0x0001: Forces the USB driver stack to reset a device on port resume.</li></ul> |
+
+```
+\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : ResetOnResume
+\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : IgnoreHWSerNum
+\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : osvc
+```
+
+`IgnoreHWSerNum<vvvvpppp>` exists in [`\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags`](https://github.com/nohuto/regkit/blob/main/records/USB-Flags.txt) too.
+
+### RegistryMachin_* Keys
 
 These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 
@@ -624,29 +709,6 @@ aRegistryMachin = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Cras
 aRegistryMachin_0 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usb\\HardwareVerifier" // g_HwVerifierKeyName
 aRegistryMachin_1 = "\\Registry\\Machine\\System\\CurrentControlSet\\Control\\usbflags" // g_usbflagsKeyName
 ```
-
-## [Subkey Structure](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)
-
-The subkeys in `usbflags` always have a length of 12, build in such a structure `vvvvpppprrrr`:
-- **vvvv** is a 4-digit hexadecimal number that identifies the vendor
-- **pppp** is a 4-digit hexadecimal number that identifies the product
-- **rrrr** is a 4-digit hexadecimal number that contains the revision number of the device
-
-The vendor ID, product ID, and revision number values are obtained from the [USB device descriptor](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-descriptors.md). The USB_DEVICE_DESCRIPTOR structure describes a device descriptor.
-
-| Registry entry | Description | Possible values |
-|---|---|---|
-| **osvc**<br><br>REG_BINARY | Indicates whether the operating system queried the device for [Microsoft-defined USB descriptors](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/microsoft-defined-usb-descriptors.md). If the previously attempted OS descriptor query was successful, the value contains the vendor code from the OS string descriptor. | <ul><li>0x0000: The device didn't provide a valid response to the Microsoft OS string descriptor request.</li><li>0x01xx: The device provided a valid response to the Microsoft OS string descriptor request, where xx is the **bVendorCode** contained in the response.</li></ul> |
-| **IgnoreHWSerNum**<br><br>REG_BINARY | Indicates whether the USB driver stack must ignore the serial number of the device. | <ul><li>0x00: The setting is disabled.</li><li>0x01: Forces the USB driver stack to ignore the serial number of the device. Therefore, the device instance is tied to the port to which the device is attached.</li></ul> |
-| **ResetOnResume**<br><br>REG_BINARY | Indicates whether the USB driver stack must reset the device when the port resumes from a sleep cycle. | <ul><li>0x0000: The setting is disabled.</li><li>0x0001: Forces the USB driver stack to reset a device on port resume.</li></ul> |
-
-```
-\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : ResetOnResume
-\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : IgnoreHWSerNum
-\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags\<vvvvpppprrrr> : osvc
-```
-
-`IgnoreHWSerNum<vvvvpppp>` exists in [`\Registry\Machine\SYSTEM\ControlSet001\Control\usbflags`](https://github.com/nohuto/regkit/blob/main/records/USB-Flags.txt) too.
 
 # USB Values
 
@@ -709,7 +771,7 @@ For values with "any nonzero" comment, the code treats the DWORD as a boolean, m
     "BootPathSurpriseRemovalCount" = ?;
 ```
 
-## RegistryMachin_* Keys
+### RegistryMachin_* Keys
 
 These are from `usbhub.sys`. Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 
@@ -813,7 +875,7 @@ For values with "any nonzero" comment, the code treats the DWORD as a boolean, m
     "{GUID}" = ?; // value name from RtlStringFromGUID
 ```
 
-## RegistryMachin_* Keys
+### RegistryMachin_* Keys
 
 Looking at xrefs of these names is sometimes a start point when trying to find values within a binary or to see what keys are somewhere used, therefore I'm adding it (note that `aRegistryMachin_*` are IDA generated names so you won't find them in strings, nor will they be the exact same for you unless you disassemble the same binary build version).
 
@@ -880,7 +942,9 @@ You can find all mentioned functions in [decompiled-pseudocode/11-23H2/audiosrv]
 
 The titles below tell what binary I've the values from.
 
-## audiodg.exe
+## Registry Values
+
+### audiodg.exe
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
@@ -922,7 +986,7 @@ The titles below tell what binary I've the values from.
   "SkipAPOFailureCheck" = 0; // REG_DWORD (bool)
 ```
 
-## AudioSrvPolicyManager.dll
+### AudioSrvPolicyManager.dll
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
@@ -944,7 +1008,7 @@ The titles below tell what binary I've the values from.
                                // 3 = 0 dB
 ```
 
-## audiosrv.dll
+### audiosrv.dll
 
 ```c
 "HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
@@ -1231,7 +1295,7 @@ Fun fact: the `Reduce the volume of other sounds by 80%` audio ducking option is
 
 - [LoadUserSettings](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/AudioSrvPolicyManager/-LoadUserSettings@@YAXPEAVTSSession@@PEAUHKEY__@@@Z.c)
 
-## MMSYS Capture
+### MMSYS Capture
 
 Capture of `control mmsys.cpl,,3`.
 
@@ -1247,67 +1311,6 @@ HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, 
 
 // Do nothing
 HKCU\Software\Microsoft\Multimedia\Audio\UserDuckingPreference	Type: REG_DWORD, Length: 4, Data: 3
-```
-
-# Sound Mode
-
-## Spatial Audio
-
-> "*Microsoft Spatial Sound is Microsoft’s platform-level solution for spatial sound support on Xbox, Windows and HoloLens 2, enabling both surround and elevation (above or below the listener) audio cues. Spatial sound can be leveraged by Windows desktop (Win32) apps as well as Universal Windows Platform (UWP) apps on supported platforms. The spatial sound APIs allow developers to create audio objects that emit audio from positions in 3D space.*"
->
-> — Microsoft, [Spatial Sound for app developers for Windows, Xbox, and Hololens 2](https://learn.microsoft.com/en-us/windows/win32/coreaudio/spatial-sound)
-
-
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatial.jpeg?raw=true)
-
-### Registry Values
-
-See '[Audio Values](https://noverse.dev/docs/win-config/peripheral/audio-values/)' for other related values.
-
-```c
-"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio";
-  // BlockSpatialAudioRegistryGates
-  "DisableSpatialAudioGlobal" = 0; // REG_DWORD (bool)
-  "DisableSpatialAudioPerEndpoint" = 1; // REG_DWORD (bool), nonzero = PKEY_Endpoint_SpatialNotAllowed
-  "DisableSpatialAudioVssFeature" = 0; // REG_DWORD (bool)
-  "SpatialAudioHrtfOnByDefault" = 0; // REG_DWORD (bool)
-
-  // IsSpatialComboEndpointDeterminationDisabled
-  "DisableSpatialOnComboEndpoints" = 1; // REG_DWORD (bool)
-
-"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Audio\\Policy\\Spatial";
-  // AtmosCheck::GetSpatialAudioLicenseGracePeriodInMs
-  "SpatialAudioLicenseCheckStartDelay" = 5; // REG_DWORD, range 1-900000 ms, 0/>900000 = 5 ms
-
-  // IsMultiUserSKU
-  "SpatialAudioLicenseCheckRequiresUserContext" = 0; // REG_DWORD (bool)
-```
-
-Disabling spatial sound via these values would gray out the option in the device properites, but Windows itself doesn't disable/enable it via them.
-
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/spatialsystemsettings.png?raw=true)
-
-- [BlockSpatialAudioRegistryGates](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/BlockSpatialAudioRegistryGates.c)
-- [IsSpatialComboEndpointDeterminationDisabled](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/IsSpatialComboEndpointDeterminationDisabled.c)
-- [GetSpatialAudioLicenseGracePeriodInMs](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-GetSpatialAudioLicenseGracePeriodInMs@AtmosCheck@@CAHXZ.c)
-- [IsMultiUserSKU](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/audiosrv/-IsMultiUserSKU@@YA_NXZ.c)
-
-## Mono/Stereo Audio
-
-Mono combines left and right audio channels into one, stereo uses two channels.
-
-![](https://github.com/nohuto/win-config/blob/main/peripheral/images/mono-stereo.jpg?raw=true)
-
-## SystemSettings Capture
-
-```c
-// System > Sound : Mono audio
-
-// Enabled
-HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 1
-
-// Disabled
-HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
 # Disable AutoPlay/Autorun
@@ -1761,7 +1764,7 @@ This list was created on a stock `W11 LTSC IoT Enterprise 2024` installation via
 dir Registry::HKEY_CLASSES_ROOT -Recurse -ea SilentlyContinue | ? { $_.Name -like '*\shell\print' } | select -ExpandProperty Name
 ```
 
-## Printer Connections
+### Printer Connections
 
 [List](https://learn.microsoft.com/en-us/powershell/module/printmanagement/get-printer?view=windowsserver2025-ps) all printer connections:
 ```powershell
@@ -1809,7 +1812,7 @@ HKR,,"MouseDataQueueSize",0x00010003,100
 >
 > — Microsoft KB Archive, [MouseDataQueueSize](https://www.betaarchive.com/wiki/index.php/Microsoft_KB_Archive/102990)
 
-## [MouseDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mouclass/MouConfiguration.c)
+### [MouseDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mouclass/MouConfiguration.c)
 
 - not present = default `100` -> `2400`
 - present and `0` = forced to `100` -> `2400`
@@ -1839,7 +1842,7 @@ LABEL_10:
 *((_DWORD *)&WPP_MAIN_CB.Reserved + 2) = v11;
 ```
 
-## [KeyboardDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/kbdclass/KbdConfiguration.c)
+### [KeyboardDataQueueSize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/kbdclass/KbdConfiguration.c)
 
 - not present = default `100` -> `1200`
 - present and `0` = forced to `100` -> `1200`
@@ -1874,32 +1877,32 @@ dword_1C000A234 = v15;
 
 Before starting the configuration, load your default settings, as many settings are already correctly configured by default.
 
-## **Game Mode** - `User`  
+### Game Mode - `User`  
 Each profile has preconfigured settings. E.g. 'Read mode' is optimized for viewing documents, it probably decreases the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) and increases the color temperature. Choose the profile you're satisfied with, for example the sRGB profile if you're a editor, then configure the other settings.
 
-## **Overdrive/OD/Response Time** - `Test`  
+### Overdrive/OD/Response Time - `Test`  
 If you experience [ghosting](https://www.testufo.com/ghosting) (most noticeable in fast paced motions, e.g. FPS games), caused by a slow response time, which cannot keep up with the speed of the changing image, you should try to increase the OD option, which will increase the response time of your monitor. Ghosting looks like a image artifact that appears as a trail of pixels behind a moving object (pixels can't change color fast enough when a new image appears, parts of the old image remain visible), which is why it gets called ghosting -> the trace looks like a ghost of the object. Increasing the overdrive setting can end up in overshooting/inverse ghosting, which is the opposite of ghosting and get's caused from a too high OD. Which means that the response time is too fast for your monitor to handle it, resulting in pixels changing their color too fast. Ghosting (normally) ends up in a trace behind the object (like motion blur), inverse ghosting can cause artifacts in front and behind the object. Search for your monitor [here](https://www.rtings.com/), scroll down to the motion section and compare the response times, to see if your monitor even performs the best one the fastest option. And no you won't "see" a difference between them, if you experience inverse ghosting, renounce the lowest response time and decrease it (as ghosting makes the image unclear -> annoying), if you experience ghosting increase and test it.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/monitor1.png?raw=true)
 
-## **Sharpness** - `0%`  
+### Sharpness - `0%`  
 Personal preference. Increasing it too much will end up in [artificial sharpening](http://www.lagom.nl/lcd-test/sharpness.php) = exaggerated outlines.
 
-## **Dark Boost/Black Boost** - `Off`  
+### Dark Boost/Black Boost - `Off`  
 Improved vision in [dark scenes](https://www.testufo.com/blacklevels) when increased, but can end up making black look gray, so don't increase it too much. 
 
-## **FreeSync, G-Sync...** - `Disabled`  
+### FreeSync, G-Sync... - `Disabled`  
 G-Sync matches the monitor's refresh rate to the frame rate. The setting is used to eliminate screen tearing, if you don't experience [screen tearing](https://www.youtube.com/watch?v=5mWMP96UdGU&t=110s), leave it disabled. If you want to use it, set your framerate limit a bit lower (kind of a buffer, `freq-(freq*freq)/3600`) than your refresh rate. Optimally set the limit within the game. Never use pure V-Sync -> G-Sync + V-Sync + Reflex & limit. [Gsync/gsync101-input-lag-tests-and-settings](https://blurbusters.com/gsync/gsync101-input-lag-tests-and-settings/) can still be read. It is old, but most of it is still correct. If information from the text above and from the website text don't match, the channel information is correct.
 
-## **Color Temperature** - `Warm`  
+### Color Temperature - `Warm`  
 Changing it is one of the best ways to reduce eye stain. Using a warm temperature -> less [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/). (read the text below for more information about [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/)) Default mostly is `6500K`. One thing to add: a higher temperature will make it easier for you to concentrate.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/monitor2.png?raw=true)
 
-## **Brightness** - `50-70`  
+### Brightness - `50-70`  
 Depends on how much light there is in your room. If there's a lot of light, you'll have to increase the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/). If you mainly play in the dark, it's recommended to reduce the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to a level that is comfortable for your eyes. Remember: decreasing it *can* lower the [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) by `50+%` -> known to be phototoxic to your eyes ([retina](https://en.wikipedia.org/wiki/Retina) - light sensitive tissue), therefore lower the [brightness](https://plano.co/does-screen-brightness-affect-your-eyes/) to reduce the intensity of [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/). For your general knowledge, [blue light](https://eyesurgeryguide.org/debunking-the-blue-light-eye-damage-myth/) has a short wavelength (~`450-500`), which means that it carries more energy -> higher impact. Don't dim it too much, or it may end up in worse focus.
 
 ![](https://github.com/nohuto/win-config/blob/main/peripheral/images/monitor3.png?raw=true)
 
-## **Contrast** - `~60`  
+### Contrast - `~60`  
 It shouldn't be set too high, otherwise you will [not be able to see any details](https://www.testufo.com/whitelevels) and not too low, or it will be too dark. You'll have to test it yourself and find the best value.
