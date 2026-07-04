@@ -1345,6 +1345,8 @@ I'll use WPR below to capture the boost, if you're not familiar with WPA/MXA, yo
 
 You can also see if a context switch was caused by `WrQuantumEnd` via '*Processes and Threads - CS Reason*', but note that there've to be two threads with the same priority, otherwise the thread will just get another quantum without a context switch.
 
+See '[Threads, State & Wait Reasons](https://noverse.dev/docs/windbg-notes/threads/thread-activity/#state--wait-reason)' for more details on the topic.
+
 ![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true)
 
 #### _KTHREAD Priority
