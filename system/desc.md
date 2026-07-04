@@ -5610,6 +5610,28 @@ You can see wether a program uses 'Segment Heap' or 'NT Heap' via for example [S
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment4.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/segment5.png?raw=true)
 
+## Desktop Heap Logging
+
+> "*It is meant to log information about desktop heap usage. This can be helpful when diagnosing issues where system resources for desktop objects might be strained.*"
+>
+> — Microsoft Community, [Question about some DWM registry settings](https://answers.microsoft.com/en-us/windows/forum/all/question-about-some-dwm-registry-settings/341cac5c-d85a-43e5-89d3-d9734f84da4e) (this isn't a verified answer, therefore can't be trusted)
+
+```c
+__int64 IsDesktopHeapLoggingOn(void)
+{
+  int v1 = 0; // default state
+  int v4 = *(_DWORD *)(W32GetUserSessionState() + 62792);
+
+  if ( v4 )
+    v1 = 0; // fallback to the default when registry access fails
+  return v1 != 0;
+}
+```
+
+`DesktopHeapLogging` seems to have a fallback of `0`, but the value exists by default and is set to `1`. Means deleting it/setting it to `0` should do the same.
+
+- [system/assets | IsDesktopHeapLoggingOn.c](https://github.com/nohuto/win-config/blob/main/system/assets/IsDesktopHeapLoggingOn.c)
+
 # Disable Scheduled Tasks
 
 This list was created using my small [`ScheduledTasksList.ps1`](https://github.com/nohuto/win-config/blob/main/system/assets/ScheduledTasksList.ps1) parser which displays name, path, description, principals, settings, triggers, actions if given.

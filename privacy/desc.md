@@ -22,7 +22,9 @@ See [`app-guides`](https://noverse.dev/docs/app-guides/docs/) ([repo](https://gi
 
 # Disable General Telemetry
 
-Prevents sending info about your computer to microsoft, disables the diagnostic log collection, bluetooth ads (`DataCollection.admx`), the inventory collector. It disables the ads ID ("Windows creates a unique advertising ID per user, allowing apps and ad networks to deliver targeted ads. When enabled, it works like a cookie, linking personal data to the ID for personalized ads. This setting only affects Windows apps using the advertising ID, not web-based ads or third-party methods.") which should be disabled by default, if you toggled all options off in the OS installation phase. See policy explanations below for more details.
+Prevents sending information about your computer to Microsoft by disabling general and diagnostic telemetry, inventory collection, app launch tracking, inking/typing personalization, online speech recognition, feedback prompts, CEIP, etc.
+
+See policy explanations below for more details.
 
 It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#calling-native-tracker---broadband-tracker-of-devices-services-and-operating-systems-)' blocklist via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
 
@@ -120,6 +122,18 @@ See [23H2.txt](https://raw.githubusercontent.com/nohuto/regkit/refs/heads/main/r
 | [Limit Dump Collection](https://noverse.dev/policies?p=DataCollection*LimitDumpCollection) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `LimitDumpCollection` |
 | [Configure the Commercial ID](https://noverse.dev/policies?p=DataCollection*CommercialIdPolicy) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `CommercialId` |
 | [Turn off the advertising ID](https://noverse.dev/policies?p=UserProfiles*DisableAdvertisingId) | `HKLM\Software\Policies\Microsoft\Windows\AdvertisingInfo` | `DisabledByGroupPolicy` |
+| [Improve inking and typing recognition](https://noverse.dev/policies?p=TextInput*AllowLinguisticDataCollection) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\TextInput` | `AllowLinguisticDataCollection` |
+| [Restrict Internet communication](https://noverse.dev/policies?p=ICM*InternetManagement_RestrictCommunication_2) | `HKLM\Software\Policies\Microsoft\Windows\HandwritingErrorReports`<br>`HKLM\Software\Policies\Microsoft\Windows\TabletPC` | `PreventHandwritingErrorReports`<br>`PreventHandwritingDataSharing` |
+| [Allow Windows Ink Workspace](https://noverse.dev/policies?p=WindowsInkWorkspace*AllowWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowWindowsInkWorkspace` |
+| [Allow suggested apps in Windows Ink Workspace](https://noverse.dev/policies?p=WindowsInkWorkspace*AllowSuggestedAppsInWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowSuggestedAppsInWindowsInkWorkspace` |
+| [Allow users to enable online speech recognition services](https://noverse.dev/policies?p=Globalization*AllowInputPersonalization) | `HKLM\Software\Policies\Microsoft\InputPersonalization` | `AllowInputPersonalization` |
+| [Allow Automatic Update of Speech Data](https://noverse.dev/policies?p=Speech*AllowSpeechModelUpdate) | `HKLM\Software\Policies\Microsoft\Speech` | `AllowSpeechModelUpdate` |
+| [Do not show feedback notifications](https://noverse.dev/policies?p=FeedbackNotifications*DoNotShowFeedbackNotifications) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DoNotShowFeedbackNotifications` |
+| [Turn off the Windows Messenger Customer Experience Improvement Program](https://noverse.dev/policies?p=ICM*WinMSG_NoInstrumentation_2) | `HKLM\Software\Policies\Microsoft\Messenger\Client` | `CEIP` |
+| [Turn off Windows Customer Experience Improvement Program](https://noverse.dev/policies?p=ICM*CEIPEnable) | `HKLM\Software\Policies\Microsoft\SQMClient\Windows` | `CEIPEnable` |
+| [Prevent participation in the Customer Experience Improvement Program](https://noverse.dev/policies?p=inetres*SQM_DisableCEIP) | `HKLM\Software\Policies\Microsoft\Internet Explorer\SQM`<br>`HKCU\Software\Policies\Microsoft\Internet Explorer\SQM` | `DisableCustomerImprovementProgram` |
+| [Turn off Resultant Set of Policy logging](https://noverse.dev/policies?p=GroupPolicy*RSoPLogging) | `HKLM\Software\Policies\Microsoft\Windows\System` | `RSoPLogging` |
+| [Turn off KMS Client Online AVS Validation](https://noverse.dev/policies?p=AVSValidationGP*NoAcquireGT) | `HKLM\Software\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform` | `NoGenTicket` |
 
 # Disable WER
 
@@ -463,7 +477,7 @@ All `Microsoft\INPUT\Settings` values which get read on boot:
 
 # Disable Automatic Map Downloads
 
-Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location-related data updates.
+Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location related data updates.
 
 `AllowOfflineMapsDownloadOverMeteredConnection` & `EnableOfflineMapsAutoUpdate`:
 
@@ -645,7 +659,21 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 # Disable Background Apps
 
-"This policy setting specifies whether Windows apps can run in the background.You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.If you choose the \"User is in control\" option, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device.If you choose the "Force Allow" option, Windows apps are allowed to run in the background and employees in your organization cannot change it.If you choose the "Force Deny" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it.If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings Privacy on the device. If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app."
+Note that whenever you use this option while having UWP apps, it'll break notifications, background sync, etc.
+
+> *This policy setting specifies whether Windows apps can run in the background.*
+>
+> *You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.*
+>
+> *If you choose the "User is in control" option, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device.*
+>
+> *If you choose the "Force Allow" option, Windows apps are allowed to run in the background and employees in your organization cannot change it.*
+>
+> *If you choose the "Force Deny" option, Windows apps are not allowed to run in the background and employees in your organization cannot change it.*
+>
+> *If you disable or do not configure this policy setting, employees in your organization can decide whether Windows apps can run in the background by using Settings > Privacy on the device.*
+>
+> *If an app is open when this Group Policy object is applied on a device, employees must restart the app or device for the policy changes to be applied to the app.*"
 
 ```
 Computer Configuration\Administrative Templates\Windows Components\App Privacy
@@ -671,15 +699,6 @@ Renames `backgroundTaskHost.exe` to prevent UWP background tasks from running (n
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Let Windows apps run in the background](https://noverse.dev/policies?p=AppPrivacy*LetAppsRunInBackground) | `HKLM\Software\Policies\Microsoft\Windows\AppPrivacy` | `LetAppsRunInBackground`<br>`LetAppsRunInBackground_UserInControlOfTheseApps`<br>`LetAppsRunInBackground_ForceAllowTheseApps`<br>`LetAppsRunInBackground_ForceDenyTheseApps` |
-
-# Disable App Launch Tracking
-
-`Privacy & security > General : Let Windows improve Start and search results by tracking app launches`
-
-```bat
-"Process Name","Operation","Path","Detail"
-"SystemSettings.exe","RegSetValue","HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\Start_TrackProgs","Type: REG_DWORD, Length: 4, Data: 0"
-```
 
 # Disable Auto Maintenance
 
@@ -917,25 +936,11 @@ No other [services](https://github.com/nohuto/win-config/blob/main/system/assets
 | --- | --- | --- |
 | [Turn off sensors](https://noverse.dev/policies?p=Sensors*DisableSensors_2) | `HKLM\Software\Policies\Microsoft\Windows\LocationAndSensors` | `DisableSensors` |
 
-# Disable Windows Insider
-
-> "*The Windows Insider Preview program lets you help shape the future of Windows, be part of the community, and get early access to releases of Windows 10 and Windows 11. Windows Insider Preview builds only apply to Windows 10 and Windows 11 and aren't available for Windows Server 2016.*"
->
-> — Microsoft, [Manage connections from Windows operating system components to Microsoft services](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services)
-
-`AllowBuildPreview` is used up to V1703, I'll still leave it. `Computer Configuration > Administrative Templates > Windows Component > Windows Update > Windows Update for Business : Manage Preview Builds` for W10+ versions.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Toggle user control over Insider builds](https://noverse.dev/policies?p=AllowBuildPreview*AllowBuildPreview) | `HKLM\Software\Policies\Microsoft\Windows\PreviewBuilds` | `AllowBuildPreview` |
-
 # Disable PowerShell & .NET Telemetry
 
 ### [POWERSHELL_TELEMETRY_OPTOUT](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_telemetry?view=powershell-7.2)
 
-> *"At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session.*"
+> "*At startup, PowerShell sends diagnostic data including OS manufacturer, name, and version; PowerShell version; `POWERSHELL_DISTRIBUTION_CHANNEL`; Application Insights SDK version; approximate location from IP; command-line parameters (without values); current Execution Policy; and randomly generated GUIDs for the user and session.*"
 
 ```bat
 setx POWERSHELL_TELEMETRY_OPTOUT 1
@@ -947,16 +952,6 @@ setx POWERSHELL_TELEMETRY_OPTOUT 1
 
 ```bat
 setx DOTNET_CLI_TELEMETRY_OPTOUT 1
-```
-
-# Disable Reserved Storage
-
-> "*Windows reserves `~7 GB` of disk space to ensure updates and system processes run reliably. Temporary files and updates use this reserved area first. If it's full, Windows uses normal disk space or asks for external storage. Size increases with optional features or extra languages. Unused ones can be removed to reduce it.*"
-
-[`Set-WindowsReservedStorageState -State Disabled`](https://learn.microsoft.com/en-us/powershell/module/dism/set-windowsreservedstoragestate?view=windowsserver2025-ps) sets:
-
-```bat
-dismhost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\ReserveManager\DisableDeletes	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
 # Disable Biometrics
@@ -1074,27 +1069,6 @@ Removing all autologgers will cause issues, therefore it's not recommended to re
 | **Status** | **REG_DWORD** | The startup status of the AutoLogger. If the AutoLogger failed to start, the value of this key is the appropriate Win32 error code. If the AutoLogger successfully started, the value of this key is **ERROR_SUCCESS** (0).|
 | **Boot** | **REG_DWORD** | This feature should not be used outside of debugging scenarios.<br> If this registry key is set to 1, the autologger will be started earlier than normal during kernel initialization, allowing it to capture events during the initialization of many important kernel subsystems. However, enabling this option has a negative impact on boot times and imposes additional restrictions on the autologger. If this feature is enabled, the autologger session GUID must be populated, and many other autologger settings may not work. <br> This key is supported on Windows Server 2022 and later. |
 
-# Disable Inking & Typing Personalization
-
-Used for better suggestions by creating a custom dictionary using your typing history and handwriting patterns. Disables autocorrection of misspelled words, highlight of misspelled words, and typing insights - would use AI to suggest words, autocorrect spelling mistakes etc. (`Privacy & security > Inking & typing personalization` & `Time & Language > Typing`).
-
-```
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\TIPC : Enabled
-\Registry\User\.Default\SOFTWARE\Microsoft\INPUT\TIPC : Enabled
-\Registry\User\S-ID\SOFTWARE\Microsoft\INPUT\TIPC : Enabled
-```
-
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/inking.png?raw=true)
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Improve inking and typing recognition](https://noverse.dev/policies?p=TextInput*AllowLinguisticDataCollection) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\TextInput` | `AllowLinguisticDataCollection` |
-| [Restrict Internet communication](https://noverse.dev/policies?p=ICM*InternetManagement_RestrictCommunication_2) | `HKLM\Software\Policies\Microsoft\Windows\HandwritingErrorReports`<br>`HKLM\Software\Policies\Microsoft\Windows\TabletPC` | `PreventHandwritingErrorReports`<br>`PreventHandwritingDataSharing` |
-| [Allow Windows Ink Workspace](https://noverse.dev/policies?p=WindowsInkWorkspace*AllowWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowWindowsInkWorkspace` |
-| [Allow suggested apps in Windows Ink Workspace](https://noverse.dev/policies?p=WindowsInkWorkspace*AllowSuggestedAppsInWindowsInkWorkspace) | `HKLM\Software\Policies\Microsoft\WindowsInkWorkspace` | `AllowSuggestedAppsInWindowsInkWorkspace` |
-
 # Disable Text Input Hosts
 
 `ctfmon.exe` is the classic CTF (Collaborative Translation Framework) loader, it's started for the user at logon by `\Microsoft\Windows\TextServicesFramework\MsCtfMonitor`. It seems to handle [IME](https://learn.microsoft.com/en-us/windows/apps/develop/input/input-method-editors) (Input Method Editor) support, language/input profiles, language bar/input indicator, and [keyboard layout switching](https://noverse.dev/docs/win-config/peripheral/keyboard-values/). 
@@ -1102,17 +1076,6 @@ Used for better suggestions by creating a custom dictionary using your typing hi
 Note that renaming that binary will break input in of start menu/MS store/UWP apps etc.
 
 `TextInputHost.exe` is the modern text input host (from `MicrosoftWindows.Client.CBS`), it seems to get used (on demand) through the `InputApp` registration when opening modern input parts such as `Win+.`, `Win+V`, touch keyboard, handwriting, voice typing, and so on.
-
-# Disable Online Speech Recognition
-
-[`HasAccepted`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) disables online speech recognition, voice input to apps like Cortana, and data upload to Microsoft. [`AllowSpeechModelUpdate`](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#bkmk-priv-speech) blocks automatic updates of speech recognition and synthesis models. I found `DisableSpeechInput` randomly while looking for `HasAccepted`, related to mixed reality environments.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Allow users to enable online speech recognition services](https://noverse.dev/policies?p=Globalization*AllowInputPersonalization) | `HKLM\Software\Policies\Microsoft\InputPersonalization` | `AllowInputPersonalization` |
-| [Allow Automatic Update of Speech Data](https://noverse.dev/policies?p=Speech*AllowSpeechModelUpdate) | `HKLM\Software\Policies\Microsoft\Speech` | `AllowSpeechModelUpdate` |
 
 # Disable Camera
 
@@ -1193,30 +1156,6 @@ Disables all kind of synchronization, see policies.
 | --- | --- | --- |
 | [Disable MDM Enrollment](https://noverse.dev/policies?p=MDM*MDM_MDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `DisableRegistration` |
 | [Enable automatic MDM enrollment using default Azure AD credentials](https://noverse.dev/policies?p=MDM*MDM_JoinMDM_DisplayName) | `HKLM\Software\Policies\Microsoft\Windows\CurrentVersion\MDM` | `AutoEnrollMDM`<br>`UseAADCredentialType`<br>`MDMApplicationId` |
-
-# Disable Feedback Prompts
-
-> "*This policy setting allows an organization to prevent its devices from showing feedback questions from Microsoft.If you enable this policy setting, users will no longer see feedback notifications through the Windows Feedback app.If you disable or do not configure this policy setting, users may see notifications through the Windows Feedback app asking users for feedback.Note: If you disable or do not configure this policy setting, users can control how often they receive feedback questions.*"
-
-Includes setting `Feedback Frequency` to `0` via `NumberOfSIUFInPeriod` & `PeriodInNanoSeconds`.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Do not show feedback notifications](https://noverse.dev/policies?p=FeedbackNotifications*DoNotShowFeedbackNotifications) | `HKLM\Software\Policies\Microsoft\Windows\DataCollection` | `DoNotShowFeedbackNotifications` |
-
-# Disable CEIP
-
-Voluntary program that collects usage data to help improve the quality and performance of its products.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Turn off the Windows Messenger Customer Experience Improvement Program](https://noverse.dev/policies?p=ICM*WinMSG_NoInstrumentation_2) | `HKLM\Software\Policies\Microsoft\Messenger\Client` | `CEIP` |
-| [Turn off Windows Customer Experience Improvement Program](https://noverse.dev/policies?p=ICM*CEIPEnable) | `HKLM\Software\Policies\Microsoft\SQMClient\Windows` | `CEIPEnable` |
-| [Prevent participation in the Customer Experience Improvement Program](https://noverse.dev/policies?p=inetres*SQM_DisableCEIP) | `HKLM\Software\Policies\Microsoft\Internet Explorer\SQM`<br>`HKCU\Software\Policies\Microsoft\Internet Explorer\SQM` | `DisableCustomerImprovementProgram` |
 
 # Disable Cortana
 
@@ -1346,59 +1285,6 @@ svchost.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WINEVT\Ch
 \Registry\Machine\SYSTEM\ControlSet001\Control\Session Manager\Power : SleepStudyTraceDirectory
 ```
 
-# Disable RSoP Logging
-
-> "*This setting allows you to enable or disable Resultant Set of Policy (RSoP) logging on a client computer.RSoP logs information on Group Policy settings that have been applied to the client. This information includes details such as which Group Policy Objects (GPO) were applied where they came from and the client-side extension settings that were included.If you enable this setting RSoP logging is turned off.If you disable or do not configure this setting RSoP logging is turned on. By default RSoP logging is always on.Note: To view the RSoP information logged on a client computer you can use the RSoP snap-in in the Microsoft Management Console (MMC).*"
->
-> — Windows Security Encyclopedia, [Turn off Resultant Set of Policy logging](https://www.windows-security.org/370c915e44b6a75efac0d24669aa9434/turn-off-resultant-set-of-policy-logging)
-
-```powershell
-\Registry\Machine\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon : RsopLogging
-\Registry\Machine\SOFTWARE\Policies\Microsoft\Windows\SYSTEM : RsopLogging
-```
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Turn off Resultant Set of Policy logging](https://noverse.dev/policies?p=GroupPolicy*RSoPLogging) | `HKLM\Software\Policies\Microsoft\Windows\System` | `RSoPLogging` |
-
-# Disable Desktop Heap Logging
-
-> "*It is meant to log information about desktop heap usage. This can be helpful when diagnosing issues where system resources for desktop objects might be strained.*"
->
-> — Microsoft Community, [Question about some DWM registry settings](https://answers.microsoft.com/en-us/windows/forum/all/question-about-some-dwm-registry-settings/341cac5c-d85a-43e5-89d3-d9734f84da4e) (this isn't a verified answer, therefore can't be trusted)
-
-```c
-__int64 IsDesktopHeapLoggingOn(void)
-{
-  int v1 = 0; // default state
-  int v4 = *(_DWORD *)(W32GetUserSessionState() + 62792);
-
-  if ( v4 )
-    v1 = 0; // fallback to the default when registry access fails
-  return v1 != 0;
-}
-```
-
-`DesktopHeapLogging` seems to have a fallback of `0`, but the value exists by default and is set to `1`. Means deleting it/setting it to `0` should do the same.
-
-- [privacy/assets | rsop-IsDesktopHeapLoggingOn.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/rsop-IsDesktopHeapLoggingOn.c)
-
-# Disable Message Sync
-
-"This policy setting allows backup and restore of cellular text messages to Microsoft's cloud services. Disable this feature to avoid information being stored on servers outside of your organization's control."
-
-| Policy | Description | Values |
-| ------ | ------ | ------ |
-| AllowMessageSync | Controls whether SMS/MMS are synced to Microsoft's cloud so they can be backed up and restored; also decides if the user can toggle this in the UI. | 0 = sync not allowed, user cannot change - 1 = sync allowed, user can change (default) |
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Allow Message Service Cloud Sync](https://noverse.dev/policies?p=messaging*AllowMessageSync) | `HKLM\Software\Policies\Microsoft\Windows\Messaging` | `AllowMessageSync` |
-
 # Disable CSC
 
 Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, disables `CSC`/`CscService`, disables the two `Offline Files` scheduled tasks (they're disabled by default), and renames `mobsync.exe` to block execution.
@@ -1446,20 +1332,6 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\NoConnectedUser	Type: REG_DWORD, Length: 4, Data: 3
 ```
 
-# Opt-Out KMS Activation Telemetry
-
-Friendly name: `Turn off KMS Client Online AVS Validation`
-
-> "*This policy setting lets you opt-out of sending KMS client activation data to Microsoft automatically. Enabling this setting prevents this computer from sending data to Microsoft regarding its activation state. If you disable or don't configure this policy setting, KMS client activation data will be sent to Microsoft services when this device activates.*"
-
-[`Disable Auto Activation`](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/dn502532(v=ws.11)#registry-settings) (MAK and KMS host but not KMS client) prevents windows from whether it's actived or not.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Turn off KMS Client Online AVS Validation](https://noverse.dev/policies?p=AVSValidationGP*NoAcquireGT) | `HKLM\Software\Policies\Microsoft\Windows NT\CurrentVersion\Software Protection Platform` | `NoGenTicket` |
-
 # Disable Font Providers
 
 > "*This policy setting determines whether Windows is allowed to download fonts and font catalog data from an online font provider. If you enable this policy setting, Windows periodically queries an online font provider to determine whether a new font catalog is available. Windows may also download font data if needed to format or render text. If you disable this policy setting, Windows does not connect to an online font provider and only enumerates locally-installed fonts.*"
@@ -1469,16 +1341,6 @@ Friendly name: `Turn off KMS Client Online AVS Validation`
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Enable Font Providers](https://noverse.dev/policies?p=GroupPolicy*EnableFontProviders) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableFontProviders` |
-
-# Disable Local Security Questions
-
-Prevent the use of security questions for local accounts.
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Prevent the use of security questions for local accounts](https://noverse.dev/policies?p=CredUI*NoLocalPasswordResetQuestions) | `HKLM\Software\Policies\Microsoft\Windows\System` | `NoLocalPasswordResetQuestions` |
 
 # Disable Thumbnail Caching
 
@@ -1525,26 +1387,6 @@ Currently includes all existing tasks in `\\Microsoft\\Windows\\Application Expe
 | [Turn off compatibility scan for backed up applications](https://noverse.dev/policies?p=AppDeviceInventory*TurnOffWin32AppBackup) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableWin32AppBackup` |
 | [Detect compatibility issues for applications and drivers](https://noverse.dev/policies?p=pca*DisablePcaUIPolicy) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisablePcaUI` |
 
-# Disable Census Data Collection
-
-`DeviceCensus.exe` = "Device and configuration data collection tool"
-
-> "*In a nutshell, Device Census is a telemetry process from Microsoft. It will analyze the use of the webcam and other components. Then, the data will be transmitted anonymously to Microsoft to help optimize Windows for future versions and fix bugs. In addition, it only checks how often the devices are used and don't record anything.*"
->
-> — MiniTool Partition Wizard, [DeviceCensus.exe](https://www.partitionwizard.com/partitionmanager/devicecensus-exe.html)
-
-## Scheduled Task Actions
-
-`\Microsoft\Windows\Device Information`:
-```powershell
-%windir%\system32\devicecensus.exe SystemCxt
-```
-
-`\Microsoft\Windows\Device Information`:
-```powershell
-%windir%\system32\devicecensus.exe UserCxt
-```
-
 # Disable OneSettings Download
 
 [Services Configuration](https://learn.microsoft.com/en-us/windows/privacy/manage-connections-from-windows-operating-system-components-to-microsoft-services#31-services-configuration) is used by Windows components and apps, such as the telemetry service, to dynamically update their configuration. If you turn off this service, apps using this service may stop working.
@@ -1581,29 +1423,6 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Turn On/Off Find My Device](https://noverse.dev/policies?p=FindMy*FindMy_AllowFindMyDeviceConfig) | `HKLM\SOFTWARE\Policies\Microsoft\FindMyDevice` | `AllowFindMyDevice` |
-
-# Disable PSR
-
-> "*Steps Recorder, also known as Problems Steps Recorder (PSR) in Windows 7, is a Windows inbox program that records screenshots of the desktop along with the annotated steps while recording the activity on the screen. The screenshots and annotated text are saved to a file for later viewing.*"
->
-> — Microsoft Support, [Steps Recorder deprecation](https://support.microsoft.com/en-gb/windows/steps-recorder-deprecation-a64888d7-8482-4965-8ce3-25fb004e975f)
-
-It is a deprecated feature, as the banner shows:
-
-![](https://github.com/nohuto/win-config/blob/main/privacy/images/psr.png?raw=true)
-
-`PSR` = Problem Steps Recorder
-
-```c
-// SR = Steps Recorder?
-HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\SystemSettings : SRAvailable
-```
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Turn off Steps Recorder](https://noverse.dev/policies?p=AppCompat*AppCompatTurnOffUserActionRecord) | `HKLM\Software\Policies\Microsoft\Windows\AppCompat` | `DisableUAR` |
 
 # Disable WMPlayer Telemetry
 

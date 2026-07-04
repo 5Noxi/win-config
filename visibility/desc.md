@@ -998,7 +998,7 @@ Prevents changing color/appearance, desktop background, desktop icons, start bac
 
 Use the suboptions to prevent/allow specific parts.
 
-## [Windows Policies](https://noverse.dev/policies)
+### [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
@@ -1274,15 +1274,6 @@ Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/shortcutafter.png?raw=true)
 
-# 'New' Context Menu
-
-Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you can add these options to the 'new' context menu. This may also change the `Type` shown in the explorer (only `.bat` is affected of the three).
-
-`Remove 'Add to Favorites' Option`, `Remove 'Share' Option`, `Remove 'Send to' Option`, `Remove 'bmp'/'zip' Options` don't have a revert yet.
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext1.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext2.png?raw=true)
-
 # Desktop Icon Spacing
 
 Location:
@@ -1307,7 +1298,7 @@ Value gets calculated with:
 -15*75 = -1125 // default
 ```
 
-I created a small tool for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly (the images show vertical `75px` & `100px` difference). I personally use `110px Horizonzal - 60px Vertical` for a more vertical compact view and more space horizontally (see suboption).
+I created a small [tool](https://github.com/nohuto/win-config/blob/main/visibility/assets/iconSpacing.ps1) for fun, since it's a lot easier to quickly change and test the different icon spacing. You've to log out after applying, otherwise it won't update instantly (the images show vertical `75px` & `100px` difference). I personally use `110px Horizonzal - 60px Vertical` for a more vertical compact view and more space horizontally (see suboption).
 
 ### `75px` Example
 
@@ -1319,7 +1310,8 @@ I created a small tool for fun, since it's a lot easier to quickly change and te
 
 ---
 
-Desktop icon size notes:
+Desktop icon size:
+
 ```c
 "HKCU\\Software\\Microsoft\\Windows\\Shell\\Bags\\1\\Desktop";
   "IconSize" = 32 // 32 = Small, 48 = Medium, 96 = Large
@@ -1576,25 +1568,7 @@ Write-Host "Noverse" -ForegroundColor Blue
 
 If it doesn't get changed within the code, it'll use the background color set by `ScreenColor`.
 
-# Hide Disabled/Disconnected Devices
-
-Hides disabled/disconnected devices in the `mmsys.cpl` window.
-
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/hidedevices.png?raw=true)
-
-## Sound Captures
-
-```c
-// Show disabled/disconnected devices
-rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowHiddenDevices	Type: REG_DWORD, Length: 4, Data: 1
-rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowDisconnectedDevices	Type: REG_DWORD, Length: 4, Data: 1
-
-// Hide disabled/diconnected devices
-rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowHiddenDevices	Type: REG_DWORD, Length: 4, Data: 0
-rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\ShowDisconnectedDevices	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-# Force Classic Control Panel
+# Classic Control Panel
 
 > "*This policy setting controls the default Control Panel view, whether by category or icons. If this policy setting is enabled, the Control Panel opens to the icon view. If this policy setting is disabled, the Control Panel opens to the category view.*"
 
@@ -1605,6 +1579,15 @@ rundll32.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\DeviceCpl\Show
 ### Category View
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/panel1.png?raw=true)
+
+## 'New' Context Menu
+
+Instead of creating a `.txt` file, then renaming it to e.g. `.bat` / `.ps1`, you can add these options to the 'new' context menu. This may also change the `Type` shown in the explorer (only `.bat` is affected of the three).
+
+`Remove 'Add to Favorites' Option`, `Remove 'Share' Option`, `Remove 'Send to' Option`, `Remove 'bmp'/'zip' Options` don't have a revert yet.
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext1.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/newcontext2.png?raw=true)
 
 ## [Windows Policies](https://noverse.dev/policies)
 
