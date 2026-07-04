@@ -8109,28 +8109,29 @@ HKCU\Control Panel\Desktop\RestorePreviousStateRecalcBehavior	Type: REG_DWORD, L
 HKCU\Control Panel\Desktop\RestorePreviousStateRecalcBehavior	Type: REG_DWORD, Length: 4, Data: 1
 ```
 
-# Reduce Shutdown Time
+# Disable Hung Screen
 
-Forces hung apps and services to terminate faster, see 'Windows Internals' section for details.
+Causes hung apps to get automatically get terminated, making the 'Hung program' screen to not show up. It's recommended to leave the timeouts at their default, see 'Windows Internals' section below for more details on each value.
 
+![](https://github.com/nohuto/win-config/blob/main/system/images/hung-program.png?raw=true)
+
+## Registry Values
+
+```c
+"HKLM\\SYSTEM\\CurrentControlSet\\Control";
+    "WaitToKillServiceTimeout" = 20000; // REG_SZ (ms), SCM timeout used by CSRSS while the SCM notifies services and waits for service cleanup
+
+"HKCU\\Control Panel\\Desktop";
+    "WaitToKillTimeout" = 5000; // REG_SZ (ms), time CSRSS waits for a console control handler/process to exit before showing the hung program screen
+    "HungAppTimeout" = 5000; // REG_SZ (ms), time CSRSS waits for a GUI thread/process to exit after shutdown messages before seeing it as hung
+    "AutoEndTasks" = 0; // REG_SZ (ms), 1 disables the 'Hung program' screen
 ```
-\Registry\Machine\SYSTEM\ControlSet001\Control : WaitToKillServiceTimeout
-\Registry\User\S-ID\Control Panel\Desktop : WaitToKillTimeout
-\Registry\User\S-ID\Control Panel\Desktop : HungAppTimeout
-\Registry\User\S-ID\Control Panel\Desktop : AutoEndTasks
-```
-
-- `HungAppTimeout` = default `5` sec
-- `WaitToKillTimeout` = default `2.5` sec
-- `WaitToKillServiceTimeout` = default `5` sec
-- `WaitToKillAppTimeout` seems to not be used anymore (would have a default of `20000`, `20` sec)
-
-More timeout related values located in `HKCU\Control Panel\Desktop`: `CriticalAppShutdownCleanupTimeout`, `CriticalAppShutdownTimeout`, `QuickResolverTimeout`, `ActiveWndTrkTimeout`, `CaretTimeout`, `ForegroundLockTimeout`, `LowLevelHooksTimeout`. I may add information about some of them soon.
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown1.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown2.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/shutdown3.png?raw=true)
 
 # Detailed Status Messages
 
@@ -8156,11 +8157,11 @@ As the value name already says (`DisplayParameters`) it will just show additiona
 
 #### Enabled
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/detailed-bsod.jpg?raw=true)
 
 #### Disabled
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/default-bsod.jpg?raw=true)
 
 Enabling the options includes setting [`AutoReboot`](https://learn.microsoft.com/en-us/troubleshoot/windows-client/performance/configure-system-failure-and-recovery-options) to `0`, to prevent auto restarting.
 
@@ -8202,36 +8203,6 @@ The same applies to superfetch.
 ![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch2.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch3.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/prefetch4.png?raw=true)
-
-# Disable Clipboard
-
-If you copy or cut something it gets stored to your clipboard.
-
-Miscellaneous notes:
-```c 
-"HKLM\SOFTWARE\Microsoft\Clipboard\ClipboardSvcDebugWaitInSec","Length: 16"
-"HKLM\SOFTWARE\Microsoft\Clipboard\IsClipboardSignalProducingFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
-"HKLM\SOFTWARE\Microsoft\Clipboard\IsCloudAndHistoryFeatureAvailable","Type: REG_DWORD, Length: 4, Data: 1"
-
-"HKCU\Software\Microsoft\Clipboard\ClipboardTipRequired","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudClipRDPOverride","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudClipboardAutomaticUpload","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudContentRemoteOverrideValueWindowInSec","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\CloudContentValueWindowInSec","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\DoubleCopyGestureEnabled","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\EnableClipboardHistory","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\PastedFromClipboardUI","Length: 16"
-"HKCU\Software\Microsoft\Clipboard\ShellHotKeyUsed","Length: 16"
-```
-
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Allow Clipboard synchronization across devices](https://noverse.dev/policies?p=OSPolicy*AllowCrossDeviceClipboard) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowCrossDeviceClipboard` |
-| [Allow Clipboard History](https://noverse.dev/policies?p=OSPolicy*AllowClipboardHistory) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowClipboardHistory` |
-| [Do not allow Clipboard redirection](https://noverse.dev/policies?p=TerminalServer*TS_CLIENT_CLIPBOARD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services` | `fDisableClip` |
-| [Allow clipboard sharing with Windows Sandbox](https://noverse.dev/policies?p=WindowsSandbox*AllowClipboardRedirection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Sandbox` | `AllowClipboardRedirection` |
 
 # Disable Autoruns
 

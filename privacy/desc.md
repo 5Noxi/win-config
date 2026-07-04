@@ -717,7 +717,7 @@ Prevents websites from opening their associated apps through HTTP or HTTPS links
 >
 > *Disabling this policy disables web-to-app linking and http(s) URIs will be opened in the default browser instead of launching the associated app.*
 >
-> *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*
+> *If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*"
 
 ## Website Access to Language List
 
@@ -743,6 +743,19 @@ Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
 | [Configure web-to-app linking with app URI handlers](https://noverse.dev/policies?p=GroupPolicy*EnableAppUriHandlers) | `HKLM\Software\Policies\Microsoft\Windows\System` | `EnableAppUriHandlers` |
+
+# Disable Clipboard
+
+If you copy or cut something it gets stored to your clipboard, see policies below for more details.
+
+## [Windows Policies](https://noverse.dev/policies)
+
+| Policy | Key Path | Value Name |
+| --- | --- | --- |
+| [Allow Clipboard synchronization across devices](https://noverse.dev/policies?p=OSPolicy*AllowCrossDeviceClipboard) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowCrossDeviceClipboard` |
+| [Allow Clipboard History](https://noverse.dev/policies?p=OSPolicy*AllowClipboardHistory) | `HKLM\Software\Policies\Microsoft\Windows\System` | `AllowClipboardHistory` |
+| [Do not allow Clipboard redirection](https://noverse.dev/policies?p=TerminalServer*TS_CLIENT_CLIPBOARD) | `HKLM\SOFTWARE\Policies\Microsoft\Windows NT\Terminal Services` | `fDisableClip` |
+| [Allow clipboard sharing with Windows Sandbox](https://noverse.dev/policies?p=WindowsSandbox*AllowClipboardRedirection) | `HKLM\SOFTWARE\Policies\Microsoft\Windows\Sandbox` | `AllowClipboardRedirection` |
 
 # Disable Auto Maintenance
 
