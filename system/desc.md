@@ -6583,9 +6583,22 @@ Here are elements which I tracked via Procmon (taken from default store and the 
 
 Note that this doesn't show default states, instead it shows several options and their possible states. And obviously the descriptions are most likely parsed, means that even "useless" descriptions will be included whenever the mentioned MS docs above include them.
 
-| Prefix | Component |
-| --- | --- |
-| `Hal` / `Halp` | Hardware Abstraction Layer |
+- `{badmemory}` = RAM Defects
+- `{bootloadersettings}` = Boot Loader Settings
+- `{bootmgr}` = Windows Boot Manager
+- `{current}` = Windows Boot Loader (current OS entry)
+- `{dbgsettings}` = Debugger Settings
+- `{emssettings}` = EMS Settings
+- `{fwbootmgr}` = Firmware Boot Manager
+- `{globalsettings}` = Global Settings
+- `{hypervisorsettings}` = Hypervisor Settings
+- `{memdiag}` = Windows Memory Diagnostic
+- `{ramdiskoptions}` = Device Options for Ramdisk (boot.sdi)
+- `{resume}` = Windows Resume Application (resumeobject)
+- `{resumeloadersettings}` = Resume Loader Settings
+- `{winre}` = Windows Recovery Environment Loader (recoverysequence)
+
+#### Windows Boot Loader
 
 ```c
 "HKLM\\BCD00000000\\Objects\\{current}\\Elements";
@@ -6715,6 +6728,11 @@ Note that this doesn't show default states, instead it shows several options and
     "\\12000002"; "Element" = \Windows\system32\winload.efi; // REG_SZ, path = \Windows\system32\winload.efi - Path to a boot environment application.
     "\\11000043"; "Element" = partition=C:; // REG_BINARY, bsdlogdevice = partition=C: - Allows a device override for the bootstat.dat log in the boot manager and winload.exe.
     "\\11000001"; "Element" = partition=C:; // REG_BINARY, device = partition=C: - Device on which a boot environment application resides.
+```
+
+#### Windows Resume Application
+
+```c
 "HKLM\\BCD00000000\\Objects\\{resume}\\Elements";
     "\\26000006"; "Element" = 00; // REG_BINARY, debugoptionenabled = false, true = 01 - Enables kernel debugging on resume from hibernate.
     "\\26000004"; "Element" = 01; // REG_BINARY, pae = true, false = 00
@@ -6734,6 +6752,11 @@ Note that this doesn't show default states, instead it shows several options and
     "\\12000004"; "Element" = Windows Resume Application; // REG_SZ, description = Windows Resume Application - Display name of the boot environment application.
     "\\12000002"; "Element" = \Windows\system32\winresume.efi; // REG_SZ, path = \Windows\system32\winresume.efi - Path to a boot environment application.
     "\\11000001"; "Element" = partition=C:; // REG_BINARY, device = partition=C: - Device on which a boot environment application resides.
+```
+
+#### Windows Boot Manager
+
+```c
 "HKLM\\BCD00000000\\Objects\\{bootmgr}\\Elements";
     "\\27000030"; "Element" = 0000000000000000; // REG_BINARY, customactionslist = <integer list> - For more information see Custom Bootstrap Actions in Windows Vista.
     "\\26000031"; "Element" = 01; // REG_BINARY, persistbootsequence = true, false = 00 - Controls whether a boot sequence persists across multiple boots.
@@ -6754,6 +6777,11 @@ Note that this doesn't show default states, instead it shows several options and
     "\\12000004"; "Element" = Windows Boot Manager; // REG_SZ, description = Windows Boot Manager - Display name of the boot environment application.
     "\\12000002"; "Element" = \EFI\MICROSOFT\BOOT\BOOTMGFW.EFI; // REG_SZ, path = \EFI\MICROSOFT\BOOT\BOOTMGFW.EFI - Path to a boot environment application.
     "\\11000001"; "Element" = partition=\Device\HarddiskVolume1; // REG_BINARY, device = partition=\Device\HarddiskVolume1 - Device on which a boot environment application resides.
+```
+
+#### Windows Memory Diagnostic
+
+```c
 "HKLM\\BCD00000000\\Objects\\{memdiag}\\Elements";
     "\\26000004"; "Element" = 01; // REG_BINARY, failuresenabled = true, false = 00
     "\\25000009"; "Element" = 0000000000000000; // REG_BINARY, chckrfailcount = 0
@@ -6769,8 +6797,18 @@ Note that this doesn't show default states, instead it shows several options and
     "\\12000004"; "Element" = Windows Memory Diagnostic; // REG_SZ, description = Windows Memory Diagnostic - Display name of the boot environment application.
     "\\12000002"; "Element" = \EFI\Microsoft\Boot\memtest.efi; // REG_SZ, path = \EFI\Microsoft\Boot\memtest.efi - Path to a boot environment application.
     "\\11000001"; "Element" = partition=\Device\HarddiskVolume1; // REG_BINARY, device = partition=\Device\HarddiskVolume1 - Device on which a boot environment application resides.
+```
+
+#### RAM Defects
+
+```c
 "HKLM\\BCD00000000\\Objects\\{badmemory}\\Elements";
     "\\1700000A"; "Element" = 0000000000000000; // REG_BINARY, badmemorylist = <integer list> - List of page frame numbers describing faulty memory in the system.
+```
+
+#### Windows Recovery Environment Loader
+
+```c
 "HKLM\\BCD00000000\\Objects\\{winre}\\Elements";
     "\\46000010"; "Element" = 01; // REG_BINARY, custom:46000010 = true, false = 00
     "\\26000022"; "Element" = 01; // REG_BINARY, winpe = true, false = 00 - Indicates that the system should be started in Windows Preinstallation Environment (Windows PE) mode.
@@ -6784,6 +6822,11 @@ Note that this doesn't show default states, instead it shows several options and
     "\\12000004"; "Element" = Windows Recovery Environment; // REG_SZ, description = Windows Recovery Environment - Display name of the boot environment application.
     "\\12000002"; "Element" = \windows\system32\winload.efi; // REG_SZ, path = \windows\system32\winload.efi - Path to a boot environment application.
     "\\11000001"; "Element" = ramdisk=[C:]\Recovery\WindowsRE\Winre.wim,{ramdiskoptions}; // REG_BINARY, device = ramdisk=[C:]\Recovery\WindowsRE\Winre.wim,{ramdiskoptions} - Device on which a boot environment application resides.
+```
+
+#### Device Options for Ramdisk
+
+```c
 "HKLM\\BCD00000000\\Objects\\{ramdiskoptions}\\Elements";
     "\\3600000B"; "Element" = 01; // REG_BINARY, ramdisktftpvarwindow = true, false = 00 - Enables or disables the TFTP variable window size extension.
     "\\3600000A"; "Element" = 01; // REG_BINARY, ramdiskmulticasttftpfallback = true, false = 00 (ramdiskmctftpfallback) - Enables fallback to TFTP if multicast fails.
@@ -6799,14 +6842,34 @@ Note that this doesn't show default states, instead it shows several options and
     "\\32000004"; "Element" = \Recovery\WindowsRE\boot.sdi; // REG_SZ, ramdisksdipath = \Recovery\WindowsRE\boot.sdi - The path from the root of the SDI device to the RAM disk file.
     "\\31000003"; "Element" = partition=C:; // REG_BINARY, ramdisksdidevice = partition=C: - The device that contains the SDI object.
     "\\12000004"; "Element" = Windows Recovery; // REG_SZ, description = Windows Recovery - Display name of the boot environment application.
+```
+
+#### Global Settings
+
+```c
 "HKLM\\BCD00000000\\Objects\\{globalsettings}\\Elements";
     "\\16000069"; "Element" = 01; // REG_BINARY, custom:16000069 = true, false = 00
     "\\16000067"; "Element" = 01; // REG_BINARY, custom:16000067 = true, false = 00
     "\\14000006"; "Element" = {dbgsettings};{emssettings};{badmemory}; // REG_MULTI_SZ, inherit = {dbgsettings}, {emssettings}, {badmemory} - List of BCD objects from which the current object should inherit elements.
+```
+
+#### Resume Loader Settings
+
+```c
 "HKLM\\BCD00000000\\Objects\\{resumeloadersettings}\\Elements";
     "\\14000006"; "Element" = {globalsettings}; // REG_MULTI_SZ, inherit = {globalsettings} - List of BCD objects from which the current object should inherit elements.
+```
+
+#### Boot Loader Settings
+
+```c
 "HKLM\\BCD00000000\\Objects\\{bootloadersettings}\\Elements";
     "\\14000006"; "Element" = {globalsettings};{hypervisorsettings}; // REG_MULTI_SZ, inherit = {globalsettings}, {hypervisorsettings} - List of BCD objects from which the current object should inherit elements.
+```
+
+#### Debugger Settings
+
+```c
 "HKLM\\BCD00000000\\Objects\\{dbgsettings}\\Elements";
     "\\1600001C"; "Element" = 01; // REG_BINARY, debuggernetdhcp = true, false = 00 - Controls the use of DHCP by the network debugger. Setting this to false causes the OS to only use link-local addresses.
     "\\16000017"; "Element" = 01; // REG_BINARY, debuggerignoreusermodeexceptions = true, false = 00 - If TRUE, the debugger will ignore user mode exceptions and only stop for kernel mode exceptions.
@@ -6822,13 +6885,28 @@ Note that this doesn't show default states, instead it shows several options and
     "\\1200001D"; "Element" = testkey; // REG_SZ, debuggernetkey = testkey - Holds the key used to encrypt the network debug connection.
     "\\12000019"; "Element" = 0.25.0; // REG_SZ, debuggerbusparams = 0.25.0 - Defines the PCI bus, device, and function numbers of the debugging device. For example, 1.5.0 describes the debugging device on bus 1, device 5, function 0.
     "\\12000016"; "Element" = usbtarget; // REG_SZ, debuggerusbtargetname = usbtarget - The target name for the USB debugger. The target name is arbitrary but must match between the debugger and the debug target.
+```
+
+#### EMS Settings
+
+```c
 "HKLM\\BCD00000000\\Objects\\{emssettings}\\Elements";
     "\\16000020"; "Element" = 00; // REG_BINARY, bootems = false, true = 01 - Indicates whether EMS redirection should be enabled.
     "\\15000023"; "Element" = 00c2010000000000; // REG_BINARY, emsbaudrate = 115200 - Baud rate for EMS redirection.
     "\\15000022"; "Element" = 0100000000000000; // REG_BINARY, emsport = 1 - If this value is not specified, the default is specified by the SPCR ACPI table settings. - COM port number for EMS redirection.
+```
+
+#### Firmware Boot Manager
+
+```c
 "HKLM\\BCD00000000\\Objects\\{fwbootmgr}\\Elements";
     "\\25000004"; "Element" = 0100000000000000; // REG_BINARY, timeout = 1 - If this value is not specified, the boot manager waits for the user to make a selection. - The maximum number of seconds a boot selection menu is to be displayed to the user. The menu is displayed until the user selects an option or the time-out expires.
     "\\24000001"; "Element" = {bootmgr}; // REG_MULTI_SZ, displayorder = {bootmgr} - The order in which BCD objects should be displayed. Objects are displayed using the string specified by the BcdLibraryString_Description element.
+```
+
+#### Hypervisor Settings
+
+```c
 "HKLM\\BCD00000000\\Objects\\{hypervisorsettings}\\Elements";
     "\\26000114"; "Element" = 00; // REG_BINARY, hypervisordhcp = false, true = 01 - Controls use of DHCP by the network debugger used with the hypervisor. Setting this to false forces local link only address.
     "\\250000FE"; "Element" = 50c3000000000000; // REG_BINARY, hypervisorhostport = 50000 - Defines the network UDP port for the network debugger.
@@ -6841,21 +6919,6 @@ Note that this doesn't show default states, instead it shows several options and
     "\\220000F9"; "Element" = 0.25.0; // REG_SZ, hypervisorbusparams = 0.25.0 - Defines the PCI bus, device, and function numbers of the debugging device used with the hypervisor. For example, 1.5.0 describes the debugging device on bus 1, device 5, function 0.
 ```
 
-`{bootmgr}` - Windows Boot Manager  
-`{fwbootmgr}` - Firmware Boot Manager  
-`{current}` - Windows Boot Loader (current OS entry)  
-`{resume}` - Windows Resume Application (resumeobject)  
-`{winre}` - Windows Recovery Environment loader (recoverysequence)  
-`{memdiag}` - Windows Memory Diagnostic  
-`{ramdiskoptions}` - Device options for ramdisk (boot.sdi)  
-`{globalsettings}` - Global settings  
-`{bootloadersettings}` - Boot loader settings  
-`{resumeloadersettings}` - Resume loader settings  
-`{dbgsettings}` - Debugger settings  
-`{emssettings}` - EMS settings  
-`{badmemory}` - RAM defects  
-`{hypervisorsettings}` - Hypervisor settings
-
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/bcdedit1.png?raw=true)
@@ -6866,7 +6929,7 @@ Note that this doesn't show default states, instead it shows several options and
 
 ## Pseudocode Notes
 
-Personal notes on several features in relation of [HalpMiscGetParameters](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c).
+Notes on several features in relation of [HalpMiscGetParameters](https://github.com/nohuto/win-config/blob/main/system/assets/bcdedit-HalpMiscGetParameters.c).
 
 ```c
 lkd> db HalpInterruptX2ApicPolicy l1
@@ -7035,127 +7098,27 @@ HalpInterruptSetMsiOverride(v10);
 
 ## Default Entries
 
-Default entries (25H2, Build 26200.6584) including WinRE:
-```powershell
-Windows Boot Manager
---------------------
-identifier              {9dea862c-5cdd-4e70-acc1-f32b344d4795}
-device                  partition=\Device\HarddiskVolume1
-description             Windows Boot Manager
-locale                  en-US
-inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
-default                 {0fd8694a-e7fe-11f0-91cd-eabb9ab44a94}
-resumeobject            {0fd86949-e7fe-11f0-91cd-eabb9ab44a94}
-displayorder            {0fd8694a-e7fe-11f0-91cd-eabb9ab44a94}
-toolsdisplayorder       {b2721d73-1db4-4c62-bf78-c548a880142d}
-timeout                 30
+All existing default boot loader entries (25H2):
 
+```powershell
 Windows Boot Loader
 -------------------
-identifier              {0fd8694a-e7fe-11f0-91cd-eabb9ab44a94}
+identifier              {current}
 device                  partition=C:
 path                    \WINDOWS\system32\winload.exe
 description             Windows 11
 locale                  en-US
-inherit                 {6efb52bf-1766-41db-a6b3-0ee5eff72bd7}
-recoverysequence        {0fd8694b-e7fe-11f0-91cd-eabb9ab44a94}
+inherit                 {bootloadersettings}
+recoverysequence        {1c945b5b-7654-11f1-adb7-b9bb2ba517f9}
 displaymessageoverride  Recovery
 recoveryenabled         Yes
 allowedinmemorysettings 0x15000075
 osdevice                partition=C:
 systemroot              \WINDOWS
-resumeobject            {0fd86949-e7fe-11f0-91cd-eabb9ab44a94}
+resumeobject            {1c945b59-7654-11f1-adb7-b9bb2ba517f9}
 nx                      OptIn
 bootmenupolicy          Standard
-
-Windows Boot Loader
--------------------
-identifier              {0fd8694b-e7fe-11f0-91cd-eabb9ab44a94}
-device                  ramdisk=[\Device\HarddiskVolume3]\Recovery\WindowsRE\Winre.wim,{0fd8694c-e7fe-11f0-91cd-eabb9ab44a94}
-path                    \windows\system32\winload.exe
-description             Windows Recovery Environment
-locale                  en-US
-inherit                 {6efb52bf-1766-41db-a6b3-0ee5eff72bd7}
-displaymessage          Recovery
-osdevice                ramdisk=[\Device\HarddiskVolume3]\Recovery\WindowsRE\Winre.wim,{0fd8694c-e7fe-11f0-91cd-eabb9ab44a94}
-systemroot              \windows
-nx                      OptIn
-bootmenupolicy          Standard
-winpe                   Yes
-custom:46000010         Yes
-
-Resume from Hibernate
----------------------
-identifier              {0fd86949-e7fe-11f0-91cd-eabb9ab44a94}
-device                  partition=C:
-path                    \WINDOWS\system32\winresume.exe
-description             Windows Resume Application
-locale                  en-US
-inherit                 {1afa9c49-16ab-4a5c-901b-212802da9460}
-recoverysequence        {0fd8694b-e7fe-11f0-91cd-eabb9ab44a94}
-recoveryenabled         Yes
-allowedinmemorysettings 0x15000075
-filedevice              partition=C:
-custom:21000026         partition=C:
-filepath                \hiberfil.sys
-bootmenupolicy          Standard
-debugoptionenabled      No
-
-Windows Memory Tester
----------------------
-identifier              {b2721d73-1db4-4c62-bf78-c548a880142d}
-device                  partition=\Device\HarddiskVolume1
-path                    \boot\memtest.exe
-description             Windows Memory Diagnostic
-locale                  en-US
-inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
-badmemoryaccess         Yes
-
-EMS Settings
-------------
-identifier              {0ce4991b-e6b3-4b16-b23c-5e0d9250e5d9}
-bootems                 No
-
-Debugger Settings
------------------
-identifier              {4636856e-540f-4170-a130-a84776f4c654}
-debugtype               Local
-
-RAM Defects
------------
-identifier              {5189b25c-5558-4bf2-bca4-289b11bd29e2}
-
-Global Settings
----------------
-identifier              {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
-inherit                 {4636856e-540f-4170-a130-a84776f4c654}
-                        {0ce4991b-e6b3-4b16-b23c-5e0d9250e5d9}
-                        {5189b25c-5558-4bf2-bca4-289b11bd29e2}
-
-Boot Loader Settings
---------------------
-identifier              {6efb52bf-1766-41db-a6b3-0ee5eff72bd7}
-inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
-                        {7ff607e0-4395-11db-b0de-0800200c9a66}
-
-Hypervisor Settings
--------------------
-identifier              {7ff607e0-4395-11db-b0de-0800200c9a66}
-hypervisordebugtype     Serial
-hypervisordebugport     1
-hypervisorbaudrate      115200
-
-Resume Loader Settings
-----------------------
-identifier              {1afa9c49-16ab-4a5c-901b-212802da9460}
-inherit                 {7ea2e1ac-2e61-4728-aaa3-896d9d0a9f0e}
-
-Device options
---------------
-identifier              {0fd8694c-e7fe-11f0-91cd-eabb9ab44a94}
-description             Windows Recovery
-ramdisksdidevice        partition=\Device\HarddiskVolume3
-ramdisksdipath          \Recovery\WindowsRE\boot.sdi
+debug                   No
 ```
 
 # Page File
@@ -7174,7 +7137,9 @@ Paging files can contain fragments of process or kernel data, enabling the optio
 
 # Disable Notifications
 
-## Option/Suboptions
+The '*System Template*' won't disable all notifications, so e.g. critical Defender notifications will still be shown.
+
+## (Sub)Options
 
 | Option | Description |
 | ---- | ---- |
@@ -8117,9 +8082,11 @@ Causes hung apps to get automatically get terminated, making the 'Hung program' 
 
 ## Registry Values
 
+Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000` ("*The SCM’s timeout value in milliseconds resides in the HKLM\SYSTEM\CurrentControlSet\Control\WaitToKillServiceTimeout registry value, and it defaults to 20 seconds.*"), while the value exists by default on W11 with the data of `5000`, when looking at the win32kbase driver it also shows a default of `5000`.
+
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control";
-    "WaitToKillServiceTimeout" = 20000; // REG_SZ (ms), SCM timeout used by CSRSS while the SCM notifies services and waits for service cleanup
+    "WaitToKillServiceTimeout" = 5000; // REG_SZ (ms), SCM timeout used by CSRSS while the SCM notifies services and waits for service cleanup
 
 "HKCU\\Control Panel\\Desktop";
     "WaitToKillTimeout" = 5000; // REG_SZ (ms), time CSRSS waits for a console control handler/process to exit before showing the hung program screen

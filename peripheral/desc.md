@@ -1032,7 +1032,7 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\stornvme\\Parameters\\Device";
-    "MaxTransferSize" = 0; // REG_MULTI_SZ, range 1-2048, clamp to 2048 (value << 10) 0 = ignore
+    "MaxTransferSize" = 0; // REG_MULTI_SZ, range 1-2048
     "IoQueueDepth" = 0; // REG_MULTI_SZ
     "IoSubmissionQueueCount" = 0; // REG_MULTI_SZ
     "IoCompletionQueueCount" = 0; // REG_MULTI_SZ
@@ -1627,28 +1627,20 @@ All available flags (`powercfg /devicequery query_flag`):
 
 | Value | Type | Values | Ranges | Notes |
 | --- | --- | --- | --- | --- |
-| `AmbientLightingEnabled` | REG_DWORD | `0 = off`, `1 = on` | `0–1` | Master toggle for Dynamic Lighting. |
-| `UseSystemAccentColor` | REG_DWORD | `0 = use custom Color/Color2`, `1 = match Windows accent` | `0–1` | When `1`, `Color` is ignored. |
-| `Color` | REG_DWORD | `COLORREF (RGB)` | `0x00000000–0x00FFFFFF`    | Format `0x00BBGGRR`. Used when `UseSystemAccentColor = 0`. |
+| `AmbientLightingEnabled` | REG_DWORD | `0 = off`, `1 = on` | `0–1` | Main toggle for Dynamic Lighting |
+| `UseSystemAccentColor` | REG_DWORD | `0 = use custom Color/Color2`, `1 = match Windows accent` | `0–1` | When `1`, `Color` is ignored |
+| `Color` | REG_DWORD | `COLORREF (RGB)` | `0x00000000–0x00FFFFFF`    | Format `0x00BBGGRR`. Used when `UseSystemAccentColor = 0` |
 | `Color2` | REG_DWORD | `COLORREF (RGB)` | `0x00000000–0x00FFFFFF`    | Secondary color for some effects. |
-| `EffectType` | REG_DWORD | `0 = Solid`, `1 = Breathing`, `2 = Rainbow`, `4 = Wave`, `5 = Wheel`, `6 = Gradient` | `discrete enum` | Defines animation. |
+| `EffectType` | REG_DWORD | `0 = Solid`, `1 = Breathing`, `2 = Rainbow`, `4 = Wave`, `5 = Wheel`, `6 = Gradient` | `discrete enum` | Defines animation |
 | `Speed` | REG_DWORD | `integer` | `1–10` | Higher = faster. |
-| `EffectMode` | REG_DWORD | Rainbow: `0 = Forward`, `1 = Reverse` · Wave: `0 = Right`, `1 = Left`, `2 = Down`, `3 = Up` · Wheel: `0 = Clockwise`, `1 = Counterclockwise` · Gradient: `0 = Horizontal`, `1 = Vertical`, `2 = Outward` | `discrete enum per effect` | Depends on `EffectType`. |
+| `EffectMode` | REG_DWORD | Rainbow: `0 = Forward`, `1 = Reverse`, Wave: `0 = Right`, `1 = Left`, `2 = Down`, `3 = Up`, Wheel: `0 = Clockwise`, `1 = Counterclockwise`, Gradient: `0 = Horizontal`, `1 = Vertical`, `2 = Outward` | `discrete enum per effect` | Depends on `EffectType`. |
 | `Brightness` | REG_DWORD | `integer (%)` | `0–100` | - |
 | `ControlledByForegroundApp` | REG_DWORD | `0 = ignore apps`, `1 = apps can take control` | `0–1` | - |
-
-# Disk Write Cache Policy
-
-Enables [write cache & turns off write cache buffer flushing](https://learn.microsoft.com/en-us/previous-versions/troubleshoot/windows-server/turn-disk-write-caching-on-off) on all connected disks.
-
-```
-\Registry\Machine\SYSTEM\ControlSet001\Enum\SCSI\Disk&Ven_NVMe&Prod_Samsung_SSD_990\5&33c33320&0&000000\Device Parameters\disk : CacheIsPowerProtected
-\Registry\Machine\SYSTEM\ControlSet001\Enum\SCSI\Disk&Ven_NVMe&Prod_Samsung_SSD_990\5&33c33320&0&000000\Device Parameters\disk : UserWriteCacheSetting
-```
 
 # Disable System Sounds
 
 Disables system sounds and removes sound events. I did use the keys, which Windows would disable:
+
 ```powershell
 "HKCU\AppEvents\Schemes\Apps\.Default\SystemAsterisk\.Current\(Default)","Type: REG_SZ, Length: 0"
 "HKCU\AppEvents\Schemes\Apps\.Default\Notification.Reminder\.Current\(Default)","Type: REG_SZ, Length: 0"
@@ -1715,7 +1707,8 @@ The revert data is based on `W11 LTSC IoT Enterprise 2024` defaults.
 Disables printer related services (`Spooler`, `PrintWorkFlowUserSvc`, `PrintNotify`, `usbprint`, `McpManagementService`, `PrintScanBrokerService`, `PrintDeviceConfigurationService`), and various optional features / scheduled tasks.
 
 Remove the `Print` option from the context menu:
-```
+
+```powershell
 Remove-Item "Registry::HKEY_CLASSES_ROOT\Applications\photoviewer.dll\shell\print" -Force -Recurse
 Remove-Item "Registry::HKEY_CLASSES_ROOT\batfile\shell\print" -Force -Recurse
 Remove-Item "Registry::HKEY_CLASSES_ROOT\cmdfile\shell\print" -Force -Recurse
