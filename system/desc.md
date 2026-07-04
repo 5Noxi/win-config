@@ -1404,6 +1404,8 @@ Note that I've done that test on 23H2, and it *seems* to be fixed on 25H2 (haven
 
 ## Quantum
 
+Note that a thread might not even get to complete its quantum, however, because Windows implements a preemptive scheduler. That is, if another thread with a higher priority becomes ready to run, the currently running thread might be preempted before finishing its time slice. In fact, a thread can be selected to run next and be preempted before even beginning its quantum.
+
 > "*A quantum is the amount of time a thread is permitted to run before Windows checks to see whether another thread at the same priority is waiting to run. If a thread completes its quantum and there are no other threads at its priority, Windows permits the thread to run for another quantum.*
 >
 > *On client versions of Windows, threads run for two clock intervals by default. On server systems, threads run for 12 clock intervals by default. The rationale for the longer default value on server systems is to minimize context switching. By having a longer quantum, server applications that wake up because of a client request have a better chance of completing the request and going back into a wait state before their quantum ends.*
