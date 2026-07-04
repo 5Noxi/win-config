@@ -26,7 +26,7 @@ Prevents sending information about your computer to Microsoft by disabling gener
 
 See policy explanations below for more details.
 
-It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#calling-native-tracker---broadband-tracker-of-devices-services-and-operating-systems-)' blocklist via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
+It's also recommended to apply the '[Microsoft (Windows, Office, MSN)](https://github.com/hagezi/dns-blocklists#calling-native-tracker---broadband-tracker-of-devices-services-and-operating-systems-)' blocklist ([Windows 11 connection endpoints for non-Enterprise editions](https://learn.microsoft.com/en-us/windows/privacy/windows-11-endpoints-non-enterprise-editions#windows-11-pro)) via the hosts file (you can use [blocklist-mgr](https://github.com/nohuto/blocklist-mgr) for that), or if you've a private DNS server, add that list to it.
 
 ## DiagnosticDataSettings Values
 
@@ -610,7 +610,7 @@ L"WifiLastDisabledNearShare",
 
 # Disable Phone Linking
 
-"This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC.If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences.If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences.If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot."
+> "*This policy allows IT admins to turn off the ability to Link a Phone with a PC to continue reading, emailing and other tasks that requires linking between Phone and PC.If you enable this policy setting, the Windows device will be able to enroll in Phone-PC linking functionality and participate in Continue on PC experiences.If you disable this policy setting, the Windows device is not allowed to be linked to Phones, will remove itself from the device list of any linked Phones, and cannot participate in Continue on PC experiences.If you do not configure this policy setting, the default behavior depends on the Windows edition. Changes to this policy take effect on reboot.*"
 
 ## SystemSettings Captures
 
@@ -636,7 +636,7 @@ By default resume is enabled, OneDrive is the only app which exists under the "C
 
 Note that if you use this option and don't have a password, you'll have to enter your username at each boot ([policy](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/security-policy-settings/interactive-logon-do-not-display-last-user-name)).
 
-"This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC."
+> "*This security setting determines whether the Windows sign-in screen will show the username of the last person who signed in on this PC.*"
 
 ```c
 // Enabled
@@ -668,7 +668,7 @@ services.exe	RegSetValue	HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies
 
 Note that whenever you use this option while having UWP apps, it'll break notifications, background sync, etc., also *some apps, including Cortana and Search, might not function as expected if you set 'Let apps run in the background' to 'Force Deny'*.
 
-> *This policy setting specifies whether Windows apps can run in the background.*
+> "*This policy setting specifies whether Windows apps can run in the background.*
 >
 > *You can specify either a default setting for all apps or a per-app setting by specifying a Package Family Name. You can get the Package Family Name for an app by using the Get-AppPackage Windows PowerShell cmdlet. A per-app setting overrides the default setting.*
 >
@@ -795,7 +795,7 @@ Miscellaneous notes:
 
 # Disable Microsoft Copilot
 
-"Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they're available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced."
+> "*Microsoft introduced Windows Copilot in May 2023. It became available in Windows 11 starting with build 23493 (Dev), 22631.2129 (Beta), and 25982 (Canary). A public preview began rolling out on September 26, 2023, with build 22621.2361 (Windows 11 22H2 KB5030310). It adds integrated AI features to assist with tasks like summarizing web content, writing, and generating images. Windows Copilot appears as a sidebar docked to the right and runs alongside open apps. In Windows 10, Copilot is available in build 19045.3754 for eligible devices in the Release Preview Channel running version 22H2. Users must enable "Get the latest updates as soon as they're available" and check for updates. The rollout is phased via Controlled Feature Rollout (CFR). Windows 10 Pro devices managed by organizations, and all Enterprise or Education editions, are excluded from the initial rollout. Copilot requires signing in with a Microsoft account (MSA) or Azure Active Directory (Entra ID). Users with local accounts can use Copilot up to ten times before sign-in is enforced.*"
 
 `CopilotDisabledReason`:
 ```c
@@ -1191,7 +1191,7 @@ Disables all kind of synchronization, see policies.
 
 # Disable File History
 
-"File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files."
+> "*File History automatically backs up versions of files in your user folders (Documents, Music, Pictures, Videos, Desktop) and offline OneDrive. It tracks changes via the NTFS change journal (fast, low overhead) and saves only changed files. You must choose a backup target (external drive or network share). If that target is unavailable, it caches copies locally and syncs them when the target returns. You can browse and restore any version or recover lost/deleted files.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -1216,7 +1216,9 @@ Disables all kind of synchronization, see policies.
 
 # Disable Cortana
 
-"[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users."
+Cortana is [deprecated](https://support.microsoft.com/en-us/cortana/end-of-support-for-cortana) in W11 and is no longer the supported voice assistant.
+
+> "*[Cortana](https://en.wikipedia.org/wiki/Cortana_(virtual_assistant)) was a virtual assistant developed by Microsoft that used the Bing search engine to perform tasks such as setting reminders and answering questions for users.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 
@@ -1444,11 +1446,11 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 
 # Disable Find My Device
 
-"Find My Device is a feature that can help you locate your Windows 10 or Windows 11 device if it's lost or stolen. To use this feature, sign in to your device with a Microsoft account and make sure you're an administrator on it. This feature works when location is turned on for your device, even if other users on the device have turned off location settings for their apps. Any time you attempt to locate the device, users using the device will see a notification in the notification area. 
-
-- This setting works for any Windows device, such as a PC, laptop, Surface, or Surface Pen. It needs to be turned on before you can use it. 
-
-- You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles."
+> "*Find My Device is a feature that can help you locate your Windows 10 or Windows 11 device if it's lost or stolen. To use this feature, sign in to your device with a Microsoft account and make sure you're an administrator on it. This feature works when location is turned on for your device, even if other users on the device have turned off location settings for their apps. Any time you attempt to locate the device, users using the device will see a notification in the notification area.*
+>
+> *- This setting works for any Windows device, such as a PC, laptop, Surface, or Surface Pen. It needs to be turned on before you can use it.* 
+>
+> *- You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
 

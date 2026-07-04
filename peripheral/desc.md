@@ -516,9 +516,9 @@ lkd> dt USBHUB3!_USB_DEVICE_HACKS
 
 `HUBDSM_QueryingRegistryValuesForDevice` -> `HUBMISC_QueryAndCacheRegistryValuesForDevice` -> `HUBREG_QueryUsbflagsValuesForDevice`
 
-For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
+For values with "any nonzero" comment, the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
-Note on some usbflag values ("queried as 4 byte bool"), `USBHUB3` reads a 4-byte and handles any nonzero value as enabled. The value type is not enforced, so both `REG_DWORD` and `REG_BINARY` should work if they're a 4-byte nonzero value (that's my current assumption). I would personally use `REG_BINARY` instead of `REG_DWORD` for now, as for example `osvc`, `IgnoreHWSerNum`, `ResetOnResume` are `REG_BINARY` ([usb-device-specific-registry-settings.md](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)).
+The value type isn't enforced, so both `REG_DWORD` and `REG_BINARY` should work if they're a 4 byte nonzero value (that's my current assumption). I would personally use `REG_BINARY` instead of `REG_DWORD` for now, as for example `osvc`, `IgnoreHWSerNum`, `ResetOnResume` are `REG_BINARY` ([usb-device-specific-registry-settings.md](https://github.com/nohuto/windows-driver-docs/blob/staging/windows-driver-docs-pr/usbcon/usb-device-specific-registry-settings.md)).
 
 See [win-config/peripheral/usbflags-values/](https://noverse.dev/docs/win-config/peripheral/usbflags-values/) for notes on `USB_DEVICE_HACKS`/miscellaneous information on values.
 
@@ -650,7 +650,7 @@ The vendor ID, product ID, and revision number values are obtained from the [USB
 
 # USB Values
 
-For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
+For values with "any nonzero" comment, the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
 ## Registry Values
 
@@ -682,15 +682,15 @@ For entries described as "any nonzero", the code treats the DWORD as a boolean, 
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Services\\usb";
     "debuglevel" = 0; // REG_DWORD
-    "debuglogmask" = 0xFFFFFFFE; // REG_DWORD, bitmask for log categories
+    "debuglogmask" = 0xFFFFFFFE; // REG_DWORD
     "debuglogenable" = 1; // REG_DWORD (bool)
     "debugcatc" = 0; // REG_DWORD (bool)
     "DisableSelectiveSuspend" = 0; // REG_DWORD (bool)
     "DisableCcDetect" = 0; // REG_DWORD (bool
     "EnPMDebug" = 0; // REG_DWORD (bool), for debugging power management
     "ForceHcD3NoWakeArm" = 0 // REG_DWORD (bool)
-    "EnableDCA" = 0 // REG_DWORD (bool), direct controller access
-    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to remain under EHCI
+    "EnableDCA" = 0 // REG_DWORD (bool), DCA = direct controller access
+    "ForcePortsHighSpeed" = 0; // REG_DWORD (bool), forces ports to stay under EHCI
 
 // "This class is reserved for USB host controllers and USB hubs", I'll add them here as they're also in usbport.sys and also taken from the W10 source
 
@@ -766,7 +766,7 @@ Stop USB devices when my screen is off to help battery.
 
 # USBHUB Values
 
-For entries described as "any nonzero", the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
+For values with "any nonzero" comment, the code treats the DWORD as a boolean, means any nonzero value is equivalent to `1`. Default data is unknown for most values as the driver code only reads the registry and handles fallbacks.
 
 ## Registry Values
 
@@ -1040,15 +1040,15 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "InterruptCoalescingEntry" = 0; // REG_MULTI_SZ
     "ArbitrationBurst" = 255; // REG_MULTI_SZ
     "ContiguousMemoryFromAnyNode" = 0; // REG_MULTI_SZ
-    "ShutdownTimeout" = 0; // REG_MULTI_SZ, >0xFF coerced to 0xFF, 0 ignored
+    "ShutdownTimeout" = 0; // REG_MULTI_SZ, >0xFF clamped to 0xFF, 0 ignored
     "DeallocateMaxLbaCount" = 0; // REG_MULTI_SZ
     "DisableDeallocate" = 0; // REG_MULTI_SZ
     "ControllerBasicInit" = 0; // REG_MULTI_SZ
-    "AsyncEventMask" = ?; // REG_MULTI_SZ, nonzero override is masked with 0x1F (init observed: 23H2=1823, 24H2=134219551)
-    "IdlePowerMode" = 0; // REG_MULTI_SZ, applied only if value < 6, skipped when StorPortExtendedFunction(97) sets mode=2
+    "AsyncEventMask" = ?; // REG_MULTI_SZ
+    "IdlePowerMode" = 0; // REG_MULTI_SZ, applied only if value < 6
     "DiagnosticFlags" = 0; // REG_MULTI_SZ, bit 1 (0x2) forces LogSize default to 0x100000 bytes
-    "LogSize" = 0; // REG_MULTI_SZ, stored as bytes (value << 10) 0 ignored (unless DiagnosticFlags set)
-    "IoStripeAlignment" = 0; // REG_MULTI_SZ, applied only if (value << 10) is 4K-aligned
+    "LogSize" = 0; // REG_MULTI_SZ, 0 ignored (unless DiagnosticFlags set)
+    "IoStripeAlignment" = 0; // REG_MULTI_SZ
     "MedPowerFxIdleTimeout" = 4294967295; // REG_MULTI_SZ
     "LowestPowerFxIdleTimeout" = 50; // REG_MULTI_SZ
     "MedPowerD3IdleTimeout" = 3000; // REG_MULTI_SZ
@@ -1059,23 +1059,23 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "BypassSgl" = 1; // REG_MULTI_SZ, only value bit 0 is used
     "TestMdlDataBufferOffsetInBytes" = 0; // REG_MULTI_SZ
     "UseDumpPointers" = 0; // REG_MULTI_SZ
-    "ReservedQueuePairCount" = 0; // REG_MULTI_SZ, valid 1-65535 (check v69-1 <= 0xFFFE)
+    "ReservedQueuePairCount" = 0; // REG_MULTI_SZ, valid 1-65535
     "NvmeTestSwitch" = 1; // REG_MULTI_SZ
-    "IoQueuePercentageInPollingMode" = 0; // REG_MULTI_SZ, >100 coerced to 100
-    "IoPollingInterval" = 0; // REG_MULTI_SZ, >100000 coerced to 100000
+    "IoQueuePercentageInPollingMode" = 0; // REG_MULTI_SZ, >100 clamped to 100
+    "IoPollingInterval" = 0; // REG_MULTI_SZ, >100000 clamped to 100000
     "IoCompletionCapInDPC" = 100; // REG_MULTI_SZ, if nonzero clamp to 128
     "IoPollingSize" = 0x4000; // REG_MULTI_SZ
     "ErrorEtwThrottleInterval" = 0xD693A400; // REG_MULTI_SZ, if nonzero clamp to max 0xD693A400
-    "ResetEnableMask" = 0; // REG_MULTI_SZ, value bit 0/1/2 set internal flags 0x40/0x800/0x1000
+    "ResetEnableMask" = 0; // REG_MULTI_SZ
     "ReliabilityDegraded" = 0; // REG_MULTI_SZ
     "ReadOnly" = 0; // REG_MULTI_SZ
     "VolatileMemoryBackupDeviceFailed" = 0; // REG_MULTI_SZ
     "AvailableSpare" = 0; // REG_MULTI_SZ
     "AvailableSpareThreshold" = 0; // REG_MULTI_SZ
-    "ForcedPhysicalSectorSizeInBytes" = ?; // REG_MULTI_SZ, nonzero required before write
-    "RetainAsyncEventControlMask" = ?; // REG_MULTI_SZ, written directly when read succeeds
-    "ShutdownTimeoutForSurpriseRemove" = 0; // REG_MULTI_SZ, >0xFF coerced to 0xFF, 0 ignored
-    "MaxIoCountLimit" = 0; // REG_MULTI_SZ, nonzero required before write
+    "ForcedPhysicalSectorSizeInBytes" = ?; // REG_MULTI_SZ
+    "RetainAsyncEventControlMask" = ?; // REG_MULTI_SZ
+    "ShutdownTimeoutForSurpriseRemove" = 0; // REG_MULTI_SZ, >0xFF clamped to 0xFF, 0 ignored
+    "MaxIoCountLimit" = 0; // REG_MULTI_SZ
     "SubmissionQueueAssignmentPolicy" = 0; // REG_MULTI_SZ
     "DisableMFNDCCDuringRemoval" = ?; // REG_MULTI_SZ
     "EnableSingleDpcForIoCompletion" = ?; // REG_MULTI_SZ
@@ -1085,11 +1085,11 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
     "DisableGetActiveNSIDList" = 0; // REG_MULTI_SZ
     "ForceCryptoEraseToUseFormatNVM" = 0; // REG_MULTI_SZ
 
-    "ControllerResetWaitTimeCushion" = 20000; // REG_MULTI_SZ, GetDynamicRegistrySettings writes the read value directly (including 0)
-    "DisableActivateFWWithoutReset" = 0; // REG_MULTI_SZ, read in GetRegistrySettingsForSpecificKey and returned directly
+    "ControllerResetWaitTimeCushion" = 20000; // REG_MULTI_SZ
+    "DisableActivateFWWithoutReset" = 0; // REG_MULTI_SZ
 
     // present in 24H2 path (not present in 23H2 path)
-    "DisableDSTThrottle" = ?; // REG_MULTI_SZ, GetDynamicRegistrySettings first clears flag 0x200000, then sets it when value is nonzero
+    "DisableDSTThrottle" = ?; // REG_MULTI_SZ
     "DisableF0TimestampSync" = 0; // REG_MULTI_SZ
     "DisableForwardedIO" = 0; // REG_MULTI_SZ
     "EnableIntelTSESplitIOWorkaround" = 0; // REG_MULTI_SZ
@@ -1123,6 +1123,8 @@ See [GetRegistrySettings23H2.c](https://github.com/nohuto/win-config/tree/main/p
 
 This currently includes all values from [`storport.sys`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport) (in relation to that StorPort key, this binary also has some PnP values/other single values, see [pnp-device-values/#default-data](https://noverse.dev/docs/win-config/power/pnp-device-values/#default-data)), see [DllInitialize](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/DllInitialize.c) & [sub_1C0042F20](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/storport/sub_1C0042F20.c) functions. More details on StorPort topic/values may be added soon.
 
+Values that include `(bool)` as comment accept range `0-4294967295` but any nonzero has the same behaviour as `1`.
+
 ## Registry Values
 
 ```c
@@ -1132,7 +1134,7 @@ This currently includes all values from [`storport.sys`](https://github.com/nohu
     "HmbAllocationPolicy" = 2; // REG_DWORD, range 0-4294967295, but only 1/2/3 seem to be used other values are invalid
     "HmbMaximumSizeInBytes" = 67108864; // REG_DWORD, range 0-67108864
     "MiniportBugActionPolicy" = 1; // REG_DWORD, range 0-2, >=3 replaced with 1
-    "AsyncStart" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "AsyncStart" = 0; // REG_DWORD (bool)
     "TelemetryPerformanceHighResolutionTimer" = 4294967295; // REG_DWORD, range 0-4294967295
     "TelemetryPerformanceEnabled" = 4294967295; // REG_DWORD, range 0-4294967295
     "TelemetryIoSizeDistributionEnabled" = 0; // REG_DWORD, range 0-4294967295, queried only when TelemetryPerformanceEnabled is nonzero
@@ -1142,30 +1144,30 @@ This currently includes all values from [`storport.sys`](https://github.com/nohu
     "TelemetryDeviceHealthPeriod" = 1; // REG_DWORD, range 1-24 hours, 0 ignored, >=24 clamps to 24
     "TelemetryCriticalEventEnabled" = 0; // REG_DWORD, range 0-4294967295
     "TelemetryCriticalEventMaximum" = 4294967295; // REG_DWORD, range 0-4294967295
-    "ExtendedDSMCommandsSupported" = 0; // REG_DWORD, range 0-4294967295 (bool)
-    "FUAEnable" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "ExtendedDSMCommandsSupported" = 0; // REG_DWORD (bool)
+    "FUAEnable" = 0; // REG_DWORD (bool)
     "QoSFlags" = 0; // REG_DWORD, range 0-4294967295
     "MaxPreAllocatedIoResourceCount" = 4096; // REG_DWORD, range 1-4294967295, 0 ignored
-    "DFxEnable" = 1; // REG_DWORD, range 0-4294967295 (bool)
-    "OverrideDeviceUniqueIDCapability" = 1; // REG_DWORD, range 0-4294967295 (bool)
-    "DisableRuntimePower" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "DFxEnable" = 1; // REG_DWORD (bool)
+    "OverrideDeviceUniqueIDCapability" = 1; // REG_DWORD (bool)
+    "DisableRuntimePower" = 0; // REG_DWORD (bool)
     "ProcsPerGateway" = 8; // REG_DWORD, range 4-16 (capped to maximum processor count?)
-    "MFNDEnable" = 0; // REG_DWORD, range 0-4294967295 (bool)
-    "CreateControlObject" = 0; // REG_DWORD, range 0-4294967295 (bool)
-    "DisableIEEE1667" = 0; // REG_DWORD, range 0-4294967295 (bool)
-    "EnableNativeTcg" = 0; // REG_DWORD, range 0-4294967295 (bool)
-    "EnableRegistryWatch" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "MFNDEnable" = 0; // REG_DWORD (bool)
+    "CreateControlObject" = 0; // REG_DWORD (bool)
+    "DisableIEEE1667" = 0; // REG_DWORD (bool)
+    "EnableNativeTcg" = 0; // REG_DWORD (bool)
+    "EnableRegistryWatch" = 0; // REG_DWORD (bool)
     "LogControlEnable" = 7757; // REG_QWORD, range 0-4294967295, 0 forces LogSize 0
     "LogSize" = 256; // REG_DWORD, range 0 or 64-393216
     "DeviceQueueIoWaitThreshold" = 300000000; // REG_QWORD, range 1-4294967295, 0 ignored
     "HighLatencyIoThreshold" = 300000000; // REG_QWORD, range 1-4294967295, 0 ignored
     "TelemetryDeviceLogPagesPeriod" = 24; // REG_DWORD, range 1-24 hours, 0 ignored, >=24 clamps to 24
-    "DeviceTelemetryLiveDumpEnable" = 4294967295; // REG_DWORD, range 0-4294967295 (bool)
+    "DeviceTelemetryLiveDumpEnable" = 4294967295; // REG_DWORD (bool)
     "StorportEtwErrorThrottleLimit" = 60; // REG_DWORD, range 1-4294967295, 0 ignored
     "StorportEtwWarningThrottleLimit" = 30; // REG_DWORD, range 1-4294967295, 0 ignored
     "StorportEtwInfoThrottleLimit" = 10; // REG_DWORD, range 1-4294967295, 0 ignored
-    "ReportAllWheaErrorsAsNonFatal" = 0; // REG_DWORD, range 0-4294967295 (bool)
-    "DisableExtensionDriver" = 0; // REG_DWORD, range 0-4294967295 (bool)
+    "ReportAllWheaErrorsAsNonFatal" = 0; // REG_DWORD (bool)
+    "DisableExtensionDriver" = 0; // REG_DWORD (bool)
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\StorPort\\Verifier";
     "VerifyLevel" = 0; // REG_DWORD, range 0-4294967295
