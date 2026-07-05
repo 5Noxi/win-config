@@ -2781,12 +2781,17 @@ Everything listed below is based on personal findings, mistakes may exist.
     "JobTimeLimitsPeriodSeconds" = 7; // PspJobTimeLimitsPeriodSeconds
     "SystemBlockedMessageLimit" = 200; // PspSystemNoWakeChargeLimit
 
-    "DfssGenerationLengthMS" = 600; // PsDfssGenerationLengthMS
-    "DfssLongTermFraction1024" = 512; // sDfssLongTermFraction1024
-    "DfssLongTermSharingMS" = 15; // PsDfssLongTermSharingMS
+    // DFSS = Dynamic, fair share scheduling
+    // "Dynamic fair share scheduling (DFSS) is a mechanism that can be used to fairly distribute CPU time among sessions running on a machine. It prevents one session from potentially monopolizing the CPU if some threads running under that session have a relatively high priority and run a lot."
+    // Means whenever you only use a single account/session (which you most likely do, use "query session"), this has no impact for you
+    "DfssGenerationLengthMS" = 600; // PsDfssGenerationLengthMS, "The generation time over which to track CPU usage"
+    "DfssLongTermFraction1024" = 512; // sDfssLongTermFraction1024, "The value used in a formula for an exponential moving average used for long-term cycles computation"
+    "DfssLongTermSharingMS" = 15; // PsDfssLongTermSharingMS, "The time it takes to jump from rank 0 to a non-zero rank when the threads exceed their quota within the generation cycle"
     "DfssResolutionMS" = 4294967295; // PsDfssDesiredTimerResolutionMs
-    "DfssShortTermSharingMS" = 30; // PsDfssShortTermSharingMS
-    "EnableCpuQuota" = 0;
+    "DfssShortTermSharingMS" = 30; // PsDfssShortTermSharingMS, "The time it takes for the group rank to increase within a generation cycle"
+    "EnableCpuQuota" = 0; // nonzero = DFSS enabled, if enabled PsCpuFairShareEnabled is TRUE
+                          // lkd> db nt!PsCpuFairShareEnabled L1
+                          // fffff807`21f1eaa0  00                                               .
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management";
     "AllocationPreference" = 0; // dword_140FC3200
