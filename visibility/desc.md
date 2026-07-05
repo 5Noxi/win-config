@@ -1,6 +1,6 @@
 # Explorer Options
 
-It changes every setting which is shown in the `Folder Options` window. Some are personal preference, see suboptions below for customization, and configurations that aren't made in the main option.
+It changes every setting which is shown in the `Folder Options` window, and more explorer related things. Some are personal preference, see suboptions below for customization, and configurations that aren't made in the main option.
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/explorer.png?raw=true)
 
@@ -801,6 +801,8 @@ Values below are based on `RegGetValueW`/`SHRegGetDWORD`/`SHRegGetUSDWORDW` xref
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/darktheme2.png?raw=true)
 
 # Disable Transparency
+
+See [DWM, `BackdropBlurCachingThrottleMs`](https://noverse.dev/docs/win-config/system/dwm-values/#backdropblurcachingthrottlems) for information on how to edit the caching rebuild time, which has a default of `25ms`, and can be throttled to down to `1000ms`.
 
 ### Transparency Enabled
 
