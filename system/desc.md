@@ -1164,6 +1164,55 @@ if ( KiEnableClockTimerPerCpuTickScheduling && KiClockTimerPerCpu )
 
 [`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) has a branch for `KiClockTimerPerCpuTickScheduling && !KiSerializeTimerExpiration` (means `SerializeTimerExpiration = 2` & `EnablePerCpuClockTickScheduling = 1`), but I haven't looked into what it's used for yet.
 
+## Structures
+
+### _KTIMER
+
+```c
+struct _KTIMER// Size=0x40 (Id=628)
+{
+    struct _DISPATCHER_HEADER Header;// Offset=0x0 Size=0x18
+    union _ULARGE_INTEGER DueTime;// Offset=0x18 Size=0x8
+    struct _LIST_ENTRY TimerListEntry;// Offset=0x20 Size=0x10
+    struct _KDPC * Dpc;// Offset=0x30 Size=0x8
+    unsigned int Processor;// Offset=0x38 Size=0x2
+    unsigned int TimerType;// Offset=0x3a Size=0x2
+    unsigned long Period;// Offset=0x3c Size=0x4
+};
+```
+
+### _KTIMER_TABLE
+
+```c
+struct _KTIMER_TABLE// Size=0x4218 (Id=693)
+{
+    struct _KTIMER * TimerExpiry[64];// Offset=0x0 Size=0x200
+    struct _KTIMER_TABLE_ENTRY TimerEntries[2][256];// Offset=0x200 Size=0x4000
+    struct _KTIMER_TABLE_STATE TableState;// Offset=0x4200 Size=0x18
+};
+```
+
+### _KTIMER_TABLE_STATE
+
+```c
+struct _KTIMER_TABLE_STATE// Size=0x18 (Id=750)
+{
+    unsigned int LastTimerExpiration[2];// Offset=0x0 Size=0x10
+    unsigned long LastTimerHand[2];// Offset=0x10 Size=0x8
+};
+```
+
+### _KTIMER_TABLE_ENTRY
+
+```c
+struct _KTIMER_TABLE_ENTRY// Size=0x20 (Id=756)
+{
+    unsigned int Lock;// Offset=0x0 Size=0x8
+    struct _LIST_ENTRY Entry;// Offset=0x8 Size=0x10
+    union _ULARGE_INTEGER Time;// Offset=0x18 Size=0x8
+};
+```
+
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/timerexpiration1.png?raw=true)

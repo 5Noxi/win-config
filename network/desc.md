@@ -717,8 +717,8 @@ RegistryKey<unsigned char>::Initialize(
 >
 > *Previously, NDIS had no formal definition of a datapath execution context. NDIS drivers typically relied on Deferred Procedure Calls (DPCs) to implement their execution model. However using DPCs can overwhelm the system when long indication chains are made and avoiding this problem requires a lot of code that's tricky to get right. NDIS Poll Mode offers an alternative to DPCs and similar execution tools.*
 >
-> *NDIS Poll Mode moves the complexity of scheduling decisions away from NIC drivers and into NDIS, where NDIS sets work limits per iteration. To achieve this Poll Mode provides:*
-> *- A mechanism for the OS to exert back pressure on the NIC.*
+> *NDIS Poll Mode moves the complexity of scheduling decisions away from NIC drivers and into NDIS, where NDIS sets work limits per iteration. To achieve this Poll Mode provides:*  
+> *- A mechanism for the OS to exert back pressure on the NIC.*  
 > *- A mechanism for the OS to finely control interrupts.*
 >
 > *NDIS Poll Mode is available to NDIS 6.85 and later miniport drivers.*"

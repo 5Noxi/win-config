@@ -386,7 +386,7 @@ HKLM\SOFTWARE\Microsoft\WindowsMitigation\UserPreference	Type: REG_DWORD, Length
 
 # Disable Suggestions/Tips/Tricks
 
-Disables all kind of suggestions, in start, text suggestions (multilingual...), in the timeline, content (also includes disabling spotlight, see below). `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
+Disables all kind of suggestions, in start, text suggestions (multilingual...), in the timeline, content. `338389` is the only value named `SubscribedContent-{number}Enabled` that exists by default.
 
 ### SubscribedContent IDs
 
@@ -395,7 +395,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | Feature | IDs | Practical meaning |
 |---|---|---|
 | `LockScreen` | `338380`, `338387` | Windows Spotlight / lock-screen creative content |
-| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for 'System > Notifications > Additional settings - Get tips and suggestions when using Windows' |
+| `WindowsTip` | `338382`, `338389` | tips, tricks, and suggested Windows content - `338389` is used for '*System > Notifications > Additional settings - Get tips and suggestions when using Windows*' |
 | `StartSuggestions` | `338381`, `338388` | suggested/recommended content in Start |
 | `Settings` | `338386`, `338393` | promoted content inside Settings |
 | `SettingsHome` | `353697`, `353696` | Settings Home recommendations/cards |
@@ -410,7 +410,7 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | `PeopleAppSuggestions` | `314562`, `314563` | People-related app suggestions |
 | `DynamicLayouts` | `314558`, `314559` | dynamic layout-driven targeted content |
 | `DynamicLayoutsSV` | `88000531`, `88000530` | variant of dynamic layouts |
-| `Timeline` | `353699`, `353698` | Timeline-related suggested content |
+| `Timeline` | `353699`, `353698` | Timeline related suggested content |
 | `AppDefaultsEdgeEnlightenment` | `88000044`, `88000045` | Edge/default-app promotion |
 | `OneDriveLocal` | `280797`, `280811` | local OneDrive promotion/setup |
 | `OneDriveSync` | `280817`, `280810` | OneDrive sync promotion/setup |
@@ -422,9 +422,9 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 ### Windows Spotlight
 
-> "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*
-> *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*
-> *- Suggestions, fun facts, tips: recommendations on how to enhance the user's productivity of Microsoft products. They're displayed in different locations, such as the lock screen, the background, the taskbar, or the Get Started app*
+> "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*  
+> *- Wallpapers: Windows spotlight displays a new image on the lock screen and in the background every day*  
+> *- Suggestions, fun facts, tips: recommendations on how to enhance the user's productivity of Microsoft products. They're displayed in different locations, such as the lock screen, the background, the taskbar, or the Get Started app*  
 > *- Organizational messages: messages from your organization, which can be displayed in the lock screen, taskbar, the notification area, or the Get Started app*"
 >
 > — Microsoft, [Configure Windows spotlight](https://learn.microsoft.com/en-us/windows/configuration/windows-spotlight/?pivots=windows-11)
@@ -452,73 +452,6 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 | [Turn off Windows Spotlight on Settings](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightOnSettings) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightOnSettings` |
 | [Turn off the Windows Welcome Experience](https://noverse.dev/policies?p=CloudContent*DisableWindowsSpotlightWindowsWelcomeExperience) | `HKCU\Software\Policies\Microsoft\Windows\CloudContent` | `DisableWindowsSpotlightWindowsWelcomeExperience` |
 
-## Miscellaneous Notes
-
-Disable edge related suggestions with (search suggestions in address bar):
-```json
-"HKLM\\SOFTWARE\\Policies\\Microsoft\\Edge": {
-  "SearchSuggestEnabled": { "Type": "REG_DWORD", "Data": 0 },
-  "LocalProvidersEnabled": { "Type": "REG_DWORD", "Data": 0 }
-},
-"HKLM\\Software\\Policies\\Microsoft\\MicrosoftEdge\\SearchScopes": {
-  "ShowSearchSuggestionsGlobal": { "Type": "REG_DWORD", "Data": 0 }
-}
-```
-
-All `Microsoft\INPUT\Settings` values which get read on boot:
-```
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAP
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCAPALLTOKENS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTFIRSTWORD
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AUTOCORRECTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollBottomZone
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollThreshold
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : AutoScrollTopZone
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : BluebirdDTWMultiplier
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DisablePersonalizationGTKM
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : DynamicAutocorrectionAllowed
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EMOJISUGGESTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbAutocorrection2
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : EnableHwkbTextPrediction
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : FLIPDebugOptions
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HASTRAILER
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbNavigationOverrideMode
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : HwkbTextPredictionDelay
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : INPUTHISTORYGUID
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Insights
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : InsightsEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : KEYBOARDMODE
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : LMDataLoggerEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MAXCORRECTIONS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : MultilingualEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : NotActiveLanguagePenalty
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PERIODSHORTCUT
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PredictionDisabledCleared
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : PRIVATE
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : RULEBASEDCONVERSION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_1
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_10
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SearchWeight_3
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeDataSources
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_10
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_4
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShapeWeight_5
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SHAPEWRITINGPREDICTION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShortenMultilingualTraversal
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : ShowAllSuggestions
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SPELLCHECK
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : SUPPRESSCONVERSION
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : Transliteration
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONONTHEFLY
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : TRANSLITERATIONSYMBOLS
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : USEDANDA
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : UserStatsEnabled
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementLimit
-\Registry\Machine\SOFTWARE\Microsoft\INPUT\Settings : VerticalMovementUpLimit
-```
-
 # Disable Automatic Map Downloads
 
 Disables automatic network traffic on the settings page and prevents automatic downloading or updating of map data, limiting location related data updates.
@@ -533,7 +466,9 @@ Disables automatic network traffic on the settings page and prevents automatic d
 
 - [privacy/assets | maps.c](https://github.com/nohuto/win-config/blob/main/privacy/assets/maps.c)
 
-## moshostcore (Downloaded Maps Manager Core) Snippets
+## moshostcore Snippets
+
+- `moshostcore` = Downloaded Maps Manager Core
 
 ```c
 v8 = 1; // Default
@@ -1386,8 +1321,8 @@ Disable Offline Files (CSC) via policy and services. Sets NetCache policy keys, 
 
 > "*This setting prevents using the Settings app to add a Microsoft account for single sign-on (SSO) authentication for Microsoft services and some background services, or using a Microsoft account for single sign-on to other applications or services.*
 >
-> *There are two options if this setting is enabled:*
-> *- Users can't add Microsoft accounts means that existing connected accounts can still sign in to the device (and appear on the Sign in screen). However, users cannot use the Settings app to add new connected accounts (or connect local accounts to Microsoft accounts).*
+> *There are two options if this setting is enabled:*  
+> *- Users can't add Microsoft accounts means that existing connected accounts can still sign in to the device (and appear on the Sign in screen). However, users cannot use the Settings app to add new connected accounts (or connect local accounts to Microsoft accounts).*  
 > *- Users can't add or log on with Microsoft accounts means that users cannot add new connected accounts (or connect local accounts to Microsoft accounts) or use existing connected accounts through Settings.*
 >
 > *This setting does not affect adding a Microsoft account for application authentication. For example, if this setting is enabled, a user can still provide a Microsoft account for authentication with an application such as Mail, but the user cannot use the Microsoft account for single sign-on authentication for other applications or services (in other words, the user will be prompted to authenticate for other applications or services).*"
@@ -1485,7 +1420,7 @@ https://www.bing.com/search?q=how+to+get+help+in+windows+11
 
 > "*Find My Device is a feature that can help you locate your Windows 10 or Windows 11 device if it's lost or stolen. To use this feature, sign in to your device with a Microsoft account and make sure you're an administrator on it. This feature works when location is turned on for your device, even if other users on the device have turned off location settings for their apps. Any time you attempt to locate the device, users using the device will see a notification in the notification area.*
 >
-> *- This setting works for any Windows device, such as a PC, laptop, Surface, or Surface Pen. It needs to be turned on before you can use it.* 
+> *- This setting works for any Windows device, such as a PC, laptop, Surface, or Surface Pen. It needs to be turned on before you can use it.*  
 > *- You can't use it with a work or school account, and it doesn't work for iOS devices, Android devices, or Xbox One consoles.*"
 
 ## [Windows Policies](https://noverse.dev/policies)
