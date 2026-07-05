@@ -1549,7 +1549,11 @@ Windows 7/XP:
 
 # Disable Bluetooth
 
-Polic CSP - [Connectivity](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-connectivity#allowbluetooth), allows the user to enable Bluetooth or restrict access.
+Polic CSP - [Connectivity](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-connectivity#allowbluetooth) & [Bluetooth](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-bluetooth#allowprepairing).
+
+### AllowBluetooth
+
+Allows the user to enable Bluetooth or restrict access.
 
 | Value | Description |
 | --- | --- |
@@ -1570,6 +1574,26 @@ $ rg -i 'AllowBluetooth' "C:\Users\nohuto\Desktop\regkit\records\23H2.txt"
 9902:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : Value
 9903:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : grouppolicyname
 ```
+
+### AllowDiscoverableMode
+
+Specifies whether other Bluetooth-enabled devices can discover the device.
+
+| Value | Description |
+| --- | --- |
+| 0 | Not allowed. When set to 0, other devices won't be able to detect the device. To verify, open the Bluetooth control panel on the device. Then, go to another Bluetooth-enabled device, open the Bluetooth control panel, and verify that you can't see the name of the device. |
+| 1 (Default) | Allowed. When set to 1, other devices will be able to detect the device. To verify, open the Bluetooth control panel on the device. Then, go to another Bluetooth-enabled device, open the Bluetooth control panel and verify that you can discover it. |
+
+### AllowPrepairing
+
+Specifies whether to allow specific bundled Bluetooth peripherals to automatically pair with the host device.
+
+| Value | Description |
+| --- | --- |
+| 0 | Not allowed. |
+| 1 (Default) | Allowed. |
+
+## Services/Drivers
 
 | Service/Driver | Description |
 | --- | --- |
