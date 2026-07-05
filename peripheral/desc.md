@@ -1332,6 +1332,8 @@ icon=Launch.exe
 | --- | --- |
 | `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
 
+### SystemSettings Capture
+
 ```c
 // Bluetooth & devices > AutoPlay (same for Control Panel > All Control Panel Items > AutoPlay)
 HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\AutoplayHandlers\DisableAutoplay	Type: REG_DWORD, Length: 4, Data: 1
@@ -1546,6 +1548,28 @@ Windows 7/XP:
 | [Turn off Tablet PC touch input](https://noverse.dev/policies?p=TouchInput*TouchInputOff_2) | `HKLM\SOFTWARE\Policies\Microsoft\TabletPC` | `TurnOffTouchInput` |
 
 # Disable Bluetooth
+
+Polic CSP - [Connectivity](https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-connectivity#allowbluetooth), allows the user to enable Bluetooth or restrict access.
+
+| Value | Description |
+| --- | --- |
+| 0 | Disallow Bluetooth. If this is set to 0, the radio in the Bluetooth control panel will be grayed out and the user won't be able to turn Bluetooth on. |
+| 2 (Default) | Allow Bluetooth. If this is set to 2, the radio in the Bluetooth control panel will be functional and the user will be able to turn Bluetooth on. |
+
+```powershell
+$ rg -i 'AllowBluetooth' "C:\Users\nohuto\Desktop\regkit\records\23H2.txt"
+9893:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : 30Value
+9894:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : ADMXMetadataBoth
+9895:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : ADMXMetadataDevice
+9896:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : ADMXMetadataUser
+9897:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : Behavior
+9898:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : MergeAlgorithm
+9899:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : PolicyType
+9900:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : RegKeyPathRedirect
+9901:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : RegKeyPathRedirectMapped
+9902:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : Value
+9903:\Registry\Machine\SOFTWARE\Microsoft\PolicyManager\Default\Connectivity\AllowBluetooth : grouppolicyname
+```
 
 | Service/Driver | Description |
 | --- | --- |
