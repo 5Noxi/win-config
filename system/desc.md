@@ -1169,48 +1169,40 @@ if ( KiEnableClockTimerPerCpuTickScheduling && KiClockTimerPerCpu )
 ### _KTIMER
 
 ```c
-struct _KTIMER// Size=0x40 (Id=628)
-{
-    struct _DISPATCHER_HEADER Header;// Offset=0x0 Size=0x18
-    union _ULARGE_INTEGER DueTime;// Offset=0x18 Size=0x8
-    struct _LIST_ENTRY TimerListEntry;// Offset=0x20 Size=0x10
-    struct _KDPC * Dpc;// Offset=0x30 Size=0x8
-    unsigned int Processor;// Offset=0x38 Size=0x2
-    unsigned int TimerType;// Offset=0x3a Size=0x2
-    unsigned long Period;// Offset=0x3c Size=0x4
-};
+lkd> dt nt!_KTIMER
+   +0x000 Header           : _DISPATCHER_HEADER
+   +0x018 DueTime          : _ULARGE_INTEGER
+   +0x020 TimerListEntry   : _LIST_ENTRY
+   +0x030 Dpc              : Ptr64 _KDPC
+   +0x038 Processor        : Uint2B
+   +0x03a TimerType        : Uint2B
+   +0x03c Period           : Uint4B
 ```
 
 ### _KTIMER_TABLE
 
 ```c
-struct _KTIMER_TABLE// Size=0x4218 (Id=693)
-{
-    struct _KTIMER * TimerExpiry[64];// Offset=0x0 Size=0x200
-    struct _KTIMER_TABLE_ENTRY TimerEntries[2][256];// Offset=0x200 Size=0x4000
-    struct _KTIMER_TABLE_STATE TableState;// Offset=0x4200 Size=0x18
-};
+lkd> dt nt!_KTIMER_TABLE
+   +0x000 TimerExpiry      : [64] Ptr64 _KTIMER
+   +0x200 TimerEntries     : [2] [256] _KTIMER_TABLE_ENTRY
+   +0x4200 TableState       : _KTIMER_TABLE_STATE
 ```
 
 ### _KTIMER_TABLE_STATE
 
 ```c
-struct _KTIMER_TABLE_STATE// Size=0x18 (Id=750)
-{
-    unsigned int LastTimerExpiration[2];// Offset=0x0 Size=0x10
-    unsigned long LastTimerHand[2];// Offset=0x10 Size=0x8
-};
+lkd> dt nt!_KTIMER_TABLE_STATE
+   +0x000 LastTimerExpiration : [2] Uint8B
+   +0x010 LastTimerHand    : [2] Uint4B
 ```
 
 ### _KTIMER_TABLE_ENTRY
 
 ```c
-struct _KTIMER_TABLE_ENTRY// Size=0x20 (Id=756)
-{
-    unsigned int Lock;// Offset=0x0 Size=0x8
-    struct _LIST_ENTRY Entry;// Offset=0x8 Size=0x10
-    union _ULARGE_INTEGER Time;// Offset=0x18 Size=0x8
-};
+lkd> dt nt!_KTIMER_TABLE_ENTRY
+   +0x000 Lock             : Uint8B
+   +0x008 Entry            : _LIST_ENTRY
+   +0x018 Time             : _ULARGE_INTEGER
 ```
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P2.pdf)
