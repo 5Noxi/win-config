@@ -1225,11 +1225,11 @@ Use it on W11, unless you like the new menu. This works via causing COM to not l
 @="C:\\Windows\\System32\\Windows.UI.FileExplorer.dll" // enabling would caus it to be empty
 ```
 
-### Before
+### Default
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classiconb.png?raw=true)
 
-### After
+### Old
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/classicona.png?raw=true)
 
