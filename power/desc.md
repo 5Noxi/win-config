@@ -593,14 +593,12 @@ HKLM\SYSTEM\CurrentControlSet\Services\<ServiceName> // software key - service/d
 
 ### Common Subkeys under `<instanceID>`
 
-`Device Parameters`: Per-instance parameters and state used by the drivers in the stack  
-`Properties`: Device property store for this instance  
-`LogConf` (optional): Resource configuration data for the instance  
-`Control` (optional): Additional PnP/device state
+- `Device Parameters`: Per-instance parameters and state used by the drivers in the stack
+- `Properties`: Device property store for this instance
+- `LogConf` (optional): Resource configuration data for the instance
+- `Control` (optional): Additional PnP/device state
 
-Not every instance has the same subkeys or values.
-
-I won't add details on the PnP manager here, as that's not the purpose of the option. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
+Not every instance has the same subkeys or values. I won't add details on the PnP manager here, as that's not the purpose of the option. For more details, read [Windows Internals E7, P1](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf), Chapter 6 (`The Plug and Play manager`).
 
 ### Default Data
 

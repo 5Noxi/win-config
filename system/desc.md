@@ -1862,6 +1862,28 @@ PROCESS ffff800f5c506080
 lkd> dt _KTHREAD ffff800f5700f080 BamQosLevel
 nt!_KTHREAD
    +0x200 BamQosLevel  : 0y00000000 (0)
+
+// via PRCB, rather read it via the thread address
+
+lkd> !prcb 5
+PRCB for Processor 5 at ffffa68162174180:
+Current IRQL -- 0
+Threads--  Current ffff820388546040 Next 0000000000000000 Idle ffff820388546040
+Processor Index 5 Number (0, 5) GroupSetMember 20
+Interrupt Count -- 00258de8
+Times -- Dpc    00000007 Interrupt 00000000 
+         Kernel 0002434a User      00000000 
+lkd> dt nt!_KPRCB ffffa68162174180 PrcbFlags
+   +0x0ec PrcbFlags : _KPRCBFLAG
+lkd> dx -id 0,0,ffff8203884d4080 -r1 (*((ntkrnlmp!_KPRCBFLAG *)0xffffa6816217426c))
+(*((ntkrnlmp!_KPRCBFLAG *)0xffffa6816217426c))                 [Type: _KPRCBFLAG]
+    [+0x000] PrcbFlags        : 0 [Type: long]
+    [+0x000 ( 7: 0)] BamQosLevel      : 0x0 [Type: unsigned long]
+    [+0x000 ( 9: 8)] PendingQosUpdate : 0x0 [Type: unsigned long]
+    [+0x000 (10:10)] CacheIsolationEnabled : 0x0 [Type: unsigned long]
+    [+0x000 (11:11)] TracepointActive : 0x0 [Type: unsigned long]
+    [+0x000 (12:12)] LongDpcRunning   : 0x0 [Type: unsigned long]
+    [+0x000 (31:13)] PrcbFlagsReserved : 0x0 [Type: unsigned long]
 ```
 
 # DWM Values
