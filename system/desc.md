@@ -3315,6 +3315,31 @@ lkd> dd nt!KeThreadDpcEnable L1
 fffff806`6d11d17c  00000001
 ```
 
+It seems to also be possible to dump the state via the [KPRCB structure](https://noverse.dev/docs/windbg-notes/kernel/prcb/#_kprcb-structure) (per processor):
+
+```c
+lkd> !prcb // processor 0
+PRCB for Processor 0 at fffff8026b2a4180:
+Current IRQL -- 0
+Threads--  Current ffff80025babc080 Next 0000000000000000 Idle fffff8026dd4d700
+Processor Index 0 Number (0, 0) GroupSetMember 1
+Interrupt Count -- 0001f496
+Times -- Dpc    00000003 Interrupt 00000002 
+         Kernel 00000cb1 User      000000bf 
+lkd> dt nt!_KPRCB fffff8026b2a4180 ThreadDpcEnable
+   +0x33b8 ThreadDpcEnable : 0x1 ''
+lkd> !prcb 6 // processor 6
+PRCB for Processor 6 at ffffd981f4fb2180:
+Current IRQL -- 0
+Threads--  Current ffff80025054f040 Next 0000000000000000 Idle ffff80025054f040
+Processor Index 6 Number (0, 6) GroupSetMember 40
+Interrupt Count -- 0008feae
+Times -- Dpc    00000007 Interrupt 00000000 
+         Kernel 000012a3 User      00000000 
+lkd> dt nt!_KPRCB ffffd981f4fb2180 ThreadDpcEnable
+   +0x33b8 ThreadDpcEnable : 0x1 ''
+```
+
 > "*A threaded DPC is a DPC that the system executes at IRQL equal to PASSIVE_LEVEL.*
 > *An ordinary DPC preempts the execution of all threads, and cannot be preempted by a thread or by another DPC. If the system has a large number of ordinary DPCs queued, or if one of those DPCs runs for a long time, every thread will remain paused for an arbitrarily long time. Thus, each ordinary DPC increases system latency, which can hurt the performance of time-sensitive applications, such as audio or video playback.*
 > *Conversely, a threaded DPC can be preempted by an ordinary DPC, but not by other threads. Therefore, you should use threaded DPCs rather than ordinary DPCs—unless a particular DPC must not be preempted, not even by another DPC.*"
