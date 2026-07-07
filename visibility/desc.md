@@ -839,15 +839,6 @@ Removes the search box, moves the taskbar to the left, removes badges, disables 
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/taskbar.png?raw=true)
 
-I removed `TaskbarDa` since you can't apply it even with `TrustedInstaller`/`SYSTEM` previledges, note that the value is still actively used by `SystemSettings`:
-
-```c
-// Personalization > Taskbar - Widgets (off)
-SystemSettings.exe	HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced\TaskbarDa	Type: REG_DWORD, Length: 4, Data: 0
-```
-
-Disallowing it via the `AllowNewsAndInterests` policy (`EnableFeeds` policy isn't used anymore) won't set `TaskbarDa` to 0, but it grays out & disables the option.
-
 ## Suboptions
 
 ### Hide Language Bar
