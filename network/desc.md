@@ -45,8 +45,6 @@ typedef struct _DNS_DOH_SERVER_SETTINGS {
 
 `Quad9/Mullvad > AdGuard > NextDNS > Cloudflare` in my option based on my findings. I wouldn't recommend to use DNS resolvers like 'Google Public DNS', just read through their privacy policies and see if they support DNSSEC/QNAME minimalisation/encrypted DNS, disable ECS (EDNS Client Subnet), and don't collect identifiable query logs (that's how I created the table above, including some other facts like Mullvad supporting anycast).
 
-Obviously self-host a DNS resolver for the best privacy, so queries stay local.
-
 ## DNS Explained
 
 DNS (domain name system) is the phonebook of the internet, which means that it translates domains to the corresponding IP addresses (DNS resolution). See [DNSimple comics](https://dnsimple.com/comics) for a very simple explanation/[DNSimple glossary](https://support.dnsimple.com/articles/dns-glossary/) and/or [Cloudflare DNS docs](https://www.cloudflare.com/learning/dns/what-is-dns/).

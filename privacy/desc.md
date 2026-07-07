@@ -719,6 +719,10 @@ Set-WinAcceptLanguageFromLanguageListOptOut -OptOut $True
 
 If you copy or cut something it gets stored to your clipboard, see policies below for more details.
 
+| Service | Description |
+| --- | --- |
+| `cbdhsvc` | This user service is used for Clipboard scenarios |
+
 ## [Windows Policies](https://noverse.dev/policies)
 
 | Policy | Key Path | Value Name |

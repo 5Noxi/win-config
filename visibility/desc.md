@@ -280,6 +280,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
 
+### Fall
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Fall.png?raw=true)
+
 ### Field Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
