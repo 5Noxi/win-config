@@ -2594,7 +2594,7 @@ INIT:0000000140BA0988                 dq 1
 
 ## Registry Values
 
-This includes details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key. See [nt-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/nt-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
+This includes details on several `HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\...` keys, not only the `Session Manager\\Kernel` key. See [nt-symbols](https://github.com/nohuto/win-config/tree/main/system/assets/nt-symbols.txt) for reference ([disp-sym](https://noverse.dev/docs/windbg-notes/symbols/reading-symbols/#mass-display-symbols)). The comments of some values with more details are based on pseudocode, if so I added the function name to the end of the comment. Search for the function name in [decompiled-pseudocode/tree/main/11-23H2/ntoskrnl](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl).
 
 | Prefix | Component |
 | --- | --- |

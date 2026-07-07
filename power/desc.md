@@ -952,7 +952,7 @@ Several values are applied, some have been changed, others are default values. T
 
 ## Registry Values
 
-See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([sym-dump](https://github.com/nohuto/sym-dump)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
+See [power-symbols](https://github.com/nohuto/win-config/tree/main/power/assets/power/power-symbols.txt) for reference ([disp-sym](https://noverse.dev/docs/windbg-notes/symbols/reading-symbols/#mass-display-symbols)). The list doesn't include all existing values yet, but the listed ones do exist. [assets/power](https://github.com/nohuto/win-config/tree/main/power/assets/power) contains the split pseudocode for several `Session Manager\\Power` values.
 
 | Prefix | Component |
 | --- | --- |
@@ -1414,7 +1414,7 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ### Setup Information
 
-```c
+```powershell
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,ParamDesc,    ,%DeviceSleepOnDisconnectDesc%
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,type,         ,enum
 HKR,Ndi\Params\*DeviceSleepOnDisconnect,default,      ,0

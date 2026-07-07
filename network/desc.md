@@ -1031,9 +1031,8 @@ RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\T
 
 `0xFFFFFFFF` disables all IPv6 interfaces, even ones Windows needs. The TCP/IP stack then waits for them to initialize and times out, which adds the `~5s` boot delay. The documentation below was taken from the official support articles.
 
-Min Value: `0x00` (default value)  
-Max Value: `0xFF` (IPv6 disabled)
-Recommended by Microsoft: `0x20` (Prefer IPv4 over IPv6)
+- Min Value: `0x00` (default value)  
+- Max Value: `0xFF` (IPv6 disabled)
 
 |IPv6 Functionality|Registry value and comments|
 |---|---|
@@ -1118,8 +1117,8 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 ### Setup Information
 
 `Disable Wait for Link`:
-```c
-, Wait for Link
+```powershell
+; Wait for Link
 HKR, Ndi\Params\WaitAutoNegComplete,            ParamDesc,              0, %WaitAutoNegComplete%
 HKR, Ndi\Params\WaitAutoNegComplete,            default,                0, "2"
 HKR, Ndi\Params\WaitAutoNegComplete\Enum,       "0",                    0, %Off%
@@ -1197,8 +1196,8 @@ The `default`/`min`/`max` data differs for users, e.g. if applying `4096` it may
 
 ## Setup Information
 
-```c
-, *TransmitBuffers
+```powershell
+; *TransmitBuffers
 HKR, Ndi\params\*TransmitBuffers,               ParamDesc,              0, %TransmitBuffers%
 HKR, Ndi\params\*TransmitBuffers,               default,                0, "512"
 HKR, Ndi\params\*TransmitBuffers,               min,                    0, "80"
@@ -1207,7 +1206,7 @@ HKR, Ndi\params\*TransmitBuffers,               step,                   0, "8"
 HKR, Ndi\params\*TransmitBuffers,               Base,                   0, "10"
 HKR, Ndi\params\*TransmitBuffers,               type,                   0, "int"
 
-, *ReceiveBuffers
+; *ReceiveBuffers
 HKR, Ndi\params\*ReceiveBuffers,                ParamDesc,              0, %ReceiveBuffers%
 HKR, Ndi\params\*ReceiveBuffers,                default,                0, "256"
 HKR, Ndi\params\*ReceiveBuffers,                min,                    0, "80"
@@ -1543,7 +1542,7 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```c
+```powershell
 ; Mellanox
 ; mlx4eth NT specific
 HKR, Ndi\Params\*VMQ,  ParamDesc, 0, "%VMQ%"
@@ -1583,9 +1582,9 @@ See [network/assets/intel-nic](https://github.com/nohuto/win-config/tree/main/ne
 
 ### Setup Information
 
-```c
-, SRIOV Default switch registry keys.
-,
+```powershell
+; SRIOV Default switch registry keys.
+
 HKR, NicSwitches\0, *SwitchId,   %REG_DWORD%, 0
 HKR, NicSwitches\0, *SwitchName, %REG_SZ%, "%DefaultSwitchName%"
 HKR, NicSwitches\0, *SwitchType,   %REG_DWORD%, 1
@@ -1649,7 +1648,7 @@ RegistryKey<enum HdSplitLocation>::Initialize(
 
 ### Setup Information
 
-```c
+```powershell
 HKR, Ndi\Params\FecMode,                         ParamDesc,              0, %FecMode%
 HKR, Ndi\Params\FecMode,                         default,                0, "0"
 HKR, Ndi\Params\FecMode,                         min,                    0, "0"
