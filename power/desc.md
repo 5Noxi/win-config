@@ -308,8 +308,6 @@ You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/
 
 # Disable Timer Coalescing
 
-"CoalesecingTimerinterval is a computer system energy-saving technique that reduces CPU power consumption by reducing the precision of software timers to allow the synchronization of process wake-ups, minimizing the number of times the CPU is forced to perform the relatively power-costly operation of entering and exiting idle states"
-
 ## InitTimerCoalescing
 
 `TimerCoalescing` (queried by [InitTimerCoalescing](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/win32kfull/InitTimerCoalescing.c)) is a binary value (`v18 == 3`) with a size of 80 bytes (`v19 == 80`), interpreted as 20 DWORDs. The value is used to load two four entry timer coalescing tolerance blocks.
@@ -1594,12 +1592,12 @@ All three values exist as shown below. [`PopReadHiberbootPolicy`](https://github
     "HibernateBootOptimizationEnabled" = 0; // PopHiberBootOptimizationEnabledReg 
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power";
-    "HiberbootEnabled" = 1; // REG_DWORD, range: 0-1
+    "HiberbootEnabled" = 1; // REG_DWORD, range 0-1
 
     // HybridBootAnimationTime records the boot animation duration during fast boot, HiberIoCpuTime is CPU time spent on hibernation I/O during resume, ResumeCompleteTimestamp is the system timestamp when resume from hibernation completed. So all of them are just counters and changing their data won't affect the boot.
-    "HybridBootAnimationTime" = 1601; // REG_DWORD, milliseconds, range: 0-4294967295
-    "HiberIoCpuTime" = 0; // REG_DWORD, milliseconds, range: 0-4294967295
-    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range: 0-4294967295FFFFFFFF
+    "HybridBootAnimationTime" = 1601; // REG_DWORD (ms), range 0-0xFFFFFFFF
+    "HiberIoCpuTime" = 0; // REG_DWORD (ms), range 0-0xFFFFFFFF
+    "ResumeCompleteTimestamp" = 0; // REG_QWORD, range 0-0xFFFFFFFFFFFFFFFF
 ```
 
 ```c
@@ -1646,22 +1644,22 @@ Hibernation files are used for hybrid sleep, fast startup, and [standard hiberna
     "HiberFileType" = 4294967295; // PopHiberFileTypeReg (4294967295)
     "HiberFileTypeDefault" = 4294967295; // PopHiberFileTypeDefaultReg (4294967295), fallback when HiberFileType is unset
 
-// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize picks the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
+// Percent<MemoryBucket><Type>, PopCalculateHiberFileSize uses the first matching RAM bucket then uses Full or Reduced percentage (when HiberFileSizePercent < 40)
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power\\HiberFileBucket";
-    "Percent16GBFull" = 40; // unk_140FC36D0
-    "Percent16GBReduced" = 20; // unk_140FC36CC
-    "Percent1GBFull" = 40; // unk_140FC3670
-    "Percent1GBReduced" = 20; // unk_140FC366C
-    "Percent2GBFull" = 40; // unk_140FC3688
-    "Percent2GBReduced" = 20; // unk_140FC3684
-    "Percent32GBFull" = 40; // unk_140FC36E8
-    "Percent32GBReduced" = 20; // unk_140FC36E4
-    "Percent4GBFull" = 40; // unk_140FC36A0
-    "Percent4GBReduced" = 20; // unk_140FC369C
-    "Percent8GBFull" = 40; // unk_140FC36B8
-    "Percent8GBReduced" = 20; // unk_140FC36B4
-    "PercentUnlimitedFull" = 40; // unk_140FC3700
-    "PercentUnlimitedReduced" = 20; // unk_140FC36FC
+    "Percent16GBFull" = 40;
+    "Percent16GBReduced" = 20;
+    "Percent1GBFull" = 40;
+    "Percent1GBReduced" = 20;
+    "Percent2GBFull" = 40;
+    "Percent2GBReduced" = 20;
+    "Percent32GBFull" = 40;
+    "Percent32GBReduced" = 20;
+    "Percent4GBFull" = 40;
+    "Percent4GBReduced" = 20;
+    "Percent8GBFull" = 40;
+    "Percent8GBReduced" = 20;
+    "PercentUnlimitedFull" = 40;
+    "PercentUnlimitedReduced" = 20;
 ```
 
 ### PowerCFG Captures
@@ -1751,7 +1749,7 @@ Energy estimation accounts for estimated power usage, components report modeled 
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Power";
     "UserBatteryDischargeEstimator" = 0; // PopDisableBatteryDischargeEstimator, 0 allows WNF_PO_DISCHARGE_ESTIMATE updates, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
     "UserBatteryChargeEstimator" = 0; // PopUserBatteryChargingEstimator, 0 clears WNF_PO_CHARGE_ESTIMATE, https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/PopBatteryWorker.c
-    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled
+    "EnergyEstimationEnabled" = 1; // PopEnergyEstimationEnabled, https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PoEnergyEstimationEnabled.c
 ```
 
 - [power/assets | PtInitializeTelemetry.c](https://github.com/nohuto/win-config/blob/main/power/assets/energyesti-PtInitializeTelemetry.c)
