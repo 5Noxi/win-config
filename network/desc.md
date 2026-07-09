@@ -1007,7 +1007,7 @@ Enabling the option includes disabling [LMHOSTS](https://en.wikipedia.org/wiki/L
 
 Disabling `NetbiosOptions` via network center:
 ```powershell
-RegSetValue	HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
+HKLM\System\CurrentControlSet\Services\NetBT\Parameters\Interfaces\Tcpip_{58f1d738-585f-40e2-aa37-39937f740875}\NetbiosOptions	Type: REG_DWORD, Length: 4, Data: 2
 ```
 
 ### Protocols Notes
