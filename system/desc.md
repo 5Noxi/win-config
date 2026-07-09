@@ -3373,8 +3373,8 @@ lkd> dt nt!_KPRCB poi(nt!KiProcessorBlock) DpcData
    +0x3340 DpcData : [2] _KDPC_DATA
 lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))
 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))                 [Type: _KDPC_DATA [2]]
-    [0]              [Type: _KDPC_DATA] // 
-    [1]              [Type: _KDPC_DATA]
+    [0]              [Type: _KDPC_DATA] // DPC_NORMAL
+    [1]              [Type: _KDPC_DATA] // DPC_THREADED
 lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))
 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))                 [Type: _KDPC_DATA]
     [+0x000] DpcList          [Type: _KDPC_LIST]
@@ -7721,27 +7721,27 @@ Not complete yet, will be extended over time.
 
   // Size
   // 1
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 1
+  HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 1
   // 2
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 2
+  HKCU\Software\Microsoft\Accessibility\CursorSize	Type: REG_DWORD, Length: 4, Data: 2
 
   // Touch indicator
   // Enabled
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 1
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 31
+  HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 1
+  HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 31
     // Make the circle darker and larger
-    SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 2
+    HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 2
   // Disabled
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 0
-  SystemSettings.exe	RegSetValue	HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 2
+  HKCU\Control Panel\Cursors\ContactVisualization	Type: REG_DWORD, Length: 4, Data: 0
+  HKCU\Control Panel\Cursors\GestureVisualization	Type: REG_DWORD, Length: 4, Data: 2
 
 // Accessibility > Text cursor
 
   // Text cursor indicator
   // Enabled
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 32, Data: cursorindicator
+  HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 32, Data: cursorindicator
   // Disabled
-  SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 2, Data: 
+  HKCU\Software\Microsoft\Windows NT\CurrentVersion\Accessibility\Configuration	Type: REG_SZ, Length: 2, Data: 
 ```
 
 # Disable Windows Search
@@ -7797,7 +7797,7 @@ Exists in [Search Policies](https://learn.microsoft.com/en-us/windows/client-man
 It probably got replaced by:
 ```c
 // Privacy & security > Search - Show search highlights
-SystemSettings.exe	RegSetValue	HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings\IsDynamicSearchBoxEnabled	Type: REG_DWORD, Length: 4, Data: 0
 ```
 
 ## [Windows Policies](https://noverse.dev/policies)
@@ -8012,28 +8012,28 @@ Changes the size of text, apps, and other items. Note that on laptops the defaul
 
 ```c
 // 100%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 0
 
 // 125%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 1
 
 // 150%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 2
 
 // 175%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 3
 
 // 200%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 4
 
 // 225%
-SystemSettings.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
-SystemSettings.exe	RegSetValue	HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+HKLM\System\CurrentControlSet\Control\GraphicsDrivers\ScaleFactors\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
+HKCU\Control Panel\Desktop\PerMonitorSettings\<MONITORID>\DpiValue	Type: REG_DWORD, Length: 4, Data: 5
 ```
 
 ## Suboptions
