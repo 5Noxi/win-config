@@ -3363,12 +3363,15 @@ if ( KeThreadDpcEnable )
 
 A simple way to see the amount of DPCs that got executed.
 
+- `0` = [`DPC_NORMAL`](https://doxygen.reactos.org/d7/deb/xdk_2ketypes_8h.html#a653ff687e27d13535119d66b179e2325) (ordinary)
+- `1` = [`DPC_THREADED`](https://doxygen.reactos.org/d7/deb/xdk_2ketypes_8h.html#aea037d3f0bccb0e36940b37c2b9a9c71) (threaded)
+
 ```c
 lkd> dt nt!_KPRCB poi(nt!KiProcessorBlock) DpcData
    +0x3340 DpcData : [2] _KDPC_DATA
 lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))
 (*((ntkrnlmp!_KDPC_DATA (*)[2])0xfffff806684ef4c0))                 [Type: _KDPC_DATA [2]]
-    [0]              [Type: _KDPC_DATA]
+    [0]              [Type: _KDPC_DATA] // 
     [1]              [Type: _KDPC_DATA]
 lkd> dx -id 0,0,ffffdc09a24ca080 -r1 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))
 (*((ntkrnlmp!_KDPC_DATA *)0xfffff806684ef4c0))                 [Type: _KDPC_DATA]
