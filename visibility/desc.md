@@ -286,7 +286,7 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ### Fall
 
-![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Fall.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/fall.png?raw=true)
 
 ### Field Sunset
 
