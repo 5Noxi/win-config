@@ -3330,6 +3330,8 @@ lkd> dt nt!_KPRCB ffffd981f4fb2180 ThreadDpcEnable
 >
 > — Microsoft, [Introduction to threaded DPCs](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-threaded-dpcs)
 
+![](https://github.com/nohuto/windbg-notes/blob/main/assets/irql-levels.png?raw=true)
+
 [`KiInitializeProcessor`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/ntoskrnl/KiInitializeProcessor.c) initializes per processor threaded DPC:
 
 ```c
