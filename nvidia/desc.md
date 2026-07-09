@@ -610,7 +610,7 @@ Disabled = `0`
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogPagingEntries
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Parameters : LogWarningEntries
 ```
-```h
+```c
 // Whenever new LOG is Created, add corresponding RegKey from nvdm.cpp in the comment in front of it.
 #if DEBUG
 LOG_EVENT_SIZE      0x2000                  // 8192 event entries (debug) L"LogEventEntries" 
@@ -684,7 +684,7 @@ int __cdecl main(int argc, char* argv[])
         deleteKey(HKEY_CURRENT_USER, VIDEO_TELEMETRY_OPTIN_OPTOUT_REGPATH, OPTIN_OUT_KEY, dwOptInOutWOW, bOptInOutPathExists, bOptInOutExists);
     }
 ```
-```h
+```c
     /* @brief Helper method to set regkey value which is used to determine whether user wants to send telemetry data or not
      * @param userOptInOrOut = 1 if user wants to opt in for sending telemetry data else userOptInOrOut =  0
      */
@@ -773,7 +773,7 @@ Only a small sequence of the process, which I have quickly written down, can be 
 
 Enables `Enable Developer Settings` in the NVIDIA control panel.
 
-```h
+```c
 //Profile info related
 NV_REG_CPL_PERFCOUNT_RESTRICTION  "RmProfilingAdminOnly"
 NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
