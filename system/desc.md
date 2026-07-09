@@ -8003,7 +8003,7 @@ Changes the size of text, apps, and other items. Note that on laptops the defaul
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/displayscaling.png?raw=true)
 
-## SystemSettings Captures
+### SystemSettings Captures
 
 ```c
 // 100%
