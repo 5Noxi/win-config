@@ -1368,9 +1368,11 @@ I'll use WPR below to capture the boost, if you're not familiar with WPA/MXA, yo
 ![](https://github.com/nohuto/win-config/blob/main/system/images/1-sep.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/2-sep.png?raw=true)
 
-You can also see if a context switch was caused by `WrQuantumEnd` via '*Processes and Threads - CS Reason*', but note that there've to be two threads with the same priority, otherwise the thread will just get another quantum without a context switch.
+#### WrQuantumEnd CS
 
-See '[Threads, State & Wait Reasons](https://noverse.dev/docs/windbg-notes/threads/thread-activity/#state--wait-reason)' for more details on the topic.
+You can also see if a context switch was caused by `WrQuantumEnd` via '*Processes and Threads - CS Reason*', but note that there've to be two threads with the same priority & processor, otherwise the thread will just get another quantum without a context switch. In the example below I've created two threads with the same priority/affinity using [CPUStress](https://github.com/zodiacon/CPUStress), but as you can see none ever needed more than its quantum in the 10sec record (FG/BG 36QU was used here).
+
+See '[Threads, State & Wait Reasons](https://noverse.dev/docs/windbg-notes/threads/thread-activity/#state--wait-reason)' for more details on the topic & a example on how [`WrQuantumEnd`](https://noverse.dev/docs/windbg-notes/threads/thread-activity/#wrquantumend) works.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true)
 
@@ -6318,7 +6320,7 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | --- | --- |
 | `DiagTrack` | The Connected User Experiences and Telemetry service enables features that support in-application and connected user experiences. Additionally, this service manages the event driven collection and transmission of diagnostic and usage information (used to improve the experience and quality of the Windows Platform) when the diagnostics and usage privacy option settings are enabled under Feedback and Diagnostics. |
 | `dmwappushservice` | Routes Wireless Application Protocol (WAP) Push messages received by the device and synchronizes Device Management sessions |
-| `Ndu` | This service provides network data usage monitoring functionality |
+| `Ndu` | This service provides network data usage monitoring functionality, disabling breaks e.g. the Send/Reveice graphcs in task manager, use System Informer anyways which will continue to show the graph |
 | `InventorySvc` | This service performs background system inventory, compatibility appraisal, and maintenance used by numerous system components. |
 | `PcaSvc` | This service provides support for the Program Compatibility Assistant (PCA). PCA monitors programs installed and run by the user and detects known compatibility problems. If this service is stopped, PCA will not function properly. |
 | `wuqisvc` | A Microsoft service producing summary facts and insights related to usage and quality of experience. Facts are used to automate on-device self-healing and other optional workflows, such as Personalized offers. |
