@@ -1,4 +1,4 @@
-# Interrupt Handling and Affinity Policies
+# Interrupt Handling & Affinities
 
 The sections below will be extended somewhat soon.
 
