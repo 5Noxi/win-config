@@ -1397,17 +1397,14 @@ Removes the `- Shortcut` text, hides the shortcut & compression arrows. Works by
 
 Location:
 
-```csv
-\Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconSpacing
-\Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconVerticalSpacing
+```c
+\Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconSpacing // horizontal
+\Registry\User\S-ID\Control Panel\Desktop\WindowMetrics : IconVerticalSpacing // vertical
 ```
 
-- `IconSpacing` = Horizontal
-- `IconVerticalSpacing` = Vertical
-
-Default: `75px` (`-1125`)
-Min: `32px` (`-480`)
-Max: `182px` (`-2730`)
+- Default: `75px` (`-1125`)
+- Min: `32px` (`-480`)
+- Max: `182px` (`-2730`)
 
 Value gets calculated with:
 
