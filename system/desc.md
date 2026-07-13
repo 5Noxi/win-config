@@ -5976,7 +5976,7 @@ This list was created using my small [`ScheduledTasksList.ps1`](https://github.c
 
 # Disable Services/Drivers
 
-I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features won't start automatically anyway. You can use the suboptions if you want to disable services/drivers (e.g. *"Autoplay Service, Bluetooth Services, Camera Services, File/Printer Sharing Services, Printer Services, Store Services"*) for a **specific** reason (note that this may cause broken functionalities). Disabling/enabling features via other options (e.g WER, Windows Search, Clipboard) includes changing service/driver `Start` data/setting policies etc, instead of only changing services/drivers state, so again, rather leave the suboptions alone.
+I personally recommend using only the main option. This includes disabling telemetry/tracking/diagnostics/location/certain drivers/services, etc. It is not necessary to disable more than this, as most other features won't start automatically anyway. You can use the suboptions if you want to disable services/drivers (e.g. *"Autoplay Service, Bluetooth Services, Camera Services, File/Printer Sharing Services, Printer Services, Store Services"*) for a **specific** reason (note that this may cause broken functionalities). Disabling/enabling features via other options (e.g WER, Windows Search, Clipboard) includes changing service/driver `Start` data/setting policies etc, instead of only changing services/drivers state, so again, rather leave the suboptions alone. Whenever you've a HDD, disable the `Disable SysMain` suboption.
 
 ## Service/Driver Table
 
@@ -6292,6 +6292,11 @@ See [services](https://github.com/nohuto/win-config/blob/main/system/assets/serv
 | `scfilter` | Smart card reader filter driver enabling smart card PnP. |
 
 ### SysMain
+
+- Service = `C:\Windows\system32\svchost.exe -k LocalSystemNetworkRestricted -p`
+- DLL = `C:\Windows\System32\sysmain.dll`
+
+The `EnableSuperfetch` value has no effect whenever this service is disabled, `EnablePrefetcher` seems to may still be used at some point in the kernel.
 
 | Service/Driver | Description |
 | --- | --- |
