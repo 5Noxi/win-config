@@ -5727,7 +5727,7 @@ I personally recommend using only the main option. This includes disabling telem
 
 ## Service/Driver Table
 
-You can dump all kind of information (including information like type, required privileges, failure actions, triggers, thread/handle count, KM/UM time etc. which the normal `services.msc` or any other program won't show) using my [dumpServicesDrivers.ps1] script (which I also used for creating the tables below, see [services.txt](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers.txt](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt)), I've commented out some fields by default, edit the file if you want to see them.
+You can dump all kind of information (including information like type, required privileges, failure actions, triggers, thread/handle count, KM/UM time etc. which the normal `services.msc` or any other programs won't show) using my [dumpServicesDrivers.ps1](https://github.com/nohuto/win-config/blob/main/system/assets/dumpServicesDrivers.ps1) script (which I also used for creating the tables below, see [services.txt](https://github.com/nohuto/win-config/blob/main/system/assets/services.txt)/[drivers.txt](https://github.com/nohuto/win-config/blob/main/system/assets/drivers.txt)), I've commented out some fields by default, edit the file if you want to see them.
 
 The suboptions probably overlap the documentation. If so, you can open the [page on my website](https://github.com/nohuto/win-config/blob/main/system/desc.md#disable-servicesdrivers) instead.
 
