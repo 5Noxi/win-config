@@ -1,3 +1,8 @@
+# (C) 2026 Noverse. All Rights Reserved.
+# This PS is a part of the WinConfig documentation
+# https://github.com/nohuto
+# https://discord.noverse.dev
+
 param([string]$outputDir = $PSScriptRoot)
 
 $ErrorActionPreference = 'SilentlyContinue'
