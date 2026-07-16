@@ -6040,6 +6040,8 @@ The suboptions probably overlap the documentation. If so, you can open the [page
 
 ### SysMain
 
+Note that disabling this service will cause memory management features like memory compression/combining to not start anymore, see '[Memory Compression](https://noverse.dev/docs/win-config/system/memory-compression/)' & '[Page Combining](https://noverse.dev/docs/win-config/system/page-combining/)'.
+
 - Service = `C:\Windows\system32\svchost.exe -k LocalSystemNetworkRestricted -p`
 - DLL = `C:\Windows\System32\sysmain.dll`
 
@@ -6496,8 +6498,6 @@ This list was created using my small [`ScheduledTasksList.ps1`](https://github.c
 | `\Microsoft\Windows\DiskFootprint\Diagnostics` | - | `%windir%\system32\disksnapshot.exe -z` |
 | `\Microsoft\Windows\DiskFootprint\StorageSense` | - | `ClassId:{AB2A519B-03B0-43CE-940A-A73DF850B49A}` |
 | `\Microsoft\Windows\Speech\SpeechModelDownloadTask` | - | `%windir%\system32\speech_onecore\common\SpeechModelDownload.exe` |
-| `\Microsoft\Windows\Sysmain\ResPriStaticDbSync` | Reserved Priority static db sync maintenance task | `ClassId:{297EE78C-BA95-4E94-81D3-D6E7F089C7B5}` |
-| `\Microsoft\Windows\Sysmain\WsSwapAssessmentTask` | Working set swap assessment maintenance task | `%windir%\system32\rundll32.exe sysmain.dll,PfSvWsSwapAssessmentTask` |
 | `\Microsoft\Windows\UNP\RunUpdateNotificationMgr` | - | - |
 | `\Microsoft\Windows\BrokerInfrastructure\BgTaskRegistrationMaintenanceTask` | Maintains registrations for background tasks for Universal Windows Platform applications. | `ClassId:{E984D939-0E00-4DD9-AC3A-7ACA04745521}` |
 | `\Microsoft\Windows\capabilityaccessmanager\maintenancetasks` | Capability Access Manager Maintenance Tasks | `%windir%\system32\rundll32.exe %windir%\system32\CapabilityAccessManager.dll,CapabilityAccessManagerDoStoreMaintenance` |
@@ -7858,11 +7858,13 @@ HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe pat
 
 # Memory Compression
 
-Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time.
+Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time. 
 
 Keep it enabled, unless you've to debug issues in relation to compression/decompression & it's activity.
 
-Compressed pages are stored in a dedicated (minimal) "Memory Compression" process managed by the Store Manager, which kind of consumes no resources, and its threads are waiting most of the time.
+Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression`) process managed by the Store Manager. Note that `SysMain` includes config functions used by `MMAgent`, while the actual compression work is done by the kernel Store Manager, means for the MMAgent state to apply and report correctly, `SysMain` must be allowed to run (if not, `MemCompression` won't be created).
+
+On systems with enough free memory, it may stay almost unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
 
@@ -7872,9 +7874,19 @@ Example:
 3. The 17 MB saved is used for active apps
 4. When the data is needed again, it's decompressed back to 24 MB
 
-### Get-MMAgent
+### MMAgent
 
-See the current memory compression state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
+`Enable-MMAgent -MemoryCompression` calls the `PS_MMAgent` CIM provider in `sysmain.dll`, which goes to `MmaConfigure`, sets the memory compression admin bit in the Superfetch key, may set `SysMain` to automatic start and (re)starts `SysMain` so the component state can be applied.
+
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Superfetch"
+    AdminEnable & 0x200 // MemoryCompression requested enabled
+    AdminDisable & 0x200 // MemoryCompression requested disabled
+    StartedComponents & 0x200 // MemoryCompression started by SysMain
+```
+
+See the current memory compression state via ([MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps)):
+
 ```powershell
 Get-MMAgent
 
@@ -7887,6 +7899,79 @@ PageCombining                : True
 PSComputerName               :
 ```
 
+### WinDbg
+
+If memory compression was applied by `SysMain`, the process should exist:
+
+```c
+lkd> !process 0 0 MemCompression
+PROCESS ffff9c06c430e040
+    SessionId: none  Cid: 0654    Peb: 00000000  ParentCid: 0004
+    DirBase: 121450000  ObjectTable: ffffb20888e79c00  HandleCount:   0.
+    Image: MemCompression
+```
+
+That was run on a 32GB system with no memory pressure, which shows again that it practically does nothing in that relation.
+
+```c
+lkd> !process ffff9c06c430e040 1
+PROCESS ffff9c06c430e040
+    SessionId: none  Cid: 0654    Peb: 00000000  ParentCid: 0004
+    DirBase: 121450000  ObjectTable: ffffb20888e79c00  HandleCount:   0.
+    Image: MemCompression
+    VadRoot 0000000000000000 Vads 0 Clone 0 Private 5. Modified 0. Locked 0.
+    DeviceMap 0000000000000000
+    Token                             ffffb20888dd8040
+    ElapsedTime                       00:39:09.121
+    UserTime                          00:00:00.000
+    KernelTime                        00:00:00.000
+    QuotaPoolUsage[PagedPool]         4224
+    QuotaPoolUsage[NonPagedPool]      0
+    Working Set Sizes (now,min,max)  (5, 50, 345) (20KB, 200KB, 1380KB)
+    PeakWorkingSetSize                0
+    VirtualSize                       0 Mb
+    PeakVirtualSize                   0 Mb
+    PageFaultCount                    5
+    MemoryPriority                    BACKGROUND
+    BasePriority                      8
+    CommitCharge                      10
+```
+
+The threads show whether the compression process is idle or doing work:
+
+```c
+lkd> !process ffff9c06c430e040 4
+PROCESS ffff9c06c430e040
+    SessionId: none  Cid: 0654    Peb: 00000000  ParentCid: 0004
+    DirBase: 121450000  ObjectTable: ffffb20888e79c00  HandleCount:   0.
+    Image: MemCompression
+
+        THREAD ffff9c06c4327080  Cid 0654.0658  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c4326080  Cid 0654.065c  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c4321080  Cid 0654.0670  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c4320080  Cid 0654.0674  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c431e080  Cid 0654.067c  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c431d080  Cid 0654.0680  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c6e8e080  Cid 0654.11e4  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c708b0c0  Cid 0654.1008  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c495e080  Cid 0654.1e30  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9c06c72cb080  Cid 0654.0758  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT
+```
+
+A thread can also show the SM (store manager) routine it is waiting in:
+
+```c
+lkd> !thread ffff9c06c4327080
+THREAD ffff9c06c4327080  Cid 0654.0658  Teb: 0000000000000000 Win32Thread: 0000000000000000 WAIT: (WrKernel) KernelMode Non-Alertable
+    ffff9c06baff4530  NotificationEvent
+Owning Process            ffff9c06c430e040       Image:         MemCompression
+Wait Start TickCount      238            Ticks: 10642 (0:00:02:46.281)
+UserTime                  00:00:00.000
+KernelTime                00:00:00.000
+Win32 Start Address nt!SMKM_STORE_MGR<SM_TRAITS>::SmCompressCtxBalancerThread (0xfffff8031b3b5460)
+Priority 25  BasePriority 25  Priority Floor 25  IoPriority 2  PagePriority 5
+```
+
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memcompress3.png?raw=true)
@@ -7897,13 +7982,15 @@ PSComputerName               :
 
 Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`.
 
+There's no separate process for page combining (like `MemCompression`), SysMain requests the work and the kernel Memory Manager does the combine work.
+
+### DisablePageCombining
+
 > "*Page combining can be disabled by setting a DWORD value named `DisablePageCombining` to `1` in the `HKLM\System\CurrentControlSet\Control\Session Manager\Memory Management` registry key.*"
 >
 > — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-### DisablePageCombining
-
-`Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value, note that the value still is used in `MiCombineIdenticalPages`.
+That value is read from the `Memory Management` registry key into `nt!MmRegistryState+0x8` and read by `MiCombineIdenticalPages`, if bit 0 is set, the combine request returns `STATUS_NOT_SUPPORTED`.
 
 ```asm
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
@@ -7913,14 +8000,27 @@ INIT:0000000140B9C350                 dq offset dword_140D1D1C8
 ALMOSTRO:0000000140D1D1C8 dword_140D1D1C8 dd 0                    ; DATA XREF: MiCombineIdenticalPages:loc_1407F7E3A↑r
 ```
 
-### Get-MMAgent
+```c
+lkd> dd nt!MmRegistryState+8 L1
+fffff803`1bd1d1c8  00000000
+```
 
-See the current page combining state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
+### MMAgent
+
+`Enable-MMAgent -PageCombining` calls the `PS_MMAgent` CIM provider in `sysmain.dll`, which goes to `MmaConfigure`, sets the page combining admin bit in the Superfetch key, and relies on `SysMain` to apply the component state.
+
+```c
+"HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Superfetch"
+    AdminEnable & 0x100 // PageCombining requested enabled
+    AdminDisable & 0x100 // PageCombining requested disabled
+    StartedComponents & 0x100 // PageCombining started by SysMain
+```
+
+See the requested page combining state via ([MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps)):
 
 ```powershell
 Get-MMAgent
-```
-```powershell
+
 ApplicationLaunchPrefetching : True
 ApplicationPreLaunch         : True
 MaxOperationAPIFiles         : 512
