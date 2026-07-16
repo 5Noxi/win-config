@@ -7885,7 +7885,9 @@ Example:
     StartedComponents & 0x200 // MemoryCompression started by SysMain
 ```
 
-See the current memory compression state via ([MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps)):
+`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data.
+
+See the current memory compression state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
 ```powershell
 Get-MMAgent
@@ -7911,7 +7913,7 @@ PROCESS ffff9c06c430e040
     Image: MemCompression
 ```
 
-That was run on a 32GB system with no memory pressure, which shows again that it practically does nothing in that relation.
+That command was run on a 32GB system (with no memory pressure), which shows again that it practically does nothing in that relation.
 
 ```c
 lkd> !process ffff9c06c430e040 1
@@ -7990,7 +7992,7 @@ There's no separate process for page combining (like `MemCompression`), SysMain 
 >
 > — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-That value is read from the `Memory Management` registry key into `nt!MmRegistryState+0x8` and read by `MiCombineIdenticalPages`, if bit 0 is set, the combine request returns `STATUS_NOT_SUPPORTED`.
+That value is read from the `Memory Management` registry key into `nt!MmRegistryState+0x8` and read by `MiCombineIdenticalPages`, if bit 0 is set, the combine request returns `STATUS_NOT_SUPPORTED` (not used by MMAgent obviously).
 
 ```asm
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
@@ -8016,7 +8018,9 @@ fffff803`1bd1d1c8  00000000
     StartedComponents & 0x100 // PageCombining started by SysMain
 ```
 
-See the requested page combining state via ([MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps)):
+`0x100` = bit `8`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data.
+
+See the requested page combining state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
 ```powershell
 Get-MMAgent
