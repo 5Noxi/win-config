@@ -5732,6 +5732,7 @@ Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression
 On systems with enough free memory, it may stay almost unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/MemCompression.png?raw=true)
 
 Example:  
 1. System looks for cold/rarely used data in RAM
@@ -5750,7 +5751,9 @@ Example:
     StartedComponents & 0x200 // MemoryCompression started by SysMain
 ```
 
-`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data.
+`0x200` = bit `9`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true)
 
 See the current memory compression state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
@@ -5883,7 +5886,9 @@ fffff803`1bd1d1c8  00000000
     StartedComponents & 0x100 // PageCombining started by SysMain
 ```
 
-`0x100` = bit `8`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data.
+`0x100` = bit `8`, you can use my [bitmask calculator](https://noverse.dev/#bitmask) to see whenever that bit is set in your current `StartedComponents` data, example:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/StartedComponents.png?raw=true)
 
 See the requested page combining state via [MMAgent](https://learn.microsoft.com/en-us/powershell/module/mmagent/get-mmagent?view=windowsserver2025-ps):
 
@@ -5898,6 +5903,28 @@ OperationAPI                 : True
 PageCombining                : True # Enabled
 PSComputerName               :
 ```
+
+### MemCombineTest
+
+Start by downloading the [Windows Internals tools](https://github.com/zodiacon/WindowsInternals/releases/download/1.1/x64.zip) which include the two binaries we need & [VMMap](https://live.sysinternals.com/vmmap.exe).
+
+`MemCombineTest.exe` allocates two same content private buffers and waits, `MemCombine64.exe` enables `SeProfileSingleProcessPrivilege` and calls `NtSetSystemInformation(SystemCombinePhysicalMemoryInformation = 130)`, which asks the memory manager to combine pages now instead of waiting for the normal background pass.
+
+1. Start `MemCombineTest.exe` and leave it open
+2. Open VMMap as admin and select the PID shown by `MemCombineTest` 
+3. Take first VMMap screenshot of the process address space and note the two private buffers
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest1.png?raw=true)
+
+4. Run `MemCombine64.exe` as admin
+5. Refresh VMMap and compare the private/shared working set
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest2.png?raw=true)
+
+6. Press a key in `MemCombineTest.exe` to modify one byte in the first buffer
+7. Refresh VMMap again, the modified page should become private again cause of `copy-on-write`
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/MemCombineTest3.png?raw=true)
 
 ## [Windows Internals](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
