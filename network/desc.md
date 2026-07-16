@@ -882,11 +882,11 @@ HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e972-e325-11ce-bfc1-08002be1031
 
 Disables Wi-Fi services/drivers, scheduled tasks.
 
-| Service/Driver | Description |
-| --- | --- |
-| `WlanSvc` | The WLANSVC service provides the logic required to configure, discover, connect to, and disconnect from a wireless local area network (WLAN) as defined by IEEE 802.11 standards. It also contains the logic to turn your computer into a software access point so that other devices or computers can connect to your computer wirelessly using a WLAN adapter that can support this. Stopping or disabling the WLANSVC service will make all WLAN adapters on your computer inaccessible from the Windows networking UI. It is strongly recommended that you have the WLANSVC service running if your computer has a WLAN adapter. |
-| `vwififlt` | Virtual WiFi Filter Driver |
-| `WwanSvc` | This service manages mobile broadband (GSM & CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices. |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `WlanSvc` | The WLANSVC service provides the logic required to configure, discover, connect to, and disconnect from a wireless local area network (WLAN) as defined by IEEE 802.11 standards. It also contains the logic to turn your computer into a software access point so that other devices or computers can connect to your computer wirelessly using a WLAN adapter that can support this. Stopping or disabling the WLANSVC service will make all WLAN adapters on your computer inaccessible from the Windows networking UI. It is strongly recommended that you have the WLANSVC service running if your computer has a WLAN adapter. | Win32 Own Process (16) | nativewifip, RpcSs, Ndisuio, wcmsvc | C:\Windows\system32\svchost.exe -k LocalSystemNetworkRestricted -p |
+| `vwififlt` | Virtual WiFi Filter Driver | Kernel Driver (1) | - | System32\drivers\vwififlt.sys |
+| `WwanSvc` | This service manages mobile broadband (GSM & CDMA) data card/embedded module adapters and connections by auto-configuring the networks. It is strongly recommended that this service be kept running for best user experience of mobile broadband devices. | Win32 Share Process (32) | RpcSs, NdisUio | C:\Windows\system32\svchost.exe -k LocalSystemNetworkRestricted -p |
 
 ---
 
@@ -1411,11 +1411,11 @@ Disables Internet Connection Sharing (ICS), which lets Windows use one network a
 
 When disabled, the PC can no longer share its internet connection to other devices through the connection Sharing tab / ICS UI, and ICS backed gateway scenarios such as adapter-to-adapter internet sharing or related hotspot-style sharing cannot use the SharedAccess service. ICS is only available when two or more network connections are present.
 
-| Service/Driver | Description |
-| --- | --- |
-| `icssvc` | Provides the ability to share a cellular data connection with another device. |
-| `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing |
-| `SharedAccess` | Provides network address translation, addressing, name resolution and/or intrusion prevention services for a home or small office network. |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `icssvc` | Provides the ability to share a cellular data connection with another device. | Win32 Share Process (32) | RpcSs, wcmsvc | C:\Windows\system32\svchost.exe -k LocalServiceNetworkRestricted -p |
+| `ALG` | Provides support for 3rd party protocol plug-ins for Internet Connection Sharing | Win32 Own Process (16) | - | C:\Windows\System32\alg.exe |
+| `SharedAccess` | Provides network address translation, addressing, name resolution and/or intrusion prevention services for a home or small office network. | Win32 Share Process (32) | BFE | C:\Windows\System32\svchost.exe -k netsvcs -p |
 
 ## [Windows Policies](https://noverse.dev/policies)
 

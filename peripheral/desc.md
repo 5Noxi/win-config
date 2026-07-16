@@ -1326,9 +1326,9 @@ open=Launch.exe
 icon=Launch.exe
 ```
 
-| Service | Description |
-| --- | --- |
-| `ShellHWDetection` | Provides notifications for AutoPlay hardware events. |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `ShellHWDetection` | Provides notifications for AutoPlay hardware events. | Win32 Share Process (32) | RpcSs | C:\Windows\System32\svchost.exe -k netsvcs -p |
 
 ### SystemSettings Captures
 
@@ -1593,24 +1593,24 @@ Specifies whether to allow specific bundled Bluetooth peripherals to automatical
 
 ## Services/Drivers
 
-| Service/Driver | Description |
-| --- | --- |
-| `BluetoothUserService_*` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. |
-| `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. |
-| `BthA2dp` | Microsoft Bluetooth A2dp driver |
-| `BthAvctpSvc` | This is Audio Video Control Transport Protocol service |
-| `BthEnum` | Bluetooth Enumerator Service |
-| `BthHFEnum` | Microsoft Bluetooth Hands-Free Profile driver |
-| `BthLEEnum` | Bluetooth Low Energy Driver |
-| `BthMini` | Bluetooth Radio Driver |
-| `BTHMODEM` | Bluetooth Modem Communications Driver |
-| `BTHPORT` | Bluetooth Port Driver |
-| `bthserv` | The Bluetooth service supports discovery and association of remote Bluetooth devices. Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated. |
-| `BTHUSB` | Bluetooth Radio USB Driver |
-| `DeviceAssociationBrokerSvc` | Enables apps to pair devices |
-| `DeviceAssociationService` | Enables pairing between the system and wired or wireless devices. |
-| `Microsoft_Bluetooth_AvrcpTransport` | Microsoft Bluetooth Avrcp Transport Driver |
-| `RFCOMM` | Bluetooth Device (RFCOMM Protocol TDI) |
+| Name | Description | Type | Dependencies | Command Line |
+| --- | --- | --- | --- | --- |
+| `BluetoothUserService_*` | The Bluetooth user service supports proper functionality of Bluetooth features relevant to each user session. | Win32 Share Process, User Service, User Service Instance (224) | - | C:\Windows\system32\svchost.exe -k BthAppGroup -p |
+| `BTAGService` | Service supporting the audio gateway role of the Bluetooth Handsfree Profile. | Win32 Share Process (32) | rpcss | C:\Windows\system32\svchost.exe -k LocalServiceNetworkRestricted |
+| `BthA2dp` | Microsoft Bluetooth A2dp driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\BthA2dp.sys |
+| `BthAvctpSvc` | This is Audio Video Control Transport Protocol service | Win32 Share Process (32) | rpcss | C:\Windows\system32\svchost.exe -k LocalService -p |
+| `BthEnum` | Bluetooth Enumerator Service | Kernel Driver (1) | - | \SystemRoot\System32\drivers\BthEnum.sys |
+| `BthHFEnum` | Microsoft Bluetooth Hands-Free Profile driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\bthhfenum.sys |
+| `BthLEEnum` | Bluetooth Low Energy Driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\Microsoft.Bluetooth.Legacy.LEEnumerator.sys |
+| `BthMini` | Bluetooth Radio Driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\BTHMINI.sys |
+| `BTHMODEM` | Bluetooth Modem Communications Driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\bthmodem.sys |
+| `BTHPORT` | Bluetooth Port Driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\BTHport.sys |
+| `bthserv` | The Bluetooth service supports discovery and association of remote Bluetooth devices. Stopping or disabling this service may cause already installed Bluetooth devices to fail to operate properly and prevent new devices from being discovered or associated. | Win32 Share Process (32) | - | C:\Windows\system32\svchost.exe -k LocalService -p |
+| `BTHUSB` | Bluetooth Radio USB Driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\BTHUSB.sys |
+| `DeviceAssociationBrokerSvc` | Enables apps to pair devices | Win32 Share Process, User Service (96) | RpcSs | C:\Windows\system32\svchost.exe -k DevicesFlow -p |
+| `DeviceAssociationService` | Enables pairing between the system and wired or wireless devices. | Win32 Share Process (32) | - | C:\Windows\system32\svchost.exe -k LocalSystemNetworkRestricted -p |
+| `Microsoft_Bluetooth_AvrcpTransport` | Microsoft Bluetooth Avrcp Transport Driver | Kernel Driver (1) | - | \SystemRoot\System32\drivers\Microsoft.Bluetooth.AvrcpTransport.sys |
+| `RFCOMM` | Bluetooth Device (RFCOMM Protocol TDI) | Kernel Driver (1) | - | \SystemRoot\System32\drivers\rfcomm.sys |
 
 # Device Manager
 
