@@ -5725,7 +5725,7 @@ __int64 IsDesktopHeapLoggingOn(void)
 
 Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time. 
 
-Disable it whenever you want to avoid the `SysMain` (`Disable (SysMain Off)` suboption which causes other MMAgent features to not work too) background activity, or when your system has enough RAM (which you never completely use) as compression will unlikely happen then anyway as shown below. See '[Services/Drivers, SysMain](https://noverse.dev/docs/win-config/system/disable-services-drivers/#sysmain)' before using that suboption as it handles other features too which are beneficial on slow disks.
+Disable it whenever you want to avoid the `SysMain` (`Disable (SysMain Off)` suboption which causes other MMAgent features to not work too) background activity, or when your system has enough RAM (which you never completely use) as compression will unlikely happen then anyway as shown below. See '[Services/Drivers, SysMain](https://noverse.dev/docs/win-config/system/disable-services-drivers/#sysmain)' before using that suboption as it handles other features too, which are beneficial on slow disks.
 
 Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression`) process managed by the Store Manager. Note that `SysMain` includes config functions used by `MMAgent`, while the actual compression work is done by the kernel Store Manager, means for the MMAgent state to apply and report correctly, `SysMain` must be allowed to run (if not, `MemCompression` won't be created).
 
@@ -5856,7 +5856,15 @@ Memory combining finds duplicate pages in RAM and replaces them with one shared 
 
 There's no separate process for page combining (like `MemCompression`), SysMain requests the work and the kernel Memory Manager does the combine work.
 
-Disable it whenever you want to avoid the `SysMain` (`Disable (SysMain Off)` suboption which causes other MMAgent features to not work too) background activity, or when your system has enough RAM (which you never completely use) even tho the state of this memory managment feature is unrelated to RAM usage. See '[Services/Drivers, SysMain](https://noverse.dev/docs/win-config/system/disable-services-drivers/#sysmain)' before using that suboption as it handles other features too which are beneficial on slow disks.
+Disable it whenever you want to avoid the `SysMain` (`Disable (SysMain Off)` suboption which causes other MMAgent features to not work too) background activity, or when your system has enough RAM (which you never completely use) even tho the state of this memory managment feature is unrelated to RAM usage. See '[Services/Drivers, SysMain](https://noverse.dev/docs/win-config/system/disable-services-drivers/#sysmain)' before using that suboption as it handles other features too, which are beneficial on slow disks.
+
+`Disable (MMAgent only)` won't set `DisablePageCombining = 1`, causing e.g. `MemCombine64.exe` to still be able to ask the memory manager to combine pages, if that value is set (bit `0`) the feature won't work at all ([`STATUS_NOT_SUPPORTED`](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55)):
+
+```powershell
+$ .\memcombine64
+Combining pages, please wait...
+Error: C00000BB # STATUS_NOT_SUPPORTED
+```
 
 ### DisablePageCombining
 
@@ -5864,7 +5872,7 @@ Disable it whenever you want to avoid the `SysMain` (`Disable (SysMain Off)` sub
 >
 > — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
-That value is read from the `Memory Management` registry key into `nt!MmRegistryState+0x8` and read by `MiCombineIdenticalPages`, if bit 0 is set, the combine request returns `STATUS_NOT_SUPPORTED` (not used by MMAgent obviously).
+That value is read from the `Memory Management` registry key into `nt!MmRegistryState+0x8` and read by `MiCombineIdenticalPages`, if bit 0 is set, the combine request returns [`STATUS_NOT_SUPPORTED`](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55) (not used by MMAgent obviously).
 
 ```asm
 INIT:0000000140B9C340                 dq offset aSessionManager_7 ; "Session Manager\\Memory Management"
