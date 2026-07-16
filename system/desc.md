@@ -7856,11 +7856,17 @@ HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe pat
 HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers\<exe path> = "~ DISABLEDXMAXIMIZEDWINDOWEDMODE"
 ```
 
-# Disable Memory Compression
+# Memory Compression
 
 Memory compression compresses rarely used or less frequently accessed data in RAM so it takes up less space. Windows does this to keep more data in physical memory and avoid writing to the pagefile, which reduces disk I/O. When the data is needed again, it's decompressed. It's faster than paging to disk, but it costs CPU.
 
-Compressed pages are stored in a dedicated "Memory Compression" process managed by the Store Manager. The memory manager compresses modified list pages into that store and later decompresses them on demand, this is enabled by default on client SKUs.
+Memory compression stores infrequently accessed, private memory pages in compressed form so they occupy less physical memory, causing Windows to keep more data in RAM and reduce pagefile I/O. Whenever a process references a compressed page again, it gets decompressed which is normally faster than reading it from storage, although compression and decompression consume CPU time.
+
+Keep it enabled, unless you've to debug issues in relation to compression/decompression & it's activity.
+
+Compressed pages are stored in a dedicated (minimal) "Memory Compression" process managed by the Store Manager, which kind of consumes no resources, and its threads are waiting most of the time.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
 
 Example:  
 1. System looks for cold/rarely used data in RAM
@@ -7868,11 +7874,12 @@ Example:
 3. The 17 MB saved is used for active apps
 4. When the data is needed again, it's decompressed back to 24 MB
 
+### Get-MMAgent
+
 See the current memory compression state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
 ```powershell
 Get-MMAgent
-```
-```powershell
+
 ApplicationLaunchPrefetching : True
 ApplicationPreLaunch         : True
 MaxOperationAPIFiles         : 512
@@ -7890,11 +7897,13 @@ PSComputerName               :
 
 # Page Combining
 
-Page combining spots identical RAM pages across processes and merges them into a single shared page. Instead of keeping 50 copies of the same DLL/data page, the memory manager keeps one, maps it to everyone, and marks it `copy-on-write`. As long as nobody changes it, everyone shares the same physical page and RAM usage drops. If a process writes to it, Windows gives that process its own private copy and leaves the shared one intact. It's a background RAM deduplicator, basically.
+Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`.
 
 > "*Page combining can be disabled by setting a DWORD value named `DisablePageCombining` to `1` in the `HKLM\System\CurrentControlSet\Control\Session Manager\Memory Management` registry key.*"
 >
 > — Windows Internals, [E7, P1: 'Memory combining'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+### DisablePageCombining
 
 `Disable-MMAgent -PageCombining` toggles the state shown in `Get-MMAgent` but does not write the `DisablePageCombining` registry value, note that the value still is used in `MiCombineIdenticalPages`.
 
@@ -7905,6 +7914,8 @@ INIT:0000000140B9C350                 dq offset dword_140D1D1C8
 
 ALMOSTRO:0000000140D1D1C8 dword_140D1D1C8 dd 0                    ; DATA XREF: MiCombineIdenticalPages:loc_1407F7E3A↑r
 ```
+
+### Get-MMAgent
 
 See the current page combining state on your system via ([cmdlet](https://learn.microsoft.com/en-us/powershell/module/mmagent/disable-mmagent?view=windowsserver2025-ps)):
 
