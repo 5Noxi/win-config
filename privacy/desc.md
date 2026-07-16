@@ -420,6 +420,13 @@ Since the `SubscribedContent-*` values aren't documented literally anywhere I've
 
 `SubscribedContent-338393Enabled` `SubscribedContent-353694Enabled` ,`SubscribedContent-353696Enabled` are used in 'Privacy & security > Recommendations & offers - Recommendatins and offers in Settings' but only when toggling it off (when toggling it on they stay at `0`).
 
+I'll look into these soon:
+
+```c
+SubscribedContent-88000325Enabled	TRACE	(value not set)		Yes (23H2)				
+SubscribedContent-88000326Enabled	TRACE	(value not set)		Yes (23H2)				
+```
+
 ### Windows Spotlight
 
 > "*Windows spotlight is a feature that displays different wallpapers and offers suggestions, fun facts, tips, or organizational messages:*  
