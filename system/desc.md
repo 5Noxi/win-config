@@ -5874,7 +5874,14 @@ Priority 25  BasePriority 25  Priority Floor 25  IoPriority 2  PagePriority 5
 
 # Page Combining
 
-Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`. The purpose of this memory management feature is to save physical memory, but on modern systems with 32-64GB of RAM the impact of page combining is minimal (a page has a size of 4KB = 4096 byte):
+Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/copy-on-write-before.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/copy-on-write-after.png?raw=true)
+
+The purpose of this memory management feature is to save physical memory, but on modern systems with 32-64GB of RAM the impact of page combining is often minimal (a page has a size of 4KB = 4096 byte).
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/page-sizes.png?raw=true)
 
 ```powershell
 $ .\memcombine64 # while having several similar apps opened
