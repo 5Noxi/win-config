@@ -8161,9 +8161,9 @@ Based on `SystemSettings > Accessibility`, not complete yet.
 
   // Mono audio
   // Enabled
-  svchost.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 1
+  HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 1
   // Disabled
-  svchost.exe	RegSetValue	HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 0
+  HKCU\Software\Microsoft\Multimedia\Audio\AccessibilityMonoMixState	Type: REG_DWORD, Length: 4, Data: 0
 
   // Flash my screen during audio notifications
   // Never
@@ -8262,7 +8262,6 @@ Based on `SystemSettings > Accessibility`, not complete yet.
     HKCU\Control Panel\Accessibility\StickyKeys\Flags	Type: REG_SZ, Length: 4, Data: 0
     HKCU\Control Panel\Accessibility\ToggleKeys\Flags	Type: REG_SZ, Length: 4, Data: 0
     HKCU\Control Panel\Accessibility\Warning Sounds	Type: REG_DWORD, Length: 4, Data: 0
-
 
     // Play a sound when I turn Sticky, Filter, or Toggle keys on or off from the keyboard
     // Enabled (bit 4)

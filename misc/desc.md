@@ -312,13 +312,6 @@ __int64 __fastcall StartAllBackX64_102(_DWORD *a1)
 }
 ```
 
-## [Windows Policies](https://noverse.dev/policies)
-
-| Policy | Key Path | Value Name |
-| --- | --- | --- |
-| [Do not keep history of recently opened documents](https://noverse.dev/policies?p=StartMenu*NoRecentDocsHistory) | `HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer`<br>`HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer` | `NoRecentDocsHistory` |
-| [Configures search on the taskbar](https://noverse.dev/policies?p=Search*ConfigureSearchOnTaskbarMode) | `HKLM\Software\Policies\Microsoft\Windows\Windows Search` | `SearchOnTaskbarMode` |
-
 # System Informer
 
 Since [system informer](https://systeminformer.io/) is a lot better than the default task manager, it's recommended to replace it. It e.g. uses the clock cycle counter instead of the clock interval timer (which the normal taskmanager uses), which would show CPU consumption of threads that have such a short execution time that task manager would show them as `0%`.
@@ -443,7 +436,7 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 | Runtime solution issues                      | Solution issues                        | Event ID; title; explanation; more info; users; sessions                                                                                | Office 2013/2016/2019 (Excel/Outlook/PowerPoint/Word)           | -                                                                                                                                                                                        |
 | Not collected (by design)                    | -                                      | File contents; info about files not in MRU                                                                                              | All                                                             | Data for Office Telemetry Dashboard stays in your org's SQL Server; it is not sent to Microsoft. Office diagnostic data is separate and managed by different settings.                   |
 
-## [Registry Values Overview](https://learn.microsoft.com/en-us/office/compatibility/manage-the-privacy-of-data-monitored-by-telemetry-in-office#to-configure-exclusion-settings-by-using-the-registry)
+## [Registry Values](https://learn.microsoft.com/en-us/office/compatibility/manage-the-privacy-of-data-monitored-by-telemetry-in-office#to-configure-exclusion-settings-by-using-the-registry)
 
 `HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\16.0\OSM\preventedapplications`
 
@@ -481,8 +474,6 @@ Disables logging, data collection, opts out from CEIP, disables feedback collect
 
 # OneDrive
 
-`DisableLibrariesDefaultSaveToOneDrive` sets local storage as the default save location, `DisableFileSync` disables OneDrive on Windows 8.1 including app and picker access removal and stops sync and hides the Explorer entry, `DisableFileSyncNGSC` disables OneDrive via the Next-Gen Sync Client with the same effect, `DisableMeteredNetworkFileSync` set to `0` blocks syncing on all metered connections, `PreventNetworkTrafficPreUserSignIn` stops the OneDrive client from generating network traffic until the user signs in, `System.IsPinnedToNameSpaceTree` set to `0` hides OneDrive from File Explorer's navigation pane.
-
 See the Windows Policies table below for policy links and registry details.
 
 Uninstall runs `OneDriveSetup.exe /uninstall` and removes leftovers:
@@ -511,26 +502,27 @@ HKLM\SOFTWARE\WOW6432Node\Policies\Microsoft\Windows\OneDrive
 
 ## [Windows Policies](https://noverse.dev/policies)
 
+All other OneDrive related policies are used in `Windows_6_3only - Windows Server 2012 R2, Windows 8.1 or Windows RT 8.1 only`, which is why I won't include them.
+
 | Policy | Key Path | Value Name |
 | --- | --- | --- |
-| [Save documents to OneDrive by default](https://noverse.dev/policies?p=SkyDrive*DisableLibrariesDefaultSaveToOneDrive) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableLibrariesDefaultSaveToOneDrive` |
-| [Prevent the usage of OneDrive for file storage on Windows 8.1](https://noverse.dev/policies?p=SkyDrive*PreventOnedriveFileSyncForBlue) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableFileSync` |
 | [Prevent the usage of OneDrive for file storage](https://noverse.dev/policies?p=SkyDrive*PreventOnedriveFileSync) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableFileSyncNGSC` |
-| [Prevent OneDrive files from syncing over metered connections](https://noverse.dev/policies?p=SkyDrive*PreventOneDriveFileSyncOnMeteredNetwork) | `HKLM\Software\Policies\Microsoft\Windows\OneDrive` | `DisableMeteredNetworkFileSync` |
 | [Prevent OneDrive from generating network traffic until the user signs in to OneDrive](https://noverse.dev/policies?p=SkyDrive*PreventNetworkTrafficPreUserSignIn) | `HKLM\SOFTWARE\Microsoft\OneDrive` | `PreventNetworkTrafficPreUserSignIn` |
 
 # Hash Generator
 
-"The `Get-FileHash` cmdlet computes the hash value for a file by using a specified hash algorithm. A hash value is a unique value that corresponds to the content of the file. Rather than identifying the contents of a file by its file name, extension, or other designation, a hash assigns a unique value to the contents of a file. File names and extensions can be changed without altering the content of the file, and without changing the hash value. Similarly, the file's content can be changed without changing the name or extension. However, changing even a single character in the contents of a file changes the hash value of the file.
+> "*The `Get-FileHash` cmdlet computes the hash value for a file by using a specified hash algorithm. A hash value is a unique value that corresponds to the content of the file. Rather than identifying the contents of a file by its file name, extension, or other designation, a hash assigns a unique value to the contents of a file. File names and extensions can be changed without altering the content of the file, and without changing the hash value. Similarly, the file's content can be changed without changing the name or extension. However, changing even a single character in the contents of a file changes the hash value of the file.*
+>
+> *The purpose of hash values is to provide a cryptographically-secure way to verify that the contents of a file have not been changed. While some hash algorithms, including MD5 and SHA1, are no longer considered secure against attack, the goal of a secure hash algorithm is to render it impossible to change the contents of a file either by accident, or by malicious or unauthorized attempt and maintain the same hash value. You can also use hash values to determine if two different files have exactly the same content. If the hash values of two files are identical, the contents of the files are also identical.*"
+>
+> — Microsoft, [Get-FileHash](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.5)
 
-The purpose of hash values is to provide a cryptographically-secure way to verify that the contents of a file have not been changed. While some hash algorithms, including MD5 and SHA1, are no longer considered secure against attack, the goal of a secure hash algorithm is to render it impossible to change the contents of a file either by accident, or by malicious or unauthorized attempt and maintain the same hash value. You can also use hash values to determine if two different files have exactly the same content. If the hash values of two files are identical, the contents of the files are also identical."
-> [Get-FileHash | microsoft.powershell.utility](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/get-filehash?view=powershell-7.5)
-
-![](https://github.com/nohuto/hash-gen/blob/main/images/contextmenu.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/misc/images/hashgen.png?raw=true)
 
 ## Algorithms
 
 `Get-FileHash -Algorithm` accepts (the script uses the built in .NET hash implementations `System.Security.Cryptography`):
+
 - [`MD5`](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.md5?view=net-9.0) (`128` Bits)
 - [`SHA1`](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.sha1?view=net-9.0) (`160` Bits)
 - [`SHA256`](https://learn.microsoft.com/en-us/dotnet/api/system.security.cryptography.sha256?view=net-9.0) (`256` Bits)
@@ -546,7 +538,6 @@ The computed hash depends on the file content, e.g. empty files have the same ha
 ### Scenario 1 (no content)
 
 ```powershell
-
 PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse0.txt' -Raw
 PS C:\Users\Nohuxi> # No output, since empty
 
@@ -558,7 +549,7 @@ SHA384: 38B060A751AC96384CD9327EB1B1E36A21FDB71114BE07434C0CC7BF63F6E1DA274EDEBF
 SHA512: CF83E1357EEFB8BDF1542850D66D8007D620E4050B5715DC83F4A921D36CE9CE47D0D13C5D85F2B0FF8318D2877EEC2F63B931BD47417A81A538327AF927DA3E
 ```
 
-###  Scenario 2 (added content)
+###  Scenario 2 (content)
 
 ```powershell
 PS C:\Users\Nohuxi> Get-Content -LiteralPath 'C:\Users\Nohuxi\Desktop\Noverse1.txt' -Raw
@@ -587,10 +578,6 @@ SHA384("")
 SHA512("")
 0x cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
 ```
-
-> [SHA-2 | wikipedia](https://en.wikipedia.org/wiki/SHA-2#Test_vectors)  
-> [MD5 | wikipedia](https://en.wikipedia.org/wiki/MD5#MD5_hashes)  
-> [SHA-1 | wikipedia](https://en.wikipedia.org/wiki/SHA-1#Example_hashes)
 
 ## Installation
 
