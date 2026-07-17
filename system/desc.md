@@ -5729,18 +5729,12 @@ Disable it whenever you want to avoid the `SysMain` (`Disable (SysMain Off)` sub
 
 Compressed pages are stored in a dedicated "Memory Compression" (`MemCompression`) process managed by the Store Manager. Note that `SysMain` includes config functions used by `MMAgent`, while the actual compression work is done by the kernel Store Manager, means for the MMAgent state to apply and report correctly, `SysMain` must be allowed to run (if not, `MemCompression` won't be created).
 
-On systems with enough free memory, it may stay almost unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
+On systems with enough free memory, it may stay **almost** unused even when it's enabled, as it becomes more relevant when active/cold private pages would otherwise have to be paged out. Means its just a processes which consumes no resources, and has inactive threads:
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/memory-compression.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/MemCompression.png?raw=true)
 
 See '[Thread Activity](https://noverse.dev/docs/windbg-notes/threads/examining-thread-activity/thread-activity/)' whenever you want to read a bit more about the column meanings.
-
-Example:  
-1. System looks for cold/rarely used data in RAM
-2. It compresses that data, e.g. 24 MB -> 7 MB
-3. The 17 MB saved is used for active apps
-4. When the data is needed again, it's decompressed back to 24 MB
 
 ### MMAgent Cmdlet
 
@@ -5783,7 +5777,7 @@ PROCESS ffff9c06c430e040
     Image: MemCompression
 ```
 
-That command was run on a 32GB RAM system (with no memory pressure), which shows again that it practically does nothing in that relation.
+On a 32GB RAM system without memory pressure, the process may exist but stay almost unused:
 
 ```c
 lkd> !process ffff9c06c430e040 1
@@ -5808,6 +5802,34 @@ PROCESS ffff9c06c430e040
     BasePriority                      8
     CommitCharge                      10
 ```
+
+After compression happened, the same process has actual private memory and a larger working set:
+
+```c
+lkd> !process ffffb4865f1cf040 1
+PROCESS ffffb4865f1cf040
+    SessionId: none  Cid: 06c0    Peb: 00000000  ParentCid: 0004
+    DirBase: 1290ad000  ObjectTable: ffffe781db853b40  HandleCount:   0.
+    Image: MemCompression
+    VadRoot ffffb48667f8b020 Vads 2351 Clone 0 Private 75392. Modified 0. Locked 0.
+    DeviceMap 0000000000000000
+    Token                             ffffe781db893040
+    ElapsedTime                       00:36:02.082
+    UserTime                          00:00:00.000
+    KernelTime                        00:00:00.078
+    QuotaPoolUsage[PagedPool]         4224
+    QuotaPoolUsage[NonPagedPool]      0
+    Working Set Sizes (now,min,max)  (75392, 50, 345) (301568KB, 200KB, 1380KB)
+    PeakWorkingSetSize                75459
+    VirtualSize                       293 Mb
+    PeakVirtualSize                   294 Mb
+    PageFaultCount                    75680
+    MemoryPriority                    BACKGROUND
+    BasePriority                      8
+    CommitCharge                      164
+```
+
+`75392` pages * `4096` bytes = `308,805,632` bytes, means the current size is about `294.5 MiB`.
 
 The threads show whether the compression process is idle or doing work:
 
@@ -5855,12 +5877,16 @@ Priority 25  BasePriority 25  Priority Floor 25  IoPriority 2  PagePriority 5
 Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`. The purpose of this memory management feature is to save physical memory, but on modern systems with 32-64GB of RAM the impact of page combining is minimal (a page has a size of 4KB = 4096 byte):
 
 ```powershell
+$ .\memcombine64 # while having several similar apps opened
+Combining pages, please wait...
+Success. Total pages combined: 284535 # 284535 * 4096 = 1,165,455,360 bytes = 1165.46 MB = 1.1655
+
 $ .\memcombine64
 Combining pages, please wait...
 Success. Total pages combined: 29490 # 29490 * 4096 = 120,791,040 bytes = 120.79 MB = 0.120791 GB
 ```
 
-The amount of pages that can be combined is obviously not always same as it depends on how many identical private pages exist, but See '[MemCombineTest](https://noverse.dev/docs/win-config/system/page-combining/#memcombinetest)' for notes on what memcombine64 does.
+The amount of pages that can be combined is obviously not always same as it depends on how many identical private pages exist. See '[MemCombineTest](https://noverse.dev/docs/win-config/system/page-combining/#memcombinetest)' for notes on what memcombine64 does.
 
 There's no separate process for page combining (like `MemCompression`), SysMain requests the work and the kernel Memory Manager does the combine work.
 
