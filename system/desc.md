@@ -5783,7 +5783,7 @@ PROCESS ffff9c06c430e040
     Image: MemCompression
 ```
 
-That command was run on a 32GB system (with no memory pressure), which shows again that it practically does nothing in that relation.
+That command was run on a 32GB RAM system (with no memory pressure), which shows again that it practically does nothing in that relation.
 
 ```c
 lkd> !process ffff9c06c430e040 1
@@ -5852,7 +5852,15 @@ Priority 25  BasePriority 25  Priority Floor 25  IoPriority 2  PagePriority 5
 
 # Page Combining
 
-Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`.
+Memory combining finds duplicate pages in RAM and replaces them with one shared physical page. All processes using those pages then reference the shared copy, and if a process modifies it, Windows creates a private copy for that process through `copy-on-write`. The purpose of this memory management feature is to save physical memory, but on modern systems with 32-64GB of RAM the impact of page combining is minimal (a page has a size of 4KB = 4096 byte):
+
+```powershell
+$ .\memcombine64
+Combining pages, please wait...
+Success. Total pages combined: 29490 # 29490 * 4096 = 120,791,040 bytes = 120.79 MB = 0.120791 GB
+```
+
+The amount of pages that can be combined is obviously not always same as it depends on how many identical private pages exist, but See '[MemCombineTest](https://noverse.dev/docs/win-config/system/page-combining/#memcombinetest)' for notes on what memcombine64 does.
 
 There's no separate process for page combining (like `MemCompression`), SysMain requests the work and the kernel Memory Manager does the combine work.
 
@@ -5920,7 +5928,7 @@ PSComputerName               :
 
 Start by downloading the [Windows Internals tools](https://github.com/zodiacon/WindowsInternals/releases/download/1.1/x64.zip) which include the two binaries we need & [VMMap](https://live.sysinternals.com/vmmap.exe).
 
-`MemCombineTest.exe` allocates two same content private buffers and waits, `MemCombine64.exe` enables `SeProfileSingleProcessPrivilege` and calls `NtSetSystemInformation(SystemCombinePhysicalMemoryInformation = 130)`, which asks the memory manager to combine pages now instead of waiting for the normal background pass.
+[`MemCombineTest.exe`](https://github.com/zodiacon/WindowsInternals/blob/master/MemCombineTest/MemCombineTest.cpp) allocates two same content private buffers and waits, [`MemCombine64.exe`](https://github.com/zodiacon/WindowsInternals/blob/master/MemCombine/MemCombine.cpp) enables `SeProfileSingleProcessPrivilege` and calls `NtSetSystemInformation(SystemCombinePhysicalMemoryInformation = 130)`, which asks the memory manager to combine pages now instead of waiting for the normal background pass.
 
 1. Start `MemCombineTest.exe` and leave it open
 2. Open VMMap as admin and select the PID shown by `MemCombineTest` 
