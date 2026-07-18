@@ -389,7 +389,7 @@ void InitTimerPowerSaving(void)
 }
 ```
 
-Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within the first W11 builds, see  [bin-diff 2004 & 21H2](https://noverse.dev/bin-diff?left=2004&right=11-21H2&module=win32kfull&function=-InitTimerPowerSaving%40%40YAXXZ.c&mode=side-by-side) comparision (the value name didn't change).
+Looks like a typo from MS (`demon` = `daemon`), which got probably fixed within the first W11 builds, see  [diff 2004 & 21H2](https://noverse.dev/diff?kind=pseudocode&left=2004&right=11-21H2&module=win32kfull&name=-InitTimerPowerSaving%40%40YAXXZ.c&mode=side-by-side) comparision (the value name didn't change).
 
 ### When TimerPowerSaving Applies
 
@@ -1285,7 +1285,7 @@ It works via [`DeviceStart`](https://github.com/nohuto/decompiled-pseudocode/blo
 
 ### Build Differences
 
-Use [bin-diff](https://noverse.dev/bin-diff?left=11-23H2&right=11-24H2&module=USBAUDIO&function=RegistryGetIdleInfo.c&mode=side-by-side) for direct comparison.
+Use [diff](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-24H2&module=USBAUDIO&name=RegistryGetIdleInfo.c&mode=side-by-side) for direct comparison.
 
 23H2 (and below) has two timeout values `ConservationIdleTime`/`PerformanceIdleTime`:
 

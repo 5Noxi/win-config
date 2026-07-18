@@ -1,6 +1,6 @@
 # MMCSS Values
 
-Everything below is based on the 11-23H2 mmcss driver pseudocode (see [bin-diff](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=mmcss&function=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
+Everything below is based on the 11-23H2 mmcss driver pseudocode (see [diff](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-25H2&module=mmcss&name=CiConfigInitialize.c&mode=side-by-side) if you want to see changes on newer builds)/ WPR (`Microsoft-Windows-MMCSS` provider).
 
 > "*The Multimedia Class Scheduler service (MMCSS) enables multimedia applications to ensure that their time-sensitive processing receives prioritized access to CPU resources. This service enables multimedia applications to utilize as much of the CPU as possible without denying CPU resources to lower-priority applications.*
 >
@@ -3212,7 +3212,7 @@ if ( (ExpPoolFlags & 1) != 0 )
   KeCheckForTimer(BugCheckParameter3);
 ```
 
-[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=ntoskrnl&function=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
+[VfMiscKeInitializeTimerEx_Entry](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/VfMiscKeInitializeTimerEx_Entry.c) calls [KeCheckForTimer](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeCheckForTimer.c) for the timer object range ([only until `11-23H2`](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-25H2&module=ntoskrnl&name=KeCheckForTimer.c&mode=side-by-side), builds above use [ViMiscValidateSynchronizationObject](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/ViMiscValidateSynchronizationObject.c)).
 
 ```c
 // VfMiscKeInitializeTimerEx_Entry (23H2)
@@ -3654,7 +3654,7 @@ aRegistryMachin_240 = "\\Registry\\Machine\\System\\Select"
 
 # Game Mode
 
-Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [bin-diff](https://noverse.dev/bin-diff)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.
+Game Mode is a RM (Resource Manager) feature for a foreground process that Windows identifies as a game through `expandedResources` (or GCS data). Note that everything below is based on pseudocode (from 23H2, things might've changed in newer builds, see [diff](https://noverse.dev/diff?kind=pseudocode)) and interpretations, this isn't official documentation just a personal attempt to document how Game Mode works, mistakes may exist and feel free to correct me. I don't claim that anything below is correct nor complete, that's just how I understood the sequence of Game Mode initialization + (un)registration. I've tried to link all functions that I used, for anyone who wants to take a look for themselves.
 
 It can apply CPU set policy, GPU scheduler/budget policy, optional process priority, optional Game Mode power profile notification, global Game Mode active state, optional expanded resource extension notification. The global state is updated through `WNF_RM_GAME_MODE_ACTIVE` (`RM` prefix in `WNF_RM_GAME_MODE_ACTIVE` = '*Game Mode Resource Manager*').
 
@@ -5382,7 +5382,7 @@ These are related to (dxgmms2) scheduler [hardware queue](https://learn.microsof
 - `1` moves (offloads) all staged HW queues to the scheduler list and wakes the scheduler thread (`VidSchiWorkerThread`)
 - `2` (default) only moves queues marked with `VIDSCH_HW_QUEUE`, others get handled by `ProcessHwQueue`
 
-`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in [23H2 and previous builds](https://noverse.dev/bin-diff?left=11-23H2&right=11-25H2&module=dxgmms2&function=VidSchiReadGlobalConfiguration.c&mode=side-by-side), means it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
+`ProcessHwQueues` has no `HwSchThreadOffloadMode`/`KLOCK_QUEUE_HANDLE` argument in [23H2 and previous builds](https://noverse.dev/diff?kind=pseudocode&left=11-23H2&right=11-25H2&module=dxgmms2&name=VidSchiReadGlobalConfiguration.c&mode=side-by-side), means it's very similar to the "other values" part of `HwSchThreadOffloadMode`.
 
 ```c
 // HwQueueStagingList::ProcessHwQueues
