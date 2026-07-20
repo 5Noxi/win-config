@@ -2763,8 +2763,8 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ClearTempFiles" = ?;
     "TempFileDirectory" = ?;
     "ExcludeFromKnownDlls" = ?; // REG_MULTI_SZ
-    "BackgroundLoadKnownDlls" = ?;
-    "DisableWpbtExecution" = ?; // REG_DWORD
+    "BackgroundLoadKnownDlls" = 0;
+    "DisableWpbtExecution" = 0; // REG_DWORD (bool), https://noverse.dev/docs/win-config/security/disable-wpbt/
     "RaiseExceptionOnPossibleDeadlock" = ?;
     "ResourcePolicies" = ?;
     "SafeDllSearchMode" = ?; // https://learn.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order#standard-search-order-for-unpackaged-apps
