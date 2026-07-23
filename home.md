@@ -13,7 +13,7 @@ All tool settings can be changed via registry or the gear on the top left, these
 // Search filter - note that enabling these will increase search time
 reg add "HKCU\Software\Noverse" /v IncludeValueNames /t REG_DWORD /d 1 /f // Includes value (registry) names which would get set by a option
 reg add "HKCU\Software\Noverse" /v IncludeTextContent /t REG_DWORD /d 1 /f // Includes markdown content (option description)
-reg add "HKCU\Software\Noverse" /v IncludeSuboptionNames /t REG_DWORD /d 1 f // Includes option names from 'Suboptions for customization' part
+reg add "HKCU\Software\Noverse" /v IncludeSuboptionNames /t REG_DWORD /d 1 /f // Includes option names from 'Suboptions for customization' part
 
 // Maximum of 10000, minimum of 100 (not recommended). Please increase it if you write slowly
 reg add "HKCU\Software\Noverse" /v SearchDelayMs /t REG_DWORD /d 1000 /f
