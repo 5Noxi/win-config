@@ -6970,7 +6970,7 @@ Note that this doesn't show default states, instead it shows several options and
     "\\260000C3"; "Element" = 01; // REG_BINARY, onetimeadvancedoptions = true, false = 00 - Controls whether the system boots to the legacy menu (F8 menu) on the next boot.
     "\\260000C4"; "Element" = 01; // REG_BINARY, onetimeoptionsedit = true, false = 00
     "\\260000B0"; "Element" = 01; // REG_BINARY, ems = true, false = 00 - Indicates whether EMS should be enabled in the kernel.
-    "\\260000A5"; "Element" = 01; // REG_BINARY, disabledynamictick = true, false = 00
+    "\\260000A5"; "Element" = 01; // REG_BINARY, disabledynamictick = true, false = 00 - https://noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason
     "\\260000A4"; "Element" = 01; // REG_BINARY, useplatformtick = true (forces platform clock source, often HPET), false = 00
     "\\260000A3"; "Element" = 01; // REG_BINARY, forcelegacyplatform = true, false = 00 - Forces the OS to assume the presence of legacy PC devices like CMOS and keyboard controllers.
     "\\260000A2"; "Element" = 01; // REG_BINARY, useplatformclock = true (forces the use of the platform clock as the system's performance counter), false = 00
