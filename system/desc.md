@@ -1161,7 +1161,7 @@ fffff805`4591d0d4  01260cb1
 
 Most processes get their reset from the selected three entries in `PspForegroundQuantum`, but [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PspComputeQuantum.c) has two exceptions, first are processes the *Idle* priority class (not the system Idle thread) which always get `6` QU. 
 
-The other exception is for processes in a job when long + fixed is used, which select one of ten resets from `PspJobSchedulingClasses` instead of `PspForegroundQuantum`.
+The other exception is for processes in a job when long + fixed is used, which select one of ten resets from `PspJobSchedulingClasses` instead of `PspForegroundQuantum`, means as every job gets class 5 (`36QU`) during `NtCreateJobObject`, processes within jobs get the same QU as FG/BG threads, but the class can be changed via `SetInformationJobObject` (classes above `5` require `SeIncreaseBasePriorityPrivilege`).
 
 ```c
 lkd> db PspUseJobSchedulingClasses L1
