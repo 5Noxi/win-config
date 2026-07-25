@@ -674,7 +674,7 @@ if ( !v2 || !PspUseJobSchedulingClasses )
   return *((_BYTE *)&PspForegroundQuantum + (PsPrioritySeparation & (unsigned int)-(a2 != 0))); // a2 == 0 uses index 0
 ```
 
-The ms were calculated while `KeMaximumIncrement` = `2625a`/`15.625 ms` (`~5.208 ms` per QU on 23H2, `~0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
+The ms were calculated while `KeMaximumIncrement` (maximum time between clock interrupts) = `2625a`/`15.625 ms` (`~5.208 ms` per QU on 23H2, `~0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
 
 | Quantum table | Index `0` | Index `1` | Index `2` |
 | --- | ---: | ---: | ---: |
@@ -2606,10 +2606,10 @@ Everything listed below is based on personal findings, mistakes may exist.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Kernel";
-    "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold, per CPU countdown value. When it reaches 1, it's reloaded and current DPC queue depth is incremented up to DpcQueueDepth ("number of clock ticks before DpcQueueDepth is incremented if DPCs are not pending") (KeAccumulateTicks, KiInitPrcb)
+    "AdjustDpcThreshold" = 20; // KiAdjustDpcThreshold, per CPU countdown value. When it reaches 1, it's reloaded and current DPC queue depth is incremented up to DpcQueueDepth ("number of clock ticks before DpcQueueDepth is incremented if DPCs are not pending")
     "AlwaysTrackIoBoosting" = 0; // PspAlwaysTrackIoBoosting enabling forces IO-boost tracking part in PsBoostThreadIoEx
     "AmdTprLowerInterruptDelayConfig" = 0; // KiAmdTprLowerInterruptDelayConfig
-    "BoostingPeriodMultiplier" = 3; // KiNormalPriorityBoostingPeriodMultiplier clamped to 1-20 and used as multiplier in 'NormalPriority AntiStarvation' scheduling parts (KiInitializeNormalPriorityAntiStarvationPolicies, KiPrepareReadyThreadForRescheduling, KiNormalPriorityReadyScan)
+    "BoostingPeriodMultiplier" = 3; // KiNormalPriorityBoostingPeriodMultiplier clamped to 1-20 and used as multiplier in 'NormalPriority AntiStarvation' scheduling parts
     "BugCheckUnexpectedInterrupts" = 0; // KiBugCheckUnexpectedInterrupts
     "CacheAwareScheduling" = 47; // KiCacheAwareScheduling
     "CacheErrataOverride" = 0; // KiTLBCOverride
