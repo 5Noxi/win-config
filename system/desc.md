@@ -633,7 +633,7 @@ Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whene
 As everything below will reference to that function at some point, I'll quickly explain what it does:
 
 1. Reads and clamps `PsPrioritySeparation`
-2. Selects fixed/variable quantum
+2. Selects fixed/variable quantums
 3. Selects short/long table
 4. Enables/disables job scheduling class QuantumReset values (enabled if fixed+long)
 5. Goes through active processes and updates their QuantumReset values (optional)
