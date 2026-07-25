@@ -628,6 +628,16 @@ See '[CmControlVector](https://noverse.dev/docs/win-config/system/kernel-values/
 
 Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whenever you want to get/read hex/dec values.
 
+## PsChangeQuantumTable
+
+As everything below will reference to that function at some point, I'll quickly explain what it does:
+
+1. Reads and clamps `PsPrioritySeparation`
+2. Selects fixed/variable quantum
+3. Selects short/long table
+4. Enables/disables job scheduling class QuantumReset values (enabled if fixed+long)
+5. Goes through active processes and updates their QuantumReset values (optional)
+
 ## PsPrioritySeparation (`1:0`)
 
 The priority applies to dynamic priorities below the RT (real time) range and is capped at priority `15`, disabling dynamic priority boosts for a thread/process would also prevent this FG boost. The quantum unit change is obviously only visible when the variable table is used, as all three in a fixed table are the same, so changing the low bits doesn't change its quantum. [`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) clamps the field and saves it in `PsPrioritySeparation`:
@@ -918,7 +928,37 @@ This is also a practical example of "*BG (background) processes use index `0`, F
 
 ### Variable/Fixed Quantum (`3:2`)
 
-[`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) uses the variable table for `01` and the fixed table for `10`.
+[`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) uses the variable table for `01` and the fixed table for `10`. You can imagine the difference between them like that ([process.c](https://doxygen.reactos.org/d2/d9f/ntoskrnl_2ps_2process_8c_source.html#l00031)):
+
+```c
+/* Fixed quantum table */
+CHAR PspFixedQuantums[6] =
+{
+    /* Short quantums */
+    3 * 6, /* Level 1 */
+    3 * 6, /* Level 2 */
+    3 * 6, /* Level 3 */
+ 
+    /* Long quantums */
+    6 * 6, /* Level 1 */
+    6 * 6, /* Level 2 */
+    6 * 6  /* Level 3 */
+};
+ 
+/* Variable quantum table */
+CHAR PspVariableQuantums[6] =
+{
+    /* Short quantums */
+    1 * 6, /* Level 1 */
+    2 * 6, /* Level 2 */
+    3 * 6, /* Level 3 */
+ 
+    /* Long quantums */
+    2 * 6, /* Level 1 */
+    4 * 6, /* Level 2 */
+    6 * 6  /* Level 3 */
+};
+```
 
 | Bits `3:2` | Result |
 | --- | --- |
@@ -1021,13 +1061,22 @@ fffff802`6471d1ec  00000000 // FALSE
 ```
 
 ```c
-// ntddk.h
+// mmsup.c (ReactOS)
 
-NTKERNELAPI
 BOOLEAN
-MmIsThisAnNtAsSystem (
-    VOID
-    );
+NTAPI
+MmIsThisAnNtAsSystem(VOID)
+{
+    /* Return if this is a server system */
+    return MmProductType & 0xFF;
+}
+```
+```c
+// mminit.c
+
+/* These values store the type of system this is (small, med, large) and if server */
+ULONG MmProductType;
+MM_SYSTEMSIZE MmSystemSize;
 ```
 
 ### Quantum Units (23H2)
@@ -1110,14 +1159,72 @@ fffff805`4591d0d4  01260cb1
 
 #### Quantum Exceptions
 
-Most processes get their reset from the selected three entries in `PspForegroundQuantum`, but [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PspComputeQuantum.c) has two exceptions, first are processes the *Idle* priority class (not the system Idle thread) which always get `6` QU. The other exception is for processes in a job when long + fixed is used, which select one of ten resets from `PspJobSchedulingClasses` instead of `PspForegroundQuantum`.
+Most processes get their reset from the selected three entries in `PspForegroundQuantum`, but [`PspComputeQuantum`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PspComputeQuantum.c) has two exceptions, first are processes the *Idle* priority class (not the system Idle thread) which always get `6` QU. 
+
+The other exception is for processes in a job when long + fixed is used, which select one of ten resets from `PspJobSchedulingClasses` instead of `PspForegroundQuantum`.
 
 ```c
 lkd> db PspUseJobSchedulingClasses L1
-fffff805`45954a07  01                                               .
+fffff805`45954a07  01                                               . // TRUE if long + fixed
 
 lkd> db PspJobSchedulingClasses La
 fffff805`45677c48  06 0c 12 18 1e 24 2a 30-36 3c                    .....$*06< // 6, 12, 18, 24, 30, 36, 42, 48, 54, 60 QU
+```
+
+ReactOS [process.c](https://doxygen.reactos.org/d2/d9f/ntoskrnl_2ps_2process_8c_source.html#l00286) also shows these parts clearly:
+
+```c
+/* Check if we're using long fixed quantums */
+if (QuantumTable == &PspFixedQuantums[3])
+{
+    /* Use Job scheduling classes */
+      PspUseJobSchedulingClasses = TRUE;
+}
+else
+{
+    /* Otherwise, we don't */
+    PspUseJobSchedulingClasses = FALSE;
+}
+```
+```c
+/* Make sure that the process isn't idle */
+if (Process->PriorityClass != PROCESS_PRIORITY_CLASS_IDLE)
+{
+    /* Does the process have a job? */
+    if ((Process->Job) && (PspUseJobSchedulingClasses))
+    {
+        /* Use job quantum */
+        Quantum = PspJobSchedulingClasses[Process->Job->SchedulingClass];
+    }
+    else
+    {
+        /* Use calculated quantum */
+        Quantum = PspForegroundQuantum[i];
+    }
+}
+else
+{
+    /* Process is idle, use default quantum */
+    Quantum = 6;
+}
+```
+
+`PspJobSchedulingClasses` definition:
+
+```c
+CHAR PspJobSchedulingClasses[PSP_JOB_SCHEDULING_CLASSES] =
+{
+    1 * 6, // class 0: 6 QU = 0x06
+    2 * 6, // class 1: 12 QU = 0x0C
+    3 * 6, // class 2: 18 QU = 0x12
+    4 * 6, // class 3: 24 QU = 0x18
+    5 * 6, // class 4: 30 QU = 0x1E
+    6 * 6, // class 5: 36 QU = 0x24 (default)
+    7 * 6, // class 6: 42 QU = 0x2A
+    8 * 6, // class 7: 48 QU = 0x30
+    9 * 6, // class 8: 54 QU = 0x36
+    10 * 6 // class 9: 60 QU = 0x3C
+};
 ```
 
 ### ShortThreadQuantum (24H2)
