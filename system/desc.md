@@ -267,11 +267,11 @@ else
 }
 ```
 
-[`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CsInitialize.c) allocates the NDIS work item and opens `\Device\Ndis` only when the value isn't `0xFFFFFFFF` and `SystemResponsiveness != 100`.
+[`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CsInitialize.c) allocates the NDIS work item and opens `\Device\Ndis` only when the value isn't `4294967295` and `SystemResponsiveness != 100`.
 
 ### Throttle State
 
-Only scheduled threads whose task use a `Scheduling Category` of `Medium` or `High` are included in `CiScheduledThreadCount`. [`CiThreadIncrementScheduledCount`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiThreadIncrementScheduledCount.c) and [`CiThreadDecrementScheduledCount`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiThreadDecrementScheduledCount.c) update this count and call [`CiNdisUpdateThrottleState`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisUpdateThrottleState.c) when it changes from `0` to `1`/from `1` to `0`. When the work item runs, [`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisThrottle.c) sends `NetworkThrottlingIndex` when the count is nonzero, or `0xFFFFFFFF` when the count is zero.
+Only scheduled threads whose task use a `Scheduling Category` of `Medium` or `High` are included in `CiScheduledThreadCount`. [`CiThreadIncrementScheduledCount`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiThreadIncrementScheduledCount.c) and [`CiThreadDecrementScheduledCount`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiThreadDecrementScheduledCount.c) update this count and call [`CiNdisUpdateThrottleState`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisUpdateThrottleState.c) when it changes from `0` to `1`/from `1` to `0`. When the work item runs, [`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisThrottle.c) sends `NetworkThrottlingIndex` when the count is nonzero, or `4294967295` when the count is zero.
 
 [`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisThrottle.c) sends the request to the previously opened `\Device\Ndis` handle using [`ZwDeviceIoControlFile`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-zwdeviceiocontrolfile).
 
@@ -309,12 +309,12 @@ When the IOCTL succeeds, `CiNdisThrottledDown` records whether the MMCSS maximum
 
 [`ndisHandlePnPRequest`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisHandlePnPRequest@@_Y2PAGENPNP@@AJPEAU_IRP@@@Z.c) receives IOCTL `0x170040`, which requires 16 input bytes, `Type = 1`, `Size = 16`, and a nonzero `MaxNblsToIndicate` (`Period` must also be nonzero unless `MaxNblsToIndicate = 0xFFFFFFFF`). That input is then passed to [`ndisConfigurePeriodicReceives`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisConfigurePeriodicReceives@@YAXPEAU_NDIS_SET_RECEIVE_RATE@@@Z.c).
 
-When MMCSS sends `1-70`, NDIS stores it as the MMCSS maximum and saves `Period = -1` (NDIS headers define `0xFFFFFFFF` as `NDIS_INDICATE_ALL_NBLS`, means when using it, MMCSS maximum is set to `0xFFFFFFFF` and `Period` gets cleared).
+When MMCSS sends `1-70`, NDIS stores it as the MMCSS maximum and saves `Period = -1` (NDIS headers define `4294967295` as `NDIS_INDICATE_ALL_NBLS`, means when using it, MMCSS maximum is set to `4294967295` and `Period` gets cleared).
 
 The NDIS maximum starts at 64 NBLs as [`ndisMInitializeAdapter`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisMInitializeAdapter@@YAHPEAU_NDIS_M_DRIVER_BLOCK@@PEAU_NDIS_MINIPORT_BLOCK@@PEAU_NDIS_WRAPPE.c) basically hard codes every per processor table index to `6` (`64`), which can also be read:
 
 ```c
-lkd> dq ffffb605cc5fa030+ce0 L1
+lkd> dq ffffb605cc5fa030+ce0 L1 // _NDIS_MINIPORT_BLOCK PeriodicReceivesNblCountIndex
 ffffb605`cc5fad10  ffffcc00`eb341170
 lkd> dd ffffcc00eb341170 L1
 ffffcc00`eb341170  00000006 // processor 0 RST index 6 = 64 NBLs
@@ -339,7 +339,7 @@ fffff801`78dbb6e0  00000010 00000020 00000040 00000080 // 16, 32, 64, 128
 fffff801`78dbb6f0  00000100 00000200 00000400 // 256, 512, 1024
 ```
 
-[`ndisMiniportDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisMiniportDpc.c) passes the result to an miniport as `MaxNblsToIndicate` in [`NDIS_RECEIVE_THROTTLE_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ndis/ns-ndis-_ndis_receive_throttle_parameters), an MMCSS maximum of `10` would limit the values (`0xFFFFFFFF` obviously doesn't):
+[`ndisMiniportDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisMiniportDpc.c) passes the result to an miniport as `MaxNblsToIndicate` in [`NDIS_RECEIVE_THROTTLE_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ndis/ns-ndis-_ndis_receive_throttle_parameters), an MMCSS maximum of `10` would limit the values (`4294967295` obviously doesn't):
 
 ```c
 RST values: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
@@ -354,7 +354,7 @@ Note that this only works whenever your miniport supports NDIS [RST (receive sid
 >
 > — Microsoft, [Receive Side Throttle in NDIS 6.20](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/receive-side-throttle-in-ndis-6-20)
 
-This also explains why NDIS DPC execution times can be higher with `0xFFFFFFFF`, as with `10`, the miniport is asked to indicate no more than 10 NBLs during one DPC call ([`ndisInterruptDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisInterruptDpc.c) also queues the miniport interrupt DPC callback for later), and with `0xFFFFFFFF`, NDIS may allow more NBLs, and could run the callback before [`ndisInterruptDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisInterruptDpc.c) call returns, causing that work to be included in the execution time of that DPC.
+This also explains why `ndis.sys` DPC execution times can be higher with `4294967295`, as with a maximum of `10` (and RST being supported), [`ndisInterruptDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisInterruptDpc.c) adds the miniport callback to a per processor NDIS receive worker queue and returns. [`ndisReceiveWorkerThread`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisReceiveWorkerThread.c) would then later run the callback at `DISPATCH_LEVEL` with `MaxNblsToIndicate = 10`. Using `4294967295`, would cause NDIS to remove the MMCSS maximum and may run the callback before the current `ndisInterruptDpc` returns, means the callback work is included in that DPCs measured execution time.
 
 ### WinDbg
 
@@ -8903,7 +8903,7 @@ Causes hung apps to get automatically get terminated, making the 'Hung program' 
 
 ### Registry Values
 
-Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000` ("*The SCM’s timeout value in milliseconds resides in the HKLM\SYSTEM\CurrentControlSet\Control\WaitToKillServiceTimeout registry value, and it defaults to 20 seconds.*"), while the value exists by default on W11 with the data of `5000`, when looking at the win32kbase driver it also shows a default of `5000`.
+Windows Internals says that the default of `WaitToKillServiceTimeout` is `20000` ("*The SCM's timeout value in milliseconds resides in the HKLM\SYSTEM\CurrentControlSet\Control\WaitToKillServiceTimeout registry value, and it defaults to 20 seconds.*"), while the value exists by default on W11 with the data of `5000`, when looking at the win32kbase driver it also shows a default of `5000`.
 
 ```c
 "HKLM\\SYSTEM\\CurrentControlSet\\Control";
