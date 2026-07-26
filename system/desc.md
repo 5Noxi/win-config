@@ -448,7 +448,7 @@ if ( !CiSchedulerDisallowLazyMode )
 
 ### Scheduler_Sleep Reasons
 
-| Reason | Meaning | ETW duration / actual wait |
+| Reason | Meaning | Duration |
 | --- | --- | --- |
 | `Realtime` | boosted sleep | boosted duration `SchedulerPeriod - (SchedulerPeriod * SystemResponsiveness / 100)` |
 | `SleepResponsiveness` | exhausted sleep | exhausted duration `SchedulerPeriod * SystemResponsiveness / 100` |
