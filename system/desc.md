@@ -49,7 +49,7 @@ All values below are read via [`CiConfigReadDWORD`](https://github.com/nohuto/de
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile";
     "SystemResponsiveness" = 100; // clamped to 10-100, 100 disables MMCSS, <10 or >100 = 20
-    "NetworkThrottlingIndex" = 10; // 0 = 1, 1-70 stay, 71-0xFFFFFFFE = 70, 0xFFFFFFFF disables NDIS throttle
+    "NetworkThrottlingIndex" = 10; // 0 = 1, 1-70 stay, 71-0xFFFFFFFE = 70, 0xFFFFFFFF disables MMCSS's override
     "NoLazyMode" = 0; // bool
     "IdleDetectionCycles" = 2; // range 1-31
     "LazyModeTimeout" = 1000000; // 0 replaced with 1000000, no upper clamp?
@@ -123,7 +123,7 @@ Then use the `DriverStart` address + RVA:
 
 ```c
 lkd> dd 0xfffff801`890e82F8 L1
-fffff800`3aee82f8  0000000a // 10
+fffff801`3aee82f8  0000000a // 10
 ```
 
 ## SystemResponsiveness
@@ -181,18 +181,76 @@ CiSystemResponsiveness = 10 * (value / 10);
 
 ## NetworkThrottlingIndex
 
-When at least one scheduled MMCSS thread (thread that registers with MMCSS task) exists, [`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiNdisThrottle.c) sends the value to NDIS. When the last scheduled MMCSS thread leaves, it would send `-1` to remove the throttle again.
+`NetworkThrottlingIndex` = maximum number of received [`NET_BUFFER_LIST`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer_list) structures (NBLs) that MMCSS can ask NDIS to allow a miniport to indicate in one receive DPC (runs after network interrupt). Note that DPCs run at `DISPATCH_LEVEL` (higher than threads, means long DPCs harm performance, by blocking threads, see [interrupt-request-levels](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)).
 
-> "*MMCSS functionality does not stop at simple priority boosting, however. Because of the nature of network drivers on Windows and the NDIS stack, DPCs are quite common mechanisms for delaying work after an interrupt has been received from the network card. Because DPCs run at an IRQL level higher than user-mode code, long-running network card driver code can still interrupt media playback—for example, during network transfers or when playing a game.*
->
-> *MMCSS sends a special command to the network stack, telling it to throttle network packets during the duration of the media playback. This throttling is designed to maximize playback performance at the cost of some small loss in network throughput (which would not be noticeable for network operations usually performed during playback, such as playing an online game).*"
->
-> — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+![](https://github.com/nohuto/windbg-notes/blob/main/images/irql-levels.png?raw=true)
+
+Miniport drivers use [`NdisMIndicateReceiveNetBufferLists`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/NdisMIndicateReceiveNetBufferLists.c) to indicate received network data. Its [`NetBufferList` argument](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ndis/nf-ndis-ndismindicatereceivenetbufferlists) points to a linked list of NBLs, and `NumberOfNetBufferLists` gives the number of NBLs in that list. Each [NBL contains a linked list of `NET_BUFFER` structures](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/net-buffer-list-structure). Each [`NET_BUFFER`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer) represents one network packet, with its data stored in buffers.
+
+```c
+union _SLIST_HEADER// Size=0x10 (Id=223)
+{
+    unsigned long long Alignment;// Offset=0x0 Size=0x8
+    unsigned long long Region;// Offset=0x8 Size=0x8
+    struct <unnamed-type-HeaderX64>// Size=0x10 (Id=13423)
+    {
+        unsigned long long Depth:16;// Offset=0x0 Size=0x8 BitOffset=0x0 BitSize=0x10
+        unsigned long long Sequence:48;// Offset=0x0 Size=0x8 BitOffset=0x10 BitSize=0x30
+        unsigned long long Reserved:4;// Offset=0x8 Size=0x8 BitOffset=0x0 BitSize=0x4
+        unsigned long long NextEntry:60;// Offset=0x8 Size=0x8 BitOffset=0x4 BitSize=0x3c
+    };
+    struct _SLIST_HEADER::<unnamed-type-HeaderX64> HeaderX64;// Offset=0x0 Size=0x10
+};
+
+struct _NET_BUFFER_LIST_DATA// Size=0x10 (Id=964)
+{
+    struct _NET_BUFFER_LIST * Next;// Offset=0x0 Size=0x8
+    struct _NET_BUFFER * FirstNetBuffer;// Offset=0x8 Size=0x8
+};
+
+union _NET_BUFFER_LIST_HEADER// Size=0x10 (Id=933)
+{
+    struct _NET_BUFFER_LIST_DATA NetBufferListData;// Offset=0x0 Size=0x10, a NET_BUFFER_LIST_DATA structure
+    union _SLIST_HEADER Link;// Offset=0x0 Size=0x10, reserved for NDIS
+};
+
+struct _NET_BUFFER_LIST// Size=0x180 (Id=164)
+{
+    union // Size=0x10 (Id=0)
+    {
+        struct _NET_BUFFER_LIST * Next;// Offset=0x0 Size=0x8, the next NET_BUFFER_LIST structure in the chain
+        struct _NET_BUFFER * FirstNetBuffer;// Offset=0x8 Size=0x8, the first NET_BUFFER on this NET_BUFFER_LIST
+        union _SLIST_HEADER Link;// Offset=0x0 Size=0x10, reserved for NDIS
+        union _NET_BUFFER_LIST_HEADER NetBufferListHeader;// Offset=0x0 Size=0x10, a NET_BUFFER_LIST_HEADER structure
+    };
+    struct _NET_BUFFER_LIST_CONTEXT * Context;// Offset=0x10 Size=0x8
+    struct _NET_BUFFER_LIST * ParentNetBufferList;// Offset=0x18 Size=0x8
+    void * NdisPoolHandle;// Offset=0x20 Size=0x8
+    void * NdisReserved[2];// Offset=0x30 Size=0x10
+    void * ProtocolReserved[4];// Offset=0x40 Size=0x20
+    void * MiniportReserved[2];// Offset=0x60 Size=0x10
+    void * Scratch;// Offset=0x70 Size=0x8
+    void * SourceHandle;// Offset=0x78 Size=0x8
+    unsigned long NblFlags;// Offset=0x80 Size=0x4
+    long ChildRefCount;// Offset=0x84 Size=0x4
+    unsigned long Flags;// Offset=0x88 Size=0x4
+    union // Size=0x4 (Id=0)
+    {
+        int Status;// Offset=0x8c Size=0x4
+        unsigned long NdisReserved2;// Offset=0x8c Size=0x4
+    };
+    void * NetBufferListInfo[29];// Offset=0x90 Size=0xe8
+};
+```
+
+See [diff](https://noverse.dev/diff?kind=type&left=11-23H2&right=11-24H2&module=ndis&name=_NET_BUFFER_LIST&mode=side-by-side) whenever you want to compare the type layout with different NDIS build versions, or to look at other layouts.
+
+### CiConfigInitialize
 
 ```c
 // CiConfigInitialize
-v3 = CiConfigReadDWORD(KeyHandle, 0x1C00110A0LL, 10LL); // NetworkThrottlingIndex, fallback = 10
-LODWORD(WPP_MAIN_CB.Dpc.DpcData) = v3;
+v3 = CiConfigReadDWORD(KeyHandle, 0x1C00110A0LL, 10LL);
+LODWORD(WPP_MAIN_CB.Dpc.DpcData) = v3; // 1-70 & 0xFFFFFFFF stay unchanged
 v4 = v3;
 if ( v3 )
 {
@@ -209,23 +267,168 @@ else
 }
 ```
 
-Note that [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c) only opens the NDIS part when the value isn't `-1` (`0xFFFFFFFF`) and MMCSS wasn't disabled by `SystemResponsiveness == 100`.
+[`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CsInitialize.c) allocates the NDIS work item and opens `\Device\Ndis` only when the value isn't `0xFFFFFFFF` and `SystemResponsiveness != 100`.
+
+### Throttle State
+
+Only scheduled threads whose task use a `Scheduling Category` of `Medium` or `High` are included in `CiScheduledThreadCount`. [`CiThreadIncrementScheduledCount`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiThreadIncrementScheduledCount.c) and [`CiThreadDecrementScheduledCount`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiThreadDecrementScheduledCount.c) update this count and call [`CiNdisUpdateThrottleState`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisUpdateThrottleState.c) when it changes from `0` to `1`/from `1` to `0`. When the work item runs, [`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisThrottle.c) sends `NetworkThrottlingIndex` when the count is nonzero, or `0xFFFFFFFF` when the count is zero.
+
+[`CiNdisThrottle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/mmcss/CiNdisThrottle.c) sends the request to the previously opened `\Device\Ndis` handle using [`ZwDeviceIoControlFile`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ntddk/nf-ntddk-zwdeviceiocontrolfile).
 
 ```c
-// CsInitialize
-if ( LODWORD(WPP_MAIN_CB.Dpc.DpcData) != -1 && CiSystemResponsiveness != 100 )
-{
-  CiNdisThrottleWorkItem = IoAllocateWorkItem(CiDeviceObject);
-  if ( CiNdisThrottleWorkItem )
-    CiNdisOpenDevice();
-}
+// CiNdisThrottle
+
+v2 = ZwDeviceIoControlFile(CiNdisDeviceHandle, 0LL, 0LL, 0LL, &IoStatusBlock, 0x170040u, InputBuffer, 0x10u, 0LL, 0);
+```
+
+Using the [`CTL_CODE`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes) layout, `0x170040` would mean:
+
+```c
+CTL_CODE(
+    FILE_DEVICE_PHYSICAL_NETCARD, // device type 0x17
+    0x10, // function 0x10
+    METHOD_BUFFERED, // 0
+    FILE_ANY_ACCESS // 0
+) // 0x170040
+```
+
+Note that the `_NDIS_SET_RECEIVE_RATE` (recreated from pseudocode) type here is only used to understand the layout as public PDBs don't include it.
+
+```c
+typedef struct _NDIS_SET_RECEIVE_RATE {
+  USHORT Type; // 1
+  USHORT Size; // 16
+  ULONG  MaxNblsToIndicate; // maximum NBL count or 0xFFFFFFFF
+  LONGLONG Period; // -1
+} NDIS_SET_RECEIVE_RATE;
+```
+
+When the IOCTL succeeds, `CiNdisThrottledDown` records whether the MMCSS maximum is active.
+
+### NDIS Request
+
+[`ndisHandlePnPRequest`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisHandlePnPRequest@@_Y2PAGENPNP@@AJPEAU_IRP@@@Z.c) receives IOCTL `0x170040`, which requires 16 input bytes, `Type = 1`, `Size = 16`, and a nonzero `MaxNblsToIndicate` (`Period` must also be nonzero unless `MaxNblsToIndicate = 0xFFFFFFFF`). That input is then passed to [`ndisConfigurePeriodicReceives`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisConfigurePeriodicReceives@@YAXPEAU_NDIS_SET_RECEIVE_RATE@@@Z.c).
+
+When MMCSS sends `1-70`, NDIS stores it as the MMCSS maximum and saves `Period = -1` (NDIS headers define `0xFFFFFFFF` as `NDIS_INDICATE_ALL_NBLS`, means when using it, MMCSS maximum is set to `0xFFFFFFFF` and `Period` gets cleared).
+
+The NDIS maximum starts at 64 NBLs as [`ndisMInitializeAdapter`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisMInitializeAdapter@@YAHPEAU_NDIS_M_DRIVER_BLOCK@@PEAU_NDIS_MINIPORT_BLOCK@@PEAU_NDIS_WRAPPE.c) basically hard codes every per processor table index to `6` (`64`), which can also be read:
+
+```c
+lkd> dq ffffb605cc5fa030+ce0 L1
+ffffb605`cc5fad10  ffffcc00`eb341170
+lkd> dd ffffcc00eb341170 L1
+ffffcc00`eb341170  00000006 // processor 0 RST index 6 = 64 NBLs
+```
+
+```c
+// ndisMInitializeAdapter
+
+PerProcessorSlot = ndisAllocatePerProcessorSlot(0x527374u);
+a2->PeriodicReceivesNblCountIndex = PerProcessorSlot;
+v20 = ndisMaxNumberOfProcessors;
+for ( i = 0; i < v20; *(_DWORD *)((char *)a2->PeriodicReceivesNblCountIndex + v22) = 6 )
+  v22 = i++ << 12;
+```
+
+[`ndisPeriodicReceivesLearning`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisPeriodicReceivesLearning@@YAXPEAU_NDIS_MINIPORT_BLOCK@@KPEAT_LARGE_INTEGER@@@Z.c) can change the current processors RST index using for example the number of received NBLs, the RST values are stored in `ndis!ndisPeriodicReceivesNblCounts`:
+
+```c
+lkd> dd ndis!ndisPeriodicReceivesNblCounts Lb
+fffff801`78dbb6d0  00000001 00000002 00000004 00000008 // 1, 2, 4, 8
+fffff801`78dbb6e0  00000010 00000020 00000040 00000080 // 16, 32, 64, 128
+fffff801`78dbb6f0  00000100 00000200 00000400 // 256, 512, 1024
+```
+
+[`ndisMiniportDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisMiniportDpc.c) passes the result to an miniport as `MaxNblsToIndicate` in [`NDIS_RECEIVE_THROTTLE_PARAMETERS`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ndis/ns-ndis-_ndis_receive_throttle_parameters), an MMCSS maximum of `10` would limit the values (`0xFFFFFFFF` obviously doesn't):
+
+```c
+RST values: 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024
+With max: 1, 2, 4, 8, 10, 10, 10, 10, 10, 10, 10
+```
+
+Note that this only works whenever your miniport supports NDIS [RST (receive side throttle)](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/receive-side-throttle-in-ndis-6-20), if not, NDIS can't pass that structure to it (fallback uses [`ndisMIndicateReceiveNblsWithThrottling`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisMIndicateReceiveNblsWithThrottling@@YAXPEAXPEAU_NET_BUFFER_LIST@@KKK@Z.c), haven't looked into that yet)..
+
+> "*NDIS 6.20 introduces receive-side throttle (RST) enhancements to reduce the possibility of disruptions during media playback in multimedia applications. RST support is mandatory for NDIS 6.20 and later drivers.*
+>
+> *If an NDIS driver spends too much time at dispatch IRQ level in a deferred procedure call (DPC), it increases the scheduling latency for multimedia application threads and might cause disruptions during media playback. To improve media playback with NDIS 6.20 and later drivers, NDIS can control the number of packets that a miniport driver indicates in a receive DPC.*"
+>
+> — Microsoft, [Receive Side Throttle in NDIS 6.20](https://learn.microsoft.com/en-us/windows-hardware/drivers/network/receive-side-throttle-in-ndis-6-20)
+
+This also explains why NDIS DPC execution times can be higher with `0xFFFFFFFF`, as with `10`, the miniport is asked to indicate no more than 10 NBLs during one DPC call ([`ndisInterruptDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisInterruptDpc.c) also queues the miniport interrupt DPC callback for later), and with `0xFFFFFFFF`, NDIS may allow more NBLs, and could run the callback before [`ndisInterruptDpc`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/ndisInterruptDpc.c) call returns, causing that work to be included in the execution time of that DPC.
+
+### WinDbg
+
+#### 0xA (Active MMCSS Threads)
+
+```c
+lkd> dd mmcss!CiNetworkThrottlingIndex L1
+fffff801`867a81c0  0000000a // 10
+lkd> dd mmcss!CiScheduledThreadCount L1
+fffff801`867a8100  00000005 // 5 scheduled Medium/High (Scheduling Category) threads
+lkd> db mmcss!CiNdisThrottledDown L1
+fffff801`867a82b0  01 // MMCSS maximum is used
+lkd> db mmcss!CiNdisThrottleInProgress L1
+fffff801`867a82c0  00 // no NDIS update queued
+lkd> dq mmcss!CiNdisDeviceHandle L1
+fffff801`867a82a8  ffffffff`80001250 // open \Device\Ndis handle
+lkd> dd ndis!ndisPeriodicReceives+4 L1
+fffff801`78dd5204  0000000a // current MMCSS maximum
+lkd> dd ndis!ndisPeriodicReceives+c L1
+fffff801`78dd520c  00000000 // use the smaller of RST value & MMCSS maximum
+lkd> dq ndis!ndisPeriodicReceives+28 L1
+fffff801`78dd5228  ffffffff`ffffffff // Period = -1
+```
+
+#### 0xA (No Active MMCSS Threads)
+
+```c
+lkd> dd mmcss!CiNetworkThrottlingIndex L1
+fffff805`a92c81c0  0000000a // 10
+lkd> dd mmcss!CiScheduledThreadCount L1
+fffff805`a92c8100  00000000 // no scheduled Medium/High threads
+lkd> db mmcss!CiNdisThrottledDown L1
+fffff805`a92c82b0  00 // MMCSS maximum inactive
+lkd> db mmcss!CiNdisThrottleInProgress L1
+fffff805`a92c82c0  00 // no NDIS update queued
+lkd> dq mmcss!CiNdisDeviceHandle L1
+fffff805`a92c82a8  ffffffff`80001248 // open \Device\Ndis handle
+lkd> dq mmcss!CiNdisThrottleWorkItem L1
+fffff805`a92c82c8  ffffc60c`321481e0 // NDIS update work item allocated
+lkd> dd ndis!ndisPeriodicReceives+4 L1
+fffff805`7cc65204  ffffffff // no MMCSS maximum
+lkd> dq ndis!ndisPeriodicReceives+28 L1
+fffff805`7cc65228  00000000`00000000 // Period = 0
+```
+
+#### 0xFFFFFFFF
+
+```c
+lkd> dd mmcss!CiNetworkThrottlingIndex L1
+fffff803`af4581c0  ffffffff
+lkd> dd mmcss!CiScheduledThreadCount L1
+fffff803`af458100  00000003 // 3 scheduled Medium/High threads
+lkd> db mmcss!CiNdisThrottledDown L1
+fffff803`af4582b0  00 // MMCSS maximum inactive
+lkd> db mmcss!CiNdisThrottleInProgress L1
+fffff803`af4582c0  00 // no NDIS update queued
+lkd> dq mmcss!CiNdisDeviceHandle L1
+fffff803`af4582a8  00000000`00000000 // \Device\Ndis wasn't opened
+lkd> dq mmcss!CiNdisThrottleWorkItem L1
+fffff803`af4582c8  00000000`00000000 // NDIS work item not allocated
+lkd> dd ndis!ndisPeriodicReceives+4 L1
+fffff803`855c5204  ffffffff // no MMCSS maximum
+lkd> dq ndis!ndisPeriodicReceives+28 L1
+fffff803`855c5228  00000000`00000000 // Period = 0
 ```
 
 ## NoLazyMode
 
-MMCSS samples CPU idle/starvation (`CiPotentiallyStarvedProcessors`) state and increases `CiProcessorIdleHistoryBits`, whenever the history reaches `(1 << IdleDetectionCycles) - 1` it enters lazy mode and uses `LazyModeTimeout` for lazy mode sleeps.
+Controls whether [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) does CPU idle/starvation detection and updates `CiProcessorIdleHistoryBits`, any nonzero registry value sets `CiSchedulerDisallowLazyMode` to `1`.
 
-`NoLazyMode = 1` only disables idle detection, causing `IdleDetection` & `IdleDetectionLazy` to disappear. It doesn't disable the normal boosted/exhausted sleeps (`Realtime`/`SleepResponsiveness`), `DeepSleep`, or an already set lazy state sleep (`SleepRealtimeLazy`). That's also why the `SchedulerPeriod` split is visible with `NoLazyMode = 1`, as `Realtime`/`SleepResponsiveness` use the boosted/exhausted durations (with `NoLazyMode = 0` it would show that as `IdleDetection`).
+- `NoLazyMode = 0` = MMCSS samples processor idle state and total cycle counters after its boosted sleep, when no (potentially) starved processor is found, it updates the idle history as `(history << 1 | 1) & CiSchedulerIdleCycleBitMask`. A nonzero history below the mask causes an `IdleDetection` sleep for `SchedulerPeriod`, reaching the mask sets `CiSchedulerInLazyMode` and creates `IdleDetectionLazy` sleeps for `LazyModeTimeout`.
+- `NoLazyMode = 1` = sampling/history update is skipped, configuration is read before the scheduler starts, while `CiProcessorIdleHistoryBits` and `CiSchedulerInLazyMode` are clear, so normal startup cannot enter lazy mode. Active MMCSS threads therefore use `Realtime` boosted sleep & `SleepResponsiveness` exhausted sleep (doesn't disable normal sleeps/`DeepSleep`).
+
+`SleepRealtimeLazy` isn't used with `NoLazyMode = 1`.
 
 You can see that in the picture of the [SchedulerPeriod](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section.
 
@@ -245,14 +448,16 @@ if ( !CiSchedulerDisallowLazyMode )
 
 ### Scheduler_Sleep Reasons
 
-| Reason | Meaning | Duration |
+| Reason | Meaning | ETW duration / actual wait |
 | --- | --- | --- |
 | `Realtime` | boosted sleep | boosted duration `SchedulerPeriod - (SchedulerPeriod * SystemResponsiveness / 100)` |
-| `SleepResponsiveness` | exhaused sleep | exhausted duration `SchedulerPeriod * SystemResponsiveness / 100` |
+| `SleepResponsiveness` | exhausted sleep | exhausted duration `SchedulerPeriod * SystemResponsiveness / 100` |
 | `SleepRealtimeLazy` | when `CiSchedulerInLazyMode` was already set before the normal boosted sleep | `LazyModeTimeout` |
 | `IdleDetection` | idle history exists but hasn't reached `CiSchedulerIdleCycleBitMask` | `SchedulerPeriod` |
 | `IdleDetectionLazy` | idle history reached `CiSchedulerIdleCycleBitMask` | `LazyModeTimeout` |
-| `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | `4,294,967,295` |
+| `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | ETW shows `0xFFFFFFFF`, the actual wait is unknown (`Timeout = NULL`) |
+
+For `DeepSleep`, `0xFFFFFFFF` is a kind of placeholder written into the `Scheduler_Sleep.Duration` field, [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) calls `KeWaitForSingleObject` with a null timeout and continues to sleep until a scheduler wakeup happens.
 
 ```xml
 <bitMap name="wakeupReasonMap">
@@ -281,7 +486,7 @@ if ( !CiSchedulerDisallowLazyMode )
 
 [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) compares `CiProcessorIdleHistoryBits` against `CiSchedulerIdleCycleBitMask`, so larger values need more idle detection passes before lazy mode can be entered. While the history is nonzero but still below the mask, it logs `IdleDetection` and sleeps for `SchedulerPeriod`. Once the history reaches the mask, it logs `IdleDetectionLazy` and sleeps for `LazyModeTimeout`.
 
-This can be seen in `Scheduler_Sleep` (always `IdleDetectionCycles - 1`, as `IdleDetectionLazy` is only logged on the pass where `CiProcessorIdleHistoryBits` first reaches the full mask):
+This can be seen in `Scheduler_Sleep` (usually `IdleDetectionCycles - 1`, as `IdleDetectionLazy` is only logged on the pass where `CiProcessorIdleHistoryBits` first reaches the full mask):
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/IdleDetectionCycles.png?raw=true)
 
@@ -467,6 +672,7 @@ Task keys are read only if `SystemResponsiveness != 100` as already shown above.
 - `Playback`
 - `Pro Audio`
 - `Window Manager`
+- `DisplayPostProcessing`
 
 You can see in `Thread_SetChars` (or `Thread_Join`) which task a thread registered with. I didn't see any app registering with other tasks than `Audio`/`Pro Audio` yet.
 
@@ -486,10 +692,11 @@ You can see in `Thread_SetChars` (or `Thread_Join`) which task a thread register
 | **SFIO Priority** | `REG_SZ` | The scheduled I/O priority. This value can be set to Idle, Low, Normal, or High. This value is not used. |
 
 Some additional notes:
-- `Clock Rate` range `5000-10000`, default of `10000`
+- `Clock Rate` range `5000-10000`, default of `10000` (not used anymore)
 - `Latency Sensitive` (`REG_SZ`, can be `True`/`False`) also exists (is visible in logging), but I didn't find any point where this is used
 - `Priority When Yielded` (`REG_DWORD`) range `1-19`, default of `16`
-- MS adding "not used" to `GPU Priority`/`SFIO Priority` isn't really accurate, as it's not even possible to "use" them as they don't exist in the driver
+- MS adding "not used" to `GPU Priority`/`SFIO Priority` isn't really accurate, as mmcss driver doesn't read them at all
+- `Background Only` isn't used
 
 ### Boosted/Exhausted Priorities
 
