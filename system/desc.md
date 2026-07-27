@@ -1008,6 +1008,10 @@ I'll use WPR below to capture the boost, if you're not familiar with WPA/MXA, yo
 ![](https://github.com/nohuto/win-config/blob/main/system/images/1-sep.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/2-sep.png?raw=true)
 
+#### PerfMon Example
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/perfmon-PsPrioritySeparation?raw=true)
+
 #### WrQuantumEnd CS
 
 You can also see if a context switch was caused by `WrQuantumEnd` via '*Processes and Threads - CS Reason*', but note that there've to be two threads with the same priority & processor, otherwise the thread will just get another quantum without a context switch. In the example below I've created two threads with the same priority/affinity using [CPUStress](https://github.com/zodiacon/CPUStress), but as you can see none ever needed more than its quantum in the 10sec record (FG/BG 36QU was used here).
