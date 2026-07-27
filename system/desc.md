@@ -286,7 +286,12 @@ Using the [`CTL_CODE`](https://learn.microsoft.com/en-us/windows-hardware/driver
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ioctl-bit-layout.png?raw=true)
 
 ```c
-// 0x00170040,0x17,0,16,0,0x00000040,0x1c000b54d,CiNdisThrottle,"mov     [rsp+88h+IoControlCode], 170040h; IoControlCode",1,0x170040,FULL
+// IOCTL hex = 0x00170040
+// device type = 0x17
+// access = 0
+// function = 16
+// method = 0
+// function name = CiNdisThrottle
 
 CTL_CODE(
     FILE_DEVICE_PHYSICAL_NETCARD, // device type 0x17
@@ -307,11 +312,11 @@ typedef struct _NDIS_SET_RECEIVE_RATE {
 } NDIS_SET_RECEIVE_RATE;
 ```
 
-When the IOCTL succeeds, `CiNdisThrottledDown` records whether the MMCSS maximum is active.
+When the [IOCTL](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-i-o-control-codes) succeeds, `CiNdisThrottledDown` records whether the MMCSS maximum is active.
 
 ### NDIS Request
 
-[`ndisHandlePnPRequest`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisHandlePnPRequest@@_Y2PAGENPNP@@AJPEAU_IRP@@@Z.c) receives IOCTL `0x170040`, which requires 16 input bytes, `Type = 1`, `Size = 16`, and a nonzero `MaxNblsToIndicate` (`Period` must also be nonzero unless `MaxNblsToIndicate = 0xFFFFFFFF`). That input is then passed to [`ndisConfigurePeriodicReceives`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisConfigurePeriodicReceives@@YAXPEAU_NDIS_SET_RECEIVE_RATE@@@Z.c).
+[`ndisHandlePnPRequest`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisHandlePnPRequest@@_Y2PAGENPNP@@AJPEAU_IRP@@@Z.c) receives [IOCTL](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/introduction-to-i-o-control-codes) `0x170040`, which requires 16 input bytes, `Type = 1`, `Size = 16`, and a nonzero `MaxNblsToIndicate` (`Period` must also be nonzero unless `MaxNblsToIndicate = 0xFFFFFFFF`). That input is then passed to [`ndisConfigurePeriodicReceives`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ndis/-ndisConfigurePeriodicReceives@@YAXPEAU_NDIS_SET_RECEIVE_RATE@@@Z.c).
 
 When MMCSS sends `1-70`, NDIS stores it as the MMCSS maximum and saves `Period = -1` (NDIS headers define `4294967295` as `NDIS_INDICATE_ALL_NBLS`, means when using it, MMCSS maximum is set to `4294967295` and `Period` gets cleared).
 
