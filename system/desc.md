@@ -281,9 +281,13 @@ Only scheduled threads whose task use a `Scheduling Category` of `Medium` or `Hi
 v2 = ZwDeviceIoControlFile(CiNdisDeviceHandle, 0LL, 0LL, 0LL, &IoStatusBlock, 0x170040u, InputBuffer, 0x10u, 0LL, 0);
 ```
 
-Using the [`CTL_CODE`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes) layout, `0x170040` would mean:
+Using the [`CTL_CODE`](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes) layout, `0x170040` would mean ([FILE_DEVICE_PHYSICAL_NETCARD](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/specifying-device-types), [METHOD_BUFFERED](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/buffer-descriptions-for-i-o-control-codes), [FILE_ANY_ACCESS](https://learn.microsoft.com/en-us/windows-hardware/drivers/kernel/defining-i-o-control-codes#guidance-for-setting-the-access-bits)):
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ioctl-bit-layout.png?raw=true)
 
 ```c
+// 0x00170040,0x17,0,16,0,0x00000040,0x1c000b54d,CiNdisThrottle,"mov     [rsp+88h+IoControlCode], 170040h; IoControlCode",1,0x170040,FULL
+
 CTL_CODE(
     FILE_DEVICE_PHYSICAL_NETCARD, // device type 0x17
     0x10, // function 0x10
