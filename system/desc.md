@@ -1010,7 +1010,7 @@ I'll use WPR below to capture the boost, if you're not familiar with WPA/MXA, yo
 
 #### PerfMon Example
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/perfmon-PsPrioritySeparation?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/perfmon-PsPrioritySeparation.png?raw=true)
 
 #### WrQuantumEnd CS
 
