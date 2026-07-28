@@ -991,6 +991,26 @@ lkd> dd KiSchedulerForegroundBoostDecayPolicy L1
 fffff802`4711d31c  00000000
 ```
 
+##### Force Decay
+
+Both PerfMon captures aren't the same as the ones shown in MXA, I've also noticed that the GUI thread doesn't seem to be impacted from it.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/force-decay.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/force-cpustres.png?raw=true)
+
+---
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/force-decay-perfmon.png?raw=true)
+
+##### Don't Force Decay
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/dont-force-decay.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/dont-force-cpustres.png?raw=true)
+
+---
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/dont-force-decay-perfmon.png?raw=true)
+
 ### Watching the FG Priority Boost
 
 I'll use WPR below to capture the boost, if you're not familiar with WPA/MXA, you can look at the boost live via perfmon, follow '[EXPERIMENT: Watching foreground priority boosts and decays](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)' if you want to do it that way instead.
