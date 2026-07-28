@@ -617,10 +617,10 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ComboHardwareIdV2Enabled" = 0; // REG_DWORD (bool)
     "CyclePortEnabled" = 0; // REG_DWORD (bool)
     "D3ColdReconnectTimeout" = 1000; // REG_DWORD
-    "DefaultIdleState" = 1; // REG_DWORD (bool), HUBREG_SetWinUsbIdleDefaults writes 1 when queries for DeviceIdleEnabled/DefaultIdleState/DeviceIdleIgnoreWakeEnable all fail
-    "DefaultIdleTimeout" = 5000/30000; // REG_DWORD, the USBCCID UM driver uses 5sec, devices that support MTP use 30sec? (UsbccidDriver, wpdmtp)
-    "DeviceIdleEnabled" = 1; // REG_DWORD (bool), ^
-    "DeviceIdleIgnoreWakeEnable" = 1; // REG_DWORD (bool), ^
+    "DefaultIdleState" = 1; // REG_DWORD (bool), "This registry value sets the default value of the AUTO_SUSPEND power policy setting. This registry key is used to enable or disable selective suspend when a handle isn't open to the device. A value of zero or the absence of this value indicates that by default, the device isn't suspended when idle. The device be allowed to suspend when idle only when the AUTO_SUSPEND power policy is enabled. A nonzero value indicates that by default the device can be suspended when idle. This value is ignored if DeviceIdleEnabled isn't set."
+    "DefaultIdleTimeout" = 5000/30000; // REG_DWORD, the USBCCID UM driver uses 5sec, devices that support MTP use 30sec? (UsbccidDriver, wpdmtp) "This registry value sets the default state of the SUSPEND_DELAY power policy setting. The value indicates the amount of time in milliseconds to wait before determining that a device is idle."
+    "DeviceIdleEnabled" = 1; // REG_DWORD (bool), ^ "This registry value indicates whether the device is capable of being powered down when idle (Selective Suspend)."
+    "DeviceIdleIgnoreWakeEnable" = 1; // REG_DWORD (bool), ^ "When set to a nonzero value, it suspends the device even if it doesn't support RemoteWake."
     "DeviceInterfaceGUID" = "{52783fc2-0179-4eca-bb46-128bba61975e}"; // REG_SZ, written if missing by HUBREG_SetWinUsbIdleDefaults, WinUSB_GetRegParams uses it as fallback when DeviceInterfaceGUIDs is unavailable
     "DeviceInterfaceGUIDs" = "{...}"; // REG_MULTI_SZ, WinUSB example: {F72FE0D4-CBCB-407d-8814-9ED673D0DD6B}
     "DevicePowerUpOnS0Entry" = 1; // REG_DWORD, when 1 = "Always enter D0 upon resume from sleep regardless of IdleInWorkingState of its power policy owner"
@@ -645,11 +645,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "SessionSecurityEnabled" = ?; // REG_DWORD (bool)
     "SuppressInputInCS" = 0; // REG_DWORD (bool), clears WakeScreenOnInputSupport when enabled?
     "SystemInputSuppressionEnabled" = 1; // REG_DWORD (bool)
-    "SystemWakeEnabled" = 1; // REG_DWORD (bool), INF default (UsbccidDriver.inf, wudfusbcciddriver.inf)
+    "SystemWakeEnabled" = 1; // REG_DWORD (bool), "This value indicates whether the device should be allowed to wake the system from a low power state. A value of zero, or the absence of this value indicates that the device isn't allowed to wake the system. To allow a device to wake the system, set SystemWakeEnabled to a nonzero value. A check box in the device Properties page is automatically enabled so that the user can override the setting."
     "TestIdleMonitorDim" = 1000; // REG_DWORD
     "TestIdleTimeoutNoHandles" = 1000; // REG_DWORD
     "TestIdleTimeoutNoHandlesInitial" = 5000; // REG_DWORD
-    "UserSetDeviceIdleEnabled" = 1; // REG_DWORD (bool) "this setting will add a power management page to allow a user to enable/disable USB SS", related to DeviceIdleEnabled
+    "UserSetDeviceIdleEnabled" = 1; // REG_DWORD (bool) "This registry value indicates whether a check box should be enabled in the device Properties page that allows a user to override the idle defaults. When UserSetDeviceIdleEnabled is set to a nonzero value the check box is enabled and the user can disable powering down the device when idle. A value of zero, or the absence of this value indicates that the check box isn't enabled. The UserSetDeviceIdleEnabled is ignored if DeviceIdleEnabled isn't set."
     "VendorRevision" = ; // REG_DWORD
     "WakeScreenOnInputSupport" = 1; // REG_DWORD (bool)
     "WakeScreenOnInputTimeout" = ?; // REG_DWORD, queried only when WakeScreenOnInputSupport is enabled
@@ -715,6 +715,10 @@ Everything listed below is based on personal findings, mistakes may exist.
     "VScrollUsageOverride" = ?;
     "WakeSystemOnConnect" = ?; // REG_DWORD (bool)
     "WheelScalingFactor" = ?;
+    
+    "IdleUsbSelectiveSuspendPolicy" = ?; // https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-driver-installation-based-on-compatible-ids#configure-selective-suspend-for-usbsersys
+                                         // 0x00000001 	Enter selective suspend when idle, that is, when there are no active data transfers to or from the device.
+                                         // 0x00000000 	Enter selective suspend only when there are no open handles to the device.
 
 "HKLM\\SYSTEM\\CurrentControlSet\\Enum\\<enumerator>\\<deviceID>\\<instanceID>\\Device Parameters\\e5b3b5ac-9725-4f78-963f-03dfb1d828c7";
     "BusDataLinkSettleTime" = ?; // REG_DWORD, accepted if <= 150, larger values are ignored
