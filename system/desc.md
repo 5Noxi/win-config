@@ -984,7 +984,7 @@ INIT:0000000140BA67F0                 dq offset KiSchedulerForegroundBoostDecayP
 INIT:0000000140BA67F8                 dq 3 dup(0)
 ```
 
-Default is `0`, which keeps the boost while the process is in FG:
+Default is `0` ([compare PE init value](https://noverse.dev/diff?kind=globals&left=11-23H2&right=11-24H2&module=ntoskrnl&name=KiSchedulerForegroundBoostDecayPolicy&mode=side-by-side)), which keeps the boost while the process is in FG:
 
 ```c
 lkd> dd KiSchedulerForegroundBoostDecayPolicy L1
