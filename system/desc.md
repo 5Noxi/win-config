@@ -993,7 +993,7 @@ fffff802`4711d31c  00000000
 
 ##### Force Decay
 
-Both PerfMon captures aren't the same as the ones shown in MXA, I've also noticed that the GUI thread doesn't seem to be impacted from it.
+Both PerfMon captures aren't the same as the ones shown in MXA, I've also noticed that the GUI thread doesn't seem to be impacted from it. As written above, the scheduler applies the boost of `PsPrioritySeparation` again, if its still in FG (CPUSTRES was in FG all the time here).
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/force-decay.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/force-cpustres.png?raw=true)
