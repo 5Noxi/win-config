@@ -284,6 +284,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dry-Landscape.png?raw=true)
 
+### Earth Gruvbox
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Earth-Gruvbox.png?raw=true)
+
 ### Fall
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/fall.png?raw=true)
@@ -303,6 +307,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 ### Flowers Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
+
+### Girl Clouds
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Girl-Clouds.png?raw=true)
 
 ### Golden Hour
 
