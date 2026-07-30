@@ -49,7 +49,7 @@ All values below are read via [`CiConfigReadDWORD`](https://github.com/nohuto/de
 ```c
 "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile";
     "SystemResponsiveness" = 100; // clamped to 10-100, 100 disables MMCSS, <10 or >100 = 20
-    "NetworkThrottlingIndex" = 10; // 0 = 1, 1-70 stay, 71-0xFFFFFFFE = 70, 0xFFFFFFFF disables MMCSS's override
+    "NetworkThrottlingIndex" = 10; // 0 = 1, 1-70 stay, 71-0xFFFFFFFE = 70, 0xFFFFFFFF disables MMCSS's override (NDIS_INDICATE_ALL_NBLS)
     "NoLazyMode" = 0; // bool
     "IdleDetectionCycles" = 2; // range 1-31
     "LazyModeTimeout" = 1000000; // 0 replaced with 1000000, no upper clamp?
