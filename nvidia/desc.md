@@ -246,7 +246,7 @@ More information - [discord notes](https://discord.com/channels/8368702607150285
 
 ## 3D Settings > Configure Surround, PhysX
 
-Select your GPU (unless the physics workload of your game which uses PhysX is small, auto detect is usually the same as GPU anyway).
+Select your GPU if supported (unless the physics workload of your game which uses PhysX is small, auto detect is usually the same as GPU anyway).
 
 "NVIDIA PhysX is a powerful physics engine that can utilize GPU acceleration to provide amazing real-time physics effects. PhysX GPU acceleration is available on GeForce 8 series and later GPUs. In order to enable PhysX GPU acceleration, all the GPUs in your system must be PhysX-capable."
 
