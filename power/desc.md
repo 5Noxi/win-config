@@ -336,7 +336,7 @@ USB mouse & keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint
 >
 > — Microsoft, [USB_ENDPOINT_DESCRIPTOR structure](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbspec/ns-usbspec-_usb_endpoint_descriptor#members)
 
-So IMOD usually has no effect on the polling interval here, as the 50 us counter is usually already at zero:
+So IMOD usually has no effect on the polling interval here, as the 50 us counter is usually already at zero, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example.
 
 | Rate | Polling Interval | Isolated endpoint with 50 us IMOD |
 | --- | ---: | --- |
