@@ -319,17 +319,16 @@ def program_imod(
     for index, address, current in zip(interrupters, addresses, current_values):
         current_interval = current & 0xFFFF
         counter = current >> 16
-        if current_interval == interval:
+        if no_write or current_interval == interval:
             print(f"[-] Interrupter {index}: IMODI={current_interval}, IMODC={counter} at 0x{address:016X}")
         else:
-            action = "would set" if no_write else "setting"
             print(
                 f"[+] Interrupter {index}: IMODI={current_interval}, IMODC={counter} at 0x{address:016X}, "
-                f"{action} IMODI={interval}"
+                f"setting IMODI={interval}"
             )
             pending.append((index, address, interval))
 
-    if no_write or not pending:
+    if not pending:
         return
 
     rw.write_mmio_dwords((address, value) for _, address, value in pending)
@@ -349,27 +348,33 @@ def process_controller(bdf: Bdf, rw: ExecRw, args: argparse.Namespace) -> None:
     program_imod(rw, runtime_base, selected, [imod_values[index] for index in selected], args.interval, args.no_write)
     print("[+] Done")
 
-def parse_args(argv: Sequence[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Change the xHCI IMODI")
+def help_formatter(prog: str) -> argparse.HelpFormatter:
+    return argparse.HelpFormatter(prog, max_help_position=34, width=240)
+
+def parse_args(argv: Sequence[str]) -> argparse.Namespace | None:
+    parser = argparse.ArgumentParser(formatter_class=help_formatter)
     parser.add_argument(
         "--rw-path",
+        metavar="PATH",
         type=Path,
         default=get_default_rw_path(),
         help="Path to rw.exe, downloaded under %%LOCALAPPDATA%%\\Noverse when missing",
     )
     controller = parser.add_mutually_exclusive_group()
     controller.add_argument("--bdf", type=parse_bdf, help="Hexadecimal xHCI PCI address (BB:DD.F)")
-    controller.add_argument("--xhci-index", type=parse_index, help="Select Nth xHCI controller")
+    controller.add_argument("--xhci-index", metavar="N", type=parse_index, help="Select Nth xHCI controller")
     controller.add_argument("--all", action="store_true", help="Go through every PCI xHCI controller")
     parser.add_argument(
         "--interrupter",
         "-i",
+        metavar="ID",
         type=parse_interrupter,
         action="append",
         help="Interrupter ID to process",
     )
     parser.add_argument(
         "--interval",
+        metavar="VALUE",
         type=parse_interval,
         default=0,
         help="IMODI in 250 ns units, 0 disables moderation, range 0-65535",
@@ -379,11 +384,16 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace:
     parser.add_argument("--startup", action="store_true", help="Create a highest privilege logon task")
     parser.add_argument("--delete", action="store_true", help="Delete the logon task")
     parser.add_argument("--no-exit", action="store_true", help="Keep the console open after completion")
+    if not argv:
+        parser.print_help()
+        return None
     return parser.parse_args(argv)
 
 def main(argv: Sequence[str]) -> int:
     raw_args = list(argv)
-    args = parse_args(argv)
+    args = parse_args(raw_args)
+    if args is None:
+        return 0
     if args.startup and args.delete:
         raise SystemExit("Use either --startup or --delete")
 

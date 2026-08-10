@@ -500,14 +500,18 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/interrupter-register-set.png?raw=true)
 
-### Interrupter Moderation Register (IMOD)
+### IMOD
+
+Interrupter Moderation Register.
 
 | Bit | Description |
 | --- | --- |
 | 15:0 | Interrupt Moderation Interval (IMODI) – RW. Default = '4000' (~1ms). Minimum inter-interrupt interval. The interval is specified in 250ns increments. A value of '0' disables interrupt throttling logic and interrupts shall be generated immediately if IP = '0', EHB = '0', and the Event Ring is not empty. |
 | 31:16 | Interrupt Moderation Counter (IMODC) – RW. Default = undefined. Down counter. Loaded with the IMODI value whenever IP is cleared to '0', counts down to '0', and stops. The associated interrupt shall be signaled whenever this counter is '0', the Event Ring is not empty, the IE and IP flags = '1', and EHB = '0'.<br><br>This counter may be directly written by software at any time to alter the interrupt rate. |
 
-### Host Controller Structural Parameters 1 (HCSPARAMS1)
+### HCSPARAMS1
+
+Host Controller Structural Parameters 1.
 
 | Bits | Description |
 | --- | --- |
@@ -516,7 +520,9 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 | 23:19 | Reserved. |
 | 31:24 | **Number of Ports (MaxPorts).** This field specifies the maximum Port Number value, meaning the highest numbered Port Register Set that is addressable in the Operational Register Space. Refer to Table 5-18. Valid values are in the range of `1h` to `FFh`.<br><br>The value in this field shall reflect the maximum Port Number value assigned by an xHCI Supported Protocol Capability, described in section 7.2. Software shall refer to these capabilities to identify whether a specific Port Number is valid and the protocol supported by the associated Port Register Set. |
 
-### Host Controller Structural Parameters 2 (HCSPARAMS2)
+### HCSPARAMS2
+
+Host Controller Structural Parameters 2.
 
 | Bit | Description |
 | --- | --- |
@@ -529,7 +535,9 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/HCSPARAMS2-structure.png?raw=true)
 
-### Runtime Register Space Offset Register (RTSOFF)
+### RTSOFF
+
+Runtime Register Space Offset Register.
 
 | Bit | Description |
 | --- | --- |
@@ -538,7 +546,9 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/RTSOFF-structure.png?raw=true)
 
-### USB Command Register Bit Definitions (USBCMD)
+### USBCMD
+
+USB Command Register Bit Definitions.
 
 | Bits | Description |
 | --- | --- |
@@ -559,7 +569,9 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 | 16 | VTIO Enable (VTIOE) – RW. Default = '0'. When set to '1', XHCI HW will enable its VTIO capability and begin to use the information provided via that VTIO Registers to determine its DMA-ID. When cleared to '0', XHCI HW will use the Primary DMA-ID for all accesses. This bit may be set only if VTC = '1'. |
 | 31:17 | RsvdP. |
 
-### USB Status Register Bit Definitions (USBSTS)
+### USBSTS
+
+USB Status Register Bit Definitions.
 
 | Bit | Description |
 | --- | --- |
@@ -576,14 +588,18 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 | 12 | Host Controller Error (HCE) – RO. Default = 0. 0' = No internal xHC error conditions exist and '1' = Internal xHC error condition. This flag shall be set to indicate that an internal error condition has been detected which requires software to reset and reinitialize the xHC. Refer to section 4.24.1 for more information. |
 | 31:13 | RsvdZ. |
 
-### Microframe Index Register Bit Definitions (MFINDEX)
+### MFINDEX
+
+Microframe Index Register Bit Definitions.
 
 | Bit | Description |
 | --- | --- |
 | 13:0 | Microframe Index – RO. The value in this register increments at the end of each microframe (e.g. 125us.). Bits 13:3 may be used to determine the current 1ms. Frame Index. |
 | 31:14 | RsvdZ. |
 
-### Interrupter Management Register Bit Definitions (IMAN)
+### IMAN
+
+Interrupter Management Register Bit Definitions.
 
 | Bit | Description |
 | --- | --- |
@@ -591,21 +607,27 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
 | 1 | Interrupt Enable (IE) – RW. Default = '0'. This flag specifies whether the Interrupter is capable of generating an interrupt. When this bit and the IP bit are set ('1'), the Interrupter shall generate an interrupt when the Interrupter Moderation Counter reaches '0'. If this bit is '0', then the Interrupter is prohibited from generating interrupts. |
 | 31:2 | RsvdP. |
 
-### Event Ring Segment Table Size Register Bit Definitions (ERSTSZ)
+### ERSTSZ
+
+Event Ring Segment Table Size Register Bit Definitions.
 
 | Bit | Description |
 | --- | --- |
 | 15:0 | Event Ring Segment Table Size – RW. Default = '0'. This field identifies the number of valid Event Ring Segment Table entries in the Event Ring Segment Table pointed to by the Event Ring Segment Table Base Address register. The maximum value supported by an xHC implementation for this register is defined by the ERST Max field in the HCSPARAMS2 register (5.3.4).<br><br>For Secondary Interrupters: Writing a value of '0' to this field disables the Event Ring. Any events targeted at this Event Ring when it is disabled shall result in undefined behavior of the Event Ring.<br><br>For the Primary Interrupter: Writing a value of '0' to this field shall result in undefined behavior of the Event Ring. The Primary Event Ring cannot be disabled. |
 | 31:16 | RsvdP. |
 
-### Event Ring Segment Table Base Address Register Bit Definitions (ERSTBA)
+### ERSTBA
+
+Event Ring Segment Table Base Address Register Bit Definitions.
 
 | Bit | Description |
 | --- | --- |
 | 5:0 | RsvdP. |
 | 63:6 | Event Ring Segment Table Base Address Register – RW. Default = '0'. This field defines the high order bits of the start address of the Event Ring Segment Table.<br><br>Writing this register sets the Event Ring State Machine:EREP Advancement to the Start state. Refer to Figure 4-12 for more information.<br><br>For Secondary Interrupters: This field may be modified at any time.<br><br>For the Primary Interrupter: This field shall not be modified if HCHalted (HCH) = '0'. |
 
-### Event Ring Dequeue Pointer Register Bit Definitions (ERDP)
+### ERDP
+
+Event Ring Dequeue Pointer Register Bit Definitions.
 
 | Bit | Description |
 | --- | --- |
