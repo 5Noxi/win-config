@@ -270,7 +270,7 @@ Usually, clearing `IP` (interrupt pending) loads `IMODC` from `IMODI`, `IMODC` t
 Whenever `IP` is cleared, hardware loads `IMODC = IMODI` and counts down to zero and stays there until another interrupt reloads it. This causes for example the first event after an idle to be immediate, and an event that arrives while the counter is running to get the IMOD wait time. With the interval of 50 us (Windows default), an event 10 us after the previous interrupt would wait about 40 us, an event 80 us after the previous interrupt wouldn't wait, means:
 
 ```powershell
-$ .\nv-imod --no-write
+$ .\xhci_imod --no-write
 [~] xHCI controller at PCI 02:00.0
     xHCI 1.10, register base 0x00000000FC700000
     Runtime base 0x00000000FC701000, 8 implemented, 8 initialized
@@ -354,7 +354,7 @@ USB mouse & keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint
 So IMOD usually adds no interrupt notification wait in relation to the polling interval here, as the 50 us counter is usually already at zero whenever the next service chance happens, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example, therefore I would generally keep IMOD at its default value and move your USB devices onto different xHCI controllers, so they can't use the same interrupters.
 
 | Rate | Polling Interval | Isolated endpoint with 50 us IMOD |
-| --- | ---: | --- |
+| --- | --- | --- |
 | 1000 Hz | 1000 us | Counter reached zero ~950 us earlier |
 | 8000 Hz | 125 us | Counter reached zero ~75 us earlier |
 
@@ -564,7 +564,7 @@ Runtime Register Space Offset Register.
 
 ### USBCMD
 
-USB Command Register Bit Definitions.
+USB Command Register.
 
 | Bits | Description |
 | --- | --- |
@@ -587,7 +587,7 @@ USB Command Register Bit Definitions.
 
 ### USBSTS
 
-USB Status Register Bit Definitions.
+USB Status Register.
 
 | Bit | Description |
 | --- | --- |
@@ -606,7 +606,7 @@ USB Status Register Bit Definitions.
 
 ### MFINDEX
 
-Microframe Index Register Bit Definitions.
+Microframe Index Register.
 
 | Bit | Description |
 | --- | --- |
@@ -615,7 +615,7 @@ Microframe Index Register Bit Definitions.
 
 ### IMAN
 
-Interrupter Management Register Bit Definitions.
+Interrupter Management Register.
 
 | Bit | Description |
 | --- | --- |
@@ -625,7 +625,7 @@ Interrupter Management Register Bit Definitions.
 
 ### ERSTSZ
 
-Event Ring Segment Table Size Register Bit Definitions.
+Event Ring Segment Table Size Register.
 
 | Bit | Description |
 | --- | --- |
@@ -634,7 +634,7 @@ Event Ring Segment Table Size Register Bit Definitions.
 
 ### ERSTBA
 
-Event Ring Segment Table Base Address Register Bit Definitions.
+Event Ring Segment Table Base Address Register.
 
 | Bit | Description |
 | --- | --- |
@@ -643,7 +643,7 @@ Event Ring Segment Table Base Address Register Bit Definitions.
 
 ### ERDP
 
-Event Ring Dequeue Pointer Register Bit Definitions.
+Event Ring Dequeue Pointer Register.
 
 | Bit | Description |
 | --- | --- |
@@ -651,13 +651,22 @@ Event Ring Dequeue Pointer Register Bit Definitions.
 | 3 | Event Handler Busy (EHB) - RW1C. Default = '0'. This flag shall be set to '1' when the IP bit is set to '1' and cleared to '0' by software when the Dequeue Pointer register is written. Refer to section 4.17.2 for more information. |
 | 63:4 | Event Ring Dequeue Pointer - RW. Default = '0'. This field defines the high order bits of the 64-bit address of the current Event Ring Dequeue Pointer. |
 
-## NV-IMOD
+## xhci_imod
 
-You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/assets/NV-IMOD.exe) from my repository. I packed it into one package because some systems may not have Python installed.
+Download [xhci_imod.exe](https://github.com/nohuto/win-config/blob/main/power/assets/xhci_imod.exe) and the signed [inpoutx64.sys](https://github.com/nohuto/win-config/blob/main/power/assets/inpoutx64.sys) driver (kernel level port access driver), you can also build the executeable from [source](https://github.com/nohuto/win-config/tree/main/power/assets/xhci_imod):
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+
+.\build\Release\xhci_imod.exe
+```
+
+You can also use the executable to read/write physical addresses via `read8`, `read16`, `read32`, `read64`, `write8`, `write16`, `write32`, `write64`, `readblk`, `writeblk`.
 
 | Flag | Description |
 | --- | --- |
-| `--rw-path PATH` | Override default `%LOCALAPPDATA%\Noverse\IMOD\RwPortable\Win64\Portable\Rw.exe` location |
+| `--driver PATH` | Override the colocated `inpoutx64.sys` path |
 | `--bdf BB:DD.F` | Hexadecimal xHCI PCI address (BB:DD.F) |
 | `--xhci-index N` | Select Nth xHCI controller |
 | `--all` | Go through every PCI xHCI controller |
@@ -665,19 +674,19 @@ You can download [NV-IMOD](https://github.com/nohuto/win-config/blob/main/power/
 | `--interval VALUE` | IMODI in 250 ns units, 0 disables moderation, range 0-65535 |
 | `--no-write` | Read and output without MMIO writes |
 | `--startup` | Create a highest privilege logon task |
-| `--delete` | Delete the logon task |
+| `--delete` | Delete the logon task and `%LOCALAPPDATA%\Noverse\IMOD` folder |
 | `--no-exit` | Keep the console open after completion |
-| `--verbose` | Show rw.exe commands and output |
+| `--verbose` | Show driver and controller details |
 
 Examples:
 
 ```c
 --all --no-write --no-exit // information only
---all --no-write --verbose --no-exit // rw commands/output
+--all --no-write --verbose --no-exit // driver and controller details
 --all // IMODI = 0 for all initialized Event Rings
 --all --interval 0xC800 // testing, 12.8 ms (~78 interrupts/s maximum)
 --all --startup // 0 for all controllers, creates scheduled task
---delete // removes the task
+--delete // removes the task and IMOD folder
 ```
 
 # Disable Timer Coalescing
