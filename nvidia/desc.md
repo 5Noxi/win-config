@@ -238,7 +238,6 @@ The following includes details of how the panel sets the changes and more, a lot
 
 ## 3D Settings > Manage 3D settings
 
-More information - [discord notes](https://discord.com/channels/836870260715028511/1375059420970487838/1412446705869394071)  
 - [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)
 - [Noverse-Minimal](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Minimal.nip)
 - [Noverse-Compatible](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Compatible.nip)

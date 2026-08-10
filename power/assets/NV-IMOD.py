@@ -1,116 +1,114 @@
 # (C) 2026 Noverse. All Rights Reserved.
-# This PY is used for WinConfig
+# This script is used for WinConfig
 # https://github.com/nohuto
 # https://discord.noverse.dev
 
 from __future__ import annotations
-import argparse, json, os, re, shutil, subprocess, sys, threading, urllib.request, zipfile
-try:
-    import winreg
-except ImportError:
-    winreg = None
+
+import argparse
+import hashlib
+import os
+import re
+import shutil
+import subprocess
+import sys
+import threading
+import urllib.request
+import zipfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Iterable, List, Sequence
+from typing import Iterable, Sequence
 
-HEX_PATTERN = re.compile(r"0x[0-9A-Fa-f]+")
-LOCATION_PATTERN = re.compile(r"PCI\s+bus\s+(?P<bus>\d+),\s*device\s+(?P<device>\d+),\s*function\s+(?P<function>\d+)", re.IGNORECASE,)
+RW_URL = "https://rweverything.com/downloads/RwPortableX64V1.7.zip"
+RW_ARCHIVE_MEMBER = "Win64/Portable/Rw.exe"
+RW_SHA256 = "5e009cdfc283d7f0d3dd777d40bcd23ecd78d8d7e93fc9cedcfb6d9dbe0b7701"
+RW_RESULT = re.compile(r"=\s*(0x[0-9A-Fa-f]+)\s*$", re.MULTILINE)
+XHCI_CLASS_CODE = 0x0C0330
+TASK_NAME = "Noverse-IMOD"
 
 class RwError(RuntimeError):
-    """rw error"""
+    pass
 
 def get_default_rw_path() -> Path:
     base = Path(os.environ.get("LOCALAPPDATA", str(Path.home())))
     return base / "Noverse" / "IMOD" / "RwPortable" / "Win64" / "Portable" / "Rw.exe"
 
-def rw_binary(rw_path: Path) -> None:
-    if rw_path.exists():
+def prepare_rw_binary(rw_path: Path) -> None:
+    if rw_path.is_file():
         return
 
-    nv_root = rw_path
-    if len(rw_path.parents) >= 3:
-        nv_root = rw_path.parents[2]
-    else:
-        nv_root = rw_path.parent
-
-    nv_root.mkdir(parents=True, exist_ok=True)
-    archive_path = nv_root / "RwPortableX64V1.7.zip"
-    url = "http://rweverything.com/downloads/RwPortableX64V1.7.zip"
+    rw_path.parent.mkdir(parents=True, exist_ok=True)
+    archive_path = rw_path.parent / "RwPortableX64V1.7.zip"
+    staged_path = rw_path.with_suffix(".tmp")
     print("[~] rw.exe not found, downloading portable package")
-    urllib.request.urlretrieve(url, archive_path)
-
-    with zipfile.ZipFile(archive_path) as zf:
-        zf.extractall(nv_root)
-
-    extracted_exe = nv_root / "Win64" / "Portable" / "Rw.exe"
-    if extracted_exe.exists() and extracted_exe.resolve() != rw_path.resolve():
-        rw_path.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(extracted_exe, rw_path)
-        print(f"[+] Placed rw.exe at {rw_path}")
     try:
-        archive_path.unlink()
-    except OSError:
-        pass
-    if not rw_path.exists():
-        raise RwError(f"[!] Failed to place rw.exe at {rw_path}")
+        urllib.request.urlretrieve(RW_URL, archive_path)
+        with zipfile.ZipFile(archive_path) as archive:
+            with archive.open(RW_ARCHIVE_MEMBER) as source, staged_path.open("wb") as target:
+                shutil.copyfileobj(source, target)
+        if hashlib.sha256(staged_path.read_bytes()).hexdigest() != RW_SHA256:
+            raise RwError("Failed SHA-256 verification")
+        staged_path.replace(rw_path)
+    except Exception:
+        staged_path.unlink(missing_ok=True)
+        raise
+    finally:
+        archive_path.unlink(missing_ok=True)
 
+    print(f"[+] Downloaded at {rw_path}")
 
-def kill_rw_processes() -> None:
-    subprocess.run(
-        ["taskkill", "/IM", "Rw.exe", "/F", "/T"],
-        capture_output=True,
-        text=True,
-    )
-
-def _startup_target_path(name: str) -> Path:
-    local_app = Path(os.environ.get("LOCALAPPDATA", str(Path.home())))
-    dest_dir = local_app / "Noverse" / "IMOD"
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    return dest_dir / name
-
-def _is_frozen() -> bool:
-    return bool(getattr(sys, "frozen", False))
-
-_TASK_NAME = "Noverse-IMOD"
+def startup_target(name: str) -> Path:
+    base = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "Noverse" / "IMOD"
+    base.mkdir(parents=True, exist_ok=True)
+    return base / name
 
 def install_startup_task(raw_args: Sequence[str]) -> None:
-    filtered = [arg for arg in raw_args if arg != "--startup"]
-    if _is_frozen():
-        exe_path = Path(sys.executable).resolve()
-        dest_target = _startup_target_path(exe_path.name)
-        if exe_path.resolve() != dest_target.resolve():
-            shutil.copy2(exe_path, dest_target)
-        cmd_args = [str(dest_target)] + filtered
+    filtered = [arg for arg in raw_args if arg not in {"--startup", "--no-exit"}]
+    if getattr(sys, "frozen", False):
+        source = Path(sys.executable).resolve()
+        target = startup_target(source.name)
+        if source != target.resolve():
+            shutil.copy2(source, target)
+        command = [str(target), *filtered]
     else:
-        python_path = Path(sys.executable).resolve()
-        script_source = Path(__file__).resolve()
-        dest_script = _startup_target_path(script_source.name)
-        if script_source.resolve() != dest_script.resolve():
-            shutil.copy2(script_source, dest_script)
-        cmd_args = [str(python_path), str(dest_script)] + filtered
-    task_cmd = subprocess.list2cmdline(cmd_args)
+        source = Path(__file__).resolve()
+        target = startup_target(source.name)
+        if source != target.resolve():
+            shutil.copy2(source, target)
+        command = [str(Path(sys.executable).resolve()), str(target), *filtered]
+
     result = subprocess.run(
-        ["schtasks", "/Create", "/SC", "ONLOGON", "/RL", "HIGHEST", "/TN", _TASK_NAME, "/TR", task_cmd, "/F"],
+        [
+            "schtasks",
+            "/Create",
+            "/SC",
+            "ONLOGON",
+            "/RL",
+            "HIGHEST",
+            "/TN",
+            TASK_NAME,
+            "/TR",
+            subprocess.list2cmdline(command),
+            "/F",
+        ],
         capture_output=True,
         text=True,
     )
-    if result.returncode != 0:
-        raise SystemExit(f"Failed to create scheduled task (tsch error {result.returncode})")
-    print(f"[+] Scheduled task '{_TASK_NAME}' created to run at logon")
-
+    if result.returncode:
+        raise RwError(f"Failed to create scheduled task - {result.returncode}")
+    print(f"[+] Scheduled task '{TASK_NAME}' created")
 
 def delete_startup_task() -> None:
     result = subprocess.run(
-        ["schtasks", "/Delete", "/TN", _TASK_NAME, "/F"],
+        ["schtasks", "/Delete", "/TN", TASK_NAME, "/F"],
         capture_output=True,
         text=True,
     )
-    if result.returncode != 0:
-        raise SystemExit(f"Failed to delete scheduled task (tsch error {result.returncode})")
-    print(f"[+] Scheduled task '{_TASK_NAME}' deleted")
+    if result.returncode:
+        raise RwError(f"Failed to delete scheduled task - {result.returncode}")
+    print(f"[+] Scheduled task '{TASK_NAME}' deleted")
 
-
-def _pause_after_run(enabled: bool) -> None:
+def pause_after_run(enabled: bool) -> None:
     if not enabled:
         return
     try:
@@ -118,32 +116,15 @@ def _pause_after_run(enabled: bool) -> None:
     except KeyboardInterrupt:
         pass
 
-def vulnerable_driver_blocklist() -> None:
-    if winreg is None:
-        return
-    key_path = r"SYSTEM\CurrentControlSet\Control\CI\Config"
-    value_name = "VulnerableDriverBlocklistEnable"
-    try:
-        try:
-            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path, 0, winreg.KEY_SET_VALUE | winreg.KEY_QUERY_VALUE)
-        except FileNotFoundError:
-            key = winreg.CreateKey(winreg.HKEY_LOCAL_MACHINE, key_path)
-        with key:
-            try:
-                current_val, _ = winreg.QueryValueEx(key, value_name)
-            except FileNotFoundError:
-                current_val = None
-            if current_val != 0:
-                print("[~] Disabling VulnerableDriverBlocklistEnable")
-                winreg.SetValueEx(key, value_name, 0, winreg.REG_DWORD, 0)
-    except PermissionError as exc:
-        raise SystemExit("Failed to modify VulnerableDriverBlocklistEnable (missing privileges)") from exc
-
-@dataclass
+@dataclass(frozen=True, slots=True)
 class Bdf:
     bus: int
     device: int
     function: int
+
+    def __post_init__(self) -> None:
+        if not 0 <= self.bus <= 0xFF or not 0 <= self.device <= 0x1F or not 0 <= self.function <= 7:
+            raise ValueError("PCI address is outside valid BB:DD.F range")
 
     def __str__(self) -> str:
         return f"{self.bus:02x}:{self.device:02x}.{self.function:x}"
@@ -154,373 +135,292 @@ class ExecRw:
         self.verbose = verbose
 
     def _call(self, command: str) -> str:
-        args = [str(self.rw_path), "/NoLogo", f"/Command={command}", "/Stdout"]
         if self.verbose:
             print(f"[rw] {command}")
-        proc = subprocess.run(args, capture_output=True, text=True, check=False,)
-        output = (proc.stdout or "") + (proc.stderr or "")
-        output = output.strip()
-        if proc.returncode:
-            raise RwError(f"rw.exe command '{command}' failed: {output}")
+        try:
+            process = subprocess.run(
+                [str(self.rw_path), "/NoLogo", f"/Command={command}", "/Stdout"],
+                capture_output=True,
+                text=True,
+                errors="replace",
+                timeout=30,
+                creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+            )
+        except subprocess.TimeoutExpired as exc:
+            raise RwError("rw.exe didn't finish within 30 seconds") from exc
+
+        output = ((process.stdout or "") + (process.stderr or "")).strip()
+        if process.returncode:
+            raise RwError(f"rw.exe returned {process.returncode}: {output}")
         if self.verbose and output:
             print(f"[rw] {output}")
         return output
 
-    def _read_hex(self, command: str) -> int:
-        payload = self._call(command)
-        matches = HEX_PATTERN.findall(payload)
-        if not matches:
-            raise RwError(f"rw.exe output did not contain a hex value: {payload}")
-        return int(matches[-1], 16)
+    @staticmethod
+    def _batches(commands: Iterable[str], limit: int = 24000) -> Iterable[list[str]]:
+        batch: list[str] = []
+        length = 0
+        for command in commands:
+            added = len(command) + bool(batch)
+            if batch and length + added > limit:
+                yield batch
+                batch = []
+                length = 0
+            batch.append(command)
+            length += len(command) + bool(length)
+        if batch:
+            yield batch
 
-    def get_xhci(self, index: int) -> int:
-        return self._read_hex(f"FPciClass 0x0C0330 0x{index:X}")
+    def read_many(self, commands: Iterable[str]) -> list[int]:
+        values: list[int] = []
+        for batch in self._batches(commands):
+            output = self._call(";".join(batch))
+            matches = RW_RESULT.findall(output)
+            if len(matches) != len(batch):
+                raise RwError(f"Expected {len(batch)} values from rw.exe, received {len(matches)}: {output}")
+            values.extend(int(value, 16) for value in matches)
+        return values
 
-    def read_pci_dword(self, bdf: Bdf, offset: int) -> int:
-        return self._read_hex(f"RPCI32 0x{bdf.bus:X} 0x{bdf.device:X} 0x{bdf.function:X} 0x{offset:X}")
+    def write_many(self, commands: Iterable[str]) -> None:
+        for batch in self._batches(commands):
+            self._call(";".join(batch))
 
-    def read_mmio_dword(self, address: int) -> int:
-        return self._read_hex(f"R32 0x{address:X}")
+    def get_xhci_many(self, indexes: Iterable[int]) -> list[int]:
+        return self.read_many(f"FPciClass 0x{XHCI_CLASS_CODE:X} 0x{index:X}" for index in indexes)
 
-    def write_mmio_dword(self, address: int, value: int) -> None:
-        self._call(f"W32 0x{address:X} 0x{value:X}")
-
-
-def parse_bdf_string(raw: str) -> Bdf:
-    try:
-        bus_part, devfun = raw.split(":")
-        dev_part, fun_part = devfun.split(".")
-        return Bdf(int(bus_part, 0), int(dev_part, 0), int(fun_part, 0))
-    except (ValueError, AttributeError) as exc:
-        raise argparse.ArgumentTypeError(f"Invalid BDF '{raw}', expected format BB:DD.F") from exc
-
-
-def decode_bdf(value: int) -> Bdf:
-    bus = (value >> 8) & 0xFF
-    device = (value >> 3) & 0x1F
-    function = value & 0x7
-    return Bdf(bus, device, function)
-
-
-def parse_interval(value: str) -> int:
-    try:
-        parsed = int(value, 0)
-    except ValueError as exc:
-        raise argparse.ArgumentTypeError("Interval must be an integer value") from exc
-    if parsed < 0 or parsed > 0xFFFF:
-        raise argparse.ArgumentTypeError("Interval must be within 0..65535 (250ns units)")
-    return parsed
-
-def resolve_mmio_base(rw: ExecRw, bdf: Bdf) -> int:
-    bar0 = rw.read_pci_dword(bdf, 0x10)
-    if bar0 & 0x1:
-        raise RwError("BAR0 reports I/O space, expected MMIO base")
-    is_64bit = bool(bar0 & 0x4)
-    base = bar0 & ~0xF
-    if is_64bit:
-        bar1 = rw.read_pci_dword(bdf, 0x14)
-        base |= bar1 << 32
-    return base
-
-
-def read_runtime_base(rw: ExecRw, operational_base: int) -> int:
-    rtsoff = rw.read_mmio_dword(operational_base + 0x18)
-    runtime_offset = rtsoff & ~0x1F
-    return operational_base + runtime_offset
-
-
-def read_max_interrupters(rw: ExecRw, operational_base: int) -> int:
-    hcsparams1 = rw.read_mmio_dword(operational_base + 0x04)
-    max_intrs = (hcsparams1 >> 8) & 0x7FF
-    if max_intrs == 0:
-        raise RwError("HCSPARAMS1 reported zero interrupters")
-    return max_intrs
-
-def determine_interrupters(max_intrs: int, requested: Sequence[int] | None) -> List[int]:
-    if not requested:
-        return list(range(max_intrs))
-    unique = sorted(set(requested))
-    for intr in unique:
-        if intr < 0 or intr >= max_intrs:
-            raise RwError(f"Requested Interrupter {intr} is outside the valid range 0..{max_intrs-1}")
-    return unique
-
-
-def imod_address(runtime_base: int, interrupter: int) -> int:
-    return runtime_base + 0x24 + (interrupter * 0x20)
-
-def disable_interrupt_moderation(rw: ExecRw, runtime_base: int, interrupters: Iterable[int], *, interval: int, no_write: bool) -> None:
-    target_interval = interval & 0xFFFF
-    desired_value = target_interval | (target_interval << 16)
-    for intr in interrupters:
-        address = imod_address(runtime_base, intr)
-        current = rw.read_mmio_dword(address)
-        prefix = "[+]" if current != desired_value else "[-]"
-        if current == desired_value:
-            print(
-                f"{prefix} Interrupter {intr}: IMOD @ 0x{address:016X} currently 0x{current:08X} "
-                f"(already {target_interval})"
-            )
-            continue
-        if no_write:
-            print(
-                f"{prefix} Interrupter {intr}: IMOD @ 0x{address:016X} currently 0x{current:08X} "
-                f"(no-write: target {target_interval})"
-            )
-            continue
-        rw.write_mmio_dword(address, desired_value)
-        new_value = rw.read_mmio_dword(address)
-        if (new_value & 0xFFFF) != target_interval:
-            raise RwError(f"Failed to program IMOD for interrupter {intr}, read-back 0x{new_value:08X}")
-        print(
-            f"{prefix} Interrupter {intr}: IMOD @ 0x{address:016X} currently 0x{new_value:08X} "
-            f"(set to {target_interval})"
+    def read_pci_dwords(self, bdf: Bdf, offsets: Iterable[int]) -> list[int]:
+        return self.read_many(
+            f"RPCI32 0x{bdf.bus:X} 0x{bdf.device:X} 0x{bdf.function:X} 0x{offset:X}"
+            for offset in offsets
         )
 
+    def read_mmio_dwords(self, addresses: Iterable[int]) -> list[int]:
+        return self.read_many(f"R32 0x{address:X}" for address in addresses)
+
+    def write_mmio_dwords(self, writes: Iterable[tuple[int, int]]) -> None:
+        self.write_many(f"W32 0x{address:X} 0x{value:X}" for address, value in writes)
+
+def parse_bdf(raw: str) -> Bdf:
+    try:
+        bus, device_function = raw.split(":", 1)
+        device, function = device_function.split(".", 1)
+        return Bdf(int(bus, 16), int(device, 16), int(function, 16))
+    except (ValueError, AttributeError) as exc:
+        raise argparse.ArgumentTypeError(f"Invalid BDF '{raw}', expected hexadecimal BB:DD.F") from exc
+
+def bounded_integer(name: str, minimum: int, maximum: int):
+    def parse(raw: str) -> int:
+        try:
+            value = int(raw, 0)
+        except ValueError as exc:
+            raise argparse.ArgumentTypeError(f"{name} must be an integer") from exc
+        if not minimum <= value <= maximum:
+            raise argparse.ArgumentTypeError(f"{name} must be within {minimum}-{maximum}")
+        return value
+
+    return parse
+
+parse_index = bounded_integer("xHCI index", 0, 0xFF)
+parse_interrupter = bounded_integer("Interrupter", 0, 0x3FF)
+parse_interval = bounded_integer("Interval", 0, 0xFFFF)
+
+def decode_bdf(value: int) -> Bdf:
+    return Bdf((value >> 8) & 0xFF, (value >> 3) & 0x1F, value & 7)
+
+def get_all_bdfs(rw: ExecRw) -> list[Bdf]:
+    controllers: list[Bdf] = []
+    for first in range(0, 0x100, 8):
+        for value in rw.get_xhci_many(range(first, first + 8)):
+            if value == 0xFFFF:
+                return controllers
+            controllers.append(decode_bdf(value))
+    raise RwError("More than 256 xHCI functions were reported")
+
 def get_bdf(rw: ExecRw, index: int) -> Bdf:
-    raw = rw.get_xhci(index)
-    if raw == 0xFFFF:
-        raise RwError("rw.exe could not locate an xHCI controller with FPciClass")
-    return decode_bdf(raw)
+    value = rw.get_xhci_many([index])[0]
+    if value == 0xFFFF:
+        raise RwError(f"rw.exe didn't find xHCI controller index {index}")
+    return decode_bdf(value)
 
+def resolve_register_base(rw: ExecRw, bdf: Bdf) -> int:
+    command_status, class_revision, bar0, bar1 = rw.read_pci_dwords(bdf, [0x04, 0x08, 0x10, 0x14])
+    class_code = (class_revision >> 8) & 0xFFFFFF
+    if class_code != XHCI_CLASS_CODE:
+        raise RwError(f"PCI {bdf} has class 0x{class_code:06X}, not xHCI class 0x{XHCI_CLASS_CODE:06X}")
+    if not command_status & 0x2:
+        raise RwError(f"PCI {bdf} has Memory Space access disabled")
+    if bar0 in {0, 0xFFFFFFFF} or bar0 & 1:
+        raise RwError(f"PCI {bdf} doesn't expose a valid MMIO BAR0")
 
-def get_all_bdfs(rw: ExecRw) -> List[Bdf]:
-    controllers: List[Bdf] = []
-    index = 0
-    while True:
-        raw = rw.get_xhci(index)
-        if raw == 0xFFFF:
-            break
-        controllers.append(decode_bdf(raw))
-        index += 1
-    return controllers
+    bar_type = (bar0 >> 1) & 3
+    if bar_type not in {0, 2}:
+        raise RwError(f"PCI {bdf} uses unsupported BAR0 memory type {bar_type}")
+    base = bar0 & 0xFFFFFFF0
+    if bar_type == 2:
+        if bar1 == 0xFFFFFFFF:
+            raise RwError(f"PCI {bdf} reports an invalid BAR1 value")
+        base |= bar1 << 32
+    if not base:
+        raise RwError(f"PCI {bdf} reports a zero register base")
+    return base
 
-def powershell_json(script: str) -> Any:
-    try:
-        completed = subprocess.run(["powershell.exe", "-c", script], capture_output=True, text=True, check=False)
-    except FileNotFoundError as exc:
-        raise RwError("powershell.exe is missing?") from exc
+def read_controller_layout(rw: ExecRw, register_base: int) -> tuple[int, int, int]:
+    capability, hcsparams1, rtsoff = rw.read_mmio_dwords(
+        [register_base, register_base + 0x04, register_base + 0x18]
+    )
+    capability_length = capability & 0xFF
+    version = (capability >> 16) & 0xFFFF
+    max_interrupters = (hcsparams1 >> 8) & 0x7FF
+    runtime_offset = rtsoff & 0xFFFFFFE0
+    if capability_length < 0x20:
+        raise RwError(f"Invalid xHCI CAPLENGTH 0x{capability_length:X}")
+    if not max_interrupters or max_interrupters > 0x400:
+        raise RwError(f"Invalid HCSPARAMS1.MaxIntrs value {max_interrupters}")
+    if not runtime_offset:
+        raise RwError("Invalid xHCI RTSOFF value 0")
+    return register_base + runtime_offset, max_interrupters, version
 
-    if completed.returncode != 0:
-        raise RwError(f"PowerShell query failed ({completed.returncode}): {completed.stderr.strip()}")
+def register_address(runtime_base: int, interrupter: int, offset: int) -> int:
+    return runtime_base + 0x20 + interrupter * 0x20 + offset
 
-    payload = completed.stdout.strip()
-    if not payload:
-        return []
+def read_interrupters(rw: ExecRw, runtime_base: int, maximum: int) -> tuple[list[int], list[int]]:
+    addresses = [register_address(runtime_base, index, 0x08) for index in range(maximum)]
+    addresses += [register_address(runtime_base, index, 0x04) for index in range(maximum)]
+    values = rw.read_mmio_dwords(addresses)
+    sizes, imod_values = values[:maximum], values[maximum:]
+    active = [index for index, size in enumerate(sizes) if size & 0xFFFF]
+    if not active:
+        raise RwError("No initialized xHCI Event Rings were found")
+    return active, imod_values
 
-    data = json.loads(payload)
-    if isinstance(data, dict):
-        return [data]
-    return data
+def select_interrupters(maximum: int, requested: Sequence[int] | None, active: list[int]) -> list[int]:
+    if not requested:
+        return active
+    selected = sorted(set(requested))
+    for index in selected:
+        if index >= maximum:
+            raise RwError(f"Interrupter {index} is outside controllers range 0-{maximum - 1}")
+    inactive = sorted(set(selected) - set(active))
+    if inactive:
+        print(f"[~] Interrupter Register Sets {inactive} don't have initialized Event Rings")
+    return selected
 
+def program_imod(
+    rw: ExecRw,
+    runtime_base: int,
+    interrupters: Sequence[int],
+    current_values: Sequence[int],
+    interval: int,
+    no_write: bool,
+) -> None:
+    addresses = [register_address(runtime_base, index, 0x04) for index in interrupters]
+    pending: list[tuple[int, int, int]] = []
 
-def parse_location_string(location: str | None) -> Bdf | None:
-    if not location:
-        return None
-    match = LOCATION_PATTERN.search(location)
-    if not match:
-        return None
-    return Bdf(bus=int(match.group("bus")), device=int(match.group("device")), function=int(match.group("function")))
+    for index, address, current in zip(interrupters, addresses, current_values):
+        current_interval = current & 0xFFFF
+        counter = current >> 16
+        if current_interval == interval:
+            print(f"[-] Interrupter {index}: IMODI={current_interval}, IMODC={counter} at 0x{address:016X}")
+        else:
+            action = "would set" if no_write else "setting"
+            print(
+                f"[+] Interrupter {index}: IMODI={current_interval}, IMODC={counter} at 0x{address:016X}, "
+                f"{action} IMODI={interval}"
+            )
+            pending.append((index, address, interval))
 
+    if no_write or not pending:
+        return
 
-def get_controller_instance(bdf: Bdf) -> dict[str, Any] | None:
-    script = r"""
-$controllers = Get-WmiObject -Class Win32_USBController
-$result = foreach ($c in $controllers) {
-    $loc = (Get-PnpDeviceProperty -InstanceId $c.PNPDeviceID -Key 'DEVPKEY_Device_LocationInfo' -ErrorAction SilentlyContinue).Data
-    [PSCustomObject]@{
-        Name = $c.Name
-        PNPDeviceID = $c.PNPDeviceID
-        Location = $loc
-    }
-}
-$result | ConvertTo-Json -Depth 3 -Compress
-"""
-    controllers = powershell_json(script)
-    for controller in controllers:
-        location_bdf = parse_location_string(controller.get("Location"))
-        if location_bdf and location_bdf == bdf:
-            return controller
-    return None
+    rw.write_mmio_dwords((address, value) for _, address, value in pending)
+    readback = rw.read_mmio_dwords(address for _, address, _ in pending)
+    for (index, _, _), value in zip(pending, readback):
+        if (value & 0xFFFF) != interval:
+            raise RwError(f"Interrupter {index} IMOD verification failed with 0x{value:08X}")
 
-def list_attached_devices(pnp_device_id: str) -> list[dict[str, Any]]:
-    escaped = pnp_device_id.replace("'", "''")
-    script = f"""
-$controller = Get-WmiObject -Class Win32_USBController | ? {{ $_.PNPDeviceID -eq '{escaped}' }}
-if ($controller) {{
-    $devices = $controller.GetRelated("Win32_PnPEntity")
-    $result = foreach ($d in $devices) {{
-        [PSCustomObject]@{{
-            Name = $d.Name
-            DeviceID = $d.DeviceID
-            Status = $d.Status
-        }}
-    }}
-    $result | ConvertTo-Json -Depth 3 -Compress
-}}
-"""
-    devices = powershell_json(script)
-    return devices if isinstance(devices, list) else []
-
-
-def print_attached_devices(bdf: Bdf) -> list[str]:
-    try:
-        controller = get_controller_instance(bdf)
-    except RwError as exc:
-        print(f"    Unable to enumerate attached devices: {exc}")
-        return []
-
-    if not controller:
-        print("    No matching Windows USB controller metadata found for this device")
-        return []
-
-    print(f"    Windows controller: {controller.get('Name')} ({controller.get('PNPDeviceID')})")
-
-    try:
-        devices = list_attached_devices(controller["PNPDeviceID"])
-    except RwError as exc:
-        print(f"    Unable to enumerate attached devices: {exc}")
-        return []
-
-    controller_device_id = (controller.get("PNPDeviceID") or "").upper()
-    devices = [
-        device
-        for device in devices
-        if (device.get("DeviceID") or "").upper() != controller_device_id
-    ]
-
-    if not devices:
-        print("      (No attached USB devices reported via Win32_USBControllerDevice)")
-        return []
-
-    print("      Attached devices:")
-    attached_names: list[str] = []
-    for device in sorted(devices, key=lambda d: d.get("Name") or ""):
-        name = device.get("Name") or "(unknown USB device)"
-        device_id = device.get("DeviceID") or "(no device id)"
-        status = device.get("Status") or "Unknown"
-        print(f"        {name} [{device_id}] status={status}")
-        attached_names.append(name)
-    return attached_names
-
-
-def process_controller(bdf: Bdf, runner: ExecRw, args: argparse.Namespace) -> None:
-    print(f"[~] Using xHCI controller @ {bdf}")
-
-    mmio_base = resolve_mmio_base(runner, bdf)
-    print(f"    Operational/Register base: 0x{mmio_base:016X}")
-
-    runtime_base = read_runtime_base(runner, mmio_base)
-    print(f"    Runtime Register base: 0x{runtime_base:016X}")
-
-    max_intrs = read_max_interrupters(runner, mmio_base)
-    print(f"    Controller has {max_intrs} Interrupter Register Sets")
-
-    print_attached_devices(bdf)
-
-    interrupters = determine_interrupters(max_intrs, args.interrupter)
-    disable_interrupt_moderation(runner, runtime_base, interrupters, interval=args.interval, no_write=args.no_write)
+def process_controller(bdf: Bdf, rw: ExecRw, args: argparse.Namespace) -> None:
+    print(f"[~] xHCI controller at PCI {bdf}")
+    register_base = resolve_register_base(rw, bdf)
+    runtime_base, maximum, version = read_controller_layout(rw, register_base)
+    active, imod_values = read_interrupters(rw, runtime_base, maximum)
+    selected = select_interrupters(maximum, args.interrupter, active)
+    print(f"    xHCI {version >> 8:X}.{version & 0xFF:02X}, register base 0x{register_base:016X}")
+    print(f"    Runtime base 0x{runtime_base:016X}, {maximum} implemented, {len(active)} initialized")
+    program_imod(rw, runtime_base, selected, [imod_values[index] for index in selected], args.interval, args.no_write)
     print("[+] Done")
 
 def parse_args(argv: Sequence[str]) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="[xHCI IMOD] Disable Interrupter Moderation via rw.exe")
+    parser = argparse.ArgumentParser(description="Change the xHCI IMODI")
     parser.add_argument(
         "--rw-path",
         type=Path,
         default=get_default_rw_path(),
-        help="Path to rw.exe (defaults to auto downloaded portable build under %%LOCALAPPDATA%%\\Noverse)",
+        help="Path to rw.exe, downloaded under %%LOCALAPPDATA%%\\Noverse when missing",
     )
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument(
-        "--bdf",
-        type=parse_bdf_string,
-        help="Explicit xHCI PCI address in BB:DD.F (hex) format",
-    )
-    group.add_argument(
-        "--xhci-index",
-        type=int,
-        help="If multiple xHCI controllers exist, choose the Nth device (default 0)",
-    )
-    group.add_argument(
-        "--all",
-        action="store_true",
-        help="Iterate over every xHCI controller returned by rw.exe FPciClass",
-    )
+    controller = parser.add_mutually_exclusive_group()
+    controller.add_argument("--bdf", type=parse_bdf, help="Hexadecimal xHCI PCI address (BB:DD.F)")
+    controller.add_argument("--xhci-index", type=parse_index, help="Select Nth xHCI controller")
+    controller.add_argument("--all", action="store_true", help="Go through every PCI xHCI controller")
     parser.add_argument(
         "--interrupter",
         "-i",
-        type=int,
+        type=parse_interrupter,
         action="append",
-        help="Interrupter ID to modify (default: all reported by HCSPARAMS1) "
-        "Repeat to target multiple specific IDs",
+        help="Interrupter ID to process",
     )
     parser.add_argument(
         "--interval",
         type=parse_interval,
         default=0,
-        help="IMOD interval value (0 disables throttling). Units are 250ns, range 0-65535 (0xFFFF)",
+        help="IMODI in 250 ns units, 0 disables moderation, range 0-65535",
     )
-    parser.add_argument(
-        "--no-write",
-        action="store_true",
-        help="Show the registers that would be cleared without writing them",
-    )
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Display rw.exe commands and responses",
-    )
-    parser.add_argument(
-        "--startup",
-        action="store_true",
-        help="Adds a scheduled task that reruns this command",
-    )
-    parser.add_argument(
-        "--delete",
-        action="store_true",
-        help="Delete the scheduled task created by --startup",
-    )
-    parser.add_argument(
-        "--no-exit",
-        action="store_true",
-        help="Keep the console open after completion (like PowerShell -NoExit)",
-    )
+    parser.add_argument("--no-write", action="store_true", help="Read and output without MMIO writes")
+    parser.add_argument("--verbose", action="store_true", help="Show rw.exe commands and output")
+    parser.add_argument("--startup", action="store_true", help="Create a highest privilege logon task")
+    parser.add_argument("--delete", action="store_true", help="Delete the logon task")
+    parser.add_argument("--no-exit", action="store_true", help="Keep the console open after completion")
     return parser.parse_args(argv)
-
 
 def main(argv: Sequence[str]) -> int:
     raw_args = list(argv)
     args = parse_args(argv)
-
     if args.startup and args.delete:
-        raise SystemExit("Use either --startup or --delete, not both")
-    if args.startup:
-        install_startup_task(raw_args)
-    if args.delete:
-        delete_startup_task()
-        _pause_after_run(args.no_exit)
-        return 0
-    vulnerable_driver_blocklist()
-    kill_rw_processes()
-    rw_path = args.rw_path
+        raise SystemExit("Use either --startup or --delete")
+
     try:
-        rw_binary(rw_path)
-    except Exception as exc:
-        raise SystemExit(f"Unable to prepare rw.exe at {rw_path}: {exc}") from exc
-    runner = ExecRw(rw_path, verbose=args.verbose)
-    if args.all:
-        controllers = get_all_bdfs(runner)
-        if not controllers:
-            raise SystemExit("No xHCI controllers reported via FPciClass")
-    elif args.bdf:
-        controllers = [args.bdf]
-    else:
-        index = args.xhci_index if args.xhci_index is not None else 0
-        controllers = [get_bdf(runner, index)]
-    for bdf in controllers:
-        process_controller(bdf, runner, args)
-    _pause_after_run(args.no_exit)
-    return 0
+        if args.delete:
+            delete_startup_task()
+            pause_after_run(args.no_exit)
+            return 0
+
+        prepare_rw_binary(args.rw_path)
+        rw = ExecRw(args.rw_path, args.verbose)
+        if args.all:
+            controllers = get_all_bdfs(rw)
+            if not controllers:
+                raise RwError("No PCI xHCI controllers were found")
+        elif args.bdf:
+            controllers = [args.bdf]
+        else:
+            controllers = [get_bdf(rw, args.xhci_index or 0)]
+
+        failed = False
+        for bdf in controllers:
+            try:
+                process_controller(bdf, rw, args)
+            except RwError as exc:
+                failed = True
+                print(f"[!] PCI {bdf}: {exc}", file=sys.stderr)
+
+        if failed:
+            return 1
+        if args.startup:
+            install_startup_task(raw_args)
+        pause_after_run(args.no_exit)
+        return 0
+    except (OSError, RwError, zipfile.BadZipFile) as exc:
+        print(f"[!] {exc}", file=sys.stderr)
+        return 1
 
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv[1:]))

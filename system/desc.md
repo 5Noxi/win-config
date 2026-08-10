@@ -126,59 +126,6 @@ lkd> dd 0xfffff801`890e82F8 L1
 fffff801`3aee82f8  0000000a // 10
 ```
 
-## SystemResponsiveness
-
-For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that. If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigInitialize.c) returns before the rest of the values and the `Tasks` key are read, it also prevents scheduler initialization later in [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c), means it disables MMCSS.
-
-```c
-exhausted = SchedulerPeriod * CiSystemResponsiveness / 100
-boosted = SchedulerPeriod - (SchedulerPeriod * CiSystemResponsiveness / 100)
-```
-
-During the boosted duration, scheduled MMCSS threads run at their task priority & during the exhausted duration, [`CiSchedulerSetPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerSetPriority.c) lowers them to their exhausted priority (`1-7`), which gives lower priority work a chance to run.
-
-`CiSystemResponsiveness` is also used later by [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) when checking idle/starvation state, so the value affects more than just the initial boosted/exhausted split.
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
-
-```c
-// CiConfigInitialize
-DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL); // SystemResponsiveness, fallback = 100
-if ( DWORD - 10 > 0x5A )
-  v2 = 20; // <10 or >100
-else
-  v2 = 10 * (DWORD / 0xA); // round down to multiple of 10
-CiSystemResponsiveness = v2;
-
-if ( CiSystemResponsiveness == 100 )
-{
-  v0 = -1073741696; // STATUS_SERVER_DISABLED
-}
-else
-{
-// values and Tasks
-}
-```
-
-### Calculation
-
-```c
-CiSystemResponsiveness = 10 * (value / 10);
-
-< 10 -> 20 // fallback since not in range
-10-19 -> 10
-20-29 -> 20
-30-39 -> 30
-40-49 -> 40
-50-59 -> 50
-60-69 -> 60
-70-79 -> 70
-80-89 -> 80
-90-99 -> 90
-== 100 -> 100 // STATUS_SERVER_DISABLED
-> 100 -> 20 // fallback since not in range
-```
-
 ## NetworkThrottlingIndex
 
 `NetworkThrottlingIndex` = maximum number of received [`NET_BUFFER_LIST`](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer_list) structures (NBLs) that MMCSS can ask NDIS to allow a miniport to indicate in one receive DPC (runs after network interrupt), to reduce the processing time it spends at `DISPATCH_LEVEL`. Note that DPCs run at `DISPATCH_LEVEL` (higher than threads, means long DPCs harm performance, by blocking threads, see [interrupt-request-levels](https://noverse.dev/docs/windbg-notes/system-mechanisms/trap-dispatching/interrupt-request-levels/)).
@@ -322,7 +269,7 @@ When the [IOCTL](https://learn.microsoft.com/en-us/windows-hardware/drivers/kern
 >
 > *The maximum number of [NET_BUFFER_LIST](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer_list) structures that a miniport driver should include in a receive indication. If this value is NDIS_INDICATE_ALL_NBLS, the miniport can indicate all of the [NET_BUFFER_LIST](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer_list) structures that it has.*"
 >
-> — Microsoft, [NET_BUFFER_LIST structure](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/nbl/ns-nbl-net_buffer_list)
+> — Microsoft, [NDIS_RECEIVE_THROTTLE_PARAMETERS structure](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/ndis/ns-ndis-_ndis_receive_throttle_parameters)
 
 When MMCSS sends `1-70`, NDIS stores it as the MMCSS maximum and saves `Period = -1` (NDIS headers define `4294967295` as `NDIS_INDICATE_ALL_NBLS`, means when using it, MMCSS maximum is set to `4294967295` and `Period` gets cleared).
 
@@ -436,6 +383,125 @@ lkd> dq ndis!ndisPeriodicReceives+28 L1
 fffff803`855c5228  00000000`00000000 // Period = 0
 ```
 
+## SystemResponsiveness
+
+Used to split each scheduler period (`SchedulerPeriod`) between MMCSS & ordinary system work.
+
+For other values than 100, [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c) splits `SchedulerPeriod` with `CiSystemResponsiveness`, see [`SchedulerPeriod`](https://noverse.dev/docs/win-config/system/mmcss-values/#schedulerperiod) section for more details on that. If `SystemResponsiveness == 100`, [`CiConfigInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigInitialize.c) returns before the rest of the values and the `Tasks` key are read, it also prevents scheduler initialization later in [`CsInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CsInitialize.c), means it disables MMCSS.
+
+```c
+exhausted = SchedulerPeriod * CiSystemResponsiveness / 100
+boosted = SchedulerPeriod - (SchedulerPeriod * CiSystemResponsiveness / 100)
+```
+
+During the boosted duration, scheduled MMCSS threads run at their task priority & during the exhausted duration, [`CiSchedulerSetPriority`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerSetPriority.c) lowers them to their exhausted priority (`1-7`), which gives lower priority work a chance to run.
+
+`CiSystemResponsiveness` is also used later by [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) when checking idle/starvation state, so the value affects more than just the initial boosted/exhausted split.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/mmcss-10-100.png?raw=true)
+
+```c
+// CiConfigInitialize
+DWORD = CiConfigReadDWORD(KeyHandle, 0x1C0011090LL, 100LL); // SystemResponsiveness, fallback = 100
+if ( DWORD - 10 > 0x5A )
+  v2 = 20; // <10 or >100
+else
+  v2 = 10 * (DWORD / 0xA); // round down to multiple of 10
+CiSystemResponsiveness = v2;
+
+if ( CiSystemResponsiveness == 100 )
+{
+  v0 = -1073741696; // STATUS_SERVER_DISABLED
+}
+else
+{
+// values and Tasks
+}
+```
+
+### Calculation
+
+```c
+CiSystemResponsiveness = 10 * (value / 10);
+
+< 10 -> 20 // fallback since not in range
+10-19 -> 10
+20-29 -> 20
+30-39 -> 30
+40-49 -> 40
+50-59 -> 50
+60-69 -> 60
+70-79 -> 70
+80-89 -> 80
+90-99 -> 90
+== 100 -> 100 // STATUS_SERVER_DISABLED
+> 100 -> 20 // fallback since not in range
+```
+
+## SchedulerPeriod
+
+As the name says it's the MMCSS scheduler period where registered multimedia threads run at their category priority for a guaranteed part, then get lowered (`1-7`) so other threads can run. Means for example a larger period = fewer scheduler transitions but longer uninterrupted boosted/exhausted switches.
+
+```c
+// CiConfigInitialize
+v9 = CiConfigReadDWORD(KeyHandle, 0x1C00110E0LL, 100000LL); // SchedulerPeriod, fallback = 100000
+*(&WPP_MAIN_CB.ActiveThreadCount + 1) = v9;
+if ( (unsigned int)(v9 - 50000) > 0xE7EF0 )
+  *(&WPP_MAIN_CB.ActiveThreadCount + 1) = 100000; // range 50000-1000000
+```
+
+Used by [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c), where `SystemResponsiveness` splits the period into two durations:
+
+```c
+// CiSchedulerInitialize
+HIDWORD(WPP_MAIN_CB.SecurityDescriptor) =
+  SchedulerPeriod * CiSystemResponsiveness / 100; // exhausted duration
+
+LODWORD(WPP_MAIN_CB.SecurityDescriptor) =
+  SchedulerPeriod - SchedulerPeriod * CiSystemResponsiveness / 100; // boosted duration
+```
+
+With `SchedulerPeriod = 50000` & `SystemResponsiveness = 30`, this would mean:
+
+```c
+exhausted duration = 50000 * 30 / 100 = 15000
+boosted duration = 50000 - (50000 * 30 / 100) = 35000
+```
+
+You can see that split (when `NoLazyMode` is 1) in `Scheduler_Sleep` via `Realtime` (boosted)/`SleepResponsiveness` (exhausted) reasons:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/SchedulerPeriod.png?raw=true)
+
+### Calculation Examples
+
+> "*By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent. (Based on a sample of 10 ms, that would be 8 ms and 2 ms, respectively.)*"
+>
+> — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
+
+The "*10 ms*" in that quote = `SchedulerPeriod = 100000`.
+
+```c
+// SchedulerPeriod = 100000 (default)
+SystemResponsiveness = 10
+exhausted = 100000 * 10 / 100 = 10000 // 1ms
+boosted = 100000 - 10000 = 90000 // 9ms
+
+// Windows Internals example (both default data)
+SystemResponsiveness = 20
+exhausted = 100000 * 20 / 100 = 20000 // 2ms
+boosted = 100000 - 20000 = 80000 // 8ms
+
+// SchedulerPeriod = 50000 (min)
+SystemResponsiveness = 20
+exhausted = 50000 * 20 / 100 = 10000 // 1ms
+boosted = 50000 - 10000 = 40000 // 4ms
+
+// SchedulerPeriod = 1000000 (max)
+SystemResponsiveness = 20
+exhausted = 1000000 * 20 / 100 = 200000 // 20ms
+boosted = 1000000 - 200000 = 800000 // 80ms
+```
+
 ## NoLazyMode
 
 Controls whether [`CiSchedulerWait`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerWait.c) does CPU idle/starvation detection and updates `CiProcessorIdleHistoryBits`, any nonzero registry value sets `CiSchedulerDisallowLazyMode` to `1`.
@@ -470,7 +536,7 @@ if ( !CiSchedulerDisallowLazyMode )
 | `SleepRealtimeLazy` | when `CiSchedulerInLazyMode` was already set before the normal boosted sleep | `LazyModeTimeout` |
 | `IdleDetection` | idle history exists but hasn't reached `CiSchedulerIdleCycleBitMask` | `SchedulerPeriod` |
 | `IdleDetectionLazy` | idle history reached `CiSchedulerIdleCycleBitMask` | `LazyModeTimeout` |
-| `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | ETW shows `0xFFFFFFFF`, the actual wait is unknown (`Timeout = NULL`) |
+| `DeepSleep` | [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) | ETW shows `0xFFFFFFFF`, means the wait is indefinite (`Timeout = NULL`) |
 
 For `DeepSleep`, `0xFFFFFFFF` is a kind of placeholder written into the `Scheduler_Sleep.Duration` field, [`CiSchedulerDeepSleep`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerDeepSleep.c) calls `KeWaitForSingleObject` with a null timeout and continues to sleep until a scheduler wakeup happens.
 
@@ -545,7 +611,7 @@ CiSchedulerSleep(v4, DpcData_high, v2);
 
 ## SchedulerTimerResolution
 
-Clamps the requested yield/deadline times so they aren't shorter than this value. With `SchedulerTimerResolution = 10000` (`1 ms`), a request like `0.5 ms` is raised to `1 ms`, so the deadline/yield part won't schedule the thread back to its higher priority sooner than `1 ms` after the yield request.
+Clamps the requested yield/deadline times so they aren't shorter than this value (unrelated to system timer resolution). With `SchedulerTimerResolution = 10000` (`1 ms`), a request like `0.5 ms` is raised to `1 ms`, so the deadline/yield part won't schedule the thread back to its higher priority sooner than `1 ms` after the yield request.
 
 This is used by [`CiSchedulerTaskIndexYield`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerTaskIndexYield.c), the requested `Duration` and `PreDuration` are raised to `SchedulerTimerResolution` if they're smaller (changed values are logged by `TaskIndex_Yield`).
 
@@ -571,70 +637,6 @@ if ( a2 < WPP_MAIN_CB.ActiveThreadCount )
 
 if ( a3 < WPP_MAIN_CB.ActiveThreadCount )
   v4 = WPP_MAIN_CB.ActiveThreadCount;
-```
-
-## SchedulerPeriod
-
-As the name says it's the MMCSS scheduler period where registered multimedia threads run at their category priority for a guaranteed part, then get lowered (`1-7`) so other threads can run.
-
-```c
-// CiConfigInitialize
-v9 = CiConfigReadDWORD(KeyHandle, 0x1C00110E0LL, 100000LL); // SchedulerPeriod, fallback = 100000
-*(&WPP_MAIN_CB.ActiveThreadCount + 1) = v9;
-if ( (unsigned int)(v9 - 50000) > 0xE7EF0 )
-  *(&WPP_MAIN_CB.ActiveThreadCount + 1) = 100000; // range 50000-1000000
-```
-
-Used by [`CiSchedulerInitialize`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiSchedulerInitialize.c), where `SystemResponsiveness` splits the period into two durations:
-
-```c
-// CiSchedulerInitialize
-HIDWORD(WPP_MAIN_CB.SecurityDescriptor) =
-  SchedulerPeriod * CiSystemResponsiveness / 100; // exhausted duration
-
-LODWORD(WPP_MAIN_CB.SecurityDescriptor) =
-  SchedulerPeriod - SchedulerPeriod * CiSystemResponsiveness / 100; // boosted duration
-```
-
-With `SchedulerPeriod = 50000` & `SystemResponsiveness = 30`, this would mean:
-
-```c
-exhausted duration = 50000 * 30 / 100 = 15000
-boosted duration = 50000 - (50000 * 30 / 100) = 35000
-```
-
-You can see that split (when `NoLazyMode` is 1) in `Scheduler_Sleep` via `Realtime` (boosted)/`SleepResponsiveness` (exhausted) reasons:
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/SchedulerPeriod.png?raw=true)
-
-### Calculation Examples
-
-> "*By default, multimedia threads get 80 percent of the CPU time available, while other threads receive 20 percent. (Based on a sample of 10 ms, that would be 8 ms and 2 ms, respectively.)*"
->
-> — Windows Internals, [E7, P1: 'Priority boosts for multimedia applications and games'](https://github.com/nohuto/Windows-Books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
-
-The "*10 ms*" in that quote = `SchedulerPeriod = 100000`.
-
-```c
-// SchedulerPeriod = 100000 (default)
-SystemResponsiveness = 10
-exhausted = 100000 * 10 / 100 = 10000 // 1ms
-boosted = 100000 - 10000 = 90000 // 9ms
-
-// Windows Internals example (both default data)
-SystemResponsiveness = 20
-exhausted = 100000 * 20 / 100 = 20000 // 2ms
-boosted = 100000 - 20000 = 80000 // 8ms
-
-// SchedulerPeriod = 50000 (min)
-SystemResponsiveness = 20
-exhausted = 50000 * 20 / 100 = 10000 // 1ms
-boosted = 50000 - 10000 = 40000 // 4ms
-
-// SchedulerPeriod = 1000000 (max)
-SystemResponsiveness = 20
-exhausted = 1000000 * 20 / 100 = 200000 // 20ms
-boosted = 1000000 - 200000 = 800000 // 80ms
 ```
 
 ## MaxThreadsPerProcess / MaxThreadsTotal
@@ -720,11 +722,14 @@ This part `For tasks with a Scheduling Category of High, this value is always tr
 The boosted priority gets calculated using the `Scheduling Category` and the `Priority` value (after subtraction), so if using category `Medium` + priority of `6` the boosted priority would be `16 + 5 = 21`. If using category `High` and `Priority = 6`, the exhausted priority would be `5`, but the boosted base is forced to `24` (by [`CiConfigTaskPolicy`](https://github.com/nohuto/decompiled-pseudocode/blob/main/11-23H2/mmcss/CiConfigTaskPolicy.c)). Relative priority can then move that boosted value within `23-26` (see [relative-priorities](https://noverse.dev/docs/win-config/system/mmcss-values/#relative-priorities)), means:
 
 ```c
-// Low/Medium
+// Low
+boosted = 8 + (backgroundPriority - 1);
+
+// Medium
 boosted = categoryBase + (Priority - 1) + relativePriority
 
 // High
-boosted = 24 // with relative priority it can be 23-26
+boosted = 24 + relativePriority // with relative priority it can be 23-26
 ```
 
 ### [Thread Priorities](https://github.com/MicrosoftDocs/win32/blob/docs/desktop-src/ProcThread/multimedia-class-scheduler-service.md#thread-priorities)
