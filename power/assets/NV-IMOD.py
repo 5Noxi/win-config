@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import hashlib
 import os
 import re
@@ -29,9 +30,12 @@ TASK_NAME = "Noverse-IMOD"
 class RwError(RuntimeError):
     pass
 
-def get_default_rw_path() -> Path:
+def imod_directory() -> Path:
     base = Path(os.environ.get("LOCALAPPDATA", str(Path.home())))
-    return base / "Noverse" / "IMOD" / "RwPortable" / "Win64" / "Portable" / "Rw.exe"
+    return base / "Noverse" / "IMOD"
+
+def get_default_rw_path() -> Path:
+    return imod_directory() / "RwPortable" / "Win64" / "Portable" / "Rw.exe"
 
 def prepare_rw_binary(rw_path: Path) -> None:
     if rw_path.is_file():
@@ -58,7 +62,7 @@ def prepare_rw_binary(rw_path: Path) -> None:
     print(f"[+] Downloaded at {rw_path}")
 
 def startup_target(name: str) -> Path:
-    base = Path(os.environ.get("LOCALAPPDATA", str(Path.home()))) / "Noverse" / "IMOD"
+    base = imod_directory()
     base.mkdir(parents=True, exist_ok=True)
     return base / name
 
@@ -107,6 +111,36 @@ def delete_startup_task() -> None:
     if result.returncode:
         raise RwError(f"Failed to delete scheduled task - {result.returncode}")
     print(f"[+] Scheduled task '{TASK_NAME}' deleted")
+
+def delete_imod_directory() -> None:
+    target = imod_directory().absolute()
+    if not target.exists():
+        return
+
+    resolved_target = target.resolve()
+    source = Path(sys.executable if getattr(sys, "frozen", False) else __file__).resolve()
+    if not source.is_relative_to(resolved_target):
+        shutil.rmtree(target)
+        print(f"[+] Deleted {target}")
+        return
+
+    escaped_target = str(target).replace("'", "''")
+    command = (
+        f"$target = '{escaped_target}'; Wait-Process -Id {os.getpid()} -ErrorAction SilentlyContinue; "
+        "for ($i = 0; $i -lt 20 -and (Test-Path -LiteralPath $target); $i++) { "
+        "Remove-Item -LiteralPath $target -Recurse -Force -ErrorAction SilentlyContinue; "
+        "if (Test-Path -LiteralPath $target) { Start-Sleep -Milliseconds 250 } }"
+    )
+    encoded = base64.b64encode(command.encode("utf-16le")).decode("ascii")
+    subprocess.Popen(
+        ["powershell.exe", "-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand", encoded],
+        stdin=subprocess.DEVNULL,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        close_fds=True,
+        creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0) | getattr(subprocess, "DETACHED_PROCESS", 0),
+    )
+    print(f"[+] {target} will be deleted after NV-IMOD exits")
 
 def pause_after_run(enabled: bool) -> None:
     if not enabled:
@@ -382,7 +416,7 @@ def parse_args(argv: Sequence[str]) -> argparse.Namespace | None:
     parser.add_argument("--no-write", action="store_true", help="Read and output without MMIO writes")
     parser.add_argument("--verbose", action="store_true", help="Show rw.exe commands and output")
     parser.add_argument("--startup", action="store_true", help="Create a highest privilege logon task")
-    parser.add_argument("--delete", action="store_true", help="Delete the logon task")
+    parser.add_argument("--delete", action="store_true", help="Delete the logon task and IMOD folder")
     parser.add_argument("--no-exit", action="store_true", help="Keep the console open after completion")
     if not argv:
         parser.print_help()
@@ -399,7 +433,10 @@ def main(argv: Sequence[str]) -> int:
 
     try:
         if args.delete:
-            delete_startup_task()
+            try:
+                delete_startup_task()
+            finally:
+                delete_imod_directory()
             pause_after_run(args.no_exit)
             return 0
 
