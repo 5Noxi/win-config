@@ -279,7 +279,7 @@ cmake --build build --config Release
 .\build\Release\xhci_imod.exe
 ```
 
-You can also use the executable to read/write physical addresses via `read8`, `read16`, `read32`, `read64`, `write8`, `write16`, `write32`, `write64`, `readblk`, `writeblk`.
+The executable is also capable to read/write physical addresses via `read8`, `read16`, `read32`, `read64`, `write8`, `write16`, `write32`, `write64`, `readblk`, `writeblk`.
 
 | Flag | Description |
 | --- | --- |
