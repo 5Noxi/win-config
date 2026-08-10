@@ -1,18 +1,21 @@
 # Bitmask Calculator
 
 This was meant to be a normal bitmask calculator, but I decided to add features to it that made it possible to directly configure and apply NVIDIA values. You may have seen people sharing NVIDIA values with uncommon looking data, e.g.:
+
 ```bat
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0001" /v RMElcg /t REG_DWORD /d 1431655765 /f
 ```
+
 The tool loads all value names including their bit definitions, making it easy for you to understand what the data of `1431655765` truely does. After selecting an option, it updates the `dec`, `hex`, `bin` data and displays the bit positions. If you want to use the value, you can add it with the `Reg Add` button, which searches for the correct key.
 
 It adds all values to the [`Display`](https://learn.microsoft.com/en-us/windows-hardware/drivers/install/system-defined-device-setup-classes-available-to-vendors#device-categories-and-class-values) class key. There are values with the same names in the [`nvlddmkm\*`](https://github.com/nohuto/wpr-reg-records/blob/main/records/nvlddmkm.txt) key, but those won't get added via the tool. I may add a second section for `nvlddmkm` key values.
+
 ```
 \Registry\Machine\SYSTEM\ControlSet001\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000 : RmProfilingAdminOnly
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\Global\NVTweak : RmProfilingAdminOnly
 ```
 
-The calculator uses an converted `.json` version of the official NVIDIA resource manager definitions. I've built the converter myself, and it should be `100%` accurate. However, if you notice any obvious errors, please report them.
+The calculator uses an converted `.json` version of the official NVIDIA resource manager definitions. I've built the converter myself, and it should be `100%` accurate.
 
 - [Preview](https://github.com/user-attachments/assets/91b241ef-5e8e-4859-8957-d3b54dc52b0e)
 
@@ -35,6 +38,7 @@ The tool currently has a selection of `967` values ([`nvvalues.txt`](https://git
 Get the lower bit range (`25:24` -> `24`), shift the dec or hex x times to the left (`-shl`). Combine all results with `-bor`, and done.
 
 Example using `RMGC6Parameters` (disabling all):
+
 ```json
 "Name":  "RMGC6Parameters",
 "Elements": [
@@ -76,22 +80,28 @@ Example using `RMGC6Parameters` (disabling all):
   }
 ]
 ```
-1. [`-shl`](https://discord.com/channels/836870260715028511/1361665557581140100/1362011539787481302) using the lower bit range value
+
+1. `-shl` using the lower bit range value
+
 ```powershell
 0x00000001 -shl 0
 0x00000001 -shl 2
 0x00000001 -shl 4
 0x00000001 -shl 6
 ```
-would result in `1`, `4`, `16`, `64`
 
-2. Combine them with [`-bor`](https://discord.com/channels/836870260715028511/1361665557581140100/1362011218151215196)
+would result in `1`, `4`, `16`, `64`.
+
+2. Combine them with `-bor`
+
 ```powershell
 1 -bor 4 -bor 16 -bor 64
 ```
+
 Output of `85`, which is the result.
 
 Different common scenario would be `DisableDynamicPstate`:
+
 ```json
 "Name":  "DisableDynamicPstate",
 "Comment":  [
@@ -103,9 +113,11 @@ Different common scenario would be `DisableDynamicPstate`:
       { "Name":  "ENABLE", "Value":  "1" }
   ]
 ```
+
 The comment shows `1` = `Enabled`, `0` = `Disabled`, means bit 0 gets switched here.
 
 Test yourself with the following example:
+
 ```json
 "Name":  "RMClkSlowDown",
 "Elements":  [
@@ -138,12 +150,13 @@ Test yourself with the following example:
   }
 ]
 ```
+
 Try to disable all of them.
 
 Solution:
-Dec: `88080384`  
-Hex: `0x05400000`  
-Bin: `00000101010000000000000000000000`  
+- Dec: `88080384`  
+- Hex: `0x05400000`  
+- Bin: `00000101010000000000000000000000`  
 
 ```powershell
 0x00000001 -shl 22
@@ -154,6 +167,7 @@ Bin: `00000101010000000000000000000000`
 4194304 -bor 16777216 -bor 67108864
 -> 88080384
 ```
+
 More info about `-shl` & `-bor` can be found in [bitwise-operators.md](https://github.com/nohuto/bitmask-calc/blob/main/bitwise-operators/bitwise-operators.md).
 
 # Debloated Driver
@@ -256,19 +270,25 @@ Note that NVIDIA PhysX is used by some old titles like *Borderlands 2* (2012)/*A
 I'm unsure how the `physxGpuId` gets set, but it's not the same for everyone .It gets read in the NVAPI key and is a `REG_BINARY` type. If `CPU` is selected, it zeros itself (`00 00 00 00`), if `Auto` (supported)/`GPU` it changes the ID. `nvapi.h` includes some notes.
 
 `Auto-select`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 1
 ```
+
 `GPU`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 07 00 00
 ```
+
 `CPU`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\NvCplPhysxAuto    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\NVAPI\physxGpuId    Type: REG_BINARY, Length: 4, Data: 00 00 00 00
 ```
+
 - [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)
@@ -386,20 +406,23 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 ```powershell
 "dwm.exe","RegSetValue","HKLM\System\CurrentControlSet\Control\UnitedVideo\CONTROL\VIDEO\{0096AEE5-861E-11F0-896E-806E6F6E6963}\0000\DefaultSettings.Orientation","Type: REG_DWORD, Length: 4, Data: 0"
 ```
-`0` = Landscape
-`1` = Portrait
-`2` = Landscape (flipped)
-`3` = Portrait (flipped)
+
+- `0` = Landscape
+- `1` = Portrait
+- `2` = Landscape (flipped)
+- `3` = Portrait (flipped)
 
 ```powershell
 "svchost.exe","RegSetValue","HKLM\System\CurrentControlSet\Control\GraphicsDrivers\Configuration\MSI3CB01222_2E_07E4_FF^28BF11A4ED9F56277B96046CA0884335\00\00\Rotation","Type: REG_DWORD, Length: 4, Data: 1"
 ```
-`1` = Landscape
-`2` = Portrait
-`3` = Landscape (flipped)
-`4` = Portrait (flipped)
+
+- `1` = Landscape
+- `2` = Portrait
+- `3` = Landscape (flipped)
+- `4` = Portrait (flipped)
 
 `Landscape`:
+
 ```json
 "HKLM\\System\\CurrentControlSet\\Control\\UnitedVideo\\CONTROL\\VIDEO\\{0096AEE5-861E-11F0-896E-806E6F6E6963}\\0000": {
   "DefaultSettings.Orientation": { "Type": "REG_DWORD", "Data": 0 }
@@ -408,7 +431,6 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
   "Rotation": { "Type": "REG_DWORD", "Data": 1 }
 }
 ```
-
 
 ## Display > View HDCP status
 
@@ -492,13 +514,16 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 ## Video > Adjust video color settings
 
 Personal preference.
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)
 
 ## Video > Adjust video image settings
+
 ```json
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\0000": {
   "_User_Global_VAL_SuperResolution": { "Type": "REG_DWORD", "Data": 0 }
@@ -506,29 +531,35 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 ```
 
 `On` & `Auto`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_Global_VAL_SuperResolution    Type: REG_DWORD, Length: 4, Data: 5
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_Global_DAT_SuperResolution    Type: REG_BINARY, Length: 128, Data: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_Global_XEN_SuperResolution    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
-`Off` = `_User_Global_VAL_SuperResolution` - `0`  
+
+`Off` = `_User_Global_VAL_SuperResolution` - `0`
+
 Quality:
+
 `Auto` = `_User_Global_VAL_SuperResolution` - `5`  
 `1` = `_User_Global_VAL_SuperResolution` - `1`  
 `2` = `_User_Global_VAL_SuperResolution` - `2`  
 `3` = `_User_Global_VAL_SuperResolution` - `3`  
 `4` = `_User_Global_VAL_SuperResolution` - `4`  
-A system restart is required to see the changes in nvcpl.
 
----
+A system restart is required to see the changes in nvcpl.
 
 ### Noise Reduction
 
 Path (Change `XXXX` to the correct key name):
+
 ```powershell
 HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\XXXX
 ```
+
 `Use the video player setting`:
+
 ```powershell
 _User_SUB0_DFP1_XALG_Noise_Reduce    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_XEN_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 0
@@ -536,7 +567,9 @@ _User_SUB0_DFP1_VAL_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 0
 _User_SUB0_DFP1_XALG_Cadence    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 `Use NVIDIA setting`:
+
 ```powershell
 _User_SUB0_DFP1_XALG_Noise_Reduce    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_VAL_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 5
@@ -544,6 +577,7 @@ _User_SUB0_DFP1_XEN_Noise_Reduce    Type: REG_DWORD, Length: 4, Data: 2147483649
 _User_SUB0_DFP1_XALG_Cadence    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 `_User_SUB0_DFP1_VAL_Noise_Reduce` controls the percentage, e.g. `5%` = `5 Dec` until `49%`. Nvcpl skips `50%`, which means that everything above `50` is `X - 1`, range `0-99`.
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl7.png?raw=true)
@@ -553,6 +587,7 @@ _User_SUB0_DFP1_XEN_Cadence    Type: REG_DWORD, Length: 4, Data: 2147483649
 Miscellaneous notes:
 
 `_User_SUB0_DFP1_VAL_Edge_Enhance`, `_User_SUB0_DFP1_VAL_Edge_Enhance`, `_User_SUB0_DFP1_XEN_Edge_Enhance`? = `Edge enhancment` (`Adjust video image settings` - `0`):
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_VAL_Edge_Enhance    Type: REG_DWORD, Length: 4, Data: 0
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Edge_Enhance    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
@@ -562,11 +597,14 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 `ScalingConfig` = `Scaling Mode`, `Perform Scaling on`, `Override the scaling mode...` (includes all settings?)
 
 Dynamic range `Full`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
+
 Dynamic range `Limited`:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 01 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
@@ -577,10 +615,13 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 `NVDisplay.Container.exe` is required for nvcpl to start. [`nvcpl.ps1`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nvcpl.ps1) starts them, waits till you close the program, and then terminates them.
 
 Download location:
+
 ```powershell
 $env:appdata\Noverse
 ```
+
 Shortcut location:
+
 ```powershell
 $home\Desktop\Nvcpl.lnk
 ```
@@ -601,6 +642,7 @@ Other miscellaneous values I found:
 ```
 
 Hides the icon from the context menu (2nd one is probably related to optimus, first controls NVCPL):
+
 ```json
 "HKCU\\Software\\NVIDIA Corporation\\Global\\NvCplApi\\Policies": {
   "ContextUIPolicy": { "Type": "REG_DWORD", "Data": 0 }
@@ -612,6 +654,7 @@ Hides the icon from the context menu (2nd one is probably related to optimus, fi
   "ShowContextMenu": { "Type": "REG_DWORD", "Data": 0 }
 }
 ```
+
 Only the first value gets used.
 
 - [nvidia/assets | HideManufacturer.c](https://github.com/nohuto/win-config/blob/main/nvidia/assets/trayicon-HideManufacturer.c)
@@ -622,8 +665,6 @@ Only the first value gets used.
 
 Enabled = `1024`  
 Disabled = `0`
-
----
 
 ### From NVIDIA Documentations
 
@@ -683,10 +724,10 @@ LOG_PAGING_SIZE     0x0200                  // 512 paging entries (retail) L"Log
 
 Disables NVIDIA scheduled tasks recusively. All 3 tasks no longer seem to be created, I'll leave this option for now.
 
-`NvTmRep.exe` = NVIDIA crash and telemetry reporter  
-`NvTmMon` = Sends data on logon, then in a 1H interval  
-`NvTmRepOnLogon` = Sends data on logon  
-`NvTmRep` = Sends data at 12:25PM daily
+- `NvTmRep.exe` = NVIDIA crash and telemetry reporter
+- `NvTmMon` = Sends data on logon, then in a 1H interval
+- `NvTmRepOnLogon` = Sends data on logon
+- `NvTmRep` = Sends data at 12:25PM daily
 
 ```powershell
 ["NvTmRep_*", "NvTmRepOnLogon*", "NvTmMon_*"]
@@ -707,6 +748,7 @@ Installing a [debloated driver](https://noverse.dev/docs/win-config/nvidia/deblo
 These three values are often applied in reference to "NVIDIA Telemetry", but since these seem to be outdated (they don't exist - test it yourself via [strings2-tui](https://github.com/nohuto/strings2-tui)) they won't get applied.
 
 Miscellaneous code snippets for `OptInOrOutPreference` & `SendTelemetryData`:
+
 ```cpp
 VIDEO_TELEMETRY_OPTIN_OPTOUT_REGPATH        L"Software\\NVIDIA Corporation\\NVControlPanel2\\Client"
 OPTIN_OUT_KEY                               L"OptInOrOutPreference"
@@ -868,6 +910,7 @@ WKS_SCANOUT_COMPOSITION_CONTROL_DEFAULT                        0x00000003
 ## 0x11112256 (WKS_POST_PROCESSING_ENGINE_CONTROL)
 
 NV private interface to adjust the behavior of the post processing engine (`D3DOGL_WksPostProcessingEngineControl`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_BITFIELDS.
+
 ```c
 0x00000000 // No specific adjustments for the post processing engine are selected
 0x00000001 // If bit is set, post processing engine operations are executed on desktop compositor owned fullscreen buffers.
@@ -910,7 +953,9 @@ WKS_POST_PROCESSING_ENGINE_CONTROL_DEFAULT                     0x00000033
 ```
 
 ## 0x112493bd (WKS_STEREO_DONGLE_SUPPORT)
+
 Control of the stereo dongle (`D3DOGL_EnableStereoDongleSupport`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Disable stereo dongle support
 1 // Enable stereo dongle using stereo signal from GPU (default)
@@ -929,6 +974,7 @@ WKS_STEREO_DONGLE_SUPPORT_DEFAULT                              WKS_STEREO_DONGLE
 ## 0x11333333 (WKS_STEREO_SWAP_MODE)
 
 `D3DOGL_33333333`? Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0x0 // Application Control (default)
 0x1 // Per Eye
@@ -952,6 +998,7 @@ WKS_STEREO_SWAP_MODE_DEFAULT                                   WKS_STEREO_SWAP_M
 ## 0x1194f158 (VRR_MODE)
 
 `D3DOGL_73314098`? Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0x0 // Disable G-Sync
 0x1 // Enable G-SYNC in fullscreen mode only (default)
@@ -970,6 +1017,7 @@ VRR_MODE_DEFAULT                                               VRR_MODE_FULLSCRE
 ## 0x11aa9e99 (WKS_STEREO_SUPPORT)
 
 Support of the stereo API for workstations (`D3DOGL_EnableStereoSupport`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Disable API stereo support (default)
 1 // Enable API stereo support
@@ -986,6 +1034,7 @@ WKS_STEREO_SUPPORT_DEFAULT                                     WKS_STEREO_SUPPOR
 ## 0x11ae435c (WKS_API_STEREO_EYES_EXCHANGE)
 
 Swaps image for the left eye with image for the right eye (`D3DOGL_APIStereoEyesExchange`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Stereo eyes exchange off (default)
 1 // Stereo eyes exchange on
@@ -1002,6 +1051,7 @@ WKS_API_STEREO_EYES_EXCHANGE_DEFAULT                           WKS_API_STEREO_EY
 ## 0x11d9dc84 (WKS_FEATURE_SUPPORT_CONTROL)
 
 NV private interface to enable/disable workstation features (`D3DOGL_WorkstationFeatureControl`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_BITFIELDS.
+
 ```c
 0x00000000 // No workstation features controled by this key enabled yet
 0x00000001 // Enable wks stereo for native dx11 Win8 stereo
@@ -1060,6 +1110,7 @@ WKS_FEATURE_SUPPORT_CONTROL_DEFAULT                            0x00086143
 ## 0x11e91a61 (WKS_API_STEREO_MODE)
 
 Display mode to use when stereo is enabled (`D3DOGL_APIStereoMode`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0 // Active stereo mode frame interleaved shutter glasses via DDC adapter shutter glasses // ELSA Revelator (default)
 1 // Passive stereo mode vertical interlaced
@@ -1122,6 +1173,7 @@ WKS_API_STEREO_MODE_DEFAULT                                    WKS_API_STEREO_MO
 ## 0x11fbdf11 (WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW)
 
 Number of Sources we can extend on Single GPU (`D3DOGL_0xfbdf11`). Type = `REG_DWORD` (SettingDWORD), attribute = ATTRIBUTE_SAMPLES.
+
 ```c
 0x1 // One Source per GPU
 0x2 // Two Sources per GPU
@@ -1169,11 +1221,13 @@ You need to pay attention to the performance limit during overclocking, as you s
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/hwinfo-powerlimit.png?raw=true)
 
 ### MSI Afterburner
+
 Download [MSI Afterburner](https://www.msi.com/Landing/afterburner/graphics-cards) and set a custom fan curve, which could look like the one in the image below (make sure the speed is not too low, as this would affect your results). You can use the preconfigured [cfg file](https://github.com/nohuto/gpu-oc-uv/blob/main/assets/MSIAfterburner.cfg) or skip it.
 
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/fancurve.png?raw=true)
 
 If you don't want MSI afterburner running in the background all time, set a static curve and load a profile on system start:
+
 ```powershell
 schtasks /create /sc ONSTART /tn "MSIAfterburnerProfile" /tr "powershell.exe -NoProfile -Command \"Set-Location 'C:\Program Files (x86)\MSI Afterburner'; .\MSIAfterburner.exe /profile1\"" /rl HIGHEST /delay 0000:20
 ```
@@ -1208,7 +1262,6 @@ Go into the 3D Adaptive tab and use the following settings:
 
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/occt.png?raw=true)
 
-
 ## Overclocking
 
 Your goal is to find a specific voltage and clock frequency that don't reach the performance limit (downclock) and don't cause a crash. Raising the clock frequency alone isn't really desirable, as you'll be throttling performance most of the time (reaching the performance limit), so you should limit it to a specific voltage.
@@ -1219,13 +1272,11 @@ Your goal is to find a specific voltage and clock frequency that don't reach the
 - Hitting the power limit = downclocking
 - Your clock and effective clock shouldn't have a big difference
 
-
 **Kepler, Maxwell, Pascal** GPU architecture uses `12.5 MHz` steps
 > GTX 600, GTX 700, GTX Titan, GTX 750, GTX 900, Titan X, GTX 10 Series
+
 **Turing, Ampere, Ada Lovelace** GPU architecture uses `15 MHz` steps
 > RTX 20 Series, RTX 30 Series, RTX 40 Series, RTX 50 Series
-
----
 
 ### Increasing the core clock & finding the voltage
 
@@ -1245,12 +1296,9 @@ How your result could look like:
 
 ![](https://github.com/nohuto/gpu-oc-uv/blob/main/images/oc.png?raw=true)
 
-
 ## Undervolting
 
 As mentioned at the beginning, undervolting limits the voltage for the GPU, resulting in lower voltage, wattage, and temperature.
-
----
 
 ### Limiting the voltage
 
@@ -1263,12 +1311,9 @@ As mentioned at the beginning, undervolting limits the voltage for the GPU, resu
 
 5. Safe the settings to a profile
 
-
 ## Memory Overclock
 
 Make sure to use a stable core clock speed. Always save the benchmark results before overclocking, as you will usually stop the memory overclocking caused by worse results rather than crashing. You should also test for artifacts that occur when memory overclocking is unstable (GPU artifacts are visual distortions, glitches, flickering textures, colored pixels, or screen tearing). Most graphics cards can achieve high memory overclocking, so you can start with stress tests at `250–500 MHz`.
-
----
 
 ### Increasing the memory clock
 
@@ -1280,7 +1325,6 @@ Make sure to use a stable core clock speed. Always save the benchmark results be
   - Stress test it, if stable increase it by `5-10MHz`, if not go down by `50` and increase it by `5-10MHz`
 6. Safe your stable memory clock to a profile
 7. Test the stability of your memory clock via [memtest vulkan](https://github.com/GpuZelenograd/memtest_vulkan/releases), let it run for `~30-60min`
-
 
 ## Final Test
 
