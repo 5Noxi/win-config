@@ -269,6 +269,21 @@ Usually, clearing `IP` (interrupt pending) loads `IMODC` from `IMODI`, `IMODC` t
 
 Whenever `IP` is cleared, hardware loads `IMODC = IMODI` and counts down to zero and stays there until another interrupt reloads it. This causes for example the first event after an idle to be immediate, and an event that arrives while the counter is running to get the IMOD wait time. With the interval of 50 us (Windows default), an event 10 us after the previous interrupt would wait about 40 us, an event 80 us after the previous interrupt wouldn't wait, means:
 
+```powershell
+$ .\nv-imod --no-write
+[~] xHCI controller at PCI 02:00.0
+    xHCI 1.10, register base 0x00000000FC700000
+    Runtime base 0x00000000FC701000, 8 implemented, 8 initialized
+[-] Interrupter 0: IMODI=200, IMODC=0 at 0x00000000FC701024 # IMODI = 200 ticks = 50 us
+[-] Interrupter 1: IMODI=200, IMODC=0 at 0x00000000FC701044
+[-] Interrupter 2: IMODI=200, IMODC=0 at 0x00000000FC701064
+[-] Interrupter 3: IMODI=200, IMODC=0 at 0x00000000FC701084
+[-] Interrupter 4: IMODI=200, IMODC=0 at 0x00000000FC7010A4
+[-] Interrupter 5: IMODI=200, IMODC=0 at 0x00000000FC7010C4
+[-] Interrupter 6: IMODI=200, IMODC=0 at 0x00000000FC7010E4
+[-] Interrupter 7: IMODI=200, IMODC=0 at 0x00000000FC701104
+```
+
 | State | Result |
 | --- | --- |
 | `IMODC = 0`, `EHB = 0`, `IE = 1` | Interrupt sent immediately |
@@ -383,7 +398,7 @@ Software Supported Capabilities
 lkd> !usb3kd.xhci_registers 0xffff85824c5bfe90
 Runtime Registers
 -----------------
-    dt USBXHCI!_RUNTIME_REGISTERS 0xffffde81645004c0
+    dt USBXHCI!_RUNTIME_REGISTERS 0xffffde81645004c0 // controller register base + RTSOFF
     dt -ba8 USBXHCI!_INTERRUPTER_REGISTER_SET 0xffffde81645004e0 // interrupter 0 starts at runtimeBase + 0x20
 ```
 
@@ -414,7 +429,7 @@ lkd> dt -ba8 USBXHCI!_INTERRUPTER_REGISTER_SET 0xffffde81645004e0
 And all eight IMOD registers on this controller have the same value:
 
 ```c
-lkd> dd 0xffffde81645004e4 L1 // interrupter 0 IMOD
+lkd> dd 0xffffde81645004e4 L1 // RuntimeBase + 0x24 + 0x20 * 0 (interrupter 0 IMOD)
 ffffde81`645004e4  000000c8 // IMODI & IMODC
 lkd> dd 0xffffde8164500504 L1 // interrupter 1 IMOD
 ffffde81`64500504  000000c8
@@ -476,7 +491,7 @@ USB_ENDPOINT_DESCRIPTOR:
 ```
 
 ```c
-lkd> !usb3kd.xhci_transfertrbs 0xffff85824f96cd10
+lkd> !usb3kd.xhci_transfertrbs 0xffff85824f96cd10 // // _BULK_STAGE_DATA.TrbRange at 0xffff85824f96ccb0 + 0x60
     [  0] NORMAL       0x0000000631175d40 CycleBit 1 IOC 0 CH 1 BEI 0 InterrupterTarget 1 TransferLength    13 TDSize  0
     [  1] EVENT_DATA   0x0000000631175d50 CycleBit 1 IOC 1 CH 0 BEI 0 InterrupterTarget 1 Data 0xffff85824f96ccb3 TotalBytes 13
 ```
@@ -486,12 +501,13 @@ lkd> !usb3kd.xhci_deviceslots 0xffff85824c5bfe90 2 verbose
 [2] SlotID : USB\VID_1038&PID_161E SteelSeries ApS // keyboard
     Speed: Full PortPath: [ 4 ] DeviceAddress: 2 // full speed
 
-    [3] EndpointType_InterruptIn Address: 0x81 PacketSize: 8 Interval: 1
+    [3] EndpointType_InterruptIn Address: 0x81 PacketSize: 8 Interval: 1 // bInterval = 1
         PendingTransferList:
         [0] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f8c6890
+            [0] dt USBXHCI!_BULK_STAGE_DATA 0xffff85824f8c6920 !xhci_transfertrbs 0xffff85824f8c6980
         [1] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f702890
 
-lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980
+lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980 // _BULK_STAGE_DATA.TrbRange at 0xffff85824f8c6920 + 0x60
     [  0] NORMAL       0x000000010da40ec0 CycleBit 1 IOC 0 CH 1 BEI 0 InterrupterTarget 1 TransferLength     8 TDSize  0
     [  1] EVENT_DATA   0x000000010da40ed0 CycleBit 1 IOC 1 CH 0 BEI 0 InterrupterTarget 1 Data 0xffff85824f8c6923 TotalBytes 8
 ```
