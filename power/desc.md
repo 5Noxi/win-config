@@ -326,7 +326,7 @@ return XilRegister_WriteUlong(v3, v6, result);
 
 ## Mouse/Keyboard Input
 
-USB mice and keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint has one USB service chance every 1 ms, and an 8000 Hz endpoint has one every 125 us ([needs high speed, as full speed interrupt endpoints cannot be faster than once per 1 ms frame](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbspec/ns-usbspec-_usb_endpoint_descriptor#members)). `bInterval`, endpoint type & the device speed decide that schedule.
+USB mouse & keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint has one USB service chance every 1 ms, and an 8000 Hz endpoint has one every 125 us ([needs high speed, as full speed interrupt endpoints cannot be faster than once per 1 ms frame](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbspec/ns-usbspec-_usb_endpoint_descriptor#members)). `bInterval`, endpoint type & the device speed decide that schedule.
 
 > "*`bInterval`*
 >
