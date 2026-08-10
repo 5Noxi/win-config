@@ -268,6 +268,44 @@ lkd> !usb3kd.xhci_transfertrbs 0xffff85824f8c6980 // _BULK_STAGE_DATA.TrbRange a
     [  1] EVENT_DATA   0x000000010da40ed0 CycleBit 1 IOC 1 CH 0 BEI 0 InterrupterTarget 1 Data 0xffff85824f8c6923 TotalBytes 8
 ```
 
+## xhci_imod
+
+Download [xhci_imod.exe](https://github.com/nohuto/win-config/blob/main/power/assets/xhci_imod.exe) and the signed [inpoutx64.sys](https://github.com/nohuto/win-config/blob/main/power/assets/inpoutx64.sys) driver (kernel level port access driver), you can also build the executeable from [source](https://github.com/nohuto/win-config/tree/main/power/assets/xhci_imod):
+
+```powershell
+cmake -S . -B build
+cmake --build build --config Release
+
+.\build\Release\xhci_imod.exe
+```
+
+You can also use the executable to read/write physical addresses via `read8`, `read16`, `read32`, `read64`, `write8`, `write16`, `write32`, `write64`, `readblk`, `writeblk`.
+
+| Flag | Description |
+| --- | --- |
+| `--driver PATH` | Override the colocated `inpoutx64.sys` path |
+| `--bdf BB:DD.F` | Hexadecimal xHCI PCI address (BB:DD.F) |
+| `--xhci-index N` | Select Nth xHCI controller |
+| `--all` | Go through every PCI xHCI controller |
+| `--interrupter ID` / `-i ID` | Interrupter ID to process (defaults to initialized Event Rings) |
+| `--interval VALUE` | IMODI in 250 ns units, 0 disables moderation, range 0-65535 |
+| `--no-write` | Read and output without MMIO writes |
+| `--startup` | Create a highest privilege logon task |
+| `--delete` | Delete the logon task and `%LOCALAPPDATA%\Noverse\IMOD` folder |
+| `--no-exit` | Keep the console open after completion |
+| `--verbose` | Show driver and controller details |
+
+Examples:
+
+```c
+--all --no-write --no-exit // information only
+--all --no-write --verbose --no-exit // driver and controller details
+--all // IMODI = 0 for all initialized Event Rings
+--all --interval 0xC800 // testing, 12.8 ms (~78 interrupts/s maximum)
+--all --startup // 0 for all controllers, creates scheduled task
+--delete // removes the task and IMOD folder
+```
+
 ## [Registers](https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/extensible-host-controler-interface-usb-xhci.pdf)
 
 ![](https://github.com/nohuto/win-config/blob/main/power/images/interrupter-register-set.png?raw=true)
@@ -406,44 +444,6 @@ Event Ring Dequeue Pointer Register.
 | 2:0 | Dequeue ERST Segment Index (DESI) – RW. Default = '0'. This field may be used by the xHC to accelerate checking the Event Ring full condition. This field is written with the low order 3 bits of the offset of the ERST entry which defines the Event Ring segment that the Event Ring Dequeue Pointer resides in. Refer to section 6.5 for the definition of an ERST entry. |
 | 3 | Event Handler Busy (EHB) - RW1C. Default = '0'. This flag shall be set to '1' when the IP bit is set to '1' and cleared to '0' by software when the Dequeue Pointer register is written. Refer to section 4.17.2 for more information. |
 | 63:4 | Event Ring Dequeue Pointer - RW. Default = '0'. This field defines the high order bits of the 64-bit address of the current Event Ring Dequeue Pointer. |
-
-## xhci_imod
-
-Download [xhci_imod.exe](https://github.com/nohuto/win-config/blob/main/power/assets/xhci_imod.exe) and the signed [inpoutx64.sys](https://github.com/nohuto/win-config/blob/main/power/assets/inpoutx64.sys) driver (kernel level port access driver), you can also build the executeable from [source](https://github.com/nohuto/win-config/tree/main/power/assets/xhci_imod):
-
-```powershell
-cmake -S . -B build
-cmake --build build --config Release
-
-.\build\Release\xhci_imod.exe
-```
-
-You can also use the executable to read/write physical addresses via `read8`, `read16`, `read32`, `read64`, `write8`, `write16`, `write32`, `write64`, `readblk`, `writeblk`.
-
-| Flag | Description |
-| --- | --- |
-| `--driver PATH` | Override the colocated `inpoutx64.sys` path |
-| `--bdf BB:DD.F` | Hexadecimal xHCI PCI address (BB:DD.F) |
-| `--xhci-index N` | Select Nth xHCI controller |
-| `--all` | Go through every PCI xHCI controller |
-| `--interrupter ID` / `-i ID` | Interrupter ID to process (defaults to initialized Event Rings) |
-| `--interval VALUE` | IMODI in 250 ns units, 0 disables moderation, range 0-65535 |
-| `--no-write` | Read and output without MMIO writes |
-| `--startup` | Create a highest privilege logon task |
-| `--delete` | Delete the logon task and `%LOCALAPPDATA%\Noverse\IMOD` folder |
-| `--no-exit` | Keep the console open after completion |
-| `--verbose` | Show driver and controller details |
-
-Examples:
-
-```c
---all --no-write --no-exit // information only
---all --no-write --verbose --no-exit // driver and controller details
---all // IMODI = 0 for all initialized Event Rings
---all --interval 0xC800 // testing, 12.8 ms (~78 interrupts/s maximum)
---all --startup // 0 for all controllers, creates scheduled task
---delete // removes the task and IMOD folder
-```
 
 # Power Plan
 
