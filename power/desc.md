@@ -244,7 +244,7 @@ Adds a `Import` option when right clicking on `.pow` files.
 
 # xHCI IMOD
 
-The *xHCI Interrupter Moderation Register* sets the minimum time between interrupt messages from one xHCI Interrupter, note that each interrupter has its own [register set](https://noverse.dev/docs/win-config/power/xhci-imod/#registers) (including the IMOD interval).
+The *xHCI Interrupter Moderation Register* sets the minimum time between interrupt messages from one xHCI Interrupter, note that each interrupter has its own [register set](https://noverse.dev/docs/win-config/power/xhci-imod/#registers) (including IMODI/IMODC).
 
 > "*Interrupt Moderation allows multiple events to be processed in the context of a single Interrupt Service Request (ISR), rather than generating an ISR for each event.*
 >
@@ -336,7 +336,7 @@ USB mouse & keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint
 >
 > — Microsoft, [USB_ENDPOINT_DESCRIPTOR structure](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbspec/ns-usbspec-_usb_endpoint_descriptor#members)
 
-So IMOD usually has no effect on the polling interval here, as the 50 us counter is usually already at zero, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example.
+So IMOD usually adds no interrupt notification wait in relation to the polling interval here, as the 50 us counter is usually already at zero whenever the next service chance happens, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example, therefore I would generally keep IMOD at its default value and move your USB devices onto different xHCI controllers, so they can't use the same interrupters.
 
 | Rate | Polling Interval | Isolated endpoint with 50 us IMOD |
 | --- | ---: | --- |
@@ -457,7 +457,7 @@ lkd> !usb3kd.xhci_deviceslots 0xffff85824c45dec0 3 verbose
     Speed: Full PortPathDepth: 1 PortPath: [ 5 ] DeviceAddress: 3 // full speed = period is measured in units of 1 millisecond frames
 
     [3] : dt USBXHCI!_ENDPOINT_DATA 0xffff8582a4bdea60 dt USBXHCI!_ENDPOINT_CONTEXT32 0xffff85824f7fe060 ES_RUNNING
-        EndpointType_InterruptIn Address: 0x81 PacketSize: 64 Interval: 1 // Interval = bInterval
+        EndpointType_InterruptIn Address: 0x81 PacketSize: 64 Interval: 1
         [1] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f96cc20
             [0] dt USBXHCI!_BULK_STAGE_DATA 0xffff85824f96ccb0 !xhci_transfertrbs 0xffff85824f96cd10
 
@@ -486,7 +486,7 @@ lkd> !usb3kd.xhci_deviceslots 0xffff85824c5bfe90 2 verbose
 [2] SlotID : USB\VID_1038&PID_161E SteelSeries ApS // keyboard
     Speed: Full PortPath: [ 4 ] DeviceAddress: 2 // full speed
 
-    [3] EndpointType_InterruptIn Address: 0x81 PacketSize: 8 Interval: 1 // bInterval = 1
+    [3] EndpointType_InterruptIn Address: 0x81 PacketSize: 8 Interval: 1
         PendingTransferList:
         [0] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f8c6890
         [1] dt USBXHCI!_BULK_TRANSFER_DATA 0xffff85824f702890
