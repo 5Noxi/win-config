@@ -254,7 +254,7 @@ The *xHCI Interrupter Moderation Register* sets the minimum time between interru
 
 ## Interrupt Wait Time
 
-`IMODI` is the configured interval, `IMODC` is the counter and each tick is 250 ns.
+`IMODI` is the interval, `IMODC` is the counter and each tick is 250 ns.
 
 ```c
 max moderation = IMODI * 250 ns
