@@ -175,25 +175,7 @@ More info about `-shl` & `-bor` can be found in [bitwise-operators.md](https://g
 `Minimal` = Uses the configurations while turning off features like G-SYNC, Antialiasing, Sharpening, Ambient Occlusion, NIS, Ansel etc.  
 `Compatible` = Uses the same configurations but keeps those features enabled/app-controlled
 
-The following includes details of how the panel sets the changes and more, a lot of it is for informational purposes only.
-
-- 3D Settings
-  - [Adjust image settings with preview](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--adjust-image-settings-with-preview)
-  - [Manage 3D settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--manage-3d-settings)
-  - [Configure Surround, PhysX](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#3d-settings--configure-surround-physx)
-- Display
-  - Change resolution
-  - [Adjust desktop color settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--adjust-desktop-color-settings)
-  - [Rotate display](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--rotate-display)
-  - [View HDCP status](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#view-hdcp-status)
-  - Set up digital audio
-  - [Adjust desktop size and position](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--adjust-desktop-size-and-position)
-  - Set up multiple displays
-- Developer
-  - [Manage GPU Performance Counters](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#developer--manage-gpu-performance-counters)
-- Video
-  - [Adjust video color settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#video--adjust-video-color-settings)
-  - [Adjust video image settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#video--adjust-video-image-settings)
+The sections below include details of how the nvcpl sets the changes and more, a lot of it is for informational purposes only.
 
 ## 3D Settings
 
