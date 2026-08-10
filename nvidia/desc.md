@@ -170,57 +170,6 @@ Solution:
 
 More info about `-shl` & `-bor` can be found in [bitwise-operators.md](https://github.com/nohuto/bitmask-calc/blob/main/bitwise-operators/bitwise-operators.md).
 
-# Debloated Driver
-
-Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1).
-
-### Main Menu
-
-- `1` - Debloat driver (includes optional DDU clean uninstall)
-- `2` - Install driver directly  
-
-### Driver Debloat Option
-
-- Opens [www.techpowerup.com | nvidia-drivers](https://www.techpowerup.com/download/nvidia-geforce-graphics-drivers/)
-- Removes all non-essential folders except `Display.Driver`, `NVI2`, `setup.cfg`, and `setup.exe`
-- Cleans up `.xml` and `.cfg` files by removing telemetry, EULA, and web-link entries
-- Miscellaenous theme configurations
-
-### Optional DDU Cleanup
-
-Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.zip) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.ps1), enables Safe Boot, and reboots.
-
-### Driver Installation
-
-Runs `setup.exe`.
-
-# NvAPI CLI
-
-This will download the app to your downloads folder, read full documentation for each group [here](https://noverse.dev/docs/nvapi-cli/sections/overview/).
-
-CLI wrapper around NVIDIA's NVAPI for querying and controlling GPU, display, and driver features on Windows. NVAPI is NVIDIA's proprietary driver API that exposes GPU and display capabilities beyond the standard OS interfaces. It's hardware and driver dependent, many functions are supported only on specific GPUs, drivers, or product lines. Expect `NVAPI_NOT_SUPPORTED` for unsupported features.
-
-Note that the documentation is partly parsed from official documentation partly rewritten by myself. The tool isn't yet in its final state, more useful APIs may be added.
-
-Use the tool with caution when applying control APIs, I'm not responsible for any damage/issues. This tool is in BETA state, bugs may exist. I didn't test each option on my own yet.
-
-[assets/supported_nvapi.txt](https://github.com/nohuto/nvapi-cli/blob/main/assets/supported_nvapi.txt) includes all NVAPI functions referenced by the current source code. [assets/unsupported_nvapi.txt](https://github.com/nohuto/nvapi-cli/blob/main/assets/unsupported_nvapi.txt) includes NVAPI functions present in the NVAPI SDK header (`nvapi.h`) but not used by the current version.
-
-## Usage
-
-Since showing all options by default would make it very confusing, it's splitted into groups. Use `nvapi-cli info` to print the NVAPI interface version and driver branch details.
-
-```powershell
-Usage:
-  nvapi-cli help [group]
-  nvapi-cli info
-  nvapi-cli <group> <command> [options]
-    groups: gpu display mosaic sli gsync drs video hdmi dp pcf sys d3d ogl vr stereo
-
-Use "nvapi-cli help <group>" or "nvapi-cli <group> help" for details.
-Use "nvapi-cli help all" for the full list.
-```
-
 # NVCPL Settings
 
 `Minimal` = Uses the configurations while turning off features like G-SYNC, Antialiasing, Sharpening, Ambient Occlusion, NIS, Ansel etc.  
@@ -246,11 +195,13 @@ The following includes details of how the panel sets the changes and more, a lot
   - [Adjust video color settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#video--adjust-video-color-settings)
   - [Adjust video image settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#video--adjust-video-image-settings)
 
-## 3D Settings > Adjust image settings with preview
+## 3D Settings
+
+### Adjust image settings with preview
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)
 
-## 3D Settings > Manage 3D settings
+### Manage 3D settings
 
 Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*Threaded optimization*', '*Vulkan/OpenGL present method*' etc. are used OpenGL/old DX games only, and e.g. '*Virtual Reality pre-rendered frames*' for VR applications.
 
@@ -259,7 +210,7 @@ Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*T
 - [Noverse-Compatible](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Compatible.nip)
 - [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp)
 
-## 3D Settings > Configure Surround, PhysX
+### Configure Surround, PhysX
 
 Select your GPU if supported (unless the physics workload of your game which uses PhysX is small, auto detect is usually the same as GPU anyway).
 
@@ -293,7 +244,9 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)
 
-## Display > Adjust desktop color settings 
+## Display
+
+### Adjust desktop color settings 
 
 Increase `Digital vibrance` up to a level you prefer.
 
@@ -399,7 +352,7 @@ sin(0) = 0  = 0x00000000 hex
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)
 
-## Display > Rotate display
+## Rotate display
 
 You've to edit the `Rotation` value to change the orientation, `DefaultSettings.Orientation` gets reset to the `Rotation` state if changing it. The IDs will obviously not be the same for you.
 
@@ -432,7 +385,7 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 }
 ```
 
-## Display > View HDCP status
+## View HDCP status
 
 > "*High-bandwidth Digital Content Protection (HDCP) is a copy-protection technology that prevents copying of digital audio and video content across DisplayPort, Digital Visual Interface (DVI), or High-Definition Multimedia Interface (HDMI) connections.*"
 >
@@ -464,7 +417,7 @@ Whether your display supports HDCP you can practically make it unsupported using
 }
 ```
 
-## Display > Adjust desktop size and position
+## Adjust desktop size and position
 
 Whenever you use your native resolution use `No scaling`, the two options below don't matter then, as no scaling happens anyway.
 
@@ -476,7 +429,9 @@ Whenever you use your native resolution use `No scaling`, the two options below 
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true)
 
-## Developer > Manage GPU Performance Counters
+## Developer
+
+### Manage GPU Performance Counters
 
 > "*GPU performance counters are used by NVIDIA GPU profiling tools such as NVIDIA Nsight. These tools enable developers debug, profile and develop software for NVIDIA GPUs.*"
 >
@@ -511,7 +466,9 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)
 
-## Video > Adjust video color settings
+## Video
+
+### Adjust video color settings
 
 Personal preference.
 
@@ -522,7 +479,7 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)
 
-## Video > Adjust video image settings
+### Adjust video image settings
 
 ```json
 "HKLM\\SYSTEM\\CurrentControlSet\\Control\\Class\\{4d36e968-e325-11ce-bfc1-08002be10318}\\0000": {
@@ -550,7 +507,7 @@ Quality:
 
 A system restart is required to see the changes in nvcpl.
 
-### Noise Reduction
+#### Noise Reduction
 
 Path (Change `XXXX` to the correct key name):
 
@@ -608,6 +565,57 @@ Dynamic range `Limited`:
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 01 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
+```
+
+# Debloated Driver
+
+Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NVIDIA-Tool.ps1).
+
+### Main Menu
+
+- `1` - Debloat driver (includes optional DDU clean uninstall)
+- `2` - Install driver directly  
+
+### Driver Debloat Option
+
+- Opens [www.techpowerup.com | nvidia-drivers](https://www.techpowerup.com/download/nvidia-geforce-graphics-drivers/)
+- Removes all non-essential folders except `Display.Driver`, `NVI2`, `setup.cfg`, and `setup.exe`
+- Cleans up `.xml` and `.cfg` files by removing telemetry, EULA, and web-link entries
+- Miscellaenous theme configurations
+
+### Optional DDU Cleanup
+
+Downloads [`NV-DDU.zip`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.zip) and [`NV-DDU.ps1`](https://github.com/nohuto/files/releases/download/driver/NV-DDU.ps1), enables Safe Boot, and reboots.
+
+### Driver Installation
+
+Runs `setup.exe`.
+
+# NvAPI CLI
+
+This will download the app to your downloads folder, read full documentation for each group [here](https://noverse.dev/docs/nvapi-cli/sections/overview/).
+
+CLI wrapper around NVIDIA's NVAPI for querying and controlling GPU, display, and driver features on Windows. NVAPI is NVIDIA's proprietary driver API that exposes GPU and display capabilities beyond the standard OS interfaces. It's hardware and driver dependent, many functions are supported only on specific GPUs, drivers, or product lines. Expect `NVAPI_NOT_SUPPORTED` for unsupported features.
+
+Note that the documentation is partly parsed from official documentation partly rewritten by myself. The tool isn't yet in its final state, more useful APIs may be added.
+
+Use the tool with caution when applying control APIs, I'm not responsible for any damage/issues. This tool is in BETA state, bugs may exist. I didn't test each option on my own yet.
+
+[assets/supported_nvapi.txt](https://github.com/nohuto/nvapi-cli/blob/main/assets/supported_nvapi.txt) includes all NVAPI functions referenced by the current source code. [assets/unsupported_nvapi.txt](https://github.com/nohuto/nvapi-cli/blob/main/assets/unsupported_nvapi.txt) includes NVAPI functions present in the NVAPI SDK header (`nvapi.h`) but not used by the current version.
+
+## Usage
+
+Since showing all options by default would make it very confusing, it's splitted into groups. Use `nvapi-cli info` to print the NVAPI interface version and driver branch details.
+
+```powershell
+Usage:
+  nvapi-cli help [group]
+  nvapi-cli info
+  nvapi-cli <group> <command> [options]
+    groups: gpu display mosaic sli gsync drs video hdmi dp pcf sys d3d ogl vr stereo
+
+Use "nvapi-cli help <group>" or "nvapi-cli <group> help" for details.
+Use "nvapi-cli help all" for the full list.
 ```
 
 # Temporary NVCPL
