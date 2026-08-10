@@ -162,8 +162,8 @@ Complete [NVIDIA driver preparation tool](https://github.com/nohuto/win-config/b
 
 ### Main Menu
 
-`1` - Debloat driver (includes optional DDU clean uninstall)  
-`2` - Install driver directly  
+- `1` - Debloat driver (includes optional DDU clean uninstall)
+- `2` - Install driver directly  
 
 ### Driver Debloat Option
 
@@ -222,7 +222,7 @@ The following includes details of how the panel sets the changes and more, a lot
   - Change resolution
   - [Adjust desktop color settings](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--adjust-desktop-color-settings)
   - [Rotate display](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--rotate-display)
-  - View HDCP status
+  - [View HDCP status](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#view-hdcp-status)
   - Set up digital audio
   - [Adjust desktop size and position](https://github.com/nohuto/win-config/blob/main/nvidia/desc.md#display--adjust-desktop-size-and-position)
   - Set up multiple displays
@@ -234,9 +234,11 @@ The following includes details of how the panel sets the changes and more, a lot
 
 ## 3D Settings > Adjust image settings with preview
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)  
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)
 
 ## 3D Settings > Manage 3D settings
+
+Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*Threaded optimization*', '*Vulkan/OpenGL present method*' etc. are used OpenGL/old DX games only, and e.g. '*Virtual Reality pre-rendered frames*' for VR applications.
 
 - [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)
 - [Noverse-Minimal](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Minimal.nip)
@@ -246,6 +248,8 @@ The following includes details of how the panel sets the changes and more, a lot
 ## 3D Settings > Configure Surround, PhysX
 
 Select your GPU if supported (unless the physics workload of your game which uses PhysX is small, auto detect is usually the same as GPU anyway).
+
+Note that NVIDIA PhysX is used by some old titles like *Borderlands 2* (2012)/*Assassin's Creed IV: Black Flag* (2013), modern games usually don't use it.
 
 "NVIDIA PhysX is a powerful physics engine that can utilize GPU acceleration to provide amazing real-time physics effects. PhysX GPU acceleration is available on GeForce 8 series and later GPUs. In order to enable PhysX GPU acceleration, all the GPUs in your system must be PhysX-capable."
 
@@ -267,19 +271,22 @@ NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services
 ```
 - [nvidia/assets | physx-nvapi.h](https://github.com/nohuto/win-config/blob/main/nvidia/assets/physx-nvapi.h)
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)  
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl2.png?raw=true)
 
 ## Display > Adjust desktop color settings 
 
 Increase `Digital vibrance` up to a level you prefer.
+
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : SaturationRegistryKey
 ```
 
 Location (the ID may differ):
+
 ```powershell
 HKCU\Software\NVIDIA Corporation\Global\NVTweak\Devices\1364265386-0\Color
 ```
+
 `3538946`, `3538947`, `3538948` seem to handle the brightness (`100 Dec` = `50%`, `80 Dec` = `0%`, `120 Dec` = `100%`). 
 `3538949`, `3538950`, `3538951` handle the contrast, same value range as the brightness. 
 `3538952`, `3538953`, `3538954` handles the gamma value (`30-180 Dec`, `100 Dec = 1.00`). 
@@ -289,6 +296,7 @@ HKCU\Software\NVIDIA Corporation\Global\NVTweak\Devices\1364265386-0\Color
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : SaturationRegistryKey
 ```
+
 Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends on your monitor.
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/saturation.jpg?raw=true)
@@ -296,7 +304,9 @@ Controls the `Digital vibrance`, decimal value = percentage. `MONITOR` depends o
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITOR : HueRegistryKey
 ```
+
 `HueRegistryKey` controls the `Hue` options, it is a `REG_BINARY` type ([`displayDB.cpp`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/color-displayDB.cpp)):
+
 ```c
 // 0°
 HKLM\System\CurrentControlSet\Services\nvlddmkm\State\DisplayDatabase\MSI3CB01222_2E_07E4_FF\HueRegistryKey    Type: REG_BINARY, Length: 20, Data: DB 01 00 00 14 00 00 00 10 27 00 00 00 00 00 00
@@ -305,7 +315,9 @@ HKLM\System\CurrentControlSet\Services\nvlddmkm\State\DisplayDatabase\MSI3CB0122
 // 359°
 HKLM\System\CurrentControlSet\Services\nvlddmkm\State\DisplayDatabase\MSI3CB01222_2E_07E4_FF\HueRegistryKey    Type: REG_BINARY, Length: 20, Data: DB 01 00 00 14 00 00 00 0E 27 00 00 52 FF FF FF
 ```
+
 The calculation works via `cosHue_x10K` (cosinus), `sinHue_x10K` (sinus) and a checksum. `0°`:
+
 ```powershell
 cos(0) = 1
 1 * 10000 = 10000 = 0x00002710 hex
@@ -365,7 +377,7 @@ sin(0) = 0  = 0x00000000 hex
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITORXXXXX_XX_XXXX_XX : ScalingConfig
 ```
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)  
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl3.png?raw=true)
 
 ## Display > Rotate display
 
@@ -397,14 +409,50 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 }
 ```
 
+
+## Display > View HDCP status
+
+> "*High-bandwidth Digital Content Protection (HDCP) is a copy-protection technology that prevents copying of digital audio and video content across DisplayPort, Digital Visual Interface (DVI), or High-Definition Multimedia Interface (HDMI) connections.*"
+>
+> — NVIDIA Control Panel Help, [HDCP Status](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/Display/HDCP_Status.htm)
+
+Whether your display supports HDCP you can practically make it unsupported using the value (can be edited using [bitmask-calc](https://github.com/nohuto/bitmask-calc)) shown below, causing:
+
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/hdcp-supported.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/hdcp-unsupported.png?raw=true)
+
+```json
+{
+"Name":  "RMHdcpKeyglobZero",
+"Comment":  [
+    "Type DWORD",
+    "Encoding: 1 means Keyglob will be forced to zero"
+  ],
+"Configured":  "1",
+"Elements":  [
+    {
+      "Name":  "TRUE",
+      "Value":  "1"
+    },
+    {
+      "Name":  "FALSE",
+      "Value":  "0"
+    }
+  ]
+}
+```
+
 ## Display > Adjust desktop size and position
+
+Whenever you use your native resolution use `No scaling`, the two options below don't matter then, as no scaling happens anyway.
 
 ```powershell
 \Registry\Machine\SYSTEM\ControlSet001\Services\nvlddmkm\State\DisplayDatabase\MONITORXXXXX : ScalingConfig
 ```
+
 `ScalingConfig` = `Scaling Mode`, `Perform Scaling on`, `Override the scaling mode...` (includes all settings?)
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true)  
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl4.png?raw=true)
 
 ## Developer > Manage GPU Performance Counters
 
@@ -428,15 +476,18 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
   ]
 },
 ```
+
 Changing it via NVCPL:
+
 ```powershell
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Services\nvlddmkm\Global\NVTweak\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\RmProfilingAdminOnly    Type: REG_DWORD, Length: 4, Data: 1
 ```
-`Restrict access to the GPU performance counters to admin users only` = `1`  
-`Allow access to the GPU performance counters to all users` = `0`
 
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)  
+- Restrict access to the GPU performance counters to admin users only = `1`  
+- Allow access to the GPU performance counters to all users = `0`
+
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl5.png?raw=true)
 
 ## Video > Adjust video color settings
 
@@ -445,7 +496,7 @@ Personal preference.
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XALG_Color_Range    Type: REG_BINARY, Length: 8, Data: 00 00 00 00 00 00 00 00
 NVDisplay.Container.exe    RegSetValue    HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\_User_SUB0_DFP1_XEN_Color_Range    Type: REG_DWORD, Length: 4, Data: 2147483649
 ```
-![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)  
+![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl6.png?raw=true)
 
 ## Video > Adjust video image settings
 ```json
