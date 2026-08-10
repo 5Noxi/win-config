@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Iterable, Sequence
 
 RW_URL = "https://rweverything.com/downloads/RwPortableX64V1.7.zip"
+RW_USER_AGENT = "NV-IMOD/1.0"
 RW_ARCHIVE_MEMBER = "Win64/Portable/Rw.exe"
 RW_SHA256 = "5e009cdfc283d7f0d3dd777d40bcd23ecd78d8d7e93fc9cedcfb6d9dbe0b7701"
 RW_RESULT = re.compile(r"=\s*(0x[0-9A-Fa-f]+)\s*$", re.MULTILINE)
@@ -46,7 +47,9 @@ def prepare_rw_binary(rw_path: Path) -> None:
     staged_path = rw_path.with_suffix(".tmp")
     print("[~] rw.exe not found, downloading portable package")
     try:
-        urllib.request.urlretrieve(RW_URL, archive_path)
+        request = urllib.request.Request(RW_URL, headers={"User-Agent": RW_USER_AGENT})
+        with urllib.request.urlopen(request, timeout=60) as response, archive_path.open("wb") as archive_file:
+            shutil.copyfileobj(response, archive_file)
         with zipfile.ZipFile(archive_path) as archive:
             with archive.open(RW_ARCHIVE_MEMBER) as source, staged_path.open("wb") as target:
                 shutil.copyfileobj(source, target)
