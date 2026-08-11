@@ -1,0 +1,52 @@
+
+/* THIS FILE IS AUTO-GENERATED!  DO NOT EDIT!
+**
+** To modify this file, regenerate after editing
+** any RKY file
+**
+** Changes in this file require Windows UI group review
+** please contact SW-Wincpl
+*/
+
+
+
+Value of RID is RID_50428_RegKeyvalue
+%%DEFSTR_START
+#define AUDIO_INJECT_RXINPUT_DLL_STRING            L" "
+#define SHADOWPLAY_FLAGS_STRING                    L"ShadowPlayFlags"
+%%DEFSTR_END
+
+%%DEFID_START
+    AUDIO_INJECT_RXINPUT_DLL_ID                   = 0x80303A19,
+    SHADOWPLAY_FLAGS_ID                           = 0x809D5F60,
+%%DEFID_END
+
+%%DEFNUM_START
+    TOTAL_DWORD_SETTING_NUM = 2,
+    TOTAL_SETTING_NUM = 2
+%%DEFNUM_END
+
+%%DEFSEC_START
+enum EValues_AUDIO_INJECT_RXINPUT_DLL {
+    AUDIO_INJECT_RXINPUT_DLL_OFF                         = 0x00000000,
+    AUDIO_INJECT_RXINPUT_DLL_ON                          = 0x00000001,
+    AUDIO_INJECT_RXINPUT_DLL_NUM_VALUES = 2,
+    AUDIO_INJECT_RXINPUT_DLL_DEFAULT = AUDIO_INJECT_RXINPUT_DLL_TRUE
+};
+
+%%DEFSEC_END
+
+%%DEFGLB_START
+EValues_AUDIO_INJECT_RXINPUT_DLL g_valuesAUDIO_INJECT_RXINPUT_DLL[AUDIO_INJECT_RXINPUT_DLL_NUM_VALUES] = 
+{
+    AUDIO_INJECT_RXINPUT_DLL_OFF,
+    AUDIO_INJECT_RXINPUT_DLL_ON,
+};
+
+%%DEFGLB_END
+
+%%DEFDW_START
+    {AUDIO_INJECT_RXINPUT_DLL_ID,          AUDIO_INJECT_RXINPUT_DLL_STRING,           2, (NvU32 *)g_valuesAUDIO_INJECT_RXINPUT_DLL, AUDIO_INJECT_RXINPUT_DLL_TRUE},
+    {SHADOWPLAY_FLAGS_ID,                  SHADOWPLAY_FLAGS_STRING,                   0, NULL,                                     0x00000000},
+%%DEFDW_END
+

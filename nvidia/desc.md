@@ -40,45 +40,51 @@ Get the lower bit range (`25:24` -> `24`), shift the dec or hex x times to the l
 Example using `RMGC6Parameters` (disabling all):
 
 ```json
-"Name":  "RMGC6Parameters",
-"Elements": [
-  {
-      "Field":  "SLEEP_AWARE_CALLBACK",
-      "Bits":  "1:0",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "DEFERRED_PMU_CALLBACK",
-      "Bits":  "3:2",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "PMU_HANDLE_MODESET",
-      "Bits":  "5:4",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "BSOD_MODESET",
-      "Bits":  "7:6",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLED", "Value":  "1" },
-                      { "Name":  "ENABLED", "Value":  "3" }
-                  ]
-  }
-]
+{
+  "Name": "RMGC6Parameters",
+  "Comment": [
+    "Type DWORD",
+    "This regkey controls individual latency optimization features for GC6."
+  ],
+  "Elements": [
+    {
+      "Field": "SLEEP_AWARE_CALLBACK",
+      "Bits": "1:0",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "DEFERRED_PMU_CALLBACK",
+      "Bits": "3:2",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "PMU_HANDLE_MODESET",
+      "Bits": "5:4",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "BSOD_MODESET",
+      "Bits": "7:6",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLED", "Value": "1" },
+        { "Name": "ENABLED", "Value": "3" }
+      ]
+    }
+  ]
+},
 ```
 
 1. `-shl` using the lower bit range value
@@ -103,15 +109,24 @@ Output of `85`, which is the result.
 Different common scenario would be `DisableDynamicPstate`:
 
 ```json
-"Name":  "DisableDynamicPstate",
-"Comment":  [
-     "1 = Disable dynamic P-State/adaptive clocking",
-     "0 = Do not disable dynamic P-State/adaptive clocking (default)",
- ],
-"Elements":  [
-      { "Name":  "DISABLE", "Value":  "0" },
-      { "Name":  "ENABLE", "Value":  "1" }
+{
+  "Name": "DisableDynamicPstate",
+  "Comment": [
+    "Type Dword",
+    "1 = Disable dynamic P-State/adaptive clocking",
+    "0 = Do not disable dynamic P-State/adaptive clocking (default)"
+  ],
+  "Elements": [
+    {
+      "Name": "DISABLE",
+      "Value": "0"
+    },
+    {
+      "Name": "ENABLE",
+      "Value": "1"
+    }
   ]
+},
 ```
 
 The comment shows `1` = `Enabled`, `0` = `Disabled`, means bit 0 gets switched here.
@@ -119,36 +134,68 @@ The comment shows `1` = `Enabled`, `0` = `Disabled`, means bit 0 gets switched h
 Test yourself with the following example:
 
 ```json
-"Name":  "RMClkSlowDown",
-"Elements":  [
-  {
-      "Field":  "NV",
-      "Bits":  "23:22",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLE", "Value":  "1" },
-                      { "Name":  "ENABLE", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "HOST",
-      "Bits":  "25:24",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLE", "Value":  "1" },
-                      { "Name":  "ENABLE", "Value":  "3" }
-                  ]
-  },
-  {
-      "Field":  "IDLE_PSTATE",
-      "Bits":  "27:26",
-      "Options":  [
-                      { "Name":  "DEFAULT", "Value":  "0" },
-                      { "Name":  "DISABLE", "Value":  "1" },
-                      { "Name":  "ENABLE", "Value":  "3" }
-                  ]
-  }
-]
+{
+  "Name": "RMClkSlowDown",
+  "Comment": [
+    "Type DWORD",
+    "Each clock down feature uses 2 bits. This is used as a stand alone regKey",
+    "For each 2 bits, the following convention holds",
+    "0 : Keep the vbios default",
+    "1 : Disable feature",
+    "3 : Enable feature",
+    "Note:  In general, for most of these features, only the disable function",
+    "should be used.  The enable function should only be used on special",
+    "occasions, such as during bringup when the corresponding property is",
+    "disabled by default, and the vbios is known to have the feature enabled and",
+    "slowdown factors and various other required settings set correctly.",
+    "Thermal Slowdown feature enablement/Disablement has been deprecated since",
+    "a) MODs does not use this regkey anymore",
+    "NV2080_CTRL_THERMAL_SYSTEM_GET_SLOWDOWN_STATE_OPCODE is used by MODS currently",
+    "b) We cannot enable/Disable OVERT event via regkey from gm20x onwards",
+    "c) Pascal and onwards, we donot support ALERT_X since we have introduced generic",
+    "Therm events"
+  ],
+  "Elements": [
+    {
+      "Field": "THERMAL_RESERVED",
+      "Bits": "17:0",
+      "Options": []
+    },
+    {
+      "Field": "DEPRECATED",
+      "Bits": "19:18",
+      "Options": []
+    },
+    {
+      "Field": "NV",
+      "Bits": "23:22",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLE", "Value": "1" },
+        { "Name": "ENABLE", "Value": "3" }
+      ]
+    },
+    {
+      "Field": "HOST",
+      "Bits": "25:24",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLE", "Value": "1" },
+        { "Name": "ENABLE", "Value": "3" }
+      ],
+      "Comment": "deprecated"
+    },
+    {
+      "Field": "IDLE_PSTATE",
+      "Bits": "27:26",
+      "Options": [
+        { "Name": "DEFAULT", "Value": "0" },
+        { "Name": "DISABLE", "Value": "1" },
+        { "Name": "ENABLE", "Value": "3" }
+      ]
+    }
+  ]
+},
 ```
 
 Try to disable all of them.
@@ -181,16 +228,51 @@ The sections below include details of how the nvcpl sets the changes and more, a
 
 ### Adjust image settings with preview
 
+```cpp
+void    CAppSettingsBasic::mapApiRes()
+{
+    //Mapping API values to the resources string
+    CplUiMap::value_type  eot( (UINT32)-1 , CplUi(0) ); // EOT, must be last in the array
+
+    CplUiMap::value_type api2resImage[] = 
+    {
+        //============= Image Quality values->strings resource IDs =====================================================================
+        CplUiMap::value_type(NVCPLAPI_VALUE_D3D_GESTALT_PERF     ,    CplUi(IDS_3DPREVIEW_EMPHASIZING_PERFORMANCE)),
+        CplUiMap::value_type(NVCPLAPI_VALUE_D3D_GESTALT_BALANCED ,    CplUi(IDS_3DPREVIEW_EMPHASIZING_BALANCED)),
+        CplUiMap::value_type(NVCPLAPI_VALUE_D3D_GESTALT_QUAL     ,    CplUi(IDS_3DPREVIEW_EMPHASIZING_QUALITY)),  
+        //============= Image Quality values->strings resource IDs =====================================================================,
+        eot
+    };
+
+    m_sliderGestalt.create(api2resImage,NVCPLAPI_SETTING_D3D_BASIC_GESTALT);
+}
+```
+
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcpl1.png?raw=true)
 
 ### Manage 3D settings
 
 Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*Threaded optimization*', '*Vulkan/OpenGL present method*' etc. are used OpenGL/old DX games only, and e.g. '*Virtual Reality pre-rendered frames*' for VR applications.
 
+````cpp
+// Power management mode
+enum EValues_PREFERRED_PSTATE {
+    PREFERRED_PSTATE_ADAPTIVE                            = 0x00000000,
+    PREFERRED_PSTATE_PREFER_MAX                          = 0x00000001,
+    PREFERRED_PSTATE_DRIVER_CONTROLLED                   = 0x00000002,
+    PREFERRED_PSTATE_PREFER_CONSISTENT_PERFORMANCE       = 0x00000003,
+    PREFERRED_PSTATE_PREFER_MIN                          = 0x00000004,
+    PREFERRED_PSTATE_OPTIMAL_POWER                       = 0x00000005,
+    PREFERRED_PSTATE_MIN                                 = 0x00000000,
+    PREFERRED_PSTATE_MAX                                 = 0x00000005,
+    PREFERRED_PSTATE_NUM_VALUES = 8,
+    PREFERRED_PSTATE_DEFAULT = PREFERRED_PSTATE_OPTIMAL_POWER
+};
+```
+
 - [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)
 - [Noverse-Minimal](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Minimal.nip)
 - [Noverse-Compatible](https://github.com/nohuto/win-config/blob/main/nvidia/assets/NV-Compatible.nip)
-- [`d3dreg` Output](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3doutput.txt) - [List](https://github.com/nohuto/win-config/blob/main/nvidia/assets/d3dlist.cpp)
 
 ### Configure Surround, PhysX
 
@@ -242,10 +324,11 @@ Location (the ID may differ):
 HKCU\Software\NVIDIA Corporation\Global\NVTweak\Devices\1364265386-0\Color
 ```
 
-`3538946`, `3538947`, `3538948` seem to handle the brightness (`100 Dec` = `50%`, `80 Dec` = `0%`, `120 Dec` = `100%`). 
-`3538949`, `3538950`, `3538951` handle the contrast, same value range as the brightness. 
-`3538952`, `3538953`, `3538954` handles the gamma value (`30-180 Dec`, `100 Dec = 1.00`). 
-`3538970` `1` = `Override to reference mode - Off`, `2` = `Override to reference mode - On`
+- `3538946`, `3538947`, `3538948` seem to handle the brightness (`100 Dec` = `50%`, `80 Dec` = `0%`, `120 Dec` = `100%`). 
+- `3538949`, `3538950`, `3538951` handle the contrast, same value range as the brightness. 
+- `3538952`, `3538953`, `3538954` handles the gamma value (`30-180 Dec`, `100 Dec = 1.00`). 
+- `3538970` `1` = `Override to reference mode - Off`, `2` = `Override to reference mode - On`
+
 [`NvCplGammaSet`](https://github.com/pbatard/nvBrightness/blob/8f4a183532f1048375608fc70ad03c38652fc140/src/nvDisplay.cpp#L293) is also located in the key, but seems to be at `1` all of the time (`DesktopColor.cpp`). If set to non zero, it uses the saved parameters (values from registry), if its `0` it'll use the default values?
 
 ```powershell
@@ -369,6 +452,39 @@ You've to edit the `Rotation` value to change the orientation, `DefaultSettings.
 
 ## View HDCP status
 
+Seems to work via `NVCPLAPI_SETTING_HDCP_GET_STATUS_INFO`/`NVCPLAPI_SETTING_HDCP_GET_LINK_STATUS`/`NVCPLAPI_SETTING_HDCP_STATUS_REPORTING_SUPPORT` APIs.
+
+```cpp
+    // check HDCP status info to get UI messages and allerts res. IDs (see UI spec. for logic)
+/** from spec, see bug #444176
+    NVCPLAPI_SETTING_HDCP_GET_STATUS_INFO: retrieves the status info of whether HDCP is supported 
+    on the current configuration or not, and if not, what the reasons are. 
+    The possible values are (can be one or more):     
+    
+    A   NVCPLAPI_VALUE_HDCP_STATUS_INFO_AVAILABLE                   
+    B   NVCPLAPI_VALUE_HDCP_STATUS_INFO_UNAVAILABLE                 
+    C   NVCPLAPI_VALUE_HDCP_STATUS_INFO_INVALID_DISPLAY_ID          
+    D   NVCPLAPI_VALUE_HDCP_STATUS_INFO_INVALID_DISPLAY             
+    E   NVCPLAPI_VALUE_HDCP_STATUS_INFO_INVALID_DISPLAY_MODE        
+    F   NVCPLAPI_VALUE_HDCP_STATUS_INFO_INVALID_GPU                 
+//  G   NVCPLAPI_VALUE_HDCP_STATUS_INFO_INVALID_GPU_MODE    // not used           
+    H   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_UNTRUST               
+    I   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_LINK_FAILURES         
+    J   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_KSV_LENGTH            
+    K   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_KSV_SIGNATURE         
+    L   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_SRM_SIGNATURE         
+    M   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_SRM_REVOKED           
+    N   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_REPEATER_NO_READY     
+    O   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_TOPOLOGY_ERROR        
+    P   NVCPLAPI_VALUE_HDCP_STATUS_INFO_ABORT_BAD_DISPLAY 
+
+    NVCPLAPI_SETTING_HDCP_GET_LINK_STATUS: link status of the HDCP connection. Possible values are:     
+    Q   NVCPLAPI_VALUE_HDCP_LINK_STATUS_REPEATER_PRESENT      
+    R   NVCPLAPI_VALUE_HDCP_LINK_STATUS_DEBUGGER_DETECTED     
+    S   NVCPLAPI_VALUE_HDCP_LINK_STATUS_HDCP_ON            
+**/ 
+```
+
 > "*High-bandwidth Digital Content Protection (HDCP) is a copy-protection technology that prevents copying of digital audio and video content across DisplayPort, Digital Visual Interface (DVI), or High-Definition Multimedia Interface (HDMI) connections.*"
 >
 > — NVIDIA Control Panel Help, [HDCP Status](https://www.nvidia.com/content/Control-Panel-Help/vLatest/en-us/mergedProjects/Display/HDCP_Status.htm)
@@ -380,22 +496,26 @@ Whether your display supports HDCP you can practically make it unsupported using
 
 ```json
 {
-"Name":  "RMHdcpKeyglobZero",
-"Comment":  [
+  "Name": "RMHdcpKeyglobZero",
+  "Comment": [
     "Type DWORD",
     "Encoding: 1 means Keyglob will be forced to zero"
   ],
-"Elements":  [
+  "Configured": "1",
+  "Elements": [
     {
-      "Name":  "TRUE",
-      "Value":  "1"
+      "Name": "TRUE",
+      "Value": "1"
     },
     {
-      "Name":  "FALSE",
-      "Value":  "0"
+      "Name": "FALSE",
+      "Value": "0"
     }
   ]
-}
+},
+```
+```js
+AddArg("hdcp_keyglob_zero", VALI, "Registry.ResourceManager.RMHdcpKeyglobZero", null, OS_KERNELRM, "Forces hdcp keyglob to 0 if set to 1, useful to skip RM init breakpoints on hdcp key less SKUs");
 ```
 
 ## Adjust desktop size and position
@@ -420,17 +540,23 @@ Whenever you use your native resolution use `No scaling`, the two options below 
 
 ```json
 {
-"Name":  "RmProfilingAdminOnly",
-"Comment":  [
-     "Type DWORD",
-     "This regkey restricts profiling capabilities (creation of profiling objects",
-     "and access to profiling-related registers) to admin only.",
-     "0 - (default - disabled)",
-     "1 - Enables admin check"
- ],
-"Elements":  [
-      {"Name":  "FALSE","Value":  "0"},
-      {"Name":  "TRUE","Value":  "1"}
+  "Name": "RmProfilingAdminOnly",
+  "Comment": [
+    "Type DWORD",
+    "This regkey restricts profiling capabilities (creation of profiling objects",
+    "and access to profiling-related registers) to admin only.",
+    "0 - (default - disabled)",
+    "1 - Enables admin check"
+  ],
+  "Elements": [
+    {
+      "Name": "FALSE",
+      "Value": "0"
+    },
+    {
+      "Name": "TRUE",
+      "Value": "1"
+    }
   ]
 },
 ```
@@ -858,6 +984,28 @@ Enables `Enable Developer Settings` in the NVIDIA control panel.
 //Profile info related
 NV_REG_CPL_PERFCOUNT_RESTRICTION  "RmProfilingAdminOnly"
 NV_REG_CPL_DEVTOOLS_VISIBLE       "NvDevToolsVisible"
+```
+```json
+{
+  "Name": "RmProfilingAdminOnly",
+  "Comment": [
+    "Type DWORD",
+    "This regkey restricts profiling capabilities (creation of profiling objects",
+    "and access to profiling-related registers) to admin only.",
+    "0 - (default - disabled)",
+    "1 - Enables admin check"
+  ],
+  "Elements": [
+    {
+      "Name": "FALSE",
+      "Value": "0"
+    },
+    {
+      "Name": "TRUE",
+      "Value": "1"
+    }
+  ]
+},
 ```
 
 ![](https://github.com/nohuto/win-config/blob/main/nvidia/images/nvcploptions.png?raw=true)

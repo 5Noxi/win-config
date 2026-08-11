@@ -1,0 +1,1880 @@
+
+/* THIS FILE IS AUTO-GENERATED!  DO NOT EDIT!
+**
+**
+**PRIVATE HEADER
+** To modify this file, regenerate after editing
+** any RKY file
+**
+** Changes in this file require Windows UI group review
+** please contact SW-Wincpl
+*/
+
+%%DEFSTR_START
+#define AA_BEHAVIOR_FLAGS_STRING                   L"Antialiasing - Behavior Flags"
+#define AA_MODE_ALPHATOCOVERAGE_STRING             L"Antialiasing - Transparency Multisampling"
+#define AA_MODE_GAMMACORRECTION_STRING             L"Antialiasing - Gamma correction"
+#define AA_MODE_METHOD_STRING                      L"Antialiasing - Setting"
+#define AA_MODE_REPLAY_STRING                      L"Antialiasing - Transparency Supersampling"
+#define AA_MODE_SELECTOR_STRING                    L"Antialiasing - Mode"
+#define AA_MODE_SELECTOR_SLIAA_STRING              L"Antialiasing - SLI AA"
+#define ANISO_MODE_LEVEL_STRING                    L"Anisotropic filtering setting"
+#define ANISO_MODE_SELECTOR_STRING                 L"Anisotropic filtering mode"
+#define ANSEL_ALLOW_STRING                         L"NVIDIA Predefined Ansel Usage"
+#define ANSEL_ALLOWLISTED_STRING                   L"Ansel flags for enabled applications"
+#define ANSEL_ENABLE_STRING                        L"Enable Ansel"
+#define APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_STRING L"Application Profile Notification Popup Timeout"
+#define APPLICATION_STEAM_ID_STRING                L"Steam Application ID"
+#define AUTOFL_STRING                              L"Platform Boost"
+#define BATTERY_BOOST_STRING                       L"Battery Boost"
+#define BATTERY_BOOST_APP_FPS_STRING               L"Battery Boost Application FPS"
+#define BG_FRL_FPS_STRING                          L"Background Application Max Frame Rate"
+#define BG_FRL_FPS_NVCPL_STRING                    L"Background Application Max Frame Rate only for NVCPL to maintain the previous slider value when the BG_FRL_FPS is set to Disabled."
+#define CPL_HIDDEN_PROFILE_STRING                  L"Do not display this profile in the Control Panel"
+#define CUDA_EXCLUDED_GPUS_STRING                  L"List of Universal GPU ids"
+#define D3DOGL_GPU_MAX_POWER_STRING                L"Maximum GPU Power"
+#define EXPORT_PERF_COUNTERS_STRING                L"Export Performance Counters"
+#define EXTERNAL_QUIET_MODE_STRING                 L"External Quiet Mode (XQM)"
+#define FRL_FPS_STRING                             L"Frame Rate Limiter"
+#define FRL_FPS_NVCPL_STRING                       L"Frame Rate Limiter for NVCPL"
+#define FRL_LOW_LATENCY_STRING                     L"FRL Low Latency"
+#define FXAA_ALLOW_STRING                          L"NVIDIA Predefined FXAA Usage"
+#define FXAA_ENABLE_STRING                         L"Enable FXAA"
+#define FXAA_INDICATOR_ENABLE_STRING               L"Enable FXAA Indicator"
+#define GFN_FRL_FPS_STRING                         L"GFN's Frame Rate Limiter"
+#define GSYNC_COMPATIBILITY_STRING                 L"G-SYNC Compatibility"
+#define LATENCY_INDICATOR_AUTOALIGN_STRING         L"Autoalign flash indicator"
+#define LATENCY_INDICATOR_HEIGHT_STRING            L"Height in pixels of latency flash indicator"
+#define LATENCY_INDICATOR_POS_X_STRING             L"Screen position by % of latency flash indicator"
+#define LATENCY_INDICATOR_POS_Y_STRING             L"Screen position by % of latency flash indicator"
+#define LATENCY_INDICATOR_WIDTH_STRING             L"Width in pixels of latency flash indicator"
+#define MAXWELL_WDDM2_FORCE_128K_PTE_STRING        L" "
+#define MCSFRSHOWSPLIT_STRING                      L"SLI indicator"
+#define NV_QUALITY_UPSCALING_STRING                L"NVIDIA Quality upscaling"
+#define OPTIMUS_MAXAA_STRING                       L"Maximum AA samples allowed for a given application"
+#define PHYSXINDICATOR_STRING                      L"Display the PhysX indicator"
+#define PREFERRED_PSTATE_STRING                    L"Power management mode"
+#define PREVENT_UI_AF_OVERRIDE_STRING              L"No override of Anisotropic filtering"
+#define PS_FRAMERATE_LIMITER_STRING                L"Frame Rate Limiter"
+#define PS_FRAMERATE_LIMITER_2_CONTROL_STRING      L"Frame Rate Limiter 2 Control"
+#define PS_FRAMERATE_LIMITER_GPS_CTRL_STRING       L"Frame Rate Monitor"
+#define PS_FRAMERATE_MONITOR_CTRL_STRING           L"Frame Rate Monitor Control"
+#define QUIET_MODE_STRING                          L"Whisper Mode"
+#define QUIET_MODE_APP_FPS_STRING                  L"Whisper Mode Application FPS"
+#define SHIM_MAXRES_STRING                         L"Maximum resolution allowed for a given application"
+#define SHIM_MCCOMPAT_STRING                       L"Optimus flags for enabled applications"
+#define SHIM_RENDERING_MODE_STRING                 L"Enable application for Optimus"
+#define SHIM_RENDERING_OPTIONS_STRING              L"Shim Rendering Mode Options per application for Optimus"
+#define SLI_GPU_COUNT_STRING                       L"Number of GPUs to use on SLI rendering mode"
+#define SLI_PREDEFINED_GPU_COUNT_STRING            L"NVIDIA predefined number of GPUs to use on SLI rendering mode"
+#define SLI_PREDEFINED_GPU_COUNT_DX10_STRING       L"NVIDIA predefined number of GPUs to use on SLI rendering mode on DirectX 10"
+#define SLI_PREDEFINED_MODE_STRING                 L"NVIDIA predefined SLI mode"
+#define SLI_PREDEFINED_MODE_DX10_STRING            L"NVIDIA predefined SLI mode on DirectX 10"
+#define SLI_RENDERING_MODE_STRING                  L"SLI rendering mode"
+#define VRPRERENDERLIMIT_STRING                    L"Virtual Reality pre-rendered frames"
+#define VRRFEATUREINDICATOR_STRING                 L"Toggle the VRR global feature"
+#define VRRINDICATOR_STRING                        L"Display the VRR Indicator"
+#define VRROVERLAYINDICATOR_STRING                 L"Display the VRR Overlay Indicator"
+#define VRRREQUESTSTATE_STRING                     L"VRR requested state"
+#define VRR_APP_OVERRIDE_STRING                    L"G-SYNC"
+#define VRR_APP_OVERRIDE_REQUEST_STATE_STRING      L"G-SYNC"
+#define VRR_MODE_STRING                            L"Enable G-SYNC globally"
+#define VSYNCSMOOTHAFR_STRING                      L"Flag to control smooth AFR behavior"
+#define VSYNCVRRCONTROL_STRING                     L"Variable refresh Rate"
+#define VSYNC_BEHAVIOR_FLAGS_STRING                L"Vsync - Behavior Flags"
+#define WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_STRING L" "
+#define WKS_API_STEREO_EYES_EXCHANGE_STRING        L"Stereo - Swap eyes"
+#define WKS_API_STEREO_MODE_STRING                 L"Stereo - Display mode"
+#define WKS_DISPLAY_REARRANGEMENT_WITHIN16K_STRING L"Control Display Rearrangement"
+#define WKS_MEMORY_ALLOCATION_POLICY_STRING        L"Memory Allocation Policy"
+#define WKS_MOSAIC_TOPOLOGY_REQUESTED_STRING       L" "
+#define WKS_POST_PROCESSING_ENGINE_CONTROL_STRING  L"Overlay Indicator"
+#define WKS_STEREO_DONGLE_SUPPORT_STRING           L"Stereo - Dongle Support"
+#define WKS_STEREO_SUPPORT_STRING                  L"Stereo - Enable"
+#define WKS_STEREO_SWAP_MODE_STRING                L"Stereo - swap mode"
+%%DEFSTR_END
+
+%%DEFID_START
+    AA_BEHAVIOR_FLAGS_ID                          = 0x10ECDB82,
+    AA_MODE_ALPHATOCOVERAGE_ID                    = 0x10FC2D9C,
+    AA_MODE_GAMMACORRECTION_ID                    = 0x107D639D,
+    AA_MODE_METHOD_ID                             = 0x10D773D2,
+    AA_MODE_REPLAY_ID                             = 0x10D48A85,
+    AA_MODE_SELECTOR_ID                           = 0x107EFC5B,
+    AA_MODE_SELECTOR_SLIAA_ID                     = 0x107AFC5B,
+    ANISO_MODE_LEVEL_ID                           = 0x101E61A9,
+    ANISO_MODE_SELECTOR_ID                        = 0x10D2BB16,
+    ANSEL_ALLOW_ID                                = 0x1035DB89,
+    ANSEL_ALLOWLISTED_ID                          = 0x1085DA8A,
+    ANSEL_ENABLE_ID                               = 0x1075D972,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_ID   = 0x104554B6,
+    APPLICATION_STEAM_ID_ID                       = 0x107CDDBC,
+    AUTOFL_ID                                     = 0x10834FFE,
+    BATTERY_BOOST_ID                              = 0x10115C89,
+    BATTERY_BOOST_APP_FPS_ID                      = 0x10115C8C,
+    BG_FRL_FPS_ID                                 = 0x10835005,
+    BG_FRL_FPS_NVCPL_ID                           = 0x10835006,
+    CPL_HIDDEN_PROFILE_ID                         = 0x106D5CFF,
+    CUDA_EXCLUDED_GPUS_ID                         = 0x10354FF8,
+    D3DOGL_GPU_MAX_POWER_ID                       = 0x10D1EF29,
+    EXPORT_PERF_COUNTERS_ID                       = 0x108F0841,
+    EXTERNAL_QUIET_MODE_ID                        = 0x10115C8D,
+    FRL_FPS_ID                                    = 0x10835002,
+    FRL_FPS_NVCPL_ID                              = 0x1083500A,
+    FRL_LOW_LATENCY_ID                            = 0x10835000,
+    FXAA_ALLOW_ID                                 = 0x1034CB89,
+    FXAA_ENABLE_ID                                = 0x1074C972,
+    FXAA_INDICATOR_ENABLE_ID                      = 0x1068FB9C,
+    GFN_FRL_FPS_ID                                = 0x1083500F,
+    GSYNC_COMPATIBILITY_ID                        = 0x109DB0D3,
+    LATENCY_INDICATOR_AUTOALIGN_ID                = 0x1095F170,
+    LATENCY_INDICATOR_HEIGHT_ID                   = 0x10844F18,
+    LATENCY_INDICATOR_POS_X_ID                    = 0x10834F15,
+    LATENCY_INDICATOR_POS_Y_ID                    = 0x10834F16,
+    LATENCY_INDICATOR_WIDTH_ID                    = 0x10834F17,
+    MAXWELL_WDDM2_FORCE_128K_PTE_ID               = 0x10C158AD,
+    MCSFRSHOWSPLIT_ID                             = 0x10287051,
+    NV_QUALITY_UPSCALING_ID                       = 0x10444444,
+    OPTIMUS_MAXAA_ID                              = 0x10F9DC83,
+    PHYSXINDICATOR_ID                             = 0x1094F16F,
+    PREFERRED_PSTATE_ID                           = 0x1057EB71,
+    PREVENT_UI_AF_OVERRIDE_ID                     = 0x103BCCB5,
+    PS_FRAMERATE_LIMITER_ID                       = 0x10834FEE,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ID             = 0x10834FFF,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_ID              = 0x10834F01,
+    PS_FRAMERATE_MONITOR_CTRL_ID                  = 0x10834F05,
+    QUIET_MODE_ID                                 = 0x10115C8A,
+    QUIET_MODE_APP_FPS_ID                         = 0x10115C8B,
+    SHIM_MAXRES_ID                                = 0x10F9DC82,
+    SHIM_MCCOMPAT_ID                              = 0x10F9DC80,
+    SHIM_RENDERING_MODE_ID                        = 0x10F9DC81,
+    SHIM_RENDERING_OPTIONS_ID                     = 0x10F9DC84,
+    SLI_GPU_COUNT_ID                              = 0x1033DCD1,
+    SLI_PREDEFINED_GPU_COUNT_ID                   = 0x1033DCD2,
+    SLI_PREDEFINED_GPU_COUNT_DX10_ID              = 0x1033DCD3,
+    SLI_PREDEFINED_MODE_ID                        = 0x1033CEC1,
+    SLI_PREDEFINED_MODE_DX10_ID                   = 0x1033CEC2,
+    SLI_RENDERING_MODE_ID                         = 0x1033CED1,
+    VRPRERENDERLIMIT_ID                           = 0x10111133,
+    VRRFEATUREINDICATOR_ID                        = 0x1094F157,
+    VRRINDICATOR_ID                               = 0x10029538,
+    VRROVERLAYINDICATOR_ID                        = 0x1095F16F,
+    VRRREQUESTSTATE_ID                            = 0x1094F1F7,
+    VRR_APP_OVERRIDE_ID                           = 0x10A879CF,
+    VRR_APP_OVERRIDE_REQUEST_STATE_ID             = 0x10A879AC,
+    VRR_MODE_ID                                   = 0x1194F158,
+    VSYNCSMOOTHAFR_ID                             = 0x101AE763,
+    VSYNCVRRCONTROL_ID                            = 0x10A879CE,
+    VSYNC_BEHAVIOR_FLAGS_ID                       = 0x10FDEC23,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_ID = 0x11FBDF11,
+    WKS_API_STEREO_EYES_EXCHANGE_ID               = 0x11AE435C,
+    WKS_API_STEREO_MODE_ID                        = 0x11E91A61,
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_ID        = 0x10D91A4C,
+    WKS_MEMORY_ALLOCATION_POLICY_ID               = 0x11112233,
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_ID              = 0x114FA775,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_ID         = 0x11112256,
+    WKS_STEREO_DONGLE_SUPPORT_ID                  = 0x112493BD,
+    WKS_STEREO_SUPPORT_ID                         = 0x11AA9E99,
+    WKS_STEREO_SWAP_MODE_ID                       = 0x11333333,
+%%DEFID_END
+
+%%DEFNUM_START
+    TOTAL_DWORD_SETTING_NUM = 79,
+    TOTAL_WSTRING_SETTING_NUM = 2,
+    TOTAL_SETTING_NUM = 81
+%%DEFNUM_END
+
+%%DEFSEC_START
+enum EValues_AA_BEHAVIOR_FLAGS {
+    AA_BEHAVIOR_FLAGS_NONE                               = 0x00000000,
+    AA_BEHAVIOR_FLAGS_TREAT_OVERRIDE_AS_APP_CONTROLLED   = 0x00000001,
+    AA_BEHAVIOR_FLAGS_TREAT_OVERRIDE_AS_ENHANCE          = 0x00000002,
+    AA_BEHAVIOR_FLAGS_DISABLE_OVERRIDE                   = 0x00000003,
+    AA_BEHAVIOR_FLAGS_TREAT_ENHANCE_AS_APP_CONTROLLED    = 0x00000004,
+    AA_BEHAVIOR_FLAGS_TREAT_ENHANCE_AS_OVERRIDE          = 0x00000008,
+    AA_BEHAVIOR_FLAGS_DISABLE_ENHANCE                    = 0x0000000c,
+    AA_BEHAVIOR_FLAGS_MAP_VCAA_TO_MULTISAMPLING          = 0x00010000,
+    AA_BEHAVIOR_FLAGS_SLI_DISABLE_TRANSPARENCY_SUPERSAMPLING = 0x00020000,
+    AA_BEHAVIOR_FLAGS_DISABLE_CPLAA                      = 0x00040000,
+    AA_BEHAVIOR_FLAGS_SKIP_RT_DIM_CHECK_FOR_ENHANCE      = 0x00080000,
+    AA_BEHAVIOR_FLAGS_DISABLE_SLIAA                      = 0x00100000,
+    AA_BEHAVIOR_FLAGS_DEFAULT                            = 0x00000000,
+    AA_BEHAVIOR_FLAGS_AA_RT_BPP_DIV_4                    = 0xf0000000,
+    AA_BEHAVIOR_FLAGS_AA_RT_BPP_DIV_4_SHIFT              = 28,
+    AA_BEHAVIOR_FLAGS_NON_AA_RT_BPP_DIV_4                = 0x0f000000,
+    AA_BEHAVIOR_FLAGS_NON_AA_RT_BPP_DIV_4_SHIFT          = 24,
+    AA_BEHAVIOR_FLAGS_MASK                               = 0xff1f000f,
+    AA_BEHAVIOR_FLAGS_NUM_VALUES = 18,
+};
+
+enum EValues_AA_MODE_ALPHATOCOVERAGE {
+    AA_MODE_ALPHATOCOVERAGE_MODE_MASK                    = 0x00000004,
+    AA_MODE_ALPHATOCOVERAGE_MODE_OFF                     = 0x00000000,
+    AA_MODE_ALPHATOCOVERAGE_MODE_ON                      = 0x00000004,
+    AA_MODE_ALPHATOCOVERAGE_MODE_MAX                     = 0x00000004,
+    AA_MODE_ALPHATOCOVERAGE_NUM_VALUES = 4,
+    AA_MODE_ALPHATOCOVERAGE_DEFAULT = 0x00000000
+};
+
+enum EValues_AA_MODE_GAMMACORRECTION {
+    AA_MODE_GAMMACORRECTION_MASK                         = 0x00000003,
+    AA_MODE_GAMMACORRECTION_OFF                          = 0x00000000,
+    AA_MODE_GAMMACORRECTION_ON_IF_FOS                    = 0x00000001,
+    AA_MODE_GAMMACORRECTION_ON_ALWAYS                    = 0x00000002,
+    AA_MODE_GAMMACORRECTION_MAX                          = 0x00000002,
+    AA_MODE_GAMMACORRECTION_DEFAULT                      = 0x00000000,
+    AA_MODE_GAMMACORRECTION_DEFAULT_TESLA                = 0x00000002,
+    AA_MODE_GAMMACORRECTION_DEFAULT_FERMI                = 0x00000002,
+    AA_MODE_GAMMACORRECTION_NUM_VALUES = 8,
+};
+
+enum EValues_AA_MODE_METHOD {
+    AA_MODE_METHOD_NONE                                  = 0x0,
+    AA_MODE_METHOD_SUPERSAMPLE_2X_H                      = 0x1,
+    AA_MODE_METHOD_SUPERSAMPLE_2X_V                      = 0x2,
+    AA_MODE_METHOD_SUPERSAMPLE_1_5X1_5                   = 0x2,
+    AA_MODE_METHOD_FREE_0x03                             = 0x3,
+    AA_MODE_METHOD_FREE_0x04                             = 0x4,
+    AA_MODE_METHOD_SUPERSAMPLE_4X                        = 0x5,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_BIAS                   = 0x6,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_GAUSSIAN               = 0x7,
+    AA_MODE_METHOD_FREE_0x08                             = 0x8,
+    AA_MODE_METHOD_FREE_0x09                             = 0x9,
+    AA_MODE_METHOD_SUPERSAMPLE_9X                        = 0xA,
+    AA_MODE_METHOD_SUPERSAMPLE_9X_BIAS                   = 0xB,
+    AA_MODE_METHOD_SUPERSAMPLE_16X                       = 0xC,
+    AA_MODE_METHOD_SUPERSAMPLE_16X_BIAS                  = 0xD,
+    AA_MODE_METHOD_MULTISAMPLE_2X_DIAGONAL               = 0xE,
+    AA_MODE_METHOD_MULTISAMPLE_2X_QUINCUNX               = 0xF,
+    AA_MODE_METHOD_MULTISAMPLE_4X                        = 0x10,
+    AA_MODE_METHOD_FREE_0x11                             = 0x11,
+    AA_MODE_METHOD_MULTISAMPLE_4X_GAUSSIAN               = 0x12,
+    AA_MODE_METHOD_MIXEDSAMPLE_4X_SKEWED_4TAP            = 0x13,
+    AA_MODE_METHOD_FREE_0x14                             = 0x14,
+    AA_MODE_METHOD_FREE_0x15                             = 0x15,
+    AA_MODE_METHOD_MIXEDSAMPLE_6X                        = 0x16,
+    AA_MODE_METHOD_MIXEDSAMPLE_6X_SKEWED_6TAP            = 0x17,
+    AA_MODE_METHOD_MIXEDSAMPLE_8X                        = 0x18,
+    AA_MODE_METHOD_MIXEDSAMPLE_8X_SKEWED_8TAP            = 0x19,
+    AA_MODE_METHOD_MIXEDSAMPLE_16X                       = 0x1a,
+    AA_MODE_METHOD_MULTISAMPLE_4X_GAMMA                  = 0x1b,
+    AA_MODE_METHOD_MULTISAMPLE_16X                       = 0x1c,
+    AA_MODE_METHOD_VCAA_32X_8v24                         = 0x1d,
+    AA_MODE_METHOD_CORRUPTION_CHECK                      = 0x1e,
+    AA_MODE_METHOD_6X_CT                                 = 0x1f,
+    AA_MODE_METHOD_MULTISAMPLE_2X_DIAGONAL_GAMMA         = 0x20,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_GAMMA                  = 0x21,
+    AA_MODE_METHOD_MULTISAMPLE_4X_FOSGAMMA               = 0x22,
+    AA_MODE_METHOD_MULTISAMPLE_2X_DIAGONAL_FOSGAMMA      = 0x23,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_FOSGAMMA               = 0x24,
+    AA_MODE_METHOD_MULTISAMPLE_8X                        = 0x25,
+    AA_MODE_METHOD_VCAA_8X_4v4                           = 0x26,
+    AA_MODE_METHOD_VCAA_16X_4v12                         = 0x27,
+    AA_MODE_METHOD_VCAA_16X_8v8                          = 0x28,
+    AA_MODE_METHOD_MIXEDSAMPLE_32X                       = 0x29,
+    AA_MODE_METHOD_SUPERVCAA_64X_4v12                    = 0x2a,
+    AA_MODE_METHOD_SUPERVCAA_64X_8v8                     = 0x2b,
+    AA_MODE_METHOD_MIXEDSAMPLE_64X                       = 0x2c,
+    AA_MODE_METHOD_MIXEDSAMPLE_128X                      = 0x2d,
+    AA_MODE_METHOD_COUNT                                 = 0x2e,
+    AA_MODE_METHOD_METHOD_MASK                           = 0x0000ffff,
+    AA_MODE_METHOD_METHOD_MAX                            = 0xf1c57815,
+    AA_MODE_METHOD_NUM_VALUES = 50,
+    AA_MODE_METHOD_DEFAULT = AA_MODE_METHOD_NONE
+};
+
+enum EValues_AA_MODE_REPLAY {
+    AA_MODE_REPLAY_SAMPLES_MASK                          = 0x00000070,
+    AA_MODE_REPLAY_SAMPLES_ONE                           = 0x00000000,
+    AA_MODE_REPLAY_SAMPLES_TWO                           = 0x00000010,
+    AA_MODE_REPLAY_SAMPLES_FOUR                          = 0x00000020,
+    AA_MODE_REPLAY_SAMPLES_EIGHT                         = 0x00000030,
+    AA_MODE_REPLAY_SAMPLES_MAX                           = 0x00000030,
+    AA_MODE_REPLAY_MODE_MASK                             = 0x0000000f,
+    AA_MODE_REPLAY_MODE_OFF                              = 0x00000000,
+    AA_MODE_REPLAY_MODE_ALPHA_TEST                       = 0x00000001,
+    AA_MODE_REPLAY_MODE_PIXEL_KILL                       = 0x00000002,
+    AA_MODE_REPLAY_MODE_DYN_BRANCH                       = 0x00000004,
+    AA_MODE_REPLAY_MODE_OPTIMAL                          = 0x00000004,
+    AA_MODE_REPLAY_MODE_ALL                              = 0x00000008,
+    AA_MODE_REPLAY_MODE_MAX                              = 0x0000000f,
+    AA_MODE_REPLAY_TRANSPARENCY                          = 0x00000023,
+    AA_MODE_REPLAY_DISALLOW_TRAA                         = 0x00000100,
+    AA_MODE_REPLAY_TRANSPARENCY_DEFAULT                  = 0x00000000,
+    AA_MODE_REPLAY_TRANSPARENCY_DEFAULT_TESLA            = 0x00000000,
+    AA_MODE_REPLAY_TRANSPARENCY_DEFAULT_FERMI            = 0x00000000,
+    AA_MODE_REPLAY_MASK                                  = 0x0000017f,
+    AA_MODE_REPLAY_NUM_VALUES = 20,
+    AA_MODE_REPLAY_DEFAULT = 0x00000000
+};
+
+enum EValues_AA_MODE_SELECTOR {
+    AA_MODE_SELECTOR_MASK                                = 0x00000003,
+    AA_MODE_SELECTOR_APP_CONTROL                         = 0x00000000,
+    AA_MODE_SELECTOR_OVERRIDE                            = 0x00000001,
+    AA_MODE_SELECTOR_ENHANCE                             = 0x00000002,
+    AA_MODE_SELECTOR_MAX                                 = 0x00000002,
+    AA_MODE_SELECTOR_NUM_VALUES = 5,
+    AA_MODE_SELECTOR_DEFAULT = AA_MODE_SELECTOR_APP_CONTROL
+};
+
+enum EValues_AA_MODE_SELECTOR_SLIAA {
+    AA_MODE_SELECTOR_SLIAA_DISABLED                      = 0,
+    AA_MODE_SELECTOR_SLIAA_ENABLED                       = 1,
+    AA_MODE_SELECTOR_SLIAA_NUM_VALUES = 2,
+    AA_MODE_SELECTOR_SLIAA_DEFAULT = AA_MODE_SELECTOR_SLIAA_DISABLED
+};
+
+enum EValues_ANISO_MODE_LEVEL {
+    ANISO_MODE_LEVEL_MASK                                = 0x0000ffff,
+    ANISO_MODE_LEVEL_NONE_POINT                          = 0x00000000,
+    ANISO_MODE_LEVEL_NONE_LINEAR                         = 0x00000001,
+    ANISO_MODE_LEVEL_MAX                                 = 0x00000010,
+    ANISO_MODE_LEVEL_DEFAULT                             = 0x00000001,
+    ANISO_MODE_LEVEL_NUM_VALUES = 5,
+};
+
+enum EValues_ANISO_MODE_SELECTOR {
+    ANISO_MODE_SELECTOR_MASK                             = 0x0000000f,
+    ANISO_MODE_SELECTOR_APP                              = 0x00000000,
+    ANISO_MODE_SELECTOR_USER                             = 0x00000001,
+    ANISO_MODE_SELECTOR_COND                             = 0x00000002,
+    ANISO_MODE_SELECTOR_MAX                              = 0x00000002,
+    ANISO_MODE_SELECTOR_DEFAULT                          = 0x00000000,
+    ANISO_MODE_SELECTOR_NUM_VALUES = 6,
+};
+
+enum EValues_ANSEL_ALLOW {
+    ANSEL_ALLOW_DISALLOWED                               = 0,
+    ANSEL_ALLOW_ALLOWED                                  = 1,
+    ANSEL_ALLOW_NUM_VALUES = 2,
+    ANSEL_ALLOW_DEFAULT = ANSEL_ALLOW_ALLOWED
+};
+
+enum EValues_ANSEL_ALLOWLISTED {
+    ANSEL_ALLOWLISTED_DISALLOWED                         = 0,
+    ANSEL_ALLOWLISTED_ALLOWED                            = 1,
+    ANSEL_ALLOWLISTED_NUM_VALUES = 2,
+    ANSEL_ALLOWLISTED_DEFAULT = ANSEL_ALLOWLISTED_DISALLOWED
+};
+
+enum EValues_ANSEL_ENABLE {
+    ANSEL_ENABLE_OFF                                     = 0,
+    ANSEL_ENABLE_ON                                      = 1,
+    ANSEL_ENABLE_NUM_VALUES = 2,
+    ANSEL_ENABLE_DEFAULT = ANSEL_ENABLE_ON
+};
+
+enum EValues_APPLICATION_PROFILE_NOTIFICATION_TIMEOUT {
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_DISABLED    = 0,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_NINE_SECONDS = 9,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_FIFTEEN_SECONDS = 15,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_THIRTY_SECONDS = 30,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_ONE_MINUTE  = 60,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_TWO_MINUTES = 120,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_NUM_VALUES = 6,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_DEFAULT = APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_DISABLED
+};
+
+enum EValues_AUTOFL {
+    AUTOFL_OFF                                           = 0,
+    AUTOFL_ON                                            = 1,
+    AUTOFL_NUM_VALUES = 2,
+    AUTOFL_DEFAULT = AUTOFL_ON
+};
+
+enum EValues_BATTERY_BOOST {
+    BATTERY_BOOST_MIN                                    = 0x00000001,
+    BATTERY_BOOST_MAX                                    = 0x000003ff,
+    BATTERY_BOOST_ENABLED                                = 0x10000000,
+    BATTERY_BOOST_DISABLED                               = 0x00000000,
+    BATTERY_BOOST_XQM                                    = 0x1000001e,
+    BATTERY_BOOST_NUM_VALUES = 5,
+    BATTERY_BOOST_DEFAULT = BATTERY_BOOST_DISABLED
+};
+
+enum EValues_BATTERY_BOOST_APP_FPS {
+    BATTERY_BOOST_APP_FPS_MIN                            = 0x00000001,
+    BATTERY_BOOST_APP_FPS_MAX                            = 0x000003ff,
+    BATTERY_BOOST_APP_FPS_NO_OVERRIDE                    = 0x00000000,
+    BATTERY_BOOST_APP_FPS_NUM_VALUES = 3,
+    BATTERY_BOOST_APP_FPS_DEFAULT = BATTERY_BOOST_APP_FPS_NO_OVERRIDE
+};
+
+enum EValues_BG_FRL_FPS {
+    BG_FRL_FPS_DISABLED                                  = 0x00000000,
+    BG_FRL_FPS_MIN                                       = 0x00000000,
+    BG_FRL_FPS_MAX                                       = 0x000003ff,
+    BG_FRL_FPS_NUM_VALUES = 3,
+    BG_FRL_FPS_DEFAULT = BG_FRL_FPS_DISABLED
+};
+
+enum EValues_BG_FRL_FPS_NVCPL {
+    BG_FRL_FPS_NVCPL_DISABLED                            = 0x00000000,
+    BG_FRL_FPS_NVCPL_MIN                                 = 0x00000000,
+    BG_FRL_FPS_NVCPL_MAX                                 = 0x000003ff,
+    BG_FRL_FPS_NVCPL_NUM_VALUES = 3,
+    BG_FRL_FPS_NVCPL_DEFAULT = BG_FRL_FPS_NVCPL_DISABLED
+};
+
+enum EValues_CPL_HIDDEN_PROFILE {
+    CPL_HIDDEN_PROFILE_DISABLED                          = 0,
+    CPL_HIDDEN_PROFILE_ENABLED                           = 1,
+    CPL_HIDDEN_PROFILE_NUM_VALUES = 2,
+    CPL_HIDDEN_PROFILE_DEFAULT = CPL_HIDDEN_PROFILE_DISABLED
+};
+
+#define    CUDA_EXCLUDED_GPUS_NONE                              L"none"
+#define    CUDA_EXCLUDED_GPUS_NUM_VALUES 1
+#define    CUDA_EXCLUDED_GPUS_DEFAULT CUDA_EXCLUDED_GPUS_NONE
+
+#define    D3DOGL_GPU_MAX_POWER_DEFAULTPOWER                    L"0"
+#define    D3DOGL_GPU_MAX_POWER_NUM_VALUES 1
+#define    D3DOGL_GPU_MAX_POWER_DEFAULT D3DOGL_GPU_MAX_POWER_DEFAULTPOWER
+
+enum EValues_EXPORT_PERF_COUNTERS {
+    EXPORT_PERF_COUNTERS_OFF                             = 0x00000000,
+    EXPORT_PERF_COUNTERS_ON                              = 0x00000001,
+    EXPORT_PERF_COUNTERS_NUM_VALUES = 2,
+    EXPORT_PERF_COUNTERS_DEFAULT = EXPORT_PERF_COUNTERS_OFF
+};
+
+enum EValues_EXTERNAL_QUIET_MODE {
+    EXTERNAL_QUIET_MODE_ON                               = 0x00000001,
+    EXTERNAL_QUIET_MODE_OFF                              = 0x00000000,
+    EXTERNAL_QUIET_MODE_NUM_VALUES = 2,
+    EXTERNAL_QUIET_MODE_DEFAULT = EXTERNAL_QUIET_MODE_OFF
+};
+
+enum EValues_FRL_FPS {
+    FRL_FPS_DISABLED                                     = 0x00000000,
+    FRL_FPS_MIN                                          = 0x00000000,
+    FRL_FPS_MAX                                          = 0x000003ff,
+    FRL_FPS_NUM_VALUES = 3,
+    FRL_FPS_DEFAULT = FRL_FPS_DISABLED
+};
+
+enum EValues_FRL_FPS_NVCPL {
+    FRL_FPS_NVCPL_DISABLED                               = 0x00000000,
+    FRL_FPS_NVCPL_MIN                                    = 0x00000000,
+    FRL_FPS_NVCPL_MAX                                    = 0x000003ff,
+    FRL_FPS_NVCPL_NUM_VALUES = 3,
+    FRL_FPS_NVCPL_DEFAULT = FRL_FPS_NVCPL_DISABLED
+};
+
+enum EValues_FRL_LOW_LATENCY {
+    FRL_LOW_LATENCY_OFF                                  = 0x00000000,
+    FRL_LOW_LATENCY_ON                                   = 0x00000001,
+    FRL_LOW_LATENCY_NUM_VALUES = 2,
+    FRL_LOW_LATENCY_DEFAULT = FRL_LOW_LATENCY_OFF
+};
+
+enum EValues_FXAA_ALLOW {
+    FXAA_ALLOW_DISALLOWED                                = 0,
+    FXAA_ALLOW_ALLOWED                                   = 1,
+    FXAA_ALLOW_NUM_VALUES = 2,
+    FXAA_ALLOW_DEFAULT = FXAA_ALLOW_ALLOWED
+};
+
+enum EValues_FXAA_ENABLE {
+    FXAA_ENABLE_OFF                                      = 0,
+    FXAA_ENABLE_ON                                       = 1,
+    FXAA_ENABLE_NUM_VALUES = 2,
+    FXAA_ENABLE_DEFAULT = FXAA_ENABLE_OFF
+};
+
+enum EValues_FXAA_INDICATOR_ENABLE {
+    FXAA_INDICATOR_ENABLE_OFF                            = 0,
+    FXAA_INDICATOR_ENABLE_ON                             = 1,
+    FXAA_INDICATOR_ENABLE_NUM_VALUES = 2,
+    FXAA_INDICATOR_ENABLE_DEFAULT = FXAA_INDICATOR_ENABLE_OFF
+};
+
+enum EValues_GFN_FRL_FPS {
+    GFN_FRL_FPS_DISABLED                                 = 0x00000000,
+    GFN_FRL_FPS_MIN                                      = 0x00000000,
+    GFN_FRL_FPS_MAX                                      = 0x000003ff,
+    GFN_FRL_FPS_NUM_VALUES = 3,
+    GFN_FRL_FPS_DEFAULT = GFN_FRL_FPS_DISABLED
+};
+
+enum EValues_GSYNC_COMPATIBILITY {
+    GSYNC_COMPATIBILITY_NO                               = 0x0,
+    GSYNC_COMPATIBILITY_YES                              = 0x1,
+    GSYNC_COMPATIBILITY_NUM_VALUES = 2,
+    GSYNC_COMPATIBILITY_DEFAULT = GSYNC_COMPATIBILITY_NO
+};
+
+enum EValues_LATENCY_INDICATOR_AUTOALIGN {
+    LATENCY_INDICATOR_AUTOALIGN_DISABLED                 = 0x0,
+    LATENCY_INDICATOR_AUTOALIGN_ENABLED                  = 0x1,
+    LATENCY_INDICATOR_AUTOALIGN_NUM_VALUES = 2,
+    LATENCY_INDICATOR_AUTOALIGN_DEFAULT = LATENCY_INDICATOR_AUTOALIGN_ENABLED
+};
+
+enum EValues_LATENCY_INDICATOR_HEIGHT {
+    LATENCY_INDICATOR_HEIGHT_MIN                         = 0x00000000,
+    LATENCY_INDICATOR_HEIGHT_MAX                         = 0x000000ff,
+    LATENCY_INDICATOR_HEIGHT_DEFAULT_SIZE                = 0x00000008,
+    LATENCY_INDICATOR_HEIGHT_NUM_VALUES = 3,
+    LATENCY_INDICATOR_HEIGHT_DEFAULT = LATENCY_INDICATOR_HEIGHT_DEFAULT_SIZE
+};
+
+enum EValues_LATENCY_INDICATOR_POS_X {
+    LATENCY_INDICATOR_POS_X_MIN                          = 0x00000000,
+    LATENCY_INDICATOR_POS_X_MAX                          = 0x00000064,
+    LATENCY_INDICATOR_POS_X_NUM_VALUES = 2,
+    LATENCY_INDICATOR_POS_X_DEFAULT = LATENCY_INDICATOR_POS_X_MIN
+};
+
+enum EValues_LATENCY_INDICATOR_POS_Y {
+    LATENCY_INDICATOR_POS_Y_MIN                          = 0x00000000,
+    LATENCY_INDICATOR_POS_Y_MAX                          = 0x00000064,
+    LATENCY_INDICATOR_POS_Y_DEFAULT_POS_Y                = 0x00000032,
+    LATENCY_INDICATOR_POS_Y_NUM_VALUES = 3,
+    LATENCY_INDICATOR_POS_Y_DEFAULT = LATENCY_INDICATOR_POS_Y_DEFAULT_POS_Y
+};
+
+enum EValues_LATENCY_INDICATOR_WIDTH {
+    LATENCY_INDICATOR_WIDTH_MIN                          = 0x00000000,
+    LATENCY_INDICATOR_WIDTH_MAX                          = 0x000000ff,
+    LATENCY_INDICATOR_WIDTH_DEFAULT_SIZE                 = 0x00000004,
+    LATENCY_INDICATOR_WIDTH_NUM_VALUES = 3,
+    LATENCY_INDICATOR_WIDTH_DEFAULT = LATENCY_INDICATOR_WIDTH_DEFAULT_SIZE
+};
+
+enum EValues_MAXWELL_WDDM2_FORCE_128K_PTE {
+    MAXWELL_WDDM2_FORCE_128K_PTE_FORCE_OFF               = 0,
+    MAXWELL_WDDM2_FORCE_128K_PTE_FORCE_ON                = 1,
+    MAXWELL_WDDM2_FORCE_128K_PTE_NUM_VALUES = 2,
+    MAXWELL_WDDM2_FORCE_128K_PTE_DEFAULT = MAXWELL_WDDM2_FORCE_128K_PTE_FORCE_OFF
+};
+
+enum EValues_MCSFRSHOWSPLIT {
+    MCSFRSHOWSPLIT_DISABLED                              = 0x34534064,
+    MCSFRSHOWSPLIT_ENABLED                               = 0x24545582,
+    MCSFRSHOWSPLIT_NUM_VALUES = 2,
+    MCSFRSHOWSPLIT_DEFAULT = MCSFRSHOWSPLIT_DISABLED
+};
+
+enum EValues_NV_QUALITY_UPSCALING {
+    NV_QUALITY_UPSCALING_OFF                             = 0,
+    NV_QUALITY_UPSCALING_ON                              = 1,
+    NV_QUALITY_UPSCALING_NUM_VALUES = 2,
+    NV_QUALITY_UPSCALING_DEFAULT = NV_QUALITY_UPSCALING_OFF
+};
+
+enum EValues_OPTIMUS_MAXAA {
+    OPTIMUS_MAXAA_MIN                                    = 0,
+    OPTIMUS_MAXAA_MAX                                    = 16,
+    OPTIMUS_MAXAA_NUM_VALUES = 2,
+    OPTIMUS_MAXAA_DEFAULT = 0
+};
+
+enum EValues_PHYSXINDICATOR {
+    PHYSXINDICATOR_DISABLED                              = 0x34534064,
+    PHYSXINDICATOR_ENABLED                               = 0x24545582,
+    PHYSXINDICATOR_NUM_VALUES = 2,
+    PHYSXINDICATOR_DEFAULT = PHYSXINDICATOR_DISABLED
+};
+
+enum EValues_PREFERRED_PSTATE {
+    PREFERRED_PSTATE_ADAPTIVE                            = 0x00000000,
+    PREFERRED_PSTATE_PREFER_MAX                          = 0x00000001,
+    PREFERRED_PSTATE_DRIVER_CONTROLLED                   = 0x00000002,
+    PREFERRED_PSTATE_PREFER_CONSISTENT_PERFORMANCE       = 0x00000003,
+    PREFERRED_PSTATE_PREFER_MIN                          = 0x00000004,
+    PREFERRED_PSTATE_OPTIMAL_POWER                       = 0x00000005,
+    PREFERRED_PSTATE_MIN                                 = 0x00000000,
+    PREFERRED_PSTATE_MAX                                 = 0x00000005,
+    PREFERRED_PSTATE_NUM_VALUES = 8,
+    PREFERRED_PSTATE_DEFAULT = PREFERRED_PSTATE_OPTIMAL_POWER
+};
+
+enum EValues_PREVENT_UI_AF_OVERRIDE {
+    PREVENT_UI_AF_OVERRIDE_OFF                           = 0,
+    PREVENT_UI_AF_OVERRIDE_ON                            = 1,
+    PREVENT_UI_AF_OVERRIDE_NUM_VALUES = 2,
+    PREVENT_UI_AF_OVERRIDE_DEFAULT = PREVENT_UI_AF_OVERRIDE_OFF
+};
+
+enum EValues_PS_FRAMERATE_LIMITER {
+    PS_FRAMERATE_LIMITER_DISABLED                        = 0x00000000,
+    PS_FRAMERATE_LIMITER_FPS_20                          = 0x00000014,
+    PS_FRAMERATE_LIMITER_FPS_30                          = 0x0000001e,
+    PS_FRAMERATE_LIMITER_FPS_40                          = 0x00000028,
+    PS_FRAMERATE_LIMITER_FPSMASK                         = 0x000003ff,
+    PS_FRAMERATE_LIMITER_ALLOW_DYNAMIC                   = 0x00001000,
+    PS_FRAMERATE_LIMITER_YIELD_PROCESSOR                 = 0x00002000,
+    PS_FRAMERATE_LIMITER_FORCE_VSYNC_OFF                 = 0x00040000,
+    PS_FRAMERATE_LIMITER_DISALLOWED                      = 0x00200000,
+    PS_FRAMERATE_LIMITER_NO_LAG_OFFSET                   = 0x00800000,
+    PS_FRAMERATE_LIMITER_ALLOW_SLEEP_WITH_REFLEX         = 0x02000000,
+    PS_FRAMERATE_LIMITER_ACCURATE                        = 0x10000000,
+    PS_FRAMERATE_LIMITER_ALLOW_WINDOWED                  = 0x20000000,
+    PS_FRAMERATE_LIMITER_FORCEON                         = 0x40000000,
+    PS_FRAMERATE_LIMITER_ENABLED                         = 0x80000000,
+    PS_FRAMERATE_LIMITER_OPENGL_REMOTE_DESKTOP           = 0xe000003c,
+    PS_FRAMERATE_LIMITER_LOW_LATENCY_DEFAULT             = 0xb0802000,
+    PS_FRAMERATE_LIMITER_MFR_FLAGS                       = 0xf0802000,
+    PS_FRAMERATE_LIMITER_GFN_FLAGS                       = 0xf2803000,
+    PS_FRAMERATE_LIMITER_MASK                            = 0xf2a433ff,
+    PS_FRAMERATE_LIMITER_NUM_VALUES = 20,
+    PS_FRAMERATE_LIMITER_DEFAULT = PS_FRAMERATE_LIMITER_LOW_LATENCY_DEFAULT
+};
+
+enum EValues_PS_FRAMERATE_LIMITER_2_CONTROL {
+    PS_FRAMERATE_LIMITER_2_CONTROL_DELAY_CE              = 0x00000000,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DELAY_3D              = 0x00000001,
+    PS_FRAMERATE_LIMITER_2_CONTROL_AVOID_NOOP            = 0x00000002,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DELAY_CE_PRESENT_3D   = 0x00000008,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ALLOW_ALL_MAXWELL     = 0x00000010,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ALLOW_ALL             = 0x00000020,
+    PS_FRAMERATE_LIMITER_2_CONTROL_FORCE_OFF             = 0x00000040,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ENABLE_VCE            = 0x00000080,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DEFAULT_FOR_GM10X     = 0x00000011,
+    PS_FRAMERATE_LIMITER_2_CONTROL_NUM_VALUES = 9,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DEFAULT = 0x00000088
+};
+
+enum EValues_PS_FRAMERATE_LIMITER_GPS_CTRL {
+    PS_FRAMERATE_LIMITER_GPS_CTRL_DISABLED               = 0x00000000,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_DECREASE_FILTER_MASK   = 0x000001FF,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PAUSE_TIME_MASK        = 0x0000FE00,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PAUSE_TIME_SHIFT       = 9,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_TARGET_RENDER_TIME_MASK = 0x00FF0000,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_TARGET_RENDER_TIME_SHIFT = 16,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PERF_STEP_SIZE_MASK    = 0x1F000000,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PERF_STEP_SIZE_SHIFT   = 24,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_INCREASE_FILTER_MASK   = 0xE0000000,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_INCREASE_FILTER_SHIFT  = 29,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_OPTIMAL_SETTING        = 0x4A5A3219,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_NUM_VALUES = 11,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_DEFAULT = PS_FRAMERATE_LIMITER_GPS_CTRL_DISABLED
+};
+
+enum EValues_PS_FRAMERATE_MONITOR_CTRL {
+    PS_FRAMERATE_MONITOR_CTRL_DISABLED                   = 0x00000000,
+    PS_FRAMERATE_MONITOR_CTRL_THRESHOLD_PCT_MASK         = 0x000000FF,
+    PS_FRAMERATE_MONITOR_CTRL_MOVING_AVG_X_MASK          = 0x00000F00,
+    PS_FRAMERATE_MONITOR_CTRL_MOVING_AVG_X_SHIFT         = 8,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OFFSET_MASK          = 0x0000F000,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OFFSET_SHIFT         = 12,
+    PS_FRAMERATE_MONITOR_CTRL_FRL_OFFSET_MASK            = 0x000F0000,
+    PS_FRAMERATE_MONITOR_CTRL_FRL_OFFSET_SHIFT           = 16,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_USE_FRL                = 0x00000000,
+    PS_FRAMERATE_MONITOR_CTRL_LOW_LATENCY_LOG            = 0x00100000,
+    PS_FRAMERATE_MONITOR_CTRL_ALLOW_AUTOFL_WITH_REFLEX   = 0x00200000,
+    PS_FRAMERATE_MONITOR_CTRL_DISABLE_MAP_GPU_TIMER      = 0x00400000,
+    PS_FRAMERATE_MONITOR_CTRL_ENABLE_ON_VSYNC            = 0x00800000,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_30                     = 0x1E000000,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_60                     = 0x3C000000,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_MASK                   = 0xFF000000,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_SHIFT                  = 24,
+    PS_FRAMERATE_MONITOR_CTRL_OPTIMAL_SETTING            = 0x00600364,
+    PS_FRAMERATE_MONITOR_CTRL_OPTIMAL_SETTING_V2         = 0x00680364,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OPTIMAL_SETTING      = 0x00E0f364,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OPTIMAL_SETTING_V2   = 0x00E8f364,
+    PS_FRAMERATE_MONITOR_CTRL_NUM_VALUES = 21,
+    PS_FRAMERATE_MONITOR_CTRL_DEFAULT = PS_FRAMERATE_MONITOR_CTRL_OPTIMAL_SETTING
+};
+
+enum EValues_QUIET_MODE {
+    QUIET_MODE_MIN                                       = 0x00000001,
+    QUIET_MODE_MAX                                       = 0x000003ff,
+    QUIET_MODE_ENABLED                                   = 0x10000000,
+    QUIET_MODE_DISABLED                                  = 0x00000000,
+    QUIET_MODE_XQM                                       = 0x10000028,
+    QUIET_MODE_NUM_VALUES = 5,
+    QUIET_MODE_DEFAULT = QUIET_MODE_DISABLED
+};
+
+enum EValues_QUIET_MODE_APP_FPS {
+    QUIET_MODE_APP_FPS_MIN                               = 0x00000001,
+    QUIET_MODE_APP_FPS_MAX                               = 0x000003ff,
+    QUIET_MODE_APP_FPS_NO_OVERRIDE                       = 0x00000000,
+    QUIET_MODE_APP_FPS_NUM_VALUES = 3,
+    QUIET_MODE_APP_FPS_DEFAULT = QUIET_MODE_APP_FPS_NO_OVERRIDE
+};
+
+enum EValues_SHIM_MCCOMPAT {
+    SHIM_MCCOMPAT_INTEGRATED                             = 0x00000000,
+    SHIM_MCCOMPAT_ENABLE                                 = 0x00000001,
+    SHIM_MCCOMPAT_USER_EDITABLE                          = 0x00000002,
+    SHIM_MCCOMPAT_MASK                                   = 0x00000003,
+    SHIM_MCCOMPAT_VIDEO_MASK                             = 0x00000004,
+    SHIM_MCCOMPAT_VARYING_BIT                            = 0x00000008,
+    SHIM_MCCOMPAT_AUTO_SELECT                            = 0x00000010,
+    SHIM_MCCOMPAT_OVERRIDE_BIT                           = 0x80000000,
+    SHIM_MCCOMPAT_NUM_VALUES = 8,
+    SHIM_MCCOMPAT_DEFAULT = SHIM_MCCOMPAT_AUTO_SELECT
+};
+
+enum EValues_SHIM_RENDERING_MODE {
+    SHIM_RENDERING_MODE_INTEGRATED                       = 0x00000000,
+    SHIM_RENDERING_MODE_ENABLE                           = 0x00000001,
+    SHIM_RENDERING_MODE_USER_EDITABLE                    = 0x00000002,
+    SHIM_RENDERING_MODE_MASK                             = 0x00000003,
+    SHIM_RENDERING_MODE_VIDEO_MASK                       = 0x00000004,
+    SHIM_RENDERING_MODE_VARYING_BIT                      = 0x00000008,
+    SHIM_RENDERING_MODE_AUTO_SELECT                      = 0x00000010,
+    SHIM_RENDERING_MODE_OVERRIDE_BIT                     = 0x80000000,
+    SHIM_RENDERING_MODE_NUM_VALUES = 8,
+    SHIM_RENDERING_MODE_DEFAULT = SHIM_RENDERING_MODE_AUTO_SELECT
+};
+
+enum EValues_SHIM_RENDERING_OPTIONS {
+    SHIM_RENDERING_OPTIONS_DEFAULT_RENDERING_MODE        = 0x00000000,
+    SHIM_RENDERING_OPTIONS_DISABLE_ASYNC_PRESENT         = 0x00000001,
+    SHIM_RENDERING_OPTIONS_EHSHELL_DETECT                = 0x00000002,
+    SHIM_RENDERING_OPTIONS_FLASHPLAYER_HOST_DETECT       = 0x00000004,
+    SHIM_RENDERING_OPTIONS_VIDEO_DRM_APP_DETECT          = 0x00000008,
+    SHIM_RENDERING_OPTIONS_IGNORE_OVERRIDES              = 0x00000010,
+    SHIM_RENDERING_OPTIONS_RESERVED1                     = 0x00000020,
+    SHIM_RENDERING_OPTIONS_ENABLE_DWM_ASYNC_PRESENT      = 0x00000040,
+    SHIM_RENDERING_OPTIONS_RESERVED2                     = 0x00000080,
+    SHIM_RENDERING_OPTIONS_ALLOW_INHERITANCE             = 0x00000100,
+    SHIM_RENDERING_OPTIONS_DISABLE_WRAPPERS              = 0x00000200,
+    SHIM_RENDERING_OPTIONS_DISABLE_DXGI_WRAPPERS         = 0x00000400,
+    SHIM_RENDERING_OPTIONS_PRUNE_UNSUPPORTED_FORMATS     = 0x00000800,
+    SHIM_RENDERING_OPTIONS_ENABLE_ALPHA_FORMAT           = 0x00001000,
+    SHIM_RENDERING_OPTIONS_IGPU_TRANSCODING              = 0x00002000,
+    SHIM_RENDERING_OPTIONS_DISABLE_CUDA                  = 0x00004000,
+    SHIM_RENDERING_OPTIONS_ALLOW_CP_CAPS_FOR_VIDEO       = 0x00008000,
+    SHIM_RENDERING_OPTIONS_IGPU_TRANSCODING_FWD_OPTIMUS  = 0x00010000,
+    SHIM_RENDERING_OPTIONS_DISABLE_DURING_SECURE_BOOT    = 0x00020000,
+    SHIM_RENDERING_OPTIONS_INVERT_FOR_QUADRO             = 0x00040000,
+    SHIM_RENDERING_OPTIONS_INVERT_FOR_MSHYBRID           = 0x00080000,
+    SHIM_RENDERING_OPTIONS_REGISTER_PROCESS_ENABLE_GOLD  = 0x00100000,
+    SHIM_RENDERING_OPTIONS_HANDLE_WINDOWED_MODE_PERF_OPT = 0x00200000,
+    SHIM_RENDERING_OPTIONS_HANDLE_WIN7_ASYNC_RUNTIME_BUG = 0x00400000,
+    SHIM_RENDERING_OPTIONS_EXPLICIT_ADAPTER_OPTED_BY_APP = 0x00800000,
+    SHIM_RENDERING_OPTIONS_ALLOW_DYNAMIC_DISPLAY_MUX_SWITCH = 0x01000000,
+    SHIM_RENDERING_OPTIONS_DISALLOW_DYNAMIC_DISPLAY_MUX_SWITCH = 0x02000000,
+    SHIM_RENDERING_OPTIONS_DISABLE_TURING_POWER_POLICY   = 0x04000000,
+    SHIM_RENDERING_OPTIONS_NUM_VALUES = 28,
+    SHIM_RENDERING_OPTIONS_DEFAULT = 0x00000000
+};
+
+enum EValues_SLI_GPU_COUNT {
+    SLI_GPU_COUNT_AUTOSELECT                             = 0x00000000,
+    SLI_GPU_COUNT_ONE                                    = 0x00000001,
+    SLI_GPU_COUNT_TWO                                    = 0x00000002,
+    SLI_GPU_COUNT_THREE                                  = 0x00000003,
+    SLI_GPU_COUNT_FOUR                                   = 0x00000004,
+    SLI_GPU_COUNT_NUM_VALUES = 5,
+    SLI_GPU_COUNT_DEFAULT = SLI_GPU_COUNT_AUTOSELECT
+};
+
+enum EValues_SLI_PREDEFINED_GPU_COUNT {
+    SLI_PREDEFINED_GPU_COUNT_AUTOSELECT                  = 0x00000000,
+    SLI_PREDEFINED_GPU_COUNT_ONE                         = 0x00000001,
+    SLI_PREDEFINED_GPU_COUNT_TWO                         = 0x00000002,
+    SLI_PREDEFINED_GPU_COUNT_THREE                       = 0x00000003,
+    SLI_PREDEFINED_GPU_COUNT_FOUR                        = 0x00000004,
+    SLI_PREDEFINED_GPU_COUNT_NUM_VALUES = 5,
+    SLI_PREDEFINED_GPU_COUNT_DEFAULT = SLI_PREDEFINED_GPU_COUNT_AUTOSELECT
+};
+
+enum EValues_SLI_PREDEFINED_GPU_COUNT_DX10 {
+    SLI_PREDEFINED_GPU_COUNT_DX10_AUTOSELECT             = 0x00000000,
+    SLI_PREDEFINED_GPU_COUNT_DX10_ONE                    = 0x00000001,
+    SLI_PREDEFINED_GPU_COUNT_DX10_TWO                    = 0x00000002,
+    SLI_PREDEFINED_GPU_COUNT_DX10_THREE                  = 0x00000003,
+    SLI_PREDEFINED_GPU_COUNT_DX10_FOUR                   = 0x00000004,
+    SLI_PREDEFINED_GPU_COUNT_DX10_NUM_VALUES = 5,
+    SLI_PREDEFINED_GPU_COUNT_DX10_DEFAULT = SLI_PREDEFINED_GPU_COUNT_DX10_AUTOSELECT
+};
+
+enum EValues_SLI_PREDEFINED_MODE {
+    SLI_PREDEFINED_MODE_AUTOSELECT                       = 0x00000000,
+    SLI_PREDEFINED_MODE_FORCE_SINGLE                     = 0x00000001,
+    SLI_PREDEFINED_MODE_FORCE_AFR                        = 0x00000002,
+    SLI_PREDEFINED_MODE_FORCE_AFR2                       = 0x00000003,
+    SLI_PREDEFINED_MODE_FORCE_SFR                        = 0x00000004,
+    SLI_PREDEFINED_MODE_FORCE_AFR_OF_SFR__FALLBACK_3AFR  = 0x00000005,
+    SLI_PREDEFINED_MODE_NUM_VALUES = 6,
+    SLI_PREDEFINED_MODE_DEFAULT = SLI_PREDEFINED_MODE_AUTOSELECT
+};
+
+enum EValues_SLI_PREDEFINED_MODE_DX10 {
+    SLI_PREDEFINED_MODE_DX10_AUTOSELECT                  = 0x00000000,
+    SLI_PREDEFINED_MODE_DX10_FORCE_SINGLE                = 0x00000001,
+    SLI_PREDEFINED_MODE_DX10_FORCE_AFR                   = 0x00000002,
+    SLI_PREDEFINED_MODE_DX10_FORCE_AFR2                  = 0x00000003,
+    SLI_PREDEFINED_MODE_DX10_FORCE_SFR                   = 0x00000004,
+    SLI_PREDEFINED_MODE_DX10_FORCE_AFR_OF_SFR__FALLBACK_3AFR = 0x00000005,
+    SLI_PREDEFINED_MODE_DX10_NUM_VALUES = 6,
+    SLI_PREDEFINED_MODE_DX10_DEFAULT = SLI_PREDEFINED_MODE_DX10_AUTOSELECT
+};
+
+enum EValues_SLI_RENDERING_MODE {
+    SLI_RENDERING_MODE_AUTOSELECT                        = 0x00000000,
+    SLI_RENDERING_MODE_FORCE_SINGLE                      = 0x00000001,
+    SLI_RENDERING_MODE_FORCE_AFR                         = 0x00000002,
+    SLI_RENDERING_MODE_FORCE_AFR2                        = 0x00000003,
+    SLI_RENDERING_MODE_FORCE_SFR                         = 0x00000004,
+    SLI_RENDERING_MODE_FORCE_AFR_OF_SFR__FALLBACK_3AFR   = 0x00000005,
+    SLI_RENDERING_MODE_NUM_VALUES = 6,
+    SLI_RENDERING_MODE_DEFAULT = SLI_RENDERING_MODE_AUTOSELECT
+};
+
+enum EValues_VRPRERENDERLIMIT {
+    VRPRERENDERLIMIT_MIN                                 = 0x00,
+    VRPRERENDERLIMIT_MAX                                 = 0xff,
+    VRPRERENDERLIMIT_APP_CONTROLLED                      = 0x00,
+    VRPRERENDERLIMIT_DEFAULT                             = 0x01,
+    VRPRERENDERLIMIT_NUM_VALUES = 4,
+};
+
+enum EValues_VRRFEATUREINDICATOR {
+    VRRFEATUREINDICATOR_DISABLED                         = 0x0,
+    VRRFEATUREINDICATOR_ENABLED                          = 0x1,
+    VRRFEATUREINDICATOR_NUM_VALUES = 2,
+    VRRFEATUREINDICATOR_DEFAULT = VRRFEATUREINDICATOR_ENABLED
+};
+
+enum EValues_VRRINDICATOR {
+    VRRINDICATOR_OFF                                     = 0x0,
+    VRRINDICATOR_ON                                      = 0x1,
+    VRRINDICATOR_NUM_VALUES = 2,
+    VRRINDICATOR_DEFAULT = VRRINDICATOR_OFF
+};
+
+enum EValues_VRROVERLAYINDICATOR {
+    VRROVERLAYINDICATOR_DISABLED                         = 0x0,
+    VRROVERLAYINDICATOR_ENABLED                          = 0x1,
+    VRROVERLAYINDICATOR_NUM_VALUES = 2,
+    VRROVERLAYINDICATOR_DEFAULT = VRROVERLAYINDICATOR_ENABLED
+};
+
+enum EValues_VRRREQUESTSTATE {
+    VRRREQUESTSTATE_DISABLED                             = 0x0,
+    VRRREQUESTSTATE_FULLSCREEN_ONLY                      = 0x1,
+    VRRREQUESTSTATE_FULLSCREEN_AND_WINDOWED              = 0x2,
+    VRRREQUESTSTATE_NUM_VALUES = 3,
+    VRRREQUESTSTATE_DEFAULT = VRRREQUESTSTATE_FULLSCREEN_ONLY
+};
+
+enum EValues_VRR_APP_OVERRIDE {
+    VRR_APP_OVERRIDE_ALLOW                               = 0,
+    VRR_APP_OVERRIDE_FORCE_OFF                           = 1,
+    VRR_APP_OVERRIDE_DISALLOW                            = 2,
+    VRR_APP_OVERRIDE_ULMB                                = 3,
+    VRR_APP_OVERRIDE_FIXED_REFRESH                       = 4,
+    VRR_APP_OVERRIDE_NUM_VALUES = 5,
+    VRR_APP_OVERRIDE_DEFAULT = VRR_APP_OVERRIDE_ALLOW
+};
+
+enum EValues_VRR_APP_OVERRIDE_REQUEST_STATE {
+    VRR_APP_OVERRIDE_REQUEST_STATE_ALLOW                 = 0,
+    VRR_APP_OVERRIDE_REQUEST_STATE_FORCE_OFF             = 1,
+    VRR_APP_OVERRIDE_REQUEST_STATE_DISALLOW              = 2,
+    VRR_APP_OVERRIDE_REQUEST_STATE_ULMB                  = 3,
+    VRR_APP_OVERRIDE_REQUEST_STATE_FIXED_REFRESH         = 4,
+    VRR_APP_OVERRIDE_REQUEST_STATE_NUM_VALUES = 5,
+    VRR_APP_OVERRIDE_REQUEST_STATE_DEFAULT = VRR_APP_OVERRIDE_REQUEST_STATE_ALLOW
+};
+
+enum EValues_VRR_MODE {
+    VRR_MODE_DISABLED                                    = 0x0,
+    VRR_MODE_FULLSCREEN_ONLY                             = 0x1,
+    VRR_MODE_FULLSCREEN_AND_WINDOWED                     = 0x2,
+    VRR_MODE_NUM_VALUES = 3,
+    VRR_MODE_DEFAULT = VRR_MODE_FULLSCREEN_ONLY
+};
+
+enum EValues_VSYNCSMOOTHAFR {
+    VSYNCSMOOTHAFR_OFF                                   = 0x00000000,
+    VSYNCSMOOTHAFR_ON                                    = 0x00000001,
+    VSYNCSMOOTHAFR_NUM_VALUES = 2,
+    VSYNCSMOOTHAFR_DEFAULT = VSYNCSMOOTHAFR_OFF
+};
+
+enum EValues_VSYNCVRRCONTROL {
+    VSYNCVRRCONTROL_DISABLE                              = 0x00000000,
+    VSYNCVRRCONTROL_ENABLE                               = 0x00000001,
+    VSYNCVRRCONTROL_NOTSUPPORTED                         = 0x9f95128e,
+    VSYNCVRRCONTROL_NUM_VALUES = 3,
+    VSYNCVRRCONTROL_DEFAULT = VSYNCVRRCONTROL_ENABLE
+};
+
+enum EValues_VSYNC_BEHAVIOR_FLAGS {
+    VSYNC_BEHAVIOR_FLAGS_NONE                            = 0x00000000,
+    VSYNC_BEHAVIOR_FLAGS_DEFAULT                         = 0x00000000,
+    VSYNC_BEHAVIOR_FLAGS_IGNORE_FLIPINTERVAL_MULTIPLE    = 0x00000001,
+    VSYNC_BEHAVIOR_FLAGS_NUM_VALUES = 3,
+};
+
+enum EValues_WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW {
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_ONE = 0x1,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_TWO = 0x2,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_THREE = 0x3,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_FOUR = 0x4,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_NUM_VALUES = 4,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_DEFAULT = WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_ONE
+};
+
+enum EValues_WKS_API_STEREO_EYES_EXCHANGE {
+    WKS_API_STEREO_EYES_EXCHANGE_OFF                     = 0,
+    WKS_API_STEREO_EYES_EXCHANGE_ON                      = 1,
+    WKS_API_STEREO_EYES_EXCHANGE_NUM_VALUES = 2,
+    WKS_API_STEREO_EYES_EXCHANGE_DEFAULT = WKS_API_STEREO_EYES_EXCHANGE_OFF
+};
+
+enum EValues_WKS_API_STEREO_MODE {
+    WKS_API_STEREO_MODE_SHUTTER_GLASSES                  = 0,
+    WKS_API_STEREO_MODE_VERTICAL_INTERLACED              = 1,
+    WKS_API_STEREO_MODE_TWINVIEW                         = 2,
+    WKS_API_STEREO_MODE_NV17_SHUTTER_GLASSES_AUTO        = 3,
+    WKS_API_STEREO_MODE_NV17_SHUTTER_GLASSES_DAC0        = 4,
+    WKS_API_STEREO_MODE_NV17_SHUTTER_GLASSES_DAC1        = 5,
+    WKS_API_STEREO_MODE_COLOR_LINE                       = 6,
+    WKS_API_STEREO_MODE_COLOR_INTERLEAVED                = 7,
+    WKS_API_STEREO_MODE_ANAGLYPH                         = 8,
+    WKS_API_STEREO_MODE_HORIZONTAL_INTERLACED            = 9,
+    WKS_API_STEREO_MODE_SIDE_FIELD                       = 10,
+    WKS_API_STEREO_MODE_SUB_FIELD                        = 11,
+    WKS_API_STEREO_MODE_CHECKERBOARD                     = 12,
+    WKS_API_STEREO_MODE_INVERSE_CHECKERBOARD             = 13,
+    WKS_API_STEREO_MODE_TRIDELITY_SL                     = 14,
+    WKS_API_STEREO_MODE_TRIDELITY_MV                     = 15,
+    WKS_API_STEREO_MODE_SEEFRONT                         = 16,
+    WKS_API_STEREO_MODE_STEREO_MIRROR                    = 17,
+    WKS_API_STEREO_MODE_FRAME_SEQUENTIAL                 = 18,
+    WKS_API_STEREO_MODE_AUTODETECT_PASSIVE_MODE          = 19,
+    WKS_API_STEREO_MODE_AEGIS_DT_FRAME_SEQUENTIAL        = 20,
+    WKS_API_STEREO_MODE_OEM_EMITTER_FRAME_SEQUENTIAL     = 21,
+    WKS_API_STEREO_MODE_DP_INBAND                        = 22,
+    WKS_API_STEREO_MODE_USE_HW_DEFAULT                   = 0xffffffff,
+    WKS_API_STEREO_MODE_DEFAULT_GL                       = 3,
+    WKS_API_STEREO_MODE_NUM_VALUES = 25,
+    WKS_API_STEREO_MODE_DEFAULT = WKS_API_STEREO_MODE_SHUTTER_GLASSES
+};
+
+enum EValues_WKS_DISPLAY_REARRANGEMENT_WITHIN16K {
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_OFF              = 0x0,
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_ON               = 0x1,
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_NUM_VALUES = 2,
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_DEFAULT = WKS_DISPLAY_REARRANGEMENT_WITHIN16K_ON
+};
+
+enum EValues_WKS_MEMORY_ALLOCATION_POLICY {
+    WKS_MEMORY_ALLOCATION_POLICY_AS_NEEDED               = 0x0,
+    WKS_MEMORY_ALLOCATION_POLICY_MODERATE_PRE_ALLOCATION = 0x1,
+    WKS_MEMORY_ALLOCATION_POLICY_AGGRESSIVE_PRE_ALLOCATION = 0x2,
+    WKS_MEMORY_ALLOCATION_POLICY_NUM_VALUES = 3,
+    WKS_MEMORY_ALLOCATION_POLICY_DEFAULT = WKS_MEMORY_ALLOCATION_POLICY_AS_NEEDED
+};
+
+enum EValues_WKS_MOSAIC_TOPOLOGY_REQUESTED {
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_OFF                    = 0,
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_ON                     = 1,
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_NUM_VALUES = 2,
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_DEFAULT = WKS_MOSAIC_TOPOLOGY_REQUESTED_OFF
+};
+
+enum EValues_WKS_POST_PROCESSING_ENGINE_CONTROL {
+    WKS_POST_PROCESSING_ENGINE_CONTROL_OFF               = 0x00000000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_EXECUTE_ON_DWM    = 0x00000001,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_EXECUTE_ON_NON_DWM = 0x00000002,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_USE_SCRATCH_MEMORY_AS_GPU_PROGRAM_STORAGE = 0x00000004,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_DRAW_ON_SCREEN_INDICATOR_DLDSR = 0x00000008,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_USE_DEVICE_RENDER_CHANNEL = 0x00000010,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_USE_UMD_SHADER_RESOURCE = 0x00000020,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_DRAW_ON_SCREEN_INDICATOR_UPSCALE = 0x00000040,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_ALL_CONTROLLED_BITS = 0xFFFF0000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_EXECUTE_ON_DWM = 0x00010000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_EXECUTE_ON_NON_DWM = 0x00020000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_USE_SCRATCH_MEMORY_AS_GPU_PROGRAM_STORAGE = 0x00040000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_DRAW_ON_SCREEN_INDICATOR_DLDSR = 0x00080000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_USE_DEVICE_RENDER_CHANNEL = 0x00100000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_USE_UMD_SHADER_RESOURCE = 0x00200000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_DRAW_ON_SCREEN_INDICATOR_UPSCALE = 0x00400000,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_NUM_VALUES = 16,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_DEFAULT = 0x00000033
+};
+
+enum EValues_WKS_STEREO_DONGLE_SUPPORT {
+    WKS_STEREO_DONGLE_SUPPORT_OFF                        = 0,
+    WKS_STEREO_DONGLE_SUPPORT_DAC                        = 1,
+    WKS_STEREO_DONGLE_SUPPORT_DLP                        = 2,
+    WKS_STEREO_DONGLE_SUPPORT_NUM_VALUES = 3,
+    WKS_STEREO_DONGLE_SUPPORT_DEFAULT = WKS_STEREO_DONGLE_SUPPORT_DAC
+};
+
+enum EValues_WKS_STEREO_SUPPORT {
+    WKS_STEREO_SUPPORT_OFF                               = 0,
+    WKS_STEREO_SUPPORT_ON                                = 1,
+    WKS_STEREO_SUPPORT_NUM_VALUES = 2,
+    WKS_STEREO_SUPPORT_DEFAULT = WKS_STEREO_SUPPORT_OFF
+};
+
+enum EValues_WKS_STEREO_SWAP_MODE {
+    WKS_STEREO_SWAP_MODE_APPLICATION_CONTROL             = 0x0,
+    WKS_STEREO_SWAP_MODE_PER_EYE                         = 0x1,
+    WKS_STEREO_SWAP_MODE_PER_EYE_PAIR                    = 0x2,
+    WKS_STEREO_SWAP_MODE_LEGACY_BEHAVIOR                 = 0x3,
+    WKS_STEREO_SWAP_MODE_PER_EYE_FOR_SWAP_GROUP          = 0x4,
+    WKS_STEREO_SWAP_MODE_NUM_VALUES = 5,
+    WKS_STEREO_SWAP_MODE_DEFAULT = WKS_STEREO_SWAP_MODE_APPLICATION_CONTROL
+};
+
+%%DEFSEC_END
+
+%%DEFGLB_START
+EValues_AA_BEHAVIOR_FLAGS g_valuesAA_BEHAVIOR_FLAGS[AA_BEHAVIOR_FLAGS_NUM_VALUES] = 
+{
+    AA_BEHAVIOR_FLAGS_NONE,
+    AA_BEHAVIOR_FLAGS_TREAT_OVERRIDE_AS_APP_CONTROLLED,
+    AA_BEHAVIOR_FLAGS_TREAT_OVERRIDE_AS_ENHANCE,
+    AA_BEHAVIOR_FLAGS_DISABLE_OVERRIDE,
+    AA_BEHAVIOR_FLAGS_TREAT_ENHANCE_AS_APP_CONTROLLED,
+    AA_BEHAVIOR_FLAGS_TREAT_ENHANCE_AS_OVERRIDE,
+    AA_BEHAVIOR_FLAGS_DISABLE_ENHANCE,
+    AA_BEHAVIOR_FLAGS_MAP_VCAA_TO_MULTISAMPLING,
+    AA_BEHAVIOR_FLAGS_SLI_DISABLE_TRANSPARENCY_SUPERSAMPLING,
+    AA_BEHAVIOR_FLAGS_DISABLE_CPLAA,
+    AA_BEHAVIOR_FLAGS_SKIP_RT_DIM_CHECK_FOR_ENHANCE,
+    AA_BEHAVIOR_FLAGS_DISABLE_SLIAA,
+    AA_BEHAVIOR_FLAGS_DEFAULT,
+    AA_BEHAVIOR_FLAGS_AA_RT_BPP_DIV_4,
+    AA_BEHAVIOR_FLAGS_AA_RT_BPP_DIV_4_SHIFT,
+    AA_BEHAVIOR_FLAGS_NON_AA_RT_BPP_DIV_4,
+    AA_BEHAVIOR_FLAGS_NON_AA_RT_BPP_DIV_4_SHIFT,
+    AA_BEHAVIOR_FLAGS_MASK,
+};
+
+EValues_AA_MODE_ALPHATOCOVERAGE g_valuesAA_MODE_ALPHATOCOVERAGE[AA_MODE_ALPHATOCOVERAGE_NUM_VALUES] = 
+{
+    AA_MODE_ALPHATOCOVERAGE_MODE_MASK,
+    AA_MODE_ALPHATOCOVERAGE_MODE_OFF,
+    AA_MODE_ALPHATOCOVERAGE_MODE_ON,
+    AA_MODE_ALPHATOCOVERAGE_MODE_MAX,
+};
+
+EValues_AA_MODE_GAMMACORRECTION g_valuesAA_MODE_GAMMACORRECTION[AA_MODE_GAMMACORRECTION_NUM_VALUES] = 
+{
+    AA_MODE_GAMMACORRECTION_MASK,
+    AA_MODE_GAMMACORRECTION_OFF,
+    AA_MODE_GAMMACORRECTION_ON_IF_FOS,
+    AA_MODE_GAMMACORRECTION_ON_ALWAYS,
+    AA_MODE_GAMMACORRECTION_MAX,
+    AA_MODE_GAMMACORRECTION_DEFAULT,
+    AA_MODE_GAMMACORRECTION_DEFAULT_TESLA,
+    AA_MODE_GAMMACORRECTION_DEFAULT_FERMI,
+};
+
+EValues_AA_MODE_METHOD g_valuesAA_MODE_METHOD[AA_MODE_METHOD_NUM_VALUES] = 
+{
+    AA_MODE_METHOD_NONE,
+    AA_MODE_METHOD_SUPERSAMPLE_2X_H,
+    AA_MODE_METHOD_SUPERSAMPLE_2X_V,
+    AA_MODE_METHOD_SUPERSAMPLE_1_5X1_5,
+    AA_MODE_METHOD_FREE_0x03,
+    AA_MODE_METHOD_FREE_0x04,
+    AA_MODE_METHOD_SUPERSAMPLE_4X,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_BIAS,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_GAUSSIAN,
+    AA_MODE_METHOD_FREE_0x08,
+    AA_MODE_METHOD_FREE_0x09,
+    AA_MODE_METHOD_SUPERSAMPLE_9X,
+    AA_MODE_METHOD_SUPERSAMPLE_9X_BIAS,
+    AA_MODE_METHOD_SUPERSAMPLE_16X,
+    AA_MODE_METHOD_SUPERSAMPLE_16X_BIAS,
+    AA_MODE_METHOD_MULTISAMPLE_2X_DIAGONAL,
+    AA_MODE_METHOD_MULTISAMPLE_2X_QUINCUNX,
+    AA_MODE_METHOD_MULTISAMPLE_4X,
+    AA_MODE_METHOD_FREE_0x11,
+    AA_MODE_METHOD_MULTISAMPLE_4X_GAUSSIAN,
+    AA_MODE_METHOD_MIXEDSAMPLE_4X_SKEWED_4TAP,
+    AA_MODE_METHOD_FREE_0x14,
+    AA_MODE_METHOD_FREE_0x15,
+    AA_MODE_METHOD_MIXEDSAMPLE_6X,
+    AA_MODE_METHOD_MIXEDSAMPLE_6X_SKEWED_6TAP,
+    AA_MODE_METHOD_MIXEDSAMPLE_8X,
+    AA_MODE_METHOD_MIXEDSAMPLE_8X_SKEWED_8TAP,
+    AA_MODE_METHOD_MIXEDSAMPLE_16X,
+    AA_MODE_METHOD_MULTISAMPLE_4X_GAMMA,
+    AA_MODE_METHOD_MULTISAMPLE_16X,
+    AA_MODE_METHOD_VCAA_32X_8v24,
+    AA_MODE_METHOD_CORRUPTION_CHECK,
+    AA_MODE_METHOD_6X_CT,
+    AA_MODE_METHOD_MULTISAMPLE_2X_DIAGONAL_GAMMA,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_GAMMA,
+    AA_MODE_METHOD_MULTISAMPLE_4X_FOSGAMMA,
+    AA_MODE_METHOD_MULTISAMPLE_2X_DIAGONAL_FOSGAMMA,
+    AA_MODE_METHOD_SUPERSAMPLE_4X_FOSGAMMA,
+    AA_MODE_METHOD_MULTISAMPLE_8X,
+    AA_MODE_METHOD_VCAA_8X_4v4,
+    AA_MODE_METHOD_VCAA_16X_4v12,
+    AA_MODE_METHOD_VCAA_16X_8v8,
+    AA_MODE_METHOD_MIXEDSAMPLE_32X,
+    AA_MODE_METHOD_SUPERVCAA_64X_4v12,
+    AA_MODE_METHOD_SUPERVCAA_64X_8v8,
+    AA_MODE_METHOD_MIXEDSAMPLE_64X,
+    AA_MODE_METHOD_MIXEDSAMPLE_128X,
+    AA_MODE_METHOD_COUNT,
+    AA_MODE_METHOD_METHOD_MASK,
+    AA_MODE_METHOD_METHOD_MAX,
+};
+
+EValues_AA_MODE_REPLAY g_valuesAA_MODE_REPLAY[AA_MODE_REPLAY_NUM_VALUES] = 
+{
+    AA_MODE_REPLAY_SAMPLES_MASK,
+    AA_MODE_REPLAY_SAMPLES_ONE,
+    AA_MODE_REPLAY_SAMPLES_TWO,
+    AA_MODE_REPLAY_SAMPLES_FOUR,
+    AA_MODE_REPLAY_SAMPLES_EIGHT,
+    AA_MODE_REPLAY_SAMPLES_MAX,
+    AA_MODE_REPLAY_MODE_MASK,
+    AA_MODE_REPLAY_MODE_OFF,
+    AA_MODE_REPLAY_MODE_ALPHA_TEST,
+    AA_MODE_REPLAY_MODE_PIXEL_KILL,
+    AA_MODE_REPLAY_MODE_DYN_BRANCH,
+    AA_MODE_REPLAY_MODE_OPTIMAL,
+    AA_MODE_REPLAY_MODE_ALL,
+    AA_MODE_REPLAY_MODE_MAX,
+    AA_MODE_REPLAY_TRANSPARENCY,
+    AA_MODE_REPLAY_DISALLOW_TRAA,
+    AA_MODE_REPLAY_TRANSPARENCY_DEFAULT,
+    AA_MODE_REPLAY_TRANSPARENCY_DEFAULT_TESLA,
+    AA_MODE_REPLAY_TRANSPARENCY_DEFAULT_FERMI,
+    AA_MODE_REPLAY_MASK,
+};
+
+EValues_AA_MODE_SELECTOR g_valuesAA_MODE_SELECTOR[AA_MODE_SELECTOR_NUM_VALUES] = 
+{
+    AA_MODE_SELECTOR_MASK,
+    AA_MODE_SELECTOR_APP_CONTROL,
+    AA_MODE_SELECTOR_OVERRIDE,
+    AA_MODE_SELECTOR_ENHANCE,
+    AA_MODE_SELECTOR_MAX,
+};
+
+EValues_AA_MODE_SELECTOR_SLIAA g_valuesAA_MODE_SELECTOR_SLIAA[AA_MODE_SELECTOR_SLIAA_NUM_VALUES] = 
+{
+    AA_MODE_SELECTOR_SLIAA_DISABLED,
+    AA_MODE_SELECTOR_SLIAA_ENABLED,
+};
+
+EValues_ANISO_MODE_LEVEL g_valuesANISO_MODE_LEVEL[ANISO_MODE_LEVEL_NUM_VALUES] = 
+{
+    ANISO_MODE_LEVEL_MASK,
+    ANISO_MODE_LEVEL_NONE_POINT,
+    ANISO_MODE_LEVEL_NONE_LINEAR,
+    ANISO_MODE_LEVEL_MAX,
+    ANISO_MODE_LEVEL_DEFAULT,
+};
+
+EValues_ANISO_MODE_SELECTOR g_valuesANISO_MODE_SELECTOR[ANISO_MODE_SELECTOR_NUM_VALUES] = 
+{
+    ANISO_MODE_SELECTOR_MASK,
+    ANISO_MODE_SELECTOR_APP,
+    ANISO_MODE_SELECTOR_USER,
+    ANISO_MODE_SELECTOR_COND,
+    ANISO_MODE_SELECTOR_MAX,
+    ANISO_MODE_SELECTOR_DEFAULT,
+};
+
+EValues_ANSEL_ALLOW g_valuesANSEL_ALLOW[ANSEL_ALLOW_NUM_VALUES] = 
+{
+    ANSEL_ALLOW_DISALLOWED,
+    ANSEL_ALLOW_ALLOWED,
+};
+
+EValues_ANSEL_ALLOWLISTED g_valuesANSEL_ALLOWLISTED[ANSEL_ALLOWLISTED_NUM_VALUES] = 
+{
+    ANSEL_ALLOWLISTED_DISALLOWED,
+    ANSEL_ALLOWLISTED_ALLOWED,
+};
+
+EValues_ANSEL_ENABLE g_valuesANSEL_ENABLE[ANSEL_ENABLE_NUM_VALUES] = 
+{
+    ANSEL_ENABLE_OFF,
+    ANSEL_ENABLE_ON,
+};
+
+EValues_APPLICATION_PROFILE_NOTIFICATION_TIMEOUT g_valuesAPPLICATION_PROFILE_NOTIFICATION_TIMEOUT[APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_NUM_VALUES] = 
+{
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_DISABLED,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_NINE_SECONDS,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_FIFTEEN_SECONDS,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_THIRTY_SECONDS,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_ONE_MINUTE,
+    APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_TWO_MINUTES,
+};
+
+EValues_AUTOFL g_valuesAUTOFL[AUTOFL_NUM_VALUES] = 
+{
+    AUTOFL_OFF,
+    AUTOFL_ON,
+};
+
+EValues_BATTERY_BOOST g_valuesBATTERY_BOOST[BATTERY_BOOST_NUM_VALUES] = 
+{
+    BATTERY_BOOST_MIN,
+    BATTERY_BOOST_MAX,
+    BATTERY_BOOST_ENABLED,
+    BATTERY_BOOST_DISABLED,
+    BATTERY_BOOST_XQM,
+};
+
+EValues_BATTERY_BOOST_APP_FPS g_valuesBATTERY_BOOST_APP_FPS[BATTERY_BOOST_APP_FPS_NUM_VALUES] = 
+{
+    BATTERY_BOOST_APP_FPS_MIN,
+    BATTERY_BOOST_APP_FPS_MAX,
+    BATTERY_BOOST_APP_FPS_NO_OVERRIDE,
+};
+
+EValues_BG_FRL_FPS g_valuesBG_FRL_FPS[BG_FRL_FPS_NUM_VALUES] = 
+{
+    BG_FRL_FPS_DISABLED,
+    BG_FRL_FPS_MIN,
+    BG_FRL_FPS_MAX,
+};
+
+EValues_BG_FRL_FPS_NVCPL g_valuesBG_FRL_FPS_NVCPL[BG_FRL_FPS_NVCPL_NUM_VALUES] = 
+{
+    BG_FRL_FPS_NVCPL_DISABLED,
+    BG_FRL_FPS_NVCPL_MIN,
+    BG_FRL_FPS_NVCPL_MAX,
+};
+
+EValues_CPL_HIDDEN_PROFILE g_valuesCPL_HIDDEN_PROFILE[CPL_HIDDEN_PROFILE_NUM_VALUES] = 
+{
+    CPL_HIDDEN_PROFILE_DISABLED,
+    CPL_HIDDEN_PROFILE_ENABLED,
+};
+
+const wchar_t * g_valuesCUDA_EXCLUDED_GPUS[CUDA_EXCLUDED_GPUS_NUM_VALUES] = 
+{
+    CUDA_EXCLUDED_GPUS_NONE
+};
+
+const wchar_t * g_valuesD3DOGL_GPU_MAX_POWER[D3DOGL_GPU_MAX_POWER_NUM_VALUES] = 
+{
+    D3DOGL_GPU_MAX_POWER_DEFAULTPOWER
+};
+
+EValues_EXPORT_PERF_COUNTERS g_valuesEXPORT_PERF_COUNTERS[EXPORT_PERF_COUNTERS_NUM_VALUES] = 
+{
+    EXPORT_PERF_COUNTERS_OFF,
+    EXPORT_PERF_COUNTERS_ON,
+};
+
+EValues_EXTERNAL_QUIET_MODE g_valuesEXTERNAL_QUIET_MODE[EXTERNAL_QUIET_MODE_NUM_VALUES] = 
+{
+    EXTERNAL_QUIET_MODE_ON,
+    EXTERNAL_QUIET_MODE_OFF,
+};
+
+EValues_FRL_FPS g_valuesFRL_FPS[FRL_FPS_NUM_VALUES] = 
+{
+    FRL_FPS_DISABLED,
+    FRL_FPS_MIN,
+    FRL_FPS_MAX,
+};
+
+EValues_FRL_FPS_NVCPL g_valuesFRL_FPS_NVCPL[FRL_FPS_NVCPL_NUM_VALUES] = 
+{
+    FRL_FPS_NVCPL_DISABLED,
+    FRL_FPS_NVCPL_MIN,
+    FRL_FPS_NVCPL_MAX,
+};
+
+EValues_FRL_LOW_LATENCY g_valuesFRL_LOW_LATENCY[FRL_LOW_LATENCY_NUM_VALUES] = 
+{
+    FRL_LOW_LATENCY_OFF,
+    FRL_LOW_LATENCY_ON,
+};
+
+EValues_FXAA_ALLOW g_valuesFXAA_ALLOW[FXAA_ALLOW_NUM_VALUES] = 
+{
+    FXAA_ALLOW_DISALLOWED,
+    FXAA_ALLOW_ALLOWED,
+};
+
+EValues_FXAA_ENABLE g_valuesFXAA_ENABLE[FXAA_ENABLE_NUM_VALUES] = 
+{
+    FXAA_ENABLE_OFF,
+    FXAA_ENABLE_ON,
+};
+
+EValues_FXAA_INDICATOR_ENABLE g_valuesFXAA_INDICATOR_ENABLE[FXAA_INDICATOR_ENABLE_NUM_VALUES] = 
+{
+    FXAA_INDICATOR_ENABLE_OFF,
+    FXAA_INDICATOR_ENABLE_ON,
+};
+
+EValues_GFN_FRL_FPS g_valuesGFN_FRL_FPS[GFN_FRL_FPS_NUM_VALUES] = 
+{
+    GFN_FRL_FPS_DISABLED,
+    GFN_FRL_FPS_MIN,
+    GFN_FRL_FPS_MAX,
+};
+
+EValues_GSYNC_COMPATIBILITY g_valuesGSYNC_COMPATIBILITY[GSYNC_COMPATIBILITY_NUM_VALUES] = 
+{
+    GSYNC_COMPATIBILITY_NO,
+    GSYNC_COMPATIBILITY_YES,
+};
+
+EValues_LATENCY_INDICATOR_AUTOALIGN g_valuesLATENCY_INDICATOR_AUTOALIGN[LATENCY_INDICATOR_AUTOALIGN_NUM_VALUES] = 
+{
+    LATENCY_INDICATOR_AUTOALIGN_DISABLED,
+    LATENCY_INDICATOR_AUTOALIGN_ENABLED,
+};
+
+EValues_LATENCY_INDICATOR_HEIGHT g_valuesLATENCY_INDICATOR_HEIGHT[LATENCY_INDICATOR_HEIGHT_NUM_VALUES] = 
+{
+    LATENCY_INDICATOR_HEIGHT_MIN,
+    LATENCY_INDICATOR_HEIGHT_MAX,
+    LATENCY_INDICATOR_HEIGHT_DEFAULT_SIZE,
+};
+
+EValues_LATENCY_INDICATOR_POS_X g_valuesLATENCY_INDICATOR_POS_X[LATENCY_INDICATOR_POS_X_NUM_VALUES] = 
+{
+    LATENCY_INDICATOR_POS_X_MIN,
+    LATENCY_INDICATOR_POS_X_MAX,
+};
+
+EValues_LATENCY_INDICATOR_POS_Y g_valuesLATENCY_INDICATOR_POS_Y[LATENCY_INDICATOR_POS_Y_NUM_VALUES] = 
+{
+    LATENCY_INDICATOR_POS_Y_MIN,
+    LATENCY_INDICATOR_POS_Y_MAX,
+    LATENCY_INDICATOR_POS_Y_DEFAULT_POS_Y,
+};
+
+EValues_LATENCY_INDICATOR_WIDTH g_valuesLATENCY_INDICATOR_WIDTH[LATENCY_INDICATOR_WIDTH_NUM_VALUES] = 
+{
+    LATENCY_INDICATOR_WIDTH_MIN,
+    LATENCY_INDICATOR_WIDTH_MAX,
+    LATENCY_INDICATOR_WIDTH_DEFAULT_SIZE,
+};
+
+EValues_MAXWELL_WDDM2_FORCE_128K_PTE g_valuesMAXWELL_WDDM2_FORCE_128K_PTE[MAXWELL_WDDM2_FORCE_128K_PTE_NUM_VALUES] = 
+{
+    MAXWELL_WDDM2_FORCE_128K_PTE_FORCE_OFF,
+    MAXWELL_WDDM2_FORCE_128K_PTE_FORCE_ON,
+};
+
+EValues_MCSFRSHOWSPLIT g_valuesMCSFRSHOWSPLIT[MCSFRSHOWSPLIT_NUM_VALUES] = 
+{
+    MCSFRSHOWSPLIT_DISABLED,
+    MCSFRSHOWSPLIT_ENABLED,
+};
+
+EValues_NV_QUALITY_UPSCALING g_valuesNV_QUALITY_UPSCALING[NV_QUALITY_UPSCALING_NUM_VALUES] = 
+{
+    NV_QUALITY_UPSCALING_OFF,
+    NV_QUALITY_UPSCALING_ON,
+};
+
+EValues_OPTIMUS_MAXAA g_valuesOPTIMUS_MAXAA[OPTIMUS_MAXAA_NUM_VALUES] = 
+{
+    OPTIMUS_MAXAA_MIN,
+    OPTIMUS_MAXAA_MAX,
+};
+
+EValues_PHYSXINDICATOR g_valuesPHYSXINDICATOR[PHYSXINDICATOR_NUM_VALUES] = 
+{
+    PHYSXINDICATOR_DISABLED,
+    PHYSXINDICATOR_ENABLED,
+};
+
+EValues_PREFERRED_PSTATE g_valuesPREFERRED_PSTATE[PREFERRED_PSTATE_NUM_VALUES] = 
+{
+    PREFERRED_PSTATE_ADAPTIVE,
+    PREFERRED_PSTATE_PREFER_MAX,
+    PREFERRED_PSTATE_DRIVER_CONTROLLED,
+    PREFERRED_PSTATE_PREFER_CONSISTENT_PERFORMANCE,
+    PREFERRED_PSTATE_PREFER_MIN,
+    PREFERRED_PSTATE_OPTIMAL_POWER,
+    PREFERRED_PSTATE_MIN,
+    PREFERRED_PSTATE_MAX,
+};
+
+EValues_PREVENT_UI_AF_OVERRIDE g_valuesPREVENT_UI_AF_OVERRIDE[PREVENT_UI_AF_OVERRIDE_NUM_VALUES] = 
+{
+    PREVENT_UI_AF_OVERRIDE_OFF,
+    PREVENT_UI_AF_OVERRIDE_ON,
+};
+
+EValues_PS_FRAMERATE_LIMITER g_valuesPS_FRAMERATE_LIMITER[PS_FRAMERATE_LIMITER_NUM_VALUES] = 
+{
+    PS_FRAMERATE_LIMITER_DISABLED,
+    PS_FRAMERATE_LIMITER_FPS_20,
+    PS_FRAMERATE_LIMITER_FPS_30,
+    PS_FRAMERATE_LIMITER_FPS_40,
+    PS_FRAMERATE_LIMITER_FPSMASK,
+    PS_FRAMERATE_LIMITER_ALLOW_DYNAMIC,
+    PS_FRAMERATE_LIMITER_YIELD_PROCESSOR,
+    PS_FRAMERATE_LIMITER_FORCE_VSYNC_OFF,
+    PS_FRAMERATE_LIMITER_DISALLOWED,
+    PS_FRAMERATE_LIMITER_NO_LAG_OFFSET,
+    PS_FRAMERATE_LIMITER_ALLOW_SLEEP_WITH_REFLEX,
+    PS_FRAMERATE_LIMITER_ACCURATE,
+    PS_FRAMERATE_LIMITER_ALLOW_WINDOWED,
+    PS_FRAMERATE_LIMITER_FORCEON,
+    PS_FRAMERATE_LIMITER_ENABLED,
+    PS_FRAMERATE_LIMITER_OPENGL_REMOTE_DESKTOP,
+    PS_FRAMERATE_LIMITER_LOW_LATENCY_DEFAULT,
+    PS_FRAMERATE_LIMITER_MFR_FLAGS,
+    PS_FRAMERATE_LIMITER_GFN_FLAGS,
+    PS_FRAMERATE_LIMITER_MASK,
+};
+
+EValues_PS_FRAMERATE_LIMITER_2_CONTROL g_valuesPS_FRAMERATE_LIMITER_2_CONTROL[PS_FRAMERATE_LIMITER_2_CONTROL_NUM_VALUES] = 
+{
+    PS_FRAMERATE_LIMITER_2_CONTROL_DELAY_CE,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DELAY_3D,
+    PS_FRAMERATE_LIMITER_2_CONTROL_AVOID_NOOP,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DELAY_CE_PRESENT_3D,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ALLOW_ALL_MAXWELL,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ALLOW_ALL,
+    PS_FRAMERATE_LIMITER_2_CONTROL_FORCE_OFF,
+    PS_FRAMERATE_LIMITER_2_CONTROL_ENABLE_VCE,
+    PS_FRAMERATE_LIMITER_2_CONTROL_DEFAULT_FOR_GM10X,
+};
+
+EValues_PS_FRAMERATE_LIMITER_GPS_CTRL g_valuesPS_FRAMERATE_LIMITER_GPS_CTRL[PS_FRAMERATE_LIMITER_GPS_CTRL_NUM_VALUES] = 
+{
+    PS_FRAMERATE_LIMITER_GPS_CTRL_DISABLED,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_DECREASE_FILTER_MASK,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PAUSE_TIME_MASK,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PAUSE_TIME_SHIFT,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_TARGET_RENDER_TIME_MASK,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_TARGET_RENDER_TIME_SHIFT,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PERF_STEP_SIZE_MASK,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_PERF_STEP_SIZE_SHIFT,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_INCREASE_FILTER_MASK,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_INCREASE_FILTER_SHIFT,
+    PS_FRAMERATE_LIMITER_GPS_CTRL_OPTIMAL_SETTING,
+};
+
+EValues_PS_FRAMERATE_MONITOR_CTRL g_valuesPS_FRAMERATE_MONITOR_CTRL[PS_FRAMERATE_MONITOR_CTRL_NUM_VALUES] = 
+{
+    PS_FRAMERATE_MONITOR_CTRL_DISABLED,
+    PS_FRAMERATE_MONITOR_CTRL_THRESHOLD_PCT_MASK,
+    PS_FRAMERATE_MONITOR_CTRL_MOVING_AVG_X_MASK,
+    PS_FRAMERATE_MONITOR_CTRL_MOVING_AVG_X_SHIFT,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OFFSET_MASK,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OFFSET_SHIFT,
+    PS_FRAMERATE_MONITOR_CTRL_FRL_OFFSET_MASK,
+    PS_FRAMERATE_MONITOR_CTRL_FRL_OFFSET_SHIFT,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_USE_FRL,
+    PS_FRAMERATE_MONITOR_CTRL_LOW_LATENCY_LOG,
+    PS_FRAMERATE_MONITOR_CTRL_ALLOW_AUTOFL_WITH_REFLEX,
+    PS_FRAMERATE_MONITOR_CTRL_DISABLE_MAP_GPU_TIMER,
+    PS_FRAMERATE_MONITOR_CTRL_ENABLE_ON_VSYNC,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_30,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_60,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_MASK,
+    PS_FRAMERATE_MONITOR_CTRL_FPS_SHIFT,
+    PS_FRAMERATE_MONITOR_CTRL_OPTIMAL_SETTING,
+    PS_FRAMERATE_MONITOR_CTRL_OPTIMAL_SETTING_V2,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OPTIMAL_SETTING,
+    PS_FRAMERATE_MONITOR_CTRL_VSYNC_OPTIMAL_SETTING_V2,
+};
+
+EValues_QUIET_MODE g_valuesQUIET_MODE[QUIET_MODE_NUM_VALUES] = 
+{
+    QUIET_MODE_MIN,
+    QUIET_MODE_MAX,
+    QUIET_MODE_ENABLED,
+    QUIET_MODE_DISABLED,
+    QUIET_MODE_XQM,
+};
+
+EValues_QUIET_MODE_APP_FPS g_valuesQUIET_MODE_APP_FPS[QUIET_MODE_APP_FPS_NUM_VALUES] = 
+{
+    QUIET_MODE_APP_FPS_MIN,
+    QUIET_MODE_APP_FPS_MAX,
+    QUIET_MODE_APP_FPS_NO_OVERRIDE,
+};
+
+EValues_SHIM_MCCOMPAT g_valuesSHIM_MCCOMPAT[SHIM_MCCOMPAT_NUM_VALUES] = 
+{
+    SHIM_MCCOMPAT_INTEGRATED,
+    SHIM_MCCOMPAT_ENABLE,
+    SHIM_MCCOMPAT_USER_EDITABLE,
+    SHIM_MCCOMPAT_MASK,
+    SHIM_MCCOMPAT_VIDEO_MASK,
+    SHIM_MCCOMPAT_VARYING_BIT,
+    SHIM_MCCOMPAT_AUTO_SELECT,
+    SHIM_MCCOMPAT_OVERRIDE_BIT,
+};
+
+EValues_SHIM_RENDERING_MODE g_valuesSHIM_RENDERING_MODE[SHIM_RENDERING_MODE_NUM_VALUES] = 
+{
+    SHIM_RENDERING_MODE_INTEGRATED,
+    SHIM_RENDERING_MODE_ENABLE,
+    SHIM_RENDERING_MODE_USER_EDITABLE,
+    SHIM_RENDERING_MODE_MASK,
+    SHIM_RENDERING_MODE_VIDEO_MASK,
+    SHIM_RENDERING_MODE_VARYING_BIT,
+    SHIM_RENDERING_MODE_AUTO_SELECT,
+    SHIM_RENDERING_MODE_OVERRIDE_BIT,
+};
+
+EValues_SHIM_RENDERING_OPTIONS g_valuesSHIM_RENDERING_OPTIONS[SHIM_RENDERING_OPTIONS_NUM_VALUES] = 
+{
+    SHIM_RENDERING_OPTIONS_DEFAULT_RENDERING_MODE,
+    SHIM_RENDERING_OPTIONS_DISABLE_ASYNC_PRESENT,
+    SHIM_RENDERING_OPTIONS_EHSHELL_DETECT,
+    SHIM_RENDERING_OPTIONS_FLASHPLAYER_HOST_DETECT,
+    SHIM_RENDERING_OPTIONS_VIDEO_DRM_APP_DETECT,
+    SHIM_RENDERING_OPTIONS_IGNORE_OVERRIDES,
+    SHIM_RENDERING_OPTIONS_RESERVED1,
+    SHIM_RENDERING_OPTIONS_ENABLE_DWM_ASYNC_PRESENT,
+    SHIM_RENDERING_OPTIONS_RESERVED2,
+    SHIM_RENDERING_OPTIONS_ALLOW_INHERITANCE,
+    SHIM_RENDERING_OPTIONS_DISABLE_WRAPPERS,
+    SHIM_RENDERING_OPTIONS_DISABLE_DXGI_WRAPPERS,
+    SHIM_RENDERING_OPTIONS_PRUNE_UNSUPPORTED_FORMATS,
+    SHIM_RENDERING_OPTIONS_ENABLE_ALPHA_FORMAT,
+    SHIM_RENDERING_OPTIONS_IGPU_TRANSCODING,
+    SHIM_RENDERING_OPTIONS_DISABLE_CUDA,
+    SHIM_RENDERING_OPTIONS_ALLOW_CP_CAPS_FOR_VIDEO,
+    SHIM_RENDERING_OPTIONS_IGPU_TRANSCODING_FWD_OPTIMUS,
+    SHIM_RENDERING_OPTIONS_DISABLE_DURING_SECURE_BOOT,
+    SHIM_RENDERING_OPTIONS_INVERT_FOR_QUADRO,
+    SHIM_RENDERING_OPTIONS_INVERT_FOR_MSHYBRID,
+    SHIM_RENDERING_OPTIONS_REGISTER_PROCESS_ENABLE_GOLD,
+    SHIM_RENDERING_OPTIONS_HANDLE_WINDOWED_MODE_PERF_OPT,
+    SHIM_RENDERING_OPTIONS_HANDLE_WIN7_ASYNC_RUNTIME_BUG,
+    SHIM_RENDERING_OPTIONS_EXPLICIT_ADAPTER_OPTED_BY_APP,
+    SHIM_RENDERING_OPTIONS_ALLOW_DYNAMIC_DISPLAY_MUX_SWITCH,
+    SHIM_RENDERING_OPTIONS_DISALLOW_DYNAMIC_DISPLAY_MUX_SWITCH,
+    SHIM_RENDERING_OPTIONS_DISABLE_TURING_POWER_POLICY,
+};
+
+EValues_SLI_GPU_COUNT g_valuesSLI_GPU_COUNT[SLI_GPU_COUNT_NUM_VALUES] = 
+{
+    SLI_GPU_COUNT_AUTOSELECT,
+    SLI_GPU_COUNT_ONE,
+    SLI_GPU_COUNT_TWO,
+    SLI_GPU_COUNT_THREE,
+    SLI_GPU_COUNT_FOUR,
+};
+
+EValues_SLI_PREDEFINED_GPU_COUNT g_valuesSLI_PREDEFINED_GPU_COUNT[SLI_PREDEFINED_GPU_COUNT_NUM_VALUES] = 
+{
+    SLI_PREDEFINED_GPU_COUNT_AUTOSELECT,
+    SLI_PREDEFINED_GPU_COUNT_ONE,
+    SLI_PREDEFINED_GPU_COUNT_TWO,
+    SLI_PREDEFINED_GPU_COUNT_THREE,
+    SLI_PREDEFINED_GPU_COUNT_FOUR,
+};
+
+EValues_SLI_PREDEFINED_GPU_COUNT_DX10 g_valuesSLI_PREDEFINED_GPU_COUNT_DX10[SLI_PREDEFINED_GPU_COUNT_DX10_NUM_VALUES] = 
+{
+    SLI_PREDEFINED_GPU_COUNT_DX10_AUTOSELECT,
+    SLI_PREDEFINED_GPU_COUNT_DX10_ONE,
+    SLI_PREDEFINED_GPU_COUNT_DX10_TWO,
+    SLI_PREDEFINED_GPU_COUNT_DX10_THREE,
+    SLI_PREDEFINED_GPU_COUNT_DX10_FOUR,
+};
+
+EValues_SLI_PREDEFINED_MODE g_valuesSLI_PREDEFINED_MODE[SLI_PREDEFINED_MODE_NUM_VALUES] = 
+{
+    SLI_PREDEFINED_MODE_AUTOSELECT,
+    SLI_PREDEFINED_MODE_FORCE_SINGLE,
+    SLI_PREDEFINED_MODE_FORCE_AFR,
+    SLI_PREDEFINED_MODE_FORCE_AFR2,
+    SLI_PREDEFINED_MODE_FORCE_SFR,
+    SLI_PREDEFINED_MODE_FORCE_AFR_OF_SFR__FALLBACK_3AFR,
+};
+
+EValues_SLI_PREDEFINED_MODE_DX10 g_valuesSLI_PREDEFINED_MODE_DX10[SLI_PREDEFINED_MODE_DX10_NUM_VALUES] = 
+{
+    SLI_PREDEFINED_MODE_DX10_AUTOSELECT,
+    SLI_PREDEFINED_MODE_DX10_FORCE_SINGLE,
+    SLI_PREDEFINED_MODE_DX10_FORCE_AFR,
+    SLI_PREDEFINED_MODE_DX10_FORCE_AFR2,
+    SLI_PREDEFINED_MODE_DX10_FORCE_SFR,
+    SLI_PREDEFINED_MODE_DX10_FORCE_AFR_OF_SFR__FALLBACK_3AFR,
+};
+
+EValues_SLI_RENDERING_MODE g_valuesSLI_RENDERING_MODE[SLI_RENDERING_MODE_NUM_VALUES] = 
+{
+    SLI_RENDERING_MODE_AUTOSELECT,
+    SLI_RENDERING_MODE_FORCE_SINGLE,
+    SLI_RENDERING_MODE_FORCE_AFR,
+    SLI_RENDERING_MODE_FORCE_AFR2,
+    SLI_RENDERING_MODE_FORCE_SFR,
+    SLI_RENDERING_MODE_FORCE_AFR_OF_SFR__FALLBACK_3AFR,
+};
+
+EValues_VRPRERENDERLIMIT g_valuesVRPRERENDERLIMIT[VRPRERENDERLIMIT_NUM_VALUES] = 
+{
+    VRPRERENDERLIMIT_MIN,
+    VRPRERENDERLIMIT_MAX,
+    VRPRERENDERLIMIT_APP_CONTROLLED,
+    VRPRERENDERLIMIT_DEFAULT,
+};
+
+EValues_VRRFEATUREINDICATOR g_valuesVRRFEATUREINDICATOR[VRRFEATUREINDICATOR_NUM_VALUES] = 
+{
+    VRRFEATUREINDICATOR_DISABLED,
+    VRRFEATUREINDICATOR_ENABLED,
+};
+
+EValues_VRRINDICATOR g_valuesVRRINDICATOR[VRRINDICATOR_NUM_VALUES] = 
+{
+    VRRINDICATOR_OFF,
+    VRRINDICATOR_ON,
+};
+
+EValues_VRROVERLAYINDICATOR g_valuesVRROVERLAYINDICATOR[VRROVERLAYINDICATOR_NUM_VALUES] = 
+{
+    VRROVERLAYINDICATOR_DISABLED,
+    VRROVERLAYINDICATOR_ENABLED,
+};
+
+EValues_VRRREQUESTSTATE g_valuesVRRREQUESTSTATE[VRRREQUESTSTATE_NUM_VALUES] = 
+{
+    VRRREQUESTSTATE_DISABLED,
+    VRRREQUESTSTATE_FULLSCREEN_ONLY,
+    VRRREQUESTSTATE_FULLSCREEN_AND_WINDOWED,
+};
+
+EValues_VRR_APP_OVERRIDE g_valuesVRR_APP_OVERRIDE[VRR_APP_OVERRIDE_NUM_VALUES] = 
+{
+    VRR_APP_OVERRIDE_ALLOW,
+    VRR_APP_OVERRIDE_FORCE_OFF,
+    VRR_APP_OVERRIDE_DISALLOW,
+    VRR_APP_OVERRIDE_ULMB,
+    VRR_APP_OVERRIDE_FIXED_REFRESH,
+};
+
+EValues_VRR_APP_OVERRIDE_REQUEST_STATE g_valuesVRR_APP_OVERRIDE_REQUEST_STATE[VRR_APP_OVERRIDE_REQUEST_STATE_NUM_VALUES] = 
+{
+    VRR_APP_OVERRIDE_REQUEST_STATE_ALLOW,
+    VRR_APP_OVERRIDE_REQUEST_STATE_FORCE_OFF,
+    VRR_APP_OVERRIDE_REQUEST_STATE_DISALLOW,
+    VRR_APP_OVERRIDE_REQUEST_STATE_ULMB,
+    VRR_APP_OVERRIDE_REQUEST_STATE_FIXED_REFRESH,
+};
+
+EValues_VRR_MODE g_valuesVRR_MODE[VRR_MODE_NUM_VALUES] = 
+{
+    VRR_MODE_DISABLED,
+    VRR_MODE_FULLSCREEN_ONLY,
+    VRR_MODE_FULLSCREEN_AND_WINDOWED,
+};
+
+EValues_VSYNCSMOOTHAFR g_valuesVSYNCSMOOTHAFR[VSYNCSMOOTHAFR_NUM_VALUES] = 
+{
+    VSYNCSMOOTHAFR_OFF,
+    VSYNCSMOOTHAFR_ON,
+};
+
+EValues_VSYNCVRRCONTROL g_valuesVSYNCVRRCONTROL[VSYNCVRRCONTROL_NUM_VALUES] = 
+{
+    VSYNCVRRCONTROL_DISABLE,
+    VSYNCVRRCONTROL_ENABLE,
+    VSYNCVRRCONTROL_NOTSUPPORTED,
+};
+
+EValues_VSYNC_BEHAVIOR_FLAGS g_valuesVSYNC_BEHAVIOR_FLAGS[VSYNC_BEHAVIOR_FLAGS_NUM_VALUES] = 
+{
+    VSYNC_BEHAVIOR_FLAGS_NONE,
+    VSYNC_BEHAVIOR_FLAGS_DEFAULT,
+    VSYNC_BEHAVIOR_FLAGS_IGNORE_FLIPINTERVAL_MULTIPLE,
+};
+
+EValues_WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW g_valuesWKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW[WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_NUM_VALUES] = 
+{
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_ONE,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_TWO,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_THREE,
+    WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_FOUR,
+};
+
+EValues_WKS_API_STEREO_EYES_EXCHANGE g_valuesWKS_API_STEREO_EYES_EXCHANGE[WKS_API_STEREO_EYES_EXCHANGE_NUM_VALUES] = 
+{
+    WKS_API_STEREO_EYES_EXCHANGE_OFF,
+    WKS_API_STEREO_EYES_EXCHANGE_ON,
+};
+
+EValues_WKS_API_STEREO_MODE g_valuesWKS_API_STEREO_MODE[WKS_API_STEREO_MODE_NUM_VALUES] = 
+{
+    WKS_API_STEREO_MODE_SHUTTER_GLASSES,
+    WKS_API_STEREO_MODE_VERTICAL_INTERLACED,
+    WKS_API_STEREO_MODE_TWINVIEW,
+    WKS_API_STEREO_MODE_NV17_SHUTTER_GLASSES_AUTO,
+    WKS_API_STEREO_MODE_NV17_SHUTTER_GLASSES_DAC0,
+    WKS_API_STEREO_MODE_NV17_SHUTTER_GLASSES_DAC1,
+    WKS_API_STEREO_MODE_COLOR_LINE,
+    WKS_API_STEREO_MODE_COLOR_INTERLEAVED,
+    WKS_API_STEREO_MODE_ANAGLYPH,
+    WKS_API_STEREO_MODE_HORIZONTAL_INTERLACED,
+    WKS_API_STEREO_MODE_SIDE_FIELD,
+    WKS_API_STEREO_MODE_SUB_FIELD,
+    WKS_API_STEREO_MODE_CHECKERBOARD,
+    WKS_API_STEREO_MODE_INVERSE_CHECKERBOARD,
+    WKS_API_STEREO_MODE_TRIDELITY_SL,
+    WKS_API_STEREO_MODE_TRIDELITY_MV,
+    WKS_API_STEREO_MODE_SEEFRONT,
+    WKS_API_STEREO_MODE_STEREO_MIRROR,
+    WKS_API_STEREO_MODE_FRAME_SEQUENTIAL,
+    WKS_API_STEREO_MODE_AUTODETECT_PASSIVE_MODE,
+    WKS_API_STEREO_MODE_AEGIS_DT_FRAME_SEQUENTIAL,
+    WKS_API_STEREO_MODE_OEM_EMITTER_FRAME_SEQUENTIAL,
+    WKS_API_STEREO_MODE_DP_INBAND,
+    WKS_API_STEREO_MODE_USE_HW_DEFAULT,
+    WKS_API_STEREO_MODE_DEFAULT_GL,
+};
+
+EValues_WKS_DISPLAY_REARRANGEMENT_WITHIN16K g_valuesWKS_DISPLAY_REARRANGEMENT_WITHIN16K[WKS_DISPLAY_REARRANGEMENT_WITHIN16K_NUM_VALUES] = 
+{
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_OFF,
+    WKS_DISPLAY_REARRANGEMENT_WITHIN16K_ON,
+};
+
+EValues_WKS_MEMORY_ALLOCATION_POLICY g_valuesWKS_MEMORY_ALLOCATION_POLICY[WKS_MEMORY_ALLOCATION_POLICY_NUM_VALUES] = 
+{
+    WKS_MEMORY_ALLOCATION_POLICY_AS_NEEDED,
+    WKS_MEMORY_ALLOCATION_POLICY_MODERATE_PRE_ALLOCATION,
+    WKS_MEMORY_ALLOCATION_POLICY_AGGRESSIVE_PRE_ALLOCATION,
+};
+
+EValues_WKS_MOSAIC_TOPOLOGY_REQUESTED g_valuesWKS_MOSAIC_TOPOLOGY_REQUESTED[WKS_MOSAIC_TOPOLOGY_REQUESTED_NUM_VALUES] = 
+{
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_OFF,
+    WKS_MOSAIC_TOPOLOGY_REQUESTED_ON,
+};
+
+EValues_WKS_POST_PROCESSING_ENGINE_CONTROL g_valuesWKS_POST_PROCESSING_ENGINE_CONTROL[WKS_POST_PROCESSING_ENGINE_CONTROL_NUM_VALUES] = 
+{
+    WKS_POST_PROCESSING_ENGINE_CONTROL_OFF,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_EXECUTE_ON_DWM,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_EXECUTE_ON_NON_DWM,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_USE_SCRATCH_MEMORY_AS_GPU_PROGRAM_STORAGE,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_DRAW_ON_SCREEN_INDICATOR_DLDSR,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_USE_DEVICE_RENDER_CHANNEL,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_USE_UMD_SHADER_RESOURCE,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_DRAW_ON_SCREEN_INDICATOR_UPSCALE,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_ALL_CONTROLLED_BITS,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_EXECUTE_ON_DWM,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_EXECUTE_ON_NON_DWM,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_USE_SCRATCH_MEMORY_AS_GPU_PROGRAM_STORAGE,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_DRAW_ON_SCREEN_INDICATOR_DLDSR,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_USE_DEVICE_RENDER_CHANNEL,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_USE_UMD_SHADER_RESOURCE,
+    WKS_POST_PROCESSING_ENGINE_CONTROL_MASK_FOR_DRAW_ON_SCREEN_INDICATOR_UPSCALE,
+};
+
+EValues_WKS_STEREO_DONGLE_SUPPORT g_valuesWKS_STEREO_DONGLE_SUPPORT[WKS_STEREO_DONGLE_SUPPORT_NUM_VALUES] = 
+{
+    WKS_STEREO_DONGLE_SUPPORT_OFF,
+    WKS_STEREO_DONGLE_SUPPORT_DAC,
+    WKS_STEREO_DONGLE_SUPPORT_DLP,
+};
+
+EValues_WKS_STEREO_SUPPORT g_valuesWKS_STEREO_SUPPORT[WKS_STEREO_SUPPORT_NUM_VALUES] = 
+{
+    WKS_STEREO_SUPPORT_OFF,
+    WKS_STEREO_SUPPORT_ON,
+};
+
+EValues_WKS_STEREO_SWAP_MODE g_valuesWKS_STEREO_SWAP_MODE[WKS_STEREO_SWAP_MODE_NUM_VALUES] = 
+{
+    WKS_STEREO_SWAP_MODE_APPLICATION_CONTROL,
+    WKS_STEREO_SWAP_MODE_PER_EYE,
+    WKS_STEREO_SWAP_MODE_PER_EYE_PAIR,
+    WKS_STEREO_SWAP_MODE_LEGACY_BEHAVIOR,
+    WKS_STEREO_SWAP_MODE_PER_EYE_FOR_SWAP_GROUP,
+};
+
+%%DEFGLB_END
+
+%%DEFDW_START
+    {AA_BEHAVIOR_FLAGS_ID,                 AA_BEHAVIOR_FLAGS_STRING,                 18, (NvU32 *)g_valuesAA_BEHAVIOR_FLAGS,       AA_BEHAVIOR_FLAGS_DEFAULT,  0},
+    {AA_MODE_ALPHATOCOVERAGE_ID,           AA_MODE_ALPHATOCOVERAGE_STRING,            4, (NvU32 *)g_valuesAA_MODE_ALPHATOCOVERAGE, 0x00000000, 0},
+    {AA_MODE_GAMMACORRECTION_ID,           AA_MODE_GAMMACORRECTION_STRING,            8, (NvU32 *)g_valuesAA_MODE_GAMMACORRECTION, 0x00000000, 0},
+    {AA_MODE_METHOD_ID,                    AA_MODE_METHOD_STRING,                    50, (NvU32 *)g_valuesAA_MODE_METHOD,          AA_MODE_METHOD_NONE,  0},
+    {AA_MODE_REPLAY_ID,                    AA_MODE_REPLAY_STRING,                    20, (NvU32 *)g_valuesAA_MODE_REPLAY,          0x00000000, 0},
+    {AA_MODE_SELECTOR_ID,                  AA_MODE_SELECTOR_STRING,                   5, (NvU32 *)g_valuesAA_MODE_SELECTOR,        AA_MODE_SELECTOR_APP_CONTROL,  0},
+    {AA_MODE_SELECTOR_SLIAA_ID,            AA_MODE_SELECTOR_SLIAA_STRING,             2, (NvU32 *)g_valuesAA_MODE_SELECTOR_SLIAA,  AA_MODE_SELECTOR_SLIAA_DISABLED,  0},
+    {ANISO_MODE_LEVEL_ID,                  ANISO_MODE_LEVEL_STRING,                   5, (NvU32 *)g_valuesANISO_MODE_LEVEL,        ANISO_MODE_LEVEL_DEFAULT,  0},
+    {ANISO_MODE_SELECTOR_ID,               ANISO_MODE_SELECTOR_STRING,                6, (NvU32 *)g_valuesANISO_MODE_SELECTOR,     ANISO_MODE_SELECTOR_DEFAULT,  0},
+    {ANSEL_ALLOW_ID,                       ANSEL_ALLOW_STRING,                        2, (NvU32 *)g_valuesANSEL_ALLOW,             ANSEL_ALLOW_ALLOWED,  0},
+    {ANSEL_ALLOWLISTED_ID,                 ANSEL_ALLOWLISTED_STRING,                  2, (NvU32 *)g_valuesANSEL_ALLOWLISTED,       ANSEL_ALLOWLISTED_DISALLOWED,  0},
+    {ANSEL_ENABLE_ID,                      ANSEL_ENABLE_STRING,                       2, (NvU32 *)g_valuesANSEL_ENABLE,            ANSEL_ENABLE_ON,  0},
+    {APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_ID, APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_STRING,  6, (NvU32 *)g_valuesAPPLICATION_PROFILE_NOTIFICATION_TIMEOUT, APPLICATION_PROFILE_NOTIFICATION_TIMEOUT_DISABLED,  0},
+    {APPLICATION_STEAM_ID_ID,              APPLICATION_STEAM_ID_STRING,               0, NULL,                                     0x00000000, 0},
+    {AUTOFL_ID,                            AUTOFL_STRING,                             2, (NvU32 *)g_valuesAUTOFL,                  AUTOFL_ON,  1},
+    {BATTERY_BOOST_ID,                     BATTERY_BOOST_STRING,                      5, (NvU32 *)g_valuesBATTERY_BOOST,           BATTERY_BOOST_DISABLED,  1},
+    {BATTERY_BOOST_APP_FPS_ID,             BATTERY_BOOST_APP_FPS_STRING,              3, (NvU32 *)g_valuesBATTERY_BOOST_APP_FPS,   BATTERY_BOOST_APP_FPS_NO_OVERRIDE,  0},
+    {BG_FRL_FPS_ID,                        BG_FRL_FPS_STRING,                         3, (NvU32 *)g_valuesBG_FRL_FPS,              BG_FRL_FPS_DISABLED,  1},
+    {BG_FRL_FPS_NVCPL_ID,                  BG_FRL_FPS_NVCPL_STRING,                   3, (NvU32 *)g_valuesBG_FRL_FPS_NVCPL,        BG_FRL_FPS_NVCPL_DISABLED,  1},
+    {CPL_HIDDEN_PROFILE_ID,                CPL_HIDDEN_PROFILE_STRING,                 2, (NvU32 *)g_valuesCPL_HIDDEN_PROFILE,      CPL_HIDDEN_PROFILE_DISABLED,  0},
+    {EXPORT_PERF_COUNTERS_ID,              EXPORT_PERF_COUNTERS_STRING,               2, (NvU32 *)g_valuesEXPORT_PERF_COUNTERS,    EXPORT_PERF_COUNTERS_OFF,  0},
+    {EXTERNAL_QUIET_MODE_ID,               EXTERNAL_QUIET_MODE_STRING,                2, (NvU32 *)g_valuesEXTERNAL_QUIET_MODE,     EXTERNAL_QUIET_MODE_OFF,  0},
+    {FRL_FPS_ID,                           FRL_FPS_STRING,                            3, (NvU32 *)g_valuesFRL_FPS,                 FRL_FPS_DISABLED,  0},
+    {FRL_FPS_NVCPL_ID,                     FRL_FPS_NVCPL_STRING,                      3, (NvU32 *)g_valuesFRL_FPS_NVCPL,           FRL_FPS_NVCPL_DISABLED,  1},
+    {FRL_LOW_LATENCY_ID,                   FRL_LOW_LATENCY_STRING,                    2, (NvU32 *)g_valuesFRL_LOW_LATENCY,         FRL_LOW_LATENCY_OFF,  1},
+    {FXAA_ALLOW_ID,                        FXAA_ALLOW_STRING,                         2, (NvU32 *)g_valuesFXAA_ALLOW,              FXAA_ALLOW_ALLOWED,  0},
+    {FXAA_ENABLE_ID,                       FXAA_ENABLE_STRING,                        2, (NvU32 *)g_valuesFXAA_ENABLE,             FXAA_ENABLE_OFF,  0},
+    {FXAA_INDICATOR_ENABLE_ID,             FXAA_INDICATOR_ENABLE_STRING,              2, (NvU32 *)g_valuesFXAA_INDICATOR_ENABLE,   FXAA_INDICATOR_ENABLE_OFF,  0},
+    {GFN_FRL_FPS_ID,                       GFN_FRL_FPS_STRING,                        3, (NvU32 *)g_valuesGFN_FRL_FPS,             GFN_FRL_FPS_DISABLED,  1},
+    {GSYNC_COMPATIBILITY_ID,               GSYNC_COMPATIBILITY_STRING,                2, (NvU32 *)g_valuesGSYNC_COMPATIBILITY,     GSYNC_COMPATIBILITY_NO,  1},
+    {LATENCY_INDICATOR_AUTOALIGN_ID,       LATENCY_INDICATOR_AUTOALIGN_STRING,        2, (NvU32 *)g_valuesLATENCY_INDICATOR_AUTOALIGN, LATENCY_INDICATOR_AUTOALIGN_ENABLED,  0},
+    {LATENCY_INDICATOR_HEIGHT_ID,          LATENCY_INDICATOR_HEIGHT_STRING,           3, (NvU32 *)g_valuesLATENCY_INDICATOR_HEIGHT, LATENCY_INDICATOR_HEIGHT_DEFAULT_SIZE,  1},
+    {LATENCY_INDICATOR_POS_X_ID,           LATENCY_INDICATOR_POS_X_STRING,            2, (NvU32 *)g_valuesLATENCY_INDICATOR_POS_X, LATENCY_INDICATOR_POS_X_MIN,  1},
+    {LATENCY_INDICATOR_POS_Y_ID,           LATENCY_INDICATOR_POS_Y_STRING,            3, (NvU32 *)g_valuesLATENCY_INDICATOR_POS_Y, LATENCY_INDICATOR_POS_Y_DEFAULT_POS_Y,  1},
+    {LATENCY_INDICATOR_WIDTH_ID,           LATENCY_INDICATOR_WIDTH_STRING,            3, (NvU32 *)g_valuesLATENCY_INDICATOR_WIDTH, LATENCY_INDICATOR_WIDTH_DEFAULT_SIZE,  1},
+    {MAXWELL_WDDM2_FORCE_128K_PTE_ID,      MAXWELL_WDDM2_FORCE_128K_PTE_STRING,       2, (NvU32 *)g_valuesMAXWELL_WDDM2_FORCE_128K_PTE, MAXWELL_WDDM2_FORCE_128K_PTE_FORCE_OFF,  1},
+    {MCSFRSHOWSPLIT_ID,                    MCSFRSHOWSPLIT_STRING,                     2, (NvU32 *)g_valuesMCSFRSHOWSPLIT,          MCSFRSHOWSPLIT_DISABLED,  0},
+    {NV_QUALITY_UPSCALING_ID,              NV_QUALITY_UPSCALING_STRING,               2, (NvU32 *)g_valuesNV_QUALITY_UPSCALING,    NV_QUALITY_UPSCALING_OFF,  0},
+    {OPTIMUS_MAXAA_ID,                     OPTIMUS_MAXAA_STRING,                      2, (NvU32 *)g_valuesOPTIMUS_MAXAA,           0x00000000, 0},
+    {PHYSXINDICATOR_ID,                    PHYSXINDICATOR_STRING,                     2, (NvU32 *)g_valuesPHYSXINDICATOR,          PHYSXINDICATOR_DISABLED,  0},
+    {PREFERRED_PSTATE_ID,                  PREFERRED_PSTATE_STRING,                   8, (NvU32 *)g_valuesPREFERRED_PSTATE,        PREFERRED_PSTATE_OPTIMAL_POWER,  0},
+    {PREVENT_UI_AF_OVERRIDE_ID,            PREVENT_UI_AF_OVERRIDE_STRING,             2, (NvU32 *)g_valuesPREVENT_UI_AF_OVERRIDE,  PREVENT_UI_AF_OVERRIDE_OFF,  0},
+    {PS_FRAMERATE_LIMITER_ID,              PS_FRAMERATE_LIMITER_STRING,              20, (NvU32 *)g_valuesPS_FRAMERATE_LIMITER,    PS_FRAMERATE_LIMITER_LOW_LATENCY_DEFAULT,  1},
+    {PS_FRAMERATE_LIMITER_2_CONTROL_ID,    PS_FRAMERATE_LIMITER_2_CONTROL_STRING,     9, (NvU32 *)g_valuesPS_FRAMERATE_LIMITER_2_CONTROL, 0x00000088, 1},
+    {PS_FRAMERATE_LIMITER_GPS_CTRL_ID,     PS_FRAMERATE_LIMITER_GPS_CTRL_STRING,     11, (NvU32 *)g_valuesPS_FRAMERATE_LIMITER_GPS_CTRL, PS_FRAMERATE_LIMITER_GPS_CTRL_DISABLED,  1},
+    {PS_FRAMERATE_MONITOR_CTRL_ID,         PS_FRAMERATE_MONITOR_CTRL_STRING,         21, (NvU32 *)g_valuesPS_FRAMERATE_MONITOR_CTRL, PS_FRAMERATE_MONITOR_CTRL_OPTIMAL_SETTING,  1},
+    {QUIET_MODE_ID,                        QUIET_MODE_STRING,                         5, (NvU32 *)g_valuesQUIET_MODE,              QUIET_MODE_DISABLED,  1},
+    {QUIET_MODE_APP_FPS_ID,                QUIET_MODE_APP_FPS_STRING,                 3, (NvU32 *)g_valuesQUIET_MODE_APP_FPS,      QUIET_MODE_APP_FPS_NO_OVERRIDE,  1},
+    {SHIM_MAXRES_ID,                       SHIM_MAXRES_STRING,                        0, NULL,                                     0x00000000, 0},
+    {SHIM_MCCOMPAT_ID,                     SHIM_MCCOMPAT_STRING,                      8, (NvU32 *)g_valuesSHIM_MCCOMPAT,           SHIM_MCCOMPAT_AUTO_SELECT,  0},
+    {SHIM_RENDERING_MODE_ID,               SHIM_RENDERING_MODE_STRING,                8, (NvU32 *)g_valuesSHIM_RENDERING_MODE,     SHIM_RENDERING_MODE_AUTO_SELECT,  0},
+    {SHIM_RENDERING_OPTIONS_ID,            SHIM_RENDERING_OPTIONS_STRING,            28, (NvU32 *)g_valuesSHIM_RENDERING_OPTIONS,  0x00000000, 0},
+    {SLI_GPU_COUNT_ID,                     SLI_GPU_COUNT_STRING,                      5, (NvU32 *)g_valuesSLI_GPU_COUNT,           SLI_GPU_COUNT_AUTOSELECT,  0},
+    {SLI_PREDEFINED_GPU_COUNT_ID,          SLI_PREDEFINED_GPU_COUNT_STRING,           5, (NvU32 *)g_valuesSLI_PREDEFINED_GPU_COUNT, SLI_PREDEFINED_GPU_COUNT_AUTOSELECT,  0},
+    {SLI_PREDEFINED_GPU_COUNT_DX10_ID,     SLI_PREDEFINED_GPU_COUNT_DX10_STRING,      5, (NvU32 *)g_valuesSLI_PREDEFINED_GPU_COUNT_DX10, SLI_PREDEFINED_GPU_COUNT_DX10_AUTOSELECT,  0},
+    {SLI_PREDEFINED_MODE_ID,               SLI_PREDEFINED_MODE_STRING,                6, (NvU32 *)g_valuesSLI_PREDEFINED_MODE,     SLI_PREDEFINED_MODE_AUTOSELECT,  0},
+    {SLI_PREDEFINED_MODE_DX10_ID,          SLI_PREDEFINED_MODE_DX10_STRING,           6, (NvU32 *)g_valuesSLI_PREDEFINED_MODE_DX10, SLI_PREDEFINED_MODE_DX10_AUTOSELECT,  0},
+    {SLI_RENDERING_MODE_ID,                SLI_RENDERING_MODE_STRING,                 6, (NvU32 *)g_valuesSLI_RENDERING_MODE,      SLI_RENDERING_MODE_AUTOSELECT,  0},
+    {VRPRERENDERLIMIT_ID,                  VRPRERENDERLIMIT_STRING,                   4, (NvU32 *)g_valuesVRPRERENDERLIMIT,        VRPRERENDERLIMIT_DEFAULT,  0},
+    {VRRFEATUREINDICATOR_ID,               VRRFEATUREINDICATOR_STRING,                2, (NvU32 *)g_valuesVRRFEATUREINDICATOR,     VRRFEATUREINDICATOR_ENABLED,  0},
+    {VRRINDICATOR_ID,                      VRRINDICATOR_STRING,                       2, (NvU32 *)g_valuesVRRINDICATOR,            VRRINDICATOR_OFF,  1},
+    {VRROVERLAYINDICATOR_ID,               VRROVERLAYINDICATOR_STRING,                2, (NvU32 *)g_valuesVRROVERLAYINDICATOR,     VRROVERLAYINDICATOR_ENABLED,  0},
+    {VRRREQUESTSTATE_ID,                   VRRREQUESTSTATE_STRING,                    3, (NvU32 *)g_valuesVRRREQUESTSTATE,         VRRREQUESTSTATE_FULLSCREEN_ONLY,  0},
+    {VRR_APP_OVERRIDE_ID,                  VRR_APP_OVERRIDE_STRING,                   5, (NvU32 *)g_valuesVRR_APP_OVERRIDE,        VRR_APP_OVERRIDE_ALLOW,  0},
+    {VRR_APP_OVERRIDE_REQUEST_STATE_ID,    VRR_APP_OVERRIDE_REQUEST_STATE_STRING,     5, (NvU32 *)g_valuesVRR_APP_OVERRIDE_REQUEST_STATE, VRR_APP_OVERRIDE_REQUEST_STATE_ALLOW,  0},
+    {VRR_MODE_ID,                          VRR_MODE_STRING,                           3, (NvU32 *)g_valuesVRR_MODE,                VRR_MODE_FULLSCREEN_ONLY,  0},
+    {VSYNCSMOOTHAFR_ID,                    VSYNCSMOOTHAFR_STRING,                     2, (NvU32 *)g_valuesVSYNCSMOOTHAFR,          VSYNCSMOOTHAFR_OFF,  0},
+    {VSYNCVRRCONTROL_ID,                   VSYNCVRRCONTROL_STRING,                    3, (NvU32 *)g_valuesVSYNCVRRCONTROL,         VSYNCVRRCONTROL_ENABLE,  0},
+    {VSYNC_BEHAVIOR_FLAGS_ID,              VSYNC_BEHAVIOR_FLAGS_STRING,               3, (NvU32 *)g_valuesVSYNC_BEHAVIOR_FLAGS,    VSYNC_BEHAVIOR_FLAGS_DEFAULT,  0},
+    {WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_ID, WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_STRING,  4, (NvU32 *)g_valuesWKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW, WKS_4PLUSGPUS_RESTRICT_SOURCES_IN_EXTENDEDVIEW_SOURCE_ONE,  1},
+    {WKS_API_STEREO_EYES_EXCHANGE_ID,      WKS_API_STEREO_EYES_EXCHANGE_STRING,       2, (NvU32 *)g_valuesWKS_API_STEREO_EYES_EXCHANGE, WKS_API_STEREO_EYES_EXCHANGE_OFF,  0},
+    {WKS_API_STEREO_MODE_ID,               WKS_API_STEREO_MODE_STRING,               25, (NvU32 *)g_valuesWKS_API_STEREO_MODE,     WKS_API_STEREO_MODE_SHUTTER_GLASSES,  0},
+    {WKS_DISPLAY_REARRANGEMENT_WITHIN16K_ID, WKS_DISPLAY_REARRANGEMENT_WITHIN16K_STRING,  2, (NvU32 *)g_valuesWKS_DISPLAY_REARRANGEMENT_WITHIN16K, WKS_DISPLAY_REARRANGEMENT_WITHIN16K_ON,  1},
+    {WKS_MEMORY_ALLOCATION_POLICY_ID,      WKS_MEMORY_ALLOCATION_POLICY_STRING,       3, (NvU32 *)g_valuesWKS_MEMORY_ALLOCATION_POLICY, WKS_MEMORY_ALLOCATION_POLICY_AS_NEEDED,  0},
+    {WKS_MOSAIC_TOPOLOGY_REQUESTED_ID,     WKS_MOSAIC_TOPOLOGY_REQUESTED_STRING,      2, (NvU32 *)g_valuesWKS_MOSAIC_TOPOLOGY_REQUESTED, WKS_MOSAIC_TOPOLOGY_REQUESTED_OFF,  1},
+    {WKS_POST_PROCESSING_ENGINE_CONTROL_ID, WKS_POST_PROCESSING_ENGINE_CONTROL_STRING, 16, (NvU32 *)g_valuesWKS_POST_PROCESSING_ENGINE_CONTROL, 0x00000033, 1},
+    {WKS_STEREO_DONGLE_SUPPORT_ID,         WKS_STEREO_DONGLE_SUPPORT_STRING,          3, (NvU32 *)g_valuesWKS_STEREO_DONGLE_SUPPORT, WKS_STEREO_DONGLE_SUPPORT_DAC,  0},
+    {WKS_STEREO_SUPPORT_ID,                WKS_STEREO_SUPPORT_STRING,                 2, (NvU32 *)g_valuesWKS_STEREO_SUPPORT,      WKS_STEREO_SUPPORT_OFF,  0},
+    {WKS_STEREO_SWAP_MODE_ID,              WKS_STEREO_SWAP_MODE_STRING,               5, (NvU32 *)g_valuesWKS_STEREO_SWAP_MODE,    WKS_STEREO_SWAP_MODE_APPLICATION_CONTROL,  0},
+%%DEFDW_END
+
+%%DEFWS_START
+    {CUDA_EXCLUDED_GPUS_ID,                CUDA_EXCLUDED_GPUS_STRING,                 1, (const wchar_t **)g_valuesCUDA_EXCLUDED_GPUS, L"none"},
+    {D3DOGL_GPU_MAX_POWER_ID,              D3DOGL_GPU_MAX_POWER_STRING,               1, (const wchar_t **)g_valuesD3DOGL_GPU_MAX_POWER, L"0"},
+%%DEFWS_END
+

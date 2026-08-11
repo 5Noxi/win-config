@@ -1,0 +1,221 @@
+
+/* THIS FILE IS AUTO-GENERATED!  DO NOT EDIT!
+**
+** To modify this file, regenerate after editing
+** any RKY file
+**
+** Changes in this file require Windows UI group review
+** please contact SW-Wincpl
+*/
+
+
+
+Value of RID is RID_50428_RegKeyvalue
+%%DEFSTR_START
+#define DISPLAY_CLONE_GROUP_IDS_STRING             L"cloneGroupIds"
+#define DISPLAY_COLS_STRING                        L"cols"
+#define DISPLAY_GRID_CSC_STRING                    L"gridCSC"
+#define DISPLAY_GRID_GAMMA_RAMP_STRING             L"gridGammaRamp"
+#define DISPLAY_GRID_POS_COL_STRING                L"positionCol"
+#define DISPLAY_GRID_POS_ROW_STRING                L"positionRow"
+#define DISPLAY_GRID_SCALING_STRING                L"gridScaling"
+#define DISPLAY_IDS_STRING                         L"displayIds"
+#define DISPLAY_MODE_STRING                        L"displayMode"
+#define DISPLAY_ROTATION_STRING                    L"rotation"
+#define DISPLAY_ROWS_STRING                        L"rows"
+#define OVERLAP_COLS_STRING                        L"overlapCols"
+#define OVERLAP_ROWS_STRING                        L"overlapRows"
+%%DEFSTR_END
+
+%%DEFID_START
+    DISPLAY_CLONE_GROUP_IDS_ID                    = 0x5818A91D,
+    DISPLAY_COLS_ID                               = 0x58E21BD4,
+    DISPLAY_GRID_CSC_ID                           = 0x5822D5EE,
+    DISPLAY_GRID_GAMMA_RAMP_ID                    = 0x58D3388F,
+    DISPLAY_GRID_POS_COL_ID                       = 0x58BA728B,
+    DISPLAY_GRID_POS_ROW_ID                       = 0x584B70FE,
+    DISPLAY_GRID_SCALING_ID                       = 0x58D4B0B4,
+    DISPLAY_IDS_ID                                = 0x58B21E43,
+    DISPLAY_MODE_ID                               = 0x58C7B07C,
+    DISPLAY_ROTATION_ID                           = 0x58DECFA8,
+    DISPLAY_ROWS_ID                               = 0x5822918D,
+    OVERLAP_COLS_ID                               = 0x58EB619D,
+    OVERLAP_ROWS_ID                               = 0x58DD36C1,
+%%DEFID_END
+
+%%DEFNUM_START
+    TOTAL_DWORD_SETTING_NUM = 5,
+    TOTAL_WSTRING_SETTING_NUM = 8,
+    TOTAL_SETTING_NUM = 13
+%%DEFNUM_END
+
+%%DEFSEC_START
+#define    DISPLAY_CLONE_GROUP_IDS_NONE                         L""
+#define    DISPLAY_CLONE_GROUP_IDS_NUM_VALUES 1
+#define    DISPLAY_CLONE_GROUP_IDS_DEFAULT DISPLAY_CLONE_GROUP_IDS_NONE
+
+enum EValues_DISPLAY_COLS {
+    DISPLAY_COLS_MIN                                     = 1,
+    DISPLAY_COLS_MAX                                     = 255,
+    DISPLAY_COLS_NUM_VALUES = 2,
+    DISPLAY_COLS_DEFAULT = DISPLAY_COLS_MIN
+};
+
+#define    DISPLAY_GRID_CSC_NONE                                L""
+#define    DISPLAY_GRID_CSC_NUM_VALUES 1
+#define    DISPLAY_GRID_CSC_DEFAULT DISPLAY_GRID_CSC_NONE
+
+#define    DISPLAY_GRID_GAMMA_RAMP_NONE                         L""
+#define    DISPLAY_GRID_GAMMA_RAMP_NUM_VALUES 1
+#define    DISPLAY_GRID_GAMMA_RAMP_DEFAULT DISPLAY_GRID_GAMMA_RAMP_NONE
+
+enum EValues_DISPLAY_GRID_POS_COL {
+    DISPLAY_GRID_POS_COL_MIN                             = 0,
+    DISPLAY_GRID_POS_COL_MAX                             = 100000,
+    DISPLAY_GRID_POS_COL_NUM_VALUES = 2,
+    DISPLAY_GRID_POS_COL_DEFAULT = DISPLAY_GRID_POS_COL_MIN
+};
+
+enum EValues_DISPLAY_GRID_POS_ROW {
+    DISPLAY_GRID_POS_ROW_MIN                             = 0,
+    DISPLAY_GRID_POS_ROW_MAX                             = 100000,
+    DISPLAY_GRID_POS_ROW_NUM_VALUES = 2,
+    DISPLAY_GRID_POS_ROW_DEFAULT = DISPLAY_GRID_POS_ROW_MIN
+};
+
+enum EValues_DISPLAY_GRID_SCALING {
+    DISPLAY_GRID_SCALING_SCALING_TO_CLOSEST              = 1,
+    DISPLAY_GRID_SCALING_SCALING_TO_NATIVE               = 2,
+    DISPLAY_GRID_SCALING_SCANOUT_TO_NATIVE               = 3,
+    DISPLAY_GRID_SCALING_SCALING_TO_ASPECT_SCANOUT_TO_NATIVE = 5,
+    DISPLAY_GRID_SCALING_SCALING_TO_ASPECT_SCANOUT_TO_CLOSEST = 6,
+    DISPLAY_GRID_SCALING_SCANOUT_TO_CLOSEST              = 7,
+    DISPLAY_GRID_SCALING_NUM_VALUES = 6,
+    DISPLAY_GRID_SCALING_DEFAULT = DISPLAY_GRID_SCALING_SCALING_TO_ASPECT_SCANOUT_TO_NATIVE
+};
+
+#define    DISPLAY_IDS_NONE                                     L""
+#define    DISPLAY_IDS_NUM_VALUES 1
+#define    DISPLAY_IDS_DEFAULT DISPLAY_IDS_NONE
+
+#define    DISPLAY_MODE_NATIVE                                  L"native"
+#define    DISPLAY_MODE_NUM_VALUES 1
+#define    DISPLAY_MODE_DEFAULT DISPLAY_MODE_NATIVE
+
+#define    DISPLAY_ROTATION_NONE                                L"0"
+#define    DISPLAY_ROTATION_NUM_VALUES 1
+#define    DISPLAY_ROTATION_DEFAULT DISPLAY_ROTATION_NONE
+
+enum EValues_DISPLAY_ROWS {
+    DISPLAY_ROWS_MIN                                     = 1,
+    DISPLAY_ROWS_MAX                                     = 255,
+    DISPLAY_ROWS_NUM_VALUES = 2,
+    DISPLAY_ROWS_DEFAULT = DISPLAY_ROWS_MIN
+};
+
+#define    OVERLAP_COLS_NONE                                    L"0"
+#define    OVERLAP_COLS_NUM_VALUES 1
+#define    OVERLAP_COLS_DEFAULT OVERLAP_COLS_NONE
+
+#define    OVERLAP_ROWS_NONE                                    L"0"
+#define    OVERLAP_ROWS_NUM_VALUES 1
+#define    OVERLAP_ROWS_DEFAULT OVERLAP_ROWS_NONE
+
+%%DEFSEC_END
+
+%%DEFGLB_START
+const wchar_t * g_valuesDISPLAY_CLONE_GROUP_IDS[DISPLAY_CLONE_GROUP_IDS_NUM_VALUES] = 
+{
+    DISPLAY_CLONE_GROUP_IDS_NONE
+};
+
+EValues_DISPLAY_COLS g_valuesDISPLAY_COLS[DISPLAY_COLS_NUM_VALUES] = 
+{
+    DISPLAY_COLS_MIN,
+    DISPLAY_COLS_MAX,
+};
+
+const wchar_t * g_valuesDISPLAY_GRID_CSC[DISPLAY_GRID_CSC_NUM_VALUES] = 
+{
+    DISPLAY_GRID_CSC_NONE
+};
+
+const wchar_t * g_valuesDISPLAY_GRID_GAMMA_RAMP[DISPLAY_GRID_GAMMA_RAMP_NUM_VALUES] = 
+{
+    DISPLAY_GRID_GAMMA_RAMP_NONE
+};
+
+EValues_DISPLAY_GRID_POS_COL g_valuesDISPLAY_GRID_POS_COL[DISPLAY_GRID_POS_COL_NUM_VALUES] = 
+{
+    DISPLAY_GRID_POS_COL_MIN,
+    DISPLAY_GRID_POS_COL_MAX,
+};
+
+EValues_DISPLAY_GRID_POS_ROW g_valuesDISPLAY_GRID_POS_ROW[DISPLAY_GRID_POS_ROW_NUM_VALUES] = 
+{
+    DISPLAY_GRID_POS_ROW_MIN,
+    DISPLAY_GRID_POS_ROW_MAX,
+};
+
+EValues_DISPLAY_GRID_SCALING g_valuesDISPLAY_GRID_SCALING[DISPLAY_GRID_SCALING_NUM_VALUES] = 
+{
+    DISPLAY_GRID_SCALING_SCALING_TO_CLOSEST,
+    DISPLAY_GRID_SCALING_SCALING_TO_NATIVE,
+    DISPLAY_GRID_SCALING_SCANOUT_TO_NATIVE,
+    DISPLAY_GRID_SCALING_SCALING_TO_ASPECT_SCANOUT_TO_NATIVE,
+    DISPLAY_GRID_SCALING_SCALING_TO_ASPECT_SCANOUT_TO_CLOSEST,
+    DISPLAY_GRID_SCALING_SCANOUT_TO_CLOSEST,
+};
+
+const wchar_t * g_valuesDISPLAY_IDS[DISPLAY_IDS_NUM_VALUES] = 
+{
+    DISPLAY_IDS_NONE
+};
+
+const wchar_t * g_valuesDISPLAY_MODE[DISPLAY_MODE_NUM_VALUES] = 
+{
+    DISPLAY_MODE_NATIVE
+};
+
+const wchar_t * g_valuesDISPLAY_ROTATION[DISPLAY_ROTATION_NUM_VALUES] = 
+{
+    DISPLAY_ROTATION_NONE
+};
+
+EValues_DISPLAY_ROWS g_valuesDISPLAY_ROWS[DISPLAY_ROWS_NUM_VALUES] = 
+{
+    DISPLAY_ROWS_MIN,
+    DISPLAY_ROWS_MAX,
+};
+
+const wchar_t * g_valuesOVERLAP_COLS[OVERLAP_COLS_NUM_VALUES] = 
+{
+    OVERLAP_COLS_NONE
+};
+
+const wchar_t * g_valuesOVERLAP_ROWS[OVERLAP_ROWS_NUM_VALUES] = 
+{
+    OVERLAP_ROWS_NONE
+};
+
+%%DEFGLB_END
+
+%%DEFDW_START
+    {DISPLAY_COLS_ID,                      DISPLAY_COLS_STRING,                       2, (NvU32 *)g_valuesDISPLAY_COLS,            DISPLAY_COLS_MIN},
+    {DISPLAY_GRID_POS_COL_ID,              DISPLAY_GRID_POS_COL_STRING,               2, (NvU32 *)g_valuesDISPLAY_GRID_POS_COL,    DISPLAY_GRID_POS_COL_MIN},
+    {DISPLAY_GRID_POS_ROW_ID,              DISPLAY_GRID_POS_ROW_STRING,               2, (NvU32 *)g_valuesDISPLAY_GRID_POS_ROW,    DISPLAY_GRID_POS_ROW_MIN},
+    {DISPLAY_GRID_SCALING_ID,              DISPLAY_GRID_SCALING_STRING,               6, (NvU32 *)g_valuesDISPLAY_GRID_SCALING,    DISPLAY_GRID_SCALING_SCALING_TO_ASPECT_SCANOUT_TO_NATIVE},
+    {DISPLAY_ROWS_ID,                      DISPLAY_ROWS_STRING,                       2, (NvU32 *)g_valuesDISPLAY_ROWS,            DISPLAY_ROWS_MIN},
+%%DEFDW_END
+
+%%DEFWS_START
+    {DISPLAY_CLONE_GROUP_IDS_ID,           DISPLAY_CLONE_GROUP_IDS_STRING,            1, (const wchar_t **)g_valuesDISPLAY_CLONE_GROUP_IDS, L""},
+    {DISPLAY_GRID_CSC_ID,                  DISPLAY_GRID_CSC_STRING,                   1, (const wchar_t **)g_valuesDISPLAY_GRID_CSC, L""},
+    {DISPLAY_GRID_GAMMA_RAMP_ID,           DISPLAY_GRID_GAMMA_RAMP_STRING,            1, (const wchar_t **)g_valuesDISPLAY_GRID_GAMMA_RAMP, L""},
+    {DISPLAY_IDS_ID,                       DISPLAY_IDS_STRING,                        1, (const wchar_t **)g_valuesDISPLAY_IDS,    L""},
+    {DISPLAY_MODE_ID,                      DISPLAY_MODE_STRING,                       1, (const wchar_t **)g_valuesDISPLAY_MODE,   L"native"},
+    {DISPLAY_ROTATION_ID,                  DISPLAY_ROTATION_STRING,                   1, (const wchar_t **)g_valuesDISPLAY_ROTATION, L"0"},
+    {OVERLAP_COLS_ID,                      OVERLAP_COLS_STRING,                       1, (const wchar_t **)g_valuesOVERLAP_COLS,   L"0"},
+    {OVERLAP_ROWS_ID,                      OVERLAP_ROWS_STRING,                       1, (const wchar_t **)g_valuesOVERLAP_ROWS,   L"0"},
+%%DEFWS_END
+

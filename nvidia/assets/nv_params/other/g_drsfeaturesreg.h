@@ -1,0 +1,454 @@
+
+/* THIS FILE IS AUTO-GENERATED!  DO NOT EDIT!
+**
+** To modify this file, regenerate after editing
+** any RKY file
+*/
+
+#if !defined (_G_DRSFEATURESREG_H_)
+#define _G_DRSFEATURESREG_H_
+
+#if !defined KERNEL_NOTIFICATION_ID_FLAG 
+#define KERNEL_NOTIFICATION_ID_FLAG                                    0x01000000
+#define NEEDS_KERNEL_NOTIFICATION(id)                                  (id & KERNEL_NOTIFICATION_ID_FLAG)
+#endif // KERNEL_NOTIFICATION_ID_FLAG 
+
+#define NVDRS_FEATURE_AA_STRING                                        ""
+#define NVDRS_FEATURE_AA_ID                                            0xa0100006
+#define NVDRS_FEATURE_AA_OVERINSTALL                                   0 // OVERRIDE
+#define NVDRS_FEATURE_AA_NONE                                          0x00000000
+#define NVDRS_FEATURE_AA_TREAT_OVERRIDE_AS_APP_CONTROLLED              0x00000001
+#define NVDRS_FEATURE_AA_TREAT_OVERRIDE_AS_ENHANCE                     0x00000002
+#define NVDRS_FEATURE_AA_DISABLE_OVERRIDE                              0x00000003
+#define NVDRS_FEATURE_AA_TREAT_ENHANCE_AS_APP_CONTROLLED               0x00000004
+#define NVDRS_FEATURE_AA_TREAT_ENHANCE_AS_OVERRIDE                     0x00000008
+#define NVDRS_FEATURE_AA_DISABLE_ENHANCE                               0x0000000c
+#define NVDRS_FEATURE_AA_MAP_VCAA_TO_MULTISAMPLING                     0x00010000
+#define NVDRS_FEATURE_AA_SLI_DISABLE_TRANSPARENCY_SUPERSAMPLING        0x00020000
+#define NVDRS_FEATURE_AA_DISABLE_CPLAA                                 0x00040000
+#define NVDRS_FEATURE_AA_SKIP_RT_DIM_CHECK_FOR_ENHANCE                 0x00080000
+#define NVDRS_FEATURE_AA_DISABLE_SLIAA                                 0x00100000
+#define NVDRS_FEATURE_AA_DEFAULT                                       0x00000000
+#define NVDRS_FEATURE_AA_AA_RT_BPP_DIV_4                               0xf0000000
+#define NVDRS_FEATURE_AA_AA_RT_BPP_DIV_4_SHIFT                         28
+#define NVDRS_FEATURE_AA_NON_AA_RT_BPP_DIV_4                           0x0f000000
+#define NVDRS_FEATURE_AA_NON_AA_RT_BPP_DIV_4_SHIFT                     24
+#define NVDRS_FEATURE_AA_MASK                                          0xff1f000f
+
+
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_STRING                       ""
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_ID                           0xa0100004
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_OVERINSTALL                  0 // OVERRIDE
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_MASK                         0x00000003
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_OFF                          0x00000000
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_ON_IF_FOS                    0x00000001
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_ON_ALWAYS                    0x00000002
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_MAX                          0x00000004
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_DEFAULT                      0x00000005
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_DEFAULT_TESLA                0x00000006
+#define NVDRS_FEATURE_AA_GAMMA_CORRECTION_DEFAULT_FERMI                0x00000007
+
+
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_STRING                          ""
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_ID                              0xa0100005
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_OVERINSTALL                     0 // OVERRIDE
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_MASK                            0x00000003
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_APP_CONTROL                     0x00000000
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_OVERRIDE                        0x00000001
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_ENHANCE                         0x00000002
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_MAX                             0x00000004
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_DEFAULT                         NVDRS_FEATURE_AA_MODE_SELECTOR_APP_CONTROL
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_DEFAULT_FERMI                   NVDRS_FEATURE_AA_MODE_SELECTOR_APP_CONTROL
+#define NVDRS_FEATURE_AA_MODE_SELECTOR_DEFAULT_TESLA                   NVDRS_FEATURE_AA_MODE_SELECTOR_APP_CONTROL
+
+
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_STRING                    ""
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_ID                        0xa0100007
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_OVERINSTALL               0 // OVERRIDE
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_SAMPLES_MASK              0x00000070
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_SAMPLES_ONE               0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_SAMPLES_TWO               0x00000010
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_SAMPLES_FOUR              0x00000020
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_SAMPLES_EIGHT             0x00000030
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_SAMPLES_MAX               0x00000030
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_MASK                 0x0000000f
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_OFF                  0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_ALPHA_TEST           0x00000001
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_PIXEL_KILL           0x00000002
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_DYN_BRANCH           0x00000004
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_OPTIMAL              0x00000004
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_ALL                  0x00000008
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MODE_MAX                  0x0000000f
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_TRANSPARENCY              0x00000023
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_DISALLOW_TRAA             0x00000100
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_TRANSPARENCY_DEFAULT      0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_TRANSPARENCY_DEFAULT_TESLA 0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_TRANSPARENCY_DEFAULT_FERMI 0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_MASK                      0x0000017f
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_DEFAULT                   0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_DEFAULT_FERMI             0x00000000
+#define NVDRS_FEATURE_AA_REPLAY_TRANSPARENCY_DEFAULT_TESLA             0x00000000
+
+
+#define NVDRS_FEATURE_ACE_POWERMODE_CPU_FREQUENCY_STRING               ""
+#define NVDRS_FEATURE_ACE_POWERMODE_CPU_FREQUENCY_ID                   0xa02fa782
+#define NVDRS_FEATURE_ACE_POWERMODE_CPU_FREQUENCY_OVERINSTALL          0 // OVERRIDE
+#define NVDRS_FEATURE_ACE_POWERMODE_CPU_FREQUENCY_NO_OVERRIDE          0xffffffff
+#define NVDRS_FEATURE_ACE_POWERMODE_CPU_FREQUENCY_DEFAULT              0x00000000
+
+
+#define NVDRS_FEATURE_ANISO_STRING                                     ""
+#define NVDRS_FEATURE_ANISO_ID                                         0xa0100002
+#define NVDRS_FEATURE_ANISO_OVERINSTALL                                0 // OVERRIDE
+#define NVDRS_FEATURE_ANISO_APP_CONTROL                                0x00100000
+#define NVDRS_FEATURE_ANISO_OFF                                        1
+#define NVDRS_FEATURE_ANISO_2X                                         2
+#define NVDRS_FEATURE_ANISO_4X                                         4
+#define NVDRS_FEATURE_ANISO_8X                                         8
+#define NVDRS_FEATURE_ANISO_16X                                        16
+#define NVDRS_FEATURE_ANISO_MASK                                       0x0000ffff
+#define NVDRS_FEATURE_ANISO_MAX                                        0x00000010
+#define NVDRS_FEATURE_ANISO_DEFAULT                                    1
+
+
+#define NVDRS_FEATURE_ANISO_OPTS_STRING                                ""
+#define NVDRS_FEATURE_ANISO_OPTS_ID                                    0xa010001a
+#define NVDRS_FEATURE_ANISO_OPTS_OVERINSTALL                           0 // OVERRIDE
+#define NVDRS_FEATURE_ANISO_OPTS_OFF                                   0x00000000
+#define NVDRS_FEATURE_ANISO_OPTS_0                                     0x00000000
+#define NVDRS_FEATURE_ANISO_OPTS_FALSE                                 0x00000000
+#define NVDRS_FEATURE_ANISO_OPTS_DISABLED                              0x00000000
+#define NVDRS_FEATURE_ANISO_OPTS_ON                                    0x00000001
+#define NVDRS_FEATURE_ANISO_OPTS_1                                     0x00000001
+#define NVDRS_FEATURE_ANISO_OPTS_TRUE                                  0x00000001
+#define NVDRS_FEATURE_ANISO_OPTS_ENABLED                               0x00000001
+#define NVDRS_FEATURE_ANISO_OPTS_DEFAULT                               NVDRS_FEATURE_ANISO_OPTS_OFF
+
+
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_STRING                          ""
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_ID                              0xa0100016
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_OVERINSTALL                     0 // OVERRIDE
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_OFF                             0x00000000
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_DISABLED                        0x00000000
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_ON                              0x00000001
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_ENABLED                         0x00000001
+#define NVDRS_FEATURE_ANISO_SAMPLE_OPS_DEFAULT                         NVDRS_FEATURE_ANISO_SAMPLE_OPS_OFF
+
+
+#define NVDRS_FEATURE_AO_MODE_STRING                                   ""
+#define NVDRS_FEATURE_AO_MODE_ID                                       0xa0100001
+#define NVDRS_FEATURE_AO_MODE_OVERINSTALL                              0 // OVERRIDE
+#define NVDRS_FEATURE_AO_MODE_OFF                                      0
+#define NVDRS_FEATURE_AO_MODE_LOW                                      1
+#define NVDRS_FEATURE_AO_MODE_MEDIUM                                   2
+#define NVDRS_FEATURE_AO_MODE_HIGH                                     3
+#define NVDRS_FEATURE_AO_MODE_NOT_SUPPORTED                            -1
+#define NVDRS_FEATURE_AO_MODE_DEFAULT                                  NVDRS_FEATURE_AO_MODE_OFF
+
+
+#define NVDRS_FEATURE_BATTERY_BOOST_STRING                             ""
+#define NVDRS_FEATURE_BATTERY_BOOST_ID                                 0xa0100020
+#define NVDRS_FEATURE_BATTERY_BOOST_OVERINSTALL                        0 // OVERRIDE
+#define NVDRS_FEATURE_BATTERY_BOOST_MIN                                0x00000001
+#define NVDRS_FEATURE_BATTERY_BOOST_MAX                                0x000000ff
+#define NVDRS_FEATURE_BATTERY_BOOST_ENABLED                            0x10000000
+#define NVDRS_FEATURE_BATTERY_BOOST_OPTIMAL                            0x0000001e
+#define NVDRS_FEATURE_BATTERY_BOOST_DEFAULT                            NVDRS_FEATURE_BATTERY_BOOST_OPTIMAL
+
+
+#define NVDRS_FEATURE_BUFFER_FLIP_MODE_STRING                          ""
+#define NVDRS_FEATURE_BUFFER_FLIP_MODE_ID                              0xa0100008
+#define NVDRS_FEATURE_BUFFER_FLIP_MODE_OVERINSTALL                     0 // OVERRIDE
+#define NVDRS_FEATURE_BUFFER_FLIP_MODE_ON                              1
+#define NVDRS_FEATURE_BUFFER_FLIP_MODE_OFF                             0
+#define NVDRS_FEATURE_BUFFER_FLIP_MODE_DEFAULT                         NVDRS_FEATURE_BUFFER_FLIP_MODE_OFF
+
+
+#define NVDRS_FEATURE_CUDA_EXCLUDED_GPUS_STRING                        ""
+#define NVDRS_FEATURE_CUDA_EXCLUDED_GPUS_ID                            0xa0100009
+#define NVDRS_FEATURE_CUDA_EXCLUDED_GPUS_OVERINSTALL                   0 // OVERRIDE
+#define NVDRS_FEATURE_CUDA_EXCLUDED_GPUS_NONE                          L"none"
+#define NVDRS_FEATURE_CUDA_EXCLUDED_GPUS_DEFAULT                       NVDRS_FEATURE_CUDA_EXCLUDED_GPUS_NONE
+
+
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_STRING                       ""
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_ID                           0xa0100013
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_OVERINSTALL                  0 // OVERRIDE
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_SHUTTER_GLASSES              0
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_VERTICAL_INTERLACED          1
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_TWINVIEW                     2
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_NV17_SHUTTER_GLASSES_AUTO    3
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_NV17_SHUTTER_GLASSES_DAC0    4
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_NV17_SHUTTER_GLASSES_DAC1    5
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_COLOR_LINE                   6
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_COLOR_INTERLEAVED            7
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_ANAGLYPH                     8
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_HORIZONTAL_INTERLACED        9
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_SIDE_FIELD                   10
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_SUB_FIELD                    11
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_CHECKERBOARD                 12
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_INVERSE_CHECKERBOARD         13
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_TRIDELITY_SL                 14
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_TRIDELITY_MV                 15
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_SEEFRONT                     16
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_STEREO_MIRROR                17
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_FRAME_SEQUENTIAL             18
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_AUTODETECT_PASSIVE_MODE      19
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_AEGIS_DT_FRAME_SEQUENTIAL    20
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_OEM_EMITTER_FRAME_SEQUENTIAL 21
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_USE_HW_DEFAULT               0xffffffff
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_DEFAULT_GL                   3
+#define NVDRS_FEATURE_DISPLAY_STEREO_MODE_DEFAULT                      NVDRS_FEATURE_DISPLAY_STEREO_MODE_SHUTTER_GLASSES
+
+
+#define NVDRS_FEATURE_FXAA_STRING                                      ""
+#define NVDRS_FEATURE_FXAA_ID                                          0xa0100003
+#define NVDRS_FEATURE_FXAA_OVERINSTALL                                 0 // OVERRIDE
+#define NVDRS_FEATURE_FXAA_OFF                                         0
+#define NVDRS_FEATURE_FXAA_DISABLED                                    0
+#define NVDRS_FEATURE_FXAA_ON                                          1
+#define NVDRS_FEATURE_FXAA_ENABLED                                     1
+#define NVDRS_FEATURE_FXAA_DEFAULT                                     NVDRS_FEATURE_FXAA_OFF
+
+
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_STRING                       ""
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_ID                           0xa0100021
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_OVERINSTALL                  0 // OVERRIDE
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_DISABLED                     0x00000000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FPS_20                       0x00000014
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FPS_30                       0x0000001e
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FPS_40                       0x00000028
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FPSMASK                      0x000000ff
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FRL2                         0x00010000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_LOWER_FPS_TO_ALIGN           0x00020000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FORCE_VSYNC_OFF              0x00040000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_GPS_WEB                      0x00080000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_DISALLOWED                   0x00200000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_USE_CPU_WAIT                 0x00400000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_NO_LAG_OFFSET                0x00800000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_ACCURATE                     0x10000000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_ALLOW_WINDOWED               0x20000000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_FORCEON                      0x40000000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_ENABLED                      0x80000000
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_OPENGL_REMOTE_DESKTOP        0xe000003c
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_MASK                         0xf0ef00ff
+#define NVDRS_FEATURE_GAMESTREAM_FRAMECAP_DEFAULT                      NVDRS_FEATURE_GAMESTREAM_FRAMECAP_DISABLED
+
+
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_STRING                         ""
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_ID                             0xa010000e
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_OVERINSTALL                    0 // OVERRIDE
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_SINGLE_MONITOR                 0
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_COMPATIBILITY_LCD              1
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_COMPATIBILITY_GCD              2
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_PERFORMANCE_LCD                3
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_PERFORMANCE_GCD                4
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_EXTENDED_SINGLE_MONITOR        5
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_PERFORMANCE_QUADRO             6
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_MULTIMON_BUFFER                7
+#define NVDRS_FEATURE_HW_ACCEL_MULTIMON_DEFAULT                        NVDRS_FEATURE_HW_ACCEL_MULTIMON_PERFORMANCE_LCD
+
+
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_STRING                          ""
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_ID                              0xa010000d
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_OVERINSTALL                     0 // OVERRIDE
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_UNKNOWN                         0
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_OFF                             1
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_DISABLED                        1
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_ON                              2
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_ENABLED                         2
+#define NVDRS_FEATURE_MFAA_INTERLEAVED_DEFAULT                         NVDRS_FEATURE_MFAA_INTERLEAVED_OFF
+
+
+#define NVDRS_FEATURE_NEG_LOD_BIAS_STRING                              ""
+#define NVDRS_FEATURE_NEG_LOD_BIAS_ID                                  0xa0100017
+#define NVDRS_FEATURE_NEG_LOD_BIAS_OVERINSTALL                         0 // OVERRIDE
+#define NVDRS_FEATURE_NEG_LOD_BIAS_OFF                                 0x00000000
+#define NVDRS_FEATURE_NEG_LOD_BIAS_DISABLED                            0x00000000
+#define NVDRS_FEATURE_NEG_LOD_BIAS_ON                                  0x00000001
+#define NVDRS_FEATURE_NEG_LOD_BIAS_ENABLED                             0x00000001
+#define NVDRS_FEATURE_NEG_LOD_BIAS_DEFAULT                             NVDRS_FEATURE_NEG_LOD_BIAS_OFF
+
+
+#define NVDRS_FEATURE_OPTIMAL_REFRESHRATE_STRING                       ""
+#define NVDRS_FEATURE_OPTIMAL_REFRESHRATE_ID                           0xa010001f
+#define NVDRS_FEATURE_OPTIMAL_REFRESHRATE_OVERINSTALL                  0 // OVERRIDE
+#define NVDRS_FEATURE_OPTIMAL_REFRESHRATE_MIN                          0x00000000
+#define NVDRS_FEATURE_OPTIMAL_REFRESHRATE_MAX                          0x000000ff
+#define NVDRS_FEATURE_OPTIMAL_REFRESHRATE_DEFAULT                      NVDRS_FEATURE_OPTIMAL_REFRESHRATE_MIN
+
+
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_STRING                        ""
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_ID                            0xa010000b
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_OVERINSTALL                   0 // OVERRIDE
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_NONE                          0x0
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_CI                            0x1
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_RGBA                          0x2
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_CI_AND_RGBA                   0x3
+#define NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_DEFAULT                       NVDRS_FEATURE_OVERLAY_PIXEL_TYPE_CI
+
+
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_STRING                           ""
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_ID                               0xa010000a
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_OVERINSTALL                      0 // OVERRIDE
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_OFF                              0
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_ON                               1
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_FORCE_SW                         2
+#define NVDRS_FEATURE_OVERLAY_SUPPORT_DEFAULT                          NVDRS_FEATURE_OVERLAY_SUPPORT_OFF
+
+
+#define NVDRS_FEATURE_POWER_MGMT_MODE_STRING                           ""
+#define NVDRS_FEATURE_POWER_MGMT_MODE_ID                               0xa0100011
+#define NVDRS_FEATURE_POWER_MGMT_MODE_OVERINSTALL                      0 // OVERRIDE
+#define NVDRS_FEATURE_POWER_MGMT_MODE_ADAPTIVE                         0x00000000
+#define NVDRS_FEATURE_POWER_MGMT_MODE_PREFER_MAX                       0x00000001
+#define NVDRS_FEATURE_POWER_MGMT_MODE_DRIVER_CONTROLLED                0x00000002
+#define NVDRS_FEATURE_POWER_MGMT_MODE_PREFER_CONSISTENT_PERFORMANCE    0x00000003
+#define NVDRS_FEATURE_POWER_MGMT_MODE_PREFER_MIN                       0x00000004
+#define NVDRS_FEATURE_POWER_MGMT_MODE_MIN                              0x00000000
+#define NVDRS_FEATURE_POWER_MGMT_MODE_MAX                              0x00000004
+#define NVDRS_FEATURE_POWER_MGMT_MODE_DEFAULT                          NVDRS_FEATURE_POWER_MGMT_MODE_ADAPTIVE
+#define NVDRS_FEATURE_POWER_MGMT_MODE_DEFAULT_GL                       NVDRS_FEATURE_POWER_MGMT_MODE_DRIVER_CONTROLLED
+
+
+#define NVDRS_FEATURE_PREFERRED_OGL_GPU_STRING                         ""
+#define NVDRS_FEATURE_PREFERRED_OGL_GPU_ID                             0xa010000f
+#define NVDRS_FEATURE_PREFERRED_OGL_GPU_OVERINSTALL                    0 // OVERRIDE
+#define NVDRS_FEATURE_PREFERRED_OGL_GPU_AUTOSELECT                     L"autoselect"
+#define NVDRS_FEATURE_PREFERRED_OGL_GPU_DEFAULT                        NVDRS_FEATURE_PREFERRED_OGL_GPU_AUTOSELECT
+
+
+#define NVDRS_FEATURE_PRERENDER_LIMIT_STRING                           ""
+#define NVDRS_FEATURE_PRERENDER_LIMIT_ID                               0xa010000c
+#define NVDRS_FEATURE_PRERENDER_LIMIT_OVERINSTALL                      0 // OVERRIDE
+#define NVDRS_FEATURE_PRERENDER_LIMIT_MIN                              0x00
+#define NVDRS_FEATURE_PRERENDER_LIMIT_MAX                              0xff
+#define NVDRS_FEATURE_PRERENDER_LIMIT_APP_CONTROLLED                   0x00
+#define NVDRS_FEATURE_PRERENDER_LIMIT_NONE                             0
+#define NVDRS_FEATURE_PRERENDER_LIMIT_ONE                              1
+#define NVDRS_FEATURE_PRERENDER_LIMIT_TWO                              2
+#define NVDRS_FEATURE_PRERENDER_LIMIT_THREE                            3
+#define NVDRS_FEATURE_PRERENDER_LIMIT_FOUR                             4
+#define NVDRS_FEATURE_PRERENDER_LIMIT_FIVE                             5
+#define NVDRS_FEATURE_PRERENDER_LIMIT_SIX                              6
+#define NVDRS_FEATURE_PRERENDER_LIMIT_SEVEN                            7
+#define NVDRS_FEATURE_PRERENDER_LIMIT_EIGHT                            8
+#define NVDRS_FEATURE_PRERENDER_LIMIT_DEFAULT                          NVDRS_FEATURE_PRERENDER_LIMIT_APP_CONTROLLED
+
+
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_STRING                      ""
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_ID                          0xa0100018
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_OVERINSTALL                 0 // OVERRIDE
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_HIGHQUALITY                 0xfffffff6
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_HQ                          0xfffffff6
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_QUALITY                     0x00000000
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_Q                           0x00000000
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_0                           0x00000000
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_PERFORMANCE                 0x0000000a
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_P                           0x0000000a
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_a                           0x0000000a
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_0xa                         0x0000000a
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_HIGHPERFORMANCE             0x00000014
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_HP                          0x00000014
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_14                          0x00000014
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_0x14                        0x00000014
+#define NVDRS_FEATURE_QUALITY_ENHANCEMENTS_DEFAULT                     NVDRS_FEATURE_QUALITY_ENHANCEMENTS_QUALITY
+
+
+#define NVDRS_FEATURE_QUIET_MODE_STRING                                ""
+#define NVDRS_FEATURE_QUIET_MODE_ID                                    0xa0100022
+#define NVDRS_FEATURE_QUIET_MODE_OVERINSTALL                           0 // OVERRIDE
+#define NVDRS_FEATURE_QUIET_MODE_MIN                                   0x00000001
+#define NVDRS_FEATURE_QUIET_MODE_MAX                                   0x000000ff
+#define NVDRS_FEATURE_QUIET_MODE_OPTIMAL                               0x0000003c
+#define NVDRS_FEATURE_QUIET_MODE_ENABLED                               0x10000000
+#define NVDRS_FEATURE_QUIET_MODE_DISABLED                              0x00000000
+#define NVDRS_FEATURE_QUIET_MODE_DEFAULT                               NVDRS_FEATURE_QUIET_MODE_DISABLED
+
+
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_STRING                         ""
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_ID                             0xa0100012
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_OVERINSTALL                    0 // OVERRIDE
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_OFF                            0x00000000
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_DISABLED                       0x00000000
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_ON                             0x00000001
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_ENABLED                        0x00000001
+#define NVDRS_FEATURE_SHADER_DISK_CACHE_DEFAULT                        0x1
+
+
+#define NVDRS_FEATURE_STEREO_EYES_SWAP_STRING                          ""
+#define NVDRS_FEATURE_STEREO_EYES_SWAP_ID                              0xa0100015
+#define NVDRS_FEATURE_STEREO_EYES_SWAP_OVERINSTALL                     0 // OVERRIDE
+#define NVDRS_FEATURE_STEREO_EYES_SWAP_OFF                             0
+#define NVDRS_FEATURE_STEREO_EYES_SWAP_ON                              1
+#define NVDRS_FEATURE_STEREO_EYES_SWAP_DEFAULT                         NVDRS_FEATURE_STEREO_EYES_SWAP_OFF
+
+
+#define NVDRS_FEATURE_STEREO_SUPPORT_STRING                            ""
+#define NVDRS_FEATURE_STEREO_SUPPORT_ID                                0xa0100014
+#define NVDRS_FEATURE_STEREO_SUPPORT_OVERINSTALL                       0 // OVERRIDE
+#define NVDRS_FEATURE_STEREO_SUPPORT_OFF                               0
+#define NVDRS_FEATURE_STEREO_SUPPORT_ON                                1
+#define NVDRS_FEATURE_STEREO_SUPPORT_DEFAULT                           NVDRS_FEATURE_STEREO_SUPPORT_OFF
+
+
+#define NVDRS_FEATURE_THREAD_CONTROL_STRING                            ""
+#define NVDRS_FEATURE_THREAD_CONTROL_ID                                0xa010001b
+#define NVDRS_FEATURE_THREAD_CONTROL_OVERINSTALL                       0 // OVERRIDE
+#define NVDRS_FEATURE_THREAD_CONTROL_ENABLE                            0x00000001
+#define NVDRS_FEATURE_THREAD_CONTROL_DISABLE                           0x00000002
+#define NVDRS_FEATURE_THREAD_CONTROL_DEFAULT                           0
+
+
+#define NVDRS_FEATURE_TRILINEAR_OPTS_STRING                            ""
+#define NVDRS_FEATURE_TRILINEAR_OPTS_ID                                0xa0100019
+#define NVDRS_FEATURE_TRILINEAR_OPTS_OVERINSTALL                       0 // OVERRIDE
+#define NVDRS_FEATURE_TRILINEAR_OPTS_OFF                               0x00000000
+#define NVDRS_FEATURE_TRILINEAR_OPTS_DISABLED                          0x00000000
+#define NVDRS_FEATURE_TRILINEAR_OPTS_ON                                0x00000001
+#define NVDRS_FEATURE_TRILINEAR_OPTS_ENABLED                           0x00000001
+#define NVDRS_FEATURE_TRILINEAR_OPTS_DEFAULT                           NVDRS_FEATURE_TRILINEAR_OPTS_OFF
+
+
+#define NVDRS_FEATURE_TRIPPLE_BUFFERING_STRING                         ""
+#define NVDRS_FEATURE_TRIPPLE_BUFFERING_ID                             0xa010001c
+#define NVDRS_FEATURE_TRIPPLE_BUFFERING_OVERINSTALL                    0 // OVERRIDE
+#define NVDRS_FEATURE_TRIPPLE_BUFFERING_DISABLED                       0x00000000
+#define NVDRS_FEATURE_TRIPPLE_BUFFERING_ENABLED                        0x00000001
+#define NVDRS_FEATURE_TRIPPLE_BUFFERING_DEFAULT                        NVDRS_FEATURE_TRIPPLE_BUFFERING_DISABLED
+
+
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_STRING                         ""
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_ID                             0xa010001e
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_OVERINSTALL                    0 // OVERRIDE
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_MIN                            0x00
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_MAX                            0xff
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_APP_CONTROLLED                 0x00
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_NONE                           0
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_ONE                            1
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_TWO                            2
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_THREE                          3
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_FOUR                           4
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_FIVE                           5
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_SIX                            6
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_SEVEN                          7
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_EIGHT                          8
+#define NVDRS_FEATURE_VRPRERENDER_LIMIT_DEFAULT                        NVDRS_FEATURE_VRPRERENDER_LIMIT_ONE
+
+
+#define NVDRS_FEATURE_VSYNC_STRING                                     ""
+#define NVDRS_FEATURE_VSYNC_ID                                         0xa010001d
+#define NVDRS_FEATURE_VSYNC_OVERINSTALL                                0 // OVERRIDE
+#define NVDRS_FEATURE_VSYNC_APPCONTROLLED                              0
+#define NVDRS_FEATURE_VSYNC_FORCEOFF                                   1
+#define NVDRS_FEATURE_VSYNC_FORCEON                                    2
+#define NVDRS_FEATURE_VSYNC_FORCEON_INTERVAL2                          3
+#define NVDRS_FEATURE_VSYNC_ADAPTIVE                                   4
+#define NVDRS_FEATURE_VSYNC_ADAPTIVE_HALF_REFRESH_RATE                 5
+#define NVDRS_FEATURE_VSYNC_SMOOTH                                     6
+#define NVDRS_FEATURE_VSYNC_GSYNC_ENABLE                               7
+#define NVDRS_FEATURE_VSYNC_GSYNC_NOT_SUPPORTED                        8
+#define NVDRS_FEATURE_VSYNC_DEFAULT                                    NVDRS_FEATURE_VSYNC_APPCONTROLLED
+
+
+#endif // _G_DRSFEATURESREG_H_

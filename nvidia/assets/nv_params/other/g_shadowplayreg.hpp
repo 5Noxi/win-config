@@ -1,0 +1,31 @@
+
+/* THIS FILE IS AUTO-GENERATED!  DO NOT EDIT!
+**
+** To modify this file, regenerate after editing
+** any RKY file
+*/
+
+#if !defined KERNEL_NOTIFICATION_ID_FLAG 
+#define KERNEL_NOTIFICATION_ID_FLAG                                    0x01000000
+#define NEEDS_KERNEL_NOTIFICATION(id)                                  (id & KERNEL_NOTIFICATION_ID_FLAG)
+#endif // KERNEL_NOTIFICATION_ID_FLAG 
+
+#define SHADOWPLAY_BLACK_LIST_PREFIX            "SHADOWPLAY_"
+#define SHADOWPLAY_BLACK_LIST_STRING            "14586201"
+#define SHADOWPLAY_BLACK_LIST_ID                0x90de9159
+#define SHADOWPLAY_BLACK_LIST_STRING_PLAIN      "SHADOWPLAY_BLACK_LIST"
+#define SHADOWPLAY_BLACK_LIST_OVERINSTALL       0 // OVERRIDE
+#define SHADOWPLAY_BLACK_LIST_DEFAULT           SHADOWPLAY_BLACK_LIST_NAMESPACE::OFF
+#define SHADOWPLAY_BLACK_LIST_APP_PROFILE_ENUM  EN_NONE
+namespace SHADOWPLAY_BLACK_LIST_NAMESPACE
+{
+    enum SHADOWPLAY_BLACK_LIST_ENUM 
+    {
+        OFF = 0,
+        DISABLED = 0,
+        ON = 1,
+        ENABLED = 1
+    };
+}
+
+
