@@ -254,20 +254,73 @@ void    CAppSettingsBasic::mapApiRes()
 
 Note that many settings like '*Triple buffering*', '*OpenGL Rendering GPU*', '*Threaded optimization*', '*Vulkan/OpenGL present method*' etc. are used OpenGL/old DX games only, and e.g. '*Virtual Reality pre-rendered frames*' for VR applications.
 
-````cpp
-// Power management mode
-enum EValues_PREFERRED_PSTATE {
-    PREFERRED_PSTATE_ADAPTIVE                            = 0x00000000,
-    PREFERRED_PSTATE_PREFER_MAX                          = 0x00000001,
-    PREFERRED_PSTATE_DRIVER_CONTROLLED                   = 0x00000002,
-    PREFERRED_PSTATE_PREFER_CONSISTENT_PERFORMANCE       = 0x00000003,
-    PREFERRED_PSTATE_PREFER_MIN                          = 0x00000004,
-    PREFERRED_PSTATE_OPTIMAL_POWER                       = 0x00000005,
-    PREFERRED_PSTATE_MIN                                 = 0x00000000,
-    PREFERRED_PSTATE_MAX                                 = 0x00000005,
-    PREFERRED_PSTATE_NUM_VALUES = 8,
-    PREFERRED_PSTATE_DEFAULT = PREFERRED_PSTATE_OPTIMAL_POWER
-};
+I've created a folder [nv_params](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params) that includes NVIDIA driver parameter references for D3D, OpenGL, display, DRS, GFE, nView, ShadowPlay, stereo components. See [d3d](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/d3d), [d3dogl](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/d3dogl), [opengl](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/opengl), [other](https://github.com/nohuto/win-config/tree/main/nvidia/assets/nv_params/other) for source files and more details.
+
+- [`parameters.txt`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nv_params/parameters.txt) - all parameters exposed by [`d3dreg.exe`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nv_params/d3dreg.exe)
+- [`dump_parameters.py`](https://github.com/nohuto/win-config/blob/main/nvidia/assets/nv_params/dump_parameters.py) - recreates the catalog (parameters.txt)
+
+Examples (which proof the mentioned settings above), you might not find the param names by searching for the option names in here, if so look through the `*.def` files in the folders which will show a `*_STRING` for it (remove `_STRING` when searching in parameters):
+
+```powershell
+$ rg -i 'Virtual Reality pre-rendered frames' 'C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params'
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\other\g_drsfeaturesNVAPI.def
+46:#define NVDRS_FEATURE_VRPRERENDER_LIMIT_STRING     L"Virtual Reality pre-rendered frames"
+
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\d3dogl\g_d3doglNVAPIPrivate.def
+74:#define VRPRERENDERLIMIT_STRING                    L"Virtual Reality pre-rendered frames"
+
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\d3dogl\g_d3doglNVAPI.def
+56:#define VRPRERENDERLIMIT_STRING                    L"Virtual Reality pre-rendered frames"
+
+C:\Users\nohuto\Desktop\win\win-config\nvidia\assets\nv_params\other\g_drsfeaturesNVAPIPrivate.def
+46:#define NVDRS_FEATURE_VRPRERENDER_LIMIT_STRING     L"Virtual Reality pre-rendered frames"
+```
+
+```c
+------------------------------------------------------------
+VRPRERENDERLIMIT
+------------------------------------------------------------
+This key is of type DWORD
+This key is defined all the time - even with release driver
+You may assign it to one of the names listed below
+but that is not required. You may also enter a number.
+
+MIN             (= 0x00000000)
+MAX             (= 0x000000ff)
+APP_CONTROLLED  (= 0x00000000)  // The present limit will be controlled by application or driver adjustments.
+DEFAULT         (= 0x00000001)
+
+Default values for this setting:
+DEFAULT:    DEFAULT
+
+------------------------------------------------------------
+OGL_TRIPLE_BUFFER
+------------------------------------------------------------
+This key is of type DWORD
+This key is defined all the time - even with release driver
+You may assign it to one of the names listed below
+but that is not required. You may also enter a number.
+
+DISABLED  (= 0x00000000)
+ENABLED   (= 0x00000001)
+
+Default values for this setting:
+DEFAULT:    DISABLED
+
+------------------------------------------------------------
+OGL_THREAD_CONTROL
+------------------------------------------------------------
+This key is of type DWORD
+This key is defined all the time - even with release driver
+The key is a collection of Bitfields.
+You may assign it to some combination of the names listed below
+but that is not required. You may also enter a dword value directly.
+
+ENABLE   (= 0x00000001)  // Force Enables threading
+DISABLE  (= 0x00000002)  // Force Disable threading
+
+Default values for this setting:
+DEFAULT:    0x00000000
 ```
 
 - [NVIDIA Profile Inspector](https://github.com/Orbmu2k/nvidiaProfileInspector)
