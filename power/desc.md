@@ -107,7 +107,7 @@ USB mouse & keyboards normally use interrupt IN endpoints, so a 1000 Hz endpoint
 >
 > — Microsoft, [USB_ENDPOINT_DESCRIPTOR structure](https://learn.microsoft.com/en-us/windows-hardware/drivers/ddi/usbspec/ns-usbspec-_usb_endpoint_descriptor#members)
 
-So IMOD usually adds no interrupt notification wait in relation to the polling interval here, as the 50 us counter is usually already at zero whenever the next service chance happens, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example, therefore I would generally keep IMOD at its default value and move your USB devices onto different xHCI controllers, so they can't use the same interrupters.
+So IMOD usually adds no interrupt notification wait in relation to the polling interval here, as the 50 us counter is usually already at zero whenever the next service chance happens, see '[Light Load](https://noverse.dev/docs/win-config/power/xhci-imod/#light-load)' example, therefore I would generally keep IMOD at its default value and move your USB devices onto different xHCI controllers, so they don't get the same `InterrupterTarget` on one controller.
 
 | Rate | Polling Interval | Isolated endpoint with 50 us IMOD |
 | --- | --- | --- |
