@@ -276,6 +276,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/City.png?raw=true)
 
+### Cloudy Village
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Cloudy-Village.png?raw=true)
+
 ### Dark Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Dark-Sunset.png?raw=true)
@@ -296,6 +300,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset.png?raw=true)
 
+### Field Sunset 2
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Field-Sunset-2.png?raw=true)
+
 ### Fishing Frogs
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Fishing-Frogs.png?raw=true)
@@ -307,6 +315,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 ### Flowers Sunset
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Flowers-Sunset.png?raw=true)
+
+### Forst Clouds
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Forst-Clouds.png?raw=true)
 
 ### Girl Clouds
 
@@ -376,6 +388,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea.png?raw=true)
 
+### Sea Art
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Art.png?raw=true)
+
 ### Sea Road
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Sea-Road.png?raw=true)
@@ -407,6 +423,10 @@ This is a collection of some wallpapers that I've found over time. Added for peo
 ### Village
 
 ![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Village.png?raw=true)
+
+### Violet Night
+
+![](https://github.com/nohuto/win-config/blob/main/visibility/images/wallpaper/Violet-Night.png?raw=true)
 
 ### Witcher Landscape
 

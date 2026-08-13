@@ -554,7 +554,6 @@ Whether your display supports HDCP you can practically make it unsupported using
     "Type DWORD",
     "Encoding: 1 means Keyglob will be forced to zero"
   ],
-  "Configured": "1",
   "Elements": [
     {
       "Name": "TRUE",
