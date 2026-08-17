@@ -6536,6 +6536,10 @@ The suboptions probably overlap the documentation. If so, you can open the [page
 
 ### IP Helper
 
+> "*Internet Protocol Helper (IP Helper) assists network administration of the local computer by enabling applications to retrieve information about the network configuration of the local computer, and to modify that configuration. IP Helper also provides notification mechanisms to ensure that an application is notified when certain aspects of the local computer network configuration change.*"
+>
+> — Microsoft, [About IP Helper](https://learn.microsoft.com/en-us/windows/win32/iphlp/about-ip-helper)
+
 | Name | Description | Type | Dependencies | Command Line |
 | --- | --- | --- | --- | --- |
 | `iphlpsvc` | Provides tunnel connectivity using IPv6 transition technologies (6to4, ISATAP, Port Proxy, and Teredo), and IP-HTTPS. If this service is stopped, the computer will not have the enhanced connectivity benefits that these technologies offer. | Win32 Share Process (32) | RpcSS, tcpip, nsi, WinHttpAutoProxySvc | C:\Windows\System32\svchost.exe -k NetSvcs -p |

@@ -1057,7 +1057,9 @@ ERROR_VOLUME_NOT_SUPPORT_EFS = 0x8007177E;
 
 Default is configured to LAN. The Group Download mode combined with Group ID, enables administrators to create custom device groups that share content between devices in the group. Download mode dictates which download sources clients are allowed to use when downloading Windows updates in addition to Windows Update servers.
 
-The option applies `0` = disables peer-to-peer (P2P) caching but still allows Delivery Optimization to download content over HTTP from the download's original source or a Microsoft Connected Cache server.
+> "*Delivery Optimization is a cloud-managed, peer-to-peer client; and a downloader service that delivers updates to an organization's networked devices. Delivery Optimization allows devices to download updates from alternate sources (such as other peers on the network), in addition to Microsoft servers. Delivery Optimization combines partial bits from local devices, with partial bits from Microsoft servers to update devices in the network environment. The expected result is reduced bandwidth usage, and a faster update process.*"
+>
+> — Microsoft, [Delivery Optimization](https://learn.microsoft.com/en-us/windows/win32/delivery_optimization/delivery-optimization-portal)
 
 ### [DODownloadMode Data](https://learn.microsoft.com/en-us/windows/deployment/do/waas-delivery-optimization-reference#download-mode)
 
