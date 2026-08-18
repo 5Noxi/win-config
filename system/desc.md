@@ -6447,6 +6447,10 @@ The suboptions probably overlap the documentation. If so, you can open the [page
 
 ### DHCP
 
+> "*Dynamic Host Configuration Protocol (DHCP) is a standardized protocol that enables clients to be dynamically assigned with various configuration parameters, such as an IP address, subnet mask, default gateway, and other critical network configuration information. DHCP servers centrally manage such configuration data, and are configured by network administrators with settings that are appropriate for a given network environment. DHCP servers in turn communicate with DHCP clients through the use of DHCP messages.*"
+>
+> — Microsoft, [About Dynamic Host Configuration Protocol](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/dhcp/about-dynamic-host-configuration-protocol)
+
 | Name | Description | Type | Dependencies | Command Line |
 | --- | --- | --- | --- | --- |
 | `Dhcp` | Registers and updates IP addresses and DNS records for this computer. If this service is stopped, this computer will not receive dynamic IP addresses and DNS updates. If this service is disabled, any services that explicitly depend on it will fail to start. | Win32 Share Process (32) | NSI, Afd | C:\Windows\system32\svchost.exe -k LocalServiceNetworkRestricted -p |

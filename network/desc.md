@@ -904,7 +904,7 @@ Reads the active adapter's IPv4 settings from `netsh int ip show config` and app
 - `IP Address` is the device's local IPv4 on your LAN
 - `Default Gateway` is your router IP used to reach other networks (internet)
 - `Subnet Mask` defines which IPs are local (same subnet) vs routed via the gateway
-- `DHCP` (Dynamic Host Configuration Protocol) registers and updates IP address, subnet mask, gateway, and DNS
+- [`DHCP`](https://learn.microsoft.com/en-us/previous-versions/windows/desktop/dhcp/about-dynamic-host-configuration-protocol) (Dynamic Host Configuration Protocol) registers and updates IP address, subnet mask, gateway, and DNS
 
 # Disable Active Probing
 
