@@ -6614,7 +6614,6 @@ The suboptions probably overlap the documentation. If so, you can open the [page
 | `P9Rdr` | Plan 9 Redirector Driver | Kernel Driver (1) | RDBSS | System32\drivers\p9rdr.sys |
 | `P9RdrService` | Enables trigger-starting plan9 file servers. | Win32 Share Process, User Service (96) | P9Rdr, RPCSS | C:\Windows\system32\svchost.exe -k P9RdrService -p |
 | `rdbss` | Provides the framework for network mini-redirectors | File System Driver (2) | Mup | system32\DRIVERS\rdbss.sys |
-| `TrkWks` | Maintains links between NTFS files within a computer or across computers in a network. | Win32 Share Process (32) | RpcSs | C:\Windows\System32\svchost.exe -k LocalSystemNetworkRestricted -p |
 | `WebClient` | Enables Windows-based programs to create, access, and modify Internet-based files. If this service is stopped, these functions will not be available. If this service is disabled, any services that explicitly depend on it will fail to start. | Win32 Share Process (32) | MRxDAV | C:\Windows\system32\svchost.exe -k LocalService -p |
 
 ### GameInput
