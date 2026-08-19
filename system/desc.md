@@ -865,6 +865,26 @@ As everything below will reference to that function at some point, I'll quickly 
 4. Enables/disables job scheduling class QuantumReset values (enabled if fixed+long)
 5. Goes through active processes and updates their QuantumReset values (optional)
 
+## Dynamic Tick
+
+Before starting with the first bits of the value, I want to point out that while having dynamic tick disabled it seems like the quantum end doesn't work properly.
+
+This is currently only based on captures (tested on 23H2/25H2), I'll add more details here soon to see if dynamic tick is actually causing it, or anything else.
+
+### On (Default)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-perfmon-max.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-mxa.png.png?raw=true)
+
+### Off
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-max.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-mxa.png.png?raw=true)
+
+#### Busy Activity
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-busy.png.png?raw=true)
+
 ## PsPrioritySeparation (`1:0`)
 
 The priority applies to dynamic priorities below the RT (real time) range and is capped at priority `15`, disabling dynamic priority boosts for a thread/process would also prevent this FG boost. The quantum unit change is obviously only visible when the variable table is used, as all three in a fixed table are the same, so changing the low bits doesn't change its quantum. [`PsChangeQuantumTable`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PsChangeQuantumTable.c) clamps the field and saves it in `PsPrioritySeparation`:
