@@ -1049,7 +1049,13 @@ You can also see if a [context switch](https://noverse.dev/docs/windbg-notes/thr
 
 See '[Thread States](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/)' for more details on the topic & a example on how [`WrQuantumEnd`](https://noverse.dev/docs/windbg-notes/threads/thread-scheduling/thread-states/#wrquantumend) works, and when the `WrQuantumEnd` reason is used (beside `CycleTime >= QuantumTarget`).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd-23H2.png?raw=true)
+
+##### 25H2 Max Activity
+
+This is just a "extreme" example of what it could cause, using two thread with maximum activity (runs continuously, no sleep) + same priority + same affinity. This was captured while the windows default (`0x2`) was used, means BG threads have a time of `1.736 ms` (CPUStress was in BG):
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/WrQuantumEnd-25H2-Default.png?raw=true)
 
 #### _KTHREAD Priority
 
@@ -1478,14 +1484,19 @@ CHAR PspJobSchedulingClasses[PSP_JOB_SCHEDULING_CLASSES] =
 };
 ```
 
-### ShortThreadQuantum (24H2)
+### ShortThreadQuantum (24H2+)
 
-In 24H2, [`KiInitializeVelocity`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiInitializeVelocity.c) calls the `Feature_ShortThreadQuantum__private_ReportDeviceUsage` helper and then sets bit `0x40000` in `KiVelocityFlags` (without conditions):
+In 24H2+, [`KiInitializeVelocity`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiInitializeVelocity.c) calls the `Feature_ShortThreadQuantum__private_ReportDeviceUsage` helper and then sets bit `0x40000` in `KiVelocityFlags` (without conditions):
 
 ```c
 // KiInitializeVelocity
 Feature_ShortThreadQuantum__private_ReportDeviceUsage();
 KiVelocityFlags |= 0x40000u;
+```
+
+```c
+lkd> ? dwo(nt!KiVelocityFlags) & 0x40000 // 25H2
+Evaluate expression: 262144 = 00000000`00040000 // 0x40000 = ShortThreadQuantum used
 ```
 
 With that flag, [`KeInitSystem`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KeInitSystem.c) divides the older quantum unit by another six:
@@ -1529,15 +1540,9 @@ Means with the `clock interval / 18` unit, the table now is:
 | Variable | `2 / 4 / 36` = `1/9 / 2/9 / 2` clock intervals | `4 / 8 / 72` = `2/9 / 4/9 / 4` clock intervals |
 | Fixed | `18 / 18 / 18` = `1` clock interval | `36 / 36 / 36` = `2` clock intervals |
 
-You should be able to query the bit via (haven't tried it yet):
-
-```c
-? dwo(nt!KiVelocityFlags) & 0x40000 // 0x40000 = ShortThreadQuantum used
-```
-
 #### [QoS](https://learn.microsoft.com/en-us/windows/win32/procthread/quality-of-service) Quantum Override (`BamQosLevel`)
 
-Note that this is currently an interpretation as I haven't debugged a live 24H2 build yet.
+Note that this is currently an interpretation as I haven't spend much time on that yet.
 
 `BamQosLevel` doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, these're still getting filled by the threads stored `QuantumReset`. When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
 
@@ -1599,49 +1604,139 @@ With the `clock interval / 18` unit, the `QuantumReset` are:
 | `7` | Dynamic | `2` QU | `1.736 ms` |
 | `8+` | ? | stored `QuantumReset` | table dependent |
 
-Since I'm currently not on 24H2 I can't really look into that further, but it seems to be possible to display the current `BamQosLevel` of a thread via `_KTHREAD <thread address> BamQosLevel` (don't treat the output below as a valid example for 24H2, as `BamQosLevel` isn't used the same way on 23H2 in relation to that):
+It seems to be possible to display the current `BamQosLevel` of a thread via `_KTHREAD <thread address> BamQosLevel`:
 
 ```c
-lkd> !process 0 4 CPUSTRES.exe
-PROCESS ffff800f5c506080
-    SessionId: 1  Cid: 03f4    Peb: 0082a000  ParentCid: 0f70
-    DirBase: 2bf090000  ObjectTable: ffffaf8825480b40  HandleCount: 197.
-    Image: CPUSTRES.EXE
+lkd> !process 0 4 CPUStress.exe
+PROCESS ffff9b82c556f080
+    SessionId: none  Cid: 37d4    Peb: 53b4829000  ParentCid: 1870
+    DirBase: 2b7cb7000  ObjectTable: ffffe48e828562c0  HandleCount: 201.
+    Image: CPUStress.exe
 
-        THREAD ffff800f4f8ac080  Cid 03f4.1ff0  Teb: 000000000082c000 Win32Thread: ffff800f5c203530 WAIT
-        THREAD ffff800f51471080  Cid 03f4.11e0  Teb: 0000000000830000 Win32Thread: 0000000000000000 WAIT
-        THREAD ffff800f5098a080  Cid 03f4.1e2c  Teb: 0000000000834000 Win32Thread: 0000000000000000 WAIT
-        THREAD ffff800f4f584080  Cid 03f4.05c0  Teb: 0000000000838000 Win32Thread: 0000000000000000 WAIT
-        THREAD ffff800f5700f080  Cid 03f4.1c70  Teb: 000000000083c000 Win32Thread: 0000000000000000 RUNNING on processor 5
-        THREAD ffff800f5701f080  Cid 03f4.0de8  Teb: 0000000000840000 Win32Thread: 0000000000000000 WAIT
-        THREAD ffff800f556f6080  Cid 03f4.1424  Teb: 0000000000844000 Win32Thread: 0000000000000000 WAIT
-        THREAD ffff800f5709d080  Cid 03f4.07fc  Teb: 0000000000848000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c556e080  Cid 37d4.37d8  Teb: 00000053b482a000 Win32Thread: ffff9b82c4e95190 WAIT
+        THREAD ffff9b82c55ae080  Cid 37d4.37ec  Teb: 00000053b4832000 Win32Thread: 0000000000000000 RUNNING on processor 3
+        THREAD ffff9b82c55ad080  Cid 37d4.37f0  Teb: 00000053b4834000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c55ac080  Cid 37d4.37f4  Teb: 00000053b4836000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c55ab0c0  Cid 37d4.37f8  Teb: 00000053b4838000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c683a040  Cid 37d4.2b54  Teb: 00000053b483e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c5cf5080  Cid 37d4.1e74  Teb: 00000053b4840000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c69b7080  Cid 37d4.2740  Teb: 00000053b4842000 Win32Thread: 0000000000000000 WAIT
 
-lkd> dt _KTHREAD ffff800f5700f080 BamQosLevel
+lkd> dt _KTHREAD ffff9b82c55ae080 BamQosLevel // active worker thread
 nt!_KTHREAD
-   +0x200 BamQosLevel  : 0y00000000 (0)
+   +0x204 BamQosLevel : 0x1 '' // Medium = 18QU = 15.625
+lkd> dt _KTHREAD ffff9b82c556e080 BamQosLevel // GUI thread
+nt!_KTHREAD
+   +0x204 BamQosLevel : 0x1 ''
+lkd> dt _KTHREAD ffff9b82c55ad080 BamQosLevel
+nt!_KTHREAD
+   +0x204 BamQosLevel : 0x1 ''
 
-// via PRCB, rather read it via the thread address
+lkd> !process 0 4 dwm.exe
+PROCESS ffff9b82be56a080
+    SessionId: none  Cid: 05f8    Peb: 1042bd0000  ParentCid: 0430
+    DirBase: 13090a000  ObjectTable: ffffe48e7ce9cbc0  HandleCount: 1652.
+    Image: dwm.exe
 
-lkd> !prcb 5
-PRCB for Processor 5 at ffffa68162174180:
-Current IRQL -- 0
-Threads--  Current ffff820388546040 Next 0000000000000000 Idle ffff820388546040
-Processor Index 5 Number (0, 5) GroupSetMember 20
-Interrupt Count -- 00258de8
-Times -- Dpc    00000007 Interrupt 00000000 
-         Kernel 0002434a User      00000000 
-lkd> dt nt!_KPRCB ffffa68162174180 PrcbFlags
-   +0x0ec PrcbFlags : _KPRCBFLAG
-lkd> dx -id 0,0,ffff8203884d4080 -r1 (*((ntkrnlmp!_KPRCBFLAG *)0xffffa6816217426c))
-(*((ntkrnlmp!_KPRCBFLAG *)0xffffa6816217426c))                 [Type: _KPRCBFLAG]
-    [+0x000] PrcbFlags        : 0 [Type: long]
-    [+0x000 ( 7: 0)] BamQosLevel      : 0x0 [Type: unsigned long]
-    [+0x000 ( 9: 8)] PendingQosUpdate : 0x0 [Type: unsigned long]
-    [+0x000 (10:10)] CacheIsolationEnabled : 0x0 [Type: unsigned long]
-    [+0x000 (11:11)] TracepointActive : 0x0 [Type: unsigned long]
-    [+0x000 (12:12)] LongDpcRunning   : 0x0 [Type: unsigned long]
-    [+0x000 (31:13)] PrcbFlagsReserved : 0x0 [Type: unsigned long]
+        THREAD ffff9b82be56b080  Cid 05f8.05fc  Teb: 0000001042bd1000 Win32Thread: ffff9b82be078ea0 WAIT
+        THREAD ffff9b82be5b7080  Cid 05f8.0624  Teb: 0000001042bd7000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82be6a0080  Cid 05f8.0760  Teb: 0000001042bd9000 Win32Thread: ffff9b82be6aa2c0 WAIT
+        THREAD ffff9b82be909080  Cid 05f8.082c  Teb: 0000001042bdd000 Win32Thread: ffff9b82be6ad180 WAIT
+        THREAD ffff9b82be90b080  Cid 05f8.083c  Teb: 0000001042bdf000 Win32Thread: ffff9b82be6ab910 WAIT
+        THREAD ffff9b82be90c080  Cid 05f8.0844  Teb: 0000001042be1000 Win32Thread: ffff9b82be6ac900 WAIT
+        THREAD ffff9b82be90d080  Cid 05f8.0848  Teb: 0000001042be3000 Win32Thread: ffff9b82be6adc20 WAIT
+        THREAD ffff9b82be994080  Cid 05f8.08a0  Teb: 0000001042be7000 Win32Thread: ffff9b82be6ac3b0 WAIT
+        THREAD ffff9b82be9d2080  Cid 05f8.08f4  Teb: 0000001042beb000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82bec6a080  Cid 05f8.0aa0  Teb: 0000001042bf1000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82bedf2080  Cid 05f8.0bc4  Teb: 0000001042bf3000 Win32Thread: ffff9b82be6ba600 WAIT
+        THREAD ffff9b82bee4f080  Cid 05f8.0810  Teb: 0000001042bf5000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82bee540c0  Cid 05f8.080c  Teb: 0000001042bf7000 Win32Thread: ffff9b82be6b6860 WAIT
+        THREAD ffff9b82befec0c0  Cid 05f8.0d58  Teb: 0000001042bf9000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82beff1080  Cid 05f8.0d7c  Teb: 0000001042bfb000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04c9080  Cid 05f8.0fdc  Teb: 0000001042bfd000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04ca080  Cid 05f8.0fe0  Teb: 0000001042a00000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04cb080  Cid 05f8.0fe4  Teb: 0000001042a02000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04cc080  Cid 05f8.0fe8  Teb: 0000001042a04000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04cd080  Cid 05f8.0fec  Teb: 0000001042a06000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04ce080  Cid 05f8.0ff0  Teb: 0000001042a08000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04cf080  Cid 05f8.0ff4  Teb: 0000001042a0a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04d0080  Cid 05f8.0ff8  Teb: 0000001042a0c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04d1080  Cid 05f8.0ffc  Teb: 0000001042a0e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04d2080  Cid 05f8.0850  Teb: 0000001042a10000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c04d3080  Cid 05f8.0cfc  Teb: 0000001042a12000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c02130c0  Cid 05f8.0cd0  Teb: 0000001042a14000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c021a080  Cid 05f8.0dc4  Teb: 0000001042a16000 Win32Thread: ffff9b82c39c43a0 WAIT
+        THREAD ffff9b82c0421080  Cid 05f8.0f20  Teb: 0000001042a18000 Win32Thread: ffff9b82c39a8890 WAIT
+        THREAD ffff9b82c03ba080  Cid 05f8.102c  Teb: 0000001042a1a000 Win32Thread: ffff9b82c019b410 WAIT
+        THREAD ffff9b82c03ea080  Cid 05f8.1054  Teb: 0000001042a1c000 Win32Thread: ffff9b82c019d3f0 WAIT
+        THREAD ffff9b82c03f4080  Cid 05f8.106c  Teb: 0000001042a20000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0555080  Cid 05f8.1070  Teb: 0000001042a22000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c05e6080  Cid 05f8.1080  Teb: 0000001042a24000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c06020c0  Cid 05f8.1084  Teb: 0000001042a26000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0603080  Cid 05f8.1088  Teb: 0000001042a28000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0604080  Cid 05f8.108c  Teb: 0000001042a2a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0605080  Cid 05f8.1090  Teb: 0000001042a2c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0606080  Cid 05f8.1094  Teb: 0000001042a2e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0607080  Cid 05f8.1098  Teb: 0000001042a30000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0608080  Cid 05f8.109c  Teb: 0000001042a32000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0609080  Cid 05f8.10a0  Teb: 0000001042a34000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c060a080  Cid 05f8.10a4  Teb: 0000001042a36000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c060b080  Cid 05f8.10a8  Teb: 0000001042a38000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c060c080  Cid 05f8.10ac  Teb: 0000001042a3a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c07330c0  Cid 05f8.11f4  Teb: 0000001042a3c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0736080  Cid 05f8.11f8  Teb: 0000001042a3e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c077c080  Cid 05f8.126c  Teb: 0000001042a40000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c077d080  Cid 05f8.1270  Teb: 0000001042a42000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c077e080  Cid 05f8.1274  Teb: 0000001042a44000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c077f080  Cid 05f8.1278  Teb: 0000001042a46000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0780080  Cid 05f8.127c  Teb: 0000001042a48000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0781080  Cid 05f8.1280  Teb: 0000001042a4a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0782080  Cid 05f8.1284  Teb: 0000001042a4c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0783080  Cid 05f8.1288  Teb: 0000001042a4e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0784080  Cid 05f8.128c  Teb: 0000001042a50000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0785080  Cid 05f8.1290  Teb: 0000001042a52000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0786080  Cid 05f8.1294  Teb: 0000001042a54000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c07880c0  Cid 05f8.1298  Teb: 0000001042a56000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c0797080  Cid 05f8.12dc  Teb: 0000001042a58000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c2249080  Cid 05f8.1d74  Teb: 0000001042a5a000 Win32Thread: ffff9b82c27d46e0 WAIT
+        THREAD ffff9b82c3ecf080  Cid 05f8.29fc  Teb: 0000001042a5c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ece080  Cid 05f8.2a00  Teb: 0000001042a5e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ecd080  Cid 05f8.2a04  Teb: 0000001042a60000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ecc080  Cid 05f8.2a08  Teb: 0000001042a62000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ecb080  Cid 05f8.2a0c  Teb: 0000001042a64000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3eca0c0  Cid 05f8.2a10  Teb: 0000001042a66000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ea7080  Cid 05f8.2a14  Teb: 0000001042a68000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ea6080  Cid 05f8.2a18  Teb: 0000001042a6a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ea5080  Cid 05f8.2a1c  Teb: 0000001042a6c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f9c080  Cid 05f8.2a24  Teb: 0000001042a6e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f9b080  Cid 05f8.2a28  Teb: 0000001042a70000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f9a080  Cid 05f8.2a2c  Teb: 0000001042a72000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f11080  Cid 05f8.2a44  Teb: 0000001042a74000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f10080  Cid 05f8.2a48  Teb: 0000001042a76000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f0f080  Cid 05f8.2a4c  Teb: 0000001042a78000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f0e080  Cid 05f8.2a50  Teb: 0000001042a7a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f0d080  Cid 05f8.2a54  Teb: 0000001042a7c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f0c080  Cid 05f8.2a58  Teb: 0000001042a7e000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f0b080  Cid 05f8.2a5c  Teb: 0000001042a80000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f0a080  Cid 05f8.2a60  Teb: 0000001042a82000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3f09080  Cid 05f8.2a64  Teb: 0000001042a84000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ef8080  Cid 05f8.2a68  Teb: 0000001042a86000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ef7080  Cid 05f8.2a6c  Teb: 0000001042a88000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3ef6080  Cid 05f8.2a70  Teb: 0000001042a8a000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3fac080  Cid 05f8.2a8c  Teb: 0000001042a8c000 Win32Thread: 0000000000000000 WAIT
+        THREAD ffff9b82c3fa8080  Cid 05f8.2aa0  Teb: 0000001042a92000 Win32Thread: ffff9b82c4e90620 WAIT
+        THREAD ffff9b82c55a9080  Cid 05f8.37fc  Teb: 0000001042a96000 Win32Thread: ffff9b82c4e9cbc0 WAIT
+        THREAD ffff9b82c6ce6080  Cid 05f8.03b8  Teb: 0000001042ab4000 Win32Thread: ffff9b82c4e9f420 WAIT
+        THREAD ffff9b82c6fea080  Cid 05f8.1884  Teb: 0000001042aba000 Win32Thread: 0000000000000000 WAIT
+
+lkd> dt _KTHREAD ffff9b82be6a0080 BamQosLevel // DWM compositor thread
+nt!_KTHREAD
+   +0x204 BamQosLevel : 0 '' // High = 36QU = 31.250ms
+
+
+lkd> dt _KTHREAD ffff9b82c077c080 BamQosLevel // Idle thread
+nt!_KTHREAD
+   +0x204 BamQosLevel : 0x6 '' // Utility = 2 QU = 1.736ms
 ```
 
 # Timer Expiration
