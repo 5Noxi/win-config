@@ -873,17 +873,17 @@ This is currently only based on captures (tested on 23H2/25H2), I'll add more de
 
 ### On (Default)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-perfmon-max.png.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-mxa.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-perfmon-max.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-mxa.png?raw=true)
 
 ### Off
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-max.png.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-mxa.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-max.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-mxa.png?raw=true)
 
 #### Busy Activity
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-busy.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-busy.png?raw=true)
 
 ## PsPrioritySeparation (`1:0`)
 
