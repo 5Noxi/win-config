@@ -1124,6 +1124,7 @@ Disallows the use of a camera on your system, by denying access via `LetAppsAcce
 | --- | --- | --- | --- | --- |
 | `FrameServer` | Enables multiple clients to access video frames from camera devices. | Win32 Share Process (32) | rpcss | C:\Windows\System32\svchost.exe -k Camera |
 | `FrameServerMonitor` | Monitors the health and state for the Windows Camera Frame Server service. | Win32 Own Process (16) | rpcss | C:\Windows\System32\svchost.exe -k CameraMonitor |
+| `StiSvc` | Provides image acquisition services for scanners and cameras | Win32 Own Process (16) | RpcSs | C:\Windows\system32\svchost.exe -k imgsvc |
 
 ## Suboption
 
