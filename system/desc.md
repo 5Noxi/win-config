@@ -1553,6 +1553,18 @@ PAGE:0000000140B3CD78 PspFixedQuantums db 3 dup(12h)
 PAGE:0000000140B3CD7B                 db 3 dup(24h), 2 dup(0)
 ```
 
+```c
+// 23H2
+lkd> db nt!PspForegroundQuantum L3
+fffff803`6f954bec  06 0c 12                                         ... // 6, 12, 18
+
+// 25H2
+lkd> db nt!PspForegroundQuantum L3
+fffff806`739d8b54  02 04 24                                         ..$ // 2, 4, 36
+lkd> db nt!PspVariableQuantums_With_ShortQuantum L6
+fffff806`7353b3ac  02 04 24 04 08 48                                ..$..H // 2, 4, 36, 4, 8, 72
+```
+
 Means with the `clock interval / 18` unit, the table now is:
 
 | Table | Short (`PsPrioritySeparation` 0/1/2) | Long (`PsPrioritySeparation` 0/1/2) |
