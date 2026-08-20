@@ -855,6 +855,213 @@ See '[CmControlVector](https://noverse.dev/docs/win-config/system/kernel-values/
 
 Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whenever you want to get/read hex/dec values.
 
+## KiUpdateRunTime Quantum Expiration
+
+Using `disabledynamictick` can cause the issue while [per CPU clock tick scheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) is enabled (default). As shown in the '[ClockTickIdleEstimateFix (24H2+)]()' section, this is kind of "fixed" on 24H2+.
+
+Before a processor enters idle ([`PpmIdleExecuteTransition`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleExecuteTransition.c)), Windows can stop its clock timer. After the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) usually programs the timer again, but with `disabledynamictick` (`KiDynamicTickDisableReason`) set, that function returns before doing so (unless something else programs the counter that means no `KeClockInterruptNotify`).
+
+Means that stopped timer no longer sends the clock interrupt used to call [`KiUpdateRunTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiUpdateRunTime.c), so the running threads `CycleTime >= QuantumTarget` check isn't reached and `KPRCB.QuantumEnd` isn't set.
+
+### ClockTickIdleEstimateFix (24H2+)
+
+`Feature_Servicing_Kernel_ClockTickIdleEstimateFix` can make the normal clock deadline (entry 1) waking, which keeps clock interrupts running after something initially programs the timer. 23H2 always sets the low `TypeFlags` bits of entry 1 to `3` (active + non waking):
+
+```c
+// KiUpdateTime (23H2)
+
+CurrentPrcb->ClockTimerState.ClockTimerEntries[1].TypeFlags |= 3u;
+```
+
+Depending on the state of the feature, [`KiSetClockTimerKTimerDeadlines`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimerKTimerDeadlines.c) programs entry 1:
+
+```c
+// KiSetClockTimerKTimerDeadlines (25H2)
+
+v7 = (unsigned int)Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_IsEnabledNoReportingNoInline() == 0;
+result = KiSetClockTimer(a1, a2, v4, KeMinimumIncrement, 1, v7, 0);
+```
+
+```c
+lkd> dd nt!Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_featureState L1
+fffff802`defc3b20  00000047 // bit 0 = 1 = feature enabled
+
+lkd> r @$t0 = dwo(nt!Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_featureState)
+lkd> .printf "state=%x direct=%u enabled=%u\n", @$t0, ((@$t0 >> 1) & 1), (@$t0 & 1)
+state=47 direct=1 enabled=1
+```
+
+With the feature enabled, entry 1 has low bits `1`, so [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c) keeps/rearms the timer (its clock interrupts reach `KiUpdateRunTime`), which also explains why the issue doesn't appear the same way on 25H2 as on 23H2.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-clocktickidleestimatefix-25h2.png?raw=true)
+
+### CSwitch Captures
+
+I've used two CPUStress threads with *Maximum* activity, the same priority/affinity & dynamic boosts disabled, causing a permanent ready/running switch (with `WrQuantumEnd` CS reason, as they reach their quantum).
+
+#### 23H2 (Accounting Timer Running)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-perfmon-max.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-mxa.png?raw=true)
+
+#### 23H2 (Accounting Timer Stopped)
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-max.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-mxa.png?raw=true)
+
+##### Busy Activity
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-busy.png?raw=true)
+
+#### Per CPU Clock Tick Scheduling Disabled
+
+This is just to prove that when disabling per CPU clock tick scheduling, the issue won't happen.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-percpu-tick-scheduling-off.png?raw=true)
+
+### QuantumTarget & Expiration
+
+[`KeInitializeClock`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeInitializeClock.c) sets `KiDynamicTickDisableReason` = `1` if the BCD settings include `DISABLEDYNAMICTICK`, see [Timer Expiration, KiDynamicTickDisableReason](https://noverse.dev/docs/win-config/system/timer-expiration/#kidynamictickdisablereason) for more details on the global.
+
+```c
+// KeInitializeClock (23H2)
+
+if ( v18 && strstr(v18, "DISABLEDYNAMICTICK") )
+  KiDynamicTickDisableReason = 1;
+```
+
+```c
+lkd> db nt!KiDynamicTickDisableReason L1
+fffff806`6d71d300  01                                               .
+```
+
+[`KiSetQuantumTargetThread`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiSetQuantumTargetThread.c) stores an absolute cycle target:
+
+```c
+// KiSetQuantumTargetThread (23H2)
+
+v15 = v8 + KiCyclesPerClockQuantum * (unsigned int)*(unsigned __int8 *)(a1 + 651);
+*(_QWORD *)(a1 + 32) = v15;
+```
+
+XREFs (in 23/25H2) show that only [`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) & [`KiUpdateTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiUpdateTime.c) call `KiUpdateRunTime`, which programs clock timer entry 3, checks the current threads accumulated cycles and requests a dispatch interrupt when the target is reached:
+
+```c
+// KiUpdateRunTime (25H2)
+
+CurrentPrcb->ClockTimerState.ClockTimerEntries[3].TypeFlags |= 3u; // bits now are now 3
+CurrentPrcb->ClockTimerState.ClockTimerEntries[3].DueTime = v28;
+CurrentPrcb->ClockTimerState.ClockTimerEntries[3].TolerableDelay = v26;
+
+result = (LARGE_INTEGER)CurrentThread->CycleTime;
+if ( result.QuadPart >= CurrentThread->QuantumTarget )
+  goto LABEL_16;
+
+// other checks & the non expired return excluded
+LABEL_16:
+CurrentPrcb->QuantumEnd = 1;
+```
+
+The idle function shown below only treats entries whose low bits equal 1 as waking deadlines, so it skips entry 3 and its deadline doesn't keep the clock timer armed while the processor is idle.
+
+### ClockTimer not Rearmed
+
+Before the processor enters idle, 23H2 uses [`KePrepareNonClockOwnerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareNonClockOwnerForIdle.c) in per CPU scheduling, while 25H2 uses [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c).
+
+With per CPU clock tick scheduling disabled, `KiUpdateRunTime` doesn't program the clock timer entry 3 & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors instead, so their quantum checks don't depend on that per CPU timer being rearmed. See the '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture.
+
+You can see whether per CPU scheduling is used via  ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
+
+```c
+lkd> db nt!KiDynamicTickDisableReason L1
+fffff806`6d71d300  01                                               .
+lkd> db nt!KiClockTimerPerCpu L1
+fffff806`6d71eaa4  01                                               .
+lkd> db nt!KiSerializeTimerExpiration L1
+fffff806`6d71d03c  01                                               .
+lkd> db nt!KiClockTimerPerCpuTickScheduling L1
+fffff806`6d71ea45  01                                               .
+```
+
+Both read the seven clock entries and only keep the timer armed if one has low `TypeFlags` bits equal to `1`:
+
+```c
+// KePrepareNonClockOwnerForIdle (23H2)
+
+while ( (v8->TypeFlags & 3) != 1 )
+{
+  ++v7;
+  v8 += 16;
+  if ( v7 >= 7 )
+  {
+    v9 = KeGetCurrentPrcb();
+    if ( (v9->PendingTickFlags & 1) != 0 )
+    {
+      ((void (__fastcall *)($7B5CACFB46652731FD5E219DB549FF78 *))off_140C01C98[0])(v8);
+      v9->PendingTickFlags &= ~1u;
+      v9->ClockTimerState.ClockActive = 0;
+    }
+    if ( v9->ClockOwner )
+      v9->ClockOwner = 0;
+
+    NextTickDueTime = -1LL;
+    goto LABEL_20;
+  }
+}
+```
+
+As shown above entry 3 has low bits `3`, so the function skips it. If no other entry needs to wake the processor, the function stops the hardware timer and clears `ClockActive`/`ClockOwner`. When the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KeResumeClockTimerFromIdle.c) checks `KiDynamicTickDisableReason` before it calls [`KiSetClockTimer`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimer.c):
+
+```c
+// KeResumeClockTimerFromIdle (25H2)
+
+if ( (_BYTE)KiDynamicTickDisableReason )
+  return (char)v3;
+
+// not reached with disabledynamictick
+KiSetClockTimer(
+  (__int64)CurrentPrcb,
+  InterruptTimePrecise,
+  -(__int64)(unsigned int)KeQuantumEndTimerIncrement,
+  KeMinimumIncrement,
+  3,
+  1,
+  0);
+```
+
+23H2 has the same early return, but uses `KeMaximumIncrement` for the deadline.
+
+### WrQuantumEnd & WrDispatchInt
+
+[`KiDispatchInterrupt`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiDispatchInterrupt.c) reads the quantum flag first, if its set, it calls [`KiQuantumEnd`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiQuantumEnd.c). Its separate `NextThread` branch stores reason `31`:
+
+```c
+// KiDispatchInterrupt (25H2)
+
+result = CurrentPrcb->QuantumEnd;
+if ( result )
+{
+  CurrentPrcb->QuantumEnd = 0;
+  return KiQuantumEnd();
+}
+else if ( CurrentPrcb->NextThread )
+{
+```
+
+```c
+// KiDispatchInterrupt, NextThread branch
+
+*(_BYTE *)(CurrentThread + 643) = 31;
+KiQueueReadyThread(CurrentPrcb);
+```
+
+```c
+// KiQuantumEnd (25H2)
+
+*(_BYTE *)(v4 + 643) = 30;
+KiQueueReadyThread(v102);
+```
+
 ## PsChangeQuantumTable
 
 As everything below will reference to that function at some point, I'll quickly explain what it does:
@@ -864,26 +1071,6 @@ As everything below will reference to that function at some point, I'll quickly 
 3. Selects short/long table
 4. Enables/disables job scheduling class QuantumReset values (enabled if fixed+long)
 5. Goes through active processes and updates their QuantumReset values (optional)
-
-## Dynamic Tick
-
-Before starting with the first bits of the value, I want to point out that while having dynamic tick disabled it seems like the quantum end doesn't work properly.
-
-This is currently only based on captures (tested on 23H2/25H2), I'll add more details here soon to see if dynamic tick is actually causing it, or anything else.
-
-### On (Default)
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-perfmon-max.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-mxa.png?raw=true)
-
-### Off
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-max.png?raw=true)
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-mxa.png?raw=true)
-
-#### Busy Activity
-
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-busy.png?raw=true)
 
 ## PsPrioritySeparation (`1:0`)
 
@@ -1992,7 +2179,7 @@ Total Timers: 301, Maximum List: 6
 
 `KiClockTimerOwner` moving between CPUs can happen through dynamic tick clock idle/resume. With dynamic tick enabled, it can stop using the periodic clock tick while the system is idle and set the clock timer for the next required due time instead, without it, it keeps using the periodic clock tick (this doesn't mean that `KiClockTimerOwner` changes). Clock owner selection also works a bit different on 23H2 when compared to 25H2, since everything below is based on 23H2 this might not be valid for all W11 builds.
 
-Also see '[Priority Separation, Dynamic Tick](https://noverse.dev/docs/win-config/system/priority-separation/#dynamic-tick)', which shows that disabling dynamic tick seems to cause quantum ends to not work properly anymore.
+Also see '[Priority Separation, KiUpdateRunTime Quantum Expiration](https://noverse.dev/docs/win-config/system/priority-separation/#kiupdateruntime-quantum-expiration)', which shows why `disabledynamictick` can stop the clock interrupts used to check quantum expiration.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/a-6-clock.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/a-6-timer.png?raw=true)
