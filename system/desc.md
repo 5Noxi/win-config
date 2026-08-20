@@ -857,7 +857,7 @@ Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whene
 
 ## KiUpdateRunTime Quantum Expiration
 
-Using `disabledynamictick` can cause the issue while [per CPU clock tick scheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) is enabled. As shown in the '[ClockTickIdleEstimateFix (24H2+)]()' section, 24/25H2 have a new function which seems to try to fix the issue.
+Using `disabledynamictick` can cause the issue while [per CPU clock tick scheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) is enabled. As shown in the '[ClockTickIdleEstimateFix (24H2+)](https://noverse.dev/docs/win-config/system/priority-separation/#clocktickidleestimatefix-24h2)' section, 24/25H2 have a new function which seems to try to fix the issue.
 
 Before a processor enters idle ([`PpmIdleExecuteTransition`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleExecuteTransition.c)), Windows can stop its clock timer. After the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) usually programs the timer again, but with `disabledynamictick` (`KiDynamicTickDisableReason`) set, that function returns before doing so (unless something else programs the counter that means no `KeClockInterruptNotify`).
 
@@ -913,7 +913,7 @@ I've used two CPUStress threads with *Maximum* activity, the same priority/affin
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-busy.png?raw=true)
 
-#### Per CPU Clock Tick Scheduling Disabled
+##### Per CPU Clock Tick Scheduling Disabled
 
 This is just to prove that when disabling per CPU clock tick scheduling, the issue won't happen.
 
