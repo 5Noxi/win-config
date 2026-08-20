@@ -865,15 +865,15 @@ Means that stopped timer no longer sends the clock interrupt used to call [`KiUp
 
 ### ClockTickIdleEstimateFix (24H2+)
 
-`Feature_Servicing_Kernel_ClockTickIdleEstimateFix` can make the normal clock deadline (entry 1) waking, which keeps clock interrupts running after something initially programs the timer. 23H2 always sets the low `TypeFlags` bits of entry 1 to `3` (active + non waking):
+`Feature_Servicing_Kernel_ClockTickIdleEstimateFix` can make the `KClockTimerKTimerExpirationPseudoHr` deadline (`ClockTimerEntries[1]`) waking, which keeps clock interrupts running after something initially programs the timer. 23H2 always sets its low `TypeFlags` bits to `3` (active + non waking):
 
 ```c
 // KiUpdateTime (23H2)
 
-CurrentPrcb->ClockTimerState.ClockTimerEntries[1].TypeFlags |= 3u;
+CurrentPrcb->ClockTimerState.ClockTimerEntries[1].TypeFlags |= 3u; // KClockTimerKTimerExpirationPseudoHr
 ```
 
-Depending on the state of the feature, [`KiSetClockTimerKTimerDeadlines`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimerKTimerDeadlines.c) programs entry 1:
+Depending on the state of the feature, [`KiSetClockTimerKTimerDeadlines`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimerKTimerDeadlines.c) programs `KClockTimerKTimerExpirationPseudoHr`:
 
 ```c
 // KiSetClockTimerKTimerDeadlines (25H2)
@@ -884,14 +884,14 @@ result = KiSetClockTimer(a1, a2, v4, KeMinimumIncrement, 1, v7, 0);
 
 ```c
 lkd> dd nt!Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_featureState L1
-fffff802`defc3b20  00000047 // bit 0 = 1 = feature enabled
+fffff802`defc3b20  00000047 // bit 0 = feature enabled
 
 lkd> r @$t0 = dwo(nt!Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_featureState)
 lkd> .printf "state=%x direct=%u enabled=%u\n", @$t0, ((@$t0 >> 1) & 1), (@$t0 & 1)
 state=47 direct=1 enabled=1
 ```
 
-With the feature enabled, entry 1 has low bits `1`, so [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c) keeps/rearms the timer (its clock interrupts reach `KiUpdateRunTime`), which also explains why the issue doesn't appear the same way on 25H2 as on 23H2.
+With the feature enabled, `KClockTimerKTimerExpirationPseudoHr` has low bits `1`, so [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c) keeps/rearms the timer (its clock interrupts reach `KiUpdateRunTime`), which also explains why the issue doesn't appear the same way on 25H2 as on 23H2.
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-clocktickidleestimatefix-25h2.png?raw=true)
 
@@ -899,12 +899,12 @@ With the feature enabled, entry 1 has low bits `1`, so [`KePrepareClockTimerForI
 
 I've used two CPUStress threads with *Maximum* activity, the same priority/affinity & dynamic boosts disabled, causing a permanent ready/running switch (with `WrQuantumEnd` CS reason, as they reach their quantum).
 
-#### 23H2 (Accounting Timer Running)
+#### 23H2 (Per CPU Clock Timer Active)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-perfmon-max.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-on-mxa.png?raw=true)
 
-#### 23H2 (Accounting Timer Stopped)
+#### 23H2 (Per CPU Clock Timer Stopped)
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-perfmon-max.png?raw=true)
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-dyntick-off-mxa.png?raw=true)
@@ -944,12 +944,12 @@ v15 = v8 + KiCyclesPerClockQuantum * (unsigned int)*(unsigned __int8 *)(a1 + 651
 *(_QWORD *)(a1 + 32) = v15;
 ```
 
-XREFs (in 23/25H2) show that only [`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) & [`KiUpdateTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiUpdateTime.c) call `KiUpdateRunTime`, which programs clock timer entry 3, checks the current threads accumulated cycles and requests a dispatch interrupt when the target is reached:
+XREFs (in 23/25H2) show that only [`KeClockInterruptNotify`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeClockInterruptNotify.c) & [`KiUpdateTime`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiUpdateTime.c) call `KiUpdateRunTime`, which programs `KClockTimerQuantumEnd` (`ClockTimerEntries[3]`), checks the current threads accumulated cycles and requests a dispatch interrupt when the target is reached:
 
 ```c
 // KiUpdateRunTime (25H2)
 
-CurrentPrcb->ClockTimerState.ClockTimerEntries[3].TypeFlags |= 3u; // bits now are now 3
+CurrentPrcb->ClockTimerState.ClockTimerEntries[3].TypeFlags |= 3u; // KClockTimerQuantumEnd, low bits now 3
 CurrentPrcb->ClockTimerState.ClockTimerEntries[3].DueTime = v28;
 CurrentPrcb->ClockTimerState.ClockTimerEntries[3].TolerableDelay = v26;
 
@@ -962,13 +962,13 @@ LABEL_16:
 CurrentPrcb->QuantumEnd = 1;
 ```
 
-The idle function shown below only treats entries whose low bits equal 1 as waking deadlines, so it skips entry 3 and its deadline doesn't keep the clock timer armed while the processor is idle.
+The idle function shown below only treats entries whose low bits equal `1` as waking deadlines, so it skips `KClockTimerQuantumEnd` and that deadline doesn't keep the clock timer armed while the processor is idle.
 
 ### ClockTimer not Rearmed
 
 Before the processor enters idle, 23H2 uses [`KePrepareNonClockOwnerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KePrepareNonClockOwnerForIdle.c) in per CPU scheduling, while 25H2 uses [`KePrepareClockTimerForIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KePrepareClockTimerForIdle.c).
 
-With per CPU clock tick scheduling disabled, `KiUpdateRunTime` doesn't program the clock timer entry 3 & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors instead, so their quantum checks don't depend on that per CPU timer being rearmed. See the '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture.
+With per CPU clock tick scheduling disabled, `KiUpdateRunTime` doesn't program `KClockTimerQuantumEnd` & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors instead, so their quantum checks don't depend on that per CPU timer being rearmed. See the '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture.
 
 You can see whether per CPU scheduling is used via  ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
 
@@ -1010,7 +1010,7 @@ while ( (v8->TypeFlags & 3) != 1 )
 }
 ```
 
-As shown above entry 3 has low bits `3`, so the function skips it. If no other entry needs to wake the processor, the function stops the hardware timer and clears `ClockActive`/`ClockOwner`. When the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KeResumeClockTimerFromIdle.c) checks `KiDynamicTickDisableReason` before it calls [`KiSetClockTimer`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimer.c):
+As shown above `KClockTimerQuantumEnd` has low bits `3`, so the function skips it. If no other entry needs to wake the processor, the function stops the hardware timer and clears `ClockActive`/`ClockOwner`. When the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KeResumeClockTimerFromIdle.c) checks `KiDynamicTickDisableReason` before it calls [`KiSetClockTimer`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-25H2/ntoskrnl/KiSetClockTimer.c):
 
 ```c
 // KeResumeClockTimerFromIdle (25H2)
@@ -1024,7 +1024,7 @@ KiSetClockTimer(
   InterruptTimePrecise,
   -(__int64)(unsigned int)KeQuantumEndTimerIncrement,
   KeMinimumIncrement,
-  3,
+  3, // KClockTimerQuantumEnd
   1,
   0);
 ```
