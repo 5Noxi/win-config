@@ -857,7 +857,7 @@ Use my [minimal (32 bit) bitmask calculator](https://noverse.dev/#bitmask) whene
 
 ## KiUpdateRunTime Quantum Expiration
 
-Using `disabledynamictick` can cause the issue while [per CPU clock tick scheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) is enabled (default). As shown in the '[ClockTickIdleEstimateFix (24H2+)]()' section, this is kind of "fixed" on 24H2+.
+Using `disabledynamictick` can cause the issue while [per CPU clock tick scheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) is enabled. As shown in the '[ClockTickIdleEstimateFix (24H2+)]()' section, 24/25H2 have a new function which seems to try to fix the issue.
 
 Before a processor enters idle ([`PpmIdleExecuteTransition`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/PpmIdleExecuteTransition.c)), Windows can stop its clock timer. After the processor leaves idle, [`KeResumeClockTimerFromIdle`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KeResumeClockTimerFromIdle.c) usually programs the timer again, but with `disabledynamictick` (`KiDynamicTickDisableReason`) set, that function returns before doing so (unless something else programs the counter that means no `KeClockInterruptNotify`).
 
@@ -884,7 +884,7 @@ result = KiSetClockTimer(a1, a2, v4, KeMinimumIncrement, 1, v7, 0);
 
 ```c
 lkd> dd nt!Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_featureState L1
-fffff802`defc3b20  00000047 // bit 0 = feature enabled
+fffff802`defc3b20  00000047 // bit 0 = 1 = feature enabled
 
 lkd> r @$t0 = dwo(nt!Feature_Servicing_Kernel_ClockTickIdleEstimateFix__private_featureState)
 lkd> .printf "state=%x direct=%u enabled=%u\n", @$t0, ((@$t0 >> 1) & 1), (@$t0 & 1)
@@ -895,7 +895,7 @@ With the feature enabled, `KClockTimerKTimerExpirationPseudoHr` has low bits `1`
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-clocktickidleestimatefix-25h2.png?raw=true)
 
-### CSwitch Captures
+### Captures
 
 I've used two CPUStress threads with *Maximum* activity, the same priority/affinity & dynamic boosts disabled, causing a permanent ready/running switch (with `WrQuantumEnd` CS reason, as they reach their quantum).
 
