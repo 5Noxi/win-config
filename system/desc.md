@@ -322,6 +322,12 @@ This capture also proofs that, as it uses `31.250ms` all the time (FG/BG).
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-25H2.png?raw=true)
 
+##### 18 QU, 25H2
+
+When using the fixed table entries on 24H2+, then [`BamQosLevel` isn't used](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel), and all threads use 18/36 QU depending on the interval.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-18-25H2.png?raw=true)
+
 #### Default Bitmasks
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/0x2.png?raw=true)
@@ -944,7 +950,7 @@ Means with the `clock interval / 18` unit, the table now is:
 
 See '[Duration Captures, 6/18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#618-qu-25h2)' for a capture showing that threads use their `BamQosLevel` to get the QU, instead of the 6 (BG)/18 (FG) QU.
 
-`BamQosLevel` doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, these're still getting filled by the threads stored `QuantumReset`. When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
+`BamQosLevel` doesn't use the `PspVariableQuantums`/`PspFixedQuantums` tables, these're still getting filled by the threads stored `QuantumReset`. When `ShortThreadQuantum` and variable quantums are used, [`KiQueryQuantumReset`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-24H2/ntoskrnl/KiQueryQuantumReset.c) (exists since 24H2) can instead return a QoS reset (fixed quantums set `KiVariableQuantumEnabled` to `0` and won't use that override, see '[18 QU, 25H2](https://noverse.dev/docs/win-config/system/priority-separation/#18-qu-25h2)' capture). `_KTHREAD.BamQosLevel` is at `0x204`, which is the `a1 + 516` byte read below.
 
 ```c
 // KiQueryQuantumReset
