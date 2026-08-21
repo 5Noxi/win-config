@@ -970,7 +970,7 @@ Before the processor enters idle, 23H2 uses [`KePrepareNonClockOwnerForIdle`](ht
 
 With per CPU clock tick scheduling disabled, `KiUpdateRunTime` doesn't program `KClockTimerQuantumEnd` & the clock owner uses [`KiForwardTick`](https://github.com/nohuto/decompiled-pseudocode/tree/main/11-23H2/ntoskrnl/KiForwardTick.c) to send ticks to the other processors instead, so their quantum checks don't depend on that per CPU timer being rearmed. See the '[Per CPU Clock Tick Scheduling Disabled](https://noverse.dev/docs/win-config/system/priority-separation/#per-cpu-clock-tick-scheduling-disabled)' capture.
 
-You can see whether per CPU scheduling is used via  ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
+You can see whether per CPU scheduling is used via ([Timer Expiration, EnablePerCpuClockTickScheduling](https://noverse.dev/docs/win-config/system/timer-expiration/#enablepercpuclocktickscheduling) for more details):
 
 ```c
 lkd> db nt!KiDynamicTickDisableReason L1
@@ -1140,6 +1140,24 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 // Programs
 SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\PriorityControl\Win32PrioritySeparation	Type: REG_DWORD, Length: 4, Data: 38 // 0x26
 ```
+
+#### Duration Captures
+
+##### 6/18 QU, 23H2
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-23H2.png.png?raw=true)
+
+##### 18 QU, 23H2
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-18-23H2.png.png?raw=true)
+
+##### 6/18 QU, 25H2
+
+As shown in the '[QoS Quantum Override (BamQosLevel)](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel)', whenever using the variable table on 24H2+, the threads get their QU from the BamQosField.
+
+This capture also proofs that, as it uses `31.250ms` all the time (FG/BG).
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-25H2.png.png?raw=true)
 
 #### Default Bitmasks
 
@@ -3361,11 +3379,11 @@ Everything listed below is based on personal findings, mistakes may exist.
     "ObTraceProcessName" = 0; // ObpTraceProcessNameBuffer / ObpTraceProcessNameLength
     "ObUnsecureGlobalNames" = 6619246; // ObpUnsecureGlobalNamesBuffer / ObpUnsecureGlobalNamesLength
     "PassiveWatchdogTimeout" = 300; // KiPassiveWatchdogTimeout
-    "PerfIsoEnabled" = 0; // KiPerfIsoEnabled
+    "PerfIsoEnabled" = 0; // KiPerfIsoEnabled, cache isolation aware processor placement for threads whose scheduling group KSCB has RankBias set, range 0-64dec
     "PoCleanShutdownFlags" = 0; // PopShutdownCleanly
     "PowerOffFrozenProcessors" = 1; // KiPowerOffFrozenProcessors, seems unused (but initialized), was probably used to "power off" processors that are frozen (see windbg !frozen)
     "ReadyTimeTicks" = 6; // KiNormalPriorityBoostReadyTimeTicks
-    "RebalanceMinPriority" = 1; // KiRebalanceMinPriority
+    "RebalanceMinPriority" = 1; // KiRebalanceMinPriority, minimum _KTHREAD.Priority at which KiQueueReadyThread checks IdleNonParkedCpuSet and may continue through KiEnterDeferredReadyState/KiDeferredReadyThread for processor selection (default uses all threads (prio 1-31) excluding zero page thread)
     "ReservedCpuSets" = 0; // KiReservedCpuSets
     "ScanLatencyTicks" = 7; // KiNormalPriorityBoostScanLatencyTicks
     "SchedulerAssistThreadFlagOverride" = 0; // KiSchedulerAssistThreadFlagOverride
