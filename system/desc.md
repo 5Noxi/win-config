@@ -1145,11 +1145,11 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 
 ##### 6/18 QU, 23H2
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-23H2.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-23H2.png?raw=true)
 
 ##### 18 QU, 23H2
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-18-23H2.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-18-23H2.png?raw=true)
 
 ##### 6/18 QU, 25H2
 
@@ -1157,7 +1157,7 @@ As shown in the '[QoS Quantum Override (BamQosLevel)](https://noverse.dev/docs/w
 
 This capture also proofs that, as it uses `31.250ms` all the time (FG/BG).
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-25H2.png.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-25H2.png?raw=true)
 
 #### Default Bitmasks
 
