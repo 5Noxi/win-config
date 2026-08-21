@@ -304,6 +304,8 @@ SystemPropertiesAdvanced.exe	RegSetValue	HKLM\System\CurrentControlSet\Control\P
 
 #### Duration Captures
 
+Same setup as in '[KiUpdateRunTime, Captures](https://noverse.dev/docs/win-config/system/priority-separation/#captures)', to cause threads to exhaust their quantum.
+
 ##### 6/18 QU, 23H2
 
 ![](https://github.com/nohuto/win-config/blob/main/system/images/ps-6-18-23H2.png?raw=true)
