@@ -500,11 +500,11 @@ nt!_KTHREAD
 
 #### Game Mode
 
-If you're using a priority boost via `PsPrioritySeparation` while having game mode enabled (default), the FG boost doesn't work. See '[FG Boost with Game Mode](https://noverse.dev/docs/win-config/system/game-mode/#fg-boost-with-game-mode)' for more information on game mode effects.
+If you're using a priority boost via `PsPrioritySeparation` while having game mode enabled (default), the FG boost doesn't work (for processes that register with game mode). This issue seems to exist on 23H2, while on 25H2 its fixed.
 
-Note that I've done that test on 23H2, and it *seems* to be fixed on 25H2 (haven't tried it on my own yet).
+![](https://github.com/nohuto/win-config/blob/main/system/images/gamemode-23H2-game.png?raw=true)
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/gamemodeprioboost.png?raw=true)
+See '[FG Boost with Game Mode](https://noverse.dev/docs/win-config/system/game-mode/#fg-boost-with-game-mode)' for more captures & details.
 
 ## Quantum
 
