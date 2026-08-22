@@ -4841,7 +4841,7 @@ Example with a game that sets itself to real time (there're probably any game de
 
 #### FG Boost with Game Mode
 
-Foreground boost is separate from process priority class, it's a temporary current priority increase for threads that belong to the foreground process. See '[PsPrioritySeparation (`1:0`)](https://noverse.dev/docs/win-config/system/priority-separation/#pspriorityseparation-10)' for more details on the topic itself. 
+See '[PsPrioritySeparation (`1:0`)](https://noverse.dev/docs/win-config/system/priority-separation/#pspriorityseparation-10)' for more details on the FG process priority boosting.
 
 You can test it by following the '[Watching the FG Priority Boost](https://noverse.dev/docs/win-config/system/priority-separation/#watching-the-fg-priority-boost)' guide while using the main game thread instead of the first CPUSTRES thread, get the instance name of a TID via e,g,:
 
@@ -4856,11 +4856,24 @@ Get-CimInstance Win32_PerfRawData_PerfProc_Thread | Where-Object { $_.IDThread -
 >
 > — Microsoft, [Windows Internals E7, P1: Chapter 4, Threads](https://github.com/nohuto/windows-books/releases/download/7th-Edition/Windows-Internals-E7-P1.pdf)
 
+##### 23H2 (Game)
+
 I've done it using Overwatch, both times I switched the state between FG/BG:
 
-![](https://github.com/nohuto/win-config/blob/main/system/images/gamemodeprioboost.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/gamemode-23H2-game.png?raw=true)
 
-One of my testers replicated it on 25H2 and it doesn't seem to exist there (FG boost works when game mode is enabled). I'll very likely look more into that soon, as the cause of this is probably that Game Mode messes with the FG state means that the windowing system doesn't see the game as FG anymore.
+##### 23H2 (Other app)
+
+Means that the missing FG boost only happens for processes that register with the game mode.
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/gamemode-23H2-app-off.png?raw=true)
+![](https://github.com/nohuto/win-config/blob/main/system/images/gamemode-23H2-app-on.png?raw=true)
+
+##### 25H2
+
+The issue doesn't seem to appear anymore on 25H2:
+
+![](https://github.com/nohuto/win-config/blob/main/system/images/gamemode-25H2.png?raw=true)
 
 #### Related Processes
 
