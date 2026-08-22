@@ -235,7 +235,7 @@ Used in [DbgkQueueUserExceptionReport](https://github.com/nohuto/decompiled-pseu
 
 ```c
 if ( !DbgkEnableWerUserReporting ) // 0 would block the part below (DbgkUserReportWorkRoutine etc)
-  return 3221226326LL;
+  return 3221226326LL; // STATUS_AUDITING_DISABLED, "The specified event is currently not being audited."
 ```
 
 The queued work routine is basically a thing for initiating UM (user mode) WER reporting work, some direct callers that I found are:
@@ -261,7 +261,7 @@ Used in [SepLogLpacAccessFailure](https://github.com/nohuto/decompiled-pseudocod
 EtwTraceLpacAccessFailure(v4); // always happenes
 
 if ( !SeLpacEnableWatsonReporting )
-  return 3221226326LL; // stop before report
+  return 3221226326LL; // stop before report - STATUS_AUDITING_DISABLED, "The specified event is currently not being audited."
 
 return DbgkQueueUserExceptionReport();
 ```
