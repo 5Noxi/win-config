@@ -281,7 +281,7 @@ if ( !v2 || !PspUseJobSchedulingClasses )
 
 The ms were calculated while `KeMaximumIncrement` (maximum time between clock interrupts) = `2625a`/`15.625 ms` (`~5.208 ms` per QU on 23H2, `~0.868 ms` per 24H2 `ShortThreadQuantum` QU), see '[Cycles per QU](https://noverse.dev/docs/win-config/system/priority-separation/#cycles-per-qu)'.
 
-As shown in the [captures](https://noverse.dev/docs/win-config/system/priority-separation/#captures) below, using *Variable* on 24H2+ will cause threads to get their QU from the [`BamQosLevel`](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel) field, only if that field has a value of `8+` the QU of the table below are used. If using fixed intervals, the QU from the table are used.
+As shown in the [captures](https://noverse.dev/docs/win-config/system/priority-separation/#duration-captures) below, using *Variable* on 24H2+ will cause threads to get their QU from the [`BamQosLevel`](https://noverse.dev/docs/win-config/system/priority-separation/#qos-quantum-override-bamqoslevel) field, only if that field has a value of `8+` the QU of the table below are used. If using fixed intervals, the QU from the table are used.
 
 | Quantum table | Index `0` | Index `1` | Index `2` |
 | --- | ---: | ---: | ---: |
