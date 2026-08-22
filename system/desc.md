@@ -1998,16 +1998,40 @@ INIT:0000000140BA1688 dq offset aEnablepercpucl       ; "EnablePerCpuClockTickSc
 INIT:0000000140BA1690 dq offset KiEnableClockTimerPerCpuTickScheduling
 ```
 
-Everything below is based on 23H2, when comparing it to 25H2, nothing in relation to `SerializeTimerExpiration` changed, but `EnablePerCpuClockTickScheduling` isn't dependend on `SerializeTimerExpiration` anymore.
+## Build Differences
 
-23H2:
+Everything below is based on 23H2, when comparing it to 25H2, nothing in relation to `SerializeTimerExpiration` changed, but `EnablePerCpuClockTickScheduling` isn't dependend on `SerializeTimerExpiration` anymore, when using the default of it (`0`).
+
+### 23H2
+
 ```c
 // KeInitializeClock
 if ( KiClockTimerPerCpu && KiSerializeTimerExpiration )
   KiClockTimerPerCpuTickScheduling = 1;
 ```
 
-25H2:
+```c
+lkd> db nt!KiClockTimerPerCpu L1
+fffff802`30f1eaa4  01                                               .
+lkd> dd nt!KiSerializeTimerExpiration L1
+fffff802`30f1d03c  00000000
+lkd> db nt!KiClockTimerPerCpuTickScheduling L1
+fffff802`30f1ea45  00                                               . // not 01 as KiSerializeTimerExpiration isnt 1
+lkd> dd nt!KiEnableClockTimerPerCpuTickScheduling L1
+fffff802`30f1edc8  0000000 // default
+
+lkd> db nt!KiClockTimerPerCpu L1
+fffff807`3891eaa4  01                                               .
+lkd> dd nt!KiSerializeTimerExpiration L1
+fffff807`3891d03c  00000000
+lkd> db nt!KiClockTimerPerCpuTickScheduling L1
+fffff807`3891ea45  01                                               . // override as KiEnableClockTimerPerCpuTickScheduling is set to 1
+lkd> dd nt!KiEnableClockTimerPerCpuTickScheduling L1
+fffff807`3891edc8  00000001 // set to 1
+```
+
+### 25H2
+
 ```c
 // KeInitializeClock
 if ( KiClockTimerPerCpu )
@@ -2018,6 +2042,16 @@ if ( KiClockTimerPerCpu )
   }
   KiClockTimerPerCpuTickScheduling = 1;
 }
+```
+```c
+lkd> db nt!KiClockTimerPerCpu L1
+fffff800`b07c5ae8  01                                               .
+lkd> dd nt!KiSerializeTimerExpiration L1
+fffff800`b07c4034  00000000
+lkd> db nt!KiClockTimerPerCpuTickScheduling L1
+fffff800`b07c5a85  01                                               . // isnt dependend on KiSerializeTimerExpiration anymore
+lkd> dd nt!KiEnableClockTimerPerCpuTickScheduling L1
+fffff800`b07c5e64  00000000 // default
 ```
 
 ## SerializeTimerExpiration
