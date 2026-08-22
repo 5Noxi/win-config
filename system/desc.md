@@ -2000,7 +2000,7 @@ INIT:0000000140BA1690 dq offset KiEnableClockTimerPerCpuTickScheduling
 
 ## Build Differences
 
-Everything below is based on 23H2, when comparing it to 25H2, nothing in relation to `SerializeTimerExpiration` changed, but `EnablePerCpuClockTickScheduling` isn't dependend on `SerializeTimerExpiration` anymore, when using the default of it (`0`).
+Everything below is based on 23H2, when comparing it to 25H2, nothing in relation to `SerializeTimerExpiration` changed, but `KiClockTimerPerCpuTickScheduling` isn't dependend on `KiSerializeTimerExpiration` anymore, when using the default of it (`0`).
 
 ### 23H2
 
